@@ -42,6 +42,8 @@ There is no cross-base migration line in this project. The project stays on the 
 - Initial and route-correction documentation commits exist.
 - Project directory skeleton has been created.
 - `Kei18/lacam2` is selected as the LaCAM* upstream candidate.
+- Phase0 base conda environment is installed and verified.
+- `git submodule add` for `Kei18/lacam2` was attempted but blocked by DNS resolution for `github.com`.
 
 ## Phase0 Gate
 
@@ -58,4 +60,4 @@ Phase0 passes when:
 - No LaCAM* repository has been cloned.
 - No C++ baseline has been built.
 - No MAPF experiment has been run.
-- Dependency installation was interrupted and still needs to be rerun.
+- PyTorch is deferred to Phase4 due to Windows package extraction issues.

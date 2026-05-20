@@ -443,7 +443,7 @@ Gate：若 `LaCAM*+NTM` 与 `LaCAM*+LTM` 平均打平，但 dense/bottleneck 更
 - `statsmodels`
 - `pytest`
 - `pybind11`
-- `pytorch` CPU 版
+- PyTorch 后续作为 Phase4 模型依赖单独安装；Phase0 基础环境先不强制安装，避免 Windows conda 包解压问题阻塞 C++/metrics 工作。
 
 实际安装结果以 `conda list -n czr004` 为准。
 

@@ -18,8 +18,4 @@ dependencies:
   - statsmodels
   - pytest
   - pybind11
-  - pytorch
-  - torchvision
-  - torchaudio
-  - cpuonly
   - pip

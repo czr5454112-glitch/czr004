@@ -93,3 +93,29 @@
   - Install or update the `czr004` conda environment.
   - Clone `Kei18/lacam2` into `external/lacam2`.
   - Record exact upstream commit and run baseline smoke.
+
+## 2026-05-20 - install Phase0 base environment and attempt upstream clone
+
+- Request: Continue Phase0 after incorporating review constraints.
+- Files changed:
+  - `environment.yml`
+  - `docs/implementation-notes.md`
+  - `docs/upstream-baseline.md`
+  - `outputs/reports/phase0_startup_plan.md`
+  - `outputs/reports/phase0_environment_report.md`
+- Commands run:
+  - `conda env update -n czr004 -f environment.yml`
+  - `conda run -n czr004` import checks
+  - `cmake --version`, `ninja --version`, `git --version`
+  - `git submodule add https://github.com/Kei18/lacam2.git external/lacam2`
+- Key observations:
+  - PyTorch extraction repeatedly failed on Windows due to a long package-cache path, so PyTorch was deferred out of the Phase0 base environment.
+  - Phase0 C++/metrics dependencies installed and import checks passed.
+  - The LaCAM* upstream submodule add failed because the shell could not resolve `github.com`.
+  - No partial submodule state remained after the failed clone attempt.
+- Tests / validation:
+  - Verified Python imports for numpy, pandas, scipy, pyyaml, networkx, matplotlib, statsmodels, pytest, and pybind11.
+  - Verified CMake, Ninja, and Git availability in `czr004`.
+- Follow-up:
+  - Retry `git submodule add` when shell DNS/network access is available.
+  - Record exact `external/lacam2` commit before any solver edits.

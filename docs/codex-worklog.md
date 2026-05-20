@@ -67,3 +67,29 @@
   - Document-only cleanup. No solver tests were run.
 - Follow-up:
   - Commit this cleanup.
+
+## 2026-05-20 - incorporate review constraints and continue Phase0
+
+- Request: Select objectively useful points from an external review, add them to the guide, and continue Phase0.
+- Files changed:
+  - `deep-research-report.md`
+  - `deep-research-report (1).md`
+  - `docs/implementation-notes.md`
+  - `docs/upstream-baseline.md`
+  - `docs/related-work-notes.md`
+  - directory `.gitkeep` files
+- Commands run:
+  - checked git status
+  - searched guide for phase and metric sections
+  - created Phase0 directory skeleton
+- Key observations:
+  - Useful review points were about scientific story and measurement, not about changing the core route.
+  - Added constraints to avoid pure LTM distillation.
+  - Added expanded-node and high-level-expansion metrics for equal-node analysis.
+  - Selected `Kei18/lacam2` as the LaCAM* upstream candidate, pending clone and exact commit record.
+- Tests / validation:
+  - Document and project hygiene only. No solver tests were run.
+- Follow-up:
+  - Install or update the `czr004` conda environment.
+  - Clone `Kei18/lacam2` into `external/lacam2`.
+  - Record exact upstream commit and run baseline smoke.

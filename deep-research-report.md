@@ -38,6 +38,8 @@ LaCAM* baseline
 | LTM 源码状态 | PDF 仓库脚注仍是占位地址 | 本项目实现称为 `paper-faithful reimplementation`，不能声称官方复现 |
 | 边权范围 | PDF 方法段写实验使用 `[wLB, wUP] = [0, 10]` | 实现默认 `[0,10]`，粗略报告中的 `[1,5]` 作废 |
 | gate 强度 | NTM 早期可能只在部分场景打平或改善 | gate 不要过严，早期以打平、可解释、低 overhead、语义正确为有效进展 |
+| 科学故事 | 纯拟合 LTM 边权容易变成 teacher distillation | NTM 主线必须包含 online residual、ranking 或 safety 之一，证明闭环 solver 收益 |
+| 节点级公平性 | wall-clock 可能掩盖搜索努力差异 | metrics 固化 expanded nodes / high-level expansions，支持 equal-node 对照 |
 
 ## 研究问题
 
@@ -49,6 +51,7 @@ LaCAM* baseline
 - NTM 能否保持 LTM 的低开销和可回退性？
 - NTM 能否在 LTM 论文同口径指标上打平或超过 LTM？
 - NTM 的收益来自 traffic map 学习本身，还是仅来自 restart、随机性或指标误差？
+- NTM 是否能在跨 seed、跨 agent density 或留图测试中表现出比手工 LTM 更好的泛化？
 
 ## 主目标
 
@@ -233,8 +236,36 @@ sum_of_loss_ratio = SoL(solution) / lower_bound_sol
 | `planning_overhead_ms` | 越低越好 | 检查 LTM/NTM 附加成本 |
 | `edge_weight_mae` | 越低越好 | 仅作为模型诊断，不作为最终 solver 指标 |
 | `action_ranking_delta` | 视定义而定 | 诊断 NTM 是否改变了有意义的候选排序 |
+| `expanded_nodes` | 越少通常越好 | 支撑 equal-node 与搜索努力分析 |
+| `high_level_expansions` | 越少通常越好 | 区分 guidance 收益和“多搜了节点” |
+| `low_level_pibt_calls` | 越少通常越好 | 诊断 PIBT 侧开销 |
+| `ntm_inference_count` | 越少通常越好 | 诊断在线推理频率 |
 
 模型离线误差不是主结论。最终只看 solver-level 指标。
+
+## 创新叙事约束
+
+NTM 的学术贡献不能只写成“用神经网络拟合 LTM 权重”。纯 edge-weight regression 可以作为稳定预训练，但不能作为最终主故事。最终方法必须至少包含以下一种 solver-facing 机制：
+
+| 机制 | 作用 | 是否主推 |
+|---|---|---|
+| online residual | 学习 `w_ntm = clamp(w_ltm + delta, 0, 10)`，让模型修正而不是替代 LTM | 主推 |
+| ranking supervision | 直接优化 PIBT 候选动作排序或 pairwise preference | 主推备选 |
+| safety head | 预测何时关闭 NTM guidance，回退到 LTM 或 LaCAM* | 必做安全增强 |
+| pure edge regression | 拟合 LTM normalized edge weights | 只作预训练和诊断 |
+
+实验报告必须明确区分“teacher fitting 指标”和“closed-loop solver 指标”。如果 offline MAE 下降但 SoL ratio、AUC、TTFS 没有改善，不能称为算法收益。
+
+## 相关工作定位
+
+最终论文或报告需要把本项目放在“learning-enhanced MAPF guidance”这一窄切口里，而不是泛泛声称学习规划。至少要讨论：
+
+- LTM：直接上游，本项目研究 learned update / residual 是否优于手工累计。
+- Local guidance for LaCAM 类工作：同属 guidance，但常是局部时空 cue；本项目强调来自 PIBT trace 的 directed traffic map。
+- Online Guidance Graph Optimization / guidance graph 类工作：同样学习 guidance，但任务闭环和目标通常偏 lifelong 或图优化；本项目绑定 one-shot / planning-and-execution 的 LaCAM* anytime loop。
+- 学习启发式或边代价的其他搜索框架：相关但集成点不同，本项目不改 high-level search 和 PIBT 冲突语义。
+
+这些工作不需要全部进入主实验表，但至少要在 related-work notes 和最终报告中解释问题差异，避免被误读为“又一个学 guidance 的泛化版本”。
 
 ## 阶段路线
 
@@ -269,7 +300,12 @@ Gate：不看性能，只看环境和记录是否规范。
 - 第一轮不加 node budget，第二轮起 `10 * current makespan`。
 - LTM 实现偏差记录在 `docs/implementation-notes.md`。
 
-Gate 不要求一开始超过论文曲线，只要求 loop 可运行、边权会随 history 更新、fallback 不坏、指标同口径。
+Phase1 gate 分两层：
+
+- structural gate：loop 可运行、边权会随 history 更新、fallback 不坏、指标同口径。
+- quantitative parity gate：在至少一个小型 benchmark smoke 和一个论文代表性图族上，`LaCAM*+LTM` 的相对排序趋势应不弱于 `LaCAM*`；若无法对齐，必须在 `docs/implementation-notes.md` 说明偏差原因。
+
+最终 paper-faithful 复现还需要在 8 张 grid maps、每图 25 random instances、30s setting 上生成完整表格。若论文只给曲线而无 CSV，报告中用趋势和置信区间作为验收，不伪造精确数值。
 
 ### Phase2：统一 metrics harness
 
@@ -282,6 +318,7 @@ Gate 不要求一开始超过论文曲线，只要求 loop 可运行、边权会
 - anytime AUC。
 - returned solutions count。
 - planning-and-execution metrics。
+- expanded nodes / high-level expansions / low-level PIBT calls。
 - paired statistical tests。
 - JSONL metadata schema。
 
@@ -306,7 +343,12 @@ Gate：所有 baseline 和 NTM 使用同一统计代码。
 - ranking：预测候选动作相对排序改善。
 - safety：预测何时不应该启用 NTM guidance。
 
-Gate：teacher 数据可复现，训练/验证/测试 split 无泄漏。
+Phase3 必须二选一确定主监督路线：
+
+- 首选：online residual，以 LTM 为安全基线，学习闭环修正量。
+- 备选：ranking supervision，以 solver 候选排序为直接学习目标。
+
+pure edge regression 只作为 warm start，不作为最终主方法。Gate：teacher 数据可复现，训练/验证/测试 split 无泄漏，并且主监督路线已经写入 `outputs/reports/phase3_teacher_data_report.md`。
 
 ### Phase4：NTM-Lite 模型
 
@@ -316,14 +358,14 @@ Gate：teacher 数据可复现，训练/验证/测试 split 无泄漏。
 
 1. `MLP-Edge`：只用局部 edge features，作为最小学习基线。
 2. `CNN-Map`：规则 grid 上的快速 spatial baseline。
-3. `GraphSAGE-Map`：稳定图模型。
-4. `GATv2-Map`：增强图注意力版本。
+3. `GraphSAGE-Map`：主图模型。
+4. `GATv2-Map`：可选增强，不作为 Phase4 必做项。
 
 原则：
 
 - 第一版尽量用纯 PyTorch，不把 PyG 作为硬依赖。
 - 模型输出 bounded directed edge weights 或 residual。
-- 推理频率要可配置，不得明显破坏 anytime。
+- 推理频率是核心设计变量：至少比较 every restart、every K restarts、first-solution-only / post-first-solution-only。
 - 训练集、验证集、测试集按 map / seed 严格隔离。
 - NTM 关闭后必须等价 fallback。
 
@@ -340,10 +382,13 @@ Gate：打平 LTM 或在 dense/bottleneck 子集有正收益即可继续，不�
 - `LaCAM*+SUO`
 - `LaCAM*+LTM`
 - `LaCAM*+NTM`
-- `LaCAM*+LTM+NTM-residual`，如果 residual 路线保留
+- `LaCAM*+LTM+NTM-residual`，作为优先主方法，除非 Phase3 明确放弃 residual
 
 消融：
 
+- LTM teacher regression only vs online residual。
+- ranking supervision vs residual。
+- safety head on/off。
 - NTM without blocked-action features。
 - NTM without wait-propagation features。
 - NTM fixed after first solution。
@@ -361,7 +406,10 @@ Gate：fallback parity、candidate domain preserved、TTFS 不灾难性变差。
 - one-shot MAPF：8 张 map、每图 25 random instances、30s。
 - anytime：至少复现 `random-64-64-20` 1000 agents coverage 曲线。
 - planning-and-execution：`E={0.1,0.5}`，`X={5,10,20}`。
+- planning-and-execution baseline：按 LTM 论文口径纳入 PIE。
+- TO/SUO：若无法完整复现作者实现，必须在主表中标明 implementation status，并把缺口写入 `docs/implementation-notes.md`。
 - NTM 消融：证明收益不是只来自 restart-only、随机性或指标误差。
+- 泛化：至少做同图不同 seed、低密度训练高密度测试、留一图测试三类分析中的两类。
 
 Gate：若 `LaCAM*+NTM` 与 `LaCAM*+LTM` 平均打平，但 dense/bottleneck 更好、overhead 更低、或在 planning-and-execution 更稳，也算正结果。
 

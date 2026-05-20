@@ -25,6 +25,7 @@ LaCAM* baseline
 - NTM 是否能在 dense、bottleneck、long-corridor 等高拥堵场景中更稳定？
 - NTM 的收益是否来自 learned traffic map 本身，而不是 restart、随机性或指标误差？
 - NTM 的推理开销是否足够低，不破坏 anytime 行为？
+- NTM 是否能在跨 seed、跨 agent density 或留图测试中展现比手工 LTM 更好的泛化？
 
 ## Baselines
 
@@ -89,6 +90,16 @@ sum_of_loss_ratio = SoL(solution) / lower_bound_sol
 
 离线 edge-weight 误差只作为模型诊断，不作为最终研究结论。
 
+## 创新叙事约束
+
+NTM 不能只做“拟合 LTM 边权”。pure edge regression 只作为预训练或诊断。主方法必须至少走一条 solver-facing 路线：
+
+- online residual：学习 `w_ntm = clamp(w_ltm + delta, 0, 10)`，修正 LTM。
+- ranking supervision：直接学习 PIBT 候选动作排序。
+- safety head：预测何时关闭 NTM guidance，回退到 LTM 或 LaCAM*。
+
+如果 offline MAE 更好但 closed-loop SoL ratio、AUC、TTFS 没有改善，不能称为算法收益。
+
 ## Git 与 Markdown 纪律
 
 项目必须从第一天开始做好记录：
@@ -115,10 +126,12 @@ sum_of_loss_ratio = SoL(solution) / lower_bound_sol
 - 接入 PIBT trace。
 - 实现 LTM update、weighted distance、restart loop。
 - 完成 small smoke 和 fallback parity。
+- 增加 quantitative parity gate：至少在 smoke 和一个代表性图族上复现相对排序趋势。
 
 ### Phase2：指标 harness
 
 - 固化 SoL、SoL ratio、AUC、coverage。
+- 增加 expanded nodes、high-level expansions、low-level PIBT calls，支持 equal-node 分析。
 - 统一 JSONL metadata schema。
 - 所有 baseline 与 NTM 共用同一统计代码。
 
@@ -127,18 +140,23 @@ sum_of_loss_ratio = SoL(solution) / lower_bound_sol
 - 用 LTM 生成 edge-level teacher labels。
 - 保存 trace schema 和 manifest。
 - 建立 map / seed split。
+- 在 online residual 和 ranking supervision 中选择一个主监督路线。
 
 ### Phase4：NTM-Lite
 
 - 先做 MLP/CNN，再做 GraphSAGE/GATv2。
+- GraphSAGE 作为主图模型；GATv2 只作为可选增强。
 - 只接入 guidance，不接管搜索。
 - 评估推理开销和 fallback。
+- 把 every restart、every K restarts、first-solution-only / post-first-solution-only 作为推理频率消融。
 
 ### Phase5：主实验
 
 - one-shot MAPF：8 张 grid maps，每图 25 random instances，30s。
 - anytime curve：复现论文 coverage / returned-solution 行为。
 - planning-and-execution：`E={0.1,0.5}`，`X={5,10,20}`。
+- P&E baseline 按论文口径纳入 PIE。
+- 至少做同图不同 seed、低密度训练高密度测试、留一图测试三类泛化分析中的两类。
 - 消融：确认收益来自 NTM traffic guidance。
 
 ## Gate 原则

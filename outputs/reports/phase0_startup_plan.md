@@ -36,6 +36,13 @@ There is no cross-base migration line in this project. The project stays on the 
 6. Add upstream LaCAM* code as submodule or clean mirror.
 7. Run minimal LaCAM* baseline smoke only after the upstream commit is recorded.
 
+## Phase0 Progress
+
+- Git repository exists.
+- Initial and route-correction documentation commits exist.
+- Project directory skeleton has been created.
+- `Kei18/lacam2` is selected as the LaCAM* upstream candidate.
+
 ## Phase0 Gate
 
 Phase0 passes when:

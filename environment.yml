@@ -1,0 +1,25 @@
+name: czr004
+channels:
+  - conda-forge
+  - pytorch
+  - defaults
+dependencies:
+  - python=3.11
+  - cmake
+  - ninja
+  - git
+  - numpy
+  - scipy
+  - pandas
+  - matplotlib
+  - pyyaml
+  - networkx
+  - tqdm
+  - statsmodels
+  - pytest
+  - pybind11
+  - pytorch
+  - torchvision
+  - torchaudio
+  - cpuonly
+  - pip

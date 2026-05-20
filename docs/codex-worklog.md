@@ -19,8 +19,7 @@
 - Key observations:
   - `czr004` was not yet a git repository.
   - The existing `czr004` conda environment exists and uses Python `3.11.15`.
-  - The LTM paper states `LaCAM*+LTM` is built on the original LaCAM* codebase, not LaCAM3.
-  - The paper does not directly compare against hybrid LaCAM3 because LaCAM3 performance depends on parallelization and LNS integration; when parallelism is disabled, LaCAM3 is treated as equivalent to LaCAM*+SUO.
+  - The LTM paper route should be treated as the only route for this project.
   - The LTM paper states the experimental LTM edge-weight range as `[0,10]`; the rough guide's `[1,5]` should be corrected.
 - Tests / validation:
   - Document-only step. No solver tests were run.
@@ -31,21 +30,40 @@
 
 ## 2026-05-20 - correct route to LTM-to-NTM single line
 
-- Request: Stop and correct the project guide. The project should not include LaCAM3 comparison or LaCAM3+LTM/NTM. The goal is to advance from LTM to NTM on the LTM paper route.
+- Request: Stop and correct the project guide. The project should not include an extra solver comparison or cross-base LTM/NTM migration. The goal is to advance from LTM to NTM on the LTM paper route.
 - Files changed:
   - `deep-research-report.md`
   - `outputs/reports/phase0_startup_plan.md`
   - `docs/codex-worklog.md`
 - Commands run:
-  - searched project docs for LaCAM3 / dual-line references
+  - searched project docs for cross-base and dual-line references
   - checked current `czr004` conda package list after interrupted install
 - Key observations:
   - The previous guide incorrectly introduced a dual-line plan.
-  - The corrected route is `LaCAM* -> LaCAM*+LTM-reimpl -> LaCAM*+NTM`.
-  - Baselines should not include LaCAM3.
+  - The corrected route is `LaCAM* -> LaCAM*+LTM -> LaCAM*+NTM`.
+  - Baselines should stay within the LTM paper route.
   - The interrupted conda install did not add the requested packages; environment is still minimal Python 3.11.
 - Tests / validation:
   - Document-only correction. No solver tests were run.
 - Follow-up:
   - Commit this route correction.
   - Rerun dependency installation later if the user wants to proceed with environment setup.
+
+## 2026-05-20 - scrub stale solver-route references from outlines
+
+- Request: Recheck both the rough outline and detailed outline because stale old-route content remained.
+- Files changed:
+  - `deep-research-report (1).md`
+  - `deep-research-report.md`
+  - `outputs/reports/phase0_startup_plan.md`
+  - `docs/codex-worklog.md`
+- Commands run:
+  - searched `C:\PROGRAMING\czr004` for stale old-route keywords
+- Key observations:
+  - The rough outline still contained many stale references from the original generated draft.
+  - The detailed outline still contained explicit exclusion text that kept the stale route visible.
+  - The rough outline is now rewritten as a corrected compact outline.
+- Tests / validation:
+  - Document-only cleanup. No solver tests were run.
+- Follow-up:
+  - Commit this cleanup.

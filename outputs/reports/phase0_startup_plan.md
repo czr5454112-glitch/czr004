@@ -17,7 +17,7 @@ LaCAM* baseline
   -> LaCAM* + NTM
 ```
 
-There is no LaCAM3 line in this project. LaCAM3 is not a baseline, not a target system, and not a place where this project will add LTM or NTM.
+There is no cross-base migration line in this project. The project stays on the LTM paper route.
 
 ## Confirmed Corrections
 

@@ -10,7 +10,7 @@
 
 ## 执行摘要
 
-本项目的目标是：**在 LTM 论文路线之上继续前进，引入 Neural Traffic Map，简称 NTM**。项目不研究 LaCAM3，不把 LaCAM3 作为 baseline，不做 `LaCAM3+LTM`，也不做 `LaCAM3+NTM`。后续所有比较、复现和神经改进都围绕 LTM 论文同口径展开。
+本项目的目标是：**在 LTM 论文路线之上继续前进，引入 Neural Traffic Map，简称 NTM**。后续所有比较、复现和神经改进都围绕 LTM 论文同口径展开。
 
 正确主线只有一条：
 
@@ -22,7 +22,7 @@ LaCAM* baseline
 
 这里的 `LaCAM*+LTM paper-faithful reimplementation` 是为了建立 LTM teacher、指标口径和可复现实验框架；最终研究贡献是 `LaCAM*+NTM` 是否能在 LTM 同口径指标上打平或超过 `LaCAM*+LTM`，并在部分场景中带来更好的泛化、收敛或低开销表现。
 
-本指南特别修正粗略报告里的一个方向性错误：**不存在“双底座”，也不存在 LaCAM3 迁移线**。LTM 论文的实验对象是 LaCAM* 及其 guidance 变体，论文还明确没有把 hybrid LaCAM3 放进直接比较。因此本项目不把 LaCAM3 纳入 baseline，不在 LaCAM3 上加 LTM/NTM，也不把 LaCAM3 作为项目目标。
+本指南特别修正粗略报告里的一个方向性错误：**项目只沿 LTM 论文路线推进**。LTM 论文的实验对象是 LaCAM* 及其 guidance 变体，因此本项目不扩展成其他求解器工程对比。
 
 第一步不是写 solver 代码，而是把研究路线、工程边界、指标口径、git 管理和 Markdown 记录纪律固定下来。MAPF 项目最容易失败的方式不是“模型不够复杂”，而是 baseline 口径漂移、实验日志不全、改了搜索底座却不知道改坏了什么。因此本项目把“底座保护”和“可复现记录”放在与算法同等重要的位置。
 
@@ -32,8 +32,8 @@ LaCAM* baseline
 
 | 修订点 | 结论 | 新要求 |
 |---|---|---|
-| 项目主线 | 只做 LTM -> NTM，不做 LaCAM3 线 | 删除所有 `LaCAM3+LTM/NTM` 计划 |
-| baseline | baseline 不包含 LaCAM3 | 只比较 LaCAM*、LaCAM*+TO、LaCAM*+SUO、LaCAM*+LTM、LaCAM*+NTM |
+| 项目主线 | 只做 LTM -> NTM | 删除所有额外工程路线计划 |
+| baseline | baseline 只按 LTM 论文口径设置 | 只比较 LaCAM*、LaCAM*+TO、LaCAM*+SUO、LaCAM*+LTM、LaCAM*+NTM |
 | LTM 基座 | PDF 实验段写明 `LaCAM*+LTM` built on original LaCAM* codebase | 使用 LaCAM* 作为唯一搜索底座 |
 | LTM 源码状态 | PDF 仓库脚注仍是占位地址 | 本项目实现称为 `paper-faithful reimplementation`，不能声称官方复现 |
 | 边权范围 | PDF 方法段写实验使用 `[wLB, wUP] = [0, 10]` | 实现默认 `[0,10]`，粗略报告中的 `[1,5]` 作废 |
@@ -60,9 +60,8 @@ LaCAM* baseline
 
 ## 非目标
 
-- 不研究 LaCAM3。
-- 不把 LaCAM3 作为 baseline。
-- 不做 `LaCAM3+LTM` 或 `LaCAM3+NTM`。
+- 不引入其他工程化求解器作为 baseline。
+- 不做额外工程路线实现。
 - 不端到端替代 LaCAM*。
 - 不重写 PIBT、LaCAM* high-level search、lazy constraint addition、rewrite / incumbent 语义。
 - 不让未验证神经网络直接接管搜索控制权。
@@ -81,7 +80,7 @@ LaCAM* baseline
 | anytime loop | `LaCAM* run -> collect history -> UpdateLTM -> SelectRestartNode` | LTM 先复现，NTM 再替代 update 或 residual |
 | one-shot 设置 | 8 张 grid map，每图 25 random instances，30s | final 复现按此执行；早期 smoke 可缩小 |
 | planning-and-execution | `E={0.1s,0.5s}`，`X={5,10,20}` | 主实验第二部分 |
-| baselines | LaCAM*、LaCAM*+TO、LaCAM*+SUO；P&E 对 PIE | 本项目加入 LaCAM*+NTM，不加入 LaCAM3 |
+| baselines | LaCAM*、LaCAM*+TO、LaCAM*+SUO；P&E 对 PIE | 本项目加入 LaCAM*+NTM |
 
 ## 必须保留的 LaCAM* 语义不变量
 
@@ -251,7 +250,7 @@ sum_of_loss_ratio = SoL(solution) / lower_bound_sol
 - 写 `docs/codex-worklog.md` 第一条。
 - 写 `outputs/reports/phase0_startup_plan.md`。
 - 检查 `czr004` conda 环境。
-- 记录当前 PDF 核实结论，尤其是 LaCAM* 基座、无 LaCAM3 baseline、`[0,10]` 边权范围。
+- 记录当前 PDF 核实结论，尤其是 LaCAM* 基座、baseline 口径、`[0,10]` 边权范围。
 
 Gate：不看性能，只看环境和记录是否规范。
 
@@ -411,7 +410,7 @@ Gate：若 `LaCAM*+NTM` 与 `LaCAM*+LTM` 平均打平，但 dense/bottleneck 更
 7. 若发现 LTM 机制和论文 PDF 不一致，优先写入 `docs/implementation-notes.md`，再改代码。
 8. 不破坏 LaCAM* 搜索底座优先级高于短期性能提升。
 9. 效果 gate 不要过严。早期以打平、稳定、可解释、低 overhead、语义正确为有效进展。
-10. 不再引入 LaCAM3 线。任何 LaCAM3 相关想法都必须先问用户，不得自行加入总纲、baseline 或实现计划。
+10. 不得自行加入额外求解器 baseline 或偏离 LTM 论文口径的实现计划。
 
 ## 下一步
 

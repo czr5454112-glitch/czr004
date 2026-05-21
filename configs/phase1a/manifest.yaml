@@ -1,0 +1,46 @@
+phase: phase1a
+date_frozen: 2026-05-21
+status: frozen_for_batch_runner
+
+experiment:
+  problem: classic one-shot MAPF
+  objective: sum_of_loss
+  time_limit_sec: 30
+  instance_ids: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25]
+  methods_required: [lacam_star, lacam_star_ltm]
+  methods_unavailable:
+    lacam_star_to: "unavailable -- no auditable upstream integration in czr004"
+    lacam_star_suo: "unavailable -- no auditable upstream integration in czr004"
+
+benchmark:
+  map_root: external/lacam2/scripts/map
+  scen_archive: external/lacam2/scripts/scen/scen-random.zip
+  scen_cache: outputs/tmp/phase1a/scen
+  scen_template: "scen-random/{map}-random-{instance}.scen"
+  local_validation: "The scen-random archive contains 25 matching random scen files for each of the eight maps."
+
+maps:
+  - name: empty-32-32
+    map_path: external/lacam2/scripts/map/empty-32-32.map
+    agent_counts: [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000]
+  - name: empty-48-48
+    map_path: external/lacam2/scripts/map/empty-48-48.map
+    agent_counts: [200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000]
+  - name: random-32-32-20
+    map_path: external/lacam2/scripts/map/random-32-32-20.map
+    agent_counts: [100, 200, 300, 400, 500, 600, 700]
+  - name: maze-32-32-4
+    map_path: external/lacam2/scripts/map/maze-32-32-4.map
+    agent_counts: [100, 200, 300, 400, 500]
+  - name: random-64-64-20
+    map_path: external/lacam2/scripts/map/random-64-64-20.map
+    agent_counts: [200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000]
+  - name: room-64-64-8
+    map_path: external/lacam2/scripts/map/room-64-64-8.map
+    agent_counts: [200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000]
+  - name: warehouse-10-20-10-2-1
+    map_path: external/lacam2/scripts/map/warehouse-10-20-10-2-1.map
+    agent_counts: [200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000]
+  - name: warehouse-10-20-10-2-2
+    map_path: external/lacam2/scripts/map/warehouse-10-20-10-2-2.map
+    agent_counts: [200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000]

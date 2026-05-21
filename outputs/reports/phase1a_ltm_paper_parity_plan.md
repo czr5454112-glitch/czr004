@@ -2,7 +2,7 @@
 
 Date: 2026-05-21  
 Project: `C:\PROGRAMING\czr004`  
-Status: planning instructions only; experiments not yet run.
+Status: partial + reason -- manifest, runner, summarizer, dry-run, and one 30s manifest probe are complete; full 3600-run paper-scale batch has not been executed.
 
 Execution checklist: `outputs/reports/phase1a_execution_checklist.md`
 
@@ -19,7 +19,7 @@ Do not enter Phase2 until Phase1a is complete, unless the user explicitly pauses
 ## Required Scope
 
 - Setting: LTM paper one-shot MAPF.
-- Maps: eight grid maps used by the LTM paper, or a documented local substitute only if the exact set cannot be obtained.
+- Maps: eight grid maps used by the LTM paper Figure 1, all present locally under `external/lacam2/scripts/map/`.
 - Instances: 25 random instances per map.
 - Runtime: 30 seconds per run.
 - Objective: sum-of-loss / `sum_of_loss_ratio`.
@@ -30,6 +30,30 @@ Do not enter Phase2 until Phase1a is complete, unless the user explicitly pauses
   - `LaCAM*+TO`
   - `LaCAM*+SUO`
   Include these only if original implementations or auditable reproductions are available. Do not silently replace them with casual local approximations.
+
+## Frozen Benchmark Manifest
+
+Manifest files:
+
+- `configs/phase1a/agent_schedule.yaml`
+- `configs/phase1a/manifest.yaml`
+- `configs/phase1a/manifest.jsonl`
+- `src/data/benchmark_index.md`
+
+Scenario source: `external/lacam2/scripts/scen/scen-random.zip`, extracted by the run script into `outputs/tmp/phase1a/scen/`.
+
+| Map | Local map path | Agent counts |
+| --- | --- | --- |
+| `empty-32-32` | `external/lacam2/scripts/map/empty-32-32.map` | 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000 |
+| `empty-48-48` | `external/lacam2/scripts/map/empty-48-48.map` | 200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000 |
+| `random-32-32-20` | `external/lacam2/scripts/map/random-32-32-20.map` | 100, 200, 300, 400, 500, 600, 700 |
+| `maze-32-32-4` | `external/lacam2/scripts/map/maze-32-32-4.map` | 100, 200, 300, 400, 500 |
+| `random-64-64-20` | `external/lacam2/scripts/map/random-64-64-20.map` | 200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000 |
+| `room-64-64-8` | `external/lacam2/scripts/map/room-64-64-8.map` | 200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000 |
+| `warehouse-10-20-10-2-1` | `external/lacam2/scripts/map/warehouse-10-20-10-2-1.map` | 200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000 |
+| `warehouse-10-20-10-2-2` | `external/lacam2/scripts/map/warehouse-10-20-10-2-2.map` | 200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000 |
+
+The agent schedule is read from Figure 1 x-axis ticks. The paper text does not publish CSV values.
 
 ## Required Records
 
@@ -56,6 +80,20 @@ Every run must record:
 - paper-style table or figure data
 - `outputs/reports/phase1a_ltm_paper_parity_report.md`
 
+## Project Entrypoints
+
+- Build: `scripts/build_phase1a_batch.ps1`
+- Run: `scripts/run_phase1a_batch.ps1`
+- Runner: `build/phase1a-batch/phase1a_batch.exe`
+- Summary: `src/eval/phase1a_summarize.py`
+
+The runner emits one JSONL row per method/map/scenario/agent-count tuple. Full paper-scale execution is:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File C:\PROGRAMING\czr004\scripts\run_phase1a_batch.ps1 -Full
+python C:\PROGRAMING\czr004\src\eval\phase1a_summarize.py --input C:\PROGRAMING\czr004\outputs\logs\phase1a\phase1a_runs.jsonl
+```
+
 ## Acceptance Gate
 
 Phase1a passes when:
@@ -68,10 +106,8 @@ Phase1a passes when:
 
 ## Next Implementation Tasks
 
-1. Follow `outputs/reports/phase1a_execution_checklist.md`.
-2. Re-read the LTM paper experiment section and list the exact eight maps and agent schedules.
-3. Locate or generate the benchmark instances.
-4. Freeze `configs/phase1a/agent_schedule.yaml` or an equivalent manifest before any parity claim.
-5. Create the Phase1a batch runner.
-6. Create a minimal Phase1a summarizer for `sum_of_loss_ratio`.
-7. Run a small dry-run before launching the full 30s batch.
+1. Build `phase1a_batch`.
+2. Run `scripts/run_phase1a_batch.ps1 -DryRun`.
+3. Summarize the dry-run JSONL.
+4. If the dry-run gate passes, launch `-Full` or a documented user-approved subset.
+5. Write `outputs/reports/phase1a_ltm_paper_parity_report.md` from the generated data.

@@ -1,0 +1,26 @@
+phase: phase1a
+source:
+  primary: "2603.07891v1.pdf Figure 1 axis ticks, rendered locally from page 6"
+  secondary: "external/lacam2/scripts/eval.jl and scripts/config/mapf-bench.yaml only for benchmark layout conventions"
+notes:
+  - "The paper text states 25 random instances per map and agent counts from small cases to 2000."
+  - "Figure 1 provides the concrete x-axis ticks used here."
+  - "This file freezes the schedule before any Phase1a parity claim."
+
+maps:
+  - name: empty-32-32
+    agent_counts: [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000]
+  - name: empty-48-48
+    agent_counts: [200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000]
+  - name: random-32-32-20
+    agent_counts: [100, 200, 300, 400, 500, 600, 700]
+  - name: maze-32-32-4
+    agent_counts: [100, 200, 300, 400, 500]
+  - name: random-64-64-20
+    agent_counts: [200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000]
+  - name: room-64-64-8
+    agent_counts: [200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000]
+  - name: warehouse-10-20-10-2-1
+    agent_counts: [200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000]
+  - name: warehouse-10-20-10-2-2
+    agent_counts: [200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000]

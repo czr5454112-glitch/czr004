@@ -12,7 +12,6 @@ This file records implementation decisions where the local code cannot be direct
 
 ## Open Items
 
-- Phase1a must define quantitative parity tolerance before any result is treated as paper-level reproduction.
 - Phase1a must expand the Phase1 structural smoke into a full paper-parity benchmark: eight grid maps, 25 random instances per map, 30s setting.
 - Phase1a must decide whether `TO/SUO` can be included from original implementations or whether they are explicitly marked unavailable / not reproduced.
 - Phase2 is blocked until Phase1a has a reproducible LTM paper-parity report.
@@ -89,3 +88,19 @@ The Pillow reinstall fixes a Windows DLL-load failure hit when importing `torchv
   - `outputs/reports/phase1a_ltm_paper_parity_report.md`
 - Phase1a minimum comparison is `LaCAM*` vs local `LaCAM*+LTM`. `LaCAM*+TO` and `LaCAM*+SUO` must not be reimplemented casually; include them only if original implementations or auditable reproductions are available.
 - Phase2 should consolidate the metrics and logging practices proven in Phase1a into a reusable harness for NTM, instead of being the first place where paper-level quantitative claims are made.
+
+## 2026-05-21 - Phase1a parity tolerance and frozen schedule
+
+- Phase1a uses the LTM paper Figure 1 one-shot MAPF setting: eight grid maps, 25 random scenario files per map, 30 seconds per run, and `sum_of_loss_ratio = sum_of_loss / sum_of_costs_lower_bound`.
+- The eight local map paths and scenario templates are frozen in `configs/phase1a/manifest.yaml` and the runner-readable `configs/phase1a/manifest.jsonl`.
+- The agent counts are read from Figure 1 x-axis ticks:
+  - `empty-32-32`: 100..1000 by 100
+  - `empty-48-48`: 200..2000 by 200
+  - `random-32-32-20`: 100..700 by 100
+  - `maze-32-32-4`: 100..500 by 100
+  - `random-64-64-20`, `room-64-64-8`, `warehouse-10-20-10-2-1`, `warehouse-10-20-10-2-2`: 200..2000 by 200
+- Local parity judgement uses the three-level rule from the Phase1a checklist:
+  - `Pass-A`: at least 6/8 maps and at least 70% of agent points show `ratio(LaCAM*+LTM) < ratio(LaCAM*)`.
+  - `Pass-B`: all eight maps have the same median trend, but the magnitude differs by more than 20% or 2-3 maps are reversed.
+  - `Fail`: most maps do not show LTM improving over LaCAM*, without a diagnosed implementation or platform reason.
+- `TO` and `SUO` remain unavailable in this project until original implementations or auditable integrations are added.

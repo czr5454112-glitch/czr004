@@ -140,20 +140,20 @@ sum_of_loss_ratio = SoL(solution) / lower_bound
 
 ### Task A — 冻结实验 manifest（文档，1 天内）
 
-- [ ] 更新 `outputs/reports/phase1a_ltm_paper_parity_plan.md`：补全 §2.2 八图路径、§2.3 agent 表、种子规则
-- [ ] 新建 `configs/phase1a/manifest.yaml`（或 `manifest.jsonl`）
-- [ ] 新建 `src/data/benchmark_index.md`：记录地图/scen 来源、缺失项、补齐命令
-- [ ] 在 `docs/implementation-notes.md` 增加 **Phase1a parity tolerance** 小节（见 §6）
+- [x] 更新 `outputs/reports/phase1a_ltm_paper_parity_plan.md`：补全 §2.2 八图路径、§2.3 agent 表、种子规则
+- [x] 新建 `configs/phase1a/manifest.yaml`（或 `manifest.jsonl`）
+- [x] 新建 `src/data/benchmark_index.md`：记录地图/scen 来源、缺失项、补齐命令
+- [x] 在 `docs/implementation-notes.md` 增加 **Phase1a parity tolerance** 小节（见 §6）
 
 ### Task B — 批量 runner（代码）
 
 在 **不修改上游** 前提下扩展：
 
-- [ ] 新建 `cpp/tools/phase1a_batch.cpp`（或 Python 驱动 `phase1_ltm` 库）
+- [x] 新建 `cpp/tools/phase1a_batch.cpp`（或 Python 驱动 `phase1_ltm` 库）
   - 输入: manifest 中的一行（map, scen, agents, seed, method, time_limit）
   - 输出: 单行 JSONL + 可选 solution 文件
-- [ ] 新建 `scripts/build_phase1a_batch.ps1`（复用 MSVC + `lacam2_windows_compat.hpp`）
-- [ ] 新建 `scripts/run_phase1a_batch.ps1`
+- [x] 新建 `scripts/build_phase1a_batch.ps1`（复用 MSVC + `lacam2_windows_compat.hpp`）
+- [x] 新建 `scripts/run_phase1a_batch.ps1`
   - 支持 `--dry-run`（1 map × 1 agent × 1 instance × 2 methods）
   - 支持 `--full`（8 maps × agent_schedule × 25 instances × 2 methods）
 
@@ -164,11 +164,11 @@ sum_of_loss_ratio = SoL(solution) / lower_bound
 
 ### Task C — 汇总与作图（脚本）
 
-- [ ] `src/eval/phase1a_summarize.py`（或同级脚本）
+- [x] `src/eval/phase1a_summarize.py`（或同级脚本）
   - 读 JSONL → 按 map、agents 聚合 mean/median/std
   - 输出 `outputs/tables/phase1a_ratio_by_map.csv`
   - 生成与论文 Figure 1 **同结构** 的折线图（ratio vs agents）
-- [ ] 不要求与论文像素级一致，但趋势方向必须可判定
+- [x] 不要求与论文像素级一致，但趋势方向必须可判定
 
 ### Task D — Dry-run gate（必须先过）
 
@@ -184,9 +184,9 @@ sum_of_loss_ratio = SoL(solution) / lower_bound
 
 ### Task E — Full batch + 报告
 
-- [ ] 跑完全部 manifest（或用户批准的子集）
-- [ ] 写 `outputs/reports/phase1a_ltm_paper_parity_report.md`，结构见 §7
-- [ ] 更新 `phase1a_ltm_paper_parity_plan.md` 状态为 `completed` 或 `partial + reason`
+- [ ] 跑完全部 manifest（或用户批准的子集） — 未完成；当前完成 dry-run + 30s single-point probe
+- [x] 写 `outputs/reports/phase1a_ltm_paper_parity_report.md`，结构见 §7
+- [x] 更新 `phase1a_ltm_paper_parity_plan.md` 状态为 `completed` 或 `partial + reason`
 
 ---
 
@@ -194,9 +194,9 @@ sum_of_loss_ratio = SoL(solution) / lower_bound
 
 ### 6.1 可复现性（硬性）
 
-- [ ] 报告含完整 `git commit`（项目 + `external/lacam2`）
-- [ ] 每条命令可一键重跑（PowerShell 脚本 + manifest 路径）
-- [ ] raw 数据在 `outputs/logs/phase1a/`（大文件不进 git，路径写进报告）
+- [x] 报告含完整 `git commit`（项目 + `external/lacam2`）
+- [x] 每条命令可一键重跑（PowerShell 脚本 + manifest 路径）
+- [x] raw 数据在 `outputs/logs/phase1a/`（大文件不进 git，路径写进报告）
 
 ### 6.2 定量结论（硬性，允许“趋势对齐”）
 
@@ -306,14 +306,14 @@ Phase3+  teacher / NTM / 主实验
 
 ## 10. Codex 交付物检查表（给用户验收）
 
-- [ ] `configs/phase1a/manifest.yaml` 含 8 图 + agent 表 + 25×seed 规则
-- [ ] `scripts/run_phase1a_batch.ps1` 可 dry-run
-- [ ] `outputs/logs/phase1a/*.jsonl` 存在
-- [ ] `outputs/tables/phase1a_ratio_by_map.csv` 存在
-- [ ] `outputs/figures/phase1a_*` 对比图存在
-- [ ] `outputs/reports/phase1a_ltm_paper_parity_report.md` 含 Pass-A/B/Fail 判定
-- [ ] `docs/codex-worklog.md` 有对应条目
-- [ ] 未修改 `external/lacam2/lacam2/**`
+- [x] `configs/phase1a/manifest.yaml` 含 8 图 + agent 表 + 25×seed 规则
+- [x] `scripts/run_phase1a_batch.ps1` 可 dry-run
+- [x] `outputs/logs/phase1a/*.jsonl` 存在
+- [x] `outputs/tables/phase1a_ratio_by_map.csv` 存在
+- [x] `outputs/figures/phase1a_*` 对比图存在
+- [x] `outputs/reports/phase1a_ltm_paper_parity_report.md` 含 Pass-A/B/Fail 判定
+- [x] `docs/codex-worklog.md` 有对应条目
+- [x] 未修改 `external/lacam2/lacam2/**`
 
 ---
 

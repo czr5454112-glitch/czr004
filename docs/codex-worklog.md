@@ -1,5 +1,65 @@
 # Codex Worklog
 
+## 2026-05-21 20:35 - execute Phase1a paper parity chain
+
+- Request: Complete Phase1a in `C:\PROGRAMING\czr004`, strictly following the project guide, keeping records and git discipline.
+- Files changed:
+  - `configs/phase1a/agent_schedule.yaml`
+  - `configs/phase1a/manifest.yaml`
+  - `configs/phase1a/manifest.jsonl`
+  - `src/data/benchmark_index.md`
+  - `cpp/tools/phase1a_batch.cpp`
+  - `cpp/ltm/CMakeLists.txt`
+  - `scripts/build_phase1a_batch.ps1`
+  - `scripts/run_phase1a_batch.ps1`
+  - `src/eval/phase1a_summarize.py`
+  - `outputs/tables/phase1a_ratio_by_map.csv`
+  - `outputs/figures/phase1a_ratio_by_map.png`
+  - `outputs/reports/phase1a_ltm_paper_parity_plan.md`
+  - `outputs/reports/phase1a_execution_checklist.md`
+  - `outputs/reports/phase1a_ltm_paper_parity_report.md`
+  - `docs/implementation-notes.md`
+  - `docs/codex-worklog.md`
+- Commands run:
+  - `git status --short --branch`
+  - `git branch --list`
+  - `git log --oneline --decorate -8`
+  - read `deep-research-report.md`, `outputs/reports/phase1a_execution_checklist.md`, `outputs/reports/phase1a_ltm_paper_parity_plan.md`, `docs/codex-worklog.md`, and Phase1 LTM source/scripts
+  - `git switch phase1a-ltm-paper-parity`
+  - `pdftotext 2603.07891v1.pdf -`
+  - rendered PDF page 6 to inspect Figure 1 x-axis ticks, then removed the temporary image
+  - `tar -tf external\lacam2\scripts\scen\scen-random.zip`
+  - `powershell -ExecutionPolicy Bypass -File scripts\build_phase1a_batch.ps1`
+  - `powershell -ExecutionPolicy Bypass -File scripts\run_phase1a_batch.ps1 -DryRun -OutputJsonl outputs\logs\phase1a\phase1a_dry_run.jsonl`
+  - `powershell -ExecutionPolicy Bypass -File scripts\run_phase1a_batch.ps1 -MapSubset random-32-32-20 -AgentSubset 100 -InstanceSubset 1 -MaxTasks 2 -TimeLimitSec 5 -OutputJsonl outputs\logs\phase1a\phase1a_manifest_probe.jsonl`
+  - `powershell -ExecutionPolicy Bypass -File scripts\run_phase1a_batch.ps1 -MapSubset random-32-32-20 -AgentSubset 100 -InstanceSubset 1 -MaxTasks 2 -TimeLimitSec 30 -OutputJsonl outputs\logs\phase1a\phase1a_manifest_probe_30s.jsonl`
+  - `python src\eval\phase1a_summarize.py --input outputs\logs\phase1a\phase1a_manifest_probe_30s.jsonl --output-csv outputs\tables\phase1a_ratio_by_map.csv --output-figure outputs\figures\phase1a_ratio_by_map.png`
+  - `git diff --check`
+  - `python -m py_compile src\eval\phase1a_summarize.py`
+  - `powershell -ExecutionPolicy Bypass -File scripts\phase0_smoke.ps1`
+  - `powershell -ExecutionPolicy Bypass -File scripts\phase1_ltm_smoke.ps1`
+- Key observations:
+  - Current branch is `phase1a-ltm-paper-parity`.
+  - `1.txt` is an unrelated untracked file and remains untouched.
+  - Phase1a must not modify `external/lacam2/lacam2/**`.
+  - The eight paper maps are present under `external/lacam2/scripts/map/`.
+  - `external/lacam2/scripts/scen/scen-random.zip` contains 25 random scenarios for every Phase1a map.
+  - Figure 1 x-axis ticks were frozen into `configs/phase1a/agent_schedule.yaml`.
+  - Full paper-scale Phase1a is 72 map-agent points x 25 scenarios x 2 methods = 3600 solver runs. This was not launched in the interactive turn.
+  - The 30s manifest probe on `random-32-32-20`, 100 agents, instance 1 solved both methods; `LaCAM*+LTM` ratio was lower than `LaCAM*` for that single point.
+- Tests / validation:
+  - Phase1a batch build: passed.
+  - Phase1a smoke dry-run: passed for `lacam_star` and `lacam_star_ltm`.
+  - Phase1a 30s manifest probe: passed for both methods.
+  - Summary CSV and figure generation: passed.
+  - `git diff --check`: passed with line-ending warnings only.
+  - `python -m py_compile src\eval\phase1a_summarize.py`: passed.
+  - `scripts\phase0_smoke.ps1`: upstream tests 7/7 and project smoke passed.
+  - `scripts\phase1_ltm_smoke.ps1`: passed.
+- Follow-up:
+  - To complete the full parity gate, run `scripts\run_phase1a_batch.ps1 -Full` and summarize `outputs\logs\phase1a\phase1a_runs.jsonl`.
+  - Do not enter Phase2 until the full Phase1a report reaches Pass-A or Pass-B, or the user explicitly pauses Phase1a.
+
 ## 2026-05-21 20:27 - prepare Phase1a entry
 
 - Request: Prepare the project to enter Phase1a, check everything, and report when ready.

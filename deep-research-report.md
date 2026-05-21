@@ -315,6 +315,7 @@ Phase1 只验收结构正确和可运行，不再把完整论文级定量复现�
 必须完成：
 
 - 复核 LTM 论文 one-shot MAPF 实验设置，写入 `outputs/reports/phase1a_ltm_paper_parity_plan.md`。
+- 执行细则以 `outputs/reports/phase1a_execution_checklist.md` 为准；若清单、总纲和 PDF 冲突，先按 PDF 和清单核实后更新文档。
 - 明确实验地图、agent 数、instance 数、随机种子、time limit、objective 和硬件环境。
 - 按论文 one-shot 设置生成或整理 8 张 grid maps、每图 25 random instances、30s setting 的实验入口；若本地素材缺失，先记录来源、缺口和补齐方式。
 - 至少跑通 `LaCAM*` 与本项目 `LaCAM*+LTM` 两列；`LaCAM*+TO`、`LaCAM*+SUO` 仅在能获得原实现或可审计复现时纳入，否则必须在报告中标明 unavailable / not reproduced，不能用自造替代品冒充论文 baseline。

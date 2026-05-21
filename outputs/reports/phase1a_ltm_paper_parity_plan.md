@@ -4,6 +4,8 @@ Date: 2026-05-21
 Project: `C:\PROGRAMING\czr004`  
 Status: planning instructions only; experiments not yet run.
 
+Execution checklist: `outputs/reports/phase1a_execution_checklist.md`
+
 ## Purpose
 
 Phase1a is inserted after Phase1 and before Phase2. Its purpose is to complete full paper-level quantitative reproduction for the LTM route before the project proceeds to the unified metrics harness and later NTM stages.
@@ -66,8 +68,10 @@ Phase1a passes when:
 
 ## Next Implementation Tasks
 
-1. Re-read the LTM paper experiment section and list the exact eight maps and agent schedules.
-2. Locate or generate the benchmark instances.
-3. Create the Phase1a batch runner.
-4. Create a minimal Phase1a summarizer for `sum_of_loss_ratio`.
-5. Run a small dry-run before launching the full 30s batch.
+1. Follow `outputs/reports/phase1a_execution_checklist.md`.
+2. Re-read the LTM paper experiment section and list the exact eight maps and agent schedules.
+3. Locate or generate the benchmark instances.
+4. Freeze `configs/phase1a/agent_schedule.yaml` or an equivalent manifest before any parity claim.
+5. Create the Phase1a batch runner.
+6. Create a minimal Phase1a summarizer for `sum_of_loss_ratio`.
+7. Run a small dry-run before launching the full 30s batch.

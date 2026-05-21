@@ -93,6 +93,7 @@ This is not yet the final paper-parity benchmark. The current quantitative check
 
 1. Start Phase1a before Phase2.
 2. Write `outputs/reports/phase1a_ltm_paper_parity_plan.md`.
-3. Promote the Phase1 smoke into a paper-level batch benchmark on the LTM paper grid families.
-4. Produce raw CSV/JSONL, summary tables, and `outputs/reports/phase1a_ltm_paper_parity_report.md`.
-5. Enter Phase2 only after the Phase1a paper-parity gate is satisfied or explicitly paused by the user.
+3. Follow `outputs/reports/phase1a_execution_checklist.md`.
+4. Promote the Phase1 smoke into a paper-level batch benchmark on the LTM paper grid families.
+5. Produce raw CSV/JSONL, summary tables, and `outputs/reports/phase1a_ltm_paper_parity_report.md`.
+6. Enter Phase2 only after the Phase1a paper-parity gate is satisfied or explicitly paused by the user.

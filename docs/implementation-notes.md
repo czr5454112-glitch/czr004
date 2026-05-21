@@ -83,6 +83,7 @@ The Pillow reinstall fixes a Windows DLL-load failure hit when importing `torchv
 - Phase1a is now a blocking gate before Phase2. Do not start Phase2 metrics-harness work unless Phase1a is complete, or unless the user explicitly pauses Phase1a and the reason is recorded in `docs/codex-worklog.md`.
 - Phase1a should produce:
   - `outputs/reports/phase1a_ltm_paper_parity_plan.md`
+  - `outputs/reports/phase1a_execution_checklist.md`
   - raw JSONL/CSV outputs
   - summary tables
   - `outputs/reports/phase1a_ltm_paper_parity_report.md`

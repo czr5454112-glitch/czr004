@@ -131,6 +131,7 @@ NTM 不能只做“拟合 LTM 边权”。pure edge regression 只作为预训�
 ### Phase1a：LTM 论文级定量复现
 
 - 在进入 Phase2 前，先按 LTM 论文 one-shot MAPF 口径做完整定量复现。
+- 执行时遵循 `outputs/reports/phase1a_execution_checklist.md`。
 - 复核 8 张 grid maps、每图 25 random instances、30s setting、agent 数范围、objective 和 seed。
 - 至少复现 `LaCAM*` 与 `LaCAM*+LTM` 两列；`TO/SUO` 只有在原实现或可审计复现可用时纳入。
 - 输出 raw CSV/JSONL、summary table 和 `outputs/reports/phase1a_ltm_paper_parity_report.md`。

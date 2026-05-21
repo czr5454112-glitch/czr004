@@ -1,5 +1,39 @@
 # Codex Worklog
 
+## 2026-05-21 20:27 - prepare Phase1a entry
+
+- Request: Prepare the project to enter Phase1a, check everything, and report when ready.
+- Files changed:
+  - `deep-research-report.md`
+  - `deep-research-report (1).md`
+  - `docs/implementation-notes.md`
+  - `outputs/reports/phase1_ltm_reimpl_report.md`
+  - `outputs/reports/phase1a_ltm_paper_parity_plan.md`
+  - `outputs/reports/phase1a_execution_checklist.md`
+  - `docs/codex-worklog.md`
+- Commands run:
+  - `git status --short`
+  - `git branch --show-current`
+  - `git log --oneline --decorate -5`
+  - read `outputs/reports/phase1a_execution_checklist.md`
+  - searched project docs and reports for Phase1a / Phase2 references
+  - `rg -n "phase1a_execution_checklist|Phase1a|不完成 Phase1a|Phase2" deep-research-report.md "deep-research-report (1).md" docs outputs\reports`
+  - `git diff --check`
+  - `powershell -ExecutionPolicy Bypass -File scripts\phase0_smoke.ps1`
+  - `powershell -ExecutionPolicy Bypass -File scripts\phase1_ltm_smoke.ps1`
+- Key observations:
+  - Current branch is `phase1-ltm-reimpl`.
+  - Phase1a gate docs are committed at `7770d64`.
+  - `outputs/reports/phase1a_execution_checklist.md` exists but is not tracked yet.
+  - `1.txt` remains an unrelated untracked file and should stay untouched.
+  - The Phase1a checklist is the most concrete entry guide and is now linked from the main guide, rough guide, Phase1 report, implementation notes, and Phase1a plan.
+- Tests / validation:
+  - `git diff --check`: passed.
+  - `scripts\phase0_smoke.ps1`: upstream `test_all.exe` passed 7/7, project smoke returned `sum_of_loss=15`.
+  - `scripts\phase1_ltm_smoke.ps1`: passed on `loop` and `random-32-32-10`.
+- Follow-up:
+  - Enter Phase1a by switching to `phase1a-ltm-paper-parity` and starting Task A: freeze map paths, agent schedule, and manifest.
+
 ## 2026-05-21 20:02 - add Phase1a paper-level parity stage
 
 - Request: Add a new Phase1a after Phase1 and before Phase2. Phase1a should perform full paper-level quantitative reproduction aligned with the LTM paper before entering Phase2.

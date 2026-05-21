@@ -1,5 +1,31 @@
 # Codex Worklog
 
+## 2026-05-21 22:34 - launch Phase1a full batch on server
+
+- Request: Use the SSH skill workflow to upload the Phase1a runtime package to the Ubuntu server and start the full reproduction batch in `tmux`.
+- Files changed:
+  - `scripts/run_phase1a_batch.py`
+  - `docs/codex-worklog.md`
+- Commands run:
+  - installed and used `badseal/ssh-skill` helper scripts locally
+  - uploaded `outputs/tmp/czr004_phase1a_server_package.tar.gz` with `ssh_upload.py`
+  - ran `/root/shared-nvme/server_setup_phase1a.sh` on the server
+  - ran `/root/shared-nvme/server_start_phase1a_full.sh` on the server
+- Key observations:
+  - The server could not reliably `git clone` from GitHub over HTTPS, so the run uses an uploaded runtime package.
+  - The runtime package is pinned to project commit `9bc9736a710e71d15b4cf5ee358e9a7f73dab4fe` and LaCAM2 commit `61a4c40ce91ce18c06eb2fe070aa9f1951eecb8d`.
+  - The Python Phase1a driver now accepts explicit metadata overrides through `PHASE1A_PROJECT_COMMIT`, `PHASE1A_EXTERNAL_LACAM2_COMMIT`, `PHASE1A_BRANCH`, `PHASE1A_DIRTY`, and `PHASE1A_PLATFORM`.
+  - Server dry-run JSONL records `dirty=clean`.
+  - Full batch is running in tmux session `phase1a_full` under `/root/shared-nvme/czr004_phase1a_9bc9736`.
+- Tests / validation:
+  - Server build of `phase1a_batch`: passed.
+  - Server dry-run: passed for `lacam_star` and `lacam_star_ltm`.
+  - Initial full-batch log check: 2 JSONL rows written; `empty-32-32`, 100 agents, seed 1 completed for both methods.
+- Follow-up:
+  - Monitor with `tmux attach -t phase1a_full` or by tailing `outputs/logs/phase1a/full_stdout.log`.
+  - After completion, retrieve `outputs/logs/phase1a/phase1a_runs.jsonl`, `outputs/tables/phase1a_ratio_by_map.csv`, and `outputs/figures/phase1a_ratio_by_map.png`.
+  - Push local commits to `origin/phase1a-ltm-paper-parity` when remote push authorization is available.
+
 ## 2026-05-21 21:14 - publish remote and prepare Linux server run
 
 - Request: Add the GitHub remote, push the project, and help prepare VS Code Remote-SSH server workflow.

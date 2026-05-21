@@ -84,6 +84,8 @@ Every run must record:
 
 - Build: `scripts/build_phase1a_batch.ps1`
 - Run: `scripts/run_phase1a_batch.ps1`
+- Linux build: `scripts/build_phase1a_batch.sh`
+- Linux run: `scripts/run_phase1a_batch.py` or `scripts/run_phase1a_batch.sh`
 - Runner: `build/phase1a-batch/phase1a_batch.exe`
 - Summary: `src/eval/phase1a_summarize.py`
 

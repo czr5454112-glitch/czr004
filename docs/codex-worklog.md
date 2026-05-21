@@ -1,5 +1,33 @@
 # Codex Worklog
 
+## 2026-05-21 21:14 - publish remote and prepare Linux server run
+
+- Request: Add the GitHub remote, push the project, and help prepare VS Code Remote-SSH server workflow.
+- Files changed:
+  - `scripts/build_phase1a_batch.sh`
+  - `scripts/run_phase1a_batch.py`
+  - `scripts/run_phase1a_batch.sh`
+  - `outputs/reports/phase1a_ltm_paper_parity_report.md`
+  - `outputs/reports/phase1a_ltm_paper_parity_plan.md`
+  - `docs/codex-worklog.md`
+- Commands run:
+  - `git status --short --branch`
+  - `git remote -v`
+  - `git branch --list`
+  - `git remote add origin https://github.com/czr5454112-glitch/czr004.git`
+  - `git push -u origin main phase1-ltm-reimpl phase1a-ltm-paper-parity`
+  - added `czr004-server` to local Windows `.ssh/config`
+- Key observations:
+  - GitHub remote is now `origin`.
+  - Branches `main`, `phase1-ltm-reimpl`, and `phase1a-ltm-paper-parity` are pushed.
+  - Local working tree still only has unrelated untracked `1.txt` before server helper edits.
+  - The server is Ubuntu 24.04, so Phase1a needs Linux shell helpers in addition to the existing PowerShell scripts.
+- Tests / validation:
+  - `python -m py_compile scripts\run_phase1a_batch.py src\eval\phase1a_summarize.py`: passed.
+  - `python scripts\run_phase1a_batch.py --dry-run --output-jsonl outputs\logs\phase1a\phase1a_python_driver_dry_run.jsonl`: passed for `lacam_star` and `lacam_star_ltm`.
+- Follow-up:
+  - Commit Linux build/run helpers and push them to `origin/phase1a-ltm-paper-parity`.
+
 ## 2026-05-21 20:35 - execute Phase1a paper parity chain
 
 - Request: Complete Phase1a in `C:\PROGRAMING\czr004`, strictly following the project guide, keeping records and git discipline.

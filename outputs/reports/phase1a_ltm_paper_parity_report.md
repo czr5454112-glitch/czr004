@@ -91,3 +91,12 @@ Full batch command, for an overnight or scheduled run:
 powershell -ExecutionPolicy Bypass -File C:\PROGRAMING\czr004\scripts\run_phase1a_batch.ps1 -Full -OutputJsonl outputs\logs\phase1a\phase1a_runs.jsonl
 python C:\PROGRAMING\czr004\src\eval\phase1a_summarize.py --input C:\PROGRAMING\czr004\outputs\logs\phase1a\phase1a_runs.jsonl
 ```
+
+Linux server command:
+
+```bash
+bash scripts/build_phase1a_batch.sh
+python3 scripts/run_phase1a_batch.py --dry-run --output-jsonl outputs/logs/phase1a/phase1a_linux_dry_run.jsonl
+python3 scripts/run_phase1a_batch.py --full --output-jsonl outputs/logs/phase1a/phase1a_runs.jsonl
+python3 src/eval/phase1a_summarize.py --input outputs/logs/phase1a/phase1a_runs.jsonl
+```

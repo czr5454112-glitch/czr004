@@ -433,6 +433,8 @@ Gate：若 `LaCAM*+NTM` 与 `LaCAM*+LTM` 平均打平，但 dense/bottleneck 更
 - `cmake`
 - `ninja`
 - `git`
+- `cxx-compiler`
+- `make`
 - `numpy`
 - `scipy`
 - `pandas`
@@ -443,7 +445,8 @@ Gate：若 `LaCAM*+NTM` 与 `LaCAM*+LTM` 平均打平，但 dense/bottleneck 更
 - `statsmodels`
 - `pytest`
 - `pybind11`
-- PyTorch 后续作为 Phase4 模型依赖单独安装；Phase0 基础环境先不强制安装，避免 Windows conda 包解压问题阻塞 C++/metrics 工作。
+- PyTorch 在 Phase0 中已经改为 GPU 版官方 CUDA 12.4 pip wheels：`torch 2.5.1+cu124`、`torchvision 0.20.1+cu124`、`torchaudio 2.5.1+cu124`；`torch.cuda.is_available()` 已在 RTX 4070 Laptop GPU 上验证通过。
+- C++ 基座构建使用 MSVC/Ninja；`external/lacam2` 不改源码，仅通过 `cpp/compat/lacam2_windows_compat.hpp` 做 Windows build shim。
 
 实际安装结果以 `conda list -n czr004` 为准。
 

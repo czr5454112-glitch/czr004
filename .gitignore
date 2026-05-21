@@ -27,3 +27,4 @@ artifacts/checkpoints/
 
 third_party/**/build/
 external/**/build/
+external/**/build*/

@@ -1,5 +1,40 @@
 # Codex Worklog
 
+## 2026-05-21 19:44 - start Phase1 LTM reimplementation
+
+- Request: Complete Phase1 in `C:\PROGRAMING\czr004`, strictly following the project guide, keeping records and git discipline.
+- Files changed:
+  - `cpp/ltm/ltm.hpp`
+  - `cpp/ltm/ltm.cpp`
+  - `cpp/ltm/CMakeLists.txt`
+  - `cpp/ltm/phase1_ltm_smoke.cpp`
+  - `scripts/build_phase1_ltm.ps1`
+  - `scripts/phase1_ltm_smoke.ps1`
+  - `docs/implementation-notes.md`
+  - `outputs/reports/phase1_ltm_reimpl_report.md`
+  - `docs/codex-worklog.md`
+- Commands run:
+  - `git status --short`
+  - searched the project guide for Phase1 requirements
+  - read Phase0 worklog, implementation notes, upstream baseline notes, and LaCAM* upstream interfaces
+  - extracted relevant LTM paper text with `pdftotext`
+  - `git switch -c phase1-ltm-reimpl`
+  - `powershell -ExecutionPolicy Bypass -File scripts\build_phase1_ltm.ps1`
+  - `powershell -ExecutionPolicy Bypass -File scripts\phase1_ltm_smoke.ps1`
+  - `powershell -ExecutionPolicy Bypass -File scripts\phase0_smoke.ps1`
+- Key observations:
+  - Phase0 gate is recorded as satisfied; upstream LaCAM* commit is `61a4c40ce91ce18c06eb2fe070aa9f1951eecb8d`.
+  - Phase1 must keep upstream solver sources unmodified and implement the LTM layer under `cpp/ltm`.
+  - The paper requires directed LTM edge weights, committed and blocked PIBT history, wait propagation with goal-wait ignore, weighted distances, and frequent restarts.
+  - The local LTM adapter uses project-owned code copied from the upstream planner structure so upstream LaCAM* files remain untouched.
+  - Full paper benchmark parity is not claimed yet; this completes the Phase1 structural gate and lightweight quantitative smoke.
+- Tests / validation:
+  - Phase1 smoke passed on `loop` with `baseline_sum_of_loss=15`, `ltm_sum_of_loss=15`, `committed=1305`, `blocked=367`.
+  - Phase1 smoke passed on `random-32-32-10` with `baseline_sum_of_loss=76`, `ltm_sum_of_loss=76`, `committed=333`.
+  - Phase0 regression smoke passed: upstream `test_all.exe` 7/7 and project `phase0_smoke.exe` `sum_of_loss=15`.
+- Follow-up:
+  - Build Phase2 metrics harness and then expand Phase1 quantitative parity to paper-style batch maps.
+
 ## 2026-05-20 - initialize project guide and environment plan
 
 - Request: 为 `C:\PROGRAMING\czr004` 写一份比粗略报告更细的项目指南，参考 `czr003` 的指南风格，并重新核实 LTM 的真实基座。
@@ -119,3 +154,98 @@
 - Follow-up:
   - Retry `git submodule add` when shell DNS/network access is available.
   - Record exact `external/lacam2` commit before any solver edits.
+
+## 2026-05-20 - complete Phase0 retry
+
+- Request: Retry PyTorch after the Windows conda long-path issue and complete Phase0.
+- Files changed:
+  - `.gitignore`
+  - `.gitmodules`
+  - `environment.yml`
+  - `cpp/compat/lacam2_windows_compat.hpp`
+  - `docs/implementation-notes.md`
+  - `docs/upstream-baseline.md`
+  - `outputs/reports/phase0_startup_plan.md`
+  - `outputs/reports/phase0_environment_report.md`
+  - `docs/codex-worklog.md`
+- Commands run:
+  - retried PyTorch with `CONDA_PKGS_DIRS=C:\tmp\conda_pkgs`
+  - rechecked `torch`, `torchvision`, and `torchaudio`
+  - added `external/lacam2` as a git submodule
+  - initialized recursive upstream submodules
+  - installed C++ compiler dependencies
+  - configured and built LaCAM* with MSVC/Ninja and a force-include compatibility header
+  - ran `build-czr004-msvc-compat\test_all.exe`
+  - attempted upstream `main.exe` CLI smoke on `assets/loop.*`
+- Key observations:
+  - PyTorch initially installed, but final `import torch` failed after toolchain troubleshooting; Phase0 does not accept PyTorch as ready.
+  - Upstream LaCAM* commit is `61a4c40ce91ce18c06eb2fe070aa9f1951eecb8d`.
+  - The upstream source tree is unmodified.
+  - MSVC needs a build-only shim for Unix-style `uint`, the alternative token `or`, and MSVC's `_MT` macro collision.
+  - The upstream library tests pass, but the upstream CLI timed out locally and is not yet a trusted experiment entrypoint.
+- Tests / validation:
+  - `test_all.exe`: 7 tests from 6 test suites passed.
+  - Final PyTorch import check failed with a DLL load error; forced CPU reinstall was not run after approval was denied.
+  - CLI loop smoke timed out and is recorded as a Phase1 entrypoint issue.
+- Follow-up:
+  - Start Phase1 by creating an LTM implementation checklist against the PDF.
+  - Before benchmark experiments, choose either a local adapter CLI or a repaired upstream CLI path without changing LaCAM* search semantics.
+  - Superseded on 2026-05-20: PyTorch is now fixed as GPU `cu124` wheels in the `czr004` environment.
+
+## 2026-05-20 - fix Phase0 blockers (CLI hang + smoke + PyTorch)
+
+- Request: Read latest Phase0 reports and fix outstanding problems.
+- Files changed:
+  - `cpp/tools/phase0_smoke.cpp`
+  - `cpp/tools/CMakeLists.txt`
+  - `scripts/build_lacam2_upstream.ps1`
+  - `scripts/phase0_smoke.ps1`
+  - `docs/implementation-notes.md`
+  - `docs/upstream-baseline.md`
+  - `outputs/reports/phase0_environment_report.md`
+  - `outputs/reports/phase0_startup_plan.md`
+  - `docs/codex-worklog.md`
+- Commands run:
+  - reproduced upstream `main.exe` hang and passing `test_planner.exe`
+  - built `build/phase0-smoke/phase0_smoke.exe`
+  - ran `scripts/phase0_smoke.ps1`
+  - attempted a temporary PyTorch CPU-wheel recovery in `czr004`
+- Key observations:
+  - Upstream `main.exe` appears unreliable; argparse defines both `-v/--version` and `-v/--verbose`, but the full CLI timeout root cause was not proven.
+  - Library-level solve path is healthy; project-owned `phase0_smoke.exe` completes loop-3 with `sum_of_loss=15`.
+  - Superseded on 2026-05-20: the accepted PyTorch stack is now GPU `2.5.1+cu124`, not CPU.
+- Tests / validation:
+  - `test_all.exe`: 7/7 passed.
+  - `phase0_smoke.exe`: exit 0, `sum_of_loss=15`.
+  - `import torch`: success.
+- Follow-up:
+  - Start Phase1 LTM checklist against PDF.
+  - Keep upstream sources unmodified; add LTM adapter layer under `cpp/ltm`.
+
+## 2026-05-20 - fix czr004 GPU PyTorch environment
+
+- Request: Solve the `czr004` conda environment now, using GPU PyTorch rather than CPU PyTorch, so Phase1 can start.
+- Files changed:
+  - `environment.yml`
+  - `docs/implementation-notes.md`
+  - `outputs/reports/phase0_environment_report.md`
+  - `outputs/reports/phase0_startup_plan.md`
+  - `docs/codex-worklog.md`
+- Commands run:
+  - checked `nvidia-smi` and existing `torch` CUDA state
+  - removed conda CPU `pytorch`/`libtorch` packages
+  - installed PyTorch from official CUDA 12.4 pip wheels
+  - force-reinstalled `pillow==10.4.0` to fix `torchvision` DLL loading
+  - ran `scripts/phase0_smoke.ps1`
+- Key observations:
+  - The machine has an NVIDIA GeForce RTX 4070 Laptop GPU and the driver reports CUDA 13.1 capability.
+  - Conda had installed `pytorch-cuda=12.4` but still selected CPU `pytorch`/`libtorch`, so `torch.version.cuda` stayed `None`.
+  - The accepted stack is `torch 2.5.1+cu124`, `torchvision 0.20.1+cu124`, and `torchaudio 2.5.1+cu124`.
+- Tests / validation:
+  - `torch.cuda.is_available()`: `True`.
+  - CUDA tensor smoke ran on `cuda:0`.
+  - GPU device: `NVIDIA GeForce RTX 4070 Laptop GPU`.
+  - `test_all.exe`: 7/7 passed.
+  - `phase0_smoke.exe`: exit 0, `sum_of_loss=15`.
+- Follow-up:
+  - Phase1 can start with LTM paper-faithful implementation planning and a project-owned adapter entrypoint.

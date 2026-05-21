@@ -142,11 +142,16 @@ def main() -> int:
         output_jsonl.unlink()
 
     metadata = {
-        "project_commit": git_value(root, ["rev-parse", "HEAD"]),
-        "external_commit": git_value(root, ["rev-parse", "HEAD"], root / "external/lacam2"),
-        "branch": git_value(root, ["branch", "--show-current"]),
-        "dirty": dirty_state(root),
-        "platform": "Linux/Windows Python Phase1a driver",
+        "project_commit": os.environ.get("PHASE1A_PROJECT_COMMIT")
+        or git_value(root, ["rev-parse", "HEAD"]),
+        "external_commit": os.environ.get("PHASE1A_EXTERNAL_LACAM2_COMMIT")
+        or os.environ.get("PHASE1A_EXTERNAL_COMMIT")
+        or git_value(root, ["rev-parse", "HEAD"], root / "external/lacam2"),
+        "branch": os.environ.get("PHASE1A_BRANCH")
+        or git_value(root, ["branch", "--show-current"]),
+        "dirty": os.environ.get("PHASE1A_DIRTY") or dirty_state(root),
+        "platform": os.environ.get("PHASE1A_PLATFORM")
+        or "Linux/Windows Python Phase1a driver",
     }
 
     if args.dry_run:

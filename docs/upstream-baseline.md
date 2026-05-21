@@ -128,4 +128,4 @@ powershell -File C:\PROGRAMING\czr004\scripts\build_lacam2_upstream.ps1 -WithPha
 
 ## Phase0 Rule
 
-No solver semantic code should be changed until the upstream commit hash and baseline smoke command are recorded here. This condition is satisfied for Phase0 via the recorded submodule hash, `test_all.exe`, and `phase0_smoke.exe`. Phase1 benchmark runs should use the project smoke/adapter entrypoint, not upstream `main.exe -v`.
+No solver semantic code should be changed until the upstream commit hash and baseline smoke command are recorded here. This condition is satisfied for Phase0 via the recorded submodule hash, `test_all.exe`, and `phase0_smoke.exe`. Phase1/Phase1a benchmark runs should use the project smoke/adapter entrypoint, not upstream `main.exe -v`.

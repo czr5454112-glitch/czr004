@@ -119,18 +119,27 @@ NTM 不能只做“拟合 LTM 边权”。pure edge regression 只作为预训�
 - 记录 PDF 中的关键口径。
 - 选择并记录 LaCAM* 上游 commit。
 
-### Phase1：LTM 复现
+### Phase1：LTM 结构复现
 
 - 跑通 LaCAM* baseline。
 - 实现 directed traffic map。
 - 接入 PIBT trace。
 - 实现 LTM update、weighted distance、restart loop。
 - 完成 small smoke 和 fallback parity。
-- 增加 quantitative parity gate：至少在 smoke 和一个代表性图族上复现相对排序趋势。
+- 完成 structural gate：LTM loop 可运行、边权会更新、fallback 不坏。
+
+### Phase1a：LTM 论文级定量复现
+
+- 在进入 Phase2 前，先按 LTM 论文 one-shot MAPF 口径做完整定量复现。
+- 复核 8 张 grid maps、每图 25 random instances、30s setting、agent 数范围、objective 和 seed。
+- 至少复现 `LaCAM*` 与 `LaCAM*+LTM` 两列；`TO/SUO` 只有在原实现或可审计复现可用时纳入。
+- 输出 raw CSV/JSONL、summary table 和 `outputs/reports/phase1a_ltm_paper_parity_report.md`。
+- Gate：确认 `LaCAM*+LTM` 相对 `LaCAM*` 的趋势与论文主结论一致，或明确记录偏差原因。
+- 不完成 Phase1a，不进入 Phase2，除非用户明确暂停并写入 worklog。
 
 ### Phase2：指标 harness
 
-- 固化 SoL、SoL ratio、AUC、coverage。
+- 在 Phase1a 结果对齐后，固化 SoL、SoL ratio、AUC、coverage。
 - 增加 expanded nodes、high-level expansions、low-level PIBT calls，支持 equal-node 分析。
 - 统一 JSONL metadata schema。
 - 所有 baseline 与 NTM 共用同一统计代码。

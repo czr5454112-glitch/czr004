@@ -1,5 +1,29 @@
 # Codex Worklog
 
+## 2026-05-21 20:02 - add Phase1a paper-level parity stage
+
+- Request: Add a new Phase1a after Phase1 and before Phase2. Phase1a should perform full paper-level quantitative reproduction aligned with the LTM paper before entering Phase2.
+- Files changed:
+  - `deep-research-report.md`
+  - `deep-research-report (1).md`
+  - `docs/implementation-notes.md`
+  - `docs/upstream-baseline.md`
+  - `outputs/reports/phase1_ltm_reimpl_report.md`
+  - `outputs/reports/phase1a_ltm_paper_parity_plan.md`
+  - `docs/codex-worklog.md`
+- Commands run:
+  - `git status --short`
+  - `git branch --show-current`
+  - searched project guide, docs, and reports for Phase1/Phase2 references
+- Key observations:
+  - Phase1 currently means the LTM structural implementation gate and lightweight smoke.
+  - The full paper-level quantitative parity benchmark was previously listed as a future expansion, but it now needs to become an explicit blocking phase.
+  - Phase1a should allow only paper-route baselines. `TO/SUO` must be original/auditable or explicitly marked unavailable.
+- Tests / validation:
+  - Documentation-only change; no solver or benchmark commands were run.
+- Follow-up:
+  - Start Phase1a by re-reading the LTM experiment section and listing exact maps / agent schedules before writing batch code.
+
 ## 2026-05-21 19:44 - start Phase1 LTM reimplementation
 
 - Request: Complete Phase1 in `C:\PROGRAMING\czr004`, strictly following the project guide, keeping records and git discipline.
@@ -33,7 +57,7 @@
   - Phase1 smoke passed on `random-32-32-10` with `baseline_sum_of_loss=76`, `ltm_sum_of_loss=76`, `committed=333`.
   - Phase0 regression smoke passed: upstream `test_all.exe` 7/7 and project `phase0_smoke.exe` `sum_of_loss=15`.
 - Follow-up:
-  - Build Phase2 metrics harness and then expand Phase1 quantitative parity to paper-style batch maps.
+  - Superseded on 2026-05-21: expand paper-style quantitative parity as Phase1a before Phase2.
 
 ## 2026-05-20 - initialize project guide and environment plan
 

@@ -12,9 +12,11 @@ This file records implementation decisions where the local code cannot be direct
 
 ## Open Items
 
-- Define quantitative parity tolerance after the first reproducible LTM smoke.
-- Expand the Phase1 structural smoke into a full paper-parity benchmark: eight grid maps, 25 random instances per map, 30s setting.
-- Decide whether later experiment scripts should use the current `cpp/ltm` adapter directly or a higher-level metrics harness entrypoint.
+- Phase1a must define quantitative parity tolerance before any result is treated as paper-level reproduction.
+- Phase1a must expand the Phase1 structural smoke into a full paper-parity benchmark: eight grid maps, 25 random instances per map, 30s setting.
+- Phase1a must decide whether `TO/SUO` can be included from original implementations or whether they are explicitly marked unavailable / not reproduced.
+- Phase2 is blocked until Phase1a has a reproducible LTM paper-parity report.
+- Decide whether later long-running experiment scripts should use the current `cpp/ltm` adapter directly or a higher-level metrics harness entrypoint.
 
 ## 2026-05-20 - Phase0 environment retry
 
@@ -72,3 +74,17 @@ The Pillow reinstall fixes a Windows DLL-load failure hit when importing `torchv
 - The frequent-restart wrapper runs repeated one-shot LTM-guided searches until the time limit or `max_iterations` is reached. The first iteration has no node budget. Subsequent iterations use `10 * current_best_makespan`, matching the Phase1 guide.
 - For the one-shot smoke, `SelectRestartNode` is implemented as root restart. The paper notes root restart generally converges well in one-shot MAPF given enough runtime; more advanced restart-node selection remains future work.
 - Current Phase1 status is a structural gate plus lightweight quantitative smoke, not a claim of full paper benchmark parity.
+
+## 2026-05-21 - Phase1a inserted before Phase2
+
+- The project plan now splits LTM reproduction into two stages:
+  - Phase1: structural `LaCAM*+LTM` reimplementation and lightweight smoke.
+  - Phase1a: full paper-level quantitative reproduction and result alignment.
+- Phase1a is now a blocking gate before Phase2. Do not start Phase2 metrics-harness work unless Phase1a is complete, or unless the user explicitly pauses Phase1a and the reason is recorded in `docs/codex-worklog.md`.
+- Phase1a should produce:
+  - `outputs/reports/phase1a_ltm_paper_parity_plan.md`
+  - raw JSONL/CSV outputs
+  - summary tables
+  - `outputs/reports/phase1a_ltm_paper_parity_report.md`
+- Phase1a minimum comparison is `LaCAM*` vs local `LaCAM*+LTM`. `LaCAM*+TO` and `LaCAM*+SUO` must not be reimplemented casually; include them only if original implementations or auditable reproductions are available.
+- Phase2 should consolidate the metrics and logging practices proven in Phase1a into a reusable harness for NTM, instead of being the first place where paper-level quantitative claims are made.

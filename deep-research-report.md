@@ -135,7 +135,8 @@ LaCAM* baseline
 | `main` | 始终可构建、文档齐全、阶段成果稳定 |
 | `phase0-project-hygiene` | git、环境、目录、baseline 获取 |
 | `phase1-ltm-reimpl` | LaCAM*+LTM paper-faithful reimplementation |
-| `phase2-metrics-harness` | 统一指标和日志 |
+| `phase1a-ltm-paper-parity` | LTM 论文级定量复现与结果对齐 |
+| `phase2-metrics-harness` | 统一指标和日志，把 Phase1a 临时复现口径固化为长期管线 |
 | `phase3-ntm-data` | teacher dataset、trace schema、训练样本 |
 | `phase4-ntm-lite` | MLP/CNN/GNN traffic map |
 | `phase5-solver-integration` | NTM 接入 LaCAM* guidance 层 |
@@ -285,9 +286,9 @@ NTM 的学术贡献不能只写成“用神经网络拟合 LTM 权重”。纯 e
 
 Gate：不看性能，只看环境和记录是否规范。
 
-### Phase1：LaCAM*+LTM 复现
+### Phase1：LaCAM*+LTM 结构复现
 
-目标：按论文结构复现 `LaCAM*+LTM`，作为 NTM teacher 和强 baseline。
+目标：按论文结构搭起 `LaCAM*+LTM` 的可运行结构，作为后续论文级定量复现、NTM teacher 和强 baseline 的工程基座。
 
 必须实现：
 
@@ -300,16 +301,38 @@ Gate：不看性能，只看环境和记录是否规范。
 - 第一轮不加 node budget，第二轮起 `10 * current makespan`。
 - LTM 实现偏差记录在 `docs/implementation-notes.md`。
 
-Phase1 gate 分两层：
+Phase1 gate：
 
 - structural gate：loop 可运行、边权会随 history 更新、fallback 不坏、指标同口径。
-- quantitative parity gate：在至少一个小型 benchmark smoke 和一个论文代表性图族上，`LaCAM*+LTM` 的相对排序趋势应不弱于 `LaCAM*`；若无法对齐，必须在 `docs/implementation-notes.md` 说明偏差原因。
+- lightweight quantitative smoke：在至少一个小型 benchmark smoke 和一个论文代表性图族小样本上，`LaCAM*+LTM` 不明显弱于 `LaCAM*`；若无法对齐，必须在 `docs/implementation-notes.md` 说明偏差原因。
 
-最终 paper-faithful 复现还需要在 8 张 grid maps、每图 25 random instances、30s setting 上生成完整表格。若论文只给曲线而无 CSV，报告中用趋势和置信区间作为验收，不伪造精确数值。
+Phase1 只验收结构正确和可运行，不再把完整论文级定量复现混在本阶段里。完整论文级结果对齐放入 Phase1a，并作为 Phase2 的前置 gate。
+
+### Phase1a：LTM 论文级定量复现
+
+目标：在进入 Phase2 统一 metrics harness 前，先完成与 LTM 论文设置对齐的完整定量复现，确认本地 `LaCAM*+LTM` 的结果趋势和论文主结论一致。
+
+必须完成：
+
+- 复核 LTM 论文 one-shot MAPF 实验设置，写入 `outputs/reports/phase1a_ltm_paper_parity_plan.md`。
+- 明确实验地图、agent 数、instance 数、随机种子、time limit、objective 和硬件环境。
+- 按论文 one-shot 设置生成或整理 8 张 grid maps、每图 25 random instances、30s setting 的实验入口；若本地素材缺失，先记录来源、缺口和补齐方式。
+- 至少跑通 `LaCAM*` 与本项目 `LaCAM*+LTM` 两列；`LaCAM*+TO`、`LaCAM*+SUO` 仅在能获得原实现或可审计复现时纳入，否则必须在报告中标明 unavailable / not reproduced，不能用自造替代品冒充论文 baseline。
+- 统计 LTM 论文主指标 `sum_of_loss_ratio`，同时记录 success、runtime、returned solution count、node/loop count，以及必要的随机种子和 commit。
+- 输出原始 JSONL/CSV、汇总表格和复现实验报告：`outputs/reports/phase1a_ltm_paper_parity_report.md`。
+- 若论文只给曲线而无 CSV，报告中用趋势、置信区间和相对排序作为验收，不伪造精确数值。
+- 若 `LaCAM*+LTM` 不能达到论文同向趋势，先记录偏差诊断，再决定是修正 Phase1 实现还是降低复现声明强度。
+
+Phase1a gate：
+
+- paper setting 可复现：所有命令、commit、config、seed、map、agent 数、time limit 可追踪。
+- result table 可解释：至少能回答 `LaCAM*+LTM` 相对 `LaCAM*` 是否复现论文主趋势。
+- implementation deviations 已写入 `docs/implementation-notes.md`。
+- 不完成 Phase1a，不进入 Phase2；除非用户明确暂停论文级复现并在 worklog 中记录原因。
 
 ### Phase2：统一 metrics harness
 
-目标：先把指标管线做扎实，再谈算法收益。
+目标：在 Phase1a 已经完成论文级 LTM 定量对齐后，把复现实验中用到的指标、日志和统计脚本固化为可长期复用的统一管线，再谈 NTM 算法收益。
 
 必须实现：
 
@@ -471,8 +494,10 @@ Gate：若 `LaCAM*+NTM` 与 `LaCAM*+LTM` 平均打平，但 dense/bottleneck 更
 2. 补齐或重新执行 `czr004` conda 环境依赖安装。
 3. 选择 LaCAM* 上游仓库，并记录 exact commit。
 4. 跑最小 LaCAM* baseline smoke。
-5. 建立 metrics library 雏形。
-6. 开始 LTM paper-faithful reimplementation。
-7. 用 LTM 产生 teacher 数据后，再进入 NTM。
+5. 建立 Phase1 结构复现所需的最小 LTM adapter。
+6. 完成 Phase1：LaCAM*+LTM structural reimplementation。
+7. 完成 Phase1a：LTM 论文级定量复现与结果对齐。
+8. 再进入 Phase2：统一 metrics harness，把 Phase1a 的临时复现统计固化为长期管线。
+9. 用 LTM 产生 teacher 数据后，再进入 NTM。
 
 这个项目的核心品味应该是：底座单一、日志细、指标同口径、gate 不虚高、NTM 慢慢加。

@@ -133,13 +133,13 @@ def write_zip(output_zip: Path, source_dir: Path) -> None:
     if output_zip.exists():
         output_zip.unlink()
 
-    with zipfile.ZipFile(output_zip, "w", compression=zipfile.ZIP_DEFLATED) as zf:
+    with zipfile.ZipFile(output_zip, "w", compression=zipfile.ZIP_STORED) as zf:
         for path in sorted(source_dir.rglob("*")):
             if not path.is_file():
                 continue
             arcname = path.relative_to(source_dir.parent).as_posix()
             info = zipfile.ZipInfo(arcname, ZIP_TIMESTAMP)
-            info.compress_type = zipfile.ZIP_DEFLATED
+            info.compress_type = zipfile.ZIP_STORED
             zf.writestr(info, path.read_bytes())
 
 

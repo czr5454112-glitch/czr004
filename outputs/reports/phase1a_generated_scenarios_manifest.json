@@ -1292,5 +1292,5 @@
   "scenario_dir": "outputs/tmp/phase1a/generated/phase1a-generated-random",
   "scenario_zip": "outputs/tmp/phase1a/generated/phase1a-generated-random.zip",
   "script_version": "phase1a-scenario-generator-v1",
-  "zip_sha256": "e27cc015c4e4a5fd8c03d38bbf23c6067deb6991c5b57ea9a23ad597922d9ff9"
+  "zip_sha256": "635c590279c350f4695f98fe4e0061fb30e6bc86e79ac1d6f51350f1018fa159"
 }

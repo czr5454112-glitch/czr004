@@ -1,5 +1,24 @@
 # Codex Worklog
 
+## 2026-05-22 - resume Phase1a server batch after expected no-solution exit
+
+- Request: Check whether the server Phase1a run is still healthy.
+- Files changed:
+  - `scripts/run_phase1a_batch.py`
+  - `docs/codex-worklog.md`
+- Commands run:
+  - checked server `tmux`, `phase1a_runs.jsonl`, `full_stdout.log`, and `full_stderr.log`
+  - reproduced the stopped point locally with a 1s failure probe
+  - `python -m py_compile scripts\run_phase1a_batch.py`
+- Key observations:
+  - The server `phase1a_full` tmux session had exited after 251 JSONL rows.
+  - The failing solver run had already emitted a valid `success=false` JSONL row, then returned exit code `2`.
+  - Exit code `2` is an expected benchmark outcome for no-solution/timeout rows and must not stop the full batch.
+- Fix:
+  - The Python batch driver now allows solver return codes `0` and `2`, and still raises on other nonzero return codes.
+- Follow-up:
+  - Repackage and relaunch the full server batch from a fresh run directory pinned to this fix commit.
+
 ## 2026-05-21 22:34 - launch Phase1a full batch on server
 
 - Request: Use the SSH skill workflow to upload the Phase1a runtime package to the Ubuntu server and start the full reproduction batch in `tmux`.

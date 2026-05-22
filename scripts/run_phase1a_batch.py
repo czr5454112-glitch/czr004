@@ -87,7 +87,9 @@ def run_task(
         "--ltm-max-iterations",
         str(ltm_max_iterations),
     ]
-    subprocess.run(cmd, check=True)
+    completed = subprocess.run(cmd, check=False)
+    if completed.returncode not in (0, 2):
+        completed.check_returncode()
 
 
 def ensure_scen_cache(root: Path) -> Path:

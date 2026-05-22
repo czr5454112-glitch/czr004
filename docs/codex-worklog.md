@@ -6,25 +6,36 @@
 - Files changed:
   - `scripts/run_phase1a_batch.py`
   - `scripts/run_phase1a_batch.ps1`
+  - `scripts/generate_phase1a_scenarios.py`
+  - `configs/phase1a/manifest.yaml`
+  - `configs/phase1a/manifest.jsonl`
+  - `src/data/benchmark_index.md`
   - `outputs/reports/phase1a_prelaunch_code_review.md`
+  - `outputs/reports/phase1a_generated_scenarios_manifest.json`
+  - `outputs/reports/phase1a_ltm_paper_parity_plan.md`
+  - `outputs/reports/phase1a_ltm_paper_parity_report.md`
   - `docs/implementation-notes.md`
   - `docs/codex-worklog.md`
 - Commands run:
   - checked server `tmux`, `phase1a_runs.jsonl`, `full_stdout.log`, and `full_stderr.log`
   - reproduced the stopped point locally with a 1s failure probe
   - `python -m py_compile scripts\run_phase1a_batch.py`
+  - `python scripts\generate_phase1a_scenarios.py --overwrite`
+  - `python scripts\run_phase1a_batch.py --preflight`
 - Key observations:
   - The server `phase1a_full` tmux session had exited after 251 JSONL rows.
   - The failing solver run had already emitted a valid `success=false` JSONL row, then returned exit code `2`.
   - Exit code `2` is an expected benchmark outcome for no-solution/timeout rows and must not stop the full batch.
   - Prelaunch review found that `scen-random.zip` does not contain enough start-goal rows for many frozen Figure 1 agent counts; the current full manifest would produce invalid rows and is blocked.
+  - Deterministic generated random scenarios with base seed `20260522` now pass local preflight for the full 3600-task manifest.
 - Fix:
   - The Python batch driver now allows solver return codes `0` and `2`, and still raises on other nonzero return codes.
   - The PowerShell runner now has the same exit-code policy.
   - Both runners now include preflight checks for map files, scenario files, and scenario row capacity.
+  - Added deterministic scenario generator and switched the Phase1a manifest to `outputs/tmp/phase1a/generated/phase1a-generated-random.zip`.
 - Follow-up:
-  - Do not relaunch the full server batch until the scenario source is corrected.
-  - Recommended correction: generate deterministic random scenario files with enough unique start-goal pairs for every frozen agent count, then label that source explicitly in the reports.
+  - Upload the updated package to the server.
+  - Run `python3 scripts/generate_phase1a_scenarios.py --overwrite` and `python3 scripts/run_phase1a_batch.py --preflight` on the server before relaunching the full batch.
 
 ## 2026-05-21 22:34 - launch Phase1a full batch on server
 

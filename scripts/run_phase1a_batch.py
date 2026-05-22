@@ -114,6 +114,11 @@ def ensure_scen_cache(root: Path, records: list[dict] | None = None) -> Path:
     cache.mkdir(parents=True, exist_ok=True)
     for archive_name in sorted(archive_names):
         archive = root / archive_name
+        if not archive.exists():
+            raise FileNotFoundError(
+                f"missing scenario archive: {archive}; "
+                "run scripts/generate_phase1a_scenarios.py if this manifest uses generated scenarios"
+            )
         top_dir = archive_top_dir(archive)
         if top_dir and (cache / top_dir).exists():
             continue

@@ -1,11 +1,11 @@
 # Phase1a Prelaunch Code Review
 
 Date: 2026-05-22
-Status: blocked before full batch restart
+Status: resolved for generated-scenario path; server full batch still requires final server preflight before launch
 
 ## Summary
 
-The server full batch must not be restarted from the current manifest yet. The runner failure from the first server attempt exposed one expected-control-flow bug, and the prelaunch review found a more important benchmark data issue.
+The first server full batch must not be interpreted as a valid Phase1a run. The runner failure exposed one expected-control-flow bug, and the prelaunch review found a more important benchmark data issue. The current manifest now points to deterministic generated scenarios rather than the insufficient public `scen-random.zip`.
 
 ## Findings
 
@@ -24,21 +24,27 @@ The server full batch must not be restarted from the current manifest yet. The r
 | `warehouse-10-20-10-2-1` | 1000 | 2000 | 1200, 1400, 1600, 1800, 2000 |
 | `warehouse-10-20-10-2-2` | 1000 | 2000 | 1200, 1400, 1600, 1800, 2000 |
 
-3. A preflight gate is now added to both runners. It checks map existence, scenario existence, and scenario capacity before non-dry-run execution. The current full manifest correctly fails preflight with 200 scenario-capacity issues.
+3. A preflight gate is now added to both runners. It checks map existence, scenario existence, and scenario capacity before non-dry-run execution. The old public-scenario manifest correctly failed preflight with 200 scenario-capacity issues.
+
+4. `scripts/generate_phase1a_scenarios.py` now generates 25 deterministic random scenarios per map with enough rows for every frozen Figure 1 agent count. It uses base seed `20260522`, samples starts and goals without replacement from each map's largest 4-neighbor connected free-cell component, and enforces `start != goal` for every agent.
 
 ## Validation
 
 - `python -m py_compile scripts\run_phase1a_batch.py`: passed.
-- Python preflight on the current full manifest: failed as expected with scenario-capacity errors.
+- Python preflight on the old public-scenario full manifest: failed as expected with scenario-capacity errors.
+- Python preflight on the generated-scenario full manifest: passed with 3600 tasks.
 - PowerShell preflight on `empty-32-32`, 600 agents, instance 1: failed as expected.
 - Python valid subset probe on `empty-32-32`, 500 agents, instance 1, both methods: preflight passed and two JSONL rows were written.
 - Python and PowerShell `--skip-preflight` / `-SkipPreflight` probes confirm exit code `2` no longer stops the driver.
+- Python high-agent generated-scenario probe on `empty-32-32`, 1000 agents, instance 1, both methods: preflight passed and two JSONL rows were written.
 
 ## Recommendation
 
-Use one of two explicit paths before restarting the server batch:
+Before restarting the server batch, run the generator and preflight on the server:
 
-- Recommended: generate deterministic random scenario files with enough unique start-goal pairs for every frozen Figure 1 agent count. This keeps the 72 map-agent points and 3600-run paper-scale structure, but must be labeled as generated random instances rather than exact MAPF benchmark `scen-random.zip` instances.
-- Conservative subset: cap each map's agent counts to the capacity of the existing `scen-random.zip` files. This would be useful for debugging but would reduce the benchmark to 37 map-agent points and would not satisfy Phase1a paper parity.
+```bash
+python3 scripts/generate_phase1a_scenarios.py --overwrite
+python3 scripts/run_phase1a_batch.py --preflight
+```
 
-No new full server batch was launched after this review.
+No new full server batch was launched during this review.

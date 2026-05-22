@@ -102,17 +102,20 @@ if (-not (Test-Path $ManifestPath)) {
   throw "Missing manifest: $ManifestPath"
 }
 
-$ScenCache = Join-Path $Root "outputs\tmp\phase1a\scen"
-$ScenRandomDir = Join-Path $ScenCache "scen-random"
-if (-not (Test-Path $ScenRandomDir)) {
-  New-Item -ItemType Directory -Force $ScenCache | Out-Null
-  $Archive = Join-Path $Root "external\lacam2\scripts\scen\scen-random.zip"
-  Expand-Archive -LiteralPath $Archive -DestinationPath $ScenCache -Force
-}
-
 $Records = Get-Content -LiteralPath $ManifestPath | Where-Object { $_.Trim() } | ForEach-Object { $_ | ConvertFrom-Json }
 $Methods = @("lacam_star", "lacam_star_ltm")
 $TaskCount = 0
+
+$ScenCache = Join-Path $Root "outputs\tmp\phase1a\scen"
+New-Item -ItemType Directory -Force $ScenCache | Out-Null
+$Archives = $Records | ForEach-Object { if ($_.scen_archive) { [string]$_.scen_archive } else { "external\lacam2\scripts\scen\scen-random.zip" } } | Sort-Object -Unique
+foreach ($ArchiveRelative in $Archives) {
+  $Archive = Join-Path $Root $ArchiveRelative
+  if (-not (Test-Path $Archive)) {
+    throw "Missing scenario archive: $Archive. Generate it first if this is a generated Phase1a manifest."
+  }
+  Expand-Archive -LiteralPath $Archive -DestinationPath $ScenCache -Force
+}
 
 function Get-ScenarioCapacity {
   param([string]$Path)

@@ -73,7 +73,7 @@ The dry-run gate is satisfied:
 - ratio values are finite and positive.
 - Phase0 and Phase1 regression smoke passed after adding the Phase1a runner.
 
-The full Phase1a parity gate remains blocked until the generated-scenario manifest is run on the server for the full 30s batch and the results are summarized. The plus-3000 points must be reported as an extension, separate from the base paper-parity judgement. Do not enter Phase2 from this report alone.
+The full Phase1a parity gate remains blocked until the generated-scenario manifest completes on the server for the full 30s batch and the results are summarized. On 2026-05-22 10:15 +08:00, the plus-3000 server batch was launched in tmux session `phase1a_full`; server preflight passed with `Tasks=3800` and initial JSONL rows were written. The plus-3000 points must be reported as an extension, separate from the base paper-parity judgement. Do not enter Phase2 from this report alone.
 
 ## Repro Commands
 

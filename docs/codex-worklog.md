@@ -1,5 +1,40 @@
 # Codex Worklog
 
+## 2026-05-22 10:15 - launch generated Phase1a plus-3000 full batch
+
+- Request: Re-check Phase1a code and LTM settings before the formal server run, then launch if clean.
+- Files changed:
+  - `docs/codex-worklog.md`
+  - `outputs/reports/phase1a_3000_extension_plan.md`
+  - `outputs/reports/phase1a_ltm_paper_parity_report.md`
+  - `outputs/reports/phase1a_prelaunch_code_review.md`
+- Commands run:
+  - `git status --short --branch`
+  - `python -m py_compile scripts\generate_phase1a_scenarios.py scripts\run_phase1a_batch.py src\eval\phase1a_summarize.py`
+  - `python scripts\run_phase1a_batch.py --manifest configs\phase1a\manifest_plus_3000.jsonl --preflight`
+  - inspected `cpp/tools/phase1a_batch.cpp`, `cpp/ltm/ltm.cpp`, `scripts/generate_phase1a_scenarios.py`, and `scripts/run_phase1a_batch.py`
+  - started `/root/shared-nvme/server_start_phase1a_full.sh` on the server
+- Key observations:
+  - Local worktree remains on `phase1a-ltm-paper-parity`, ahead of origin by 8 commits, with only unrelated untracked `1.txt`.
+  - Plus-3000 manifest contains 76 map-agent points: 72 base paper-parity points plus 4 eligible 3000-agent extension points.
+  - Total formal server run is 3800 solver runs: 76 points x 25 instances x 2 methods.
+  - LTM batch entrypoint uses `Objective::OBJ_SUM_OF_LOSS`, 30s default time limit, `ltm_max_iterations=100000`, and `node_budget_factor=10`.
+  - LTM traffic weights are normalized into the configured `[0, 10]` range and used by weighted distance as `1 + normalized_ltm_weight`.
+  - The server script pins project commit `65984dbf729e90177cb72cecab49cc222bd1bd1f` and LaCAM2 commit `61a4c40ce91ce18c06eb2fe070aa9f1951eecb8d`.
+- Server launch:
+  - tmux session: `phase1a_full`
+  - server directory: `/root/shared-nvme/czr004_phase1a_65984db`
+  - preflight log: `outputs/logs/phase1a/full_preflight.log`
+  - result JSONL: `outputs/logs/phase1a/phase1a_plus_3000_runs.jsonl`
+  - start time: `2026-05-22T10:15:11+08:00`
+- Initial validation:
+  - Server preflight passed with `Tasks=3800`.
+  - Initial JSONL check showed 5 rows written.
+  - `full_stderr.log` was empty at launch check.
+- Follow-up:
+  - Monitor until `phase1a_plus_3000_runs.jsonl` reaches 3800 rows and `full_finished_at.txt` exists.
+  - After completion, summarize `outputs/tables/phase1a_plus_3000_ratio_by_map.csv` and report the 3000-agent points separately from the base paper-parity claim.
+
 ## 2026-05-22 - resume Phase1a server batch after expected no-solution exit
 
 - Request: Check whether the server Phase1a run is still healthy.

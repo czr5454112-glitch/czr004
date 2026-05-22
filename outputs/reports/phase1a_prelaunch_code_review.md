@@ -1,7 +1,7 @@
 # Phase1a Prelaunch Code Review
 
 Date: 2026-05-22
-Status: resolved for generated-scenario path; server full batch still requires final server preflight before launch
+Status: resolved for generated-scenario path; server full batch launched after final preflight
 
 ## Summary
 
@@ -54,4 +54,14 @@ python3 scripts/generate_phase1a_scenarios.py --manifest configs/phase1a/manifes
 python3 scripts/run_phase1a_batch.py --manifest configs/phase1a/manifest_plus_3000.jsonl --preflight
 ```
 
-No new full server batch was launched during this review.
+## Launch Record
+
+On 2026-05-22 10:15 +08:00, the formal plus-3000 batch was launched on the server in tmux session `phase1a_full`.
+
+- Server directory: `/root/shared-nvme/czr004_phase1a_65984db`
+- Project commit: `65984dbf729e90177cb72cecab49cc222bd1bd1f`
+- External LaCAM2 commit: `61a4c40ce91ce18c06eb2fe070aa9f1951eecb8d`
+- Manifest: `configs/phase1a/manifest_plus_3000.jsonl`
+- Server preflight: `Phase1a preflight passed. Tasks=3800`
+- Output JSONL: `outputs/logs/phase1a/phase1a_plus_3000_runs.jsonl`
+- Initial health check: JSONL had begun writing rows and `full_stderr.log` was empty.

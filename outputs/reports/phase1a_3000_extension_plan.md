@@ -1,7 +1,7 @@
 # Phase1a 3000-Agent Extension Plan
 
 Date: 2026-05-22
-Status: ready for server preflight
+Status: running on server in tmux session `phase1a_full`
 
 ## Purpose
 
@@ -43,7 +43,19 @@ This extension keeps the full LTM paper-parity schedule intact and adds a stress
 - `python scripts\generate_phase1a_scenarios.py --manifest configs\phase1a\manifest_plus_3000.jsonl --overwrite`: generated 200 scenario files.
 - `python scripts\run_phase1a_batch.py --manifest configs\phase1a\manifest_plus_3000.jsonl --preflight`: passed with 3800 tasks.
 - `python scripts\run_phase1a_batch.py --manifest configs\phase1a\manifest_plus_3000.jsonl --map-subset random-64-64-20 --agent-subset 3000 --instance-subset 1 --max-tasks 1 --time-limit-sec 1`: wrote a valid JSONL row with `valid_instance=true`.
+- Server launch check on 2026-05-22 10:15 +08:00: `/root/shared-nvme/server_start_phase1a_full.sh` created tmux session `phase1a_full`.
+- Server preflight log: `Phase1a preflight passed. Tasks=3800`.
+- Initial server output: `outputs/logs/phase1a/phase1a_plus_3000_runs.jsonl` had begun writing rows and `full_stderr.log` was empty.
 
 ## Server Rule
 
 All server setup, preflight, dry-run, and full-batch execution must be launched inside `tmux`.
+
+## Server Output Paths
+
+- Work directory: `/root/shared-nvme/czr004_phase1a_65984db`
+- JSONL: `outputs/logs/phase1a/phase1a_plus_3000_runs.jsonl`
+- Stdout: `outputs/logs/phase1a/full_stdout.log`
+- Stderr: `outputs/logs/phase1a/full_stderr.log`
+- Summary CSV: `outputs/tables/phase1a_plus_3000_ratio_by_map.csv`
+- Summary figure: `outputs/figures/phase1a_plus_3000_ratio_by_map.png`

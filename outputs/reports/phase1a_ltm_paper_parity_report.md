@@ -1,7 +1,7 @@
 # Phase1a LTM Paper Parity Report
 
 Date: 2026-05-21
-Status: ready for server preflight -- reproducible Phase1a chain and 30s probe passed; deterministic generated random scenarios now pass the full 3600-task preflight locally. Full server batch has not been relaunched.
+Status: ready for server preflight -- reproducible Phase1a chain and 30s probe passed; deterministic generated random scenarios now pass the full 3600-task base preflight locally. A separate plus-3000 extension manifest passes local preflight with 3800 tasks. Full server batch has not been relaunched.
 
 ## Code State
 
@@ -16,6 +16,7 @@ Status: ready for server preflight -- reproducible Phase1a chain and 30s probe p
 - paper setting: classic one-shot MAPF
 - full target maps: 8 maps frozen in `configs/phase1a/manifest.yaml`
 - full target instances: 25 deterministic generated random instances per map from `outputs/tmp/phase1a/generated/phase1a-generated-random.zip`
+- optional extension: `configs/phase1a/manifest_plus_3000.jsonl` adds a 3000-agent stress-test point on four eligible maps, for 3800 total solver runs
 - full target time limit: 30s per run
 - objective: sum-of-loss
 - metric: `sum_of_loss_ratio = sum_of_loss / sum_of_costs_lower_bound`
@@ -72,7 +73,7 @@ The dry-run gate is satisfied:
 - ratio values are finite and positive.
 - Phase0 and Phase1 regression smoke passed after adding the Phase1a runner.
 
-The full Phase1a parity gate remains blocked until the generated-scenario manifest is run on the server for the full 30s batch and the results are summarized. Do not enter Phase2 from this report alone.
+The full Phase1a parity gate remains blocked until the generated-scenario manifest is run on the server for the full 30s batch and the results are summarized. The plus-3000 points must be reported as an extension, separate from the base paper-parity judgement. Do not enter Phase2 from this report alone.
 
 ## Repro Commands
 

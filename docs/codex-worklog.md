@@ -9,7 +9,11 @@
   - `scripts/generate_phase1a_scenarios.py`
   - `configs/phase1a/manifest.yaml`
   - `configs/phase1a/manifest.jsonl`
+  - `configs/phase1a/agent_schedule_plus_3000.yaml`
+  - `configs/phase1a/manifest_plus_3000.yaml`
+  - `configs/phase1a/manifest_plus_3000.jsonl`
   - `src/data/benchmark_index.md`
+  - `outputs/reports/phase1a_3000_extension_plan.md`
   - `outputs/reports/phase1a_prelaunch_code_review.md`
   - `outputs/reports/phase1a_generated_scenarios_manifest.json`
   - `outputs/reports/phase1a_ltm_paper_parity_plan.md`
@@ -22,12 +26,16 @@
   - `python -m py_compile scripts\run_phase1a_batch.py`
   - `python scripts\generate_phase1a_scenarios.py --overwrite`
   - `python scripts\run_phase1a_batch.py --preflight`
+  - `python scripts\generate_phase1a_scenarios.py --manifest configs\phase1a\manifest_plus_3000.jsonl --overwrite`
+  - `python scripts\run_phase1a_batch.py --manifest configs\phase1a\manifest_plus_3000.jsonl --preflight`
 - Key observations:
   - The server `phase1a_full` tmux session had exited after 251 JSONL rows.
   - The failing solver run had already emitted a valid `success=false` JSONL row, then returned exit code `2`.
   - Exit code `2` is an expected benchmark outcome for no-solution/timeout rows and must not stop the full batch.
   - Prelaunch review found that `scen-random.zip` does not contain enough start-goal rows for many frozen Figure 1 agent counts; the current full manifest would produce invalid rows and is blocked.
   - Deterministic generated random scenarios with base seed `20260522` now pass local preflight for the full 3600-task manifest.
+  - The user requested an additional 3000-agent stress-test point. It is feasible only on four maps with at least 3000 free cells, so it is stored in a separate `phase1a_plus_3000` manifest.
+  - Local plus-3000 preflight passes with 3800 tasks.
 - Fix:
   - The Python batch driver now allows solver return codes `0` and `2`, and still raises on other nonzero return codes.
   - The PowerShell runner now has the same exit-code policy.
@@ -36,6 +44,7 @@
 - Follow-up:
   - Upload the updated package to the server.
   - Run `python3 scripts/generate_phase1a_scenarios.py --overwrite` and `python3 scripts/run_phase1a_batch.py --preflight` on the server before relaunching the full batch.
+  - For the plus-3000 server run, use `--manifest configs/phase1a/manifest_plus_3000.jsonl` for both generation/preflight and full batch.
 
 ## 2026-05-21 22:34 - launch Phase1a full batch on server
 

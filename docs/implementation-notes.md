@@ -112,3 +112,14 @@ The Pillow reinstall fixes a Windows DLL-load failure hit when importing `torchv
 - The current `scen-random.zip` files do not contain enough start-goal rows for many frozen Figure 1 agent counts. For example, `empty-32-32-random-*.scen` has 512 pairs while the frozen schedule goes to 1000 agents.
 - Full Phase1a now uses `scripts/generate_phase1a_scenarios.py` to generate deterministic random scenario files with enough unique starts/goals for every frozen agent count. The generator uses base seed `20260522`, samples from each map's largest connected free-cell component, enforces unique starts and unique goals, and rejects per-agent `start == goal`.
 - Generated scenario metadata is written to `outputs/reports/phase1a_generated_scenarios_manifest.json`. The generated archive is `outputs/tmp/phase1a/generated/phase1a-generated-random.zip`; it uses stored zip entries and platform-neutral zip headers for cross-platform hash stability and is not meant to be hand-edited.
+
+## 2026-05-22 - Phase1a 3000-agent extension
+
+- The paper-parity base schedule remains unchanged at 72 map-agent points.
+- A separate `phase1a_plus_3000` manifest adds a 3000-agent stress-test point only where the map has at least 3000 free cells:
+  - `random-64-64-20`
+  - `room-64-64-8`
+  - `warehouse-10-20-10-2-1`
+  - `warehouse-10-20-10-2-2`
+- The extension adds 4 map-agent points, or 200 solver runs with 25 instances and two methods. The server full batch for this manifest is 3800 solver runs.
+- The 3000-agent points must be analyzed as an extension, not as part of the original LTM Figure 1 paper-parity claim.

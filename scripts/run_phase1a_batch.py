@@ -9,6 +9,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import shutil
 import subprocess
 import sys
 import zipfile
@@ -120,8 +121,10 @@ def ensure_scen_cache(root: Path, records: list[dict] | None = None) -> Path:
                 "run scripts/generate_phase1a_scenarios.py if this manifest uses generated scenarios"
             )
         top_dir = archive_top_dir(archive)
-        if top_dir and (cache / top_dir).exists():
-            continue
+        if top_dir:
+            target = cache / top_dir
+            if target.exists():
+                shutil.rmtree(target)
         with zipfile.ZipFile(archive) as zf:
             zf.extractall(cache)
     return cache

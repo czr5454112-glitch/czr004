@@ -178,6 +178,7 @@ def main() -> int:
     metadata: dict = {
         "script_version": SCRIPT_VERSION,
         "base_seed": args.base_seed,
+        "source_manifest": args.manifest.replace("\\", "/"),
         "scenario_dir": args.output_dir.replace("\\", "/"),
         "scenario_zip": args.output_zip.replace("\\", "/"),
         "rules": {

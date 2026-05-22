@@ -57,6 +57,8 @@ The agent schedule is read from Figure 1 x-axis ticks. The paper text does not p
 
 The public MovingAI `scen-random.zip` files are not large enough for several frozen Figure 1 agent counts. Phase1a therefore uses deterministic generated random scenarios with base seed `20260522`; generation metadata is written to `outputs/reports/phase1a_generated_scenarios_manifest.json`.
 
+Plus-3000 extension: `configs/phase1a/manifest_plus_3000.jsonl` keeps the base schedule and adds a 3000-agent stress-test point on `random-64-64-20`, `room-64-64-8`, `warehouse-10-20-10-2-1`, and `warehouse-10-20-10-2-2`. This extension is not part of the original paper-parity claim.
+
 ## Required Records
 
 Every run must record:

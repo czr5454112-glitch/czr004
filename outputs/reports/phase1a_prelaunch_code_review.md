@@ -47,4 +47,11 @@ python3 scripts/generate_phase1a_scenarios.py --overwrite
 python3 scripts/run_phase1a_batch.py --preflight
 ```
 
+For the user-requested plus-3000 extension, use:
+
+```bash
+python3 scripts/generate_phase1a_scenarios.py --manifest configs/phase1a/manifest_plus_3000.jsonl --overwrite
+python3 scripts/run_phase1a_batch.py --manifest configs/phase1a/manifest_plus_3000.jsonl --preflight
+```
+
 No new full server batch was launched during this review.

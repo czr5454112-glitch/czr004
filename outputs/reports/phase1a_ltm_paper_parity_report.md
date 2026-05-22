@@ -1,7 +1,7 @@
 # Phase1a LTM Paper Parity Report
 
 Date: 2026-05-21
-Status: partial -- reproducible Phase1a chain and 30s probe passed; full paper-scale parity batch not yet run.
+Status: blocked -- reproducible Phase1a chain and 30s probe passed, but the current `scen-random.zip` source is too small for many frozen Figure 1 agent counts. See `outputs/reports/phase1a_prelaunch_code_review.md`.
 
 ## Code State
 
@@ -15,7 +15,7 @@ Status: partial -- reproducible Phase1a chain and 30s probe passed; full paper-s
 
 - paper setting: classic one-shot MAPF
 - full target maps: 8 maps frozen in `configs/phase1a/manifest.yaml`
-- full target instances: 25 random instances per map from `external/lacam2/scripts/scen/scen-random.zip`
+- full target instances: 25 random instances per map; the previously selected `external/lacam2/scripts/scen/scen-random.zip` source is blocked by scenario-capacity preflight
 - full target time limit: 30s per run
 - objective: sum-of-loss
 - metric: `sum_of_loss_ratio = sum_of_loss / sum_of_costs_lower_bound`
@@ -55,6 +55,7 @@ This single 30s probe is directionally consistent with the paper trend, but it i
 ## Known Deviations From Paper
 
 - Full paper-scale execution is not complete in this report. The frozen full manifest contains 72 map-agent points x 25 instances x 2 required methods = 3600 solver runs.
+- Current scenario source is insufficient for several frozen agent counts, so a full run from the current manifest would not be a valid parity run.
 - The local LTM adapter currently uses root restart for one-shot MAPF, as recorded in Phase1.
 - Weighted distance uses `1 + normalized_ltm_weight`; exact official source is unavailable.
 - Hardware/platform differs from the paper workstation.
@@ -71,7 +72,7 @@ The dry-run gate is satisfied:
 - ratio values are finite and positive.
 - Phase0 and Phase1 regression smoke passed after adding the Phase1a runner.
 
-The full Phase1a parity gate remains blocked until the full 30s manifest is run and summarized. Do not enter Phase2 from this report alone.
+The full Phase1a parity gate remains blocked until the scenario source is corrected, the full 30s manifest is run, and the results are summarized. Do not enter Phase2 from this report alone.
 
 ## Repro Commands
 

@@ -12,7 +12,8 @@ param(
   [int[]]$AgentSubset = @(),
   [int[]]$InstanceSubset = @(),
   [int]$MaxTasks = 0,
-  [uint32]$LtmMaxIterations = 100000
+  [uint32]$LtmMaxIterations = 100000,
+  [switch]$SkipPreflight
 )
 
 $ErrorActionPreference = "Stop"
@@ -73,7 +74,7 @@ function Invoke-Phase1aTask {
     --platform $Platform `
     --ltm-max-iterations $LtmMaxIterations
 
-  if ($LASTEXITCODE -ne 0) {
+  if ($LASTEXITCODE -ne 0 -and $LASTEXITCODE -ne 2) {
     throw "phase1a_batch failed with exit $LASTEXITCODE for $Method $MapName N=$Agents seed=$Seed"
   }
 }
@@ -112,6 +113,74 @@ if (-not (Test-Path $ScenRandomDir)) {
 $Records = Get-Content -LiteralPath $ManifestPath | Where-Object { $_.Trim() } | ForEach-Object { $_ | ConvertFrom-Json }
 $Methods = @("lacam_star", "lacam_star_ltm")
 $TaskCount = 0
+
+function Get-ScenarioCapacity {
+  param([string]$Path)
+
+  $LineCount = (Get-Content -LiteralPath $Path | Where-Object { $_.Trim() } | Measure-Object).Count
+  return [Math]::Max(0, $LineCount - 1)
+}
+
+if (-not $SkipPreflight) {
+  $Issues = New-Object System.Collections.Generic.List[string]
+  $PreflightTasks = 0
+
+  foreach ($Record in $Records) {
+    if ($MapSubset.Count -gt 0 -and $MapSubset -notcontains $Record.map) {
+      continue
+    }
+
+    $MapPath = Join-Path $Root $Record.map_path
+    if (-not (Test-Path $MapPath)) {
+      $Issues.Add("$($Record.map): missing map $MapPath")
+    }
+
+    $Agents = @($Record.agent_counts)
+    if ($AgentSubset.Count -gt 0) {
+      $Agents = $Agents | Where-Object { $AgentSubset -contains [int]$_ }
+    }
+    $Instances = @($Record.instances)
+    if ($InstanceSubset.Count -gt 0) {
+      $Instances = $Instances | Where-Object { $InstanceSubset -contains [int]$_ }
+    }
+
+    if ($Agents.Count -eq 0) {
+      $Issues.Add("$($Record.map): no selected agent counts")
+      continue
+    }
+    if ($Instances.Count -eq 0) {
+      $Issues.Add("$($Record.map): no selected instances")
+      continue
+    }
+
+    $MaxAgents = ($Agents | Measure-Object -Maximum).Maximum
+    foreach ($InstanceId in $Instances) {
+      $Template = [string]$Record.scen_template
+      $RelativeScen = $Template.Replace("{instance}", [string]$InstanceId)
+      $ScenPath = Join-Path $ScenCache $RelativeScen
+      if (-not (Test-Path $ScenPath)) {
+        $Issues.Add("$($Record.map) instance ${InstanceId}: missing scenario $ScenPath")
+        continue
+      }
+      $Capacity = Get-ScenarioCapacity -Path $ScenPath
+      if ($Capacity -lt $MaxAgents) {
+        $Issues.Add("$($Record.map) instance ${InstanceId}: scenario has $Capacity pairs, but selected max agent count is $MaxAgents")
+      }
+    }
+    $PreflightTasks += $Agents.Count * $Instances.Count * $Methods.Count
+  }
+
+  if ($Issues.Count -gt 0) {
+    $Preview = $Issues | Select-Object -First 20
+    $Message = "Phase1a preflight failed:`n- " + ($Preview -join "`n- ")
+    if ($Issues.Count -gt 20) {
+      $Message += "`n- ... $($Issues.Count - 20) more issues"
+    }
+    throw $Message
+  }
+
+  Write-Host "Phase1a preflight passed. Tasks=$PreflightTasks"
+}
 
 foreach ($Record in $Records) {
   if ($MapSubset.Count -gt 0 -and $MapSubset -notcontains $Record.map) {

@@ -5,6 +5,9 @@
 - Request: Check whether the server Phase1a run is still healthy.
 - Files changed:
   - `scripts/run_phase1a_batch.py`
+  - `scripts/run_phase1a_batch.ps1`
+  - `outputs/reports/phase1a_prelaunch_code_review.md`
+  - `docs/implementation-notes.md`
   - `docs/codex-worklog.md`
 - Commands run:
   - checked server `tmux`, `phase1a_runs.jsonl`, `full_stdout.log`, and `full_stderr.log`
@@ -14,10 +17,14 @@
   - The server `phase1a_full` tmux session had exited after 251 JSONL rows.
   - The failing solver run had already emitted a valid `success=false` JSONL row, then returned exit code `2`.
   - Exit code `2` is an expected benchmark outcome for no-solution/timeout rows and must not stop the full batch.
+  - Prelaunch review found that `scen-random.zip` does not contain enough start-goal rows for many frozen Figure 1 agent counts; the current full manifest would produce invalid rows and is blocked.
 - Fix:
   - The Python batch driver now allows solver return codes `0` and `2`, and still raises on other nonzero return codes.
+  - The PowerShell runner now has the same exit-code policy.
+  - Both runners now include preflight checks for map files, scenario files, and scenario row capacity.
 - Follow-up:
-  - Repackage and relaunch the full server batch from a fresh run directory pinned to this fix commit.
+  - Do not relaunch the full server batch until the scenario source is corrected.
+  - Recommended correction: generate deterministic random scenario files with enough unique start-goal pairs for every frozen agent count, then label that source explicitly in the reports.
 
 ## 2026-05-21 22:34 - launch Phase1a full batch on server
 

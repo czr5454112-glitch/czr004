@@ -92,12 +92,31 @@ def run_task(
         completed.check_returncode()
 
 
-def ensure_scen_cache(root: Path) -> Path:
+def archive_top_dir(archive: Path) -> str | None:
+    with zipfile.ZipFile(archive) as zf:
+        for name in zf.namelist():
+            parts = Path(name).parts
+            if not parts or parts[0] == "__MACOSX":
+                continue
+            return parts[0]
+    return None
+
+
+def ensure_scen_cache(root: Path, records: list[dict] | None = None) -> Path:
     cache = root / "outputs/tmp/phase1a/scen"
-    scen_dir = cache / "scen-random"
-    if not scen_dir.exists():
-        archive = root / "external/lacam2/scripts/scen/scen-random.zip"
-        cache.mkdir(parents=True, exist_ok=True)
+    archive_names = {
+        record.get("scen_archive", "external/lacam2/scripts/scen/scen-random.zip")
+        for record in records or []
+    }
+    if not archive_names:
+        archive_names = {"external/lacam2/scripts/scen/scen-random.zip"}
+
+    cache.mkdir(parents=True, exist_ok=True)
+    for archive_name in sorted(archive_names):
+        archive = root / archive_name
+        top_dir = archive_top_dir(archive)
+        if top_dir and (cache / top_dir).exists():
+            continue
         with zipfile.ZipFile(archive) as zf:
             zf.extractall(cache)
     return cache
@@ -111,6 +130,74 @@ def parse_int_set(values: list[str]) -> set[int]:
             if part:
                 out.add(int(part))
     return out
+
+
+def selected_values(record: dict, agent_subset: set[int], instance_subset: set[int]) -> tuple[list[int], list[int]]:
+    agents = [int(value) for value in record["agent_counts"]]
+    if agent_subset:
+        agents = [value for value in agents if value in agent_subset]
+    instances = [int(value) for value in record["instances"]]
+    if instance_subset:
+        instances = [value for value in instances if value in instance_subset]
+    return agents, instances
+
+
+def scen_capacity(path: Path) -> int:
+    with path.open("r", encoding="utf-8") as handle:
+        nonempty = sum(1 for line in handle if line.strip())
+    return max(0, nonempty - 1)
+
+
+def preflight(
+    root: Path,
+    records: list[dict],
+    scen_cache: Path,
+    map_subset: set[str],
+    agent_subset: set[int],
+    instance_subset: set[int],
+) -> int:
+    issues: list[str] = []
+    task_count = 0
+
+    for record in records:
+        map_name = record["map"]
+        if map_subset and map_name not in map_subset:
+            continue
+
+        map_path = root / record["map_path"]
+        if not map_path.exists():
+            issues.append(f"{map_name}: missing map {map_path}")
+
+        agents, instances = selected_values(record, agent_subset, instance_subset)
+        if not agents:
+            issues.append(f"{map_name}: no selected agent counts")
+            continue
+        if not instances:
+            issues.append(f"{map_name}: no selected instances")
+            continue
+
+        max_agents = max(agents)
+        for instance_id in instances:
+            scen_id = record["scen_template"].replace("{instance}", str(instance_id))
+            scen_path = scen_cache / scen_id
+            if not scen_path.exists():
+                issues.append(f"{map_name} instance {instance_id}: missing scenario {scen_path}")
+                continue
+            capacity = scen_capacity(scen_path)
+            if capacity < max_agents:
+                issues.append(
+                    f"{map_name} instance {instance_id}: scenario has {capacity} pairs, "
+                    f"but selected max agent count is {max_agents}"
+                )
+        task_count += len(agents) * len(instances) * 2
+
+    if issues:
+        preview = "\n".join(f"- {issue}" for issue in issues[:20])
+        extra = "" if len(issues) <= 20 else f"\n- ... {len(issues) - 20} more issues"
+        raise ValueError(f"Phase1a preflight failed:\n{preview}{extra}")
+
+    print(f"Phase1a preflight passed. Tasks={task_count}")
+    return task_count
 
 
 def main() -> int:
@@ -128,6 +215,8 @@ def main() -> int:
     parser.add_argument("--instance-subset", action="append", default=[])
     parser.add_argument("--max-tasks", type=int, default=0)
     parser.add_argument("--ltm-max-iterations", type=int, default=100000)
+    parser.add_argument("--preflight", action="store_true")
+    parser.add_argument("--skip-preflight", action="store_true")
     args = parser.parse_args()
 
     root = project_root()
@@ -177,31 +266,32 @@ def main() -> int:
         print(f"Phase1a dry-run JSONL: {output_jsonl}")
         return 0
 
-    if not args.full and not any(
+    if not args.full and not args.preflight and not any(
         [args.map_subset, args.agent_subset, args.instance_subset, args.max_tasks]
     ):
         raise ValueError("choose --dry-run, --full, or an explicit subset")
 
-    scen_cache = ensure_scen_cache(root)
+    with manifest.open("r", encoding="utf-8") as handle:
+        records = [json.loads(line) for line in handle if line.strip()]
+
+    scen_cache = ensure_scen_cache(root, records)
     map_subset = set(args.map_subset)
     agent_subset = parse_int_set(args.agent_subset)
     instance_subset = parse_int_set(args.instance_subset)
 
+    if args.preflight or not args.skip_preflight:
+        preflight(root, records, scen_cache, map_subset, agent_subset, instance_subset)
+        if args.preflight:
+            return 0
+
     task_count = 0
-    with manifest.open("r", encoding="utf-8") as handle:
-        records = [json.loads(line) for line in handle if line.strip()]
 
     for record in records:
         map_name = record["map"]
         if map_subset and map_name not in map_subset:
             continue
 
-        agents = [int(value) for value in record["agent_counts"]]
-        if agent_subset:
-            agents = [value for value in agents if value in agent_subset]
-        instances = [int(value) for value in record["instances"]]
-        if instance_subset:
-            instances = [value for value in instances if value in instance_subset]
+        agents, instances = selected_values(record, agent_subset, instance_subset)
 
         for n_agents in agents:
             for instance_id in instances:

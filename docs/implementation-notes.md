@@ -104,3 +104,10 @@ The Pillow reinstall fixes a Windows DLL-load failure hit when importing `torchv
   - `Pass-B`: all eight maps have the same median trend, but the magnitude differs by more than 20% or 2-3 maps are reversed.
   - `Fail`: most maps do not show LTM improving over LaCAM*, without a diagnosed implementation or platform reason.
 - `TO` and `SUO` remain unavailable in this project until original implementations or auditable integrations are added.
+
+## 2026-05-22 - Phase1a prelaunch review and scenario capacity gate
+
+- The first server full-batch attempt stopped after 251 JSONL rows because the Python driver treated `phase1a_batch` exit code `2` as fatal. Exit code `2` means the runner wrote a valid `success=false` row, so the Python and PowerShell drivers now allow both `0` and `2`.
+- A preflight gate now checks map existence, scenario existence, and scenario capacity before non-dry-run execution.
+- The current `scen-random.zip` files do not contain enough start-goal rows for many frozen Figure 1 agent counts. For example, `empty-32-32-random-*.scen` has 512 pairs while the frozen schedule goes to 1000 agents.
+- Full Phase1a is blocked until the scenario source is corrected. The recommended path is to generate deterministic random scenario files with enough unique starts/goals for every frozen agent count, and to label that source explicitly in the reports.

@@ -139,7 +139,9 @@ def write_zip(output_zip: Path, source_dir: Path) -> None:
                 continue
             arcname = path.relative_to(source_dir.parent).as_posix()
             info = zipfile.ZipInfo(arcname, ZIP_TIMESTAMP)
+            info.create_system = 0
             info.compress_type = zipfile.ZIP_STORED
+            info.external_attr = 0
             zf.writestr(info, path.read_bytes())
 
 

@@ -26,7 +26,7 @@ The first server full batch must not be interpreted as a valid Phase1a run. The 
 
 3. A preflight gate is now added to both runners. It checks map existence, scenario existence, and scenario capacity before non-dry-run execution. The old public-scenario manifest correctly failed preflight with 200 scenario-capacity issues.
 
-4. `scripts/generate_phase1a_scenarios.py` now generates 25 deterministic random scenarios per map with enough rows for every frozen Figure 1 agent count. It uses base seed `20260522`, samples starts and goals without replacement from each map's largest 4-neighbor connected free-cell component, and enforces `start != goal` for every agent. The archive is written with stored zip entries so the archive hash is not affected by platform-specific zlib output.
+4. `scripts/generate_phase1a_scenarios.py` now generates 25 deterministic random scenarios per map with enough rows for every frozen Figure 1 agent count. It uses base seed `20260522`, samples starts and goals without replacement from each map's largest 4-neighbor connected free-cell component, and enforces `start != goal` for every agent. The archive is written with stored zip entries and platform-neutral zip headers so the archive hash is not affected by platform-specific zlib output or file mode metadata.
 
 ## Validation
 

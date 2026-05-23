@@ -1,7 +1,7 @@
 # Phase1a LTM Paper Parity Report
 
 Date: 2026-05-23
-Status: server full batch complete; integrity pass; base paper-parity results ready for final comparison
+Status: Phase1a Pass-A; Phase2 may begin
 
 ## Code State
 
@@ -100,7 +100,7 @@ The plus-3000 extension is complete but mixed, and is not part of the base paper
 
 ## Parity Gate
 
-Current judgement: `full execution complete / candidate paper-parity pass pending final figure-level comparison`.
+Current judgement: `Pass-A / close paper-parity`.
 
 The dry-run gate is satisfied:
 
@@ -109,7 +109,7 @@ The dry-run gate is satisfied:
 - ratio values are finite and positive.
 - Phase0 and Phase1 regression smoke passed after adding the Phase1a runner.
 
-The full Phase1a server execution is complete and structurally valid. The base 72-point paper-parity subset shows the expected LTM direction: lower mean ratio than LaCAM* on all base map-agent groups. Before entering Phase2, make an explicit final signoff against the LTM paper figures and keep the plus-3000 points reported as an extension.
+The full Phase1a server execution is complete and structurally valid. The base 72-point paper-parity subset satisfies Pass-A: LTM has lower mean ratio than LaCAM* on all 72 base map-agent groups, exceeding the project gate of at least 6/8 maps and at least 70% of agent points. Phase2 may begin. Keep the plus-3000 points reported as an extension, not part of the original Figure 1 paper-parity claim.
 
 ## Repro Commands
 

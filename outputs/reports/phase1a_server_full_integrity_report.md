@@ -1,7 +1,7 @@
 # Phase1a Server Full Batch Integrity Report
 
 Date: 2026-05-23
-Status: integrity pass; scientific interpretation pending final paper-parity signoff
+Status: integrity pass; Phase1a Pass-A
 
 ## Run Identity
 
@@ -86,4 +86,6 @@ At the group level, the base paper-parity schedule has lower mean ratio for `lac
 
 ## Verdict
 
-The server full batch is complete and structurally valid. The base 72-point paper-parity subset is ready for final scientific comparison against the LTM paper figures. The 3000-agent rows are valid extension data but are not part of the paper-parity claim.
+The server full batch is complete and structurally valid. The base 72-point paper-parity subset satisfies the project Pass-A gate because LTM has lower mean ratio than LaCAM* on all 72 base map-agent groups. The 3000-agent rows are valid extension data but are not part of the paper-parity claim.
+
+Server shutdown preservation is recorded in `outputs/reports/phase1a_server_shutdown_preservation.md`.

@@ -1,7 +1,7 @@
 # Phase1a 3000-Agent Extension Plan
 
-Date: 2026-05-22
-Status: running on server in tmux session `phase1a_full`
+Date: 2026-05-23
+Status: server full batch complete; extension results valid but mixed
 
 ## Purpose
 
@@ -46,6 +46,19 @@ This extension keeps the full LTM paper-parity schedule intact and adds a stress
 - Server launch check on 2026-05-22 10:15 +08:00: `/root/shared-nvme/server_start_phase1a_full.sh` created tmux session `phase1a_full`.
 - Server preflight log: `Phase1a preflight passed. Tasks=3800`.
 - Initial server output: `outputs/logs/phase1a/phase1a_plus_3000_runs.jsonl` had begun writing rows and `full_stderr.log` was empty.
+- Server completion on 2026-05-23 19:05:33 +08:00: JSONL reached 3800 rows and summary artifacts were generated.
+- Integrity report: `outputs/reports/phase1a_server_full_integrity_report.md`.
+
+## Extension Result Snapshot
+
+The 3000-agent points are not part of the base paper-parity claim.
+
+| Map | LaCAM* success rate | LTM success rate | LaCAM* mean ratio | LTM mean ratio | Interpretation |
+| --- | ---: | ---: | ---: | ---: | --- |
+| `random-64-64-20` | 0.28 | 0.32 | 9.652097 | 10.073940 | LTM solved more rows but had worse solved-row mean ratio |
+| `room-64-64-8` | 0.00 | 0.00 | n/a | n/a | no solved rows in 30s |
+| `warehouse-10-20-10-2-1` | 1.00 | 1.00 | 9.848979 | 9.706904 | LTM better |
+| `warehouse-10-20-10-2-2` | 1.00 | 1.00 | 1.908131 | 1.912685 | LTM slightly worse |
 
 ## Server Rule
 

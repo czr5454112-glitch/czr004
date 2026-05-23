@@ -1,13 +1,13 @@
 # Phase1a LTM Paper Parity Report
 
-Date: 2026-05-21
-Status: ready for server preflight -- reproducible Phase1a chain and 30s probe passed; deterministic generated random scenarios now pass the full 3600-task base preflight locally. A separate plus-3000 extension manifest passes local preflight with 3800 tasks. Full server batch has not been relaunched.
+Date: 2026-05-23
+Status: server full batch complete; integrity pass; base paper-parity results ready for final comparison
 
 ## Code State
 
-- project commit used by recorded probe: `8e5bb57493f68a9302ca573754f83a1c870821ed`
+- project commit used by server full batch: `65984dbf729e90177cb72cecab49cc222bd1bd1f`
 - branch: `phase1a-ltm-paper-parity`
-- workspace state during probe: `tracked-dirty` because Phase1a files were being added in this working session
+- workspace state recorded by server full batch: `clean`
 - external/lacam2 commit: `61a4c40ce91ce18c06eb2fe070aa9f1951eecb8d`
 - upstream solver source policy: `external/lacam2/lacam2/**` was not modified
 
@@ -20,14 +20,14 @@ Status: ready for server preflight -- reproducible Phase1a chain and 30s probe p
 - full target time limit: 30s per run
 - objective: sum-of-loss
 - metric: `sum_of_loss_ratio = sum_of_loss / sum_of_costs_lower_bound`
-- platform: Windows + PowerShell + MSVC-compatible local build
+- server platform: Linux server package via ssh-skill tmux
 
 ## Methods Run
 
 | Method | Status | Notes |
 | --- | --- | --- |
-| `LaCAM*` | probe done | project-owned batch runner calls upstream library API, not upstream CLI |
-| `LaCAM*+LTM` | probe done | paper-faithful local reimplementation |
+| `LaCAM*` | full server batch complete | project-owned batch runner calls upstream library API, not upstream CLI |
+| `LaCAM*+LTM` | full server batch complete | paper-faithful local reimplementation |
 | `LaCAM*+TO` | unavailable | no auditable upstream integration in `czr004` |
 | `LaCAM*+SUO` | unavailable | no auditable upstream integration in `czr004` |
 
@@ -53,9 +53,45 @@ Generated tracked summaries:
 
 This single 30s probe is directionally consistent with the paper trend, but it is not enough for a Phase1a parity judgement.
 
+## Server Full Batch Results
+
+Downloaded server artifacts:
+
+- Raw JSONL: `outputs/logs/phase1a/phase1a_plus_3000_runs.jsonl` (ignored by git)
+- Summary CSV: `outputs/tables/phase1a_plus_3000_ratio_by_map.csv`
+- Summary figure: `outputs/figures/phase1a_plus_3000_ratio_by_map.png`
+- Integrity report: `outputs/reports/phase1a_server_full_integrity_report.md`
+
+Structural checks passed:
+
+- JSONL rows: 3800 / 3800.
+- Unique `(map, agents, seed, method)` keys: 3800.
+- Missing expected rows: 0.
+- Duplicate rows: 0.
+- `valid_instance=true`: 3800.
+- Time limit: 30s for all rows.
+- stderr: empty.
+- Re-summarized local CSV matches the downloaded server CSV hash.
+
+Base paper-parity subset:
+
+| Metric | Result |
+| --- | ---: |
+| Rows | 3600 |
+| `lacam_star` successes | 1799 / 1800 |
+| `lacam_star_ltm` successes | 1787 / 1800 |
+| Paired successful instances | 1787 |
+| LTM better paired instances | 1758 / 1787 |
+| Average LaCAM* ratio on paired successes | 2.884359 |
+| Average LTM ratio on paired successes | 2.440896 |
+| Relative ratio improvement | 15.3747% |
+| Group-level mean-ratio wins | 72 / 72 base map-agent groups |
+
+The plus-3000 extension is complete but mixed, and is not part of the base paper-parity claim.
+
 ## Known Deviations From Paper
 
-- Full paper-scale execution is not complete in this report. The frozen full manifest contains 72 map-agent points x 25 instances x 2 required methods = 3600 solver runs.
+- The frozen base paper-parity subset contains 72 map-agent points x 25 instances x 2 required methods = 3600 solver runs, now completed on the server as part of the plus-3000 manifest.
 - The original public `scen-random.zip` source is insufficient for several frozen agent counts. The current manifest uses generated scenarios instead, with metadata in `outputs/reports/phase1a_generated_scenarios_manifest.json`.
 - The local LTM adapter currently uses root restart for one-shot MAPF, as recorded in Phase1.
 - Weighted distance uses `1 + normalized_ltm_weight`; exact official source is unavailable.
@@ -64,7 +100,7 @@ This single 30s probe is directionally consistent with the paper trend, but it i
 
 ## Parity Gate
 
-Current judgement: `partial / no parity pass yet`.
+Current judgement: `full execution complete / candidate paper-parity pass pending final figure-level comparison`.
 
 The dry-run gate is satisfied:
 
@@ -73,7 +109,7 @@ The dry-run gate is satisfied:
 - ratio values are finite and positive.
 - Phase0 and Phase1 regression smoke passed after adding the Phase1a runner.
 
-The full Phase1a parity gate remains blocked until the generated-scenario manifest completes on the server for the full 30s batch and the results are summarized. On 2026-05-22 10:15 +08:00, the plus-3000 server batch was launched in tmux session `phase1a_full`; server preflight passed with `Tasks=3800` and initial JSONL rows were written. The plus-3000 points must be reported as an extension, separate from the base paper-parity judgement. Do not enter Phase2 from this report alone.
+The full Phase1a server execution is complete and structurally valid. The base 72-point paper-parity subset shows the expected LTM direction: lower mean ratio than LaCAM* on all base map-agent groups. Before entering Phase2, make an explicit final signoff against the LTM paper figures and keep the plus-3000 points reported as an extension.
 
 ## Repro Commands
 

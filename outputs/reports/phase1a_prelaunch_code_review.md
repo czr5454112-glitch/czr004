@@ -65,3 +65,14 @@ On 2026-05-22 10:15 +08:00, the formal plus-3000 batch was launched on the serve
 - Server preflight: `Phase1a preflight passed. Tasks=3800`
 - Output JSONL: `outputs/logs/phase1a/phase1a_plus_3000_runs.jsonl`
 - Initial health check: JSONL had begun writing rows and `full_stderr.log` was empty.
+
+## Completion Record
+
+On 2026-05-23 19:05:33 +08:00, the formal plus-3000 batch completed on the server.
+
+- Final JSONL rows: 3800 / 3800
+- Summary groups: 152
+- stderr: empty
+- Summary CSV: `outputs/tables/phase1a_plus_3000_ratio_by_map.csv`
+- Summary figure: `outputs/figures/phase1a_plus_3000_ratio_by_map.png`
+- Integrity report: `outputs/reports/phase1a_server_full_integrity_report.md`

@@ -1,5 +1,44 @@
 # Codex Worklog
 
+## 2026-05-23 - retrieve and validate Phase1a server full batch
+
+- Request: Pull server results back locally, check completeness carefully, update records, and maintain git.
+- Files changed:
+  - `outputs/tables/phase1a_plus_3000_ratio_by_map.csv`
+  - `outputs/figures/phase1a_plus_3000_ratio_by_map.png`
+  - `outputs/reports/phase1a_server_full_integrity_report.md`
+  - `outputs/reports/phase1a_ltm_paper_parity_report.md`
+  - `outputs/reports/phase1a_3000_extension_plan.md`
+  - `outputs/reports/phase1a_prelaunch_code_review.md`
+  - `docs/codex-worklog.md`
+- Downloaded ignored raw artifacts:
+  - `outputs/logs/phase1a/phase1a_plus_3000_runs.jsonl`
+  - `outputs/logs/phase1a/full_stdout.log`
+  - `outputs/logs/phase1a/full_stderr.log`
+  - `outputs/logs/phase1a/full_preflight.log`
+  - `outputs/logs/phase1a/full_preflight.err`
+  - `outputs/logs/phase1a/full_started_at.txt`
+  - `outputs/logs/phase1a/full_finished_at.txt`
+  - `outputs/logs/phase1a/phase1a_generated_scenarios_manifest_server.json`
+- Commands run:
+  - downloaded server artifacts with `ssh_download.py`
+  - checked server-side `sha256sum` against local `Get-FileHash`
+  - parsed JSONL for row count, duplicates, missing expected keys, valid-instance status, method counts, success counts, and metadata
+  - re-ran `src/eval/phase1a_summarize.py` locally into `outputs/tmp/phase1a_verify`
+  - compared the local re-summarized CSV hash against the downloaded server CSV
+- Key observations:
+  - Full server batch completed: 3800 / 3800 rows.
+  - Started at `2026-05-22T10:15:11+08:00`; finished at `2026-05-23T19:05:33+08:00`.
+  - JSONL has 0 parse errors, 0 duplicate keys, 0 missing expected keys, and 3800 `valid_instance=true` rows.
+  - Method counts are balanced: 1900 `lacam_star`, 1900 `lacam_star_ltm`.
+  - Base paper-parity subset rows: 3600. Extension rows: 200.
+  - Base paper-parity success counts: `lacam_star` 1799/1800, `lacam_star_ltm` 1787/1800.
+  - On paired successful base rows, LTM is better on 1758/1787 instances, with average ratio improving from 2.884359 to 2.440896.
+  - At the base group level, LTM has lower mean ratio on all 72 base map-agent groups.
+  - 3000-agent extension is valid but mixed and must stay separate from the paper-parity claim.
+- Follow-up:
+  - Final paper-parity signoff should compare the generated summary figure and table against the LTM paper Figure 1 trend before entering Phase2.
+
 ## 2026-05-22 10:15 - launch generated Phase1a plus-3000 full batch
 
 - Request: Re-check Phase1a code and LTM settings before the formal server run, then launch if clean.

@@ -1,7 +1,7 @@
 # Phase1a Server Shutdown Preservation
 
 Date: 2026-05-23
-Status: preservation complete; server can be shut down after user review
+Status: final preservation complete; server can be shut down
 
 ## Purpose
 
@@ -25,7 +25,7 @@ The generated scenario zip was not re-downloaded because the local file already 
 
 ## Additional Preserved Server Files
 
-These files were downloaded to ignored local directory `outputs/logs/phase1a/server_preserve/`.
+These files were downloaded to ignored local directory `outputs/logs/phase1a_server_archive/phase1a_65984db_20260523/`.
 
 | File | Size | SHA256 |
 | --- | ---: | --- |
@@ -37,6 +37,23 @@ These files were downloaded to ignored local directory `outputs/logs/phase1a/ser
 | `server_setup_phase1a.sh` | 2,304 | `b1ae67590cd2e13ffc12fd157d168259e7c584a7329552b3a18a9e4e5ad4edc5` |
 | `server_start_phase1a_full.sh` | 1,591 | `67a3daa57c0d453b4da7bccdc7fa1c4a41811cd24078c067dcf16aa001026fa2` |
 | `server_start_phase1a_setup_tmux.sh` | 499 | `04569d960cd16ead688b508ae4b218c3cda2778467df996ee3a712119a9f9b74` |
+
+## Full Server Outputs Snapshot
+
+As a final guard against unnoticed differences between server outputs and local working copies, the complete server `outputs/` tree was also downloaded recursively to:
+
+`outputs/logs/phase1a_server_archive/phase1a_65984db_20260523/server_outputs_snapshot/`
+
+Download result:
+
+- Files transferred: 426
+- Files failed: 0
+- Bytes transferred: 62,245,194
+
+Local archive totals after this final snapshot:
+
+- Archive files: 434
+- Archive bytes: 94,494,711
 
 ## Server-Side Comparison
 
@@ -52,4 +69,4 @@ The full work directory is reproducible from the preserved runtime package, sour
 
 ## Verdict
 
-No important Phase1a server artifact remains uniquely available only on the server. The server can be shut down from the Phase1a audit perspective.
+No important Phase1a server artifact remains uniquely available only on the server. The full `outputs/` tree, run package, launch scripts, probe logs, and actual Linux binary are preserved locally. The server can be shut down from the Phase1a audit perspective.

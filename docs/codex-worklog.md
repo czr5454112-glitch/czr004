@@ -9,18 +9,20 @@
   - `outputs/reports/phase1a_ltm_paper_parity_report.md`
   - `docs/codex-worklog.md`
 - Downloaded ignored preservation artifacts:
-  - `outputs/logs/phase1a/server_preserve/czr004_phase1a_server_package.tar.gz`
-  - `outputs/logs/phase1a/server_preserve/phase1a_batch_linux`
-  - `outputs/logs/phase1a/server_preserve/phase1a_server_dry_run.jsonl`
-  - `outputs/logs/phase1a/server_preserve/phase1a_server_generated_highN_probe.jsonl`
-  - `outputs/logs/phase1a/server_preserve/phase1a_server_3000_probe.jsonl`
-  - `outputs/logs/phase1a/server_preserve/server_setup_phase1a.sh`
-  - `outputs/logs/phase1a/server_preserve/server_start_phase1a_full.sh`
-  - `outputs/logs/phase1a/server_preserve/server_start_phase1a_setup_tmux.sh`
+  - `outputs/logs/phase1a_server_archive/phase1a_65984db_20260523/czr004_phase1a_server_package.tar.gz`
+  - `outputs/logs/phase1a_server_archive/phase1a_65984db_20260523/phase1a_batch_linux`
+  - `outputs/logs/phase1a_server_archive/phase1a_65984db_20260523/phase1a_server_dry_run.jsonl`
+  - `outputs/logs/phase1a_server_archive/phase1a_65984db_20260523/phase1a_server_generated_highN_probe.jsonl`
+  - `outputs/logs/phase1a_server_archive/phase1a_65984db_20260523/phase1a_server_3000_probe.jsonl`
+  - `outputs/logs/phase1a_server_archive/phase1a_65984db_20260523/server_setup_phase1a.sh`
+  - `outputs/logs/phase1a_server_archive/phase1a_65984db_20260523/server_start_phase1a_full.sh`
+  - `outputs/logs/phase1a_server_archive/phase1a_65984db_20260523/server_start_phase1a_setup_tmux.sh`
+  - `outputs/logs/phase1a_server_archive/phase1a_65984db_20260523/server_outputs_snapshot/`
 - Key observations:
   - The generated scenario zip on the server matches the local zip SHA256 `de0308757a107e845de0cf9a200c6bb8144ed1da3134ca8484f86468bb722a93`, so it was not duplicated.
   - The actual Linux `phase1a_batch` binary used for the run was preserved with SHA256 `cb373aec93c8eb07c89ec876257882cf75d30d9e65e3057d967d6076eb494b94`.
   - The original uploaded runtime package was preserved with SHA256 `b980f8463b11b9d9fbde4e77a79ee0afba2133bfbf89f362b2c2b15126beefbf`.
+  - The final recursive server `outputs/` snapshot transferred 426 files with 0 failures.
   - No important Phase1a audit artifact remains uniquely available only on the server.
   - Phase1a is now recorded as Pass-A; Phase2 may begin.
 

@@ -174,6 +174,11 @@ struct RunStats {
   std::string additional_info;
   double runtime_ms = 0.0;
   uint loop_cnt = 0;
+  uint expanded_nodes = 0;
+  uint high_level_expansions = 0;
+  uint low_level_pibt_calls = 0;
+  bool has_low_level_pibt_calls = false;
+  uint returned_solutions_count = 0;
   uint ltm_iterations = 0;
   uint committed_events = 0;
   uint blocked_events = 0;
@@ -193,6 +198,9 @@ RunStats run_lacam_star(const Instance& instance, const Args& args)
   stats.runtime_ms =
       std::chrono::duration<double, std::milli>(ended - started).count();
   stats.loop_cnt = sum_info_values(stats.additional_info, "loop_cnt");
+  stats.high_level_expansions = stats.loop_cnt;
+  stats.expanded_nodes = sum_info_values(stats.additional_info, "num_node_gen");
+  stats.returned_solutions_count = stats.solution.empty() ? 0 : 1;
   return stats;
 }
 
@@ -215,6 +223,13 @@ RunStats run_lacam_star_ltm(const Instance& instance, const Args& args)
   stats.solution = result.best_solution;
   stats.additional_info = result.additional_info;
   stats.loop_cnt = sum_info_values(stats.additional_info, "ltm_one_shot_loop_cnt");
+  stats.high_level_expansions = stats.loop_cnt;
+  stats.expanded_nodes =
+      sum_info_values(stats.additional_info, "ltm_one_shot_num_node_gen");
+  stats.low_level_pibt_calls =
+      sum_info_values(stats.additional_info, "ltm_one_shot_low_level_pibt_calls");
+  stats.has_low_level_pibt_calls = true;
+  stats.returned_solutions_count = stats.solution.empty() ? 0 : 1;
   stats.ltm_iterations = result.iterations;
   stats.committed_events = result.trace_summary.committed;
   stats.blocked_events = result.trace_summary.blocked;
@@ -260,7 +275,13 @@ void append_jsonl(const Args& args, const std::filesystem::path& binary_path,
   out << ",\"makespan\":" << (success ? std::to_string(makespan) : "null");
   out << ",\"runtime_ms\":" << json_number_or_null(stats.runtime_ms);
   out << ",\"time_to_first_solution_ms\":null";
+  out << ",\"returned_solutions_count\":" << stats.returned_solutions_count;
   out << ",\"loop_cnt\":" << stats.loop_cnt;
+  out << ",\"expanded_nodes\":" << stats.expanded_nodes;
+  out << ",\"high_level_expansions\":" << stats.high_level_expansions;
+  out << ",\"low_level_pibt_calls\":"
+      << (stats.has_low_level_pibt_calls ? std::to_string(stats.low_level_pibt_calls)
+                                         : "null");
   out << ",\"ltm_iterations\":" << stats.ltm_iterations;
   out << ",\"committed_events\":" << stats.committed_events;
   out << ",\"blocked_events\":" << stats.blocked_events;

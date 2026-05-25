@@ -123,3 +123,14 @@ The Pillow reinstall fixes a Windows DLL-load failure hit when importing `torchv
   - `warehouse-10-20-10-2-2`
 - The extension adds 4 map-agent points, or 200 solver runs with 25 instances and two methods. The server full batch for this manifest is 3800 solver runs.
 - The 3000-agent points must be analyzed as an extension, not as part of the original LTM Figure 1 paper-parity claim.
+
+## 2026-05-25 - Phase2 metrics harness completion
+
+- Phase2 is complete as a metrics/logging/schema consolidation stage before learning.
+- The shared metrics package is `src/czr004_metrics`; future baseline, LTM, and NTM reports should use this package rather than stage-local summary logic.
+- `src/eval/phase1a_summarize.py` now delegates its JSONL reading and aggregation to `czr004_metrics`, preserving the existing Phase1a CSV output byte-for-byte on the full server JSONL.
+- `scripts/run_phase2_metrics.py` is the Phase2 replay entrypoint. It validates schema, writes group summary CSV, writes paired instance CSV, computes paired sign-test statistics, and emits `outputs/reports/phase2_metrics_harness_report.md`.
+- `cpp/tools/phase1a_batch.cpp` now emits Phase2 schema fields: `returned_solutions_count`, `expanded_nodes`, `high_level_expansions`, and `low_level_pibt_calls`.
+- The project-owned LTM adapter now counts `ltm_one_shot_low_level_pibt_calls` inside `cpp/ltm/ltm.cpp`. Upstream `LaCAM*` keeps `low_level_pibt_calls=null` because upstream solver source remains unmodified.
+- Historical Phase1a server rows predate the new schema fields; the harness reports missing coverage for those fields and does not invent values.
+- Phase2 verification is recorded in `outputs/reports/phase2_metrics_harness_completion.md`.

@@ -300,6 +300,7 @@ class OneShotLtmPlanner {
         V_size(ins->G.size()),
         D(ins, ltm),
         loop_cnt(0),
+        low_level_pibt_calls(0),
         C_next(N),
         tie_breakers(V_size, 0),
         A(N, nullptr),
@@ -383,6 +384,7 @@ class OneShotLtmPlanner {
     oss << "ltm_one_shot_loop_cnt=" << loop_cnt << "\n";
     oss << "ltm_one_shot_node_budget=" << node_budget << "\n";
     oss << "ltm_one_shot_num_node_gen=" << explored.size() << "\n";
+    oss << "ltm_one_shot_low_level_pibt_calls=" << low_level_pibt_calls << "\n";
     oss << "ltm_one_shot_solved=" << !solution.empty() << "\n";
     additional_info += oss.str();
 
@@ -406,6 +408,7 @@ class OneShotLtmPlanner {
   const uint V_size;
   WeightedDistanceTable D;
   uint loop_cnt;
+  uint low_level_pibt_calls;
   std::vector<std::array<Vertex*, 5> > C_next;
   std::vector<float> tie_breakers;
   Agents A;
@@ -470,6 +473,7 @@ class OneShotLtmPlanner {
 
   bool funcPIBT(Agent* ai)
   {
+    ++low_level_pibt_calls;
     const auto i = ai->id;
     const auto k_size = ai->v_now->neighbor.size();
 

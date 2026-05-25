@@ -3,79 +3,18 @@
 from __future__ import annotations
 
 import argparse
-import csv
-import json
 import math
-import statistics
-from collections import defaultdict
 from pathlib import Path
+import sys
 
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "src"))
 
-MAP_ORDER = [
-    "empty-32-32",
-    "empty-48-48",
-    "random-32-32-20",
-    "maze-32-32-4",
-    "random-64-64-20",
-    "room-64-64-8",
-    "warehouse-10-20-10-2-1",
-    "warehouse-10-20-10-2-2",
-]
-
-
-def read_rows(path: Path) -> list[dict]:
-    rows: list[dict] = []
-    with path.open("r", encoding="utf-8") as handle:
-        for line_no, line in enumerate(handle, 1):
-            line = line.strip()
-            if not line:
-                continue
-            try:
-                rows.append(json.loads(line))
-            except json.JSONDecodeError as exc:
-                raise ValueError(f"{path}:{line_no}: invalid JSONL") from exc
-    return rows
-
-
-def stdev_or_zero(values: list[float]) -> float:
-    return statistics.stdev(values) if len(values) > 1 else 0.0
-
-
-def summarize(rows: list[dict]) -> list[dict]:
-    grouped: dict[tuple[str, int, str], list[dict]] = defaultdict(list)
-    for row in rows:
-        grouped[(row["map"], int(row["agents"]), row["method"])].append(row)
-
-    summary: list[dict] = []
-    for (map_name, agents, method), group in sorted(
-        grouped.items(), key=lambda item: (MAP_ORDER.index(item[0][0]) if item[0][0] in MAP_ORDER else 999, item[0][0], item[0][1], item[0][2])
-    ):
-        ratios = [
-            float(row["sum_of_loss_ratio"])
-            for row in group
-            if row.get("success") and row.get("sum_of_loss_ratio") is not None
-        ]
-        runtimes = [float(row["runtime_ms"]) for row in group if row.get("runtime_ms") is not None]
-        success_count = sum(1 for row in group if row.get("success"))
-        summary.append(
-            {
-                "map": map_name,
-                "agents": agents,
-                "method": method,
-                "runs": len(group),
-                "successes": success_count,
-                "success_rate": success_count / len(group) if group else 0.0,
-                "ratio_mean": statistics.mean(ratios) if ratios else math.nan,
-                "ratio_median": statistics.median(ratios) if ratios else math.nan,
-                "ratio_std": stdev_or_zero(ratios) if ratios else math.nan,
-                "runtime_ms_mean": statistics.mean(runtimes) if runtimes else math.nan,
-            }
-        )
-    return summary
+from czr004_metrics.io import read_jsonl, write_csv as write_rows_csv
+from czr004_metrics.summary import MAP_ORDER, summarize_by_group
 
 
 def write_csv(path: Path, rows: list[dict]) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
     fieldnames = [
         "map",
         "agents",
@@ -88,10 +27,7 @@ def write_csv(path: Path, rows: list[dict]) -> None:
         "ratio_std",
         "runtime_ms_mean",
     ]
-    with path.open("w", encoding="utf-8", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=fieldnames)
-        writer.writeheader()
-        writer.writerows(rows)
+    write_rows_csv(path, rows, fieldnames)
 
 
 def plot_summary(path: Path, rows: list[dict]) -> None:
@@ -155,8 +91,8 @@ def main() -> int:
     parser.add_argument("--output-figure", default=Path("outputs/figures/phase1a_ratio_by_map.png"), type=Path)
     args = parser.parse_args()
 
-    rows = read_rows(args.input)
-    summary = summarize(rows)
+    rows = read_jsonl(args.input)
+    summary = summarize_by_group(rows)
     write_csv(args.output_csv, summary)
     plot_summary(args.output_figure, summary)
     print(f"rows={len(rows)} groups={len(summary)} csv={args.output_csv} figure={args.output_figure}")

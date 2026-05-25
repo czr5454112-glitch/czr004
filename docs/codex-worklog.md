@@ -1,5 +1,44 @@
 # Codex Worklog
 
+## 2026-05-25 - complete Phase2 metrics harness
+
+- Request: Complete Phase2, keep records, and maintain git.
+- Files changed:
+  - `src/czr004_metrics/__init__.py`
+  - `src/czr004_metrics/core.py`
+  - `src/czr004_metrics/io.py`
+  - `src/czr004_metrics/schema.py`
+  - `src/czr004_metrics/incumbent.py`
+  - `src/czr004_metrics/summary.py`
+  - `src/czr004_metrics/cli.py`
+  - `scripts/run_phase2_metrics.py`
+  - `src/eval/phase1a_summarize.py`
+  - `tests/test_czr004_metrics.py`
+  - `cpp/tools/phase1a_batch.cpp`
+  - `cpp/ltm/ltm.cpp`
+  - `outputs/reports/phase2_metrics_harness_report.md`
+  - `outputs/reports/phase2_metrics_harness_completion.md`
+  - `outputs/tables/phase2_phase1a_replay_summary.csv`
+  - `outputs/tables/phase2_phase1a_replay_paired.csv`
+  - `docs/implementation-notes.md`
+  - `docs/codex-worklog.md`
+- Key observations:
+  - Phase2 is implemented as the shared `src/czr004_metrics` metrics/schema/statistics package before learning starts.
+  - The Phase1a summarizer now reuses the shared harness and reproduced `outputs/tables/phase1a_plus_3000_ratio_by_map.csv` exactly by SHA256.
+  - Full Phase1a JSONL replay through `scripts/run_phase2_metrics.py` produced 3800 rows, 152 groups, 1840 paired rows, and 0 schema errors.
+  - The replay confirms Pass-A: 72 / 72 base paper-parity groups favor `LaCAM*+LTM`.
+  - The updated C++ batch runner emits Phase2 fields for returned solution count and search-effort metrics; LTM additionally emits low-level PIBT calls.
+- Verification:
+  - `python -m py_compile scripts\run_phase2_metrics.py src\eval\phase1a_summarize.py src\czr004_metrics\__init__.py src\czr004_metrics\core.py src\czr004_metrics\io.py src\czr004_metrics\schema.py src\czr004_metrics\incumbent.py src\czr004_metrics\summary.py src\czr004_metrics\cli.py`: passed.
+  - `& 'C:\PROGRAMING\anaconda\Scripts\conda.exe' run -n czr004 python -m pytest tests\test_czr004_metrics.py`: 6 passed.
+  - `python scripts\run_phase2_metrics.py --input outputs\logs\phase1a\phase1a_plus_3000_runs.jsonl --summary-csv outputs\tables\phase2_phase1a_replay_summary.csv --paired-csv outputs\tables\phase2_phase1a_replay_paired.csv --planning-execution-csv outputs\tables\phase2_planning_execution_summary.csv --report-md outputs\reports\phase2_metrics_harness_report.md`: passed.
+  - `python src\eval\phase1a_summarize.py --input outputs\logs\phase1a\phase1a_plus_3000_runs.jsonl --output-csv outputs\tmp\phase2_verify\phase1a_resummary.csv --output-figure outputs\tmp\phase2_verify\phase1a_resummary.png`: passed; CSV SHA256 matched the tracked Phase1a CSV.
+  - `powershell -ExecutionPolicy Bypass -File scripts\build_phase1a_batch.ps1`: passed.
+  - `powershell -ExecutionPolicy Bypass -File scripts\run_phase1a_batch.ps1 -DryRun -DryRunTimeLimitSec 2 -OutputJsonl outputs\logs\phase2\phase2_schema_dry_run.jsonl`: passed.
+  - `python scripts\run_phase2_metrics.py --input outputs\logs\phase2\phase2_schema_dry_run.jsonl --summary-csv outputs\tmp\phase2_verify\schema_dry_run_summary.csv --paired-csv outputs\tmp\phase2_verify\schema_dry_run_paired.csv --report-md outputs\tmp\phase2_verify\schema_dry_run_report.md --strict-schema`: passed.
+- Follow-up:
+  - Start Phase3 teacher-data work using `src/czr004_metrics` for all reporting and split/metadata audits.
+
 ## 2026-05-23 - preserve server artifacts before shutdown
 
 - Request: Check the server one more time before shutdown and pull back anything useful that is missing locally.

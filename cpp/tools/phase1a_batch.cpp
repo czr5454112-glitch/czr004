@@ -28,6 +28,9 @@ struct Args {
   std::string branch;
   std::string dirty;
   std::string platform;
+  std::string traffic_map_jsonl;
+  std::string traffic_map_run_id;
+  std::string traffic_map_edge_filter = "all";
   uint agents = 0;
   uint seed = 0;
   double time_limit_sec = 30.0;
@@ -130,6 +133,12 @@ Args parse_args(int argc, char** argv)
   args.branch = values.count("branch") ? values["branch"] : "";
   args.dirty = values.count("dirty") ? values["dirty"] : "";
   args.platform = values.count("platform") ? values["platform"] : "";
+  args.traffic_map_jsonl =
+      values.count("traffic-map-jsonl") ? values["traffic-map-jsonl"] : "";
+  args.traffic_map_run_id =
+      values.count("traffic-map-run-id") ? values["traffic-map-run-id"] : "";
+  args.traffic_map_edge_filter =
+      values.count("traffic-map-edge-filter") ? values["traffic-map-edge-filter"] : "all";
 
   if (!parse_uint(require("agents"), &args.agents)) {
     throw std::runtime_error("invalid --agents");
@@ -149,6 +158,11 @@ Args parse_args(int argc, char** argv)
 
   if (args.method != "lacam_star" && args.method != "lacam_star_ltm") {
     throw std::runtime_error("unsupported --method " + args.method);
+  }
+  if (args.traffic_map_edge_filter != "all" &&
+      args.traffic_map_edge_filter != "nonzero") {
+    throw std::runtime_error("unsupported --traffic-map-edge-filter " +
+                             args.traffic_map_edge_filter);
   }
   return args;
 }
@@ -184,6 +198,81 @@ struct RunStats {
   uint blocked_events = 0;
   uint nonzero_ltm_edges = 0;
 };
+
+std::string default_traffic_map_run_id(const Args& args)
+{
+  if (!args.traffic_map_run_id.empty()) return args.traffic_map_run_id;
+  std::ostringstream out;
+  out << args.map_name << "__a" << args.agents << "__s" << args.seed;
+  return out.str();
+}
+
+uint vertex_x(const Graph& graph, const Vertex* vertex)
+{
+  return graph.width == 0 ? 0 : vertex->index % graph.width;
+}
+
+uint vertex_y(const Graph& graph, const Vertex* vertex)
+{
+  return graph.width == 0 ? 0 : vertex->index / graph.width;
+}
+
+void append_traffic_map_jsonl(const Args& args, const Instance& instance,
+                              const czr004::ltm::DirectedTrafficMap& traffic_map)
+{
+  if (args.traffic_map_jsonl.empty()) return;
+
+  const auto output_path = std::filesystem::path(args.traffic_map_jsonl);
+  if (output_path.has_parent_path()) {
+    std::filesystem::create_directories(output_path.parent_path());
+  }
+
+  std::ofstream out(output_path, std::ios::app);
+  if (!out) throw std::runtime_error("cannot open traffic map JSONL");
+
+  const auto& graph = traffic_map.graph();
+  const auto run_id = default_traffic_map_run_id(args);
+  for (const auto* from : graph.V) {
+    for (const auto* to : from->neighbor) {
+      const auto raw_count = traffic_map.raw_count(from->id, to->id);
+      if (args.traffic_map_edge_filter == "nonzero" && raw_count <= 0.0) {
+        continue;
+      }
+      const auto weight = traffic_map.normalized_weight(from->id, to->id);
+
+      out << "{";
+      out << "\"schema_version\":\"phase3_edge_label_v1\"";
+      out << ",\"run_id\":" << json_string(run_id);
+      out << ",\"source\":\"final_ltm_traffic_map\"";
+      out << ",\"method\":" << json_string(args.method);
+      out << ",\"map\":" << json_string(args.map_name);
+      out << ",\"scen\":" << json_string(args.scen_id);
+      out << ",\"agents\":" << args.agents;
+      out << ",\"seed\":" << args.seed;
+      out << ",\"time_limit_sec\":" << json_number_or_null(args.time_limit_sec);
+      out << ",\"objective\":\"sum_of_loss\"";
+      out << ",\"from_id\":" << from->id;
+      out << ",\"to_id\":" << to->id;
+      out << ",\"from_index\":" << from->index;
+      out << ",\"to_index\":" << to->index;
+      out << ",\"from_x\":" << vertex_x(graph, from);
+      out << ",\"from_y\":" << vertex_y(graph, from);
+      out << ",\"to_x\":" << vertex_x(graph, to);
+      out << ",\"to_y\":" << vertex_y(graph, to);
+      out << ",\"from_degree\":" << from->neighbor.size();
+      out << ",\"to_degree\":" << to->neighbor.size();
+      out << ",\"ltm_raw_count\":" << json_number_or_null(raw_count);
+      out << ",\"ltm_normalized_weight\":" << json_number_or_null(weight);
+      out << ",\"warm_start_target_weight\":" << json_number_or_null(weight);
+      out << ",\"residual_reference_weight\":" << json_number_or_null(weight);
+      out << ",\"residual_delta_target\":0";
+      out << ",\"traversal_cost\":" << json_number_or_null(1.0 + weight);
+      out << ",\"nonzero\":" << (raw_count > 0.0 ? "true" : "false");
+      out << ",\"map_vertices\":" << instance.G.size();
+      out << "}\n";
+    }
+  }
+}
 
 RunStats run_lacam_star(const Instance& instance, const Args& args)
 {
@@ -234,6 +323,7 @@ RunStats run_lacam_star_ltm(const Instance& instance, const Args& args)
   stats.committed_events = result.trace_summary.committed;
   stats.blocked_events = result.trace_summary.blocked;
   stats.nonzero_ltm_edges = result.traffic_map.nonzero_raw_edges();
+  append_traffic_map_jsonl(args, instance, result.traffic_map);
   return stats;
 }
 

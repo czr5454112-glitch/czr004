@@ -134,3 +134,17 @@ The Pillow reinstall fixes a Windows DLL-load failure hit when importing `torchv
 - The project-owned LTM adapter now counts `ltm_one_shot_low_level_pibt_calls` inside `cpp/ltm/ltm.cpp`. Upstream `LaCAM*` keeps `low_level_pibt_calls=null` because upstream solver source remains unmodified.
 - Historical Phase1a server rows predate the new schema fields; the harness reports missing coverage for those fields and does not invent values.
 - Phase2 verification is recorded in `outputs/reports/phase2_metrics_harness_completion.md`.
+
+## 2026-05-25 - Phase3 teacher data gate
+
+- Phase3 defines the NTM route as `online_residual`: future inference should use `w_ntm = clamp(w_ltm + delta, 0, 10)` with LTM as the safety baseline.
+- Pure `ltm_normalized_weight` regression is retained only as a warm-start / diagnostic target, not as the final solver-facing contribution.
+- `cpp/tools/phase1a_batch.cpp` now has optional `--traffic-map-jsonl`, `--traffic-map-run-id`, and `--traffic-map-edge-filter` arguments. These export final LTM directed edge labels without changing the normal Phase1a/Phase2 run-row JSONL.
+- Phase3 Python helpers live under `src/czr004_teacher`; they validate edge-label rows, teacher manifest rows, stable run IDs, and map-holdout leakage rules.
+- The Phase3 split rule is map-holdout:
+  - train: `empty-32-32`, `random-32-32-20`, `random-64-64-20`, `room-64-64-8`, `warehouse-10-20-10-2-1`, `warehouse-10-20-10-2-2`
+  - validation: `empty-48-48`
+  - test: `maze-32-32-4`
+- The tracked manifest is `artifacts/teacher/manifest.jsonl`. Large edge-label files stay under ignored `artifacts/teacher/edge_labels/`.
+- The Phase3 smoke teacher set uses fixed 50-agent instance-1 samples across all eight maps with a 3s time limit, producing 8/8 feasible runs and 90,992 edge-label rows.
+- Completion evidence is recorded in `outputs/reports/phase3_teacher_data_report.md`, `outputs/tables/phase3_teacher_dataset_summary.csv`, and `outputs/tables/phase3_teacher_split_audit.csv`.

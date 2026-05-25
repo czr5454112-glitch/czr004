@@ -22,7 +22,10 @@ outputs/labels/
 outputs/checkpoints/
 outputs/tmp/
 outputs/**/*.tmp
-artifacts/teacher/
+artifacts/teacher/edge_labels/
+artifacts/teacher/traces/
+artifacts/teacher/tmp/
+artifacts/teacher/*.tmp
 artifacts/checkpoints/
 
 third_party/**/build/

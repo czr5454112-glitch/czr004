@@ -1,5 +1,41 @@
 # Codex Worklog
 
+## 2026-05-25 - complete Phase3 teacher data gate
+
+- Request: Complete Phase3, keep records, and maintain git.
+- Files changed:
+  - `.gitignore`
+  - `cpp/tools/phase1a_batch.cpp`
+  - `configs/phase3/teacher_data.yaml`
+  - `src/czr004_teacher/__init__.py`
+  - `src/czr004_teacher/schema.py`
+  - `src/czr004_teacher/splits.py`
+  - `scripts/run_phase3_teacher_data.py`
+  - `tests/test_phase3_teacher_data.py`
+  - `artifacts/teacher/manifest.jsonl`
+  - `artifacts/teacher/schema/phase3_edge_label_schema.json`
+  - `artifacts/teacher/schema/phase3_pibt_trace_schema.json`
+  - `outputs/reports/phase3_teacher_data_report.md`
+  - `outputs/tables/phase3_teacher_dataset_summary.csv`
+  - `outputs/tables/phase3_teacher_split_audit.csv`
+  - `docs/implementation-notes.md`
+  - `docs/codex-worklog.md`
+- Key observations:
+  - Phase3 now has a reproducible teacher-data path rather than only a paper plan.
+  - The project-owned batch runner can optionally export one JSONL row per directed graph edge from the final LTM traffic map.
+  - Large edge labels are intentionally ignored under `artifacts/teacher/edge_labels/`; the lightweight manifest and schema files are tracked.
+  - The primary supervision route is `online_residual`; pure edge regression remains only a warm-start / diagnostic target.
+  - The teacher smoke set uses fixed 50-agent, instance-1 samples across all eight Phase1a maps with a 3s time limit.
+  - The generated manifest has 8 runs, 90,992 edge-label rows, and 8 / 8 feasible runs.
+  - The map-holdout split audit passed: 6 train maps, 1 validation map, and 1 test map, with no map/map-seed/run-id leakage.
+- Verification:
+  - `python -m py_compile scripts\run_phase3_teacher_data.py src\czr004_teacher\__init__.py src\czr004_teacher\schema.py src\czr004_teacher\splits.py tests\test_phase3_teacher_data.py`: passed.
+  - `powershell -ExecutionPolicy Bypass -File scripts\build_phase1a_batch.ps1`: passed.
+  - `& 'C:\PROGRAMING\anaconda\Scripts\conda.exe' run -n czr004 python -m pytest tests\test_czr004_metrics.py tests\test_phase3_teacher_data.py`: 10 passed.
+  - `& 'C:\PROGRAMING\anaconda\Scripts\conda.exe' run -n czr004 python scripts\run_phase3_teacher_data.py --config configs\phase3\teacher_data.yaml --overwrite`: passed.
+- Follow-up:
+  - Phase4 can start from the tracked manifest and choose the first warm-start model without changing split rules.
+
 ## 2026-05-25 - complete Phase2 metrics harness
 
 - Request: Complete Phase2, keep records, and maintain git.

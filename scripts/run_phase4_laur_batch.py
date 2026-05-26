@@ -21,6 +21,14 @@ from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[1]
+PHASE4F_GATE_THRESHOLDS = {
+    "validation_non_neutral_checkpoints": 50,
+    "rule_top1_accuracy": 0.35,
+    "rule_top3_accuracy": 0.70,
+    "harmful_update_recall": 0.80,
+    "harmful_update_precision": 0.30,
+    "predicted_rule_validation_mean_delta_ratio": 0.0,
+}
 sys.path.insert(0, str(ROOT / "src"))
 
 from czr004_teacher.update_sequences import (  # noqa: E402
@@ -427,6 +435,7 @@ def run_train_stage(config: dict[str, Any], log_dir: Path) -> dict[str, Any]:
 
 def run_eval_stage(config: dict[str, Any], log_dir: Path) -> dict[str, Any]:
     model_path = resolve_repo_path(config["model_output_dir"]) / "laur_mlp_v1_weights.json"
+    summary_path = resolve_repo_path(config["offline_eval_summary_json"])
     command = [
         sys.executable,
         str(ROOT / "src" / "eval" / "eval_laur_offline.py"),
@@ -443,10 +452,74 @@ def run_eval_stage(config: dict[str, Any], log_dir: Path) -> dict[str, Any]:
         "--summary-csv",
         str(resolve_repo_path(config["offline_eval_summary_csv"])),
         "--summary-json",
-        str(resolve_repo_path(config["offline_eval_summary_json"])),
+        str(summary_path),
     ]
     completed = run_command(command, log_dir=log_dir, log_name="eval")
-    return {"command": command, "stdout": completed.stdout.strip()}
+    summary = json.loads(summary_path.read_text(encoding="utf-8")) if summary_path.exists() else {}
+    return {
+        "command": command,
+        "stdout": completed.stdout.strip(),
+        "summary_json": str(summary_path),
+        "summary": summary,
+    }
+
+
+def phase4f_performance_gate(
+    eval_summary: dict[str, Any] | None,
+    *,
+    validation_non_neutral_checkpoints: int,
+) -> dict[str, Any]:
+    metrics_by_split = (eval_summary or {}).get("metrics_by_split", {})
+    validation_metrics = metrics_by_split.get("validation", {}) if isinstance(metrics_by_split, dict) else {}
+
+    def metric_value(key: str) -> float | None:
+        value = validation_metrics.get(key)
+        return float(value) if isinstance(value, (int, float)) else None
+
+    def metric_passes(key: str) -> bool:
+        value = metric_value(key)
+        threshold = PHASE4F_GATE_THRESHOLDS[key]
+        return value is not None and value >= threshold
+
+    gate = {
+        "validation_non_neutral_checkpoints": validation_non_neutral_checkpoints,
+        "phase4f_validation_non_neutral_min": PHASE4F_GATE_THRESHOLDS[
+            "validation_non_neutral_checkpoints"
+        ],
+        "phase4f_validation_non_neutral_gate": (
+            validation_non_neutral_checkpoints
+            >= PHASE4F_GATE_THRESHOLDS["validation_non_neutral_checkpoints"]
+        ),
+        "phase4f_validation_rule_top1_accuracy": metric_value("rule_top1_accuracy"),
+        "phase4f_validation_rule_top1_gate": metric_passes("rule_top1_accuracy"),
+        "phase4f_validation_rule_top3_accuracy": metric_value("rule_top3_accuracy"),
+        "phase4f_validation_rule_top3_gate": metric_passes("rule_top3_accuracy"),
+        "phase4f_validation_harmful_update_recall": metric_value("harmful_update_recall"),
+        "phase4f_harmful_update_recall_gate": metric_passes("harmful_update_recall"),
+        "phase4f_validation_harmful_update_precision": metric_value("harmful_update_precision"),
+        "phase4f_harmful_update_precision_gate": metric_passes("harmful_update_precision"),
+        "phase4f_validation_predicted_rule_mean_delta_ratio": metric_value(
+            "predicted_rule_validation_mean_delta_ratio"
+        ),
+        "phase4f_predicted_rule_mean_delta_gate": metric_passes(
+            "predicted_rule_validation_mean_delta_ratio"
+        ),
+        "phase4f_validation_neutral_additive_rate": metric_value("neutral_additive_rate"),
+        "phase4f_neutral_additive_documented": "neutral_additive_rate" in validation_metrics,
+    }
+    gate["phase4f_performance_gate_passed"] = all(
+        bool(gate[key])
+        for key in (
+            "phase4f_validation_non_neutral_gate",
+            "phase4f_validation_rule_top1_gate",
+            "phase4f_validation_rule_top3_gate",
+            "phase4f_harmful_update_recall_gate",
+            "phase4f_harmful_update_precision_gate",
+            "phase4f_predicted_rule_mean_delta_gate",
+            "phase4f_neutral_additive_documented",
+        )
+    )
+    return gate
 
 
 def config_path_for_summary(config: dict[str, Any]) -> str:
@@ -558,6 +631,7 @@ def main(argv: list[str] | None = None) -> int:
             for row in _read_jsonl_for_gate(resolve_repo_path(config["dataset_jsonl"]))
             if row.get("split") == "validation" and not row.get("target", {}).get("neutral", True)
         )
+    eval_metrics_summary = eval_summary.get("summary", {}) if eval_summary else None
     gate = {
         "batch_script_completed": True,
         "record_completed": record_summary is not None or "record" not in steps,
@@ -565,10 +639,14 @@ def main(argv: list[str] | None = None) -> int:
         "dataset_completed": dataset_summary is not None or "dataset" not in steps,
         "train_completed": train_summary is not None or "train" not in steps,
         "eval_completed": eval_summary is not None or "eval" not in steps,
-        "validation_non_neutral_checkpoints": validation_rows,
-        "pilot_validation_non_neutral_gate": validation_rows >= 50,
     }
-    gate["passed"] = all(
+    gate.update(
+        phase4f_performance_gate(
+            eval_metrics_summary,
+            validation_non_neutral_checkpoints=validation_rows,
+        )
+    )
+    gate["operational_gate_passed"] = all(
         bool(gate[key])
         for key in (
             "batch_script_completed",
@@ -578,6 +656,9 @@ def main(argv: list[str] | None = None) -> int:
             "train_completed",
             "eval_completed",
         )
+    )
+    gate["passed"] = bool(gate["operational_gate_passed"]) and bool(
+        gate["phase4f_performance_gate_passed"]
     )
 
     summary = {

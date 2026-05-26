@@ -1,0 +1,5 @@
+split,run_id,checkpoint_id,map_name,agents,seed,iteration,target_rule,predicted_rule,top1_correct,top3_correct,harmful_update,harmful_update_probability,harmful_prediction,delta_ratio_best,predicted_rule_delta_ratio_vs_additive,delta_pred,neutral
+train,random-32-32-10__a50__s1__phase4c_smoke,random-32-32-10__a50__s1__phase4c_smoke__iter0,random-32-32-10,50,1,0,commit_heavy,commit_heavy,1,1,0,1.1624915255956293e-05,0,0.0269541778976,0.0269541778976,0.026954081029166077,0
+train,random-32-32-10__a50__s1__phase4c_smoke,random-32-32-10__a50__s1__phase4c_smoke__iter1,random-32-32-10,50,1,1,block_heavy,block_heavy,1,1,1,0.9999551446339955,1,0.00808625336927,0.00808625336927,0.008077811287316446,0
+train,random-32-32-10__a50__s1__phase4c_smoke,random-32-32-10__a50__s1__phase4c_smoke__iter2,random-32-32-10,50,1,2,decay_090,decay_090,1,1,0,0.00014073376532323597,0,0.0377358490566,0.0377358490566,0.03772208934388168,0
+train,random-32-32-10__a50__s1__phase4c_smoke,random-32-32-10__a50__s1__phase4c_smoke__iter3,random-32-32-10,50,1,3,wait_light,wait_light,1,1,1,0.9998499157284444,1,0.0116801437556,0.0116801437556,0.01166491620079324,0

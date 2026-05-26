@@ -1,0 +1,65 @@
+{
+  "dataset": "C:\\PROGRAMING\\czr004\\artifacts\\teacher\\laur\\update_labels\\phase4_laur_update_dataset_smoke.jsonl",
+  "gate": {
+    "eval_script_runs_end_to_end": true,
+    "model_export_file_exists": true,
+    "passed": true,
+    "schema_validation_passes": true,
+    "summary_csv_written": true,
+    "validation_metrics_computed": true
+  },
+  "metrics_by_split": {
+    "all": {
+      "harmful_update_f1": 1.0,
+      "harmful_update_precision": 1.0,
+      "harmful_update_recall": 1.0,
+      "label_distribution": {
+        "block_heavy": 1,
+        "commit_heavy": 1,
+        "decay_090": 1,
+        "wait_light": 1
+      },
+      "neutral_additive_rate": 0.0,
+      "non_neutral_rule_top1_accuracy": 1.0,
+      "predicted_rule_distribution": {
+        "block_heavy": 1,
+        "commit_heavy": 1,
+        "decay_090": 1,
+        "wait_light": 1
+      },
+      "predicted_rule_validation_mean_delta_ratio": 0.0211141060197675,
+      "rule_top1_accuracy": 1.0,
+      "rule_top3_accuracy": 1.0,
+      "safety_auroc": 1.0,
+      "sample_count": 4
+    },
+    "train": {
+      "harmful_update_f1": 1.0,
+      "harmful_update_precision": 1.0,
+      "harmful_update_recall": 1.0,
+      "label_distribution": {
+        "block_heavy": 1,
+        "commit_heavy": 1,
+        "decay_090": 1,
+        "wait_light": 1
+      },
+      "neutral_additive_rate": 0.0,
+      "non_neutral_rule_top1_accuracy": 1.0,
+      "predicted_rule_distribution": {
+        "block_heavy": 1,
+        "commit_heavy": 1,
+        "decay_090": 1,
+        "wait_light": 1
+      },
+      "predicted_rule_validation_mean_delta_ratio": 0.0211141060197675,
+      "rule_top1_accuracy": 1.0,
+      "rule_top3_accuracy": 1.0,
+      "safety_auroc": 1.0,
+      "sample_count": 4
+    }
+  },
+  "model": "C:\\PROGRAMING\\czr004\\artifacts\\models\\laur_ltm\\smoke\\laur_mlp_v1_weights.json",
+  "probe_jsonl": "C:\\PROGRAMING\\czr004\\artifacts\\teacher\\laur\\probes\\phase4_laur_probe_smoke.jsonl",
+  "schema_version": "phase4_laur_offline_eval_summary_v1",
+  "summary_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase4_laur_ltm_offline_eval.csv"
+}

@@ -901,3 +901,33 @@
   - `artifacts/models/laur_ltm/full/`
 - Follow-up:
   - Phase4F is no longer blocked by storage or server execution. The next blocker is validation generalization and harmful-update recall; do not advance this model into Phase5 learned runtime yet.
+
+## 2026-05-26 19:45 - Phase4F P0 failure diagnostics
+
+- Request: continue Phase4F after the full server run failed performance gates, keep records/git backups, and evaluate the GPT Pro repair suggestions before changing the model.
+- Files changed:
+  - `src/eval/diagnose_laur_phase4f.py`
+  - `tests/test_phase4f_diagnostics.py`
+  - `outputs/reports/phase4f_laur_failure_diagnostics.md`
+  - `outputs/tables/phase4f_laur_label_margin_details.csv`
+  - `outputs/tables/phase4f_laur_label_margin_histogram.csv`
+  - `outputs/tables/phase4f_laur_per_map_confusion.csv`
+  - `outputs/tables/phase4f_laur_safety_threshold_sweep.csv`
+  - `outputs/tables/phase4f_laur_feature_drift.csv`
+  - `docs/codex-worklog.md`
+- Commands run:
+  - `& 'C:\Users\38908\.conda\envs\czr004\python.exe' -m py_compile src\eval\diagnose_laur_phase4f.py`
+  - `& 'C:\Users\38908\.conda\envs\czr004\python.exe' -m pytest tests\test_phase4f_diagnostics.py`
+  - `& 'C:\Users\38908\.conda\envs\czr004\python.exe' src\eval\diagnose_laur_phase4f.py`
+- Key observations:
+  - P0 diagnostics are offline-only and do not lower the Phase4F gate or change labels.
+  - Validation exact top1/top3 remain `0.1943` / `0.4716`; family-collapsed top1 is only `0.2336`, so failures are not just within-family variant swaps.
+  - Validation best-vs-second probe margins are small: `230 / 458` checkpoints have margin `<= 0.005`, and `304 / 458` have margin `<= 0.010`.
+  - The largest validation confusions remain `neutral_additive -> block_heavy`, `block_heavy -> neutral_additive`, `wait_light -> neutral_additive`, and wait/block swaps.
+  - A train-side safety threshold candidate at `0.40` reaches harmful recall `0.8419` and precision `0.6941`, but would trigger fallback on `0.5066` of train rows.
+  - Feature drift confirms held-out-map OOD pressure, especially `map_width`, `map_height`, `free_cells`, and `obstacle_ratio`.
+- Tests / validation:
+  - `py_compile` passed.
+  - `tests/test_phase4f_diagnostics.py` passed, 3 tests.
+- Follow-up:
+  - Continue Phase4F repairs in this order: preserve exact gate diagnostics, calibrate safety threshold/fallback on train or a calibration split, then move to margin-aware labels or a rule-aware scorer if exact top1/top3 remain below gate.

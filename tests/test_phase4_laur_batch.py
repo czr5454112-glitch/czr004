@@ -1,4 +1,32 @@
-from scripts.run_phase4_laur_batch import phase4f_performance_gate
+from scripts.run_phase4_laur_batch import phase4f_performance_gate, record_command
+
+
+def test_record_command_can_disable_raw_trace_export() -> None:
+    config = {
+        "binary": "phase4_laur_record",
+        "checkpoint_jsonl": "checkpoints.jsonl",
+        "trace_jsonl": "trace.jsonl",
+        "traffic_snapshot_root": "snapshots",
+        "time_limit_sec": 1,
+        "max_iterations": 1,
+        "checkpoint_topk_edges": 4,
+        "export_raw_trace": False,
+    }
+    run = {
+        "map_path": "map.map",
+        "scen_path": "case.scen",
+        "map_name": "map",
+        "split": "train",
+        "agents": 10,
+        "seed": 1,
+        "run_id": "run",
+    }
+    meta = {"branch": "b", "commit": "c", "dirty": "clean"}
+
+    command = record_command(config, run, meta)
+
+    raw_trace_index = command.index("--export-raw-trace")
+    assert command[raw_trace_index + 1] == "0"
 
 
 def test_phase4f_performance_gate_rejects_weak_validation_metrics() -> None:

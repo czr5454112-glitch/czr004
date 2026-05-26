@@ -40,9 +40,11 @@ from czr004_teacher.update_sequences import (  # noqa: E402
     read_checkpoint_jsonl,
     read_probe_jsonl,
     read_trace_jsonl,
+    validate_checkpoint_row,
     write_jsonl,
     write_update_dataset_summary_csv,
 )
+from czr004_teacher.splits import audit_no_leakage  # noqa: E402
 
 
 def load_config(path: Path) -> dict[str, Any]:
@@ -267,7 +269,7 @@ def metadata() -> dict[str, str]:
 
 
 def record_command(config: dict[str, Any], run: dict[str, Any], meta: dict[str, str]) -> list[str]:
-    return [
+    command = [
         str(maybe_exe(resolve_repo_path(config["binary"]))),
         "--map",
         str(resolve_repo_path(run["map_path"])),
@@ -301,10 +303,46 @@ def record_command(config: dict[str, Any], run: dict[str, Any], meta: dict[str, 
         meta["commit"],
         "--dirty",
         meta["dirty"],
-        "--export-raw-trace",
         "--export-checkpoints",
         "--force-additive",
     ]
+    if bool(config.get("export_raw_trace", True)):
+        command.append("--export-raw-trace")
+    else:
+        command.extend(["--export-raw-trace", "0"])
+    return command
+
+
+def audit_checkpoints_without_trace(checkpoint_jsonl: Path) -> dict[str, Any]:
+    checkpoints = list(read_checkpoint_jsonl(checkpoint_jsonl))
+    checkpoint_schema_errors: list[str] = []
+    for index, row in enumerate(checkpoints, 1):
+        checkpoint_schema_errors.extend(
+            f"checkpoint row {index}: {error}" for error in validate_checkpoint_row(row)
+        )
+    split_rows = [
+        {
+            "split": row["split"],
+            "map": row["map_name"],
+            "seed": row["seed"],
+            "run_id": row["run_id"],
+        }
+        for row in checkpoints
+        if all(key in row for key in ("split", "map_name", "seed", "run_id"))
+    ]
+    split_errors = audit_no_leakage(split_rows) if split_rows else ["no checkpoint rows available for split audit"]
+    result = {
+        "checkpoint_jsonl": str(checkpoint_jsonl),
+        "trace_jsonl": None,
+        "trace_exported": False,
+        "checkpoint_rows": len(checkpoints),
+        "checkpoint_schema_errors": checkpoint_schema_errors,
+        "split_errors": split_errors,
+        "checkpoint_schema_error_count": len(checkpoint_schema_errors),
+        "split_error_count": len(split_errors),
+    }
+    result["passed"] = not (checkpoint_schema_errors or split_errors)
+    return result
 
 
 def probe_command(config: dict[str, Any], run: dict[str, Any], meta: dict[str, str]) -> list[str]:
@@ -359,10 +397,13 @@ def run_record_stage(config: dict[str, Any], runs: list[dict[str, Any]], meta: d
             log_name=f"record_{index:04d}_{run['run_id']}",
         )
         completed += 1
-    audit = audit_checkpoint_trace_join(
-        resolve_repo_path(config["checkpoint_jsonl"]),
-        resolve_repo_path(config["trace_jsonl"]),
-    )
+    if bool(config.get("export_raw_trace", True)):
+        audit = audit_checkpoint_trace_join(
+            resolve_repo_path(config["checkpoint_jsonl"]),
+            resolve_repo_path(config["trace_jsonl"]),
+        )
+    else:
+        audit = audit_checkpoints_without_trace(resolve_repo_path(config["checkpoint_jsonl"]))
     if not audit["passed"]:
         raise ValueError("checkpoint/trace audit failed:\n" + json.dumps(audit, indent=2))
     return {"run_count": completed, "audit": audit}

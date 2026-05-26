@@ -8,6 +8,7 @@ probe_binary: build/phase4-laur-ltm/phase4_laur_probe
 time_limit_sec: 8
 max_iterations: 4
 checkpoint_topk_edges: 16
+export_raw_trace: true
 
 scenario_manifest: configs/phase1a/manifest.jsonl
 scenario_output_dir: outputs/tmp/phase1a/generated/phase1a-generated-random

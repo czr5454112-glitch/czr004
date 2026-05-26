@@ -288,6 +288,16 @@ def validate_checkpoint_row(row: dict) -> list[str]:
         errors.append("committed_count + blocked_count must equal trace_event_count")
     if int(row["wait_event_count"]) + int(row["goal_wait_ignored_count"]) > int(row["trace_event_count"]):
         errors.append("wait_event_count + goal_wait_ignored_count must be <= trace_event_count")
+    for key in ("blocked_unique_edge_count", "topk_blocked_edge_count"):
+        if key in row:
+            _nonnegative_int(row, key, errors)
+    for key in ("topk_blocked_edge_concentration", "blocked_edge_entropy"):
+        if key in row:
+            _finite_number(row, key, errors)
+    if "topk_blocked_edge_concentration" in row:
+        value = row.get("topk_blocked_edge_concentration")
+        if _is_number(value) and not (0.0 <= float(value) <= 1.0):
+            errors.append("topk_blocked_edge_concentration must be within [0, 1]")
 
     _validate_raw_topk(row, "raw_before_topk", errors)
     _validate_raw_topk(row, "raw_after_topk", errors)

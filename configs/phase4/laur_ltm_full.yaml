@@ -9,6 +9,7 @@ time_limit_sec: 8
 max_iterations: 4
 checkpoint_topk_edges: 16
 export_raw_trace: true
+trace_compression: zstd
 
 scenario_manifest: configs/phase1a/manifest.jsonl
 scenario_output_dir: outputs/tmp/phase1a/generated/phase1a-generated-random
@@ -17,7 +18,8 @@ scenario_metadata: outputs/reports/phase4_laur_full_generated_scenarios_manifest
 scen_template: outputs/tmp/phase1a/generated/phase1a-generated-random/{map_name}-random-{instance}.scen
 
 checkpoint_jsonl: artifacts/teacher/laur/full/checkpoints/phase4_laur_checkpoints_full.jsonl
-trace_jsonl: artifacts/teacher/laur/full/traces/phase4_laur_trace_full.jsonl
+trace_jsonl: artifacts/teacher/laur/full/traces/phase4_laur_trace_full.jsonl.pipe
+compressed_trace_zst: artifacts/teacher/laur/full/traces/phase4_laur_trace_full.jsonl.zst
 traffic_snapshot_root: artifacts/teacher/laur/full/checkpoints/snapshots
 probe_output_jsonl: artifacts/teacher/laur/full/probes/phase4_laur_probe_full.jsonl
 update_label_jsonl: artifacts/teacher/laur/full/update_labels/phase4_laur_best_rule_labels_full.jsonl

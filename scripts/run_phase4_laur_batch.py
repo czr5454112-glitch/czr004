@@ -8,12 +8,15 @@ launches Phase4F training and offline eval with fixed output paths.
 from __future__ import annotations
 
 import argparse
+import errno
+import hashlib
 import json
 import os
 import platform
 import shutil
 import subprocess
 import sys
+import time
 from collections import Counter
 from datetime import datetime
 from pathlib import Path
@@ -120,6 +123,130 @@ def write_json(path: str | Path, payload: dict[str, Any]) -> None:
     output = resolve_repo_path(path)
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+
+def file_sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def trace_compression_kind(config: dict[str, Any]) -> str:
+    return str(config.get("trace_compression", "")).strip().lower()
+
+
+def compressed_trace_enabled(config: dict[str, Any]) -> bool:
+    kind = trace_compression_kind(config)
+    if kind and kind not in {"zstd", "zst"}:
+        raise ValueError(f"unsupported trace_compression: {kind}")
+    return bool(config.get("export_raw_trace", True)) and kind in {"zstd", "zst"}
+
+
+def compressed_trace_output_path(config: dict[str, Any]) -> Path:
+    configured = config.get("compressed_trace_zst")
+    if configured:
+        return resolve_repo_path(configured)
+    return resolve_repo_path(str(config["trace_jsonl"]) + ".zst")
+
+
+def start_zstd_trace_stream(config: dict[str, Any], log_dir: Path) -> dict[str, Any]:
+    if os.name != "posix" or not hasattr(os, "mkfifo"):
+        raise RuntimeError("streaming zstd trace compression requires a POSIX server")
+    if shutil.which("zstd") is None:
+        raise RuntimeError("zstd is required for streaming trace compression")
+
+    fifo_path = resolve_repo_path(config["trace_jsonl"])
+    compressed_path = compressed_trace_output_path(config)
+    remove_file_if_exists(fifo_path)
+    remove_file_if_exists(compressed_path)
+    remove_file_if_exists(compressed_path.with_suffix(compressed_path.suffix + ".sha256"))
+    fifo_path.parent.mkdir(parents=True, exist_ok=True)
+    compressed_path.parent.mkdir(parents=True, exist_ok=True)
+    log_dir.mkdir(parents=True, exist_ok=True)
+    os.mkfifo(fifo_path)
+
+    stdout_handle = compressed_path.open("wb")
+    stderr_path = log_dir / "trace_zstd.stderr.log"
+    stderr_handle = stderr_path.open("w", encoding="utf-8")
+    process = subprocess.Popen(
+        ["zstd", "-T0", "-q", "-c", str(fifo_path)],
+        cwd=ROOT,
+        stdout=stdout_handle,
+        stderr=stderr_handle,
+    )
+
+    dummy_fd: int | None = None
+    deadline = time.monotonic() + 10.0
+    try:
+        while dummy_fd is None:
+            if process.poll() is not None:
+                raise RuntimeError(f"zstd exited before trace stream opened: {stderr_path}")
+            try:
+                dummy_fd = os.open(str(fifo_path), os.O_WRONLY | os.O_NONBLOCK)
+            except OSError as exc:
+                if exc.errno != errno.ENXIO or time.monotonic() >= deadline:
+                    raise
+                time.sleep(0.05)
+    except Exception:
+        process.terminate()
+        try:
+            process.wait(timeout=30)
+        except subprocess.TimeoutExpired:
+            process.kill()
+            process.wait(timeout=30)
+        stdout_handle.close()
+        stderr_handle.close()
+        remove_file_if_exists(fifo_path)
+        raise
+
+    return {
+        "fifo_path": fifo_path,
+        "compressed_path": compressed_path,
+        "stderr_path": stderr_path,
+        "process": process,
+        "dummy_fd": dummy_fd,
+        "stdout_handle": stdout_handle,
+        "stderr_handle": stderr_handle,
+    }
+
+
+def finish_zstd_trace_stream(stream: dict[str, Any], *, abort: bool = False) -> dict[str, Any]:
+    dummy_fd = stream.get("dummy_fd")
+    if dummy_fd is not None:
+        os.close(int(dummy_fd))
+        stream["dummy_fd"] = None
+
+    process: subprocess.Popen[Any] = stream["process"]
+    try:
+        returncode = process.wait(timeout=120)
+    except subprocess.TimeoutExpired:
+        process.terminate()
+        returncode = process.wait(timeout=30)
+
+    stream["stdout_handle"].close()
+    stream["stderr_handle"].close()
+    remove_file_if_exists(stream["fifo_path"])
+
+    if returncode != 0 and not abort:
+        raise RuntimeError(f"zstd trace compression failed with exit={returncode}: {stream['stderr_path']}")
+
+    compressed_path: Path = stream["compressed_path"]
+    summary = {
+        "trace_compression": "zstd",
+        "trace_jsonl_fifo": str(stream["fifo_path"]),
+        "compressed_trace_zst": str(compressed_path),
+        "compressed_trace_bytes": compressed_path.stat().st_size if compressed_path.exists() else 0,
+        "zstd_returncode": returncode,
+    }
+    if compressed_path.exists() and returncode == 0:
+        sha256 = file_sha256(compressed_path)
+        sha_path = compressed_path.with_suffix(compressed_path.suffix + ".sha256")
+        sha_path.write_text(f"{sha256}  {compressed_path.name}\n", encoding="utf-8")
+        summary["compressed_trace_sha256"] = sha256
+        summary["compressed_trace_sha256_path"] = str(sha_path)
+    return summary
 
 
 def append_log(log_dir: Path, name: str, completed: subprocess.CompletedProcess[str]) -> None:
@@ -239,6 +366,8 @@ def clear_outputs(config: dict[str, Any]) -> None:
     for key in (
         "checkpoint_jsonl",
         "trace_jsonl",
+        "compressed_trace_zst",
+        "compressed_trace_zst_sha256",
         "probe_output_jsonl",
         "update_label_jsonl",
         "dataset_jsonl",
@@ -390,23 +519,43 @@ def probe_command(config: dict[str, Any], run: dict[str, Any], meta: dict[str, s
 
 def run_record_stage(config: dict[str, Any], runs: list[dict[str, Any]], meta: dict[str, str], log_dir: Path) -> dict[str, Any]:
     completed = 0
-    for index, run in enumerate(runs, 1):
-        run_command(
-            record_command(config, run, meta),
-            log_dir=log_dir,
-            log_name=f"record_{index:04d}_{run['run_id']}",
-        )
-        completed += 1
-    if bool(config.get("export_raw_trace", True)):
+    trace_stream: dict[str, Any] | None = None
+    compressed_summary: dict[str, Any] | None = None
+    try:
+        if compressed_trace_enabled(config):
+            trace_stream = start_zstd_trace_stream(config, log_dir)
+        for index, run in enumerate(runs, 1):
+            run_command(
+                record_command(config, run, meta),
+                log_dir=log_dir,
+                log_name=f"record_{index:04d}_{run['run_id']}",
+            )
+            completed += 1
+    except Exception:
+        if trace_stream is not None:
+            finish_zstd_trace_stream(trace_stream, abort=True)
+        raise
+    if trace_stream is not None:
+        compressed_summary = finish_zstd_trace_stream(trace_stream)
+
+    if bool(config.get("export_raw_trace", True)) and not compressed_trace_enabled(config):
         audit = audit_checkpoint_trace_join(
             resolve_repo_path(config["checkpoint_jsonl"]),
             resolve_repo_path(config["trace_jsonl"]),
         )
     else:
         audit = audit_checkpoints_without_trace(resolve_repo_path(config["checkpoint_jsonl"]))
+    if compressed_summary is not None:
+        audit["trace_exported"] = True
+        audit["trace_compressed"] = True
+        audit["compressed_trace_zst"] = compressed_summary["compressed_trace_zst"]
+        audit["compressed_trace_sha256"] = compressed_summary.get("compressed_trace_sha256")
     if not audit["passed"]:
         raise ValueError("checkpoint/trace audit failed:\n" + json.dumps(audit, indent=2))
-    return {"run_count": completed, "audit": audit}
+    result = {"run_count": completed, "audit": audit}
+    if compressed_summary is not None:
+        result["compressed_trace"] = compressed_summary
+    return result
 
 
 def run_probe_stage(config: dict[str, Any], runs: list[dict[str, Any]], meta: dict[str, str], log_dir: Path) -> dict[str, Any]:
@@ -436,7 +585,10 @@ def run_probe_stage(config: dict[str, Any], runs: list[dict[str, Any]], meta: di
 
 def run_dataset_stage(config: dict[str, Any]) -> dict[str, Any]:
     checkpoints = list(read_checkpoint_jsonl(resolve_repo_path(config["checkpoint_jsonl"])))
-    traces = list(read_trace_jsonl(resolve_repo_path(config["trace_jsonl"])))
+    if bool(config.get("export_raw_trace", True)) and not compressed_trace_enabled(config):
+        traces = list(read_trace_jsonl(resolve_repo_path(config["trace_jsonl"])))
+    else:
+        traces = []
     probes = list(read_probe_jsonl(resolve_repo_path(config["probe_output_jsonl"])))
     min_delta = float(config.get("probe", {}).get("min_delta_ratio_for_label", 0.005))
     rows = build_update_dataset_rows(
@@ -730,6 +882,8 @@ def main(argv: list[str] | None = None) -> int:
         },
         "gate": gate,
     }
+    if config.get("compressed_trace_zst") or trace_compression_kind(config):
+        summary["outputs"]["compressed_trace_zst"] = str(compressed_trace_output_path(config))
     write_json(config["batch_summary_json"], summary)
     write_report(resolve_repo_path(config["batch_report_md"]), summary)
     print(json.dumps({"passed": gate["passed"], "summary": str(resolve_repo_path(config["batch_summary_json"]))}))

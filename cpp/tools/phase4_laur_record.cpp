@@ -8,6 +8,7 @@
 #include <filesystem>
 #include <fstream>
 #include <iostream>
+#include <map>
 #include <set>
 #include <sstream>
 #include <string>
@@ -302,23 +303,51 @@ struct TraceCounts {
   uint blocked = 0;
   uint wait = 0;
   uint goal_wait_ignored = 0;
+  uint blocked_unique_edges = 0;
+  uint topk_blocked_edges = 0;
+  double topk_blocked_edge_concentration = 0.0;
+  double blocked_edge_entropy = 0.0;
 };
 
 TraceCounts count_trace_events(
-    const std::vector<czr004::ltm::TraceEvent>& events)
+    const std::vector<czr004::ltm::TraceEvent>& events,
+    const std::vector<czr004::ltm::TrafficEdgeSnapshot>& raw_after_topk)
 {
   TraceCounts counts;
+  std::set<std::pair<uint, uint>> topk_after_edges;
+  for (const auto& edge : raw_after_topk) {
+    topk_after_edges.insert({edge.from_id, edge.to_id});
+  }
+  std::map<std::pair<uint, uint>, uint> blocked_edges;
   for (const auto& event : events) {
     if (event.kind == czr004::ltm::TraceEventKind::Committed) {
       ++counts.committed;
     } else {
       ++counts.blocked;
+      const auto edge = std::make_pair(event.from_id, event.to_id);
+      ++blocked_edges[edge];
+      if (topk_after_edges.count(edge) > 0) {
+        ++counts.topk_blocked_edges;
+      }
     }
     if (event.from_id == event.to_id) {
       if (event.at_goal) {
         ++counts.goal_wait_ignored;
       } else {
         ++counts.wait;
+      }
+    }
+  }
+  counts.blocked_unique_edges = static_cast<uint>(blocked_edges.size());
+  if (counts.blocked > 0) {
+    counts.topk_blocked_edge_concentration =
+        static_cast<double>(counts.topk_blocked_edges) /
+        static_cast<double>(counts.blocked);
+    for (const auto& item : blocked_edges) {
+      const auto probability =
+          static_cast<double>(item.second) / static_cast<double>(counts.blocked);
+      if (probability > 0.0) {
+        counts.blocked_edge_entropy -= probability * std::log(probability);
       }
     }
   }
@@ -360,7 +389,8 @@ void write_checkpoint_row(
     const std::string& checkpoint_id, const std::filesystem::path& snapshot_path,
     const czr004::ltm::LtmIterationCheckpoint& checkpoint)
 {
-  const auto counts = count_trace_events(checkpoint.trace_events);
+  const auto counts =
+      count_trace_events(checkpoint.trace_events, checkpoint.traffic_after.raw_topk);
 
   out << "{";
   out << "\"schema_version\":\"phase4_laur_checkpoint_v1\"";
@@ -396,6 +426,12 @@ void write_checkpoint_row(
   out << ",\"blocked_count\":" << counts.blocked;
   out << ",\"wait_event_count\":" << counts.wait;
   out << ",\"goal_wait_ignored_count\":" << counts.goal_wait_ignored;
+  out << ",\"blocked_unique_edge_count\":" << counts.blocked_unique_edges;
+  out << ",\"topk_blocked_edge_count\":" << counts.topk_blocked_edges;
+  out << ",\"topk_blocked_edge_concentration\":"
+      << json_number_or_null(counts.topk_blocked_edge_concentration);
+  out << ",\"blocked_edge_entropy\":"
+      << json_number_or_null(counts.blocked_edge_entropy);
   out << ",\"traffic_before_nonzero_edges\":"
       << checkpoint.traffic_before.nonzero_edges;
   out << ",\"traffic_after_nonzero_edges\":"

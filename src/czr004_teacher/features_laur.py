@@ -198,6 +198,11 @@ def build_aggregate_checkpoint_features(
     )
     topk_after_keys = set(after_by_edge)
     topk_blocked_count = sum(count for edge, count in blocked_edges.items() if edge in topk_after_keys)
+    topk_blocked_concentration = _ratio(topk_blocked_count, blocked)
+    blocked_edge_entropy = _entropy(blocked_edges.values())
+    if not blocked_edges:
+        topk_blocked_concentration = _to_float(checkpoint_row.get("topk_blocked_edge_concentration"))
+        blocked_edge_entropy = _to_float(checkpoint_row.get("blocked_edge_entropy"))
 
     after_weights = [_to_float(edge.get("weight")) for edge in normalized_after]
     after_raw_values = list(after_by_edge.values())
@@ -247,8 +252,8 @@ def build_aggregate_checkpoint_features(
                 - int(checkpoint_row.get("traffic_before_nonzero_edges", 0)),
             )
         ),
-        "topk_blocked_edge_concentration": _ratio(topk_blocked_count, blocked),
-        "entropy_edge_usage": _entropy(blocked_edges.values()),
+        "topk_blocked_edge_concentration": topk_blocked_concentration,
+        "entropy_edge_usage": blocked_edge_entropy,
         "local_degree_mean_topk": _ratio(sum(local_degrees), len(local_degrees)),
         "current_additive_max_normalized_weight": _to_float(checkpoint_row.get("traffic_after_max_normalized")),
         "weight_entropy": _entropy(after_weights),

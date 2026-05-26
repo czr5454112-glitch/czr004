@@ -1,0 +1,113 @@
+{
+  "dataset": "/root/shared-nvme/czr004_phase4_full_9c395b1_zstd/artifacts/teacher/laur/full/update_labels/phase4_laur_update_dataset_full.jsonl",
+  "gate": {
+    "eval_script_runs_end_to_end": true,
+    "model_export_file_exists": true,
+    "passed": true,
+    "schema_validation_passes": true,
+    "summary_csv_written": true,
+    "validation_metrics_computed": true
+  },
+  "metrics_by_split": {
+    "all": {
+      "harmful_update_f1": 0.7103046014257939,
+      "harmful_update_precision": 0.7201051248357424,
+      "harmful_update_recall": 0.7007672634271099,
+      "label_distribution": {
+        "block_heavy": 325,
+        "block_light": 163,
+        "commit_heavy": 316,
+        "decay_090": 98,
+        "decay_095": 87,
+        "neutral_additive": 413,
+        "wait_heavy": 213,
+        "wait_light": 282
+      },
+      "neutral_additive_rate": 0.22614654717975752,
+      "non_neutral_rule_top1_accuracy": 0.605121293800539,
+      "predicted_rule_distribution": {
+        "block_heavy": 397,
+        "block_light": 167,
+        "commit_heavy": 331,
+        "decay_090": 62,
+        "decay_095": 70,
+        "neutral_additive": 429,
+        "wait_heavy": 168,
+        "wait_light": 273
+      },
+      "predicted_rule_validation_mean_delta_ratio": 0.022119483254420803,
+      "rule_top1_accuracy": 0.6136004217185029,
+      "rule_top3_accuracy": 0.8355297838692672,
+      "safety_auroc": 0.8344362506164485,
+      "sample_count": 1897
+    },
+    "train": {
+      "harmful_update_f1": 0.7504187604690117,
+      "harmful_update_precision": 0.7554806070826307,
+      "harmful_update_recall": 0.7454242928452579,
+      "label_distribution": {
+        "block_heavy": 248,
+        "block_light": 130,
+        "commit_heavy": 240,
+        "decay_090": 72,
+        "decay_095": 60,
+        "neutral_additive": 304,
+        "wait_heavy": 162,
+        "wait_light": 223
+      },
+      "neutral_additive_rate": 0.221681723419041,
+      "non_neutral_rule_top1_accuracy": 0.73215859030837,
+      "predicted_rule_distribution": {
+        "block_heavy": 280,
+        "block_light": 120,
+        "commit_heavy": 253,
+        "decay_090": 52,
+        "decay_095": 48,
+        "neutral_additive": 319,
+        "wait_heavy": 130,
+        "wait_light": 237
+      },
+      "predicted_rule_validation_mean_delta_ratio": 0.02824749635885571,
+      "rule_top1_accuracy": 0.7470465601111883,
+      "rule_top3_accuracy": 0.95135510771369,
+      "safety_auroc": 0.8779897466037114,
+      "sample_count": 1439
+    },
+    "validation": {
+      "harmful_update_f1": 0.5730659025787965,
+      "harmful_update_precision": 0.5952380952380952,
+      "harmful_update_recall": 0.5524861878453039,
+      "label_distribution": {
+        "block_heavy": 77,
+        "block_light": 33,
+        "commit_heavy": 76,
+        "decay_090": 26,
+        "decay_095": 27,
+        "neutral_additive": 109,
+        "wait_heavy": 51,
+        "wait_light": 59
+      },
+      "neutral_additive_rate": 0.24017467248908297,
+      "non_neutral_rule_top1_accuracy": 0.19197707736389685,
+      "predicted_rule_distribution": {
+        "block_heavy": 117,
+        "block_light": 47,
+        "commit_heavy": 78,
+        "decay_090": 10,
+        "decay_095": 22,
+        "neutral_additive": 110,
+        "wait_heavy": 38,
+        "wait_light": 36
+      },
+      "predicted_rule_validation_mean_delta_ratio": 0.0028657477581722716,
+      "rule_top1_accuracy": 0.1943231441048035,
+      "rule_top3_accuracy": 0.47161572052401746,
+      "safety_auroc": 0.7090172926182261,
+      "sample_count": 458
+    }
+  },
+  "model": "/root/shared-nvme/czr004_phase4_full_9c395b1_zstd/artifacts/models/laur_ltm/full/laur_mlp_v1_weights.json",
+  "probe_jsonl": "/root/shared-nvme/czr004_phase4_full_9c395b1_zstd/artifacts/teacher/laur/full/probes/phase4_laur_probe_full.jsonl",
+  "schema_version": "phase4_laur_offline_eval_summary_v1",
+  "summary_csv": "/root/shared-nvme/czr004_phase4_full_9c395b1_zstd/outputs/tables/phase4_laur_ltm_offline_eval_full.csv"
+}

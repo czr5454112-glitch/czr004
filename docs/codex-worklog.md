@@ -854,3 +854,50 @@
   - Conda pytest: `tests/test_phase4_laur_schema.py tests/test_phase3_teacher_data.py` passed, 9 tests.
 - Follow-up:
   - Phase4F can add the LAU-MLP-v1 model/training skeleton using `phase4_laur_update_dataset_smoke.jsonl` for train-loop smoke only; no performance claim should be made from this smoke scale.
+
+## 2026-05-26 17:55 - complete Phase4F full server run with compressed traces
+
+- Request: continue Phase4F on the server, keep git backed up, run in tmux, and preserve useful raw trace data without filling the old 50GB shared disk.
+- Code changes:
+  - Added FIFO -> zstd streaming compression support to `scripts/run_phase4_laur_batch.py`.
+  - Added checkpoint-level blocked-edge trace summaries in `cpp/tools/phase4_laur_record.cpp`.
+  - Updated feature extraction to use checkpoint trace summaries when raw trace rows are not loaded.
+  - Updated full config to write `trace_jsonl` as a FIFO and retain compressed `phase4_laur_trace_full.jsonl.zst`.
+- Server validation:
+  - Old server: `ackcs-00gjgxxy`.
+  - Workdir: `/root/shared-nvme/czr004_phase4_full_9c395b1_zstd`.
+  - tmux: `phase4_laur_full_9c395b1_zstd`.
+  - Linux C++ build passed for `phase4_laur_record` and `phase4_laur_probe`.
+  - Server pytest passed: `tests/test_phase4_laur_features.py tests/test_phase4_laur_batch.py tests/test_phase4_laur_schema.py tests/test_phase4_laur_model.py` (11 passed).
+  - zstd FIFO smoke passed and wrote a `.zst` plus `.sha256`.
+- Full run:
+  - Started: `2026-05-26T16:50:51+08:00`.
+  - Finished: `2026-05-26T17:53:34+08:00`.
+  - Runs: 480.
+  - Checkpoints: 1897.
+  - Probe rows: 15360.
+  - Dataset rows: 1897.
+  - Compressed raw trace: `810218454` bytes (`773M`).
+  - Compressed raw trace sha256: `c2a8deadfa8c7628fd8411b91bc369b3c1d69aa171184f278c1f1171ffd0ad47`.
+  - Shared disk remained healthy at about `3.0G / 50G` used.
+- Gate result:
+  - Operational gate passed: record, probe, dataset, train, and eval completed.
+  - Phase4F performance gate failed on validation.
+  - Validation top1: `0.1943231441048035` vs threshold `0.35`.
+  - Validation top3: `0.47161572052401746` vs threshold `0.70`.
+  - Harmful recall: `0.5524861878453039` vs threshold `0.80`.
+  - Harmful precision: `0.5952380952380952`, passed.
+  - Predicted-rule validation mean delta ratio: `0.0028657477581722716`, passed.
+- Evidence files:
+  - `outputs/reports/phase4_laur_ltm_full_gate_audit.md`
+  - `outputs/reports/phase4_laur_ltm_full_batch_report.md`
+  - `outputs/reports/phase4_laur_ltm_full_batch_summary.json`
+  - `outputs/reports/phase4_laur_ltm_offline_eval_full.md`
+  - `outputs/reports/phase4_laur_ltm_offline_eval_full_summary.json`
+  - `outputs/reports/phase4_laur_ltm_train_full.md`
+  - `outputs/reports/phase4_laur_update_dataset_full_summary.json`
+  - `outputs/tables/phase4_laur_ltm_offline_eval_full.csv`
+  - `outputs/tables/phase4_laur_update_dataset_full_summary.csv`
+  - `artifacts/models/laur_ltm/full/`
+- Follow-up:
+  - Phase4F is no longer blocked by storage or server execution. The next blocker is validation generalization and harmful-update recall; do not advance this model into Phase5 learned runtime yet.

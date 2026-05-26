@@ -1,0 +1,112 @@
+{
+  "dataset": "/root/shared-nvme/czr004/artifacts/teacher/laur/pilot/update_labels/phase4_laur_update_dataset_pilot.jsonl",
+  "gate": {
+    "eval_script_runs_end_to_end": true,
+    "model_export_file_exists": true,
+    "passed": true,
+    "schema_validation_passes": true,
+    "summary_csv_written": true,
+    "validation_metrics_computed": true
+  },
+  "metrics_by_split": {
+    "all": {
+      "harmful_update_f1": 0.8361581920903954,
+      "harmful_update_precision": 0.961038961038961,
+      "harmful_update_recall": 0.74,
+      "label_distribution": {
+        "block_heavy": 65,
+        "block_light": 21,
+        "commit_heavy": 63,
+        "decay_090": 23,
+        "decay_095": 13,
+        "neutral_additive": 70,
+        "wait_heavy": 38,
+        "wait_light": 27
+      },
+      "neutral_additive_rate": 0.178125,
+      "non_neutral_rule_top1_accuracy": 0.804,
+      "predicted_rule_distribution": {
+        "block_heavy": 92,
+        "block_light": 20,
+        "commit_heavy": 60,
+        "decay_090": 19,
+        "decay_095": 8,
+        "neutral_additive": 57,
+        "wait_heavy": 37,
+        "wait_light": 27
+      },
+      "predicted_rule_validation_mean_delta_ratio": 0.018798308294264394,
+      "rule_top1_accuracy": 0.784375,
+      "rule_top3_accuracy": 0.871875,
+      "safety_auroc": 0.7908636363636363,
+      "sample_count": 320
+    },
+    "train": {
+      "harmful_update_f1": 1.0,
+      "harmful_update_precision": 1.0,
+      "harmful_update_recall": 1.0,
+      "label_distribution": {
+        "block_heavy": 54,
+        "block_light": 16,
+        "commit_heavy": 47,
+        "decay_090": 18,
+        "decay_095": 8,
+        "neutral_additive": 48,
+        "wait_heavy": 29,
+        "wait_light": 20
+      },
+      "neutral_additive_rate": 0.2,
+      "non_neutral_rule_top1_accuracy": 1.0,
+      "predicted_rule_distribution": {
+        "block_heavy": 54,
+        "block_light": 16,
+        "commit_heavy": 47,
+        "decay_090": 18,
+        "decay_095": 8,
+        "neutral_additive": 48,
+        "wait_heavy": 29,
+        "wait_light": 20
+      },
+      "predicted_rule_validation_mean_delta_ratio": 0.024378808616423792,
+      "rule_top1_accuracy": 1.0,
+      "rule_top3_accuracy": 1.0,
+      "safety_auroc": 1.0,
+      "sample_count": 240
+    },
+    "validation": {
+      "harmful_update_f1": 0.12121212121212122,
+      "harmful_update_precision": 0.4,
+      "harmful_update_recall": 0.07142857142857142,
+      "label_distribution": {
+        "block_heavy": 11,
+        "block_light": 5,
+        "commit_heavy": 16,
+        "decay_090": 5,
+        "decay_095": 5,
+        "neutral_additive": 22,
+        "wait_heavy": 9,
+        "wait_light": 7
+      },
+      "neutral_additive_rate": 0.1125,
+      "non_neutral_rule_top1_accuracy": 0.15517241379310345,
+      "predicted_rule_distribution": {
+        "block_heavy": 38,
+        "block_light": 4,
+        "commit_heavy": 13,
+        "decay_090": 1,
+        "neutral_additive": 9,
+        "wait_heavy": 8,
+        "wait_light": 7
+      },
+      "predicted_rule_validation_mean_delta_ratio": 0.0020568073277862,
+      "rule_top1_accuracy": 0.1375,
+      "rule_top3_accuracy": 0.4875,
+      "safety_auroc": 0.3873626373626374,
+      "sample_count": 80
+    }
+  },
+  "model": "/root/shared-nvme/czr004/artifacts/models/laur_ltm/pilot/laur_mlp_v1_weights.json",
+  "probe_jsonl": "/root/shared-nvme/czr004/artifacts/teacher/laur/pilot/probes/phase4_laur_probe_pilot.jsonl",
+  "schema_version": "phase4_laur_offline_eval_summary_v1",
+  "summary_csv": "/root/shared-nvme/czr004/outputs/tables/phase4_laur_ltm_offline_eval_pilot.csv"
+}

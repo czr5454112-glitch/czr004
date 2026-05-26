@@ -1,0 +1,282 @@
+{
+  "agent_counts": [
+    50,
+    100
+  ],
+  "build_commands": [
+    [
+      "cmake",
+      "-S",
+      "/root/shared-nvme/czr004/cpp/ltm",
+      "-B",
+      "/root/shared-nvme/czr004/build/phase4-laur-ltm",
+      "-G",
+      "Ninja"
+    ],
+    [
+      "cmake",
+      "--build",
+      "/root/shared-nvme/czr004/build/phase4-laur-ltm",
+      "--config",
+      "Release",
+      "--target",
+      "phase4_laur_record",
+      "phase4_laur_probe",
+      "--parallel",
+      "1"
+    ]
+  ],
+  "config": "/root/shared-nvme/czr004/configs/phase4/laur_ltm_pilot.yaml",
+  "dataset": {
+    "audit": {
+      "best_rule_histogram": {
+        "additive_ltm": 29,
+        "block_heavy": 72,
+        "block_light": 24,
+        "commit_heavy": 67,
+        "decay_090": 26,
+        "decay_095": 20,
+        "wait_heavy": 50,
+        "wait_light": 32
+      },
+      "dataset_schema_error_count": 0,
+      "dataset_schema_errors": [],
+      "dynamic_rule_vocab": true,
+      "expected_checkpoint_rows": 320,
+      "feature_count": 36,
+      "feature_names": [
+        "agents",
+        "free_cells",
+        "density",
+        "map_width",
+        "map_height",
+        "obstacle_ratio",
+        "iteration",
+        "node_budget",
+        "elapsed_ms",
+        "time_remaining_sec",
+        "max_iterations",
+        "has_solution_before",
+        "best_ratio_before",
+        "improved_last_iteration",
+        "returned_solutions_count_so_far",
+        "committed_count",
+        "blocked_count",
+        "wait_event_count",
+        "goal_wait_ignored_count",
+        "blocked_per_committed",
+        "wait_per_committed",
+        "blocked_per_agent",
+        "committed_per_agent",
+        "nonzero_edges_before",
+        "max_raw_before",
+        "mean_topk_raw_before",
+        "max_weight_before",
+        "topk_raw_delta_mean",
+        "topk_raw_delta_max",
+        "new_nonzero_edges_count",
+        "topk_blocked_edge_concentration",
+        "entropy_edge_usage",
+        "local_degree_mean_topk",
+        "current_additive_max_normalized_weight",
+        "weight_entropy",
+        "saturated_edge_count"
+      ],
+      "feature_set": "aggregate_checkpoint_v1",
+      "harmful_update_count": 100,
+      "label_distribution": {
+        "block_heavy": 65,
+        "block_light": 21,
+        "commit_heavy": 63,
+        "decay_090": 23,
+        "decay_095": 13,
+        "neutral_additive": 70,
+        "wait_heavy": 38,
+        "wait_light": 27
+      },
+      "missing_label_count": 0,
+      "non_neutral_checkpoint_count": 250,
+      "passed": true,
+      "rule_vocab": [
+        "additive_ltm",
+        "commit_heavy",
+        "block_heavy",
+        "block_light",
+        "wait_light",
+        "wait_heavy",
+        "decay_095",
+        "decay_090",
+        "neutral_additive"
+      ],
+      "rule_vocab_count": 9,
+      "sample_count": 320,
+      "schema_version": "phase4_laur_update_dataset_v1",
+      "split_error_count": 0,
+      "split_errors": []
+    },
+    "row_count": 320
+  },
+  "eval": {
+    "command": [
+      "/usr/bin/python3",
+      "/root/shared-nvme/czr004/src/eval/eval_laur_offline.py",
+      "--config",
+      "/root/shared-nvme/czr004/configs/phase4/laur_ltm_pilot.yaml",
+      "--dataset",
+      "/root/shared-nvme/czr004/artifacts/teacher/laur/pilot/update_labels/phase4_laur_update_dataset_pilot.jsonl",
+      "--model",
+      "/root/shared-nvme/czr004/artifacts/models/laur_ltm/pilot/laur_mlp_v1_weights.json",
+      "--probe-jsonl",
+      "/root/shared-nvme/czr004/artifacts/teacher/laur/pilot/probes/phase4_laur_probe_pilot.jsonl",
+      "--report",
+      "/root/shared-nvme/czr004/outputs/reports/phase4_laur_ltm_offline_eval_pilot.md",
+      "--summary-csv",
+      "/root/shared-nvme/czr004/outputs/tables/phase4_laur_ltm_offline_eval_pilot.csv",
+      "--summary-json",
+      "/root/shared-nvme/czr004/outputs/reports/phase4_laur_ltm_offline_eval_pilot_summary.json"
+    ],
+    "stdout": "{\"report\": \"/root/shared-nvme/czr004/outputs/reports/phase4_laur_ltm_offline_eval_pilot.md\", \"summary_csv\": \"/root/shared-nvme/czr004/outputs/tables/phase4_laur_ltm_offline_eval_pilot.csv\", \"passed\": true}"
+  },
+  "gate": {
+    "batch_script_completed": true,
+    "dataset_completed": true,
+    "eval_completed": true,
+    "passed": true,
+    "pilot_validation_non_neutral_gate": true,
+    "probe_completed": true,
+    "record_completed": true,
+    "train_completed": true,
+    "validation_non_neutral_checkpoints": 58
+  },
+  "instances": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "maps": [
+    "empty-32-32",
+    "empty-48-48",
+    "maze-32-32-4",
+    "random-32-32-20",
+    "random-64-64-20",
+    "room-64-64-8",
+    "warehouse-10-20-10-2-1",
+    "warehouse-10-20-10-2-2"
+  ],
+  "metadata": {
+    "branch": "phase4-laur-ltm",
+    "commit": "e648089",
+    "dirty": "tracked-dirty",
+    "platform": "Linux-5.15.0-171-generic-x86_64-with-glibc2.39",
+    "python": "3.12.3 (main, Feb  4 2025, 14:48:35) [GCC 13.3.0]"
+  },
+  "mode": "pilot",
+  "outputs": {
+    "batch_report_md": "/root/shared-nvme/czr004/outputs/reports/phase4_laur_ltm_pilot_batch_report.md",
+    "batch_summary_json": "/root/shared-nvme/czr004/outputs/reports/phase4_laur_ltm_pilot_batch_summary.json",
+    "checkpoint_jsonl": "/root/shared-nvme/czr004/artifacts/teacher/laur/pilot/checkpoints/phase4_laur_checkpoints_pilot.jsonl",
+    "dataset_jsonl": "/root/shared-nvme/czr004/artifacts/teacher/laur/pilot/update_labels/phase4_laur_update_dataset_pilot.jsonl",
+    "log_dir": "/root/shared-nvme/czr004/outputs/logs/phase4_laur_pilot",
+    "model_output_dir": "/root/shared-nvme/czr004/artifacts/models/laur_ltm/pilot",
+    "probe_output_jsonl": "/root/shared-nvme/czr004/artifacts/teacher/laur/pilot/probes/phase4_laur_probe_pilot.jsonl",
+    "trace_jsonl": "/root/shared-nvme/czr004/artifacts/teacher/laur/pilot/traces/phase4_laur_trace_pilot.jsonl"
+  },
+  "probe": {
+    "audit": {
+      "best_label_rows": 320,
+      "best_rule_histogram": {
+        "additive_ltm": 29,
+        "block_heavy": 72,
+        "block_light": 24,
+        "commit_heavy": 67,
+        "decay_090": 26,
+        "decay_095": 20,
+        "wait_heavy": 50,
+        "wait_light": 32
+      },
+      "checkpoint_count": 320,
+      "grouping_error_count": 0,
+      "grouping_errors": [],
+      "harmful_update_count": 198,
+      "label_distribution": {
+        "block_heavy": 65,
+        "block_light": 21,
+        "commit_heavy": 63,
+        "decay_090": 23,
+        "decay_095": 13,
+        "neutral_additive": 70,
+        "wait_heavy": 38,
+        "wait_light": 27
+      },
+      "non_neutral_checkpoint_count": 250,
+      "passed": true,
+      "probe_jsonl": "/root/shared-nvme/czr004/artifacts/teacher/laur/pilot/probes/phase4_laur_probe_pilot.jsonl",
+      "probe_rows": 2560,
+      "probe_schema_error_count": 0,
+      "probe_schema_errors": []
+    },
+    "label_count": 320,
+    "label_distribution": {
+      "block_heavy": 65,
+      "block_light": 21,
+      "commit_heavy": 63,
+      "decay_090": 23,
+      "decay_095": 13,
+      "neutral_additive": 70,
+      "wait_heavy": 38,
+      "wait_light": 27
+    },
+    "run_count": 80
+  },
+  "record": {
+    "audit": {
+      "checkpoint_jsonl": "/root/shared-nvme/czr004/artifacts/teacher/laur/pilot/checkpoints/phase4_laur_checkpoints_pilot.jsonl",
+      "checkpoint_rows": 320,
+      "checkpoint_schema_error_count": 0,
+      "checkpoint_schema_errors": [],
+      "join_error_count": 0,
+      "join_errors": [],
+      "passed": true,
+      "split_error_count": 0,
+      "split_errors": [],
+      "trace_jsonl": "/root/shared-nvme/czr004/artifacts/teacher/laur/pilot/traces/phase4_laur_trace_pilot.jsonl",
+      "trace_rows": 3165093,
+      "trace_schema_error_count": 0,
+      "trace_schema_errors": []
+    },
+    "run_count": 80
+  },
+  "run_count": 80,
+  "scenario_command": [
+    "/usr/bin/python3",
+    "/root/shared-nvme/czr004/scripts/generate_phase1a_scenarios.py",
+    "--manifest",
+    "configs/phase1a/manifest.jsonl",
+    "--output-dir",
+    "outputs/tmp/phase1a/generated/phase1a-generated-random",
+    "--output-zip",
+    "outputs/tmp/phase1a/generated/phase1a-generated-random.zip",
+    "--metadata",
+    "outputs/reports/phase1a_generated_scenarios_manifest.json",
+    "--overwrite"
+  ],
+  "schema_version": "phase4_laur_batch_summary_v1",
+  "train": {
+    "command": [
+      "/usr/bin/python3",
+      "/root/shared-nvme/czr004/src/train/train_laur_ltm.py",
+      "--config",
+      "/root/shared-nvme/czr004/configs/phase4/laur_ltm_pilot.yaml",
+      "--dataset",
+      "/root/shared-nvme/czr004/artifacts/teacher/laur/pilot/update_labels/phase4_laur_update_dataset_pilot.jsonl",
+      "--output-dir",
+      "/root/shared-nvme/czr004/artifacts/models/laur_ltm/pilot",
+      "--report",
+      "/root/shared-nvme/czr004/outputs/reports/phase4_laur_ltm_train_pilot.md"
+    ],
+    "stdout": "{\"report\": \"/root/shared-nvme/czr004/outputs/reports/phase4_laur_ltm_train_pilot.md\", \"weights\": \"/root/shared-nvme/czr004/artifacts/models/laur_ltm/pilot/laur_mlp_v1_weights.json\", \"passed\": true}",
+    "summary_json": "/root/shared-nvme/czr004/artifacts/models/laur_ltm/pilot/laur_mlp_v1_train_summary.json"
+  }
+}

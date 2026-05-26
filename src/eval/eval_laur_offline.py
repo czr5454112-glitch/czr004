@@ -317,8 +317,9 @@ def _write_report(
         handle.write("\n")
         handle.write("## Caveat\n\n")
         handle.write(
-            "This offline eval checks exported-model inference and metrics only. "
-            "The smoke dataset is too small for a learned-update performance claim.\n"
+            "This offline eval checks exported-model inference and label metrics "
+            "only. It is not a runtime performance claim; learned-update benefit "
+            "still requires paired solver comparisons.\n"
         )
 
 

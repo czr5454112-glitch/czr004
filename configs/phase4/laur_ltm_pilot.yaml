@@ -12,7 +12,7 @@ checkpoint_topk_edges: 16
 scenario_manifest: configs/phase1a/manifest.jsonl
 scenario_output_dir: outputs/tmp/phase1a/generated/phase1a-generated-random
 scenario_output_zip: outputs/tmp/phase1a/generated/phase1a-generated-random.zip
-scenario_metadata: outputs/reports/phase1a_generated_scenarios_manifest.json
+scenario_metadata: outputs/reports/phase4_laur_pilot_generated_scenarios_manifest.json
 scen_template: outputs/tmp/phase1a/generated/phase1a-generated-random/{map_name}-random-{instance}.scen
 
 checkpoint_jsonl: artifacts/teacher/laur/pilot/checkpoints/phase4_laur_checkpoints_pilot.jsonl

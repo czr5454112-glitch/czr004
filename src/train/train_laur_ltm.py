@@ -273,7 +273,7 @@ def _write_report(
     dirty = _dirty_state(root)
     smoke_passed = bool(summary["gate"]["passed"])
     with path.open("w", encoding="utf-8", newline="\n") as handle:
-        handle.write("# Phase4F LAU-LTM Train Smoke Report\n\n")
+        handle.write("# Phase4F LAU-LTM Train Report\n\n")
         handle.write(f"Date: {datetime.now().strftime('%Y-%m-%d %H:%M:%S %z')}\n")
         handle.write(f"Status: {'passed' if smoke_passed else 'failed'}\n\n")
         handle.write("## Code State\n\n")
@@ -321,18 +321,26 @@ def _write_report(
                 handle.write(f"- {key}: `{value}`\n")
             handle.write("\n")
         else:
-            handle.write("### test\n\n- map-holdout test performance: `not_available_in_smoke_dataset`\n\n")
+            handle.write("### test\n\n- map-holdout test performance: `not_available`\n\n")
         handle.write("## Gate\n\n")
         for key, value in summary["gate"].items():
             handle.write(f"- {key}: `{value}`\n")
         handle.write("\n")
         handle.write("## Caveat\n\n")
-        handle.write(
-            "This smoke run proves the Phase4F training/export path only. The "
-            "current local dataset has four train-split samples, so validation "
-            "falls back to all-row smoke reuse and must not be used as a "
-            "learned-update performance claim.\n"
-        )
+        if summary["validation_source"] == "validation":
+            handle.write(
+                "This report evaluates checkpoint-level update-rule prediction "
+                "on collected probe labels. It is offline evidence only; runtime "
+                "benefit still requires paired solver comparisons before making "
+                "a learned-update performance claim.\n"
+            )
+        else:
+            handle.write(
+                "This smoke run proves the Phase4F training/export path only. "
+                "Validation reused the available rows because no held-out split "
+                "was present, so it must not be used as a learned-update "
+                "performance claim.\n"
+            )
 
 
 def build_parser() -> argparse.ArgumentParser:

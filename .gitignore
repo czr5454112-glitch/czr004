@@ -27,6 +27,8 @@ artifacts/teacher/laur/checkpoints/
 artifacts/teacher/laur/probes/
 artifacts/teacher/laur/traces/
 artifacts/teacher/laur/update_labels/
+artifacts/teacher/laur/pilot/
+artifacts/teacher/laur/full/
 artifacts/teacher/traces/
 artifacts/teacher/tmp/
 artifacts/teacher/*.tmp

@@ -989,3 +989,25 @@
   - Keep monitoring the old-server tmux run.
   - After batch completion, download useful reports, summaries, exported model metadata, and compact trace/checkpoint evidence; keep bulky raw/compressed traces out of git unless a small manifest or checksum is sufficient.
   - Analyze the repair1 full result before deciding whether Phase4F can proceed or must pause with failure evidence.
+
+## 2026-05-26 22:25 - Phase4F repair1 pause-after-probe guard
+
+- Request: stop after probe completion tonight and leave the server job in tmux; resume training tomorrow.
+- Server / workspace:
+  - old server `ackcs-00gjgxxy`
+  - workspace `/root/shared-nvme/czr004_phase4_repair1_43633e7`
+  - main tmux session `phase4_laur_repair1_43633e7`
+  - pause guard tmux session `phase4_laur_repair1_pause_guard`
+- Guard behavior:
+  - script path `/root/shared-nvme/czr004_phase4_repair1_43633e7/pause_after_probe_guard.sh`
+  - checks `outputs/logs/phase4_laur_full_repair1/probe_*.stdout.log` every 20 seconds.
+  - when probe count reaches `765`, writes the batch PID/PGID under `outputs/logs/phase4_laur_full_repair1/` and sends `SIGSTOP` to the batch process group.
+  - this should leave the main tmux session paused before training, or at worst with training stopped immediately after it starts.
+- Status when installed:
+  - record completed: `765 / 765`
+  - probe in progress: `624 / 765`
+  - train/eval not started: `0 / 0`
+  - raw trace compressed artifact and sha256 sidecar exist on the server.
+- Follow-up:
+  - Before resuming, inspect `pause_after_probe_status.txt`, `pause_after_probe_pgid.txt`, tmux state, and `train_*.stdout.log` count.
+  - Resume with `SIGCONT` to the recorded process group only after confirming probe completion and no unexpected train progress.

@@ -4,8 +4,9 @@ set -euo pipefail
 repo_dir="${1:-/root/shared-nvme/czr004}"
 session="${2:-phase4_laur_full}"
 log_dir="$repo_dir/outputs/logs/phase4_laur_full"
-driver_log="$log_dir/tmux_driver.log"
-pane_log="$log_dir/tmux_pane.log"
+tmux_log_dir="$repo_dir/outputs/logs/phase4_laur_full_tmux"
+driver_log="$tmux_log_dir/tmux_driver.log"
+pane_log="$tmux_log_dir/tmux_pane.log"
 
 if ! command -v tmux >/dev/null 2>&1; then
   echo "tmux is required on the server" >&2
@@ -18,7 +19,7 @@ if tmux has-session -t "$session" 2>/dev/null; then
   exit 1
 fi
 
-mkdir -p "$log_dir"
+mkdir -p "$tmux_log_dir"
 : > "$driver_log"
 : > "$pane_log"
 

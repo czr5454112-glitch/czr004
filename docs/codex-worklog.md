@@ -720,3 +720,66 @@
   - Early duplicated parallel build attempts hit MSVC/Ninja PDB file locks; later single-command build and smoke runs passed.
 - Follow-up:
   - Treat `outputs/reports/phase4_laur_ltm_update_api_report.md` as the Phase4B gate handoff. Do not start Phase4C until that handoff is accepted.
+
+## 2026-05-26 10:40 - evaluate GPTPro Phase4C checkpoint/trace guidance
+
+- Request: Before starting Phase4C implementation, review GPTPro's extra guidance for LAU iteration checkpoints and raw trace export, and fold the accepted constraints into the Phase4-6 LAUR execution plan.
+- Files changed:
+  - `docs/codex-worklog.md`
+  - `phase4_6_laur_ltm_codex_execution_plan.md`
+- Commands run:
+  - `git status --short`
+  - inspected `phase4_6_laur_ltm_codex_execution_plan.md`
+  - recorded current branch and commit with `git branch --show-current` and `git rev-parse --short HEAD`
+  - recorded local start time with `Get-Date -Format "yyyy-MM-dd HH:mm zzz"`
+- Key observations:
+  - Current branch is `phase4-laur-ltm` at Phase4B handoff commit `fef6956`.
+  - Working tree only shows user-known untracked `1.txt`; it can be ignored for this documentation update.
+  - GPTPro's Phase4C guidance is consistent with the LAU-first plan and should be added as the stricter Phase4C gate.
+  - This update must not start learning/training, must not modify `cpp/ntm`, and must not implement learned restart.
+- Tests / validation:
+  - Documentation-only preparation; no solver, schema, or training tests run.
+- Follow-up:
+  - Begin Phase4C only after the plan records the checkpoint/trace schema, join audit, smoke commands, and report requirements.
+
+## 2026-05-26 10:58 - complete LAUR-LTM Phase4C record smoke pipeline
+
+- Request: Complete Phase4C: iteration-level checkpoint export, raw trace export, schema/audit helper, smoke wrapper, report, and required regressions.
+- Files changed:
+  - `.gitignore`
+  - `configs/phase4/laur_ltm.yaml`
+  - `cpp/ltm/CMakeLists.txt`
+  - `cpp/ltm/ltm.hpp`
+  - `cpp/ltm/ltm.cpp`
+  - `cpp/tools/phase4_laur_record.cpp`
+  - `scripts/build_phase4_laur_record.ps1`
+  - `scripts/run_phase4_laur_record.py`
+  - `src/czr004_teacher/update_sequences.py`
+  - `tests/test_phase4_laur_schema.py`
+  - `outputs/reports/phase4_laur_trace_checkpoint_audit_summary.json`
+  - `outputs/reports/phase4_laur_trace_checkpoint_report.md`
+  - `docs/codex-worklog.md`
+- Commands run:
+  - `python -m pytest tests\test_phase4_laur_schema.py` (failed in base Python because pytest is not installed there)
+  - `& 'C:\PROGRAMING\anaconda\Scripts\conda.exe' run -n czr004 python -m pytest tests\test_phase4_laur_schema.py`
+  - `powershell -ExecutionPolicy Bypass -File scripts\build_phase4_laur_record.ps1`
+  - `& 'C:\PROGRAMING\anaconda\Scripts\conda.exe' run -n czr004 python scripts\run_phase4_laur_record.py --config configs\phase4\laur_ltm.yaml --mode smoke --overwrite`
+  - `& 'C:\PROGRAMING\anaconda\Scripts\conda.exe' run -n czr004 python src\czr004_teacher\update_sequences.py --checkpoint-jsonl artifacts\teacher\laur\checkpoints\phase4_laur_checkpoints_smoke.jsonl --trace-jsonl artifacts\teacher\laur\traces\phase4_laur_trace_smoke.jsonl --summary-json outputs\reports\phase4_laur_trace_checkpoint_audit_summary.json`
+  - `powershell -ExecutionPolicy Bypass -File scripts\build_phase1_ltm.ps1`
+  - `powershell -ExecutionPolicy Bypass -File scripts\build_phase4_laur_smoke.ps1`
+  - `powershell -ExecutionPolicy Bypass -File scripts\phase1_ltm_smoke.ps1`
+  - `powershell -ExecutionPolicy Bypass -File scripts\phase4_laur_update_smoke.ps1`
+- Key observations:
+  - Phase4C adds a read-only LTM iteration callback and traffic snapshot helper; default `solve_with_ltm` behavior remains additive-compatible.
+  - `phase4_laur_record` writes `run_id`, per-iteration `checkpoint_id`, checkpoint JSONL rows, raw trace JSONL rows, and per-checkpoint traffic snapshots.
+  - The smoke config uses `random-32-32-10`, 50 agents, seed 1, 3 seconds, and 4 max iterations.
+  - Generated raw traces and snapshots are ignored under `artifacts/teacher/laur/`.
+  - No learning/training was added, `cpp/ntm` was not modified, and learned restart remains unimplemented.
+- Tests / validation:
+  - Conda pytest: `tests/test_phase4_laur_schema.py` passed, 3 tests.
+  - Phase4C record smoke passed: 4 checkpoint rows and 11489 trace rows.
+  - Python schema/join audit passed with 0 checkpoint schema errors, 0 trace schema errors, 0 join errors, and 0 split leakage errors.
+  - Phase1 LTM smoke passed for loop and random-32-32-10.
+  - Phase4B force-additive update smoke passed.
+- Follow-up:
+  - Commit Phase4C with message `trace: add LAU iteration checkpoints and raw trace export` after final status review.

@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <cmath>
 #include <functional>
+#include <limits>
 #include <queue>
 #include <sstream>
 #include <utility>
@@ -21,6 +22,22 @@ bool is_better_solution(const Solution& candidate, const Solution& incumbent)
   if (candidate.empty()) return false;
   if (incumbent.empty()) return true;
   return get_sum_of_loss(candidate) < get_sum_of_loss(incumbent);
+}
+
+uint info_uint_value(const std::string& info, const std::string& key)
+{
+  std::istringstream stream(info);
+  std::string line;
+  const auto prefix = key + "=";
+  while (std::getline(stream, line)) {
+    if (line.rfind(prefix, 0) != 0) continue;
+    try {
+      return static_cast<uint>(std::stoul(line.substr(prefix.size())));
+    } catch (...) {
+      return 0;
+    }
+  }
+  return 0;
 }
 
 }  // namespace
@@ -136,6 +153,52 @@ double DirectedTrafficMap::max_normalized_weight() const
     value = std::max(value, weight);
   }
   return value;
+}
+
+TrafficSnapshot DirectedTrafficMap::snapshot(uint topk_edges) const
+{
+  TrafficSnapshot out;
+  out.nonzero_edges = nonzero_raw_edges();
+  out.max_raw = max_raw_count();
+  out.max_normalized = max_normalized_weight();
+
+  auto raw_edges = std::vector<TrafficEdgeSnapshot>();
+  auto normalized_edges = std::vector<TrafficEdgeSnapshot>();
+  for (const auto* from : graph_.V) {
+    for (const auto* to : from->neighbor) {
+      const auto raw = raw_count(from->id, to->id);
+      const auto weight = normalized_weight(from->id, to->id);
+      if (raw > 0.0) {
+        raw_edges.push_back(TrafficEdgeSnapshot{from->id, to->id, raw, weight});
+        normalized_edges.push_back(
+            TrafficEdgeSnapshot{from->id, to->id, raw, weight});
+      }
+    }
+  }
+
+  const auto raw_less = [](const auto& lhs, const auto& rhs) {
+    if (lhs.raw != rhs.raw) return lhs.raw > rhs.raw;
+    if (lhs.from_id != rhs.from_id) return lhs.from_id < rhs.from_id;
+    return lhs.to_id < rhs.to_id;
+  };
+  const auto weight_less = [](const auto& lhs, const auto& rhs) {
+    if (lhs.weight != rhs.weight) return lhs.weight > rhs.weight;
+    if (lhs.raw != rhs.raw) return lhs.raw > rhs.raw;
+    if (lhs.from_id != rhs.from_id) return lhs.from_id < rhs.from_id;
+    return lhs.to_id < rhs.to_id;
+  };
+  std::sort(raw_edges.begin(), raw_edges.end(), raw_less);
+  std::sort(normalized_edges.begin(), normalized_edges.end(), weight_less);
+
+  if (topk_edges > 0) {
+    if (raw_edges.size() > topk_edges) raw_edges.resize(topk_edges);
+    if (normalized_edges.size() > topk_edges) {
+      normalized_edges.resize(topk_edges);
+    }
+  }
+  out.raw_topk = std::move(raw_edges);
+  out.normalized_topk = std::move(normalized_edges);
+  return out;
 }
 
 std::uint64_t DirectedTrafficMap::key(uint from_id, uint to_id)
@@ -709,11 +772,16 @@ LtmRunResult solve_with_ltm(const Instance& instance, const LtmOptions& options)
   auto result = LtmRunResult(instance.G, 0.0, 10.0);
   auto deadline = Deadline(options.time_limit_ms);
   auto random_engine = std::mt19937(options.seed);
+  auto dist_table = DistTable(instance);
+  const auto lower_bound_sol =
+      get_sum_of_costs_lower_bound(instance, dist_table);
 
   for (uint iteration = 0;
        iteration < options.max_iterations && !is_expired(&deadline);
        ++iteration) {
     auto collector = PibtTraceCollector();
+    const auto traffic_before =
+        result.traffic_map.snapshot(options.checkpoint_topk_edges);
     const auto node_budget =
         (iteration == 0 || result.best_solution.empty())
             ? 0
@@ -731,6 +799,15 @@ LtmRunResult solve_with_ltm(const Instance& instance, const LtmOptions& options)
     result.last_node_budget = node_budget;
     result.iterations = iteration + 1;
 
+    const auto solution_found = !solution.empty();
+    const auto sum_of_loss =
+        solution_found ? get_sum_of_loss(solution) : 0;
+    const auto ratio =
+        (solution_found && lower_bound_sol > 0)
+            ? static_cast<double>(sum_of_loss) /
+                  static_cast<double>(lower_bound_sol)
+            : std::numeric_limits<double>::quiet_NaN();
+
     if (is_better_solution(solution, result.best_solution)) {
       result.best_solution = solution;
     }
@@ -738,7 +815,29 @@ LtmRunResult solve_with_ltm(const Instance& instance, const LtmOptions& options)
     const auto summary = collector.summary();
     result.trace_summary.committed += summary.committed;
     result.trace_summary.blocked += summary.blocked;
-    result.traffic_map.update_from_trace(collector.events());
+    result.traffic_map.update_from_trace(collector.events(), options.update_params);
+    const auto traffic_after =
+        result.traffic_map.snapshot(options.checkpoint_topk_edges);
+
+    if (options.iteration_callback) {
+      LtmIterationCheckpoint checkpoint;
+      checkpoint.iteration = iteration;
+      checkpoint.node_budget = node_budget;
+      checkpoint.solution_found_this_iteration = solution_found;
+      checkpoint.sum_of_loss_this_iteration = sum_of_loss;
+      checkpoint.lower_bound_sol = lower_bound_sol;
+      checkpoint.sum_of_loss_ratio_this_iteration = ratio;
+      checkpoint.expanded_nodes_this_iteration =
+          info_uint_value(iteration_info, "ltm_one_shot_num_node_gen");
+      checkpoint.high_level_expansions_this_iteration =
+          info_uint_value(iteration_info, "ltm_one_shot_loop_cnt");
+      checkpoint.low_level_pibt_calls_this_iteration =
+          info_uint_value(iteration_info, "ltm_one_shot_low_level_pibt_calls");
+      checkpoint.trace_events = collector.events();
+      checkpoint.traffic_before = traffic_before;
+      checkpoint.traffic_after = traffic_after;
+      options.iteration_callback(checkpoint);
+    }
 
     if (solution.empty() && collector.events().empty()) break;
   }

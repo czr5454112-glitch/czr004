@@ -750,6 +750,16 @@ git commit -m "ltm: add parameterized update rule with additive fallback"
 
 ## 7. Phase4C：iteration-level checkpoint 与 raw trace 导出
 
+当前进入条件：
+
+```text
+branch: phase4-laur-ltm
+Phase4B handoff commit: fef6956
+Phase4B gate: passed
+```
+
+Phase4C 只做 LAU record smoke pipeline。不得做 learning/training，不改 `cpp/ntm`，不实现 learned restart，也不得回滚 Phase4B 已有的 `UpdateParams` / force-additive parity 代码。
+
 ### 7.1 新增 C++ 导出结构
 
 新增文件：
@@ -758,11 +768,18 @@ git commit -m "ltm: add parameterized update rule with additive fallback"
 cpp/tools/phase4_laur_record.cpp
 ```
 
+新增 target / binary：
+
+```text
+phase4_laur_record
+phase4_laur_record.exe
+```
+
 若复用 `cpp/tools/phase1a_batch.cpp` 更省事，也可以在其基础上加参数，但建议新工具隔离 Phase4 逻辑，避免污染 Phase1a 主复现入口。
 
 ### 7.2 CLI 设计
 
-建议新 binary：
+新 binary：
 
 ```text
 phase4_laur_record.exe
@@ -877,6 +894,15 @@ phase4_laur_checkpoint_v1
 }
 ```
 
+硬性要求：
+
+- 每个 run 必须输出 `run_id`。
+- 每个 LTM iteration 必须输出 `checkpoint_id`。
+- `checkpoint_id` 必须能和 raw trace rows join。
+- `sum_of_loss_this_iteration` 和 `sum_of_loss_ratio_this_iteration` 在未找到解或 smoke 暂无该值时允许为 `null`。
+- `raw_before_topk`、`raw_after_topk`、`normalized_after_topk` 中的 normalized weight 必须有审计，范围为 `[0, 10]`。
+- `trace_path` 与 `traffic_snapshot_path` 必须指向本次 run 实际产物。
+
 ### 7.4 raw trace schema
 
 Schema 名称：
@@ -916,6 +942,15 @@ phase4_laur_trace_event_v1
 
 注意：C++ 里的原始 event 仍可保持 `kind=Committed/Blocked`。`wait_propagated` 和 `goal_wait_ignored` 可以作为 `propagation_kind`，不一定要改 `TraceEventKind` 的主枚举，以降低破坏面。
 
+硬性要求：
+
+- `schema_version` 固定为 `phase4_laur_trace_event_v1`。
+- `run_id`、`checkpoint_id`、`iteration` 必须与 checkpoint row 对齐。
+- `event_index` 在同一 checkpoint 内稳定递增。
+- `is_wait` 从 `from_id == to_id` 派生。
+- `at_goal` 必须显式写入，供 `goal_wait_ignored_count` 审计。
+- `map_name`、`agents`、`seed` 必须随 trace row 写入，便于单文件审计。
+
 ### 7.5 snapshot 存储策略
 
 大文件默认不进 git。checkpoint JSONL 可以提交小型 smoke 摘要，但原始 trace 和 snapshot 放：
@@ -940,7 +975,7 @@ artifacts/teacher/laur/update_labels/
 schema
 manifest
 summary CSV
-phase4_laur_ltm_report.md
+outputs/reports/phase4_laur_trace_checkpoint_report.md
 small smoke fixture if necessary
 ```
 
@@ -963,6 +998,16 @@ build_checkpoint_features(checkpoint_row, trace_rows) -> dict
 audit_checkpoint_trace_join(checkpoint_jsonl, trace_jsonl) -> dict
 ```
 
+审计要求：
+
+- checkpoint JSONL schema validation 0 errors。
+- raw trace JSONL schema validation 0 errors。
+- `trace_event_count == grouped trace rows`。
+- `committed_count` / `blocked_count` 与 trace rows 一致。
+- `wait_event_count` / `goal_wait_ignored_count` 与 `is_wait`、`at_goal` 一致。
+- normalized weights bounded in `[0, 10]`。
+- split 不泄漏；优先沿用 Phase3 split helper，若不能直接复用，必须在 helper 中明确复用规则并写进报告。
+
 ### 7.7 测试
 
 新增：
@@ -981,18 +1026,36 @@ no map split leakage
 all weights bounded
 trace_event_count equals grouped trace rows
 committed_count / blocked_count consistency
+wait_event_count / goal_wait_ignored_count consistency
 ```
 
 ### 7.8 Phase4C gate
 
 ```text
-1-map smoke record 通过
-checkpoint JSONL schema validation 0 errors
-trace JSONL schema validation 0 errors
-checkpoint trace_event_count 与 raw trace 行数一致
-split audit 通过
-old Phase1 smoke 不回归
+1. build phase4_laur_record passed
+2. 1-map 50-agent 3s max_iterations=4 smoke record passed
+3. checkpoint JSONL schema validation 0 errors
+4. trace JSONL schema validation 0 errors
+5. checkpoint-trace join audit passed
+6. trace_event_count consistency passed
+7. committed/blocked/wait count consistency passed
+8. split audit passed
+9. old Phase1 LTM smoke still passes
+10. Phase4B force-additive smoke still passes
+11. outputs/reports/phase4_laur_trace_checkpoint_report.md written
 ```
+
+Smoke 命令必须覆盖：
+
+```text
+build phase4_laur_record
+run 1-map 50-agent 3s max_iterations=4 smoke
+run Python schema audit
+rerun Phase1 LTM smoke
+rerun Phase4B update smoke
+```
+
+报告必须记录 exact command、branch、commit、dirty status、output paths、file sizes、schema/audit 结果和旧 smoke 回归结果。
 
 Commit：
 
@@ -2500,9 +2563,10 @@ warn-only 字段：
 | `committed_events` | existing | `LtmRunResult.trace_summary.committed` | run-level trace summary |
 | `blocked_events` | existing | `LtmRunResult.trace_summary.blocked` | run-level trace summary |
 | `nonzero_ltm_edges` | existing | `DirectedTrafficMap::nonzero_raw_edges()` | final map summary |
-| `iteration_index` | existing in additional_info / new for JSONL | `solve_with_ltm` writes text `ltm_iteration=` | Phase4C record tool must write structured JSON field |
-| `node_budget_this_iteration` | existing in additional_info / new for JSONL | `ltm_one_shot_node_budget` | Phase4C record tool must write structured JSON field |
+| `iteration` | existing in additional_info / new for JSONL | `solve_with_ltm` writes text `ltm_iteration=` | Phase4C record tool must write structured JSON field; public schema uses `iteration` |
+| `node_budget` | existing in additional_info / new for JSONL | `ltm_one_shot_node_budget` | Phase4C record tool must write structured JSON field; public schema uses `node_budget` |
 | `expanded_nodes_this_iteration` | derive -> new | per-iteration `ltm_one_shot_num_node_gen` text exists | Phase4C record tool should parse/write structured field |
+| `high_level_expansions_this_iteration` | derive -> new | per-iteration loop count / high-level expansion count | Phase4C record tool should parse/write structured field |
 | `low_level_pibt_calls_this_iteration` | derive -> new | per-iteration `ltm_one_shot_low_level_pibt_calls` text exists | Phase4C record tool should parse/write structured field |
 | `trace_event_count` | derive | grouped raw trace rows per checkpoint | required Phase4C consistency check |
 | `committed_count` | derive | raw trace rows where `kind=committed` | checkpoint feature |
@@ -2668,7 +2732,7 @@ void DirectedTrafficMap::update_from_trace(
 推荐新增：
 
 ```text
-src/czr004_teacher/laur_schema.py
+src/czr004_teacher/update_sequences.py
 tests/test_phase4_laur_schema.py
 ```
 
@@ -2685,27 +2749,45 @@ checkpoint row 必须至少包含：
 - `schema_version`
 - `run_id`
 - `checkpoint_id`
-- `map`
-- `scen`
+- `map_name`
 - `agents`
 - `seed`
 - `time_limit_sec`
-- `iteration_index`
-- `node_budget_this_iteration`
+- `iteration`
+- `node_budget`
+- `sum_of_loss_this_iteration`
+- `lower_bound_sol`
+- `sum_of_loss_ratio_this_iteration`
+- `expanded_nodes_this_iteration`
+- `high_level_expansions_this_iteration`
+- `low_level_pibt_calls_this_iteration`
 - `trace_event_count`
 - `committed_count`
 - `blocked_count`
 - `wait_event_count`
 - `goal_wait_ignored_count`
+- `traffic_before_nonzero_edges`
+- `traffic_after_nonzero_edges`
+- `traffic_before_max_raw`
+- `traffic_after_max_raw`
+- `traffic_after_max_normalized`
+- `raw_before_topk`
+- `raw_after_topk`
+- `normalized_after_topk`
 - `traffic_snapshot_path`
 - `trace_path`
+- `branch`
+- `commit`
+- `dirty`
 
 nullable allowed in smoke：
 
-- `current_best_sol_ratio`
+- `sum_of_loss_this_iteration`
+- `sum_of_loss_ratio_this_iteration`
 - `time_to_first_solution_ms`
 - `returned_solutions_count_so_far`
 - `expanded_nodes_this_iteration`
+- `high_level_expansions_this_iteration`
 - `low_level_pibt_calls_this_iteration`
 
 trace event row 必须至少包含：
@@ -2713,7 +2795,7 @@ trace event row 必须至少包含：
 - `schema_version`
 - `run_id`
 - `checkpoint_id`
-- `iteration_index`
+- `iteration`
 - `event_index`
 - `kind`
 - `agent_id`
@@ -2722,13 +2804,20 @@ trace event row 必须至少包含：
 - `at_goal`
 - `is_wait`
 - `propagation_kind`
+- `propagated_to_id`
+- `map_name`
+- `agents`
+- `seed`
 
 join audit 必须检查：
 
 - 每个 `checkpoint_id` 至少有 0 条或多条 trace rows，但 `trace_event_count` 必须等于实际 join 后行数。
 - `committed_count + blocked_count == trace_event_count`。
 - `wait_event_count + goal_wait_ignored_count <= trace_event_count`。
-- 所有 trace row 的 `run_id`、`checkpoint_id`、`iteration_index` 与 checkpoint 对齐。
+- `committed_count`、`blocked_count`、`wait_event_count`、`goal_wait_ignored_count` 必须分别与 grouped trace rows 一致。
+- 所有 trace row 的 `run_id`、`checkpoint_id`、`iteration`、`map_name`、`agents`、`seed` 与 checkpoint 对齐。
+- 所有 normalized traffic weights 必须 bounded in `[0, 10]`。
+- split 不泄漏；沿用 Phase3 split helper 或在 `update_sequences.py` 中明确复用同一规则。
 
 ### 23.8 命令与路径约定
 
@@ -2780,24 +2869,33 @@ Phase5 引入 learned runtime 时，run JSONL 需要新增 LAU 字段，并由 `
 
 ## 24. 修订后的立即开工顺序
 
-在本附录加入后，Codex 真正开始实现时的第一轮任务必须收窄为：
+Phase4B 已在 `phase4-laur-ltm` 分支以 commit `fef6956` 通过 gate。当前开始 Phase4C 前，第一步必须收窄为：
 
 ```text
-1. 新建 phase4-laur-ltm 执行分支。
-2. 更新 docs/codex-worklog.md。
-3. 实现 UpdateParams 最小接口。
-4. 保持旧 update_from_trace(events) wrapper 行为不变。
-5. 新增 Phase4B update API parity smoke。
-6. 跑旧 phase1_ltm_smoke 与 phase0_smoke。
-7. 写 outputs/reports/phase4_laur_ltm_update_api_report.md。
+1. git status --short。
+2. 确认只有用户已知的 untracked 1.txt 可忽略。
+3. 先追加 docs/codex-worklog.md。
+4. 不做 learning/training。
+5. 不改 cpp/ntm。
+6. 不实现 learned restart。
+7. 不回滚已有 UpdateParams / force-additive parity 代码。
 ```
 
-只有第 1-7 项通过后，才进入：
+随后 Phase4C 执行顺序为：
 
 ```text
-phase4_laur_record.cpp
-phase4_laur_probe.cpp
-raw trace export
-iteration checkpoint schema
-update-rule labels
+1. 新增 phase4_laur_record C++ target。
+2. 新增 scripts/run_phase4_laur_record.py wrapper。
+3. 新增 src/czr004_teacher/update_sequences.py helper。
+4. 新增 tests/test_phase4_laur_schema.py。
+5. 产出 phase4_laur_checkpoint_v1 checkpoint JSONL。
+6. 产出 phase4_laur_trace_event_v1 raw trace JSONL。
+7. 跑 checkpoint/trace schema validation。
+8. 跑 checkpoint-trace join audit。
+9. 跑 trace_event_count 与 committed/blocked/wait consistency audit。
+10. 跑 Phase1 LTM smoke 回归。
+11. 跑 Phase4B force-additive update smoke 回归。
+12. 写 outputs/reports/phase4_laur_trace_checkpoint_report.md。
 ```
+
+Phase4C 不包含 `phase4_laur_probe.cpp`、update-rule labels、model training 或 runtime learned update；这些仍属于 Phase4D 以后。

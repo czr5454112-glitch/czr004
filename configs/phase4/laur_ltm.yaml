@@ -1,0 +1,17 @@
+schema_version: phase4_laur_config_v1
+mode: smoke
+binary: build/phase4-laur-ltm/phase4_laur_record.exe
+map: external/lacam2/assets/random-32-32-10.map
+scen: external/lacam2/assets/random-32-32-10-random-1.scen
+map_name: random-32-32-10
+split: train
+agents: 50
+seed: 1
+time_limit_sec: 3
+max_iterations: 4
+checkpoint_topk_edges: 16
+checkpoint_jsonl: artifacts/teacher/laur/checkpoints/phase4_laur_checkpoints_smoke.jsonl
+trace_jsonl: artifacts/teacher/laur/traces/phase4_laur_trace_smoke.jsonl
+traffic_snapshot_root: artifacts/teacher/laur/checkpoints/snapshots
+audit_summary_json: outputs/reports/phase4_laur_trace_checkpoint_audit_summary.json
+report_md: outputs/reports/phase4_laur_trace_checkpoint_report.md

@@ -3,9 +3,11 @@
 #include <lacam2.hpp>
 
 #include <cstdint>
+#include <functional>
 #include <limits>
 #include <string>
 #include <unordered_map>
+#include <vector>
 
 namespace czr004::ltm {
 
@@ -22,6 +24,21 @@ struct TraceEvent {
 struct TraceSummary {
   uint committed = 0;
   uint blocked = 0;
+};
+
+struct TrafficEdgeSnapshot {
+  uint from_id = 0;
+  uint to_id = 0;
+  double raw = 0.0;
+  double weight = 0.0;
+};
+
+struct TrafficSnapshot {
+  uint nonzero_edges = 0;
+  double max_raw = 0.0;
+  double max_normalized = 0.0;
+  std::vector<TrafficEdgeSnapshot> raw_topk;
+  std::vector<TrafficEdgeSnapshot> normalized_topk;
 };
 
 struct UpdateParams {
@@ -81,6 +98,7 @@ class DirectedTrafficMap {
   uint nonzero_raw_edges() const;
   double max_raw_count() const;
   double max_normalized_weight() const;
+  TrafficSnapshot snapshot(uint topk_edges) const;
   double lower_bound() const { return lower_bound_; }
   double upper_bound() const { return upper_bound_; }
   const Graph& graph() const { return graph_; }
@@ -126,6 +144,25 @@ struct LtmOptions {
   uint node_budget_factor = 10;
   int verbose = 0;
   uint seed = 0;
+  uint checkpoint_topk_edges = 16;
+  UpdateParams update_params = UpdateParams::additive();
+  std::function<void(const struct LtmIterationCheckpoint&)> iteration_callback;
+};
+
+struct LtmIterationCheckpoint {
+  uint iteration = 0;
+  uint node_budget = 0;
+  bool solution_found_this_iteration = false;
+  int sum_of_loss_this_iteration = 0;
+  int lower_bound_sol = 0;
+  double sum_of_loss_ratio_this_iteration =
+      std::numeric_limits<double>::quiet_NaN();
+  uint expanded_nodes_this_iteration = 0;
+  uint high_level_expansions_this_iteration = 0;
+  uint low_level_pibt_calls_this_iteration = 0;
+  std::vector<TraceEvent> trace_events;
+  TrafficSnapshot traffic_before;
+  TrafficSnapshot traffic_after;
 };
 
 struct LtmRunResult {

@@ -14,9 +14,9 @@ torch = pytest.importorskip("torch")
 
 from czr004_teacher.features_laur import FEATURE_NAMES, FEATURE_SET  # noqa: E402
 from czr004_teacher.update_sequences import validate_update_dataset_row  # noqa: E402
-from eval.eval_laur_offline import main as eval_main  # noqa: E402
+from eval.eval_laur_offline import _feature_vector_for_export, main as eval_main  # noqa: E402
 from models.laur_ltm import load_export  # noqa: E402
-from train.train_laur_ltm import main as train_main  # noqa: E402
+from train.train_laur_ltm import _soft_rule_targets, main as train_main  # noqa: E402
 
 
 RULES = ["additive_ltm", "commit_heavy", "block_heavy", "wait_light", "neutral_additive"]
@@ -129,3 +129,37 @@ def test_phase4f_train_and_eval_smoke(tmp_path: Path) -> None:
     ) == 0
     assert eval_report.exists()
     assert eval_csv.read_text(encoding="utf-8").splitlines()[0].startswith("split,run_id")
+
+
+def test_phase4f_eval_builds_export_feature_subset() -> None:
+    row = _row(0, "commit_heavy")
+    export = {"input_features": FEATURE_NAMES[1:4]}
+
+    vector = _feature_vector_for_export(row, export)
+
+    assert vector == [float(row["features"][name]) for name in FEATURE_NAMES[1:4]]
+
+
+def test_phase4f_soft_rule_targets_mix_hard_and_probe_delta_distribution() -> None:
+    row = _row(0, "commit_heavy")
+    probe_rows = {
+        row["checkpoint_id"]: [
+            {"rule_id": "additive_ltm", "delta_ratio_vs_additive": 0.0},
+            {"rule_id": "commit_heavy", "delta_ratio_vs_additive": 0.02},
+            {"rule_id": "block_heavy", "delta_ratio_vs_additive": 0.019},
+        ]
+    }
+
+    targets = _soft_rule_targets(
+        [row],
+        RULES,
+        probe_rows,
+        neutral_threshold=0.005,
+        temperature=0.01,
+        hard_mix=0.5,
+    )
+
+    assert len(targets) == 1
+    assert abs(sum(targets[0]) - 1.0) < 1e-9
+    assert targets[0][RULES.index("commit_heavy")] > targets[0][RULES.index("block_heavy")]
+    assert targets[0][RULES.index("block_heavy")] > 0.0

@@ -931,3 +931,40 @@
   - `tests/test_phase4f_diagnostics.py` passed, 3 tests.
 - Follow-up:
   - Continue Phase4F repairs in this order: preserve exact gate diagnostics, calibrate safety threshold/fallback on train or a calibration split, then move to margin-aware labels or a rule-aware scorer if exact top1/top3 remain below gate.
+
+## 2026-05-26 20:10 - Phase4F local repair round 1 and repair-full config
+
+- Request: continue Phase4F attempts, commit the GPT Pro improvement notes, keep records, and prepare the next meaningful full attempt if local repairs still miss the gate.
+- Files changed:
+  - `phase4f_possible_improvement_attempts.md`
+  - `src/train/train_laur_ltm.py`
+  - `src/train/losses_laur.py`
+  - `src/eval/eval_laur_offline.py`
+  - `src/eval/eval_laur_ensemble.py`
+  - `src/train/train_laur_rule_scorer.py`
+  - `scripts/run_phase4_laur_batch.py`
+  - `configs/phase4/laur_ltm_full_repair1.yaml`
+  - `configs/phase4/laur_ltm_repair1_scenario_manifest.jsonl`
+  - `outputs/reports/phase4f_laur_repair_attempts_round1.md`
+  - `outputs/reports/phase4_laur_repair1_generated_scenarios_manifest.json`
+  - summary tables under `outputs/tables/phase4f_laur_*sweep.csv`
+- Commands run:
+  - `git commit -m "docs: add Phase4F improvement notes"`
+  - `git push`
+  - local hparam, feature-drop, soft-label, rule-aware scorer, and ensemble eval sweeps on the full dataset artifacts
+  - `& 'C:\Users\38908\.conda\envs\czr004\python.exe' -m py_compile scripts\run_phase4_laur_batch.py src\train\train_laur_ltm.py src\eval\eval_laur_offline.py src\eval\eval_laur_ensemble.py src\train\train_laur_rule_scorer.py`
+  - `& 'C:\Users\38908\.conda\envs\czr004\python.exe' -m pytest tests\test_phase4_laur_batch.py tests\test_phase4_laur_model.py tests\test_phase4f_rule_scorer.py tests\test_phase4f_diagnostics.py`
+  - generated repair1 scenarios from `configs/phase4/laur_ltm_repair1_scenario_manifest.jsonl`
+- Key observations:
+  - Safety recall can be repaired locally with a conservative threshold such as `0.10`.
+  - Pure MLP hparam tuning improved validation top3 only to about `0.5328`.
+  - Dropping strongly drifting map/traffic features improved validation top3 to about `0.5917`.
+  - Margin-aware soft labels gave the best local top3, `0.6048`, but still missed the `0.70` gate.
+  - Rule-aware delta regression and a five-model ensemble did not beat the best soft-label single model.
+  - Current full data lacks train coverage for the maze family while validation includes `maze-32-32-4`; local model-only repair is unlikely to pass the exact top1/top3 gates.
+- Tests / validation:
+  - 12 local tests passed.
+  - repair1 scenario generation passed with `195` scenarios and archive sha256 `ef100b9053c7a5fb2c38180d4430789ed673230b18eedfa6685830c2fe4f367d`.
+  - repair1 batch expands to `765` runs: `645` train and `120` validation.
+- Follow-up:
+  - Launch `configs/phase4/laur_ltm_full_repair1.yaml` on the server in tmux after committing/pushing. This run keeps `empty-48-48` and `maze-32-32-4` held out, adds neighboring train map families, uses feature-drop plus soft labels, and evaluates harmful threshold `0.10`.

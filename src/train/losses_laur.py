@@ -34,6 +34,7 @@ def laur_ltm_loss(
     outputs: dict[str, Any],
     *,
     rule_target: Any,
+    rule_target_probs: Any | None = None,
     harmful_target: Any,
     delta_target: Any,
     neutral_target: Any,
@@ -52,7 +53,10 @@ def laur_ltm_loss(
     opts = weights or LaurLossWeights()
     logits = outputs["rule_logits"]
     probs = torch.softmax(logits, dim=-1)
-    rule_loss = F.cross_entropy(logits, rule_target)
+    if rule_target_probs is None:
+        rule_loss = F.cross_entropy(logits, rule_target)
+    else:
+        rule_loss = -(rule_target_probs.float() * F.log_softmax(logits, dim=-1)).sum(dim=-1).mean()
     safety_loss = F.binary_cross_entropy_with_logits(
         outputs["safety_logit"], harmful_target.float()
     )

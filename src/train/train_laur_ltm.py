@@ -7,7 +7,7 @@ import json
 import math
 import subprocess
 import sys
-from collections import Counter
+from collections import Counter, defaultdict
 from datetime import datetime
 from pathlib import Path
 from typing import Any
@@ -52,6 +52,10 @@ def _read_jsonl(path: Path) -> list[dict[str, Any]]:
     return rows
 
 
+def _read_probe_jsonl(path: Path | None) -> list[dict[str, Any]]:
+    return _read_jsonl(path) if path is not None else []
+
+
 def _load_config(path: Path | None) -> dict[str, Any]:
     if path is None or not path.exists():
         return {}
@@ -81,6 +85,26 @@ def _feature_names(rows: list[dict[str, Any]]) -> list[str]:
     return names
 
 
+def _parse_drop_features(value: Any) -> set[str]:
+    if value is None:
+        return set()
+    if isinstance(value, str):
+        return {item.strip() for item in value.split(",") if item.strip()}
+    if isinstance(value, list):
+        return {str(item).strip() for item in value if str(item).strip()}
+    raise TypeError("drop_features must be a comma-separated string or list")
+
+
+def _selected_feature_names(rows: list[dict[str, Any]], drop_features: set[str]) -> list[str]:
+    names = [name for name in _feature_names(rows) if name not in drop_features]
+    if not names:
+        raise ValueError("feature selection removed every feature")
+    missing = sorted(drop_features - set(_feature_names(rows)))
+    if missing:
+        raise ValueError(f"drop_features not present in dataset: {missing}")
+    return names
+
+
 def _rule_vocab(rows: list[dict[str, Any]]) -> list[str]:
     rules = list(rows[0]["target"]["rule_vocab"])
     for index, row in enumerate(rows, 1):
@@ -89,8 +113,18 @@ def _rule_vocab(rows: list[dict[str, Any]]) -> list[str]:
     return rules
 
 
-def _feature_matrix(rows: list[dict[str, Any]]) -> list[list[float]]:
-    return [[float(value) for value in row["feature_vector"]] for row in rows]
+def _feature_matrix(rows: list[dict[str, Any]], names: list[str]) -> list[list[float]]:
+    matrix: list[list[float]] = []
+    for row in rows:
+        features = row.get("features")
+        if isinstance(features, dict) and all(name in features for name in names):
+            matrix.append([float(features[name]) for name in names])
+            continue
+        row_names = list(row["feature_names"])
+        row_values = list(row["feature_vector"])
+        lookup = {name: float(row_values[index]) for index, name in enumerate(row_names)}
+        matrix.append([lookup[name] for name in names])
+    return matrix
 
 
 def _targets(rows: list[dict[str, Any]], rules: list[str]) -> tuple[list[int], list[float], list[float], list[float]]:
@@ -100,6 +134,57 @@ def _targets(rows: list[dict[str, Any]], rules: list[str]) -> tuple[list[int], l
     delta = [float(row["target"]["delta_ratio_best"]) for row in rows]
     neutral = [1.0 if row["target"]["neutral"] else 0.0 for row in rows]
     return rule_target, harmful, delta, neutral
+
+
+def _probe_rows_by_checkpoint(probe_rows: list[dict[str, Any]]) -> dict[str, list[dict[str, Any]]]:
+    grouped: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    for row in probe_rows:
+        grouped[str(row["checkpoint_id"])].append(row)
+    return grouped
+
+
+def _soft_rule_targets(
+    rows: list[dict[str, Any]],
+    rules: list[str],
+    probe_rows_by_checkpoint: dict[str, list[dict[str, Any]]],
+    *,
+    neutral_threshold: float,
+    temperature: float,
+    hard_mix: float,
+) -> list[list[float]]:
+    if temperature <= 0.0:
+        raise ValueError("soft-label temperature must be positive")
+    if hard_mix < 0.0 or hard_mix > 1.0:
+        raise ValueError("soft-label hard mix must be in [0, 1]")
+    targets: list[list[float]] = []
+    for row in rows:
+        scores = [float("-inf")] * len(rules)
+        for probe_row in probe_rows_by_checkpoint.get(str(row["checkpoint_id"]), []):
+            rule_id = str(probe_row["rule_id"])
+            if rule_id in rules:
+                scores[rules.index(rule_id)] = float(probe_row["delta_ratio_vs_additive"])
+        if "neutral_additive" in rules:
+            scores[rules.index("neutral_additive")] = float(neutral_threshold)
+        finite_scores = [score for score in scores if math.isfinite(score)]
+        hard = [0.0] * len(rules)
+        hard[int(row["target"]["rule_class_index"])] = 1.0
+        if not finite_scores:
+            targets.append(hard)
+            continue
+        pivot = max(finite_scores)
+        weights = [
+            math.exp((score - pivot) / temperature) if math.isfinite(score) else 0.0
+            for score in scores
+        ]
+        total = sum(weights)
+        soft = [weight / total if total else 0.0 for weight in weights]
+        targets.append(
+            [
+                float(hard_mix) * hard_value + (1.0 - float(hard_mix)) * soft_value
+                for hard_value, soft_value in zip(hard, soft)
+            ]
+        )
+    return targets
 
 
 def _feature_stats(matrix: list[list[float]]) -> tuple[list[float], list[float]]:
@@ -172,12 +257,13 @@ def _evaluate_model(
     rows: list[dict[str, Any]],
     *,
     rules: list[str],
+    feature_names: list[str],
     feature_mean: list[float],
     feature_std: list[float],
     device: torch.device,
     harmful_threshold: float,
 ) -> dict[str, Any]:
-    matrix = _standardize(_feature_matrix(rows), feature_mean, feature_std)
+    matrix = _standardize(_feature_matrix(rows, feature_names), feature_mean, feature_std)
     x = torch.tensor(matrix, dtype=torch.float32, device=device)
     target_indices, harmful, delta, neutral = _targets(rows, rules)
     with torch.no_grad():
@@ -294,6 +380,9 @@ def _write_report(
         handle.write("## Training\n\n")
         handle.write(f"- epochs: {summary['epochs']}\n")
         handle.write(f"- hidden_dim: {summary['hidden_dim']}\n")
+        handle.write(f"- drop_features: `{summary.get('drop_features', [])}`\n")
+        handle.write(f"- soft_label_temperature: `{summary.get('soft_label_temperature')}`\n")
+        handle.write(f"- soft_label_hard_mix: `{summary.get('soft_label_hard_mix')}`\n")
         handle.write(f"- final_loss: {summary['final_loss']:.6f}\n\n")
         handle.write("## Metrics\n\n")
         for prefix, metrics in (
@@ -357,6 +446,11 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--seed", type=int)
     parser.add_argument("--device", default="cpu", choices=["cpu", "cuda", "auto"])
     parser.add_argument("--harmful-threshold", type=float, default=0.5)
+    parser.add_argument("--drop-features")
+    parser.add_argument("--probe-jsonl", type=Path)
+    parser.add_argument("--soft-label-temperature", type=float)
+    parser.add_argument("--soft-label-hard-mix", type=float)
+    parser.add_argument("--soft-label-neutral-threshold", type=float)
     return parser
 
 
@@ -371,6 +465,9 @@ def main(argv: list[str] | None = None) -> int:
     output_dir = _resolve(args.output_dir, root)
     report_path = _resolve(args.report, root)
     summary_json_path = _resolve(args.summary_json, root) if args.summary_json else output_dir / "laur_mlp_v1_train_summary.json"
+    probe_path = _resolve(args.probe_jsonl, root)
+    if probe_path is None and config.get("probe_output_jsonl"):
+        probe_path = _resolve(Path(str(config["probe_output_jsonl"])), root)
     if dataset_path is None or output_dir is None or report_path is None:
         raise ValueError("--dataset, --output-dir, and --report are required")
 
@@ -379,13 +476,16 @@ def main(argv: list[str] | None = None) -> int:
     if schema_errors:
         raise ValueError("Phase4F dataset schema errors:\n" + "\n".join(schema_errors[:20]))
 
-    feature_names = _feature_names(rows)
+    cli_drop_features = _parse_drop_features(args.drop_features)
+    config_drop_features = _parse_drop_features(train_config.get("drop_features"))
+    drop_features = cli_drop_features or config_drop_features
+    feature_names = _selected_feature_names(rows, drop_features)
     rules = _rule_vocab(rows)
     splits = _split_rows(rows)
     train_rows = splits["train"]
     validation_rows = splits["validation"]
     test_rows = splits["test"]
-    train_matrix = _feature_matrix(train_rows)
+    train_matrix = _feature_matrix(train_rows, feature_names)
     feature_mean, feature_std = _feature_stats(train_matrix)
 
     epochs = int(args.epochs if args.epochs is not None else train_config.get("epochs", 300))
@@ -393,6 +493,17 @@ def main(argv: list[str] | None = None) -> int:
     learning_rate = float(args.learning_rate if args.learning_rate is not None else train_config.get("learning_rate", 1e-2))
     weight_decay = float(args.weight_decay if args.weight_decay is not None else train_config.get("weight_decay", 1e-4))
     seed = int(args.seed if args.seed is not None else train_config.get("seed", 7))
+    soft_temperature = args.soft_label_temperature
+    if soft_temperature is None and train_config.get("soft_label_temperature") is not None:
+        soft_temperature = float(train_config["soft_label_temperature"])
+    soft_hard_mix = args.soft_label_hard_mix
+    if soft_hard_mix is None and train_config.get("soft_label_hard_mix") is not None:
+        soft_hard_mix = float(train_config["soft_label_hard_mix"])
+    soft_neutral_threshold = float(
+        args.soft_label_neutral_threshold
+        if args.soft_label_neutral_threshold is not None
+        else train_config.get("soft_label_neutral_threshold", 0.005)
+    )
 
     torch.manual_seed(seed)
     if args.device == "auto":
@@ -409,6 +520,20 @@ def main(argv: list[str] | None = None) -> int:
     y_harmful = torch.tensor(harmful, dtype=torch.float32, device=device)
     y_delta = torch.tensor(delta, dtype=torch.float32, device=device)
     y_neutral = torch.tensor(neutral, dtype=torch.float32, device=device)
+    y_rule_soft = None
+    if soft_temperature is not None:
+        probe_rows = _read_probe_jsonl(probe_path)
+        if not probe_rows:
+            raise ValueError("--soft-label-temperature requires --probe-jsonl or config.probe_output_jsonl")
+        soft_targets = _soft_rule_targets(
+            train_rows,
+            rules,
+            _probe_rows_by_checkpoint(probe_rows),
+            neutral_threshold=soft_neutral_threshold,
+            temperature=float(soft_temperature),
+            hard_mix=float(soft_hard_mix if soft_hard_mix is not None else 0.5),
+        )
+        y_rule_soft = torch.tensor(soft_targets, dtype=torch.float32, device=device)
     additive_index = rules.index("additive_ltm") if "additive_ltm" in rules else 0
     neutral_index = rules.index("neutral_additive") if "neutral_additive" in rules else None
     loss_weights = LaurLossWeights()
@@ -422,6 +547,7 @@ def main(argv: list[str] | None = None) -> int:
         losses = laur_ltm_loss(
             outputs,
             rule_target=y_rule,
+            rule_target_probs=y_rule_soft,
             harmful_target=y_harmful,
             delta_target=y_delta,
             neutral_target=y_neutral,
@@ -441,6 +567,7 @@ def main(argv: list[str] | None = None) -> int:
         model,
         train_rows,
         rules=rules,
+        feature_names=feature_names,
         feature_mean=feature_mean,
         feature_std=feature_std,
         device=device,
@@ -450,6 +577,7 @@ def main(argv: list[str] | None = None) -> int:
         model,
         validation_rows,
         rules=rules,
+        feature_names=feature_names,
         feature_mean=feature_mean,
         feature_std=feature_std,
         device=device,
@@ -460,6 +588,7 @@ def main(argv: list[str] | None = None) -> int:
             model,
             test_rows,
             rules=rules,
+            feature_names=feature_names,
             feature_mean=feature_mean,
             feature_std=feature_std,
             device=device,
@@ -479,6 +608,12 @@ def main(argv: list[str] | None = None) -> int:
         "learning_rate": learning_rate,
         "weight_decay": weight_decay,
         "feature_set": rows[0]["feature_set"],
+        "drop_features": sorted(drop_features),
+        "input_features": feature_names,
+        "probe_jsonl": str(probe_path) if probe_path else None,
+        "soft_label_temperature": soft_temperature,
+        "soft_label_hard_mix": soft_hard_mix,
+        "soft_label_neutral_threshold": soft_neutral_threshold if soft_temperature is not None else None,
     }
     paths = write_laur_mlp_exports(
         model,
@@ -509,6 +644,10 @@ def main(argv: list[str] | None = None) -> int:
         "validation_source": splits["validation_source"],
         "epochs": epochs,
         "hidden_dim": hidden_dim,
+        "drop_features": sorted(drop_features),
+        "soft_label_temperature": soft_temperature,
+        "soft_label_hard_mix": soft_hard_mix,
+        "soft_label_neutral_threshold": soft_neutral_threshold if soft_temperature is not None else None,
         "final_loss": final_loss,
         "loss_components": final_components,
         "train_metrics": train_metrics,

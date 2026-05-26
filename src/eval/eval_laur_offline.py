@@ -69,6 +69,19 @@ def _topk_indices(values: list[float], k: int) -> list[int]:
     return sorted(range(len(values)), key=lambda index: values[index], reverse=True)[:k]
 
 
+def _feature_vector_for_export(row: dict[str, Any], export: dict[str, Any]) -> list[float]:
+    input_features = [str(name) for name in export.get("input_features", [])]
+    features = row.get("features")
+    if isinstance(features, dict) and input_features and all(name in features for name in input_features):
+        return [float(features[name]) for name in input_features]
+    if len(row["feature_vector"]) == len(input_features):
+        return [float(value) for value in row["feature_vector"]]
+    row_names = list(row["feature_names"])
+    row_values = list(row["feature_vector"])
+    lookup = {str(name): float(row_values[index]) for index, name in enumerate(row_names)}
+    return [lookup[name] for name in input_features]
+
+
 def _binary_metrics(labels: list[int], predictions: list[int]) -> dict[str, float]:
     tp = sum(1 for label, pred in zip(labels, predictions) if label == 1 and pred == 1)
     fp = sum(1 for label, pred in zip(labels, predictions) if label == 0 and pred == 1)
@@ -113,7 +126,7 @@ def _predict_rows(
     rules = {int(index): rule_id for index, rule_id in export["rules"].items()}
     records: list[dict[str, Any]] = []
     for row in rows:
-        prediction = forward_exported_model(export, [float(value) for value in row["feature_vector"]])
+        prediction = forward_exported_model(export, _feature_vector_for_export(row, export))
         probabilities = [float(value) for value in prediction["rule_probabilities"]]
         top3 = _topk_indices(probabilities, min(3, len(probabilities)))
         pred_index = top3[0]

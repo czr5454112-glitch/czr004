@@ -340,9 +340,12 @@ def expanded_runs(config: dict[str, Any]) -> list[dict[str, Any]]:
     scen_template = str(config["scen_template"])
     for map_record in config["maps"]:
         map_name = str(map_record["map_name"])
+        map_agent_counts = [
+            int(value) for value in map_record.get("agent_counts", agent_counts)
+        ]
         for instance in instances:
             scen = scen_template.format(map_name=map_name, instance=instance)
-            for agents in agent_counts:
+            for agents in map_agent_counts:
                 run_id = (
                     f"{map_name}__a{agents}__i{instance}"
                     f"__phase4_{config.get('mode', 'pilot')}"
@@ -609,6 +612,7 @@ def run_dataset_stage(config: dict[str, Any]) -> dict[str, Any]:
 
 
 def run_train_stage(config: dict[str, Any], log_dir: Path) -> dict[str, Any]:
+    train_config = config.get("training", {}) if isinstance(config.get("training", {}), dict) else {}
     command = [
         sys.executable,
         str(ROOT / "src" / "train" / "train_laur_ltm.py"),
@@ -621,12 +625,15 @@ def run_train_stage(config: dict[str, Any], log_dir: Path) -> dict[str, Any]:
         "--report",
         str(resolve_repo_path(config["train_report_md"])),
     ]
+    if train_config.get("harmful_threshold") is not None:
+        command.extend(["--harmful-threshold", str(train_config["harmful_threshold"])])
     completed = run_command(command, log_dir=log_dir, log_name="train")
     summary_path = resolve_repo_path(config["model_output_dir"]) / "laur_mlp_v1_train_summary.json"
     return {"command": command, "stdout": completed.stdout.strip(), "summary_json": str(summary_path)}
 
 
 def run_eval_stage(config: dict[str, Any], log_dir: Path) -> dict[str, Any]:
+    eval_config = config.get("eval", {}) if isinstance(config.get("eval", {}), dict) else {}
     model_path = resolve_repo_path(config["model_output_dir"]) / "laur_mlp_v1_weights.json"
     summary_path = resolve_repo_path(config["offline_eval_summary_json"])
     command = [
@@ -647,6 +654,8 @@ def run_eval_stage(config: dict[str, Any], log_dir: Path) -> dict[str, Any]:
         "--summary-json",
         str(summary_path),
     ]
+    if eval_config.get("harmful_threshold") is not None:
+        command.extend(["--harmful-threshold", str(eval_config["harmful_threshold"])])
     completed = run_command(command, log_dir=log_dir, log_name="eval")
     summary = json.loads(summary_path.read_text(encoding="utf-8")) if summary_path.exists() else {}
     return {

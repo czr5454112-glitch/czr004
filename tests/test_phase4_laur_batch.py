@@ -1,4 +1,5 @@
 from scripts.run_phase4_laur_batch import phase4f_performance_gate, record_command
+from scripts.run_phase4_laur_batch import expanded_runs
 
 
 def test_record_command_can_disable_raw_trace_export() -> None:
@@ -27,6 +28,23 @@ def test_record_command_can_disable_raw_trace_export() -> None:
 
     raw_trace_index = command.index("--export-raw-trace")
     assert command[raw_trace_index + 1] == "0"
+
+
+def test_expanded_runs_allows_map_specific_agent_counts() -> None:
+    config = {
+        "mode": "repair",
+        "instances": [1],
+        "agent_counts": [50, 100],
+        "scen_template": "{map_name}-{instance}.scen",
+        "maps": [
+            {"map_name": "small", "map_path": "small.map", "split": "train", "agent_counts": [10]},
+            {"map_name": "large", "map_path": "large.map", "split": "validation"},
+        ],
+    }
+
+    runs = expanded_runs(config)
+
+    assert [run["agents"] for run in runs] == [10, 50, 100]
 
 
 def test_phase4f_performance_gate_rejects_weak_validation_metrics() -> None:

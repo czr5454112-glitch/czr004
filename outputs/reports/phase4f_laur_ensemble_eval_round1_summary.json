@@ -1,0 +1,111 @@
+{
+  "dataset": "C:\\PROGRAMING\\czr004\\artifacts\\teacher\\laur\\full\\update_labels\\phase4_laur_update_dataset_full.jsonl",
+  "harmful_threshold": 0.1,
+  "metrics_by_split": {
+    "all": {
+      "harmful_update_f1": 0.6426778242677824,
+      "harmful_update_precision": 0.47761194029850745,
+      "harmful_update_recall": 0.9820971867007673,
+      "label_distribution": {
+        "block_heavy": 325,
+        "block_light": 163,
+        "commit_heavy": 316,
+        "decay_090": 98,
+        "decay_095": 87,
+        "neutral_additive": 413,
+        "wait_heavy": 213,
+        "wait_light": 282
+      },
+      "neutral_additive_rate": 0.26515550869794413,
+      "non_neutral_rule_top1_accuracy": 0.45350404312668463,
+      "predicted_rule_distribution": {
+        "block_heavy": 413,
+        "block_light": 121,
+        "commit_heavy": 344,
+        "decay_090": 33,
+        "decay_095": 22,
+        "neutral_additive": 503,
+        "wait_heavy": 127,
+        "wait_light": 334
+      },
+      "predicted_rule_validation_mean_delta_ratio": 0.02005698450337172,
+      "rule_top1_accuracy": 0.4765419082762256,
+      "rule_top3_accuracy": 0.7981022667369531,
+      "safety_auroc": 0.8089697567465278,
+      "sample_count": 1897
+    },
+    "train": {
+      "harmful_update_f1": 0.6607242339832871,
+      "harmful_update_precision": 0.4966499162479062,
+      "harmful_update_recall": 0.9866888519134775,
+      "label_distribution": {
+        "block_heavy": 248,
+        "block_light": 130,
+        "commit_heavy": 240,
+        "decay_090": 72,
+        "decay_095": 60,
+        "neutral_additive": 304,
+        "wait_heavy": 162,
+        "wait_light": 223
+      },
+      "neutral_additive_rate": 0.2425295343988881,
+      "non_neutral_rule_top1_accuracy": 0.5303964757709251,
+      "predicted_rule_distribution": {
+        "block_heavy": 282,
+        "block_light": 99,
+        "commit_heavy": 280,
+        "decay_090": 33,
+        "decay_095": 17,
+        "neutral_additive": 349,
+        "wait_heavy": 109,
+        "wait_light": 270
+      },
+      "predicted_rule_validation_mean_delta_ratio": 0.02295405296516662,
+      "rule_top1_accuracy": 0.5496872828353023,
+      "rule_top3_accuracy": 0.8693537178596248,
+      "safety_auroc": 0.8298976645924255,
+      "sample_count": 1439
+    },
+    "validation": {
+      "harmful_update_f1": 0.5882352941176471,
+      "harmful_update_precision": 0.4227053140096618,
+      "harmful_update_recall": 0.9668508287292817,
+      "label_distribution": {
+        "block_heavy": 77,
+        "block_light": 33,
+        "commit_heavy": 76,
+        "decay_090": 26,
+        "decay_095": 27,
+        "neutral_additive": 109,
+        "wait_heavy": 51,
+        "wait_light": 59
+      },
+      "neutral_additive_rate": 0.33624454148471616,
+      "non_neutral_rule_top1_accuracy": 0.2034383954154728,
+      "predicted_rule_distribution": {
+        "block_heavy": 131,
+        "block_light": 22,
+        "commit_heavy": 64,
+        "decay_095": 5,
+        "neutral_additive": 154,
+        "wait_heavy": 18,
+        "wait_light": 64
+      },
+      "predicted_rule_validation_mean_delta_ratio": 0.0109546231135838,
+      "rule_top1_accuracy": 0.24672489082969432,
+      "rule_top3_accuracy": 0.574235807860262,
+      "safety_auroc": 0.743203622075513,
+      "sample_count": 458
+    }
+  },
+  "models": [
+    "C:\\PROGRAMING\\czr004\\artifacts\\models\\laur_ltm\\soft_label_sweep\\soft_t005_mix07_drop_top_h64\\laur_mlp_v1_weights.json",
+    "C:\\PROGRAMING\\czr004\\artifacts\\models\\laur_ltm\\feature_drop_sweep\\drop_top_h64_s43\\laur_mlp_v1_weights.json",
+    "C:\\PROGRAMING\\czr004\\artifacts\\models\\laur_ltm\\feature_drop_sweep\\drop_top_h48_s41\\laur_mlp_v1_weights.json",
+    "C:\\PROGRAMING\\czr004\\artifacts\\models\\laur_ltm\\feature_drop_sweep\\drop_top_h32_s59\\laur_mlp_v1_weights.json",
+    "C:\\PROGRAMING\\czr004\\artifacts\\models\\laur_ltm\\feature_drop_sweep\\drop_top_drift_h64\\laur_mlp_v1_weights.json"
+  ],
+  "probe_jsonl": "C:\\PROGRAMING\\czr004\\artifacts\\teacher\\laur\\full\\probes\\phase4_laur_probe_full.jsonl",
+  "schema_version": "phase4_laur_ensemble_eval_summary_v1",
+  "summary_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase4f_laur_ensemble_eval_round1.csv"
+}

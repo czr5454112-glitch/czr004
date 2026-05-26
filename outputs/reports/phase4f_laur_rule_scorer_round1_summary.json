@@ -1,0 +1,86 @@
+{
+  "dataset": "C:\\PROGRAMING\\czr004\\artifacts\\teacher\\laur\\full\\update_labels\\phase4_laur_update_dataset_full.jsonl",
+  "delta_scale": 25.0,
+  "epochs": 700,
+  "final_loss": 0.32485172152519226,
+  "harmful_threshold": 0.1,
+  "hidden_dim": 96,
+  "learning_rate": 0.003,
+  "metrics_by_split": {
+    "train": {
+      "harmful_update_f1": 0.702928870292887,
+      "harmful_update_precision": 0.5485074626865671,
+      "harmful_update_recall": 0.978369384359401,
+      "label_distribution": {
+        "block_heavy": 248,
+        "block_light": 130,
+        "commit_heavy": 240,
+        "decay_090": 72,
+        "decay_095": 60,
+        "neutral_additive": 304,
+        "wait_heavy": 162,
+        "wait_light": 223
+      },
+      "neutral_additive_rate": 0.20013898540653233,
+      "non_neutral_rule_top1_accuracy": 0.44493392070484583,
+      "predicted_rule_distribution": {
+        "additive_ltm": 6,
+        "block_heavy": 278,
+        "block_light": 104,
+        "commit_heavy": 276,
+        "decay_090": 32,
+        "decay_095": 45,
+        "neutral_additive": 282,
+        "wait_heavy": 157,
+        "wait_light": 259
+      },
+      "predicted_rule_validation_mean_delta_ratio": 0.02604337418510064,
+      "rule_top1_accuracy": 0.443363446838082,
+      "rule_top3_accuracy": 0.788047255038221,
+      "safety_auroc": 0.8744157509957549,
+      "sample_count": 1439
+    },
+    "validation": {
+      "harmful_update_f1": 0.6178861788617886,
+      "harmful_update_precision": 0.4887459807073955,
+      "harmful_update_recall": 0.8397790055248618,
+      "label_distribution": {
+        "block_heavy": 77,
+        "block_light": 33,
+        "commit_heavy": 76,
+        "decay_090": 26,
+        "decay_095": 27,
+        "neutral_additive": 109,
+        "wait_heavy": 51,
+        "wait_light": 59
+      },
+      "neutral_additive_rate": 0.19213973799126638,
+      "non_neutral_rule_top1_accuracy": 0.17191977077363896,
+      "predicted_rule_distribution": {
+        "additive_ltm": 20,
+        "block_heavy": 71,
+        "block_light": 55,
+        "commit_heavy": 115,
+        "decay_090": 4,
+        "decay_095": 19,
+        "neutral_additive": 68,
+        "wait_heavy": 31,
+        "wait_light": 75
+      },
+      "predicted_rule_validation_mean_delta_ratio": -0.0010369694942634368,
+      "rule_top1_accuracy": 0.18777292576419213,
+      "rule_top3_accuracy": 0.49563318777292575,
+      "safety_auroc": 0.701856912060953,
+      "sample_count": 458
+    }
+  },
+  "model_path": "C:\\PROGRAMING\\czr004\\artifacts\\models\\laur_ltm\\rule_scorer_round1\\laur_rule_scorer.pt",
+  "neutral_threshold": 0.005,
+  "output_dir": "C:\\PROGRAMING\\czr004\\artifacts\\models\\laur_ltm\\rule_scorer_round1",
+  "probes": "C:\\PROGRAMING\\czr004\\artifacts\\teacher\\laur\\full\\probes\\phase4_laur_probe_full.jsonl",
+  "safety_loss_weight": 0.2,
+  "schema_version": "phase4_laur_rule_scorer_experiment_v1",
+  "seed": 23,
+  "train_pair_count": 11512,
+  "weight_decay": 0.001
+}

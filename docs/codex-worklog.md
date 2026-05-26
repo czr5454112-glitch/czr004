@@ -968,3 +968,24 @@
   - repair1 batch expands to `765` runs: `645` train and `120` validation.
 - Follow-up:
   - Launch `configs/phase4/laur_ltm_full_repair1.yaml` on the server in tmux after committing/pushing. This run keeps `empty-48-48` and `maze-32-32-4` held out, adds neighboring train map families, uses feature-drop plus soft labels, and evaluates harmful threshold `0.10`.
+
+## 2026-05-26 20:45 - Phase4F repair1 full server run launched
+
+- Request: continue trying the old server first; if the old server cannot run the full attempt, pause instead of moving to the new server.
+- Server / workspace:
+  - old server `ackcs-00gjgxxy`
+  - workspace `/root/shared-nvme/czr004_phase4_repair1_43633e7`
+  - git commit `43633e7`
+  - tmux session `phase4_laur_repair1_43633e7`
+- Command:
+  - `python scripts/run_phase4_laur_batch.py --config configs/phase4/laur_ltm_full_repair1.yaml --overwrite --prepare-scenarios --build`
+- Early status:
+  - tmux is active.
+  - build stage completed far enough to start record logs.
+  - record stage reached at least `record_0132_*` by `2026-05-26 20:42 CST`.
+  - latest checked record logs report `success=1 feasible=1` and empty stderr.
+  - `/root/shared-nvme` still had about `46G` available, so no migration is needed yet.
+- Follow-up:
+  - Keep monitoring the old-server tmux run.
+  - After batch completion, download useful reports, summaries, exported model metadata, and compact trace/checkpoint evidence; keep bulky raw/compressed traces out of git unless a small manifest or checksum is sufficient.
+  - Analyze the repair1 full result before deciding whether Phase4F can proceed or must pause with failure evidence.

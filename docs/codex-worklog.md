@@ -823,3 +823,34 @@
   - Phase4B force-additive update smoke passed.
 - Follow-up:
   - Phase4E should build checkpoint-level training samples from checkpoint features plus Phase4D best-rule labels.
+
+## 2026-05-26 12:55 - complete LAUR-LTM Phase4E update dataset smoke
+
+- Request: Continue LAU/LAUR-LTM Phase4E in `C:\PROGRAMING\czr004`; use the remote server only if larger computation is needed, keep git backups, and avoid hard-coding saturation labels because the current Phase4D smoke rule set has 8 rules.
+- Files changed:
+  - `src/czr004_teacher/features_laur.py`
+  - `src/czr004_teacher/update_sequences.py`
+  - `tests/test_phase4_laur_schema.py`
+  - `outputs/reports/phase4_laur_update_dataset_report.md`
+  - `outputs/reports/phase4_laur_update_dataset_summary.json`
+  - `outputs/tables/phase4_laur_update_dataset_smoke_summary.csv`
+  - `docs/codex-worklog.md`
+- Commands run:
+  - `python src\czr004_teacher\update_sequences.py --checkpoint-jsonl artifacts\teacher\laur\checkpoints\phase4_laur_checkpoints_smoke.jsonl --trace-jsonl artifacts\teacher\laur\traces\phase4_laur_trace_smoke.jsonl`
+  - `& 'C:\PROGRAMING\anaconda\Scripts\conda.exe' run -n czr004 python -m pytest tests\test_phase4_laur_schema.py`
+  - `& 'C:\PROGRAMING\anaconda\Scripts\conda.exe' run -n czr004 python src\czr004_teacher\update_sequences.py build-dataset --config configs\phase4\laur_ltm.yaml --checkpoint-jsonl artifacts\teacher\laur\checkpoints\phase4_laur_checkpoints_smoke.jsonl --probe-jsonl artifacts\teacher\laur\probes\phase4_laur_probe_smoke.jsonl --output-jsonl artifacts\teacher\laur\update_labels\phase4_laur_update_dataset_smoke.jsonl --summary-csv outputs\tables\phase4_laur_update_dataset_smoke_summary.csv --summary-json outputs\reports\phase4_laur_update_dataset_summary.json --report-md outputs\reports\phase4_laur_update_dataset_report.md`
+  - `& 'C:\PROGRAMING\anaconda\Scripts\conda.exe' run -n czr004 python -m pytest tests\test_phase4_laur_schema.py tests\test_phase3_teacher_data.py`
+  - `& 'C:\PROGRAMING\anaconda\Scripts\conda.exe' run -n czr004 python -m compileall src\czr004_teacher`
+- Key observations:
+  - Phase4E adds checkpoint-level aggregate features from checkpoint rows, trace rows, and MovingAI map topology.
+  - The dataset target vocabulary is built from actual probe rows while preserving config order, then appends `neutral_additive`; absent `saturation_low/high` rules are not required.
+  - The generated smoke dataset remains under ignored `artifacts/teacher/laur/update_labels/`; report and summary outputs are tracked.
+  - Local smoke was enough for this step; the remote server was not used.
+- Tests / validation:
+  - Phase4C checkpoint/trace join audit still passed with 4 checkpoint rows and 11489 trace rows.
+  - Phase4E dataset build passed with 4 samples, 36 features, 0 schema errors, 0 split errors, and 0 missing labels.
+  - Dynamic rule vocab: `additive_ltm, commit_heavy, block_heavy, block_light, wait_light, wait_heavy, decay_095, decay_090, neutral_additive`.
+  - Label distribution: `block_heavy=1`, `commit_heavy=1`, `decay_090=1`, `wait_light=1`; harmful_update samples: 2.
+  - Conda pytest: `tests/test_phase4_laur_schema.py tests/test_phase3_teacher_data.py` passed, 9 tests.
+- Follow-up:
+  - Phase4F can add the LAU-MLP-v1 model/training skeleton using `phase4_laur_update_dataset_smoke.jsonl` for train-loop smoke only; no performance claim should be made from this smoke scale.

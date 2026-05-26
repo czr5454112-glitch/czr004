@@ -11,10 +11,13 @@ sys.path.insert(0, str(ROOT / "src"))
 from czr004_teacher.update_sequences import (  # noqa: E402
     audit_checkpoint_trace_join,
     audit_probe_labels,
+    audit_update_dataset_rows,
     build_best_rule_labels,
+    build_update_dataset_rows,
     validate_checkpoint_row,
     validate_probe_row,
     validate_trace_event_row,
+    validate_update_dataset_row,
 )
 
 
@@ -234,3 +237,53 @@ def test_phase4_laur_probe_schema_and_best_rule_labels(tmp_path: Path) -> None:
 
     broken = probe_row(rule_id="additive_ltm", delta=0.1)
     assert "additive_ltm delta_ratio_vs_additive must be zero" in validate_probe_row(broken)
+
+
+def test_phase4e_update_dataset_uses_actual_probe_rule_vocab() -> None:
+    probe_rows = [
+        probe_row(),
+        probe_row(rule_id="commit_heavy", ratio=1.8, delta=0.2),
+        probe_row(rule_id="block_heavy", ratio=2.2, delta=-0.2, harmful=True),
+        probe_row(rule_id="wait_light", ratio=2.0, delta=0.0),
+    ]
+    config = {
+        "probe": {
+            "rule_set": [
+                "additive_ltm",
+                "commit_heavy",
+                "block_heavy",
+                "wait_light",
+                "saturation_low",
+            ]
+        }
+    }
+
+    rows = build_update_dataset_rows(
+        [checkpoint_row()],
+        trace_rows(),
+        probe_rows,
+        config=config,
+        repo_root=ROOT,
+    )
+
+    assert len(rows) == 1
+    row = rows[0]
+    assert validate_update_dataset_row(row) == []
+    assert row["target"]["rule_class"] == "commit_heavy"
+    assert row["target"]["harmful_update"] is True
+    assert row["target"]["harmful_rule_ids"] == ["block_heavy"]
+    assert row["target"]["rule_vocab"] == [
+        "additive_ltm",
+        "commit_heavy",
+        "block_heavy",
+        "wait_light",
+        "neutral_additive",
+    ]
+    assert "saturation_low" not in row["target"]["rule_vocab"]
+    assert "split" not in row["features"]
+    assert "map_name" not in row["features"]
+
+    audit = audit_update_dataset_rows(rows, expected_checkpoint_rows=1)
+    assert audit["passed"] is True
+    assert audit["sample_count"] == 1
+    assert audit["dynamic_rule_vocab"] is True

@@ -5,6 +5,7 @@
 #include <cstdint>
 #include <functional>
 #include <limits>
+#include <memory>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -146,6 +147,7 @@ struct LtmOptions {
   uint seed = 0;
   uint checkpoint_topk_edges = 16;
   UpdateParams update_params = UpdateParams::additive();
+  bool retain_iteration_traffic_maps = false;
   std::function<void(const struct LtmIterationCheckpoint&)> iteration_callback;
 };
 
@@ -163,6 +165,31 @@ struct LtmIterationCheckpoint {
   std::vector<TraceEvent> trace_events;
   TrafficSnapshot traffic_before;
   TrafficSnapshot traffic_after;
+  std::shared_ptr<const DirectedTrafficMap> traffic_before_map;
+  std::shared_ptr<const DirectedTrafficMap> traffic_after_map;
+};
+
+struct LtmOneShotProbeOptions {
+  Objective objective = Objective::OBJ_SUM_OF_LOSS;
+  double short_budget_ms = 1000.0;
+  uint node_budget = 0;
+  int verbose = 0;
+  uint seed = 0;
+  UpdateParams update_params = UpdateParams::additive();
+};
+
+struct LtmOneShotProbeResult {
+  bool solution_found = false;
+  bool feasible = false;
+  int sum_of_loss = 0;
+  int lower_bound_sol = 0;
+  double sum_of_loss_ratio = std::numeric_limits<double>::quiet_NaN();
+  double runtime_ms = 0.0;
+  uint returned_solutions_count = 0;
+  uint expanded_nodes = 0;
+  uint high_level_expansions = 0;
+  uint low_level_pibt_calls = 0;
+  TraceSummary trace_summary;
 };
 
 struct LtmRunResult {
@@ -181,5 +208,9 @@ struct LtmRunResult {
 };
 
 LtmRunResult solve_with_ltm(const Instance& instance, const LtmOptions& options);
+LtmOneShotProbeResult run_one_shot_update_probe(
+    const Instance& instance, const DirectedTrafficMap& traffic_before,
+    const std::vector<TraceEvent>& trace_events,
+    const LtmOneShotProbeOptions& options);
 
 }  // namespace czr004::ltm

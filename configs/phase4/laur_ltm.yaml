@@ -1,6 +1,7 @@
 schema_version: phase4_laur_config_v1
 mode: smoke
 binary: build/phase4-laur-ltm/phase4_laur_record.exe
+probe_binary: build/phase4-laur-ltm/phase4_laur_probe.exe
 map: external/lacam2/assets/random-32-32-10.map
 scen: external/lacam2/assets/random-32-32-10-random-1.scen
 map_name: random-32-32-10
@@ -15,3 +16,23 @@ trace_jsonl: artifacts/teacher/laur/traces/phase4_laur_trace_smoke.jsonl
 traffic_snapshot_root: artifacts/teacher/laur/checkpoints/snapshots
 audit_summary_json: outputs/reports/phase4_laur_trace_checkpoint_audit_summary.json
 report_md: outputs/reports/phase4_laur_trace_checkpoint_report.md
+probe_output_jsonl: artifacts/teacher/laur/probes/phase4_laur_probe_smoke.jsonl
+update_label_jsonl: artifacts/teacher/laur/update_labels/phase4_laur_best_rule_labels_smoke.jsonl
+probe_summary_json: outputs/reports/phase4_laur_probe_label_summary.json
+probe_report_md: outputs/reports/phase4_laur_probe_label_report.md
+probe:
+  enabled: true
+  short_budget_sec: 1.0
+  max_checkpoints_per_run: 4
+  min_delta_ratio_for_label: 0.005
+  harmful_delta_ratio_threshold: -0.02
+  harmful_ttfs_regression_ratio: 1.20
+  rule_set:
+    - additive_ltm
+    - commit_heavy
+    - block_heavy
+    - block_light
+    - wait_light
+    - wait_heavy
+    - decay_095
+    - decay_090

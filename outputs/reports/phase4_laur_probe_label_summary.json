@@ -1,0 +1,33 @@
+{
+  "best_label_rows": 4,
+  "best_rule_histogram": {
+    "block_heavy": 1,
+    "commit_heavy": 1,
+    "decay_090": 1,
+    "wait_light": 1
+  },
+  "checkpoint_count": 4,
+  "grouping_error_count": 0,
+  "grouping_errors": [],
+  "harmful_update_count": 2,
+  "label_distribution": {
+    "block_heavy": 1,
+    "commit_heavy": 1,
+    "decay_090": 1,
+    "wait_light": 1
+  },
+  "label_jsonl": "C:\\PROGRAMING\\czr004\\artifacts\\teacher\\laur\\update_labels\\phase4_laur_best_rule_labels_smoke.jsonl",
+  "label_rows": 4,
+  "non_neutral_checkpoint_count": 4,
+  "passed": true,
+  "probe_jsonl": "C:\\PROGRAMING\\czr004\\artifacts\\teacher\\laur\\probes\\phase4_laur_probe_smoke.jsonl",
+  "probe_rows": 32,
+  "probe_schema_error_count": 0,
+  "probe_schema_errors": [],
+  "written_label_distribution": {
+    "block_heavy": 1,
+    "commit_heavy": 1,
+    "decay_090": 1,
+    "wait_light": 1
+  }
+}

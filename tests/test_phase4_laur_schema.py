@@ -10,7 +10,10 @@ sys.path.insert(0, str(ROOT / "src"))
 
 from czr004_teacher.update_sequences import (  # noqa: E402
     audit_checkpoint_trace_join,
+    audit_probe_labels,
+    build_best_rule_labels,
     validate_checkpoint_row,
+    validate_probe_row,
     validate_trace_event_row,
 )
 
@@ -103,6 +106,60 @@ def trace_rows(checkpoint_id: str = "run-1__iter0") -> list[dict]:
     ]
 
 
+def probe_row(
+    checkpoint_id: str = "run-1__iter0",
+    rule_id: str = "additive_ltm",
+    ratio: float | None = 2.0,
+    delta: float = 0.0,
+    harmful: bool = False,
+) -> dict:
+    solved = ratio is not None
+    return {
+        "schema_version": "phase4_laur_update_label_v1",
+        "run_id": "run-1",
+        "checkpoint_id": checkpoint_id,
+        "probe_id": f"{checkpoint_id}__rule_{rule_id}",
+        "split": "train",
+        "map_name": "random-32-32-10",
+        "agents": 50,
+        "seed": 1,
+        "iteration": 0,
+        "rule_id": rule_id,
+        "rule_params": {
+            "alpha_commit": 1.0,
+            "alpha_block": 1.0,
+            "alpha_wait": 1.0,
+            "rho_decay": 1.0,
+            "saturation_scale": 1.0,
+            "contraflow_penalty": 0.0,
+        },
+        "probe_short_budget_sec": 1.0,
+        "solution_found": solved,
+        "feasible": solved,
+        "sum_of_loss": 200 if solved else None,
+        "lower_bound_sol": 100,
+        "sum_of_loss_ratio": ratio,
+        "time_to_first_solution_ms": None,
+        "returned_solutions_count": 1 if solved else 0,
+        "expanded_nodes": 10,
+        "high_level_expansions": 10,
+        "low_level_pibt_calls": 20,
+        "runtime_ms": 5.0,
+        "additive_solution_found": True,
+        "additive_sum_of_loss": 200,
+        "additive_sum_of_loss_ratio": 2.0,
+        "delta_ratio_vs_additive": delta,
+        "beats_additive": delta > 0,
+        "harmful": harmful,
+        "base_solution_found_this_iteration": True,
+        "base_sum_of_loss_ratio_this_iteration": 2.0,
+        "trace_event_count": 3,
+        "branch": "phase4-laur-ltm",
+        "commit": "abc1234",
+        "dirty": "clean",
+    }
+
+
 def write_jsonl(path: Path, rows: list[dict]) -> None:
     path.write_text("".join(json.dumps(row, sort_keys=True) + "\n" for row in rows), encoding="utf-8")
 
@@ -151,3 +208,29 @@ def test_phase4_laur_split_audit_uses_map_holdout_helper(tmp_path: Path) -> None
     audit = audit_checkpoint_trace_join(checkpoint_path, trace_path)
     assert audit["passed"] is False
     assert any("random-32-32-10 leaks" in error for error in audit["split_errors"])
+
+
+def test_phase4_laur_probe_schema_and_best_rule_labels(tmp_path: Path) -> None:
+    rows = [
+        probe_row(),
+        probe_row(rule_id="commit_heavy", ratio=1.8, delta=0.2),
+        probe_row(rule_id="block_heavy", ratio=2.1, delta=-0.1, harmful=True),
+        probe_row(rule_id="wait_light", ratio=2.0, delta=0.0),
+    ]
+    for row in rows:
+        assert validate_probe_row(row) == []
+
+    labels = build_best_rule_labels(rows, min_delta_ratio=0.005)
+    assert labels[0]["label_rule_id"] == "commit_heavy"
+    assert labels[0]["best_delta_ratio_vs_additive"] == 0.2
+    assert labels[0]["harmful_rule_ids"] == ["block_heavy"]
+
+    path = tmp_path / "probe.jsonl"
+    write_jsonl(path, rows)
+    audit = audit_probe_labels(path)
+    assert audit["passed"] is True
+    assert audit["probe_rows"] == 4
+    assert audit["label_distribution"] == {"commit_heavy": 1}
+
+    broken = probe_row(rule_id="additive_ltm", delta=0.1)
+    assert "additive_ltm delta_ratio_vs_additive must be zero" in validate_probe_row(broken)

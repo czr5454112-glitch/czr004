@@ -783,3 +783,43 @@
   - Phase4B force-additive update smoke passed.
 - Follow-up:
   - Commit Phase4C with message `trace: add LAU iteration checkpoints and raw trace export` after final status review.
+
+## 2026-05-26 12:14 - complete LAUR-LTM Phase4D update-rule probe labels
+
+- Request: Continue LAU/LAUR-LTM Phase4d in `C:\PROGRAMING\czr004`; use the remote server only if large-scale computation is needed, keep git backup discipline, and run remote work under tmux if used.
+- Files changed:
+  - `configs/phase4/laur_ltm.yaml`
+  - `cpp/ltm/CMakeLists.txt`
+  - `cpp/ltm/ltm.hpp`
+  - `cpp/ltm/ltm.cpp`
+  - `cpp/tools/phase4_laur_probe.cpp`
+  - `scripts/build_phase4_laur_probe.ps1`
+  - `scripts/run_phase4_laur_probes.py`
+  - `src/czr004_teacher/update_sequences.py`
+  - `tests/test_phase4_laur_schema.py`
+  - `outputs/reports/phase4_laur_probe_label_summary.json`
+  - `outputs/reports/phase4_laur_probe_label_report.md`
+  - `docs/codex-worklog.md`
+- Commands run:
+  - `powershell -ExecutionPolicy Bypass -File scripts\build_phase4_laur_probe.ps1`
+  - `& 'C:\PROGRAMING\anaconda\Scripts\conda.exe' run -n czr004 python -m pytest tests\test_phase4_laur_schema.py`
+  - `& 'C:\PROGRAMING\anaconda\Scripts\conda.exe' run -n czr004 python scripts\run_phase4_laur_probes.py --config configs\phase4\laur_ltm.yaml --mode smoke --overwrite`
+  - `powershell -ExecutionPolicy Bypass -File scripts\build_phase1_ltm.ps1`
+  - `powershell -ExecutionPolicy Bypass -File scripts\phase1_ltm_smoke.ps1 -BuildDir build\phase1-ltm`
+  - `powershell -ExecutionPolicy Bypass -File scripts\build_phase4_laur_smoke.ps1`
+  - `powershell -ExecutionPolicy Bypass -File scripts\phase4_laur_update_smoke.ps1`
+- Key observations:
+  - Phase4D adds an isolated `phase4_laur_probe` tool and Python runner; `cpp/tools/phase1a_batch.cpp` remains untouched.
+  - The LTM API now exposes a one-shot update-probe helper and optional retained per-iteration traffic-map copies for probe generation. Default `solve_with_ltm` behavior remains unchanged.
+  - The smoke probe reruns the additive LTM checkpoint stream, then tests candidate update rules with a 1s short budget from the root restart.
+  - Candidate rules are limited to currently implemented `UpdateParams`: additive, commit/block/wait heavy/light, and decay variants. Local saturation, contraflow, spillover-radius expansion, learned runtime, and learned restart remain out of scope.
+  - Local smoke was enough for Phase4D; the remote server was not used.
+- Tests / validation:
+  - Conda pytest: `tests/test_phase4_laur_schema.py` passed, 4 tests.
+  - Phase4D probe smoke passed with 32 per-rule probe rows and 4 checkpoint-level best-rule labels.
+  - Probe audit passed with 0 schema errors and 0 grouping errors; every checkpoint had additive plus 7 non-additive rules.
+  - Smoke label distribution: `block_heavy=1`, `commit_heavy=1`, `decay_090=1`, `wait_light=1`.
+  - Phase1 LTM smoke passed for loop and random-32-32-10.
+  - Phase4B force-additive update smoke passed.
+- Follow-up:
+  - Phase4E should build checkpoint-level training samples from checkpoint features plus Phase4D best-rule labels.

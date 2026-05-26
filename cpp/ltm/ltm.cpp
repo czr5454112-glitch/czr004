@@ -1,6 +1,7 @@
 #include "ltm.hpp"
 
 #include <algorithm>
+#include <chrono>
 #include <cmath>
 #include <functional>
 #include <limits>
@@ -767,6 +768,52 @@ class OneShotLtmPlanner {
   }
 };
 
+LtmOneShotProbeResult run_one_shot_update_probe(
+    const Instance& instance, const DirectedTrafficMap& traffic_before,
+    const std::vector<TraceEvent>& trace_events,
+    const LtmOneShotProbeOptions& options)
+{
+  auto probe_map = traffic_before;
+  probe_map.update_from_trace(trace_events, options.update_params);
+
+  auto result = LtmOneShotProbeResult();
+  auto deadline = Deadline(options.short_budget_ms);
+  auto random_engine = std::mt19937(options.seed);
+  auto collector = PibtTraceCollector();
+  auto one_shot =
+      OneShotLtmPlanner(&instance, &deadline, &random_engine, &probe_map,
+                        &collector, options.objective, options.node_budget,
+                        options.verbose);
+
+  std::string additional_info;
+  const auto started = std::chrono::steady_clock::now();
+  const auto solution = one_shot.solve(additional_info);
+  const auto ended = std::chrono::steady_clock::now();
+
+  auto dist_table = DistTable(instance);
+  result.lower_bound_sol = get_sum_of_costs_lower_bound(instance, dist_table);
+  result.solution_found = !solution.empty();
+  result.feasible =
+      result.solution_found && is_feasible_solution(instance, solution, 1);
+  result.sum_of_loss = result.solution_found ? get_sum_of_loss(solution) : 0;
+  result.sum_of_loss_ratio =
+      (result.solution_found && result.lower_bound_sol > 0)
+          ? static_cast<double>(result.sum_of_loss) /
+                static_cast<double>(result.lower_bound_sol)
+          : std::numeric_limits<double>::quiet_NaN();
+  result.runtime_ms =
+      std::chrono::duration<double, std::milli>(ended - started).count();
+  result.returned_solutions_count = result.solution_found ? 1 : 0;
+  result.expanded_nodes =
+      info_uint_value(additional_info, "ltm_one_shot_num_node_gen");
+  result.high_level_expansions =
+      info_uint_value(additional_info, "ltm_one_shot_loop_cnt");
+  result.low_level_pibt_calls =
+      info_uint_value(additional_info, "ltm_one_shot_low_level_pibt_calls");
+  result.trace_summary = collector.summary();
+  return result;
+}
+
 LtmRunResult solve_with_ltm(const Instance& instance, const LtmOptions& options)
 {
   auto result = LtmRunResult(instance.G, 0.0, 10.0);
@@ -780,6 +827,11 @@ LtmRunResult solve_with_ltm(const Instance& instance, const LtmOptions& options)
        iteration < options.max_iterations && !is_expired(&deadline);
        ++iteration) {
     auto collector = PibtTraceCollector();
+    auto traffic_before_map = std::shared_ptr<const DirectedTrafficMap>();
+    if (options.retain_iteration_traffic_maps) {
+      traffic_before_map =
+          std::make_shared<DirectedTrafficMap>(result.traffic_map);
+    }
     const auto traffic_before =
         result.traffic_map.snapshot(options.checkpoint_topk_edges);
     const auto node_budget =
@@ -816,6 +868,11 @@ LtmRunResult solve_with_ltm(const Instance& instance, const LtmOptions& options)
     result.trace_summary.committed += summary.committed;
     result.trace_summary.blocked += summary.blocked;
     result.traffic_map.update_from_trace(collector.events(), options.update_params);
+    auto traffic_after_map = std::shared_ptr<const DirectedTrafficMap>();
+    if (options.retain_iteration_traffic_maps) {
+      traffic_after_map =
+          std::make_shared<DirectedTrafficMap>(result.traffic_map);
+    }
     const auto traffic_after =
         result.traffic_map.snapshot(options.checkpoint_topk_edges);
 
@@ -836,6 +893,8 @@ LtmRunResult solve_with_ltm(const Instance& instance, const LtmOptions& options)
       checkpoint.trace_events = collector.events();
       checkpoint.traffic_before = traffic_before;
       checkpoint.traffic_after = traffic_after;
+      checkpoint.traffic_before_map = traffic_before_map;
+      checkpoint.traffic_after_map = traffic_after_map;
       options.iteration_callback(checkpoint);
     }
 

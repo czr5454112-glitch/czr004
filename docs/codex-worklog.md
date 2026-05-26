@@ -642,3 +642,81 @@
   - `phase0_smoke.exe`: exit 0, `sum_of_loss=15`.
 - Follow-up:
   - Phase1 can start with LTM paper-faithful implementation planning and a project-owned adapter entrypoint.
+
+## 2026-05-26 08:50 - archive GPTPro Phase4-6 alternatives
+
+- Request: Add two GPTPro-generated Phase4-6 alternative technical routes into the research outline without mixing them into the current main route.
+- Files changed:
+  - `deep-research-report.md`
+  - `docs/phase4_6_gptpro_alternatives_20260526_0850.md`
+  - `docs/codex-worklog.md`
+- Commands run:
+  - checked branch and working tree state with `git status --short --branch`
+  - inspected project outline, Phase3 report, and empty Phase4 module directories
+  - recorded local archive time with `Get-Date -Format "yyyy-MM-dd HH:mm zzz"`
+- Key observations:
+  - Current branch is `phase1a-ltm-paper-parity`.
+  - Phase3 primary supervision route is already `online_residual`; this aligns most directly with CBR-LTM.
+  - The GPTPro text did not include an independent generation timestamp, only "已思考 10m 19s", so the new auxiliary outline records the archive time and flags that caveat.
+- Tests / validation:
+  - Documentation-only change; no solver or training tests run.
+- Follow-up:
+  - Before Phase4 implementation, choose whether CBR-LTM becomes the active Phase4 route or remains a backup beside the existing NTM-Lite plan.
+
+## 2026-05-26 09:56 - evaluate and align LAU/LAUR execution plan
+
+- Request: Review the new GPTPro LAU/LAUR Phase4-6 execution plan, supplement the interface-alignment items suggested by Claude, and add an entry from the main research outline.
+- Files changed:
+  - `phase4_6_laur_ltm_codex_execution_plan.md`
+  - `deep-research-report.md`
+  - `docs/codex-worklog.md`
+- Commands run:
+  - inspected `phase4_6_laur_ltm_codex_execution_plan.md`
+  - checked current branch and dirty files with `git status --short --branch`
+  - inspected `cpp/ltm/ltm.hpp`, `cpp/ltm/ltm.cpp`, `cpp/tools/phase1a_batch.cpp`, `src/czr004_metrics/schema.py`, and `src/czr004_teacher/schema.py`
+  - recorded local archive time with `Get-Date -Format "yyyy-MM-dd HH:mm zzz"`
+- Key observations:
+  - The LAU-first plan is executable, but Phase4 must start with parameterized `UpdateLTM` and force-additive parity rather than model training.
+  - Current C++ trace events only distinguish `Committed` and `Blocked`; wait semantics are derived from `from_id == to_id`.
+  - Current Phase1a JSONL writes `time_to_first_solution_ms` as `null` and `returned_solutions_count` as final 0/1, so Phase4C needs nullable fields or new instrumentation.
+  - Phase4 record/probe tools should be isolated from `phase1a_batch.cpp`.
+- Tests / validation:
+  - Documentation-only change; no solver, schema, or training tests run.
+- Follow-up:
+  - If LAU is adopted as active Phase4, create `phase4-laur-ltm` and implement only Phase4B first: `UpdateParams`, additive wrapper parity, and an update API smoke report.
+
+## 2026-05-26 10:08 - start LAUR-LTM Phase4B update API gate
+
+- Request: Continue LAU/LAUR-LTM Phase4 on a dedicated execution branch, but only execute Phase4B: parameterized C++ LTM update API, additive parity smoke, old smoke reruns, and the Phase4B report.
+- Files changed:
+  - `docs/codex-worklog.md`
+  - `cpp/ltm/ltm.hpp`
+  - `cpp/ltm/ltm.cpp`
+  - `cpp/ltm/CMakeLists.txt`
+  - `cpp/ltm/phase4_laur_update_smoke.cpp`
+  - `scripts/build_phase4_laur_smoke.ps1`
+  - `scripts/phase4_laur_update_smoke.ps1`
+  - `outputs/reports/phase4_laur_ltm_update_api_report.md`
+- Commands run:
+  - `git status --short --branch`
+  - checked that `phase4-laur-ltm` did not exist, then created it from `phase1a-ltm-paper-parity`
+  - inspected Phase4B, the interface-alignment appendix, and the revised immediate start order in `phase4_6_laur_ltm_codex_execution_plan.md`
+  - recorded local start time with `Get-Date -Format "yyyy-MM-dd HH:mm zzz"`
+  - `powershell -ExecutionPolicy Bypass -File scripts\build_phase4_laur_smoke.ps1`
+  - `powershell -ExecutionPolicy Bypass -File scripts\phase4_laur_update_smoke.ps1`
+  - `powershell -ExecutionPolicy Bypass -File scripts\build_phase1_ltm.ps1`
+  - `powershell -ExecutionPolicy Bypass -File scripts\phase1_ltm_smoke.ps1`
+  - `powershell -ExecutionPolicy Bypass -File scripts\phase0_smoke.ps1`
+- Key observations:
+  - Existing preparation documents are dirty/untracked and must be preserved: `deep-research-report.md`, `docs/codex-worklog.md`, `docs/phase4_6_gptpro_alternatives_20260526_0850.md`, and `phase4_6_laur_ltm_codex_execution_plan.md`.
+  - Phase4B was kept limited to the minimal `UpdateParams` API, old wrapper behavior, force-additive parity, and old smoke validation.
+  - `UpdateParams::additive()` now protects the old additive update path; non-default params are ignored when `force_additive=true`.
+  - Local saturation remains a reserved field only; Phase4B keeps the old max-count normalization.
+  - Phase4C artifacts such as raw trace export, checkpoint schema, learned restart, and training were not implemented.
+- Tests / validation:
+  - `phase4_laur_update_smoke.ps1`: passed; `phase4_laur_update_smoke ok`.
+  - `phase1_ltm_smoke.ps1`: passed for loop (`ltm_sum_of_loss=15`) and random-32-32-10 (`ltm_sum_of_loss=76`).
+  - `phase0_smoke.ps1`: passed; upstream gtests `7/7`, phase0 loop `sum_of_loss=15`.
+  - Early duplicated parallel build attempts hit MSVC/Ninja PDB file locks; later single-command build and smoke runs passed.
+- Follow-up:
+  - Treat `outputs/reports/phase4_laur_ltm_update_api_report.md` as the Phase4B gate handoff. Do not start Phase4C until that handoff is accepted.

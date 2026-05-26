@@ -257,6 +257,24 @@ NTM 的学术贡献不能只写成“用神经网络拟合 LTM 权重”。纯 e
 
 实验报告必须明确区分“teacher fitting 指标”和“closed-loop solver 指标”。如果 offline MAE 下降但 SoL ratio、AUC、TTFS 没有改善，不能称为算法收益。
 
+## Phase4-6 备选路线隔离说明
+
+2026-05-26 08:50 +08:00，用户提供了网页端 GPTPro 生成的两条 Phase4-Phase6 备选技术路线。GPTPro 原文未单独注明真实生成时刻，只包含“已思考 10m 19s”；因此本项目暂按本次归档时间记录来源时间，后续若获得原始生成时间再更新。
+
+这两条路线只作为备选，不替换当前主线，也不与当前 Phase4-Phase6 主路线混写。完整辅助总纲见：
+
+- `docs/phase4_6_gptpro_alternatives_20260526_0850.md`
+
+备选 1：`CBR-LTM`，即 Counterfactual Bottleneck Residual LTM。核心是用 short closed-loop probes 生成 counterfactual residual / ranking / safety 标签，在 LTM 边权基础上学习 `w_cbr = clamp(w_ltm + gate * delta, 0, 10)`，优先作为 Phase4 的可交付主备选。
+
+备选 2：`LAUR-LTM`，即 Learned Adaptive Update-and-Restart LTM。核心是学习 LTM 的 online update rule 与 restart-node scoring，输出 commit / block / wait gain、decay、local saturation、contraflow penalty、spillover radius、restart score 与 safety gate，作为创新性更强但风险更高的第二备选。
+
+后续决策更新：2026-05-26 09:56 +08:00，用户明确希望优先推进 LAUR 方向。当前采用 **LAU-first** 执行原则：Phase4/Phase5 先实现 `LAU-LTM = Learned Adaptive Update LTM`，只学习 LTM online `UpdateLTM` rule，restart 仍保持 root restart；Full `LAUR-LTM` learned restart 仅在 LAU 通过 gate 后作为 optional extension。可执行计划入口：
+
+- `phase4_6_laur_ltm_codex_execution_plan.md`
+
+该执行计划已补充 Codex 可执行性评估和前置接口对齐附录。进入 Phase4B 前必须先按该计划钉死 force-additive parity 两级口径、checkpoint 字段来源表、trace wait 语义、独立 record/probe tool 边界、pilot 级 Phase4 learned-runtime gate。
+
 ## 相关工作定位
 
 最终论文或报告需要把本项目放在“learning-enhanced MAPF guidance”这一窄切口里，而不是泛泛声称学习规划。至少要讨论：

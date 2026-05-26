@@ -78,8 +78,16 @@ void DirectedTrafficMap::reset()
 
 void DirectedTrafficMap::update_from_trace(const std::vector<TraceEvent>& events)
 {
-  for (const auto& event : events) increment_event(event);
-  renormalize();
+  update_from_trace(events, UpdateParams::additive());
+}
+
+void DirectedTrafficMap::update_from_trace(const std::vector<TraceEvent>& events,
+                                           const UpdateParams& params)
+{
+  const auto effective = params.force_additive ? UpdateParams::additive() : params;
+  apply_decay(effective);
+  for (const auto& event : events) increment_event(event, effective);
+  renormalize(effective);
 }
 
 bool DirectedTrafficMap::has_edge(uint from_id, uint to_id) const
@@ -136,15 +144,40 @@ std::uint64_t DirectedTrafficMap::key(uint from_id, uint to_id)
          static_cast<std::uint64_t>(to_id);
 }
 
-void DirectedTrafficMap::increment_event(const TraceEvent& event)
+void DirectedTrafficMap::apply_decay(const UpdateParams& params)
+{
+  if (params.force_additive || params.rho_decay >= 1.0) return;
+  const auto decay = std::clamp(params.rho_decay, 0.0, 1.0);
+  for (auto& [_, count] : raw_counts_) count *= decay;
+}
+
+void DirectedTrafficMap::increment_event(const TraceEvent& event,
+                                         const UpdateParams& params)
 {
   if (event.from_id == event.to_id) {
     if (event.at_goal) return;
     const auto* from = graph_.V[event.from_id];
-    for (const auto* to : from->neighbor) increment_edge(from->id, to->id, 1.0);
+    const auto delta =
+        params.force_additive ? 1.0 : params.alpha_wait_spillover;
+    for (const auto* to : from->neighbor) increment_edge(from->id, to->id, delta);
     return;
   }
-  increment_edge(event.from_id, event.to_id, 1.0);
+
+  auto delta = 1.0;
+  if (!params.force_additive) {
+    if (event.kind == TraceEventKind::Committed) {
+      delta = params.alpha_commit;
+    } else if (event.kind == TraceEventKind::Blocked) {
+      delta = params.alpha_block;
+    }
+  }
+  increment_edge(event.from_id, event.to_id, delta);
+
+  if (!params.force_additive && params.enable_contraflow_penalty &&
+      params.contraflow_penalty > 0.0 &&
+      has_edge(event.to_id, event.from_id)) {
+    increment_edge(event.to_id, event.from_id, params.contraflow_penalty);
+  }
 }
 
 void DirectedTrafficMap::increment_edge(uint from_id, uint to_id, double delta)
@@ -156,6 +189,11 @@ void DirectedTrafficMap::increment_edge(uint from_id, uint to_id, double delta)
 
 void DirectedTrafficMap::renormalize()
 {
+  renormalize(UpdateParams::additive());
+}
+
+void DirectedTrafficMap::renormalize(const UpdateParams& params)
+{
   const auto max_count = max_raw_count();
   if (max_count <= 0.0) {
     for (auto& [edge, weight] : normalized_weights_) {
@@ -163,6 +201,8 @@ void DirectedTrafficMap::renormalize()
     }
     return;
   }
+
+  (void)params;
 
   for (const auto& [edge, raw] : raw_counts_) {
     const auto scaled = lower_bound_ + (raw / max_count) *

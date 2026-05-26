@@ -24,6 +24,31 @@ struct TraceSummary {
   uint blocked = 0;
 };
 
+struct UpdateParams {
+  double alpha_commit = 1.0;
+  double alpha_block = 1.0;
+  double alpha_wait_spillover = 1.0;
+  double rho_decay = 1.0;
+  bool enable_contraflow_penalty = false;
+  double contraflow_penalty = 0.0;
+  bool enable_local_saturation = false;
+  bool force_additive = false;
+
+  static UpdateParams additive()
+  {
+    UpdateParams params;
+    params.alpha_commit = 1.0;
+    params.alpha_block = 1.0;
+    params.alpha_wait_spillover = 1.0;
+    params.rho_decay = 1.0;
+    params.enable_contraflow_penalty = false;
+    params.contraflow_penalty = 0.0;
+    params.enable_local_saturation = false;
+    params.force_additive = true;
+    return params;
+  }
+};
+
 class PibtTraceCollector {
  public:
   void clear();
@@ -46,6 +71,8 @@ class DirectedTrafficMap {
 
   void reset();
   void update_from_trace(const std::vector<TraceEvent>& events);
+  void update_from_trace(const std::vector<TraceEvent>& events,
+                         const UpdateParams& params);
 
   bool has_edge(uint from_id, uint to_id) const;
   double raw_count(uint from_id, uint to_id) const;
@@ -66,9 +93,11 @@ class DirectedTrafficMap {
   std::unordered_map<std::uint64_t, double> normalized_weights_;
 
   static std::uint64_t key(uint from_id, uint to_id);
-  void increment_event(const TraceEvent& event);
+  void apply_decay(const UpdateParams& params);
+  void increment_event(const TraceEvent& event, const UpdateParams& params);
   void increment_edge(uint from_id, uint to_id, double delta);
   void renormalize();
+  void renormalize(const UpdateParams& params);
 };
 
 class WeightedDistanceTable {

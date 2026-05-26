@@ -1000,7 +1000,7 @@
   - pause guard tmux session `phase4_laur_repair1_pause_guard`
 - Guard behavior:
   - script path `/root/shared-nvme/czr004_phase4_repair1_43633e7/pause_after_probe_guard.sh`
-  - checks `outputs/logs/phase4_laur_full_repair1/probe_*.stdout.log` every 20 seconds.
+  - checks `outputs/logs/phase4_laur_full_repair1/probe_*.stdout.log` frequently; after the first install it was tightened to a 2-second poll, then 1-second poll once probe count reaches `740`.
   - when probe count reaches `765`, writes the batch PID/PGID under `outputs/logs/phase4_laur_full_repair1/` and sends `SIGSTOP` to the batch process group.
   - this should leave the main tmux session paused before training, or at worst with training stopped immediately after it starts.
 - Status when installed:

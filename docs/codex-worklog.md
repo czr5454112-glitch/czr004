@@ -1037,12 +1037,13 @@
   - compressed raw trace sha256 sidecar
 - Raw trace:
   - remote compressed trace size `3516816240` bytes.
-  - local partial download reached `3154116608` bytes before being stopped by user request.
-  - remaining raw-trace download: `362699632` bytes, about `345.9 MiB`.
+  - local download is complete at `3516816240` bytes.
+  - final local sha256 matches the server sidecar: `0dc42e4e9f6bf8d40642371897b208c2ce3c5901a4576687d11c5f48647a2ccc`.
+  - first full-size local download failed sha256 because interrupted chunks were corrupt; a block-level hash repair replaced `13` mismatched chunks.
   - `.gitignore` now excludes `artifacts/teacher/laur/full_repair1/traces/*.zst` so the large raw trace is not committed.
 - New local records:
   - `outputs/reports/phase4_laur_ltm_full_repair1_result_analysis.md`
   - `outputs/reports/phase4_laur_ltm_full_repair1_local_archive_manifest.md`
 - Follow-up:
   - Commit and push medium/small repair1 evidence first.
-  - Resume and verify the raw-trace `.zst` download later with sha256.
+  - Keep the verified raw-trace `.zst` as a local-only backup unless large-file storage is intentionally configured later.

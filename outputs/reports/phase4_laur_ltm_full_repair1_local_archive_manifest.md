@@ -33,12 +33,13 @@ The compressed raw trace is intentionally not committed to git:
 
 - path: `artifacts/teacher/laur/full_repair1/traces/phase4_laur_trace_full_repair1.jsonl.zst`
 - remote size: `3516816240` bytes
-- local partial size after interrupted resume: `3154116608` bytes
-- remaining to download: `362699632` bytes, about `345.9 MiB`
+- local size after resumed download and block repair: `3516816240` bytes
+- remaining to download: `0` bytes
 - sha256 sidecar: `0dc42e4e9f6bf8d40642371897b208c2ce3c5901a4576687d11c5f48647a2ccc`
+- local sha256 verified: `true`
 
 The `.zst` file is ignored by `.gitignore`; only the sha256 sidecar is git-backed.
 
 ## Notes
 
-The partial local `.zst` is useful for resuming the later raw-trace download but should not be treated as a verified archive until its size reaches `3516816240` bytes and the sha256 matches the sidecar.
+The first resumed raw-trace download reached full size but failed sha256 because earlier interrupted chunks were corrupt. A block-level hash repair replaced the mismatched chunks and the final local sha256 now matches the server sidecar.

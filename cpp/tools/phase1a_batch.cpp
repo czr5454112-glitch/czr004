@@ -36,6 +36,8 @@ struct Args {
   std::string traffic_map_run_id;
   std::string traffic_map_edge_filter = "all";
   std::string laur_model_path;
+  std::string laur_static_rule;
+  std::string method_alias;
   uint agents = 0;
   uint seed = 0;
   double time_limit_sec = 30.0;
@@ -43,6 +45,7 @@ struct Args {
   bool laur_enable = false;
   bool laur_disable = false;
   bool laur_force_additive = false;
+  bool laur_safety_enabled = true;
   bool laur_post_first_solution_only = true;
   uint laur_every_k_restarts = 1;
   double laur_safety_threshold = 0.30;
@@ -130,7 +133,9 @@ Args parse_args(int argc, char** argv)
       "laur-enable",
       "laur-disable",
       "laur-force-additive",
+      "laur-disable-safety",
       "laur-post-first-solution-only",
+      "laur-allow-pre-first-solution",
   };
   for (int i = 1; i < argc; ++i) {
     const auto key = std::string(argv[i]);
@@ -177,12 +182,19 @@ Args parse_args(int argc, char** argv)
       values.count("traffic-map-edge-filter") ? values["traffic-map-edge-filter"] : "all";
   args.laur_model_path =
       values.count("laur-model-path") ? values["laur-model-path"] : "";
+  args.laur_static_rule =
+      values.count("laur-static-rule") ? values["laur-static-rule"] : "";
+  args.method_alias =
+      values.count("method-alias") ? values["method-alias"] : "";
   args.laur_enable = values.count("laur-enable") > 0;
   args.laur_disable = values.count("laur-disable") > 0;
   args.laur_force_additive = values.count("laur-force-additive") > 0;
+  args.laur_safety_enabled = values.count("laur-disable-safety") == 0;
   args.laur_post_first_solution_only =
-      values.count("laur-post-first-solution-only") > 0 ||
-      args.laur_post_first_solution_only;
+      values.count("laur-allow-pre-first-solution") > 0
+          ? false
+          : (values.count("laur-post-first-solution-only") > 0 ||
+             args.laur_post_first_solution_only);
 
   if (!parse_uint(require("agents"), &args.agents)) {
     throw std::runtime_error("invalid --agents");
@@ -212,6 +224,14 @@ Args parse_args(int argc, char** argv)
   if (args.laur_disable && args.laur_enable) {
     throw std::runtime_error("--laur-enable and --laur-disable are mutually exclusive");
   }
+  if (args.laur_force_additive && !args.laur_static_rule.empty()) {
+    throw std::runtime_error("--laur-force-additive and --laur-static-rule are mutually exclusive");
+  }
+  if (!args.laur_static_rule.empty() &&
+      !czr004::ntm::is_supported_laur_rule_id(args.laur_static_rule)) {
+    throw std::runtime_error("unsupported --laur-static-rule " +
+                             args.laur_static_rule);
+  }
   if (values.count("verbose")) args.verbose = std::stoi(values["verbose"]);
 
   if (args.method != "lacam_star" && args.method != "lacam_star_ltm" &&
@@ -228,7 +248,8 @@ Args parse_args(int argc, char** argv)
 
 bool laur_runtime_requested(const Args& args)
 {
-  return (args.method == "lacam_star_lau_ltm" || args.laur_enable) &&
+  return (args.method == "lacam_star_lau_ltm" || args.laur_enable ||
+          !args.laur_static_rule.empty()) &&
          !args.laur_disable;
 }
 
@@ -257,6 +278,7 @@ struct RunStats {
   uint high_level_expansions = 0;
   uint low_level_pibt_calls = 0;
   bool has_low_level_pibt_calls = false;
+  double time_to_first_solution_ms = std::numeric_limits<double>::quiet_NaN();
   uint returned_solutions_count = 0;
   uint ltm_iterations = 0;
   uint committed_events = 0;
@@ -264,8 +286,10 @@ struct RunStats {
   uint nonzero_ltm_edges = 0;
   bool laur_enabled = false;
   bool laur_force_additive = false;
+  bool laur_safety_enabled = true;
   std::string laur_update_mode = "disabled";
   std::string laur_model_path;
+  std::string laur_static_rule;
   uint laur_inference_count = 0;
   double laur_inference_total_ms = 0.0;
   uint laur_additive_fallback_count = 0;
@@ -362,6 +386,9 @@ RunStats run_lacam_star(const Instance& instance, const Args& args)
   const auto ended = std::chrono::steady_clock::now();
   stats.runtime_ms =
       std::chrono::duration<double, std::milli>(ended - started).count();
+  if (!stats.solution.empty()) {
+    stats.time_to_first_solution_ms = stats.runtime_ms;
+  }
   stats.loop_cnt = sum_info_values(stats.additional_info, "loop_cnt");
   stats.high_level_expansions = stats.loop_cnt;
   stats.expanded_nodes = sum_info_values(stats.additional_info, "num_node_gen");
@@ -374,13 +401,20 @@ RunStats run_lacam_star_ltm(const Instance& instance, const Args& args)
   RunStats stats;
   stats.laur_enabled = laur_runtime_requested(args);
   stats.laur_force_additive = stats.laur_enabled && args.laur_force_additive;
+  stats.laur_safety_enabled = args.laur_safety_enabled;
   stats.laur_model_path = args.laur_model_path;
+  stats.laur_static_rule = args.laur_static_rule;
   stats.laur_update_period_restarts = args.laur_every_k_restarts;
   stats.laur_post_first_solution_only = args.laur_post_first_solution_only;
-  stats.laur_update_mode =
-      stats.laur_enabled
-          ? (stats.laur_force_additive ? "force_additive" : "runtime")
-          : "disabled";
+  if (!stats.laur_enabled) {
+    stats.laur_update_mode = "disabled";
+  } else if (stats.laur_force_additive) {
+    stats.laur_update_mode = "force_additive";
+  } else if (!stats.laur_static_rule.empty()) {
+    stats.laur_update_mode = "static_rule";
+  } else {
+    stats.laur_update_mode = "runtime";
+  }
 
   czr004::ltm::LtmOptions options;
   options.objective = Objective::OBJ_SUM_OF_LOSS;
@@ -391,10 +425,15 @@ RunStats run_lacam_star_ltm(const Instance& instance, const Args& args)
   options.seed = args.seed;
 
   auto runtime = czr004::ntm::LaurLtmRuntime();
+  const auto static_params =
+      !args.laur_static_rule.empty()
+          ? czr004::ntm::update_params_for_laur_rule_id(args.laur_static_rule)
+          : czr004::ltm::UpdateParams::additive();
   if (stats.laur_enabled) {
     czr004::ntm::LaurRuntimeOptions runtime_options;
     runtime_options.enabled = true;
     runtime_options.force_additive = args.laur_force_additive;
+    runtime_options.safety_enabled = args.laur_safety_enabled;
     runtime_options.model_path = args.laur_model_path;
     runtime_options.post_first_solution_only = args.laur_post_first_solution_only;
     runtime_options.update_period_restarts = args.laur_every_k_restarts;
@@ -420,6 +459,10 @@ RunStats run_lacam_star_ltm(const Instance& instance, const Args& args)
             ++stats.laur_additive_fallback_count;
             return additive;
           }
+          if (!args.laur_static_rule.empty()) {
+            ++stats.laur_selected_rules[args.laur_static_rule];
+            return static_params;
+          }
 
           const auto features = czr004::ntm::build_laur_features(
               *context.instance, *context.traffic_before,
@@ -433,7 +476,7 @@ RunStats run_lacam_star_ltm(const Instance& instance, const Args& args)
             ++stats.laur_additive_fallback_count;
             return additive;
           }
-          if (!args.laur_force_additive &&
+          if (!args.laur_force_additive && args.laur_safety_enabled &&
               prediction.safety_harmful_prob >= args.laur_safety_threshold) {
             ++stats.laur_safety_disabled_count;
             ++stats.laur_additive_fallback_count;
@@ -449,6 +492,7 @@ RunStats run_lacam_star_ltm(const Instance& instance, const Args& args)
   stats.runtime_ms =
       std::chrono::duration<double, std::milli>(ended - started).count();
   stats.solution = result.best_solution;
+  stats.time_to_first_solution_ms = result.time_to_first_solution_ms;
   stats.additional_info = result.additional_info;
   stats.loop_cnt = sum_info_values(stats.additional_info, "ltm_one_shot_loop_cnt");
   stats.high_level_expansions = stats.loop_cnt;
@@ -484,8 +528,11 @@ void append_jsonl(const Args& args, const std::filesystem::path& binary_path,
   std::ofstream out(output_path, std::ios::app);
   if (!out) throw std::runtime_error("cannot open output JSONL");
 
+  const auto output_method =
+      args.method_alias.empty() ? args.method : args.method_alias;
+
   out << "{";
-  out << "\"method\":" << json_string(args.method);
+  out << "\"method\":" << json_string(output_method);
   out << ",\"map\":" << json_string(args.map_name);
   out << ",\"map_path\":" << json_string(args.map);
   out << ",\"scen\":" << json_string(args.scen_id);
@@ -503,7 +550,8 @@ void append_jsonl(const Args& args, const std::filesystem::path& binary_path,
   out << ",\"sum_of_loss_ratio\":" << json_number_or_null(ratio);
   out << ",\"makespan\":" << (success ? std::to_string(makespan) : "null");
   out << ",\"runtime_ms\":" << json_number_or_null(stats.runtime_ms);
-  out << ",\"time_to_first_solution_ms\":null";
+  out << ",\"time_to_first_solution_ms\":"
+      << json_number_or_null(stats.time_to_first_solution_ms);
   out << ",\"returned_solutions_count\":" << stats.returned_solutions_count;
   out << ",\"loop_cnt\":" << stats.loop_cnt;
   out << ",\"expanded_nodes\":" << stats.expanded_nodes;
@@ -518,8 +566,11 @@ void append_jsonl(const Args& args, const std::filesystem::path& binary_path,
   out << ",\"laur_enabled\":" << (stats.laur_enabled ? "true" : "false");
   out << ",\"laur_force_additive\":"
       << (stats.laur_force_additive ? "true" : "false");
+  out << ",\"laur_safety_enabled\":"
+      << (stats.laur_safety_enabled ? "true" : "false");
   out << ",\"laur_update_mode\":" << json_string(stats.laur_update_mode);
   out << ",\"laur_model_path\":" << json_string(stats.laur_model_path);
+  out << ",\"laur_static_rule\":" << json_string(stats.laur_static_rule);
   out << ",\"laur_inference_count\":" << stats.laur_inference_count;
   out << ",\"laur_inference_total_ms\":"
       << json_number_or_null(stats.laur_inference_total_ms);

@@ -1,0 +1,7 @@
+map,agents,seed,scen,baseline_method,contender_method,baseline_ratio,contender_ratio,delta_ratio,relative_improvement,contender_better
+maze-32-32-4,50,1,maze-32-32-4-random-1.scen,lacam_star_ltm,lacam_star_lau_ltm_learned_safety,1.15109170306,1.17947598253,0.028384279469999996,-0.02465857359109162,False
+maze-32-32-4,100,1,maze-32-32-4-random-1.scen,lacam_star_ltm,lacam_star_lau_ltm_learned_safety,1.27024459748,1.24269769651,-0.02754690097000001,0.02168629650120101,True
+random-32-32-20,50,1,random-32-32-20-random-1.scen,lacam_star_ltm,lacam_star_lau_ltm_learned_safety,1.13415710503,1.13415710503,0.0,0.0,False
+random-32-32-20,100,1,random-32-32-20-random-1.scen,lacam_star_ltm,lacam_star_lau_ltm_learned_safety,1.28865058088,1.28865058088,0.0,0.0,False
+warehouse-10-20-10-2-1,50,1,warehouse-10-20-10-2-1-random-1.scen,lacam_star_ltm,lacam_star_lau_ltm_learned_safety,1.08573801121,1.08573801121,0.0,0.0,False
+warehouse-10-20-10-2-1,100,1,warehouse-10-20-10-2-1-random-1.scen,lacam_star_ltm,lacam_star_lau_ltm_learned_safety,1.13446381658,1.13446381658,0.0,0.0,False

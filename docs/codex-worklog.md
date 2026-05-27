@@ -1229,3 +1229,53 @@
   - Wrote `outputs/reports/phase5_laur_solver_integration_report.md`.
 - Boundary:
   - This remains a parity/safety integration step only: no learned restart, no LaCAM*/PIBT semantic changes, no closed-loop learned performance claim.
+
+## 2026-05-27 12:59 - Start LAUR Phase5C closed-loop smoke
+
+- Request:
+  - Complete LAUR/LAU-LTM Phase5C according to `phase4_6_laur_ltm_codex_execution_plan.md` and `deep-research-report.md`.
+- Scope:
+  - Add solver-runner support for Phase5C ablations: static update rules, learned runtime with safety, learned runtime without safety, every-restart, every-K, and post-first-solution-only modes.
+  - Add a C++ runtime export bridge from Phase4F MLP JSON artifacts to the Phase5 CSV runtime directory format.
+  - Run closed-loop smoke on the available Phase1a map/scenario fixtures and write a Phase5C report.
+- Boundary:
+  - No learned restart.
+  - No changes to LaCAM*/PIBT candidate legality, conflicts, rewrite, or incumbent pruning.
+  - No closed-loop learned performance claim unless the Phase5C runtime smoke/ablation evidence supports it.
+- Follow-up:
+  - Write `outputs/reports/phase5c_laur_closed_loop_smoke_report.md` after validation.
+
+## 2026-05-27 13:12 - Finish LAUR Phase5C closed-loop smoke
+
+- Implemented:
+  - `--laur-static-rule` for static update-rule diagnostics (`block_heavy`, `decay_095`, and the existing executable LAU rule set).
+  - `--laur-disable-safety` and `--laur-allow-pre-first-solution` for Phase5C ablations.
+  - `--method-alias` so Phase5C JSONL rows keep separate method labels per ablation while reusing the safe `lacam_star_lau_ltm` execution path.
+  - Phase5C LAUR fields `laur_safety_enabled` and `laur_static_rule` in the metrics schema.
+  - `scripts/export_phase5_laur_mlp_runtime.py` to convert the Phase4F Repair3 MLP JSON export into the Phase5 C++ CSV runtime format.
+  - `scripts/phase5_laur_closed_loop_smoke.ps1` and `scripts/summarize_phase5_laur_smoke.py`.
+- Validation:
+  - `python -m py_compile scripts/export_phase5_laur_mlp_runtime.py scripts/summarize_phase5_laur_smoke.py`: passed.
+  - `conda run -n czr004 python -m pytest tests/test_phase5_laur_runtime_parity.py tests/test_czr004_metrics.py`: 10 passed.
+  - `scripts/build_phase1a_batch.ps1`: passed.
+  - `scripts/phase5_laur_closed_loop_smoke.ps1`: passed.
+  - `scripts/phase5_laur_runtime_smoke.ps1`: passed.
+  - `scripts/phase5_laur_solver_parity_smoke.ps1`: passed; only warn-only `runtime_ms` fields drifted.
+- Phase5C smoke result:
+  - JSONL rows: `54`.
+  - Maps: `random-32-32-20`, `maze-32-32-4`, `warehouse-10-20-10-2-1`.
+  - Agents: `50`, `100`.
+  - Methods/ablations: LaCAM*, LTM, LAU force-additive, static block-heavy, static decay_095, learned with safety, learned without safety, learned every restart, learned every K=2.
+  - Force-additive parity pairs: `6 / 6` passed.
+  - Schema errors: `0`.
+  - Learned safety vs LTM paired smoke: successes `6 / 6` vs `6 / 6`; mean ratio `1.17753` vs LTM `1.17739`; expanded nodes not better (`397.167` vs `377.333`).
+  - LAUR inference overhead was reported and small in smoke rows.
+  - `time_to_first_solution_ms` is logged for all `54` rows; `ttfs_gate_evaluable=True`.
+- Reports:
+  - `outputs/reports/phase5c_laur_closed_loop_smoke_report.md`
+  - `outputs/tables/phase5c_laur_closed_loop_smoke_summary.csv`
+  - `outputs/reports/phase5c_laur_metrics_replay.md`
+  - `outputs/metrics/phase5/phase5c_laur_smoke_summary.csv`
+  - `outputs/metrics/phase5/phase5c_laur_smoke_paired.csv`
+- Boundary:
+  - This completes Phase5C smoke/ablation execution, but it is not a Phase6-scale performance claim and does not include learned restart.

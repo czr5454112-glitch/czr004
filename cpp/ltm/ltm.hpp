@@ -223,6 +223,7 @@ struct LtmRunResult {
   uint last_node_budget = 0;
   TraceSummary trace_summary;
   bool timeout = false;
+  double time_to_first_solution_ms = std::numeric_limits<double>::quiet_NaN();
 
   LtmRunResult(const Graph& graph, double lower_bound, double upper_bound)
       : traffic_map(graph, lower_bound, upper_bound)

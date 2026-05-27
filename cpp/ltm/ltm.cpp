@@ -858,6 +858,10 @@ LtmRunResult solve_with_ltm(const Instance& instance, const LtmOptions& options)
     result.iterations = iteration + 1;
 
     const auto solution_found = !solution.empty();
+    if (solution_found &&
+        !std::isfinite(result.time_to_first_solution_ms)) {
+      result.time_to_first_solution_ms = deadline.elapsed_ms();
+    }
     const auto sum_of_loss =
         solution_found ? get_sum_of_loss(solution) : 0;
     const auto ratio =

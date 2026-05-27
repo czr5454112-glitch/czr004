@@ -56,8 +56,10 @@ PLANNING_EXECUTION_FIELDS = {
 PHASE5_LAUR_FIELDS = {
     "laur_enabled": bool,
     "laur_force_additive": bool,
+    "laur_safety_enabled": (bool, type(None)),
     "laur_update_mode": (str, type(None)),
     "laur_model_path": (str, type(None)),
+    "laur_static_rule": (str, type(None)),
     "laur_inference_count": (int, type(None)),
     "laur_inference_total_ms": (int, float, type(None)),
     "laur_update_runtime_ms": (int, float, type(None)),
@@ -106,10 +108,14 @@ def normalize_run_row(row: dict) -> dict:
         normalized["laur_enabled"] = False
     if "laur_force_additive" not in normalized:
         normalized["laur_force_additive"] = False
+    if "laur_safety_enabled" not in normalized:
+        normalized["laur_safety_enabled"] = True
     if "laur_update_mode" not in normalized:
         normalized["laur_update_mode"] = "disabled"
     if "laur_model_path" not in normalized:
         normalized["laur_model_path"] = ""
+    if "laur_static_rule" not in normalized:
+        normalized["laur_static_rule"] = ""
     if "laur_inference_count" not in normalized:
         normalized["laur_inference_count"] = 0
     if "laur_inference_total_ms" not in normalized:

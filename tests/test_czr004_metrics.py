@@ -79,8 +79,10 @@ def test_schema_accepts_phase5_laur_runtime_fields() -> None:
         {
             "laur_enabled": True,
             "laur_force_additive": True,
+            "laur_safety_enabled": True,
             "laur_update_mode": "force_additive",
             "laur_model_path": "configs/phase5/laur_additive_only",
+            "laur_static_rule": "",
             "laur_inference_count": 2,
             "laur_inference_total_ms": 0.25,
             "laur_update_runtime_ms": 0.25,

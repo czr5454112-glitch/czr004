@@ -76,36 +76,6 @@ std::vector<std::string> read_lines(const std::filesystem::path& path)
   return values;
 }
 
-czr004::ltm::UpdateParams params_for_rule_id(const std::string& rule_id)
-{
-  auto params = czr004::ltm::UpdateParams::additive();
-  if (rule_id == "commit_heavy") {
-    params = czr004::ltm::UpdateParams();
-    params.alpha_commit = 1.5;
-  } else if (rule_id == "block_heavy") {
-    params = czr004::ltm::UpdateParams();
-    params.alpha_block = 1.5;
-  } else if (rule_id == "block_light") {
-    params = czr004::ltm::UpdateParams();
-    params.alpha_block = 0.5;
-  } else if (rule_id == "wait_light") {
-    params = czr004::ltm::UpdateParams();
-    params.alpha_wait_spillover = 0.5;
-  } else if (rule_id == "wait_heavy") {
-    params = czr004::ltm::UpdateParams();
-    params.alpha_wait_spillover = 1.5;
-  } else if (rule_id == "decay_095") {
-    params = czr004::ltm::UpdateParams();
-    params.rho_decay = 0.95;
-  } else if (rule_id == "decay_090") {
-    params = czr004::ltm::UpdateParams();
-    params.rho_decay = 0.90;
-  } else {
-    params = czr004::ltm::UpdateParams::additive();
-  }
-  return params;
-}
-
 double sigmoid(double value)
 {
   if (value >= 0.0) {
@@ -135,6 +105,47 @@ double dot_row(const std::vector<double>& matrix, uint cols, uint row,
 }
 
 }  // namespace
+
+bool is_supported_laur_rule_id(const std::string& rule_id)
+{
+  const auto normalized =
+      rule_id == "neutral_additive" ? "additive_ltm" : rule_id;
+  return normalized == "additive_ltm" || normalized == "commit_heavy" ||
+         normalized == "block_heavy" || normalized == "block_light" ||
+         normalized == "wait_light" || normalized == "wait_heavy" ||
+         normalized == "decay_095" || normalized == "decay_090";
+}
+
+czr004::ltm::UpdateParams update_params_for_laur_rule_id(
+    const std::string& rule_id)
+{
+  const auto normalized =
+      rule_id == "neutral_additive" ? "additive_ltm" : rule_id;
+  auto params = czr004::ltm::UpdateParams::additive();
+  if (normalized == "commit_heavy") {
+    params = czr004::ltm::UpdateParams();
+    params.alpha_commit = 1.5;
+  } else if (normalized == "block_heavy") {
+    params = czr004::ltm::UpdateParams();
+    params.alpha_block = 1.5;
+  } else if (normalized == "block_light") {
+    params = czr004::ltm::UpdateParams();
+    params.alpha_block = 0.5;
+  } else if (normalized == "wait_light") {
+    params = czr004::ltm::UpdateParams();
+    params.alpha_wait_spillover = 0.5;
+  } else if (normalized == "wait_heavy") {
+    params = czr004::ltm::UpdateParams();
+    params.alpha_wait_spillover = 1.5;
+  } else if (normalized == "decay_095") {
+    params = czr004::ltm::UpdateParams();
+    params.rho_decay = 0.95;
+  } else if (normalized == "decay_090") {
+    params = czr004::ltm::UpdateParams();
+    params.rho_decay = 0.90;
+  }
+  return params;
+}
 
 bool LaurLtmRuntime::load(const LaurRuntimeOptions& options)
 {
@@ -271,7 +282,7 @@ bool LaurLtmRuntime::load_model_directory(const std::string& model_path)
 
       auto spec = RuleSpec();
       spec.rule_id = cells[0] == "neutral_additive" ? "additive_ltm" : cells[0];
-      spec.params = params_for_rule_id(spec.rule_id);
+      spec.params = update_params_for_laur_rule_id(spec.rule_id);
       if (cells.size() >= 8) {
         spec.params.alpha_commit = parse_double_or(cells[1], spec.params.alpha_commit);
         spec.params.alpha_block = parse_double_or(cells[2], spec.params.alpha_block);

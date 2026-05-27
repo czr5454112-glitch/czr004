@@ -31,6 +31,10 @@ struct LaurPrediction {
   bool enabled = false;
 };
 
+bool is_supported_laur_rule_id(const std::string& rule_id);
+czr004::ltm::UpdateParams update_params_for_laur_rule_id(
+    const std::string& rule_id);
+
 class LaurLtmRuntime {
  public:
   bool load(const LaurRuntimeOptions& options);

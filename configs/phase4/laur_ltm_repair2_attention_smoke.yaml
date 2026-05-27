@@ -1,0 +1,42 @@
+schema_version: phase4_laur_repair2_config_v1
+mode: phase4-full-repair2-attention-smoke
+
+checkpoint_jsonl: artifacts/teacher/laur/full_repair1/checkpoints/phase4_laur_checkpoints_full_repair1.jsonl
+probe_output_jsonl: artifacts/teacher/laur/full_repair1/probes/phase4_laur_probe_full_repair1.jsonl
+dataset_jsonl: artifacts/teacher/laur/full_repair1/update_labels/phase4_laur_update_dataset_full_repair1.jsonl
+
+repair2:
+  dataset_jsonl: artifacts/teacher/laur/full_repair2/update_labels/phase4_laur_update_dataset_full_repair2_v2_smoke.jsonl
+  dataset_summary_json: outputs/reports/phase4_laur_update_dataset_full_repair2_v2_smoke_summary.json
+  dataset_summary_csv: outputs/tables/phase4_laur_update_dataset_full_repair2_v2_smoke_summary.csv
+  model_output_dir: artifacts/models/laur_ltm/full_repair2_attention_smoke
+  train_report_md: outputs/reports/phase4f_repair2_attention_train_smoke.md
+  train_summary_json: outputs/reports/phase4f_repair2_attention_train_smoke_summary.json
+  train_summary_csv: outputs/tables/phase4f_repair2_attention_train_smoke.csv
+  eval_report_md: outputs/reports/phase4f_repair2_attention_eval_smoke.md
+  eval_summary_json: outputs/reports/phase4f_repair2_attention_eval_smoke_summary.json
+  eval_summary_csv: outputs/tables/phase4f_repair2_attention_eval_smoke.csv
+  dataset:
+    max_edge_tokens: 16
+    max_trace_tokens: 8
+    soft_label_temperature: 0.01
+    soft_label_hard_mix: 0.55
+  training:
+    architecture: LAU-EdgeTraceTransformer-v2
+    epochs: 12
+    d_model: 32
+    nhead: 4
+    num_layers: 1
+    dropout: 0.05
+    learning_rate: 0.003
+    weight_decay: 0.001
+    harmful_threshold: 0.10
+    min_confidence: 0.0
+    seed: 73
+    device: auto
+    listwise_kl: 1.0
+    pairwise_margin: 0.25
+    delta_regression: 0.30
+    harmful_bce: 0.35
+    family_ce: 0.10
+    additive_regularization: 0.02

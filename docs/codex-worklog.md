@@ -1061,3 +1061,51 @@
 - Decision:
   - Repair2 is feasible to try, but it has not been started.
   - Wait for the user command before implementing token dataset, attention models, training, or evaluation.
+
+## 2026-05-27 20:30 - Phase4F repair2 execution started
+
+- Request: continue the paused Phase4F goal from `phase4_6_laur_ltm_codex_execution_plan.md`.
+- Interpretation:
+  - The previously recorded Repair2 plan is now authorized to execute.
+  - Scope remains offline Phase4F only: build a cleaned executable-rule target, token/rule-aware dataset, rule-conditioned attention model, local train/eval, and a Repair2 report.
+  - Do not enter Phase5 C++ learned runtime and do not lower the Phase4F gate.
+- Starting inputs:
+  - `artifacts/teacher/laur/full_repair1/checkpoints/phase4_laur_checkpoints_full_repair1.jsonl`
+  - `artifacts/teacher/laur/full_repair1/probes/phase4_laur_probe_full_repair1.jsonl`
+  - `artifacts/teacher/laur/full_repair1/update_labels/phase4_laur_update_dataset_full_repair1.jsonl`
+  - verified local raw trace backup remains available as `.zst`, but Repair2 will first use checkpoint top-k/fallback trace tokens so training is not blocked by streaming the 3.5GB trace.
+- Immediate implementation plan:
+  - Add `phase4_laur_update_dataset_v2` with `neutral_additive -> additive_ltm` executable target cleanup while preserving original labels.
+  - Add `LAU-EdgeTraceTransformer-v2` / `LAU-SetTransformer-v2` offline PyTorch model and listwise/pairwise per-rule losses.
+  - Run targeted smoke tests, then train/evaluate on the full repair1 artifacts.
+
+## 2026-05-27 21:25 - Phase4F repair2 completed locally, gate still failed
+
+- Implemented:
+  - `src/czr004_teacher/token_features_laur.py`
+  - `src/czr004_teacher/token_dataset_laur.py`
+  - `src/models/laur_rule_attention.py`
+  - `src/train/losses_laur_rule_attention.py`
+  - `src/train/train_laur_rule_attention.py`
+  - `src/eval/eval_laur_rule_attention.py`
+  - configs for smoke/full Repair2 attention runs
+  - tests for v2 token dataset and attention model/loss
+- Verification:
+  - `py_compile` passed for all new modules.
+  - targeted pytest passed: `14 passed`.
+  - generated `phase4_laur_update_dataset_v2` from repair1 artifacts: `2985` rows, `459` validation rows, `359` validation non-neutral rows, schema errors `0`.
+- Best gate-compatible Repair2 validation result:
+  - model: `LAU-SetTransformer-v2`
+  - soft target: temperature `0.010`, hard mix `0.55`
+  - harmful threshold: `0.10`
+  - top1 `0.3159` vs required `0.35`
+  - top3 `0.5033` vs required `0.70`
+  - harmful recall `0.9711` pass
+  - harmful precision `0.3916` pass
+  - mean selected delta `0.0050` pass
+- Threshold sweep:
+  - highest top3 reached `0.6580`, but harmful recall fell to `0.6127`, so no threshold made Repair2 pass.
+- Decision:
+  - Repair2 is complete as a local offline attempt, but Phase4F still fails.
+  - Do not enter Phase5 learned runtime.
+  - Record this as a useful negative result; next Phase4F work should focus on label/probe ambiguity, target formulation, richer raw-trace event tokens, or map-family balance rather than just making the model larger.

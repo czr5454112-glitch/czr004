@@ -1,0 +1,67 @@
+{
+  "branch": "phase4-laur-ltm",
+  "checkpoint_jsonl": "C:\\PROGRAMING\\czr004\\artifacts\\teacher\\laur\\full_repair1\\checkpoints\\phase4_laur_checkpoints_full_repair1.jsonl",
+  "commit": "80a437c",
+  "created_at": "2026-05-27 10:13:22 ",
+  "dataset_v1_jsonl": "C:\\PROGRAMING\\czr004\\artifacts\\teacher\\laur\\full_repair1\\update_labels\\phase4_laur_update_dataset_full_repair1.jsonl",
+  "edge_feature_count": 12,
+  "executable_label_distribution": {
+    "additive_ltm": 669,
+    "block_heavy": 507,
+    "block_light": 252,
+    "commit_heavy": 449,
+    "decay_090": 164,
+    "decay_095": 178,
+    "wait_heavy": 282,
+    "wait_light": 484
+  },
+  "family_distribution": {
+    "additive": 669,
+    "block": 759,
+    "commit": 449,
+    "decay": 342,
+    "wait": 766
+  },
+  "harmful_update_count": 1427,
+  "max_edge_tokens": 16,
+  "max_edge_tokens_observed": 16,
+  "max_trace_tokens": 8,
+  "max_trace_tokens_observed": 4,
+  "non_neutral_checkpoint_count": 2316,
+  "original_label_distribution": {
+    "block_heavy": 507,
+    "block_light": 252,
+    "commit_heavy": 449,
+    "decay_090": 164,
+    "decay_095": 178,
+    "neutral_additive": 669,
+    "wait_heavy": 282,
+    "wait_light": 484
+  },
+  "output_jsonl": "C:\\PROGRAMING\\czr004\\artifacts\\teacher\\laur\\full_repair2\\update_labels\\phase4_laur_update_dataset_full_repair2_v2.jsonl",
+  "passed": true,
+  "probe_jsonl": "C:\\PROGRAMING\\czr004\\artifacts\\teacher\\laur\\full_repair1\\probes\\phase4_laur_probe_full_repair1.jsonl",
+  "rule_feature_count": 16,
+  "rule_vocab": [
+    "additive_ltm",
+    "commit_heavy",
+    "block_heavy",
+    "block_light",
+    "wait_light",
+    "wait_heavy",
+    "decay_095",
+    "decay_090"
+  ],
+  "rule_vocab_count": 8,
+  "sample_count": 2985,
+  "schema_error_count": 0,
+  "schema_errors": [],
+  "schema_version": "phase4_laur_update_dataset_v2",
+  "soft_label_hard_mix": 0.55,
+  "soft_label_temperature": 0.01,
+  "split_counts": {
+    "train": 2526,
+    "validation": 459
+  },
+  "trace_feature_count": 12
+}

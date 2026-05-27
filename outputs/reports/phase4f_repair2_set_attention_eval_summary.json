@@ -1,0 +1,137 @@
+{
+  "architecture": "LAU-SetTransformer-v2",
+  "dataset": "C:\\PROGRAMING\\czr004\\artifacts\\teacher\\laur\\full_repair2\\update_labels\\phase4_laur_update_dataset_full_repair2_v2.jsonl",
+  "device": "cuda",
+  "harmful_threshold": 0.1,
+  "metrics_by_split": {
+    "train": {
+      "executable_rule_top1_accuracy": 0.3004750593824228,
+      "executable_rule_top3_accuracy": 0.4679334916864608,
+      "family_top1_accuracy": 0.3079968329374505,
+      "harmful_update_f1": 0.6751241036955323,
+      "harmful_update_precision": 0.5160202360876898,
+      "harmful_update_recall": 0.9760765550239234,
+      "label_distribution_executable": {
+        "additive_ltm": 569,
+        "block_heavy": 426,
+        "block_light": 220,
+        "commit_heavy": 376,
+        "decay_090": 145,
+        "decay_095": 149,
+        "wait_heavy": 231,
+        "wait_light": 410
+      },
+      "label_distribution_original": {
+        "block_heavy": 426,
+        "block_light": 220,
+        "commit_heavy": 376,
+        "decay_090": 145,
+        "decay_095": 149,
+        "neutral_additive": 569,
+        "wait_heavy": 231,
+        "wait_light": 410
+      },
+      "neutral_additive_rate": 0.666270783847981,
+      "non_neutral_rule_top1_accuracy": 0.17526826775677057,
+      "predicted_rule_distribution": {
+        "additive_ltm": 1683,
+        "block_heavy": 360,
+        "block_light": 18,
+        "commit_heavy": 210,
+        "decay_095": 7,
+        "wait_heavy": 141,
+        "wait_light": 107
+      },
+      "predicted_rule_validation_mean_delta_ratio": 0.006316611635744744,
+      "raw_original_top1_accuracy": 0.3004750593824228,
+      "rule_top1_accuracy": 0.3004750593824228,
+      "rule_top3_accuracy": 0.4679334916864608,
+      "safety_auroc": 0.7473468548443722,
+      "sample_count": 2526,
+      "selected_harmful_rule_rate": 0.0166270783847981
+    },
+    "validation": {
+      "executable_rule_top1_accuracy": 0.3159041394335512,
+      "executable_rule_top3_accuracy": 0.5032679738562091,
+      "family_top1_accuracy": 0.32461873638344224,
+      "harmful_update_f1": 0.5581395348837209,
+      "harmful_update_precision": 0.3916083916083916,
+      "harmful_update_recall": 0.9710982658959537,
+      "label_distribution_executable": {
+        "additive_ltm": 100,
+        "block_heavy": 81,
+        "block_light": 32,
+        "commit_heavy": 73,
+        "decay_090": 19,
+        "decay_095": 29,
+        "wait_heavy": 51,
+        "wait_light": 74
+      },
+      "label_distribution_original": {
+        "block_heavy": 81,
+        "block_light": 32,
+        "commit_heavy": 73,
+        "decay_090": 19,
+        "decay_095": 29,
+        "neutral_additive": 100,
+        "wait_heavy": 51,
+        "wait_light": 74
+      },
+      "neutral_additive_rate": 0.5403050108932462,
+      "non_neutral_rule_top1_accuracy": 0.2395543175487465,
+      "predicted_rule_distribution": {
+        "additive_ltm": 248,
+        "block_heavy": 69,
+        "block_light": 3,
+        "commit_heavy": 87,
+        "decay_090": 1,
+        "decay_095": 1,
+        "wait_heavy": 23,
+        "wait_light": 27
+      },
+      "predicted_rule_validation_mean_delta_ratio": 0.004997741152722399,
+      "raw_original_top1_accuracy": 0.3159041394335512,
+      "rule_top1_accuracy": 0.3159041394335512,
+      "rule_top3_accuracy": 0.5032679738562091,
+      "safety_auroc": 0.729556570597033,
+      "sample_count": 459,
+      "selected_harmful_rule_rate": 0.006535947712418301
+    }
+  },
+  "min_confidence": 0.0,
+  "model": "C:\\PROGRAMING\\czr004\\artifacts\\models\\laur_ltm\\full_repair2_set_attention\\laur_rule_attention_v2.pt",
+  "phase4f_gate": {
+    "harmful_precision": {
+      "passed": true,
+      "threshold": 0.3,
+      "value": 0.3916083916083916
+    },
+    "harmful_recall": {
+      "passed": true,
+      "threshold": 0.8,
+      "value": 0.9710982658959537
+    },
+    "passed": false,
+    "predicted_mean_delta": {
+      "passed": true,
+      "threshold": 0.0,
+      "value": 0.004997741152722399
+    },
+    "validation_non_neutral": {
+      "passed": true,
+      "threshold": 50,
+      "value": 359
+    },
+    "validation_top1": {
+      "passed": false,
+      "threshold": 0.35,
+      "value": 0.3159041394335512
+    },
+    "validation_top3": {
+      "passed": false,
+      "threshold": 0.7,
+      "value": 0.5032679738562091
+    }
+  },
+  "schema_version": "phase4f_repair2_rule_attention_eval_summary_v1"
+}

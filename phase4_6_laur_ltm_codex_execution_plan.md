@@ -3018,4 +3018,92 @@ validation non-neutral checkpoints >= 50
 - 如果 advanced models 提升 top1/top3 但仍未过 gate：继续留在 Phase4F，下一步考虑 label/probe ambiguity、map-family balance、topology-biased attention 或 sequence-of-checkpoints。
 - 如果 advanced models 不优于 repair1：记录 negative result，优先怀疑 probe label ambiguity / update-rule set / target formulation，而不是继续盲目扩大 MLP。
 
-当前状态：**repair2 方案已记录，尚未启动。等待用户明确命令后再开始。**
+当前状态：**repair2 已由用户授权并完成本地离线执行；结果未通过 Phase4F gate，不能进入 Phase5 learned runtime。详见第 26 节。**
+
+---
+
+## 26. 2026-05-27 Phase4F Repair2 本地执行结果
+
+### 26.1 已完成内容
+
+Repair2 已按 offline Phase4F 范围完成：
+
+- 新增 `phase4_laur_update_dataset_v2` token/rule-aware dataset builder。
+- 将 executable target 从 original label 中拆出：
+  - `neutral_additive -> additive_ltm`
+  - 保留 `rule_class_original`、`best_rule_original`、`is_neutral_label` 供 audit。
+- 新增 LAU-EdgeTraceTransformer-v2。
+- 新增 LAU-SetTransformer-v2。
+- 使用 listwise soft target、pairwise margin、delta regression、per-rule harmful BCE、family auxiliary loss。
+- 只做离线训练/评估；未进入 C++ runtime，未改 `solve_with_ltm`，未实现 learned restart。
+
+### 26.2 主要输出
+
+```text
+configs/phase4/laur_ltm_full_repair2_attention.yaml
+configs/phase4/laur_ltm_repair2_attention_smoke.yaml
+src/czr004_teacher/token_features_laur.py
+src/czr004_teacher/token_dataset_laur.py
+src/models/laur_rule_attention.py
+src/train/losses_laur_rule_attention.py
+src/train/train_laur_rule_attention.py
+src/eval/eval_laur_rule_attention.py
+outputs/reports/phase4f_repair2_advanced_update_rule_network_report.md
+outputs/reports/phase4f_repair2_threshold_sweep_summary.json
+```
+
+### 26.3 最好结果
+
+在保持 harmful recall / precision / positive delta 通过的条件下，最好 validation 结果来自：
+
+```text
+model: LAU-SetTransformer-v2
+dataset soft target: temperature 0.010, hard_mix 0.55
+harmful threshold: 0.10
+```
+
+结果：
+
+```text
+validation top1       = 0.3159   < 0.35  fail
+validation top3       = 0.5033   < 0.70  fail
+harmful recall        = 0.9711   pass
+harmful precision     = 0.3916   pass
+mean selected delta   = 0.0050   pass
+validation nonneutral = 359      pass
+```
+
+阈值 sweep 中，最高 top3 可到 `0.6580`，但此时 harmful recall 只有 `0.6127`，不满足 safety gate。
+
+### 26.4 与 repair1 对比
+
+Repair1：
+
+```text
+validation top1 = 0.3072
+validation top3 = 0.6427
+harmful recall  = 0.9538
+harmful precision = 0.4015
+mean delta = 0.0110
+```
+
+Repair2：
+
+```text
+best gate-compatible top1 = 0.3159
+best gate-compatible top3 = 0.5033
+best top3 under threshold sweep = 0.6580, but safety recall fails
+```
+
+结论：Repair2 的 advanced rule-conditioned architecture 没有通过 Phase4F gate，也没有稳定优于 repair1。它略微改善了 best gate-compatible top1，但显著损失 top3 ranking。
+
+### 26.5 当前决策
+
+Phase4F **尚未通过**。
+
+不要进入 Phase5 learned runtime。下一步如果继续 Phase4F，应优先排查：
+
+- label/probe ambiguity：许多 rule delta 接近，hard exact-rule top3 可能不稳定。
+- rule set / target formulation：当前 8 个 executable rules 可能粒度不合适。
+- trace richness：本轮 Repair2 首先使用 checkpoint top-k + count trace tokens，尚未把 3.5GB raw trace 解成高密度 event-token sequence。
+- validation map-family generalization：repair2 advanced model 对 held-out map 的 top3 不如 repair1。

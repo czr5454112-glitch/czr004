@@ -1279,3 +1279,63 @@
   - `outputs/metrics/phase5/phase5c_laur_smoke_paired.csv`
 - Boundary:
   - This completes Phase5C smoke/ablation execution, but it is not a Phase6-scale performance claim and does not include learned restart.
+
+## 2026-05-27 14:01 - Record stable-target attention LAU route
+
+- Request:
+  - Read `phase4f5p5_stable_attention_lau_ltm_plan.md` and, if it is viable, record the route in the comprehensive research guide and the Phase4-6 LAU/LAUR execution plan.
+- Assessment:
+  - The plan is viable as a Phase4F.4 / Phase5.5-update route because it keeps the project on LAU-LTM: learned `UpdateLTM` rule selection only, no agent-action policy replacement, no PIBT/LaCAM* semantic changes, and no learned restart before learned update is stable.
+  - It correctly treats Repair2 attention as inconclusive because Repair2 predated the Repair3 stable-target formulation.
+  - It preserves the Phase5C MLP runtime as a safety/parity baseline instead of deleting it.
+- Files changed:
+  - `deep-research-report.md`
+  - `phase4_6_laur_ltm_codex_execution_plan.md`
+- Key decisions recorded:
+  - Add `phase4f5p5_stable_attention_lau_ltm_plan.md` as the next allowed advanced-model route.
+  - Name the route `LAU-StableAttention-v1`, with `LAU-SetRuleTransformer-v1` as primary, `LAU-EdgeTraceTransformer-v3` as secondary, and `LAU-TopoBiasAttention-v1` as optional.
+  - Define `Phase5.5-update` separately from optional learned restart.
+- Follow-up:
+  - If implementation starts, begin with dataset/stable-target audit and offline gates before any attention runtime integration.
+
+## 2026-05-27 14:05 - Start Phase4F/5.5 stable-target attention LAU
+
+- Request: Redo advanced LAU update-rule model using Repair3 stable target formulation, then integrate only if offline gate passes.
+- Branch: phase4f5p5-stable-attention-lau
+- Base commit: e94fa2d
+- Files planned:
+  - `src/czr004_teacher/stable_attention_tokens_laur.py`
+  - `src/czr004_teacher/stable_attention_dataset_laur.py`
+  - `src/models/laur_stable_attention.py`
+  - `src/train/losses_laur_stable_attention.py`
+  - `src/train/train_laur_stable_attention.py`
+  - `src/eval/eval_laur_stable_attention.py`
+  - `configs/phase4/laur_ltm_full_repair4_stable_attention.yaml`
+  - `configs/phase4/laur_ltm_stable_attention_smoke.yaml`
+  - `tests/test_phase4f_stable_attention_dataset.py`
+  - `tests/test_phase4f_stable_attention_model.py`
+  - `tests/test_phase4f_stable_attention_eval.py`
+  - `outputs/reports/phase4f_repair4_stable_attention_dataset_report.md`
+  - `outputs/reports/phase4f_repair4_stable_attention_report.md`
+- Key constraints: predict update rules only; do not predict agent actions; do not modify PIBT or LaCAM* semantics; do not lower gates; do not break MLP runtime baseline.
+- Follow-up: implement stable-target token dataset v3, train/evaluate offline attention, and only consider Phase5.5 runtime export if the offline promotion gate passes.
+
+## 2026-05-27 16:50 - Phase4F/5.5 stable-attention offline result
+
+- Server:
+  - Used old Paratera instance under tmux only for training/eval jobs.
+  - Reused server raw trace `artifacts/teacher/laur/full_repair1/traces/phase4_laur_trace_full_repair1.jsonl.zst`; no raw trace was committed.
+  - Rebuilt stable-attention dataset from Repair3 stable targets after clearing a partial upload.
+- Dataset gate:
+  - `outputs/reports/phase4f_repair4_stable_attention_dataset_summary.json`
+  - 2985 samples, train 2526 / validation 459, schema errors 0, split leakage 0, trace truncation 0.
+- Model evidence:
+  - `LAU-SetRuleTransformer-v1` seeds 61/103/107 all pass ranking/delta/recall but fail per-rule harmful precision.
+  - Extended safety threshold sweep 0.35-0.90 found no all-seed Phase4F pass.
+  - `LAU-EdgeTraceTransformer-v3` seed 61 improves top3 to 0.749455 and mean selected delta to 0.003256, but still fails safety precision/recall tradeoff.
+  - Gate-select EdgeTrace checkpoint selection did not recover a passing checkpoint.
+- Final decision:
+  - `outputs/reports/phase4f_repair4_stable_attention_report.md`
+  - `outputs/reports/phase4f_repair4_stable_attention_final_gate_summary.json`
+  - Phase5.5 runtime is not allowed for Repair4 stable-attention in this run.
+  - Keep Repair3 stable-target MLP / conservative fallback as current offline-pass baseline.

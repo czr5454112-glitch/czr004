@@ -275,6 +275,47 @@ NTM 的学术贡献不能只写成“用神经网络拟合 LTM 权重”。纯 e
 
 该执行计划已补充 Codex 可执行性评估和前置接口对齐附录。进入 Phase4B 前必须先按该计划钉死 force-additive parity 两级口径、checkpoint 字段来源表、trace wait 语义、独立 record/probe tool 边界、pilot 级 Phase4 learned-runtime gate。
 
+后续决策更新：2026-05-27 +08:00，Phase5C 已经完成 `Repair3 MLP -> C++ runtime -> closed-loop smoke/ablation` 的工程闭环。结论是：MLP learned runtime 可以安全执行、保持 success、记录 TTFS 和 LAU overhead，但在 Phase5C smoke 中没有稳定优于普通 LTM 的 ratio / expanded-node 证据。因此，后续不应把 MLP 当成最终科学模型继续硬推，而应把它保留为 runtime / fallback / parity baseline。
+
+新的可尝试路线记录为：
+
+- `phase4f5p5_stable_attention_lau_ltm_plan.md`
+
+该路线属于 **LAU-first 主线内部的高级 update-rule 模型修复**，不是方向切换。它采用 `Phase4F.4 / Phase5.5-update` 定位：
+
+```text
+Phase4F.4:
+  redo advanced LAU update-rule models with Repair3 stable targets
+
+Phase5.5-update:
+  only if offline gate passes, export and integrate the advanced update model
+```
+
+该路线被允许尝试的原因：
+
+- 它仍然预测 LTM `UpdateLTM` rule / update parameters，不预测 agent action。
+- 它不替换 PIBT、不替换 LaCAM*、不改变候选动作域和冲突语义。
+- 它沿用 Repair3 stable target / tie-aware label，避免重复 Repair2 的 unstable hard-label 问题。
+- 它保留 Phase5C MLP runtime 作为可回退 baseline。
+- 它要求 advanced model 先过 offline gate，再进入 runtime；不得先接 solver 再找理由。
+
+推荐命名：
+
+```text
+umbrella: LAU-StableAttention-v1
+primary:  LAU-SetRuleTransformer-v1
+secondary: LAU-EdgeTraceTransformer-v3
+optional: LAU-TopoBiasAttention-v1
+```
+
+其中 `LAU-SetRuleTransformer-v1` 是第一优先级，因为它比 aggregate MLP 更能表达 traffic edge set / rule-conditioned interaction，同时仍比 full trace Transformer 更容易导出到轻量 runtime。`LAU-EdgeTraceTransformer-v3` 只能在 tokenization 和 runtime export 成本可控时升级为候选。
+
+该路线与 Full `LAUR-LTM` learned restart 的关系：
+
+- stable-attention update route 排在 learned restart 之前。
+- learned restart 仍是 optional extension，只能在 learned update 本身稳定后再做。
+- 如果 stable-attention offline 或 closed-loop 仍失败，应回到 probe label、rule set、trace representation 或 map split 诊断，不能用 learned restart 掩盖 update-rule 模型失败。
+
 ## 相关工作定位
 
 最终论文或报告需要把本项目放在“learning-enhanced MAPF guidance”这一窄切口里，而不是泛泛声称学习规划。至少要讨论：

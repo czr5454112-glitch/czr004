@@ -1,0 +1,17 @@
+target_rule,predicted_rule,count
+additive_ltm,additive_ltm,141
+additive_ltm,block_heavy,10
+additive_ltm,commit_heavy,15
+block_heavy,additive_ltm,64
+block_heavy,block_heavy,13
+block_heavy,commit_heavy,8
+block_heavy,wait_heavy,1
+block_light,additive_ltm,12
+commit_heavy,additive_ltm,73
+commit_heavy,block_heavy,7
+commit_heavy,commit_heavy,28
+commit_heavy,wait_heavy,1
+decay_090,additive_ltm,7
+decay_095,additive_ltm,13
+wait_heavy,additive_ltm,19
+wait_light,additive_ltm,47

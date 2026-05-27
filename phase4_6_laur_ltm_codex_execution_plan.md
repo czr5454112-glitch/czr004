@@ -1923,6 +1923,67 @@ conservative fallback smoke
 closed-loop ablation
 ```
 
+#### 12.1.8 2026-05-27 Phase5C 后的 stable-target attention 路线
+
+Phase5C 已经证明 Repair3 MLP runtime 可以安全接入 solver loop，但没有在 smoke 中稳定优于普通 LTM。因此后续不应把 MLP 当作最终模型继续堆 runtime 实验；MLP 现在的定位是：
+
+```text
+safe engineering baseline
+fallback/parity reference
+closed-loop comparison reference
+```
+
+新的高级模型路线以用户提供的计划为准：
+
+```text
+phase4f5p5_stable_attention_lau_ltm_plan.md
+```
+
+该路线不是方向切换。它仍然属于 LAU-first：
+
+```text
+learn LTM UpdateLTM rule / update parameters
+do not learn agent actions
+do not replace PIBT
+do not replace LaCAM*
+do not learn restart before learned update is stable
+```
+
+命名约定：
+
+```text
+umbrella:  LAU-StableAttention-v1
+primary:   LAU-SetRuleTransformer-v1
+secondary: LAU-EdgeTraceTransformer-v3
+optional:  LAU-TopoBiasAttention-v1
+```
+
+执行定位：
+
+```text
+Phase4F.4:
+  redo advanced update-rule models with Repair3 stable targets
+
+Phase5.5-update:
+  only after offline promotion gate, export and integrate the passing advanced update model
+```
+
+Promotion rule:
+
+```text
+If stable-target attention does not pass offline gate, do not implement C++ runtime.
+If it passes offline but fails closed-loop smoke/pilot, report it as an advanced-model negative or partial result.
+Do not use learned restart to hide an unstable learned update model.
+```
+
+Relationship to old Repair2:
+
+```text
+Repair2 attention failed before stable-target formulation became the central target.
+Repair2 is not the final verdict on attention.
+Any new attention attempt must use Repair3 stable targets and must compare against Repair3 MLP.
+```
+
 ---
 
 ## 13. Phase5A：C++ runtime skeleton
@@ -2307,9 +2368,266 @@ Stop. Fix parity before any experiment.
 
 ---
 
+## 15A. Phase4F.4 / Phase5.5-update：stable-target attention LAU
+
+### 15A.1 Decision
+
+This route is now an allowed next attempt after Phase5C.
+
+Reason:
+
+```text
+Phase5C MLP runtime is integrated safely, but it does not yet show solver-level learned benefit.
+The next scientific question is whether a structured attention model can learn update-rule selection better than aggregate MLP features.
+```
+
+This route must remain LAU-compatible:
+
+```text
+LaGAT-inspired attention for LAU update-rule selection,
+not LaGAT-style agent policy replacement.
+```
+
+Allowed:
+
+```text
+stable target / tie-aware labels
+rule-conditioned attention
+Set Transformer over global + top-K traffic edge tokens
+compressed trace/event tokens if needed
+topology-biased attention masks without PyG hard dependency
+safety-gated fallback to additive_ltm
+```
+
+Not allowed:
+
+```text
+agent action prediction
+PIBT replacement
+LaCAM* high-level search replacement
+candidate-domain changes
+conflict-semantics changes
+learned restart before learned update is stable
+large raw trace commits
+```
+
+### 15A.2 Model sequence
+
+Primary model:
+
+```text
+LAU-SetRuleTransformer-v1
+```
+
+Use it first because it is stronger than MLP but still plausibly exportable:
+
+```text
+global checkpoint token
+top-K directed traffic edge tokens
+candidate update-rule tokens
+rule-conditioned cross-attention
+q_delta head per rule
+harmful head per rule
+confidence/fallback head if useful
+```
+
+Secondary model:
+
+```text
+LAU-EdgeTraceTransformer-v3
+```
+
+Only attempt after SetRuleTransformer smoke works or if token evidence shows edge-set tokens are insufficient. It may remain offline-only unless runtime export is tractable.
+
+Optional topology variant:
+
+```text
+LAU-TopoBiasAttention-v1
+```
+
+Use pure PyTorch masks / additive attention bias for:
+
+```text
+shared endpoint
+reverse edge
+same corridor direction
+endpoint graph distance <= 2
+```
+
+### 15A.3 Dataset and target requirements
+
+The dataset must expose both audit labels and stable labels:
+
+```text
+rule_class_original
+rule_class_stable
+rule_class_executable
+best_minus_second_margin
+best_minus_additive_margin
+rule_delta_vector
+rule_harmful_vector
+soft_rule_target_stable
+soft_rule_target_probe
+```
+
+Main target:
+
+```text
+rule_class_stable
+rule_delta_vector
+rule_harmful_vector
+```
+
+Executable rule vocabulary:
+
+```text
+additive_ltm
+commit_heavy
+block_heavy
+block_light
+wait_light
+wait_heavy
+decay_095
+decay_090
+```
+
+`neutral_additive` may exist as a semantic stable target for audit, but execution maps it to `additive_ltm`.
+
+### 15A.4 Offline gate
+
+Do not lower the existing Phase4F gate:
+
+```text
+validation top1 >= 0.35
+validation top3 >= 0.70
+harmful recall >= 0.80
+harmful precision >= 0.30
+mean selected delta > 0.0
+validation non-neutral checkpoints >= 50
+```
+
+Additional promotion conditions for stable attention:
+
+```text
+compare against Repair3 MLP seed-61
+report seeds 61, 103, 107
+top3 not worse than Repair3 MLP seed-61 by more than 0.02
+harmful recall >= 0.80 for every reported seed
+mean selected delta positive in aggregate, or positive for at least 2 of 3 seeds
+no catastrophic per-map selected-delta failure
+```
+
+If this gate fails:
+
+```text
+stay in Phase4F.4
+write negative/diagnostic report
+do not implement Phase5.5 runtime
+```
+
+### 15A.5 Phase5.5-update runtime boundary
+
+Only after the offline gate passes, decide runtime export.
+
+Preferred:
+
+```text
+C++ JSON/CSV lightweight runtime for LAU-SetRuleTransformer-v1
+```
+
+Allowed fallback:
+
+```text
+ONNX Runtime smoke only if dependency is explicit and does not affect ordinary Phase5 tests
+TorchScript/Python-service only as experimental report, not as final Phase5 gate
+```
+
+Required runtime behavior:
+
+```text
+--laur-disable -> exact LTM behavior
+--laur-force-additive -> exact LTM through LAUR update path
+missing model file -> fail loudly unless explicit fallback flag is set
+unsupported rule -> additive fallback and logged reason
+NaN prediction -> additive fallback and logged reason
+all rules unsafe -> additive fallback and logged reason
+low confidence -> additive fallback and logged reason
+MLP runtime path remains available
+```
+
+### 15A.6 Phase5.5-update closed-loop smoke
+
+Use the Phase5C smoke set and add attention methods:
+
+```text
+lacam_star_ltm
+lacam_star_lau_ltm_force_additive
+lacam_star_lau_ltm_mlp_repair3_safety
+lacam_star_lau_ltm_attention_safety
+lacam_star_lau_ltm_attention_no_safety
+lacam_star_lau_ltm_attention_every_k2
+lacam_star_lau_ltm_attention_every_restart
+static_block_heavy
+static_decay_095
+```
+
+Smoke gate:
+
+```text
+schema errors = 0
+force-additive parity = true
+attention runtime exercised = true
+success count not lower than LTM
+TTFS evaluable and not catastrophically worse
+feature/model/total overhead reported
+candidate domain unchanged by code audit
+PIBT legality untouched by code audit
+```
+
+This gate is safety/engineering only. It does not prove learned benefit.
+
+### 15A.7 Learned-benefit pilot gate
+
+Only after Phase5.5 smoke passes, run paired pilot:
+
+```text
+baseline: lacam_star_ltm
+contender: lacam_star_lau_ltm_attention_safety
+reference: lacam_star_lau_ltm_mlp_repair3_safety
+```
+
+Phase5 learned-benefit for this route requires:
+
+```text
+success not lower than LTM
+ratio mean <= LTM on paired successes, or dense/bottleneck subset clearly better while overall not worse
+expanded_nodes not worse or equal-node ratio not worse
+TTFS not catastrophically worse
+policy overhead reported and not dominating runtime
+paired deltas show a nonnegative trend, not one lucky seed
+```
+
+If 15A.4-15A.6 pass but 15A.7 fails:
+
+```text
+advanced LAU runtime integrated safely, but no learned-benefit claim yet
+do not enter Phase6 learned-benefit main table
+```
+
+---
+
 ## 16. Optional Phase5.5：Full LAUR learned restart
 
 Only start this after LAU-LTM passes Phase5 gate.
+
+Naming note after the stable-attention update decision:
+
+```text
+Phase5.5-update = advanced learned UpdateLTM runtime path.
+Phase5.5-restart / optional restart extension = learned restart-node policy.
+```
+
+If both are discussed in one report, keep them separate. Stable learned update must be evaluated before learned restart is promoted.
 
 ### 16.1 Why optional
 
@@ -2413,6 +2731,7 @@ Optional if available:
 ```text
 LaCAM*+TO
 LaCAM*+SUO
+LaCAM*+LAU-LTM-attention
 LaCAM*+LAUR-LTM-restart
 ```
 

@@ -1,0 +1,192 @@
+{
+  "advanced_promotion_gate": {
+    "condition_a_positive_delta_two_of_three": {
+      "passed": true,
+      "threshold": ">= 2",
+      "value": 2
+    },
+    "condition_b_average_delta_positive": {
+      "passed": true,
+      "threshold": "> 0.0",
+      "value": 0.0015848485517954052
+    },
+    "condition_c_top3_not_worse_than_repair3_minus_002": {
+      "passed": false,
+      "threshold": 0.7490631808278867,
+      "value": 0.7320261437908497
+    },
+    "condition_d_recall_every_seed": {
+      "passed": true,
+      "threshold": ">= 0.80",
+      "value": 0.954233409610984
+    },
+    "passed": false
+  },
+  "branch": "phase4-laur-ltm",
+  "commit": "43633e7",
+  "confidence_margin": 0.002,
+  "dataset": "/root/shared-nvme/czr004_phase4_repair1_43633e7/artifacts/teacher/laur/full_repair4_stable_attention/update_labels/phase4_laur_stable_attention_dataset.jsonl",
+  "device": "cuda",
+  "dirty": "tracked-dirty_untracked-present",
+  "metrics_by_split": {
+    "train": {
+      "fallback_rate": 0.8729216152019003,
+      "fallback_reason_distribution": {
+        "low_confidence": 1012,
+        "selected": 321,
+        "unsafe": 1193
+      },
+      "harmful_update_f1": 0.39018218623481776,
+      "harmful_update_precision": 0.24252909720037746,
+      "harmful_update_recall": 0.9974126778783958,
+      "low_confidence_fallback_rate": 0.4006334125098971,
+      "original_target_top1_accuracy": 0.2593032462391132,
+      "original_target_top3_accuracy": 0.6654790182106096,
+      "pairwise_ranking_accuracy": 0.5922813859692116,
+      "predicted_rule_validation_mean_delta_ratio": 0.0026896525396936087,
+      "rule_top1_accuracy": 0.37292161520190026,
+      "rule_top3_accuracy": 0.7699920823436263,
+      "sample_count": 2526,
+      "selected_rule_distribution": {
+        "additive_ltm": 2205,
+        "block_heavy": 106,
+        "commit_heavy": 207,
+        "wait_light": 8
+      },
+      "selected_vs_additive_delta_mean": 0.0026896525396936087,
+      "spearman_q_delta_mean": 0.22980978618409006,
+      "stable_target_top1_accuracy": 0.37292161520190026,
+      "stable_target_top3_accuracy": 0.7699920823436263,
+      "unsafe_fallback_rate": 0.47228820269200317
+    },
+    "validation": {
+      "fallback_rate": 0.7494553376906318,
+      "fallback_reason_distribution": {
+        "low_confidence": 176,
+        "selected": 115,
+        "unsafe": 168
+      },
+      "harmful_update_f1": 0.33601933924254634,
+      "harmful_update_precision": 0.2039119804400978,
+      "harmful_update_recall": 0.954233409610984,
+      "low_confidence_fallback_rate": 0.38344226579520696,
+      "original_target_top1_accuracy": 0.2701525054466231,
+      "original_target_top3_accuracy": 0.6318082788671024,
+      "pairwise_ranking_accuracy": 0.5695692340958455,
+      "predicted_rule_validation_mean_delta_ratio": 0.0005753428416190872,
+      "rule_top1_accuracy": 0.39215686274509803,
+      "rule_top3_accuracy": 0.7429193899782135,
+      "sample_count": 459,
+      "selected_rule_distribution": {
+        "additive_ltm": 344,
+        "block_heavy": 23,
+        "commit_heavy": 92
+      },
+      "selected_vs_additive_delta_mean": 0.0005753428416190872,
+      "spearman_q_delta_mean": 0.17156448471233096,
+      "stable_target_top1_accuracy": 0.39215686274509803,
+      "stable_target_top3_accuracy": 0.7429193899782135,
+      "unsafe_fallback_rate": 0.3660130718954248
+    }
+  },
+  "model": "/root/shared-nvme/czr004_phase4_repair1_43633e7/artifacts/models/laur_ltm/full_repair4_stable_attention_seed103/laur_stable_attention_v1.pt",
+  "model_args": {
+    "d_model": 64,
+    "dropout": 0.1,
+    "edge_dim": 27,
+    "global_dim": 22,
+    "n_heads": 2,
+    "n_layers": 2,
+    "num_families": 5,
+    "num_rules": 8,
+    "rule_dim": 12,
+    "trace_dim": 9
+  },
+  "model_name": "LAU-SetRuleTransformer-v1",
+  "parameter_count": 171912,
+  "phase4f_gate": {
+    "harmful_precision": {
+      "passed": false,
+      "threshold": 0.3,
+      "value": 0.2039119804400978
+    },
+    "harmful_recall": {
+      "passed": true,
+      "threshold": 0.8,
+      "value": 0.954233409610984
+    },
+    "mean_selected_delta": {
+      "passed": true,
+      "threshold": "> 0.0",
+      "value": 0.0005753428416190872
+    },
+    "passed": false,
+    "validation_non_neutral": {
+      "passed": true,
+      "threshold": 50,
+      "value": 293
+    },
+    "validation_top1": {
+      "passed": true,
+      "threshold": 0.35,
+      "value": 0.39215686274509803
+    },
+    "validation_top3": {
+      "passed": true,
+      "threshold": 0.7,
+      "value": 0.7429193899782135
+    }
+  },
+  "phase5p5_runtime_allowed": false,
+  "repair3_baseline_summary_json": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair3_stable_tie001_eval_h010_summary.json",
+  "safety_penalty": 0.02,
+  "safety_threshold": 0.1,
+  "schema_version": "phase4f_repair4_stable_attention_eval_summary_v1",
+  "seed": 103,
+  "threshold_sweep": [
+    {
+      "fallback_rate": 0.7668845315904139,
+      "harmful_precision": 0.19229024943310657,
+      "harmful_recall": 0.9702517162471396,
+      "low_confidence_fallback_rate": 0.3812636165577342,
+      "mean_selected_delta": 0.002751888527614599,
+      "safety_threshold": 0.05,
+      "top1": 0.40522875816993464,
+      "top3": 0.7429193899782135,
+      "unsafe_fallback_rate": 0.38562091503267976
+    },
+    {
+      "fallback_rate": 0.7494553376906318,
+      "harmful_precision": 0.2039119804400978,
+      "harmful_recall": 0.954233409610984,
+      "low_confidence_fallback_rate": 0.38344226579520696,
+      "mean_selected_delta": 0.0005753428416190872,
+      "safety_threshold": 0.1,
+      "top1": 0.39215686274509803,
+      "top3": 0.7429193899782135,
+      "unsafe_fallback_rate": 0.3660130718954248
+    },
+    {
+      "fallback_rate": 0.7189542483660131,
+      "harmful_precision": 0.22109207708779444,
+      "harmful_recall": 0.9450800915331807,
+      "low_confidence_fallback_rate": 0.37254901960784315,
+      "mean_selected_delta": 0.0031032636225863004,
+      "safety_threshold": 0.2,
+      "top1": 0.39433551198257083,
+      "top3": 0.7429193899782135,
+      "unsafe_fallback_rate": 0.3464052287581699
+    },
+    {
+      "fallback_rate": 0.6601307189542484,
+      "harmful_precision": 0.2391174716756112,
+      "harmful_recall": 0.9176201372997712,
+      "low_confidence_fallback_rate": 0.32679738562091504,
+      "mean_selected_delta": 0.0027107208139871917,
+      "safety_threshold": 0.3,
+      "top1": 0.39651416122004357,
+      "top3": 0.7429193899782135,
+      "unsafe_fallback_rate": 0.3333333333333333
+    }
+  ]
+}

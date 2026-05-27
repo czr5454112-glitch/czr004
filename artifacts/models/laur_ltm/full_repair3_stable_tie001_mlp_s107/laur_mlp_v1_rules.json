@@ -1,0 +1,153 @@
+{
+  "metadata": {
+    "config": "C:\\PROGRAMING\\czr004\\configs\\phase4\\laur_ltm_full_repair1.yaml",
+    "created_at": "2026-05-27T10:39:18.978931",
+    "dataset": "C:\\PROGRAMING\\czr004\\artifacts\\teacher\\laur\\full_repair3_stable_targets\\update_labels\\phase4_laur_update_dataset_full_repair3_stable_tie001.jsonl",
+    "drop_features": [
+      "blocked_count",
+      "blocked_per_agent",
+      "density",
+      "free_cells",
+      "local_degree_mean_topk",
+      "map_height",
+      "map_width",
+      "mean_topk_raw_before",
+      "new_nonzero_edges_count",
+      "nonzero_edges_before",
+      "obstacle_ratio",
+      "topk_blocked_edge_concentration"
+    ],
+    "epochs": 600,
+    "feature_set": "aggregate_checkpoint_v1",
+    "hidden_dim": 64,
+    "input_features": [
+      "agents",
+      "iteration",
+      "node_budget",
+      "elapsed_ms",
+      "time_remaining_sec",
+      "max_iterations",
+      "has_solution_before",
+      "best_ratio_before",
+      "improved_last_iteration",
+      "returned_solutions_count_so_far",
+      "committed_count",
+      "wait_event_count",
+      "goal_wait_ignored_count",
+      "blocked_per_committed",
+      "wait_per_committed",
+      "committed_per_agent",
+      "max_raw_before",
+      "max_weight_before",
+      "topk_raw_delta_mean",
+      "topk_raw_delta_max",
+      "entropy_edge_usage",
+      "current_additive_max_normalized_weight",
+      "weight_entropy",
+      "saturated_edge_count"
+    ],
+    "learning_rate": 0.004,
+    "probe_jsonl": "C:\\PROGRAMING\\czr004\\artifacts\\teacher\\laur\\full_repair1\\probes\\phase4_laur_probe_full_repair1.jsonl",
+    "seed": 107,
+    "soft_label_hard_mix": 0.7,
+    "soft_label_neutral_threshold": 0.005,
+    "soft_label_temperature": 0.005,
+    "weight_decay": 0.001
+  },
+  "model_name": "LAU-MLP-v1",
+  "rule_params": {
+    "additive_ltm": {
+      "alpha_block": 1.0,
+      "alpha_commit": 1.0,
+      "alpha_wait": 1.0,
+      "contraflow_penalty": 0.0,
+      "force_additive": true,
+      "rho_decay": 1.0,
+      "saturation_scale": 1.0
+    },
+    "block_heavy": {
+      "alpha_block": 1.5,
+      "alpha_commit": 1.0,
+      "alpha_wait": 1.0,
+      "contraflow_penalty": 0.0,
+      "force_additive": false,
+      "rho_decay": 1.0,
+      "saturation_scale": 1.0
+    },
+    "block_light": {
+      "alpha_block": 0.5,
+      "alpha_commit": 1.0,
+      "alpha_wait": 1.0,
+      "contraflow_penalty": 0.0,
+      "force_additive": false,
+      "rho_decay": 1.0,
+      "saturation_scale": 1.0
+    },
+    "commit_heavy": {
+      "alpha_block": 1.0,
+      "alpha_commit": 1.5,
+      "alpha_wait": 1.0,
+      "contraflow_penalty": 0.0,
+      "force_additive": false,
+      "rho_decay": 1.0,
+      "saturation_scale": 1.0
+    },
+    "decay_090": {
+      "alpha_block": 1.0,
+      "alpha_commit": 1.0,
+      "alpha_wait": 1.0,
+      "contraflow_penalty": 0.0,
+      "force_additive": false,
+      "rho_decay": 0.9,
+      "saturation_scale": 1.0
+    },
+    "decay_095": {
+      "alpha_block": 1.0,
+      "alpha_commit": 1.0,
+      "alpha_wait": 1.0,
+      "contraflow_penalty": 0.0,
+      "force_additive": false,
+      "rho_decay": 0.95,
+      "saturation_scale": 1.0
+    },
+    "neutral_additive": {
+      "alpha_block": 1.0,
+      "alpha_commit": 1.0,
+      "alpha_wait": 1.0,
+      "contraflow_penalty": 0.0,
+      "force_additive": true,
+      "rho_decay": 1.0,
+      "saturation_scale": 1.0
+    },
+    "wait_heavy": {
+      "alpha_block": 1.0,
+      "alpha_commit": 1.0,
+      "alpha_wait": 1.5,
+      "contraflow_penalty": 0.0,
+      "force_additive": false,
+      "rho_decay": 1.0,
+      "saturation_scale": 1.0
+    },
+    "wait_light": {
+      "alpha_block": 1.0,
+      "alpha_commit": 1.0,
+      "alpha_wait": 0.5,
+      "contraflow_penalty": 0.0,
+      "force_additive": false,
+      "rho_decay": 1.0,
+      "saturation_scale": 1.0
+    }
+  },
+  "rules": {
+    "0": "additive_ltm",
+    "1": "commit_heavy",
+    "2": "block_heavy",
+    "3": "block_light",
+    "4": "wait_light",
+    "5": "wait_heavy",
+    "6": "decay_095",
+    "7": "decay_090",
+    "8": "neutral_additive"
+  },
+  "schema_version": "laur_mlp_v1_rules"
+}

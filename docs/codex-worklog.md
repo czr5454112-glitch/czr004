@@ -1109,3 +1109,44 @@
   - Repair2 is complete as a local offline attempt, but Phase4F still fails.
   - Do not enter Phase5 learned runtime.
   - Record this as a useful negative result; next Phase4F work should focus on label/probe ambiguity, target formulation, richer raw-trace event tokens, or map-family balance rather than just making the model larger.
+
+## 2026-05-27 22:10 - Phase4F repair3 stable-target candidate pass
+
+- Request: continue Phase4F after Repair2 failed.
+- Diagnostics:
+  - Ran `src/eval/diagnose_laur_phase4f.py` on `full_repair1` artifacts.
+  - Ran new `src/eval/diagnose_laur_label_ambiguity.py`.
+  - Validation best-vs-second probe margins are highly ambiguous:
+    - `<= 0.005`: `53.38%`
+    - `<= 0.010`: `70.59%`
+    - `<= 0.020`: `82.35%`
+- Implemented:
+  - `src/czr004_teacher/stable_targets_laur.py`
+  - `tests/test_phase4f_stable_targets.py`
+  - `configs/phase4/laur_ltm_full_repair3_stable_tie001.yaml`
+- Stable target policy:
+  - `tie_epsilon=0.010`
+  - `neutral_delta_threshold=0.005`
+  - prefer additive fallback if `additive_ltm` is inside the tie band
+  - otherwise use deterministic priority tie-break.
+- Dataset:
+  - `artifacts/teacher/laur/full_repair3_stable_targets/update_labels/phase4_laur_update_dataset_full_repair3_stable_tie001.jsonl`
+  - rows `2985`
+  - changed labels `890 / 2985`
+  - max best-minus-stable delta `0.010`
+  - mean best-minus-stable delta `0.0020`
+  - schema errors `0`
+- Main seed-61 result at harmful threshold `0.10`:
+  - validation top1 `0.3900` >= `0.35`
+  - validation top3 `0.7691` >= `0.70`
+  - harmful recall `0.9422` >= `0.80`
+  - harmful precision `0.3909` >= `0.30`
+  - mean selected delta `0.0081` > `0.0`
+  - validation non-neutral `293` >= `50`
+- Robustness:
+  - seeds `103` and `107` keep top1/top3/safety above gate but mean selected delta is slightly negative.
+  - Treat this as a stable-target Phase4F candidate pass, not as evidence for a strong Phase5 learned-runtime performance claim.
+- Boundary:
+  - No C++ runtime integration was done.
+  - No solver semantics changed.
+  - Phase5, if started later, must begin with parity and fallback gates.

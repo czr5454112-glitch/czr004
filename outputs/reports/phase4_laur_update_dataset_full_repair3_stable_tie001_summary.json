@@ -1,0 +1,61 @@
+{
+  "branch": "phase4-laur-ltm",
+  "changed_rule_class_count": 890,
+  "changed_rule_class_rate": 0.2981574539363484,
+  "commit": "6a36212",
+  "created_at": "2026-05-27 10:36:43",
+  "dataset": "C:\\PROGRAMING\\czr004\\artifacts\\teacher\\laur\\full_repair1\\update_labels\\phase4_laur_update_dataset_full_repair1.jsonl",
+  "expected_rows": 2985,
+  "label_distribution": {
+    "block_heavy": 519,
+    "block_light": 121,
+    "commit_heavy": 671,
+    "decay_090": 65,
+    "decay_095": 82,
+    "neutral_additive": 1001,
+    "wait_heavy": 120,
+    "wait_light": 406
+  },
+  "max_best_minus_stable": 0.01,
+  "mean_best_minus_stable": 0.0019999393929924386,
+  "missing_rows": 0,
+  "neutral_delta_threshold": 0.005,
+  "original_label_distribution": {
+    "block_heavy": 507,
+    "block_light": 252,
+    "commit_heavy": 449,
+    "decay_090": 164,
+    "decay_095": 178,
+    "neutral_additive": 669,
+    "wait_heavy": 282,
+    "wait_light": 484
+  },
+  "output_jsonl": "C:\\PROGRAMING\\czr004\\artifacts\\teacher\\laur\\full_repair3_stable_targets\\update_labels\\phase4_laur_update_dataset_full_repair3_stable_tie001.jsonl",
+  "passed": true,
+  "prefer_additive_if_tied": true,
+  "probes": "C:\\PROGRAMING\\czr004\\artifacts\\teacher\\laur\\full_repair1\\probes\\phase4_laur_probe_full_repair1.jsonl",
+  "reason_distribution": {
+    "additive_within_tie_band": 332,
+    "best_below_neutral_threshold": 669,
+    "priority_tie_break": 1984
+  },
+  "rule_priority": [
+    "additive_ltm",
+    "commit_heavy",
+    "block_heavy",
+    "wait_light",
+    "wait_heavy",
+    "block_light",
+    "decay_095",
+    "decay_090"
+  ],
+  "sample_count": 2985,
+  "schema_error_count": 0,
+  "schema_errors": [],
+  "schema_version": "phase4_laur_stable_target_audit_v1",
+  "split_counts": {
+    "train": 2526,
+    "validation": 459
+  },
+  "tie_epsilon": 0.01
+}

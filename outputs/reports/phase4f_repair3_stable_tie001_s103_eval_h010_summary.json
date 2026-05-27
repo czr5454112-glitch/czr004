@@ -1,0 +1,112 @@
+{
+  "dataset": "C:\\PROGRAMING\\czr004\\artifacts\\teacher\\laur\\full_repair3_stable_targets\\update_labels\\phase4_laur_update_dataset_full_repair3_stable_tie001.jsonl",
+  "gate": {
+    "eval_script_runs_end_to_end": true,
+    "model_export_file_exists": true,
+    "passed": true,
+    "schema_validation_passes": true,
+    "summary_csv_written": true,
+    "validation_metrics_computed": true
+  },
+  "metrics_by_split": {
+    "all": {
+      "harmful_update_f1": 0.6688694831248526,
+      "harmful_update_precision": 0.504270462633452,
+      "harmful_update_recall": 0.9929922915206727,
+      "label_distribution": {
+        "block_heavy": 519,
+        "block_light": 121,
+        "commit_heavy": 671,
+        "decay_090": 65,
+        "decay_095": 82,
+        "neutral_additive": 1001,
+        "wait_heavy": 120,
+        "wait_light": 406
+      },
+      "neutral_additive_rate": 0.4224455611390285,
+      "non_neutral_rule_top1_accuracy": 0.4092741935483871,
+      "predicted_rule_distribution": {
+        "block_heavy": 407,
+        "block_light": 67,
+        "commit_heavy": 738,
+        "decay_090": 19,
+        "decay_095": 17,
+        "neutral_additive": 1261,
+        "wait_heavy": 18,
+        "wait_light": 458
+      },
+      "predicted_rule_validation_mean_delta_ratio": 0.024572441312171237,
+      "rule_top1_accuracy": 0.4911222780569514,
+      "rule_top3_accuracy": 0.8321608040201005,
+      "safety_auroc": 0.7783319674748771,
+      "sample_count": 2985
+    },
+    "train": {
+      "harmful_update_f1": 0.6868298047841628,
+      "harmful_update_precision": 0.5241292488459924,
+      "harmful_update_recall": 0.9960127591706539,
+      "label_distribution": {
+        "block_heavy": 433,
+        "block_light": 109,
+        "commit_heavy": 562,
+        "decay_090": 58,
+        "decay_095": 69,
+        "neutral_additive": 835,
+        "wait_heavy": 101,
+        "wait_light": 359
+      },
+      "neutral_additive_rate": 0.4089469517022961,
+      "non_neutral_rule_top1_accuracy": 0.43169722057953874,
+      "predicted_rule_distribution": {
+        "block_heavy": 325,
+        "block_light": 67,
+        "commit_heavy": 626,
+        "decay_090": 16,
+        "decay_095": 16,
+        "neutral_additive": 1033,
+        "wait_heavy": 15,
+        "wait_light": 428
+      },
+      "predicted_rule_validation_mean_delta_ratio": 0.029226806637671156,
+      "rule_top1_accuracy": 0.5087094220110847,
+      "rule_top3_accuracy": 0.8463974663499604,
+      "safety_auroc": 0.7823938240398022,
+      "sample_count": 2526
+    },
+    "validation": {
+      "harmful_update_f1": 0.5599999999999999,
+      "harmful_update_precision": 0.39344262295081966,
+      "harmful_update_recall": 0.9710982658959537,
+      "label_distribution": {
+        "block_heavy": 86,
+        "block_light": 12,
+        "commit_heavy": 109,
+        "decay_090": 7,
+        "decay_095": 13,
+        "neutral_additive": 166,
+        "wait_heavy": 19,
+        "wait_light": 47
+      },
+      "neutral_additive_rate": 0.49673202614379086,
+      "non_neutral_rule_top1_accuracy": 0.27986348122866894,
+      "predicted_rule_distribution": {
+        "block_heavy": 82,
+        "commit_heavy": 112,
+        "decay_090": 3,
+        "decay_095": 1,
+        "neutral_additive": 228,
+        "wait_heavy": 3,
+        "wait_light": 30
+      },
+      "predicted_rule_validation_mean_delta_ratio": -0.0010417783222792458,
+      "rule_top1_accuracy": 0.39433551198257083,
+      "rule_top3_accuracy": 0.7538126361655774,
+      "safety_auroc": 0.7345082663001739,
+      "sample_count": 459
+    }
+  },
+  "model": "C:\\PROGRAMING\\czr004\\artifacts\\models\\laur_ltm\\full_repair3_stable_tie001_mlp_s103\\laur_mlp_v1_weights.json",
+  "probe_jsonl": "C:\\PROGRAMING\\czr004\\artifacts\\teacher\\laur\\full_repair1\\probes\\phase4_laur_probe_full_repair1.jsonl",
+  "schema_version": "phase4_laur_offline_eval_summary_v1",
+  "summary_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase4f_repair3_stable_tie001_s103_eval_h010.csv"
+}

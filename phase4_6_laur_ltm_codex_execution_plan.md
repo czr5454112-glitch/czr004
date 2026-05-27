@@ -3107,3 +3107,90 @@ Phase4F **尚未通过**。
 - rule set / target formulation：当前 8 个 executable rules 可能粒度不合适。
 - trace richness：本轮 Repair2 首先使用 checkpoint top-k + count trace tokens，尚未把 3.5GB raw trace 解成高密度 event-token sequence。
 - validation map-family generalization：repair2 advanced model 对 held-out map 的 top3 不如 repair1。
+
+---
+
+## 27. 2026-05-27 Phase4F Repair3：stable target formulation
+
+### 27.1 触发原因
+
+Repair2 后继续检查 repair1 的 label/probe ambiguity，得到当前 full_repair1 validation：
+
+```text
+best-vs-second <= 0.005 : 53.38%
+best-vs-second <= 0.010 : 70.59%
+best-vs-second <= 0.020 : 82.35%
+```
+
+这说明 hard best-rule label 在大量 checkpoint 上并不稳定。Repair3 因此不再继续扩大模型，而是先修复 target formulation。
+
+### 27.2 Stable target policy
+
+Stable target 不降低 Phase4F 阈值，只改变近 tie probe group 的 deterministic tie-break：
+
+```text
+tie_epsilon = 0.010
+neutral_delta_threshold = 0.005
+prefer_additive_if_tied = true
+priority = additive_ltm, commit_heavy, block_heavy, wait_light, wait_heavy, block_light, decay_095, decay_090
+```
+
+规则：
+
+1. 如果 best delta `< 0.005`，label 为 `neutral_additive`。
+2. 如果 `additive_ltm` 在 best delta `0.010` 以内，label 为 `neutral_additive`。
+3. 否则在 tie band 内按 priority 选 stable rule。
+
+Stable target 数据：
+
+```text
+artifacts/teacher/laur/full_repair3_stable_targets/update_labels/phase4_laur_update_dataset_full_repair3_stable_tie001.jsonl
+```
+
+变更统计：
+
+```text
+rows = 2985
+changed_rule_class = 890 / 2985 = 29.82%
+max_best_minus_stable = 0.010
+mean_best_minus_stable = 0.0020
+schema errors = 0
+```
+
+### 27.3 Phase4F gate result
+
+使用 repair1 MLP 配置重新训练，seed `61`，harmful threshold `0.10`。
+
+Validation：
+
+```text
+rule top1       = 0.3899782135  pass >= 0.35
+rule top3       = 0.7690631808  pass >= 0.70
+harmful recall  = 0.9421965318  pass >= 0.80
+harmful precision = 0.3908872902 pass >= 0.30
+mean selected delta = 0.0081308431 pass > 0.0
+validation non-neutral = 293 pass >= 50
+```
+
+这是当前分支第一次本地满足 Phase4F performance gate 的结果。
+
+### 27.4 稳定性备注
+
+额外 seed：
+
+```text
+seed 103: top1/top3/safety pass, mean selected delta = -0.0010 fail
+seed 107: top1/top3/safety pass, mean selected delta = -0.0012 fail
+```
+
+因此 Phase4F 可以记录为 **stable-target candidate pass**，但 Phase5 不能直接做 learned runtime 性能声明。下一步只能进入 Phase5 parity / fallback / conservative runtime gate 规划，并保留 additive fallback。
+
+### 27.5 当前决策
+
+Phase4F offline gate 在 stable-target formulation 下已有 candidate pass。
+
+允许进入 Phase5 规划的前置条件：
+
+- Phase5 首先做 `--laur-disable` / `--laur-force-additive` parity。
+- learned runtime 接入必须 safety-gated，低置信或 unsafe rule 回退 `additive_ltm`。
+- 不得声称 closed-loop learned runtime 性能，直到 Phase5 runtime smoke/ablation 另行通过。

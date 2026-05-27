@@ -3194,3 +3194,30 @@ Phase4F offline gate 在 stable-target formulation 下已有 candidate pass。
 - Phase5 首先做 `--laur-disable` / `--laur-force-additive` parity。
 - learned runtime 接入必须 safety-gated，低置信或 unsafe rule 回退 `additive_ltm`。
 - 不得声称 closed-loop learned runtime 性能，直到 Phase5 runtime smoke/ablation 另行通过。
+
+### 27.6 Repair3 conservative fallback calibration
+
+继续对 seed `61`、`103`、`107` 做 safety fallback sweep。该诊断不改变 Phase4F exact-rule gate，只检查 safety head 是否能作为 Phase5 初始保守回退门。
+
+候选策略：
+
+```text
+if harmful_update_probability >= 0.30:
+    execute additive/neutral fallback
+else:
+    execute predicted update rule
+```
+
+共同阈值 `0.30` 在三个 seed 的 train/validation 上均满足 safety precision/recall 要求，并使 validation fallback 后 mean delta 为正：
+
+```text
+seed 61  validation: recall 0.8092, precision 0.4795, fallback 0.6362, mean delta after fallback 0.0064
+seed 103 validation: recall 0.8150, precision 0.4747, fallback 0.6471, mean delta after fallback 0.0031
+seed 107 validation: recall 0.8439, precision 0.4725, fallback 0.6732, mean delta after fallback 0.0014
+```
+
+结论：
+
+- Phase4F 仍记录为 stable-target offline candidate pass。
+- `0.30` 可作为 Phase5 第一个 conservative safety fallback threshold 候选。
+- 该阈值回退率较高，只适合先做 runtime parity/smoke，不适合直接做性能声明。

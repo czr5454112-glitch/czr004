@@ -13,6 +13,7 @@ import json
 import math
 import sys
 from collections import Counter, defaultdict
+from datetime import date
 from pathlib import Path
 from typing import Any
 
@@ -582,7 +583,7 @@ def write_report(
     lines: list[str] = [
         "# Phase4F LAUR Failure Diagnostics",
         "",
-        "Date: 2026-05-26",
+        f"Date: {date.today().isoformat()}",
         "",
         "## Scope",
         "",

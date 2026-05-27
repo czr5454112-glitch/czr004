@@ -40,3 +40,9 @@ gate:
   harmful_precision_min: 0.30
   predicted_rule_mean_delta_min_exclusive: 0.0
   validation_non_neutral_min: 50
+
+conservative_fallback:
+  diagnostic_only: true
+  safety_threshold_candidate: 0.30
+  evidence_report: outputs/reports/phase4f_repair3_conservative_fallback_report.md
+  note: Use only as the first Phase5 fallback candidate after parity smoke; it does not replace the Phase4F exact-rule gate.

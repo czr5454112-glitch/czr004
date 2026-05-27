@@ -1150,3 +1150,16 @@
   - No C++ runtime integration was done.
   - No solver semantics changed.
   - Phase5, if started later, must begin with parity and fallback gates.
+
+## 2026-05-27 22:56 - Phase4F repair3 conservative fallback calibration
+
+- Request: continue the active Phase4F goal after the Repair3 candidate pass.
+- Fixed `src/eval/diagnose_laur_phase4f.py` report dates to use the current run date instead of the stale hard-coded date.
+- Ran Repair3 diagnostics for seeds `61`, `103`, and `107`.
+- Key result: a common safety fallback threshold `0.30` keeps train/validation harmful recall and precision above the Phase4F safety gates for all three seeds.
+- At threshold `0.30`, validation mean delta after additive fallback is positive for all three seeds:
+  - seed `61`: `0.0064`
+  - seed `103`: `0.0031`
+  - seed `107`: `0.0014`
+- This does not replace the Phase4F exact-rule ranking gate. It is recorded as the first conservative Phase5 fallback candidate.
+- Added report: `outputs/reports/phase4f_repair3_conservative_fallback_report.md`.

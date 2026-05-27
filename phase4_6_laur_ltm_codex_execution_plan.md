@@ -3221,3 +3221,45 @@ seed 107 validation: recall 0.8439, precision 0.4725, fallback 0.6732, mean delt
 - Phase4F 仍记录为 stable-target offline candidate pass。
 - `0.30` 可作为 Phase5 第一个 conservative safety fallback threshold 候选。
 - 该阈值回退率较高，只适合先做 runtime parity/smoke，不适合直接做性能声明。
+
+---
+
+## 28. 2026-05-27 Phase4F completion audit
+
+完成一次 Phase4F completion audit：
+
+```text
+outputs/reports/phase4f_completion_audit.md
+```
+
+审计范围：只验收 Phase4F offline gate，不验收 Phase5 runtime。
+
+当前 authoritative evidence：
+
+```text
+outputs/reports/phase4f_repair3_stable_tie001_performance_gate.json
+outputs/reports/phase4f_repair3_stable_target_report.md
+outputs/reports/phase4f_repair3_conservative_fallback_report.md
+```
+
+Phase4F offline gate 逐项结论：
+
+```text
+validation non-neutral = 293 >= 50 pass
+rule top1 = 0.3899782135 >= 0.35 pass
+rule top3 = 0.7690631808 >= 0.70 pass
+harmful recall = 0.9421965318 >= 0.80 pass
+harmful precision = 0.3908872902 >= 0.30 pass
+predicted-rule mean delta = 0.0081308431 >= 0.0 pass
+neutral/additive behavior documented pass
+schema validation pass
+git backup pass through commit 293ba8f
+```
+
+Completion decision：
+
+```text
+Phase4F offline stable-target pass, with Phase5 conservative fallback precondition.
+```
+
+Phase4F 可以关闭。后续工作应新开 Phase5：runtime parity / force-additive parity / conservative fallback smoke / learned-runtime ablation。不得把 Phase4F offline pass 表述为 closed-loop learned runtime performance。

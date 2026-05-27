@@ -1163,3 +1163,18 @@
   - seed `107`: `0.0014`
 - This does not replace the Phase4F exact-rule ranking gate. It is recorded as the first conservative Phase5 fallback candidate.
 - Added report: `outputs/reports/phase4f_repair3_conservative_fallback_report.md`.
+
+## 2026-05-27 23:08 - Phase4F completion audit
+
+- Request: continue the active Phase4F goal and verify whether the current state is enough to close Phase4F.
+- Audited the authoritative Phase4F gate from `phase4_6_laur_ltm_codex_execution_plan.md`.
+- Primary evidence is `outputs/reports/phase4f_repair3_stable_tie001_performance_gate.json`.
+- All Phase4F offline gate items pass for the Repair3 stable-target seed-61 candidate:
+  - validation non-neutral `293 >= 50`
+  - top1 `0.3899782135 >= 0.35`
+  - top3 `0.7690631808 >= 0.70`
+  - harmful recall `0.9421965318 >= 0.80`
+  - harmful precision `0.3908872902 >= 0.30`
+  - mean selected delta `0.0081308431 >= 0.0`
+- Closure report: `outputs/reports/phase4f_completion_audit.md`.
+- Decision: Phase4F offline work is complete under the current project gate; Phase5 runtime integration remains separate and unclaimed.

@@ -827,6 +827,12 @@ LtmRunResult solve_with_ltm(const Instance& instance, const LtmOptions& options)
        iteration < options.max_iterations && !is_expired(&deadline);
        ++iteration) {
     auto collector = PibtTraceCollector();
+    const auto has_incumbent_before = !result.best_solution.empty();
+    const auto best_ratio_before =
+        (has_incumbent_before && lower_bound_sol > 0)
+            ? static_cast<double>(get_sum_of_loss(result.best_solution)) /
+                  static_cast<double>(lower_bound_sol)
+            : 0.0;
     auto traffic_before_map = std::shared_ptr<const DirectedTrafficMap>();
     if (options.retain_iteration_traffic_maps) {
       traffic_before_map =
@@ -860,14 +866,50 @@ LtmRunResult solve_with_ltm(const Instance& instance, const LtmOptions& options)
                   static_cast<double>(lower_bound_sol)
             : std::numeric_limits<double>::quiet_NaN();
 
-    if (is_better_solution(solution, result.best_solution)) {
+    const auto improved_incumbent =
+        is_better_solution(solution, result.best_solution);
+    if (improved_incumbent) {
       result.best_solution = solution;
     }
+    const auto best_ratio_after =
+        (!result.best_solution.empty() && lower_bound_sol > 0)
+            ? static_cast<double>(get_sum_of_loss(result.best_solution)) /
+                  static_cast<double>(lower_bound_sol)
+            : 0.0;
 
     const auto summary = collector.summary();
     result.trace_summary.committed += summary.committed;
     result.trace_summary.blocked += summary.blocked;
-    result.traffic_map.update_from_trace(collector.events(), options.update_params);
+
+    auto update_params = options.update_params;
+    if (options.update_policy) {
+      LtmIterationStats stats;
+      stats.iteration = iteration;
+      stats.node_budget = node_budget;
+      stats.has_incumbent_before = has_incumbent_before;
+      stats.improved_incumbent = improved_incumbent;
+      stats.best_ratio_before = best_ratio_before;
+      stats.best_ratio_after = best_ratio_after;
+      stats.returned_solutions_count_so_far =
+          result.best_solution.empty() ? 0 : 1;
+      stats.expanded_nodes_this_iteration =
+          info_uint_value(iteration_info, "ltm_one_shot_num_node_gen");
+      stats.low_level_pibt_calls_this_iteration =
+          info_uint_value(iteration_info, "ltm_one_shot_low_level_pibt_calls");
+      stats.elapsed_ms = deadline.elapsed_ms();
+      stats.time_remaining_sec =
+          std::max(0.0, options.time_limit_ms - stats.elapsed_ms) / 1000.0;
+      stats.max_iterations = options.max_iterations;
+
+      LtmUpdateContext context;
+      context.instance = &instance;
+      context.traffic_before = &result.traffic_map;
+      context.trace_events = &collector.events();
+      context.stats = stats;
+      update_params = options.update_policy(context);
+    }
+
+    result.traffic_map.update_from_trace(collector.events(), update_params);
     auto traffic_after_map = std::shared_ptr<const DirectedTrafficMap>();
     if (options.retain_iteration_traffic_maps) {
       traffic_after_map =

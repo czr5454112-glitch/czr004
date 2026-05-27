@@ -67,6 +67,34 @@ def test_schema_normalizes_phase1a_rows() -> None:
     assert normalized["returned_solutions_count"] == 1
     assert normalized["high_level_expansions"] == 7
     assert normalized["low_level_pibt_calls"] is None
+    assert normalized["laur_enabled"] is False
+    assert normalized["laur_inference_count"] == 0
+    assert normalized["laur_selected_rules"] == {}
+    assert validate_run_row(normalized) == []
+
+
+def test_schema_accepts_phase5_laur_runtime_fields() -> None:
+    run = row("lacam_star_lau_ltm", 1.2)
+    run.update(
+        {
+            "laur_enabled": True,
+            "laur_force_additive": True,
+            "laur_update_mode": "force_additive",
+            "laur_model_path": "configs/phase5/laur_additive_only",
+            "laur_inference_count": 2,
+            "laur_inference_total_ms": 0.25,
+            "laur_update_runtime_ms": 0.25,
+            "laur_additive_fallback_count": 1,
+            "laur_safety_disabled_count": 0,
+            "laur_update_period_restarts": 1,
+            "laur_post_first_solution_only": True,
+            "laur_selected_rules": {"additive_ltm": 2},
+        }
+    )
+
+    normalized = normalize_run_row(run)
+
+    assert normalized["laur_force_additive"] is True
     assert validate_run_row(normalized) == []
 
 

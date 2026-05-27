@@ -53,7 +53,26 @@ PLANNING_EXECUTION_FIELDS = {
     "planning_execution_window": (int, type(None)),
 }
 
-PHASE2_OPTIONAL_FIELDS = {**PHASE2_CORE_FIELDS, **PLANNING_EXECUTION_FIELDS}
+PHASE5_LAUR_FIELDS = {
+    "laur_enabled": bool,
+    "laur_force_additive": bool,
+    "laur_update_mode": (str, type(None)),
+    "laur_model_path": (str, type(None)),
+    "laur_inference_count": (int, type(None)),
+    "laur_inference_total_ms": (int, float, type(None)),
+    "laur_update_runtime_ms": (int, float, type(None)),
+    "laur_additive_fallback_count": (int, type(None)),
+    "laur_safety_disabled_count": (int, type(None)),
+    "laur_update_period_restarts": (int, type(None)),
+    "laur_post_first_solution_only": (bool, type(None)),
+    "laur_selected_rules": (dict, type(None)),
+}
+
+PHASE2_OPTIONAL_FIELDS = {
+    **PHASE2_CORE_FIELDS,
+    **PLANNING_EXECUTION_FIELDS,
+    **PHASE5_LAUR_FIELDS,
+}
 
 
 def _is_number(value: Any) -> bool:
@@ -83,6 +102,30 @@ def normalize_run_row(row: dict) -> dict:
         normalized["expanded_nodes"] = normalized.get("num_node_gen")
     if "low_level_pibt_calls" not in normalized:
         normalized["low_level_pibt_calls"] = None
+    if "laur_enabled" not in normalized:
+        normalized["laur_enabled"] = False
+    if "laur_force_additive" not in normalized:
+        normalized["laur_force_additive"] = False
+    if "laur_update_mode" not in normalized:
+        normalized["laur_update_mode"] = "disabled"
+    if "laur_model_path" not in normalized:
+        normalized["laur_model_path"] = ""
+    if "laur_inference_count" not in normalized:
+        normalized["laur_inference_count"] = 0
+    if "laur_inference_total_ms" not in normalized:
+        normalized["laur_inference_total_ms"] = 0.0
+    if "laur_update_runtime_ms" not in normalized:
+        normalized["laur_update_runtime_ms"] = normalized.get("laur_inference_total_ms", 0.0)
+    if "laur_additive_fallback_count" not in normalized:
+        normalized["laur_additive_fallback_count"] = 0
+    if "laur_safety_disabled_count" not in normalized:
+        normalized["laur_safety_disabled_count"] = 0
+    if "laur_update_period_restarts" not in normalized:
+        normalized["laur_update_period_restarts"] = None
+    if "laur_post_first_solution_only" not in normalized:
+        normalized["laur_post_first_solution_only"] = None
+    if "laur_selected_rules" not in normalized:
+        normalized["laur_selected_rules"] = {}
 
     for key in PHASE2_OPTIONAL_FIELDS:
         _coerce_optional_int(normalized, key)
@@ -138,5 +181,23 @@ def validate_run_row(row: dict, strict_phase2: bool = False) -> list[str]:
             errors.append("time_to_first_solution_ms must be nonnegative")
         if row.get("runtime_ms") is not None and float(row["time_to_first_solution_ms"]) > float(row["runtime_ms"]) + 1e-6:
             errors.append("time_to_first_solution_ms exceeds runtime_ms")
+    for key in (
+        "laur_inference_count",
+        "laur_inference_total_ms",
+        "laur_update_runtime_ms",
+        "laur_additive_fallback_count",
+        "laur_safety_disabled_count",
+    ):
+        if row.get(key) is not None and float(row[key]) < 0:
+            errors.append(f"{key} must be nonnegative")
+    if row.get("laur_enabled") and row.get("laur_update_period_restarts") is not None:
+        if int(row["laur_update_period_restarts"]) < 1:
+            errors.append("laur_update_period_restarts must be >= 1 when LAUR is enabled")
+    if isinstance(row.get("laur_selected_rules"), dict):
+        for rule_id, count in row["laur_selected_rules"].items():
+            if not isinstance(rule_id, str):
+                errors.append("laur_selected_rules keys must be strings")
+            if not isinstance(count, int) or isinstance(count, bool) or count < 0:
+                errors.append("laur_selected_rules counts must be nonnegative integers")
 
     return errors

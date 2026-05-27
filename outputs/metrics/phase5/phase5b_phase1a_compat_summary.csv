@@ -1,0 +1,3 @@
+map,agents,method,runs,successes,success_rate,ratio_mean,ratio_median,ratio_std,runtime_ms_mean,time_to_first_solution_ms_mean,returned_solutions_count_mean,expanded_nodes_mean,high_level_expansions_mean,low_level_pibt_calls_mean
+loop-dry-run,3,lacam_star,1,1,1.0,3.75,3.75,0.0,14.6827,nan,1,103.0,1964.0,nan
+loop-dry-run,3,lacam_star_ltm,1,1,1.0,3.75,3.75,0.0,11.9289,nan,1,87.0,375.0,536.0

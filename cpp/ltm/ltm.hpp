@@ -148,6 +148,7 @@ struct LtmOptions {
   uint checkpoint_topk_edges = 16;
   UpdateParams update_params = UpdateParams::additive();
   bool retain_iteration_traffic_maps = false;
+  std::function<UpdateParams(const struct LtmUpdateContext&)> update_policy;
   std::function<void(const struct LtmIterationCheckpoint&)> iteration_callback;
 };
 
@@ -167,6 +168,28 @@ struct LtmIterationCheckpoint {
   TrafficSnapshot traffic_after;
   std::shared_ptr<const DirectedTrafficMap> traffic_before_map;
   std::shared_ptr<const DirectedTrafficMap> traffic_after_map;
+};
+
+struct LtmIterationStats {
+  uint iteration = 0;
+  uint node_budget = 0;
+  bool has_incumbent_before = false;
+  bool improved_incumbent = false;
+  double best_ratio_before = 0.0;
+  double best_ratio_after = 0.0;
+  uint returned_solutions_count_so_far = 0;
+  uint expanded_nodes_this_iteration = 0;
+  uint low_level_pibt_calls_this_iteration = 0;
+  double elapsed_ms = 0.0;
+  double time_remaining_sec = 0.0;
+  uint max_iterations = 0;
+};
+
+struct LtmUpdateContext {
+  const Instance* instance = nullptr;
+  const DirectedTrafficMap* traffic_before = nullptr;
+  const std::vector<TraceEvent>* trace_events = nullptr;
+  LtmIterationStats stats;
 };
 
 struct LtmOneShotProbeOptions {

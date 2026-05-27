@@ -1192,3 +1192,40 @@
   - listwise, pairwise, delta, safety, family, and additive fallback losses
   - runtime export boundary for TorchScript / ONNX / Python service / C++ attention implementation.
 - Added the important decision note: future advanced models should reuse Repair3 stable target formulation instead of returning to unstable hard best-rule targets.
+
+## 2026-05-27 11:28 - Start LAUR Phase5B runtime parity integration
+
+- Request: complete LAUR/LAU-LTM Phase5B according to `phase4_6_laur_ltm_codex_execution_plan.md` and `deep-research-report.md`.
+- Scope:
+  - Integrate the Phase5A C++ LAU runtime into the existing `solve_with_ltm` update loop through a solver-safe update-policy hook.
+  - Add `lacam_star_lau_ltm` runner support with `--laur-disable` and `--laur-force-additive` parity modes.
+  - Add LAU runtime logging fields and metrics schema normalization.
+  - Verify additive/disable parity on smoke runs before any learned-runtime claim.
+- Boundary:
+  - No learned restart.
+  - No PIBT candidate-domain, conflict, rewrite, or incumbent-pruning semantic changes.
+  - No closed-loop learned performance claim in Phase5B.
+- Follow-up:
+  - Write `outputs/reports/phase5_laur_solver_integration_report.md` after validation.
+
+## 2026-05-27 11:47 - Finish LAUR Phase5B parity validation
+
+- Implemented:
+  - `LtmOptions::update_policy` and `LtmUpdateContext` for solver-loop update-param selection after each LTM one-shot iteration.
+  - `phase1a_batch` support for `lacam_star_lau_ltm`, LAUR enable/disable/force-additive flags, runtime model loading, safety fallback, and LAUR JSONL diagnostics.
+  - Metrics schema normalization/validation for Phase5B LAUR fields.
+  - `scripts/phase5_laur_solver_parity_smoke.ps1` for LTM vs LAUR force-additive vs LAUR disabled parity.
+- Validation:
+  - `tests/test_czr004_metrics.py tests/test_phase5_laur_runtime_parity.py`: 9 passed in conda env `czr004`.
+  - `tests/test_phase4_laur_features.py tests/test_phase4_laur_schema.py`: 7 passed in conda env `czr004`.
+  - `scripts/build_phase1a_batch.ps1`: passed.
+  - `scripts/build_phase5_laur_runtime_smoke.ps1`: passed.
+  - `scripts/phase5_laur_runtime_smoke.ps1`: passed.
+  - `scripts/phase5_laur_solver_parity_smoke.ps1`: passed; strict parity fields matched, runtime-ms differences were warn-only.
+  - Phase1a dry-run JSONL replay through `czr004_metrics.cli`: schema errors 0.
+  - `scripts/build_phase4_laur_smoke.ps1` and `scripts/phase4_laur_update_smoke.ps1`: passed.
+  - `scripts/build_phase1_ltm.ps1` and `scripts/phase1_ltm_smoke.ps1`: passed.
+- Report:
+  - Wrote `outputs/reports/phase5_laur_solver_integration_report.md`.
+- Boundary:
+  - This remains a parity/safety integration step only: no learned restart, no LaCAM*/PIBT semantic changes, no closed-loop learned performance claim.

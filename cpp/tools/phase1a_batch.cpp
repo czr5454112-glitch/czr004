@@ -1,4 +1,6 @@
 #include "ltm.hpp"
+#include "laur_ltm_features.hpp"
+#include "laur_ltm_runtime.hpp"
 
 #include <lacam2.hpp>
 
@@ -8,10 +10,12 @@
 #include <fstream>
 #include <iostream>
 #include <limits>
+#include <map>
 #include <random>
 #include <sstream>
 #include <string>
 #include <unordered_map>
+#include <unordered_set>
 
 namespace {
 
@@ -31,10 +35,17 @@ struct Args {
   std::string traffic_map_jsonl;
   std::string traffic_map_run_id;
   std::string traffic_map_edge_filter = "all";
+  std::string laur_model_path;
   uint agents = 0;
   uint seed = 0;
   double time_limit_sec = 30.0;
   uint ltm_max_iterations = 100000;
+  bool laur_enable = false;
+  bool laur_disable = false;
+  bool laur_force_additive = false;
+  bool laur_post_first_solution_only = true;
+  uint laur_every_k_restarts = 1;
+  double laur_safety_threshold = 0.30;
   int verbose = 0;
 };
 
@@ -79,6 +90,19 @@ std::string json_number_or_null(double value)
   return out.str();
 }
 
+void append_json_string_uint_map(std::ostream& out,
+                                 const std::map<std::string, uint>& values)
+{
+  out << "{";
+  bool first = true;
+  for (const auto& [key, value] : values) {
+    if (!first) out << ",";
+    first = false;
+    out << json_string(key) << ":" << value;
+  }
+  out << "}";
+}
+
 bool parse_uint(const std::string& value, uint* out)
 {
   try {
@@ -102,12 +126,24 @@ bool parse_double(const std::string& value, double* out)
 Args parse_args(int argc, char** argv)
 {
   auto values = std::unordered_map<std::string, std::string>();
+  const auto switches = std::unordered_set<std::string>{
+      "laur-enable",
+      "laur-disable",
+      "laur-force-additive",
+      "laur-post-first-solution-only",
+  };
   for (int i = 1; i < argc; ++i) {
     const auto key = std::string(argv[i]);
-    if (key.rfind("--", 0) != 0 || i + 1 >= argc) {
+    if (key.rfind("--", 0) != 0) {
       throw std::runtime_error("invalid argument near " + key);
     }
-    values[key.substr(2)] = argv[++i];
+    const auto name = key.substr(2);
+    if (switches.count(name) > 0) {
+      values[name] = "1";
+      continue;
+    }
+    if (i + 1 >= argc) throw std::runtime_error("missing value for " + key);
+    values[name] = argv[++i];
   }
 
   auto require = [&](const std::string& key) {
@@ -139,6 +175,14 @@ Args parse_args(int argc, char** argv)
       values.count("traffic-map-run-id") ? values["traffic-map-run-id"] : "";
   args.traffic_map_edge_filter =
       values.count("traffic-map-edge-filter") ? values["traffic-map-edge-filter"] : "all";
+  args.laur_model_path =
+      values.count("laur-model-path") ? values["laur-model-path"] : "";
+  args.laur_enable = values.count("laur-enable") > 0;
+  args.laur_disable = values.count("laur-disable") > 0;
+  args.laur_force_additive = values.count("laur-force-additive") > 0;
+  args.laur_post_first_solution_only =
+      values.count("laur-post-first-solution-only") > 0 ||
+      args.laur_post_first_solution_only;
 
   if (!parse_uint(require("agents"), &args.agents)) {
     throw std::runtime_error("invalid --agents");
@@ -154,9 +198,24 @@ Args parse_args(int argc, char** argv)
       !parse_uint(values["ltm-max-iterations"], &args.ltm_max_iterations)) {
     throw std::runtime_error("invalid --ltm-max-iterations");
   }
+  if (values.count("laur-every-k-restarts") &&
+      !parse_uint(values["laur-every-k-restarts"], &args.laur_every_k_restarts)) {
+    throw std::runtime_error("invalid --laur-every-k-restarts");
+  }
+  if (args.laur_every_k_restarts == 0) {
+    throw std::runtime_error("--laur-every-k-restarts must be >= 1");
+  }
+  if (values.count("laur-safety-threshold") &&
+      !parse_double(values["laur-safety-threshold"], &args.laur_safety_threshold)) {
+    throw std::runtime_error("invalid --laur-safety-threshold");
+  }
+  if (args.laur_disable && args.laur_enable) {
+    throw std::runtime_error("--laur-enable and --laur-disable are mutually exclusive");
+  }
   if (values.count("verbose")) args.verbose = std::stoi(values["verbose"]);
 
-  if (args.method != "lacam_star" && args.method != "lacam_star_ltm") {
+  if (args.method != "lacam_star" && args.method != "lacam_star_ltm" &&
+      args.method != "lacam_star_lau_ltm") {
     throw std::runtime_error("unsupported --method " + args.method);
   }
   if (args.traffic_map_edge_filter != "all" &&
@@ -165,6 +224,12 @@ Args parse_args(int argc, char** argv)
                              args.traffic_map_edge_filter);
   }
   return args;
+}
+
+bool laur_runtime_requested(const Args& args)
+{
+  return (args.method == "lacam_star_lau_ltm" || args.laur_enable) &&
+         !args.laur_disable;
 }
 
 uint sum_info_values(const std::string& info, const std::string& key)
@@ -197,6 +262,17 @@ struct RunStats {
   uint committed_events = 0;
   uint blocked_events = 0;
   uint nonzero_ltm_edges = 0;
+  bool laur_enabled = false;
+  bool laur_force_additive = false;
+  std::string laur_update_mode = "disabled";
+  std::string laur_model_path;
+  uint laur_inference_count = 0;
+  double laur_inference_total_ms = 0.0;
+  uint laur_additive_fallback_count = 0;
+  uint laur_safety_disabled_count = 0;
+  uint laur_update_period_restarts = 1;
+  bool laur_post_first_solution_only = true;
+  std::map<std::string, uint> laur_selected_rules;
 };
 
 std::string default_traffic_map_run_id(const Args& args)
@@ -296,6 +372,16 @@ RunStats run_lacam_star(const Instance& instance, const Args& args)
 RunStats run_lacam_star_ltm(const Instance& instance, const Args& args)
 {
   RunStats stats;
+  stats.laur_enabled = laur_runtime_requested(args);
+  stats.laur_force_additive = stats.laur_enabled && args.laur_force_additive;
+  stats.laur_model_path = args.laur_model_path;
+  stats.laur_update_period_restarts = args.laur_every_k_restarts;
+  stats.laur_post_first_solution_only = args.laur_post_first_solution_only;
+  stats.laur_update_mode =
+      stats.laur_enabled
+          ? (stats.laur_force_additive ? "force_additive" : "runtime")
+          : "disabled";
+
   czr004::ltm::LtmOptions options;
   options.objective = Objective::OBJ_SUM_OF_LOSS;
   options.time_limit_ms = args.time_limit_sec * 1000.0;
@@ -303,6 +389,59 @@ RunStats run_lacam_star_ltm(const Instance& instance, const Args& args)
   options.node_budget_factor = 10;
   options.verbose = args.verbose;
   options.seed = args.seed;
+
+  auto runtime = czr004::ntm::LaurLtmRuntime();
+  if (stats.laur_enabled) {
+    czr004::ntm::LaurRuntimeOptions runtime_options;
+    runtime_options.enabled = true;
+    runtime_options.force_additive = args.laur_force_additive;
+    runtime_options.model_path = args.laur_model_path;
+    runtime_options.post_first_solution_only = args.laur_post_first_solution_only;
+    runtime_options.update_period_restarts = args.laur_every_k_restarts;
+    if (!runtime.load(runtime_options)) {
+      throw std::runtime_error("failed to load LAUR runtime model path " +
+                               args.laur_model_path);
+    }
+
+    options.update_policy =
+        [&](const czr004::ltm::LtmUpdateContext& context) {
+          const auto additive = czr004::ltm::UpdateParams::additive();
+          if (context.instance == nullptr || context.traffic_before == nullptr ||
+              context.trace_events == nullptr) {
+            ++stats.laur_additive_fallback_count;
+            return additive;
+          }
+          if (args.laur_post_first_solution_only &&
+              !context.stats.has_incumbent_before) {
+            ++stats.laur_additive_fallback_count;
+            return additive;
+          }
+          if (context.stats.iteration % args.laur_every_k_restarts != 0) {
+            ++stats.laur_additive_fallback_count;
+            return additive;
+          }
+
+          const auto features = czr004::ntm::build_laur_features(
+              *context.instance, *context.traffic_before,
+              *context.trace_events, context.stats);
+          const auto prediction = runtime.predict(features);
+          ++stats.laur_inference_count;
+          stats.laur_inference_total_ms += prediction.inference_ms;
+          ++stats.laur_selected_rules[prediction.rule_id];
+
+          if (!prediction.enabled) {
+            ++stats.laur_additive_fallback_count;
+            return additive;
+          }
+          if (!args.laur_force_additive &&
+              prediction.safety_harmful_prob >= args.laur_safety_threshold) {
+            ++stats.laur_safety_disabled_count;
+            ++stats.laur_additive_fallback_count;
+            return additive;
+          }
+          return prediction.params;
+        };
+  }
 
   const auto started = std::chrono::steady_clock::now();
   const auto result = czr004::ltm::solve_with_ltm(instance, options);
@@ -376,6 +515,26 @@ void append_jsonl(const Args& args, const std::filesystem::path& binary_path,
   out << ",\"committed_events\":" << stats.committed_events;
   out << ",\"blocked_events\":" << stats.blocked_events;
   out << ",\"nonzero_ltm_edges\":" << stats.nonzero_ltm_edges;
+  out << ",\"laur_enabled\":" << (stats.laur_enabled ? "true" : "false");
+  out << ",\"laur_force_additive\":"
+      << (stats.laur_force_additive ? "true" : "false");
+  out << ",\"laur_update_mode\":" << json_string(stats.laur_update_mode);
+  out << ",\"laur_model_path\":" << json_string(stats.laur_model_path);
+  out << ",\"laur_inference_count\":" << stats.laur_inference_count;
+  out << ",\"laur_inference_total_ms\":"
+      << json_number_or_null(stats.laur_inference_total_ms);
+  out << ",\"laur_update_runtime_ms\":"
+      << json_number_or_null(stats.laur_inference_total_ms);
+  out << ",\"laur_additive_fallback_count\":"
+      << stats.laur_additive_fallback_count;
+  out << ",\"laur_safety_disabled_count\":"
+      << stats.laur_safety_disabled_count;
+  out << ",\"laur_update_period_restarts\":"
+      << stats.laur_update_period_restarts;
+  out << ",\"laur_post_first_solution_only\":"
+      << (stats.laur_post_first_solution_only ? "true" : "false");
+  out << ",\"laur_selected_rules\":";
+  append_json_string_uint_map(out, stats.laur_selected_rules);
   out << ",\"git_commit\":" << json_string(args.project_commit);
   out << ",\"external_lacam2_commit\":" << json_string(args.external_commit);
   out << ",\"branch\":" << json_string(args.branch);

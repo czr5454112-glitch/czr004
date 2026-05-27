@@ -29,6 +29,7 @@ artifacts/teacher/laur/traces/
 artifacts/teacher/laur/update_labels/
 artifacts/teacher/laur/pilot/
 artifacts/teacher/laur/full/
+artifacts/teacher/laur/full_repair1/traces/*.zst
 artifacts/teacher/traces/
 artifacts/teacher/tmp/
 artifacts/teacher/*.tmp

@@ -1,0 +1,113 @@
+{
+  "dataset": "/root/shared-nvme/czr004_phase4_repair1_43633e7/artifacts/teacher/laur/full_repair1/update_labels/phase4_laur_update_dataset_full_repair1.jsonl",
+  "gate": {
+    "eval_script_runs_end_to_end": true,
+    "model_export_file_exists": true,
+    "passed": true,
+    "schema_validation_passes": true,
+    "summary_csv_written": true,
+    "validation_metrics_computed": true
+  },
+  "metrics_by_split": {
+    "all": {
+      "harmful_update_f1": 0.6747792889525173,
+      "harmful_update_precision": 0.5115774240231549,
+      "harmful_update_recall": 0.9908899789768746,
+      "label_distribution": {
+        "block_heavy": 507,
+        "block_light": 252,
+        "commit_heavy": 449,
+        "decay_090": 164,
+        "decay_095": 178,
+        "neutral_additive": 669,
+        "wait_heavy": 282,
+        "wait_light": 484
+      },
+      "neutral_additive_rate": 0.2552763819095477,
+      "non_neutral_rule_top1_accuracy": 0.3903281519861831,
+      "predicted_rule_distribution": {
+        "block_heavy": 548,
+        "block_light": 137,
+        "commit_heavy": 580,
+        "decay_090": 51,
+        "decay_095": 74,
+        "neutral_additive": 762,
+        "wait_heavy": 186,
+        "wait_light": 647
+      },
+      "predicted_rule_validation_mean_delta_ratio": 0.03145251246145307,
+      "rule_top1_accuracy": 0.40938023450586264,
+      "rule_top3_accuracy": 0.7480737018425461,
+      "safety_auroc": 0.7833372165094056,
+      "sample_count": 2985
+    },
+    "train": {
+      "harmful_update_f1": 0.6925422789021347,
+      "harmful_update_precision": 0.5308117297067574,
+      "harmful_update_recall": 0.9960127591706539,
+      "label_distribution": {
+        "block_heavy": 426,
+        "block_light": 220,
+        "commit_heavy": 376,
+        "decay_090": 145,
+        "decay_095": 149,
+        "neutral_additive": 569,
+        "wait_heavy": 231,
+        "wait_light": 410
+      },
+      "neutral_additive_rate": 0.25257323832145684,
+      "non_neutral_rule_top1_accuracy": 0.40929994890137966,
+      "predicted_rule_distribution": {
+        "block_heavy": 451,
+        "block_light": 121,
+        "commit_heavy": 504,
+        "decay_090": 45,
+        "decay_095": 69,
+        "neutral_additive": 638,
+        "wait_heavy": 157,
+        "wait_light": 541
+      },
+      "predicted_rule_validation_mean_delta_ratio": 0.035171056485156525,
+      "rule_top1_accuracy": 0.42794932699920823,
+      "rule_top3_accuracy": 0.7672209026128266,
+      "safety_auroc": 0.7881853540368933,
+      "sample_count": 2526
+    },
+    "validation": {
+      "harmful_update_f1": 0.5650684931506849,
+      "harmful_update_precision": 0.40145985401459855,
+      "harmful_update_recall": 0.953757225433526,
+      "label_distribution": {
+        "block_heavy": 81,
+        "block_light": 32,
+        "commit_heavy": 73,
+        "decay_090": 19,
+        "decay_095": 29,
+        "neutral_additive": 100,
+        "wait_heavy": 51,
+        "wait_light": 74
+      },
+      "neutral_additive_rate": 0.2701525054466231,
+      "non_neutral_rule_top1_accuracy": 0.28690807799442897,
+      "predicted_rule_distribution": {
+        "block_heavy": 97,
+        "block_light": 16,
+        "commit_heavy": 76,
+        "decay_090": 6,
+        "decay_095": 5,
+        "neutral_additive": 124,
+        "wait_heavy": 29,
+        "wait_light": 106
+      },
+      "predicted_rule_validation_mean_delta_ratio": 0.01098836822643145,
+      "rule_top1_accuracy": 0.30718954248366015,
+      "rule_top3_accuracy": 0.6427015250544662,
+      "safety_auroc": 0.7299810016573023,
+      "sample_count": 459
+    }
+  },
+  "model": "/root/shared-nvme/czr004_phase4_repair1_43633e7/artifacts/models/laur_ltm/full_repair1/laur_mlp_v1_weights.json",
+  "probe_jsonl": "/root/shared-nvme/czr004_phase4_repair1_43633e7/artifacts/teacher/laur/full_repair1/probes/phase4_laur_probe_full_repair1.jsonl",
+  "schema_version": "phase4_laur_offline_eval_summary_v1",
+  "summary_csv": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/tables/phase4_laur_ltm_offline_eval_full_repair1.csv"
+}

@@ -1011,3 +1011,38 @@
 - Follow-up:
   - Before resuming, inspect `pause_after_probe_status.txt`, `pause_after_probe_pgid.txt`, tmux state, and `train_*.stdout.log` count.
   - Resume with `SIGCONT` to the recorded process group only after confirming probe completion and no unexpected train progress.
+
+## 2026-05-27 09:10 - Phase4F repair1 completed, backed up medium artifacts
+
+- Request: after the night pause, confirm the old-server state, continue only from completed probe, then back up useful medium/small files to git before continuing the raw-trace download.
+- Server state:
+  - probe completed: `765 / 765`
+  - train/eval had not started before resume: `0 / 0`
+  - pause guard stopped the tmux launcher process group at `2026-05-26 22:46:18 CST`; the original batch python was already defunct.
+  - resumed in a new tmux session with `python scripts/run_phase4_laur_batch.py --config configs/phase4/laur_ltm_full_repair1.yaml --steps dataset,train,eval`.
+- Result:
+  - dataset/train/eval completed end to end.
+  - operational gate passed.
+  - Phase4F performance gate still failed due to validation exact top1/top3:
+    - validation top1 `0.3072` vs required `0.35`
+    - validation top3 `0.6427` vs required `0.70`
+  - safety gates now pass:
+    - harmful recall `0.9538`
+    - harmful precision `0.4015`
+  - conclusion: repair1 meaningfully improves the failed full baseline, but the model is still not ready for Phase5 learned runtime.
+- Downloaded locally:
+  - repair1 reports, summaries, tables
+  - exported model JSON files
+  - checkpoint JSONL, probe JSONL, update labels/dataset JSONL
+  - compressed raw trace sha256 sidecar
+- Raw trace:
+  - remote compressed trace size `3516816240` bytes.
+  - local partial download reached `3154116608` bytes before being stopped by user request.
+  - remaining raw-trace download: `362699632` bytes, about `345.9 MiB`.
+  - `.gitignore` now excludes `artifacts/teacher/laur/full_repair1/traces/*.zst` so the large raw trace is not committed.
+- New local records:
+  - `outputs/reports/phase4_laur_ltm_full_repair1_result_analysis.md`
+  - `outputs/reports/phase4_laur_ltm_full_repair1_local_archive_manifest.md`
+- Follow-up:
+  - Commit and push medium/small repair1 evidence first.
+  - Resume and verify the raw-trace `.zst` download later with sha256.

@@ -2899,3 +2899,123 @@ Phase4B 已在 `phase4-laur-ltm` 分支以 commit `fef6956` 通过 gate。当前
 ```
 
 Phase4C 不包含 `phase4_laur_probe.cpp`、update-rule labels、model training 或 runtime learned update；这些仍属于 Phase4D 以后。
+
+---
+
+## 25. 2026-05-27 Phase4F Repair2：advanced update-rule network 预案记录
+
+### 25.1 当前状态
+
+Phase4F `full_repair1` 已在旧服务器 `ackcs-00gjgxxy` 上完成并备份：
+
+- record/probe/dataset/train/eval operational gate 全部通过。
+- 中小型证据已提交到 git。
+- compressed raw trace `.zst` 已完整下载到本地并通过 sha256 校验，但不进入 git。
+- repair1 仍未通过 Phase4F performance gate：
+  - validation rule top1 `0.3072 < 0.35`
+  - validation rule top3 `0.6427 < 0.70`
+  - harmful recall `0.9538 >= 0.80`
+  - harmful precision `0.4015 >= 0.30`
+  - predicted-rule mean delta `0.0110 > 0.0`
+
+结论：repair1 修好了 safety/fallback 方向，但 exact update-rule ranking 仍不足，不能进入 Phase5 learned runtime。
+
+### 25.2 GPT Pro repair2 建议稿
+
+建议稿文件：
+
+```text
+phase4f_repair2_advanced_update_rule_network_plan.md
+```
+
+该建议与当前证据一致，可以作为下一轮 Phase4F repair2 的候选执行方案。它不改变 LAU/LAUR-LTM 路线，不降低 gate，也不进入 Phase5 runtime。
+
+### 25.3 Repair2 可以尝试的原因
+
+当前失败不像是纯 safety 问题：
+
+- safety recall/precision 已通过。
+- train top3 已超过 gate，但 validation top3 仍未过，说明存在泛化与规则排序问题。
+- 旧 MLP-v1 的输入是 aggregate checkpoint features，输出是 hard best-rule class，可能丢失 traffic map state、trace/event 结构和 candidate-rule 条件信息。
+
+因此 repair2 可以尝试把任务从：
+
+```text
+checkpoint -> best rule class
+```
+
+改成：
+
+```text
+Q(checkpoint, candidate update rule)
+P_harmful(checkpoint, candidate update rule)
+```
+
+再用 safety-gated argmax 选择 update rule。
+
+### 25.4 Repair2 允许做的范围
+
+Repair2 仍属于 offline Phase4F。
+
+Allowed：
+
+- 清理 executable update-rule target。
+- 把 `neutral_additive` 从 executable rule class 中折叠到 `additive_ltm`，同时保留 original label / neutral flag 供 audit。
+- 构建 token/rule-aware dataset v2。
+- 使用已有 repair1 artifacts：
+  - checkpoints JSONL
+  - probe JSONL
+  - update dataset JSONL
+  - verified local raw trace zst
+  - traffic snapshots / checkpoint top-k 信息（如需要）
+- 实现 LAU-SetTransformer-v2 / LAU-EdgeTraceTransformer-v2。
+- 使用 listwise / pairwise / delta regression / per-rule harmful BCE / family auxiliary loss。
+- 离线训练、离线评估、写 repair2 report。
+
+Not allowed：
+
+- 不降低 Phase4F gate。
+- 不进入 Phase5 runtime。
+- 不改 C++ learned runtime / `solve_with_ltm` 行为。
+- 不替换 PIBT。
+- 不预测 agent actions。
+- 不实现 learned restart。
+- 不把 large raw trace `.zst` 提交进 git。
+
+### 25.5 Repair2 最小执行顺序
+
+等待用户明确命令后再开始。默认顺序：
+
+```text
+R2-A. Clean executable update-rule target
+R2-B. Build token/rule-aware dataset v2
+R2-C. Implement LAU-SetTransformer-v2 smoke baseline
+R2-D. Implement LAU-EdgeTraceTransformer-v2
+R2-E. Train/evaluate locally on repair1 artifacts
+R2-F. 若本地 evidence 超过 repair1，再考虑服务器 full offline training
+R2-G. 写 outputs/reports/phase4f_repair2_advanced_update_rule_network_report.md
+R2-H. 根据 Phase4F gate 判断 pass/fail；未过则继续留在 Phase4F
+```
+
+### 25.6 Repair2 gate 不变
+
+Repair2 仍必须满足：
+
+```text
+validation rule top1 >= 0.35
+validation rule top3 >= 0.70
+harmful recall >= 0.80
+harmful precision >= 0.30
+predicted-rule mean delta > 0.0
+validation non-neutral checkpoints >= 50
+```
+
+可以新增 executable-rule metrics、family metrics、per-map confusion、oracle/top-k delta diagnostics，但这些不能替代主 gate。
+
+### 25.7 Repair2 后续决策
+
+- 如果 SetTransformer 或 EdgeTraceTransformer 通过 Phase4F gate：记录 pass，随后单独规划 Phase5 runtime，不在同一轮直接进入 Phase5。
+- 如果 advanced models 提升 top1/top3 但仍未过 gate：继续留在 Phase4F，下一步考虑 label/probe ambiguity、map-family balance、topology-biased attention 或 sequence-of-checkpoints。
+- 如果 advanced models 不优于 repair1：记录 negative result，优先怀疑 probe label ambiguity / update-rule set / target formulation，而不是继续盲目扩大 MLP。
+
+当前状态：**repair2 方案已记录，尚未启动。等待用户明确命令后再开始。**

@@ -1047,3 +1047,17 @@
 - Follow-up:
   - Commit and push medium/small repair1 evidence first.
   - Keep the verified raw-trace `.zst` as a local-only backup unless large-file storage is intentionally configured later.
+
+## 2026-05-27 09:35 - Phase4F repair2 advanced update-rule network plan reviewed
+
+- Request: read `phase4f_repair2_advanced_update_rule_network_plan.md`, decide whether it is currently actionable, record the decision in the master execution plan, and wait for an explicit start command.
+- Assessment:
+  - The plan is aligned with the current repair1 evidence.
+  - Repair1 fixed safety metrics but still failed exact validation top1/top3, so a rule-conditioned objective is a reasonable next attempt.
+  - The proposed direction stays within offline Phase4F: no Phase5 runtime integration, no learned restart, no PIBT/action-policy replacement, and no gate lowering.
+  - Existing repair1 artifacts are sufficient to start R2-A/R2-B locally: checkpoint JSONL, probe JSONL, update labels/dataset, exported model baseline, and a verified local raw trace zst.
+- Master plan update:
+  - Added section `25. 2026-05-27 Phase4F Repair2：advanced update-rule network 预案记录` to `phase4_6_laur_ltm_codex_execution_plan.md`.
+- Decision:
+  - Repair2 is feasible to try, but it has not been started.
+  - Wait for the user command before implementing token dataset, attention models, training, or evaluation.

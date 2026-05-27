@@ -1655,6 +1655,274 @@ Phase5 顺序：
 5E: closed-loop LAU smoke and ablation
 ```
 
+### 12.1 Phase5 / Phase5.5 advanced architecture memo
+
+来源：
+
+```text
+phase4f_repair2_advanced_update_rule_network_plan.md
+```
+
+该建议在 Repair2 当时用于替换 checkpoint-level MLP。Repair2 实测未通过 Phase4F gate，后续 Repair3 证明更关键的问题是 target formulation：大量 probe label 近 tie，使 hard best-rule label 不稳定。
+
+因此后续若在 Phase5 / Phase5.5 重新启用高级模型，不应回到旧 hard target，而应沿用 Repair3 的 stable target formulation：
+
+```text
+stable target / tie-aware label
+conservative additive fallback
+safety-gated rule selection
+```
+
+高级模型和 stable target 不是二选一：
+
+```text
+target formulation: defines what the model should learn
+model architecture: defines how the model learns it
+```
+
+#### 12.1.1 Why MLP may still be limiting
+
+Pro 建议中关于 MLP 限制的核心判断：
+
+```text
+The current model is LAU-MLP-v1.
+
+Its effective learning problem is:
+
+aggregate checkpoint features -> one best update rule
+
+This is likely too weak for LAUR because choosing an LTM update rule depends on:
+
+W_t: current traffic-map state
+H_t: current iteration trace events
+local bottlenecks / corridors / blocked regions
+which candidate update rule is being evaluated
+rule-family structure: additive / commit / block / wait / decay
+near-ties between rules in short-budget probes
+
+A single aggregate MLP loses most of this structure.
+```
+
+#### 12.1.2 Advanced model output must remain LAUR-compatible
+
+后续高级模型不能变成 MAPF policy，也不能替换 PIBT。输出仍然只允许是 LTM update-rule / update-parameter family：
+
+```text
+input:
+  checkpoint context + traffic-map tokens + trace/event tokens + candidate update-rule tokens
+
+output:
+  score for each candidate update rule
+  harmful probability for each candidate update rule
+  optional expected delta_ratio for each rule
+
+selected update:
+  safety-gated argmax over candidate update-rule scores
+```
+
+边界不变：
+
+```text
+Do not predict agent actions.
+Do not replace PIBT.
+Do not change LaCAM*/PIBT legality.
+Do not change high-level LaCAM* search.
+Only predict traffic-map update rule / update parameters.
+```
+
+#### 12.1.3 Primary candidate: LAU-EdgeTraceTransformer-v2
+
+来自 Pro 建议的主架构：
+
+```text
+global_features
+    -> global token encoder
+
+edge_tokens
+    -> edge token encoder
+    -> type embedding + numeric projection + optional direction embedding
+
+trace_tokens
+    -> trace token encoder
+    -> event kind embedding + count/numeric projection
+
+rule_tokens
+    -> rule token encoder
+    -> rule family embedding + update-param numeric projection
+
+context tokens = [global token, edge tokens, trace tokens]
+
+Transformer encoder over context tokens
+
+Rule-conditioned cross-attention:
+    query = rule tokens
+    key/value = context tokens
+
+Rule-token self-attention:
+    lets candidate rules compare against each other
+
+Heads:
+    q_delta_head(rule_token) -> expected delta_ratio score
+    harmful_head(rule_token) -> harmful probability
+    optional family_head(rule_token) -> family auxiliary logits
+```
+
+Pseudocode reference：
+
+```python
+class LAUEdgeTraceTransformerV2(nn.Module):
+    def __init__(self, d_model=128, n_heads=4, n_layers=2):
+        self.global_encoder = NumericEncoder(...)
+        self.edge_encoder = EdgeTokenEncoder(...)
+        self.trace_encoder = TraceTokenEncoder(...)
+        self.rule_encoder = RuleTokenEncoder(...)
+
+        self.context_encoder = nn.TransformerEncoder(...)
+        self.rule_cross_attn = nn.MultiheadAttention(...)
+        self.rule_self_attn = nn.TransformerEncoder(...)
+
+        self.q_head = nn.Linear(d_model, 1)
+        self.harmful_head = nn.Linear(d_model, 1)
+        self.family_head = nn.Linear(d_model, num_families)
+
+    def forward(batch):
+        g = encode_global(batch.global_features)
+        e = encode_edges(batch.edge_tokens)
+        t = encode_trace(batch.trace_tokens)
+        r = encode_rules(batch.rule_tokens)
+
+        context = concat([g, e, t])
+        context = context_encoder(context, key_padding_mask=context_mask)
+
+        r2 = cross_attention(query=r, key=context, value=context)
+        r2 = rule_self_attention(r2)
+
+        q_delta = q_head(r2).squeeze(-1)
+        harmful_logit = harmful_head(r2).squeeze(-1)
+
+        return {
+          "rule_score": q_delta,
+          "harmful_logit": harmful_logit,
+          "family_logits": family_head(r2)
+        }
+```
+
+#### 12.1.4 Backup candidate: LAU-SetTransformer-v2
+
+如果 raw trace tokenization 太慢、太重，或 EdgeTraceTransformer 过拟合，可用轻量 attention 模型：
+
+```text
+LAU-SetTransformer-v2
+
+inputs:
+  global token
+  top-K traffic edge tokens
+  top-K additive delta edge tokens
+  rule tokens
+
+architecture:
+  edge token encoder
+  Set Transformer / Transformer encoder over edge tokens
+  pooling by multihead attention
+  rule-conditioned cross-attention
+  q_delta_head per rule
+  harmful_head per rule
+```
+
+使用场景：
+
+```text
+raw trace zst is unavailable
+trace tokenization is too slow
+EdgeTraceTransformer overfits
+GPU memory is too high
+```
+
+#### 12.1.5 Optional topology-biased attention
+
+Pro 建议中有一个不引入 PyG 的 GAT-like bias：
+
+```text
+bias(i, j) =
+  +b_shared_vertex if edge_i and edge_j share a vertex
+  +b_reverse_edge if edge_i is reverse of edge_j
+  +b_same_direction_corridor if directions align locally
+  +b_nearby if endpoint distance <= 2
+```
+
+候选名：
+
+```text
+LAU-TopoEdgeAttention-v2
+```
+
+约束：
+
+```text
+pure PyTorch attention bias allowed
+networkx preprocessing allowed
+top-k sparse adjacency masks allowed
+do not make PyTorch Geometric a Phase5 hard dependency
+```
+
+#### 12.1.6 Loss and rule selection for advanced model
+
+后续高级模型不要只做 hard classifier，应直接利用 probe outcomes：
+
+```text
+score[rule] = predicted expected delta_ratio
+harmful_logit[rule] = harmful probability
+```
+
+Loss 组件：
+
+```text
+L =
+  lambda_listwise * listwise_kl_loss(score, soft_rule_target)
++ lambda_pairwise * pairwise_margin_ranking_loss(score, rule_delta_vector)
++ lambda_delta    * smooth_l1(score, rule_delta_vector)
++ lambda_safe     * per-rule_harmful_bce(harmful_logit, rule_harmful_vector)
++ lambda_family   * family_auxiliary_loss
++ lambda_additive * additive_fallback_regularization
+```
+
+Eval/runtime rule selection：
+
+```python
+score = model.rule_score
+harmful_prob = sigmoid(model.harmful_logit)
+
+allowed = harmful_prob < threshold
+if not any(allowed):
+    selected = additive_ltm
+else:
+    selected = argmax(score over allowed rules)
+```
+
+#### 12.1.7 Runtime export boundary
+
+第一版 Phase5 应优先接入 Repair3 MLP，因为它已通过 offline gate、体积小、JSON export 简单、C++ 手写 forward 可控。
+
+高级 attention 模型如果进入 Phase5.5 或后续 Phase6，应单独决定 runtime export：
+
+```text
+TorchScript
+ONNX
+Python service wrapper
+C++ lightweight attention implementation
+```
+
+不要在 Phase5 parity 阶段强行解决 attention runtime export。
+
+Phase5 第一优先级仍然是：
+
+```text
+--laur-disable parity
+--laur-force-additive parity
+conservative fallback smoke
+closed-loop ablation
+```
+
 ---
 
 ## 13. Phase5A：C++ runtime skeleton

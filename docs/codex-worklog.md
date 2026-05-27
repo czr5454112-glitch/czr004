@@ -1178,3 +1178,17 @@
   - mean selected delta `0.0081308431 >= 0.0`
 - Closure report: `outputs/reports/phase4f_completion_audit.md`.
 - Decision: Phase4F offline work is complete under the current project gate; Phase5 runtime integration remains separate and unclaimed.
+
+## 2026-05-27 23:24 - Preserve advanced architecture memo in Phase5 plan
+
+- Request: copy the valuable network-architecture selection content from `phase4f_repair2_advanced_update_rule_network_plan.md` into the LAUR master plan Phase5 section.
+- Updated `phase4_6_laur_ltm_codex_execution_plan.md` under `## 12. Phase5 总目标`.
+- Added `12.1 Phase5 / Phase5.5 advanced architecture memo`.
+- Preserved the Pro-model suggestions for:
+  - `LAU-EdgeTraceTransformer-v2`
+  - `LAU-SetTransformer-v2`
+  - optional `LAU-TopoEdgeAttention-v2`
+  - per-rule score / per-rule harmful prediction
+  - listwise, pairwise, delta, safety, family, and additive fallback losses
+  - runtime export boundary for TorchScript / ONNX / Python service / C++ attention implementation.
+- Added the important decision note: future advanced models should reuse Repair3 stable target formulation instead of returning to unstable hard best-rule targets.

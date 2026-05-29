@@ -30,6 +30,9 @@ artifacts/teacher/laur/update_labels/
 artifacts/teacher/laur/pilot/
 artifacts/teacher/laur/full/
 artifacts/teacher/laur/full_repair1/traces/*.zst
+artifacts/teacher/laur/full_repair5_expand5000/traces/*.zst
+artifacts/teacher/laur/full_repair5_attention_native_expand5000_rawtrace/update_labels/*.jsonl
+artifacts/teacher/laur/full_repair5_attention_native_expand5000_rawtrace_hightoken/update_labels/*.jsonl
 artifacts/teacher/traces/
 artifacts/teacher/tmp/
 artifacts/teacher/*.tmp

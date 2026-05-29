@@ -1,0 +1,73 @@
+{
+  "anti_escape_mean_selected_vs_additive_delta": 0.034749479796327344,
+  "avoidable_additive_fallback_rate": 0.32972972972972975,
+  "avoidable_additive_or_defer_rate": 0.32972972972972975,
+  "avoidable_defer_rate": 0.32972972972972975,
+  "checks": {
+    "anti_escape_mean_delta": {
+      "passed": true,
+      "threshold": 0.005,
+      "value": 0.034749479796327344
+    },
+    "avoidable_additive_or_defer_rate": {
+      "passed": true,
+      "threshold": 0.6,
+      "value": 0.32972972972972975
+    },
+    "global_additive_or_defer_rate": {
+      "passed": true,
+      "threshold": 0.7,
+      "value": 0.46187363834422657
+    },
+    "high_margin_capture_rate": {
+      "passed": true,
+      "threshold": 0.4,
+      "value": 0.43783783783783786
+    },
+    "high_margin_opportunity_count": {
+      "passed": true,
+      "threshold": 50,
+      "value": 185
+    },
+    "opportunity_nonadditive_selection_rate": {
+      "passed": true,
+      "threshold": 0.35,
+      "value": 0.5938566552901023
+    }
+  },
+  "decision_distribution": {
+    "defer_ltm": 212,
+    "use_nonadditive": 247
+  },
+  "global_additive_or_defer_rate": 0.46187363834422657,
+  "global_nonadditive_selection_rate": 0.5381263616557734,
+  "high_margin_nonadditive_capture_rate": 0.43783783783783786,
+  "inconclusive": false,
+  "nonadditive_capture_rate": 0.5938566552901023,
+  "opportunity_additive_or_defer_rate": 0.4061433447098976,
+  "opportunity_nonadditive_selection_rate": 0.5938566552901023,
+  "passed": true,
+  "reason": "passed",
+  "records_csv": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/tables/phase4f_repair5_rawtrace_edge_sf_global_pair_neg2_anti2_eval_seed61.csv",
+  "schema_version": "phase4f_repair5_anti_escape_gate_summary_v1",
+  "selected_rule_distribution": {
+    "additive_ltm": 212,
+    "block_heavy": 18,
+    "block_light": 3,
+    "commit_heavy": 136,
+    "decay_090": 6,
+    "decay_095": 10,
+    "wait_heavy": 7,
+    "wait_light": 67
+  },
+  "thresholds": {
+    "anti_escape_mean_selected_vs_additive_delta_min": 0.005,
+    "avoidable_additive_or_defer_rate_max": 0.6,
+    "global_additive_or_defer_rate_max": 0.7,
+    "high_margin_nonadditive_capture_rate_min": 0.4,
+    "min_validation_high_margin_opportunity_count": 50,
+    "opportunity_nonadditive_selection_rate_min": 0.35
+  },
+  "validation_high_margin_opportunity_count": 185,
+  "validation_opportunity_count": 293
+}

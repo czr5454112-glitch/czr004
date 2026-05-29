@@ -1,0 +1,5717 @@
+{
+  "boundary": "Diagnostic layered gates do not lower or replace the strict Repair5 final gate. Runtime remains forbidden unless eval_laur_repair5_final_gate.py passes.",
+  "counts": {
+    "development_pass": 0,
+    "promotion_candidate_pass": 0,
+    "strict_seed_pass": 0,
+    "summaries": 27
+  },
+  "groups": [
+    {
+      "available_seeds": [
+        61,
+        103,
+        107
+      ],
+      "development_pass_count": 0,
+      "missing_required_seeds": [],
+      "promotion_candidate_multiseed_2_of_3": false,
+      "promotion_candidate_pass_count": 0,
+      "runtime_claim_multiseed_allowed": false,
+      "runtime_note": "Use eval_laur_repair5_final_gate.py for the only Phase5.5 unlock.",
+      "strict_seed_pass_count": 0,
+      "variant": "phase4f_repair5_attention_native"
+    },
+    {
+      "available_seeds": [
+        61
+      ],
+      "development_pass_count": 0,
+      "missing_required_seeds": [
+        103,
+        107
+      ],
+      "promotion_candidate_multiseed_2_of_3": false,
+      "promotion_candidate_pass_count": 0,
+      "runtime_claim_multiseed_allowed": false,
+      "runtime_note": "Use eval_laur_repair5_final_gate.py for the only Phase5.5 unlock.",
+      "strict_seed_pass_count": 0,
+      "variant": "phase4f_repair5_expand5000_ex5000_linear_target_global"
+    },
+    {
+      "available_seeds": [
+        61
+      ],
+      "development_pass_count": 0,
+      "missing_required_seeds": [
+        103,
+        107
+      ],
+      "promotion_candidate_multiseed_2_of_3": false,
+      "promotion_candidate_pass_count": 0,
+      "runtime_claim_multiseed_allowed": false,
+      "runtime_note": "Use eval_laur_repair5_final_gate.py for the only Phase5.5 unlock.",
+      "strict_seed_pass_count": 0,
+      "variant": "phase4f_repair5_expand5000_ex5000_mlp_safety_light"
+    },
+    {
+      "available_seeds": [
+        61
+      ],
+      "development_pass_count": 0,
+      "missing_required_seeds": [
+        103,
+        107
+      ],
+      "promotion_candidate_multiseed_2_of_3": false,
+      "promotion_candidate_pass_count": 0,
+      "runtime_claim_multiseed_allowed": false,
+      "runtime_note": "Use eval_laur_repair5_final_gate.py for the only Phase5.5 unlock.",
+      "strict_seed_pass_count": 0,
+      "variant": "phase4f_repair5_expand5000_ex5000_mlp_target_global"
+    },
+    {
+      "available_seeds": [
+        61
+      ],
+      "development_pass_count": 0,
+      "missing_required_seeds": [
+        103,
+        107
+      ],
+      "promotion_candidate_multiseed_2_of_3": false,
+      "promotion_candidate_pass_count": 0,
+      "runtime_claim_multiseed_allowed": false,
+      "runtime_note": "Use eval_laur_repair5_final_gate.py for the only Phase5.5 unlock.",
+      "strict_seed_pass_count": 0,
+      "variant": "phase4f_repair5_expand5000_followup_ex5000_follow_global_rank3_anti3"
+    },
+    {
+      "available_seeds": [
+        61
+      ],
+      "development_pass_count": 0,
+      "missing_required_seeds": [
+        103,
+        107
+      ],
+      "promotion_candidate_multiseed_2_of_3": false,
+      "promotion_candidate_pass_count": 0,
+      "runtime_claim_multiseed_allowed": false,
+      "runtime_note": "Use eval_laur_repair5_final_gate.py for the only Phase5.5 unlock.",
+      "strict_seed_pass_count": 0,
+      "variant": "phase4f_repair5_expand5000_followup_ex5000_follow_pair_focal_m035_lh4"
+    },
+    {
+      "available_seeds": [
+        61
+      ],
+      "development_pass_count": 0,
+      "missing_required_seeds": [
+        103,
+        107
+      ],
+      "promotion_candidate_multiseed_2_of_3": false,
+      "promotion_candidate_pass_count": 0,
+      "runtime_claim_multiseed_allowed": false,
+      "runtime_note": "Use eval_laur_repair5_final_gate.py for the only Phase5.5 unlock.",
+      "strict_seed_pass_count": 0,
+      "variant": "phase4f_repair5_expand5000_followup_ex5000_follow_target_ce2_margin1_hm3"
+    },
+    {
+      "available_seeds": [
+        61
+      ],
+      "development_pass_count": 0,
+      "missing_required_seeds": [
+        103,
+        107
+      ],
+      "promotion_candidate_multiseed_2_of_3": false,
+      "promotion_candidate_pass_count": 0,
+      "runtime_claim_multiseed_allowed": false,
+      "runtime_note": "Use eval_laur_repair5_final_gate.py for the only Phase5.5 unlock.",
+      "strict_seed_pass_count": 0,
+      "variant": "phase4f_repair5_expand5000_followup_ex5000_follow_target_margin2_rank3_safe5"
+    },
+    {
+      "available_seeds": [
+        61
+      ],
+      "development_pass_count": 0,
+      "missing_required_seeds": [
+        103,
+        107
+      ],
+      "promotion_candidate_multiseed_2_of_3": false,
+      "promotion_candidate_pass_count": 0,
+      "runtime_claim_multiseed_allowed": false,
+      "runtime_note": "Use eval_laur_repair5_final_gate.py for the only Phase5.5 unlock.",
+      "strict_seed_pass_count": 0,
+      "variant": "phase4f_repair5_expand5000_hightoken_ht_linear_target_global"
+    },
+    {
+      "available_seeds": [
+        61
+      ],
+      "development_pass_count": 0,
+      "missing_required_seeds": [
+        103,
+        107
+      ],
+      "promotion_candidate_multiseed_2_of_3": false,
+      "promotion_candidate_pass_count": 0,
+      "runtime_claim_multiseed_allowed": false,
+      "runtime_note": "Use eval_laur_repair5_final_gate.py for the only Phase5.5 unlock.",
+      "strict_seed_pass_count": 0,
+      "variant": "phase4f_repair5_expand5000_hightoken_ht_mlp_target_global"
+    },
+    {
+      "available_seeds": [
+        61,
+        103,
+        107
+      ],
+      "development_pass_count": 0,
+      "missing_required_seeds": [],
+      "promotion_candidate_multiseed_2_of_3": false,
+      "promotion_candidate_pass_count": 0,
+      "runtime_claim_multiseed_allowed": false,
+      "runtime_note": "Use eval_laur_repair5_final_gate.py for the only Phase5.5 unlock.",
+      "strict_seed_pass_count": 0,
+      "variant": "phase4f_repair5_rawtrace_edge"
+    },
+    {
+      "available_seeds": [
+        61
+      ],
+      "development_pass_count": 0,
+      "missing_required_seeds": [
+        103,
+        107
+      ],
+      "promotion_candidate_multiseed_2_of_3": false,
+      "promotion_candidate_pass_count": 0,
+      "runtime_claim_multiseed_allowed": false,
+      "runtime_note": "Use eval_laur_repair5_final_gate.py for the only Phase5.5 unlock.",
+      "strict_seed_pass_count": 0,
+      "variant": "phase4f_repair5_rawtrace_edge_sf_global_pair_neg2_anti2"
+    },
+    {
+      "available_seeds": [
+        61
+      ],
+      "development_pass_count": 0,
+      "missing_required_seeds": [
+        103,
+        107
+      ],
+      "promotion_candidate_multiseed_2_of_3": false,
+      "promotion_candidate_pass_count": 0,
+      "runtime_claim_multiseed_allowed": false,
+      "runtime_note": "Use eval_laur_repair5_final_gate.py for the only Phase5.5 unlock.",
+      "strict_seed_pass_count": 0,
+      "variant": "phase4f_repair5_rawtrace_edge_sf_global_pair_rank2_anti2"
+    },
+    {
+      "available_seeds": [
+        61
+      ],
+      "development_pass_count": 0,
+      "missing_required_seeds": [
+        103,
+        107
+      ],
+      "promotion_candidate_multiseed_2_of_3": false,
+      "promotion_candidate_pass_count": 0,
+      "runtime_claim_multiseed_allowed": false,
+      "runtime_note": "Use eval_laur_repair5_final_gate.py for the only Phase5.5 unlock.",
+      "strict_seed_pass_count": 0,
+      "variant": "phase4f_repair5_rawtrace_edge_sf_global_rank3_anti3"
+    },
+    {
+      "available_seeds": [
+        61
+      ],
+      "development_pass_count": 0,
+      "missing_required_seeds": [
+        103,
+        107
+      ],
+      "promotion_candidate_multiseed_2_of_3": false,
+      "promotion_candidate_pass_count": 0,
+      "runtime_claim_multiseed_allowed": false,
+      "runtime_note": "Use eval_laur_repair5_final_gate.py for the only Phase5.5 unlock.",
+      "strict_seed_pass_count": 0,
+      "variant": "phase4f_repair5_rawtrace_edge_sf_hpw1_lh12"
+    },
+    {
+      "available_seeds": [
+        61
+      ],
+      "development_pass_count": 0,
+      "missing_required_seeds": [
+        103,
+        107
+      ],
+      "promotion_candidate_multiseed_2_of_3": false,
+      "promotion_candidate_pass_count": 0,
+      "runtime_claim_multiseed_allowed": false,
+      "runtime_note": "Use eval_laur_repair5_final_gate.py for the only Phase5.5 unlock.",
+      "strict_seed_pass_count": 0,
+      "variant": "phase4f_repair5_rawtrace_edge_sf_hpw1_lh8"
+    },
+    {
+      "available_seeds": [
+        61
+      ],
+      "development_pass_count": 0,
+      "missing_required_seeds": [
+        103,
+        107
+      ],
+      "promotion_candidate_multiseed_2_of_3": false,
+      "promotion_candidate_pass_count": 0,
+      "runtime_claim_multiseed_allowed": false,
+      "runtime_note": "Use eval_laur_repair5_final_gate.py for the only Phase5.5 unlock.",
+      "strict_seed_pass_count": 0,
+      "variant": "phase4f_repair5_rawtrace_edge_sf_hpw2_lh8"
+    },
+    {
+      "available_seeds": [
+        61
+      ],
+      "development_pass_count": 0,
+      "missing_required_seeds": [
+        103,
+        107
+      ],
+      "promotion_candidate_multiseed_2_of_3": false,
+      "promotion_candidate_pass_count": 0,
+      "runtime_claim_multiseed_allowed": false,
+      "runtime_note": "Use eval_laur_repair5_final_gate.py for the only Phase5.5 unlock.",
+      "strict_seed_pass_count": 0,
+      "variant": "phase4f_repair5_rawtrace_edge_sf_pair_focal_m035_lh4"
+    },
+    {
+      "available_seeds": [
+        61
+      ],
+      "development_pass_count": 0,
+      "missing_required_seeds": [
+        103,
+        107
+      ],
+      "promotion_candidate_multiseed_2_of_3": false,
+      "promotion_candidate_pass_count": 0,
+      "runtime_claim_multiseed_allowed": false,
+      "runtime_note": "Use eval_laur_repair5_final_gate.py for the only Phase5.5 unlock.",
+      "strict_seed_pass_count": 0,
+      "variant": "phase4f_repair5_rawtrace_edge_sf_pair_m035_lh4_neg1"
+    },
+    {
+      "available_seeds": [
+        61
+      ],
+      "development_pass_count": 0,
+      "missing_required_seeds": [
+        103,
+        107
+      ],
+      "promotion_candidate_multiseed_2_of_3": false,
+      "promotion_candidate_pass_count": 0,
+      "runtime_claim_multiseed_allowed": false,
+      "runtime_note": "Use eval_laur_repair5_final_gate.py for the only Phase5.5 unlock.",
+      "strict_seed_pass_count": 0,
+      "variant": "phase4f_repair5_rawtrace_edge_sf_pair_m050_lh3_neg2"
+    },
+    {
+      "available_seeds": [
+        61
+      ],
+      "development_pass_count": 0,
+      "missing_required_seeds": [
+        103,
+        107
+      ],
+      "promotion_candidate_multiseed_2_of_3": false,
+      "promotion_candidate_pass_count": 0,
+      "runtime_claim_multiseed_allowed": false,
+      "runtime_note": "Use eval_laur_repair5_final_gate.py for the only Phase5.5 unlock.",
+      "strict_seed_pass_count": 0,
+      "variant": "phase4f_repair5_rawtrace_edge_sf_target_ce1_margin1_hm4"
+    },
+    {
+      "available_seeds": [
+        61
+      ],
+      "development_pass_count": 0,
+      "missing_required_seeds": [
+        103,
+        107
+      ],
+      "promotion_candidate_multiseed_2_of_3": false,
+      "promotion_candidate_pass_count": 0,
+      "runtime_claim_multiseed_allowed": false,
+      "runtime_note": "Use eval_laur_repair5_final_gate.py for the only Phase5.5 unlock.",
+      "strict_seed_pass_count": 0,
+      "variant": "phase4f_repair5_rawtrace_edge_sf_target_ce2_margin1_hm3"
+    },
+    {
+      "available_seeds": [
+        61
+      ],
+      "development_pass_count": 0,
+      "missing_required_seeds": [
+        103,
+        107
+      ],
+      "promotion_candidate_multiseed_2_of_3": false,
+      "promotion_candidate_pass_count": 0,
+      "runtime_claim_multiseed_allowed": false,
+      "runtime_note": "Use eval_laur_repair5_final_gate.py for the only Phase5.5 unlock.",
+      "strict_seed_pass_count": 0,
+      "variant": "phase4f_repair5_rawtrace_edge_sf_target_margin2_rank3_safe5"
+    }
+  ],
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "reference": {
+    "capture": 0.0,
+    "fallback": 1.0,
+    "name": "always_additive_or_external_baseline"
+  },
+  "required_seeds": [
+    61,
+    103,
+    107
+  ],
+  "results": [
+    {
+      "dataset": "/root/shared-nvme/czr004_phase4_repair1_43633e7/artifacts/teacher/laur/full_repair5_attention_native/update_labels/phase4_laur_attention_native_dataset.jsonl",
+      "development_gate": {
+        "anti_inconclusive": false,
+        "anti_reference": {
+          "capture": 0.0,
+          "fallback": 1.0
+        },
+        "checks": {
+          "avoidable_fallback": {
+            "passed": true,
+            "reference": 1.0,
+            "threshold": 1.0,
+            "value": 0.1945945945945946
+          },
+          "harmful_precision": {
+            "passed": true,
+            "threshold": 0.25,
+            "value": 0.3002832861189802
+          },
+          "harmful_recall": {
+            "passed": false,
+            "threshold": 0.7,
+            "value": 0.2425629290617849
+          },
+          "high_margin_count": {
+            "passed": true,
+            "threshold": 50,
+            "value": 185
+          },
+          "label_audit": {
+            "passed": true,
+            "path": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_attention_native_label_audit.json",
+            "reason": null
+          },
+          "opportunity_capture": {
+            "passed": true,
+            "reference": 0.0,
+            "threshold": 0.0,
+            "value": 0.4810810810810811
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.00377316688997132
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.25,
+            "value": 0.22866894197952217
+          },
+          "top3": {
+            "passed": true,
+            "threshold": 0.6,
+            "value": 0.6109215017064846
+          }
+        },
+        "passed": false,
+        "thresholds": {
+          "avoidable_fallback_margin": 0.0,
+          "opportunity_capture_margin": 0.0,
+          "precision": 0.25,
+          "recall": 0.7,
+          "top1": 0.25,
+          "top3": 0.6
+        }
+      },
+      "interpretation": "diagnostic_fail",
+      "promotion_candidate_gate": {
+        "anti_inconclusive": false,
+        "anti_reference": {
+          "capture": 0.0,
+          "fallback": 1.0
+        },
+        "checks": {
+          "avoidable_fallback": {
+            "passed": true,
+            "reference": 1.0,
+            "threshold": 0.95,
+            "value": 0.1945945945945946
+          },
+          "harmful_precision": {
+            "passed": true,
+            "threshold": 0.28,
+            "value": 0.3002832861189802
+          },
+          "harmful_recall": {
+            "passed": false,
+            "threshold": 0.78,
+            "value": 0.2425629290617849
+          },
+          "high_margin_count": {
+            "passed": true,
+            "threshold": 50,
+            "value": 185
+          },
+          "label_audit": {
+            "passed": true,
+            "path": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_attention_native_label_audit.json",
+            "reason": null
+          },
+          "opportunity_capture": {
+            "passed": true,
+            "reference": 0.0,
+            "threshold": 0.05,
+            "value": 0.4810810810810811
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.00377316688997132
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.32,
+            "value": 0.22866894197952217
+          },
+          "top3": {
+            "passed": false,
+            "threshold": 0.65,
+            "value": 0.6109215017064846
+          }
+        },
+        "passed": false,
+        "thresholds": {
+          "avoidable_fallback_margin": 0.05,
+          "opportunity_capture_margin": 0.05,
+          "precision": 0.28,
+          "recall": 0.78,
+          "top1": 0.32,
+          "top3": 0.65
+        }
+      },
+      "runtime_claim_seed_gate": {
+        "checks": {
+          "harmful_precision": {
+            "passed": true,
+            "threshold": 0.3,
+            "value": 0.3002832861189802
+          },
+          "harmful_recall": {
+            "passed": false,
+            "threshold": 0.8,
+            "value": 0.2425629290617849
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.00377316688997132
+          },
+          "strict_anti_escape_gate": {
+            "passed": true
+          },
+          "strict_attention_native_gate": {
+            "passed": false
+          },
+          "strict_phase4f_gate": {
+            "passed": false
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.35,
+            "value": 0.22866894197952217
+          },
+          "top3": {
+            "passed": false,
+            "threshold": 0.7,
+            "value": 0.6109215017064846
+          }
+        },
+        "note": "Diagnostic only. Phase5.5 still requires the existing strict final multi-seed gate.",
+        "passed": false,
+        "thresholds": {
+          "precision": 0.3,
+          "recall": 0.8,
+          "top1": 0.35,
+          "top3": 0.7
+        }
+      },
+      "seed": 103,
+      "summary_json": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_attention_native_eval_seed103_summary.json",
+      "values": {
+        "anti_capture": 0.4810810810810811,
+        "anti_passed": true,
+        "attention_native_passed": false,
+        "avoidable_fallback": 0.1945945945945946,
+        "delta": 0.00377316688997132,
+        "harmful_precision": 0.3002832861189802,
+        "harmful_recall": 0.2425629290617849,
+        "phase4f_passed": false,
+        "positive_delta_proxy": 0.00377316688997132,
+        "selected_vs_additive_delta": 0.00377316688997132,
+        "top1": 0.22866894197952217,
+        "top3": 0.6109215017064846
+      },
+      "variant": "phase4f_repair5_attention_native"
+    },
+    {
+      "dataset": "/root/shared-nvme/czr004_phase4_repair1_43633e7/artifacts/teacher/laur/full_repair5_attention_native/update_labels/phase4_laur_attention_native_dataset.jsonl",
+      "development_gate": {
+        "anti_inconclusive": false,
+        "anti_reference": {
+          "capture": 0.0,
+          "fallback": 1.0
+        },
+        "checks": {
+          "avoidable_fallback": {
+            "passed": true,
+            "reference": 1.0,
+            "threshold": 1.0,
+            "value": 0.2594594594594595
+          },
+          "harmful_precision": {
+            "passed": true,
+            "threshold": 0.25,
+            "value": 0.2531969309462916
+          },
+          "harmful_recall": {
+            "passed": false,
+            "threshold": 0.7,
+            "value": 0.22654462242562928
+          },
+          "high_margin_count": {
+            "passed": true,
+            "threshold": 50,
+            "value": 185
+          },
+          "label_audit": {
+            "passed": true,
+            "path": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_attention_native_label_audit.json",
+            "reason": null
+          },
+          "opportunity_capture": {
+            "passed": true,
+            "reference": 0.0,
+            "threshold": 0.0,
+            "value": 0.4648648648648649
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.01375384603052623
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.25,
+            "value": 0.22866894197952217
+          },
+          "top3": {
+            "passed": true,
+            "threshold": 0.6,
+            "value": 0.6552901023890785
+          }
+        },
+        "passed": false,
+        "thresholds": {
+          "avoidable_fallback_margin": 0.0,
+          "opportunity_capture_margin": 0.0,
+          "precision": 0.25,
+          "recall": 0.7,
+          "top1": 0.25,
+          "top3": 0.6
+        }
+      },
+      "interpretation": "diagnostic_fail",
+      "promotion_candidate_gate": {
+        "anti_inconclusive": false,
+        "anti_reference": {
+          "capture": 0.0,
+          "fallback": 1.0
+        },
+        "checks": {
+          "avoidable_fallback": {
+            "passed": true,
+            "reference": 1.0,
+            "threshold": 0.95,
+            "value": 0.2594594594594595
+          },
+          "harmful_precision": {
+            "passed": false,
+            "threshold": 0.28,
+            "value": 0.2531969309462916
+          },
+          "harmful_recall": {
+            "passed": false,
+            "threshold": 0.78,
+            "value": 0.22654462242562928
+          },
+          "high_margin_count": {
+            "passed": true,
+            "threshold": 50,
+            "value": 185
+          },
+          "label_audit": {
+            "passed": true,
+            "path": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_attention_native_label_audit.json",
+            "reason": null
+          },
+          "opportunity_capture": {
+            "passed": true,
+            "reference": 0.0,
+            "threshold": 0.05,
+            "value": 0.4648648648648649
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.01375384603052623
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.32,
+            "value": 0.22866894197952217
+          },
+          "top3": {
+            "passed": true,
+            "threshold": 0.65,
+            "value": 0.6552901023890785
+          }
+        },
+        "passed": false,
+        "thresholds": {
+          "avoidable_fallback_margin": 0.05,
+          "opportunity_capture_margin": 0.05,
+          "precision": 0.28,
+          "recall": 0.78,
+          "top1": 0.32,
+          "top3": 0.65
+        }
+      },
+      "runtime_claim_seed_gate": {
+        "checks": {
+          "harmful_precision": {
+            "passed": false,
+            "threshold": 0.3,
+            "value": 0.2531969309462916
+          },
+          "harmful_recall": {
+            "passed": false,
+            "threshold": 0.8,
+            "value": 0.22654462242562928
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.01375384603052623
+          },
+          "strict_anti_escape_gate": {
+            "passed": true
+          },
+          "strict_attention_native_gate": {
+            "passed": false
+          },
+          "strict_phase4f_gate": {
+            "passed": false
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.35,
+            "value": 0.22866894197952217
+          },
+          "top3": {
+            "passed": false,
+            "threshold": 0.7,
+            "value": 0.6552901023890785
+          }
+        },
+        "note": "Diagnostic only. Phase5.5 still requires the existing strict final multi-seed gate.",
+        "passed": false,
+        "thresholds": {
+          "precision": 0.3,
+          "recall": 0.8,
+          "top1": 0.35,
+          "top3": 0.7
+        }
+      },
+      "seed": 107,
+      "summary_json": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_attention_native_eval_seed107_summary.json",
+      "values": {
+        "anti_capture": 0.4648648648648649,
+        "anti_passed": true,
+        "attention_native_passed": false,
+        "avoidable_fallback": 0.2594594594594595,
+        "delta": 0.01375384603052623,
+        "harmful_precision": 0.2531969309462916,
+        "harmful_recall": 0.22654462242562928,
+        "phase4f_passed": false,
+        "positive_delta_proxy": 0.01375384603052623,
+        "selected_vs_additive_delta": 0.01375384603052623,
+        "top1": 0.22866894197952217,
+        "top3": 0.6552901023890785
+      },
+      "variant": "phase4f_repair5_attention_native"
+    },
+    {
+      "dataset": "/root/shared-nvme/czr004_phase4_repair1_43633e7/artifacts/teacher/laur/full_repair5_attention_native/update_labels/phase4_laur_attention_native_dataset.jsonl",
+      "development_gate": {
+        "anti_inconclusive": false,
+        "anti_reference": {
+          "capture": 0.0,
+          "fallback": 1.0
+        },
+        "checks": {
+          "avoidable_fallback": {
+            "passed": true,
+            "reference": 1.0,
+            "threshold": 1.0,
+            "value": 0.2
+          },
+          "harmful_precision": {
+            "passed": true,
+            "threshold": 0.25,
+            "value": 0.26170212765957446
+          },
+          "harmful_recall": {
+            "passed": false,
+            "threshold": 0.7,
+            "value": 0.2814645308924485
+          },
+          "high_margin_count": {
+            "passed": true,
+            "threshold": 50,
+            "value": 185
+          },
+          "label_audit": {
+            "passed": true,
+            "path": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_attention_native_label_audit.json",
+            "reason": null
+          },
+          "opportunity_capture": {
+            "passed": true,
+            "reference": 0.0,
+            "threshold": 0.0,
+            "value": 0.4648648648648649
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.00990702449332689
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.25,
+            "value": 0.2150170648464164
+          },
+          "top3": {
+            "passed": false,
+            "threshold": 0.6,
+            "value": 0.5767918088737202
+          }
+        },
+        "passed": false,
+        "thresholds": {
+          "avoidable_fallback_margin": 0.0,
+          "opportunity_capture_margin": 0.0,
+          "precision": 0.25,
+          "recall": 0.7,
+          "top1": 0.25,
+          "top3": 0.6
+        }
+      },
+      "interpretation": "diagnostic_fail",
+      "promotion_candidate_gate": {
+        "anti_inconclusive": false,
+        "anti_reference": {
+          "capture": 0.0,
+          "fallback": 1.0
+        },
+        "checks": {
+          "avoidable_fallback": {
+            "passed": true,
+            "reference": 1.0,
+            "threshold": 0.95,
+            "value": 0.2
+          },
+          "harmful_precision": {
+            "passed": false,
+            "threshold": 0.28,
+            "value": 0.26170212765957446
+          },
+          "harmful_recall": {
+            "passed": false,
+            "threshold": 0.78,
+            "value": 0.2814645308924485
+          },
+          "high_margin_count": {
+            "passed": true,
+            "threshold": 50,
+            "value": 185
+          },
+          "label_audit": {
+            "passed": true,
+            "path": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_attention_native_label_audit.json",
+            "reason": null
+          },
+          "opportunity_capture": {
+            "passed": true,
+            "reference": 0.0,
+            "threshold": 0.05,
+            "value": 0.4648648648648649
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.00990702449332689
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.32,
+            "value": 0.2150170648464164
+          },
+          "top3": {
+            "passed": false,
+            "threshold": 0.65,
+            "value": 0.5767918088737202
+          }
+        },
+        "passed": false,
+        "thresholds": {
+          "avoidable_fallback_margin": 0.05,
+          "opportunity_capture_margin": 0.05,
+          "precision": 0.28,
+          "recall": 0.78,
+          "top1": 0.32,
+          "top3": 0.65
+        }
+      },
+      "runtime_claim_seed_gate": {
+        "checks": {
+          "harmful_precision": {
+            "passed": false,
+            "threshold": 0.3,
+            "value": 0.26170212765957446
+          },
+          "harmful_recall": {
+            "passed": false,
+            "threshold": 0.8,
+            "value": 0.2814645308924485
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.00990702449332689
+          },
+          "strict_anti_escape_gate": {
+            "passed": true
+          },
+          "strict_attention_native_gate": {
+            "passed": false
+          },
+          "strict_phase4f_gate": {
+            "passed": false
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.35,
+            "value": 0.2150170648464164
+          },
+          "top3": {
+            "passed": false,
+            "threshold": 0.7,
+            "value": 0.5767918088737202
+          }
+        },
+        "note": "Diagnostic only. Phase5.5 still requires the existing strict final multi-seed gate.",
+        "passed": false,
+        "thresholds": {
+          "precision": 0.3,
+          "recall": 0.8,
+          "top1": 0.35,
+          "top3": 0.7
+        }
+      },
+      "seed": 61,
+      "summary_json": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_attention_native_eval_seed61_summary.json",
+      "values": {
+        "anti_capture": 0.4648648648648649,
+        "anti_passed": true,
+        "attention_native_passed": false,
+        "avoidable_fallback": 0.2,
+        "delta": 0.00990702449332689,
+        "harmful_precision": 0.26170212765957446,
+        "harmful_recall": 0.2814645308924485,
+        "phase4f_passed": false,
+        "positive_delta_proxy": 0.00990702449332689,
+        "selected_vs_additive_delta": 0.00990702449332689,
+        "top1": 0.2150170648464164,
+        "top3": 0.5767918088737202
+      },
+      "variant": "phase4f_repair5_attention_native"
+    },
+    {
+      "dataset": "/root/shared-nvme/czr004_phase4_repair1_43633e7/artifacts/teacher/laur/full_repair5_attention_native_rawtrace/update_labels/phase4_laur_attention_native_rawtrace_dataset.jsonl",
+      "development_gate": {
+        "anti_inconclusive": false,
+        "anti_reference": {
+          "capture": 0.0,
+          "fallback": 1.0
+        },
+        "checks": {
+          "avoidable_fallback": {
+            "passed": true,
+            "reference": 1.0,
+            "threshold": 1.0,
+            "value": 0.23783783783783785
+          },
+          "harmful_precision": {
+            "passed": true,
+            "threshold": 0.25,
+            "value": 0.340956340956341
+          },
+          "harmful_recall": {
+            "passed": false,
+            "threshold": 0.7,
+            "value": 0.37528604118993136
+          },
+          "high_margin_count": {
+            "passed": true,
+            "threshold": 50,
+            "value": 185
+          },
+          "label_audit": {
+            "passed": true,
+            "path": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_attention_native_rawtrace_label_audit.json",
+            "reason": null
+          },
+          "opportunity_capture": {
+            "passed": true,
+            "reference": 0.0,
+            "threshold": 0.0,
+            "value": 0.4918918918918919
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.02061652308881321
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.25,
+            "value": 0.23890784982935154
+          },
+          "top3": {
+            "passed": true,
+            "threshold": 0.6,
+            "value": 0.6143344709897611
+          }
+        },
+        "passed": false,
+        "thresholds": {
+          "avoidable_fallback_margin": 0.0,
+          "opportunity_capture_margin": 0.0,
+          "precision": 0.25,
+          "recall": 0.7,
+          "top1": 0.25,
+          "top3": 0.6
+        }
+      },
+      "interpretation": "diagnostic_fail",
+      "promotion_candidate_gate": {
+        "anti_inconclusive": false,
+        "anti_reference": {
+          "capture": 0.0,
+          "fallback": 1.0
+        },
+        "checks": {
+          "avoidable_fallback": {
+            "passed": true,
+            "reference": 1.0,
+            "threshold": 0.95,
+            "value": 0.23783783783783785
+          },
+          "harmful_precision": {
+            "passed": true,
+            "threshold": 0.28,
+            "value": 0.340956340956341
+          },
+          "harmful_recall": {
+            "passed": false,
+            "threshold": 0.78,
+            "value": 0.37528604118993136
+          },
+          "high_margin_count": {
+            "passed": true,
+            "threshold": 50,
+            "value": 185
+          },
+          "label_audit": {
+            "passed": true,
+            "path": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_attention_native_rawtrace_label_audit.json",
+            "reason": null
+          },
+          "opportunity_capture": {
+            "passed": true,
+            "reference": 0.0,
+            "threshold": 0.05,
+            "value": 0.4918918918918919
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.02061652308881321
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.32,
+            "value": 0.23890784982935154
+          },
+          "top3": {
+            "passed": false,
+            "threshold": 0.65,
+            "value": 0.6143344709897611
+          }
+        },
+        "passed": false,
+        "thresholds": {
+          "avoidable_fallback_margin": 0.05,
+          "opportunity_capture_margin": 0.05,
+          "precision": 0.28,
+          "recall": 0.78,
+          "top1": 0.32,
+          "top3": 0.65
+        }
+      },
+      "runtime_claim_seed_gate": {
+        "checks": {
+          "harmful_precision": {
+            "passed": true,
+            "threshold": 0.3,
+            "value": 0.340956340956341
+          },
+          "harmful_recall": {
+            "passed": false,
+            "threshold": 0.8,
+            "value": 0.37528604118993136
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.02061652308881321
+          },
+          "strict_anti_escape_gate": {
+            "passed": true
+          },
+          "strict_attention_native_gate": {
+            "passed": false
+          },
+          "strict_phase4f_gate": {
+            "passed": false
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.35,
+            "value": 0.23890784982935154
+          },
+          "top3": {
+            "passed": false,
+            "threshold": 0.7,
+            "value": 0.6143344709897611
+          }
+        },
+        "note": "Diagnostic only. Phase5.5 still requires the existing strict final multi-seed gate.",
+        "passed": false,
+        "thresholds": {
+          "precision": 0.3,
+          "recall": 0.8,
+          "top1": 0.35,
+          "top3": 0.7
+        }
+      },
+      "seed": 103,
+      "summary_json": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_rawtrace_edge_eval_seed103_summary.json",
+      "values": {
+        "anti_capture": 0.4918918918918919,
+        "anti_passed": true,
+        "attention_native_passed": false,
+        "avoidable_fallback": 0.23783783783783785,
+        "delta": 0.02061652308881321,
+        "harmful_precision": 0.340956340956341,
+        "harmful_recall": 0.37528604118993136,
+        "phase4f_passed": false,
+        "positive_delta_proxy": 0.02061652308881321,
+        "selected_vs_additive_delta": 0.02061652308881321,
+        "top1": 0.23890784982935154,
+        "top3": 0.6143344709897611
+      },
+      "variant": "phase4f_repair5_rawtrace_edge"
+    },
+    {
+      "dataset": "/root/shared-nvme/czr004_phase4_repair1_43633e7/artifacts/teacher/laur/full_repair5_attention_native_rawtrace/update_labels/phase4_laur_attention_native_rawtrace_dataset.jsonl",
+      "development_gate": {
+        "anti_inconclusive": false,
+        "anti_reference": {
+          "capture": 0.0,
+          "fallback": 1.0
+        },
+        "checks": {
+          "avoidable_fallback": {
+            "passed": true,
+            "reference": 1.0,
+            "threshold": 1.0,
+            "value": 0.2756756756756757
+          },
+          "harmful_precision": {
+            "passed": true,
+            "threshold": 0.25,
+            "value": 0.25738396624472576
+          },
+          "harmful_recall": {
+            "passed": false,
+            "threshold": 0.7,
+            "value": 0.13958810068649885
+          },
+          "high_margin_count": {
+            "passed": true,
+            "threshold": 50,
+            "value": 185
+          },
+          "label_audit": {
+            "passed": true,
+            "path": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_attention_native_rawtrace_label_audit.json",
+            "reason": null
+          },
+          "opportunity_capture": {
+            "passed": true,
+            "reference": 0.0,
+            "threshold": 0.0,
+            "value": 0.43783783783783786
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.015413693654996202
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.25,
+            "value": 0.20477815699658702
+          },
+          "top3": {
+            "passed": false,
+            "threshold": 0.6,
+            "value": 0.5733788395904437
+          }
+        },
+        "passed": false,
+        "thresholds": {
+          "avoidable_fallback_margin": 0.0,
+          "opportunity_capture_margin": 0.0,
+          "precision": 0.25,
+          "recall": 0.7,
+          "top1": 0.25,
+          "top3": 0.6
+        }
+      },
+      "interpretation": "diagnostic_fail",
+      "promotion_candidate_gate": {
+        "anti_inconclusive": false,
+        "anti_reference": {
+          "capture": 0.0,
+          "fallback": 1.0
+        },
+        "checks": {
+          "avoidable_fallback": {
+            "passed": true,
+            "reference": 1.0,
+            "threshold": 0.95,
+            "value": 0.2756756756756757
+          },
+          "harmful_precision": {
+            "passed": false,
+            "threshold": 0.28,
+            "value": 0.25738396624472576
+          },
+          "harmful_recall": {
+            "passed": false,
+            "threshold": 0.78,
+            "value": 0.13958810068649885
+          },
+          "high_margin_count": {
+            "passed": true,
+            "threshold": 50,
+            "value": 185
+          },
+          "label_audit": {
+            "passed": true,
+            "path": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_attention_native_rawtrace_label_audit.json",
+            "reason": null
+          },
+          "opportunity_capture": {
+            "passed": true,
+            "reference": 0.0,
+            "threshold": 0.05,
+            "value": 0.43783783783783786
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.015413693654996202
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.32,
+            "value": 0.20477815699658702
+          },
+          "top3": {
+            "passed": false,
+            "threshold": 0.65,
+            "value": 0.5733788395904437
+          }
+        },
+        "passed": false,
+        "thresholds": {
+          "avoidable_fallback_margin": 0.05,
+          "opportunity_capture_margin": 0.05,
+          "precision": 0.28,
+          "recall": 0.78,
+          "top1": 0.32,
+          "top3": 0.65
+        }
+      },
+      "runtime_claim_seed_gate": {
+        "checks": {
+          "harmful_precision": {
+            "passed": false,
+            "threshold": 0.3,
+            "value": 0.25738396624472576
+          },
+          "harmful_recall": {
+            "passed": false,
+            "threshold": 0.8,
+            "value": 0.13958810068649885
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.015413693654996202
+          },
+          "strict_anti_escape_gate": {
+            "passed": true
+          },
+          "strict_attention_native_gate": {
+            "passed": false
+          },
+          "strict_phase4f_gate": {
+            "passed": false
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.35,
+            "value": 0.20477815699658702
+          },
+          "top3": {
+            "passed": false,
+            "threshold": 0.7,
+            "value": 0.5733788395904437
+          }
+        },
+        "note": "Diagnostic only. Phase5.5 still requires the existing strict final multi-seed gate.",
+        "passed": false,
+        "thresholds": {
+          "precision": 0.3,
+          "recall": 0.8,
+          "top1": 0.35,
+          "top3": 0.7
+        }
+      },
+      "seed": 107,
+      "summary_json": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_rawtrace_edge_eval_seed107_summary.json",
+      "values": {
+        "anti_capture": 0.43783783783783786,
+        "anti_passed": true,
+        "attention_native_passed": false,
+        "avoidable_fallback": 0.2756756756756757,
+        "delta": 0.015413693654996202,
+        "harmful_precision": 0.25738396624472576,
+        "harmful_recall": 0.13958810068649885,
+        "phase4f_passed": false,
+        "positive_delta_proxy": 0.015413693654996202,
+        "selected_vs_additive_delta": 0.015413693654996202,
+        "top1": 0.20477815699658702,
+        "top3": 0.5733788395904437
+      },
+      "variant": "phase4f_repair5_rawtrace_edge"
+    },
+    {
+      "dataset": "/root/shared-nvme/czr004_phase4_repair1_43633e7/artifacts/teacher/laur/full_repair5_attention_native_rawtrace/update_labels/phase4_laur_attention_native_rawtrace_dataset.jsonl",
+      "development_gate": {
+        "anti_inconclusive": false,
+        "anti_reference": {
+          "capture": 0.0,
+          "fallback": 1.0
+        },
+        "checks": {
+          "avoidable_fallback": {
+            "passed": true,
+            "reference": 1.0,
+            "threshold": 1.0,
+            "value": 0.21621621621621623
+          },
+          "harmful_precision": {
+            "passed": false,
+            "threshold": 0.25,
+            "value": 0.2397003745318352
+          },
+          "harmful_recall": {
+            "passed": false,
+            "threshold": 0.7,
+            "value": 0.14645308924485126
+          },
+          "high_margin_count": {
+            "passed": true,
+            "threshold": 50,
+            "value": 185
+          },
+          "label_audit": {
+            "passed": true,
+            "path": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_attention_native_rawtrace_label_audit.json",
+            "reason": null
+          },
+          "opportunity_capture": {
+            "passed": true,
+            "reference": 0.0,
+            "threshold": 0.0,
+            "value": 0.5351351351351351
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.012440622753516211
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.25,
+            "value": 0.24573378839590443
+          },
+          "top3": {
+            "passed": true,
+            "threshold": 0.6,
+            "value": 0.6552901023890785
+          }
+        },
+        "passed": false,
+        "thresholds": {
+          "avoidable_fallback_margin": 0.0,
+          "opportunity_capture_margin": 0.0,
+          "precision": 0.25,
+          "recall": 0.7,
+          "top1": 0.25,
+          "top3": 0.6
+        }
+      },
+      "interpretation": "diagnostic_fail",
+      "promotion_candidate_gate": {
+        "anti_inconclusive": false,
+        "anti_reference": {
+          "capture": 0.0,
+          "fallback": 1.0
+        },
+        "checks": {
+          "avoidable_fallback": {
+            "passed": true,
+            "reference": 1.0,
+            "threshold": 0.95,
+            "value": 0.21621621621621623
+          },
+          "harmful_precision": {
+            "passed": false,
+            "threshold": 0.28,
+            "value": 0.2397003745318352
+          },
+          "harmful_recall": {
+            "passed": false,
+            "threshold": 0.78,
+            "value": 0.14645308924485126
+          },
+          "high_margin_count": {
+            "passed": true,
+            "threshold": 50,
+            "value": 185
+          },
+          "label_audit": {
+            "passed": true,
+            "path": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_attention_native_rawtrace_label_audit.json",
+            "reason": null
+          },
+          "opportunity_capture": {
+            "passed": true,
+            "reference": 0.0,
+            "threshold": 0.05,
+            "value": 0.5351351351351351
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.012440622753516211
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.32,
+            "value": 0.24573378839590443
+          },
+          "top3": {
+            "passed": true,
+            "threshold": 0.65,
+            "value": 0.6552901023890785
+          }
+        },
+        "passed": false,
+        "thresholds": {
+          "avoidable_fallback_margin": 0.05,
+          "opportunity_capture_margin": 0.05,
+          "precision": 0.28,
+          "recall": 0.78,
+          "top1": 0.32,
+          "top3": 0.65
+        }
+      },
+      "runtime_claim_seed_gate": {
+        "checks": {
+          "harmful_precision": {
+            "passed": false,
+            "threshold": 0.3,
+            "value": 0.2397003745318352
+          },
+          "harmful_recall": {
+            "passed": false,
+            "threshold": 0.8,
+            "value": 0.14645308924485126
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.012440622753516211
+          },
+          "strict_anti_escape_gate": {
+            "passed": true
+          },
+          "strict_attention_native_gate": {
+            "passed": false
+          },
+          "strict_phase4f_gate": {
+            "passed": false
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.35,
+            "value": 0.24573378839590443
+          },
+          "top3": {
+            "passed": false,
+            "threshold": 0.7,
+            "value": 0.6552901023890785
+          }
+        },
+        "note": "Diagnostic only. Phase5.5 still requires the existing strict final multi-seed gate.",
+        "passed": false,
+        "thresholds": {
+          "precision": 0.3,
+          "recall": 0.8,
+          "top1": 0.35,
+          "top3": 0.7
+        }
+      },
+      "seed": 61,
+      "summary_json": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_rawtrace_edge_eval_seed61_summary.json",
+      "values": {
+        "anti_capture": 0.5351351351351351,
+        "anti_passed": true,
+        "attention_native_passed": false,
+        "avoidable_fallback": 0.21621621621621623,
+        "delta": 0.012440622753516211,
+        "harmful_precision": 0.2397003745318352,
+        "harmful_recall": 0.14645308924485126,
+        "phase4f_passed": false,
+        "positive_delta_proxy": 0.012440622753516211,
+        "selected_vs_additive_delta": 0.012440622753516211,
+        "top1": 0.24573378839590443,
+        "top3": 0.6552901023890785
+      },
+      "variant": "phase4f_repair5_rawtrace_edge"
+    },
+    {
+      "dataset": "/root/shared-nvme/czr004_phase4_repair1_43633e7/artifacts/teacher/laur/full_repair5_attention_native_rawtrace/update_labels/phase4_laur_attention_native_rawtrace_dataset.jsonl",
+      "development_gate": {
+        "anti_inconclusive": false,
+        "anti_reference": {
+          "capture": 0.0,
+          "fallback": 1.0
+        },
+        "checks": {
+          "avoidable_fallback": {
+            "passed": true,
+            "reference": 1.0,
+            "threshold": 1.0,
+            "value": 0.32972972972972975
+          },
+          "harmful_precision": {
+            "passed": true,
+            "threshold": 0.25,
+            "value": 0.31343283582089554
+          },
+          "harmful_recall": {
+            "passed": false,
+            "threshold": 0.7,
+            "value": 0.5766590389016019
+          },
+          "high_margin_count": {
+            "passed": true,
+            "threshold": 50,
+            "value": 185
+          },
+          "label_audit": {
+            "passed": true,
+            "path": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_attention_native_rawtrace_label_audit.json",
+            "reason": null
+          },
+          "opportunity_capture": {
+            "passed": true,
+            "reference": 0.0,
+            "threshold": 0.0,
+            "value": 0.43783783783783786
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.002122196951869791
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.25,
+            "value": 0.23208191126279865
+          },
+          "top3": {
+            "passed": true,
+            "threshold": 0.6,
+            "value": 0.7064846416382252
+          }
+        },
+        "passed": false,
+        "thresholds": {
+          "avoidable_fallback_margin": 0.0,
+          "opportunity_capture_margin": 0.0,
+          "precision": 0.25,
+          "recall": 0.7,
+          "top1": 0.25,
+          "top3": 0.6
+        }
+      },
+      "interpretation": "diagnostic_fail",
+      "promotion_candidate_gate": {
+        "anti_inconclusive": false,
+        "anti_reference": {
+          "capture": 0.0,
+          "fallback": 1.0
+        },
+        "checks": {
+          "avoidable_fallback": {
+            "passed": true,
+            "reference": 1.0,
+            "threshold": 0.95,
+            "value": 0.32972972972972975
+          },
+          "harmful_precision": {
+            "passed": true,
+            "threshold": 0.28,
+            "value": 0.31343283582089554
+          },
+          "harmful_recall": {
+            "passed": false,
+            "threshold": 0.78,
+            "value": 0.5766590389016019
+          },
+          "high_margin_count": {
+            "passed": true,
+            "threshold": 50,
+            "value": 185
+          },
+          "label_audit": {
+            "passed": true,
+            "path": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_attention_native_rawtrace_label_audit.json",
+            "reason": null
+          },
+          "opportunity_capture": {
+            "passed": true,
+            "reference": 0.0,
+            "threshold": 0.05,
+            "value": 0.43783783783783786
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.002122196951869791
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.32,
+            "value": 0.23208191126279865
+          },
+          "top3": {
+            "passed": true,
+            "threshold": 0.65,
+            "value": 0.7064846416382252
+          }
+        },
+        "passed": false,
+        "thresholds": {
+          "avoidable_fallback_margin": 0.05,
+          "opportunity_capture_margin": 0.05,
+          "precision": 0.28,
+          "recall": 0.78,
+          "top1": 0.32,
+          "top3": 0.65
+        }
+      },
+      "runtime_claim_seed_gate": {
+        "checks": {
+          "harmful_precision": {
+            "passed": true,
+            "threshold": 0.3,
+            "value": 0.31343283582089554
+          },
+          "harmful_recall": {
+            "passed": false,
+            "threshold": 0.8,
+            "value": 0.5766590389016019
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.002122196951869791
+          },
+          "strict_anti_escape_gate": {
+            "passed": true
+          },
+          "strict_attention_native_gate": {
+            "passed": false
+          },
+          "strict_phase4f_gate": {
+            "passed": false
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.35,
+            "value": 0.23208191126279865
+          },
+          "top3": {
+            "passed": true,
+            "threshold": 0.7,
+            "value": 0.7064846416382252
+          }
+        },
+        "note": "Diagnostic only. Phase5.5 still requires the existing strict final multi-seed gate.",
+        "passed": false,
+        "thresholds": {
+          "precision": 0.3,
+          "recall": 0.8,
+          "top1": 0.35,
+          "top3": 0.7
+        }
+      },
+      "seed": 61,
+      "summary_json": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_rawtrace_edge_sf_global_pair_neg2_anti2_eval_seed61_summary.json",
+      "values": {
+        "anti_capture": 0.43783783783783786,
+        "anti_passed": true,
+        "attention_native_passed": false,
+        "avoidable_fallback": 0.32972972972972975,
+        "delta": 0.002122196951869791,
+        "harmful_precision": 0.31343283582089554,
+        "harmful_recall": 0.5766590389016019,
+        "phase4f_passed": false,
+        "positive_delta_proxy": 0.002122196951869791,
+        "selected_vs_additive_delta": 0.002122196951869791,
+        "top1": 0.23208191126279865,
+        "top3": 0.7064846416382252
+      },
+      "variant": "phase4f_repair5_rawtrace_edge_sf_global_pair_neg2_anti2"
+    },
+    {
+      "dataset": "/root/shared-nvme/czr004_phase4_repair1_43633e7/artifacts/teacher/laur/full_repair5_attention_native_rawtrace/update_labels/phase4_laur_attention_native_rawtrace_dataset.jsonl",
+      "development_gate": {
+        "anti_inconclusive": false,
+        "anti_reference": {
+          "capture": 0.0,
+          "fallback": 1.0
+        },
+        "checks": {
+          "avoidable_fallback": {
+            "passed": true,
+            "reference": 1.0,
+            "threshold": 1.0,
+            "value": 0.5621621621621622
+          },
+          "harmful_precision": {
+            "passed": true,
+            "threshold": 0.25,
+            "value": 0.2900355871886121
+          },
+          "harmful_recall": {
+            "passed": true,
+            "threshold": 0.7,
+            "value": 0.7459954233409611
+          },
+          "high_margin_count": {
+            "passed": true,
+            "threshold": 50,
+            "value": 185
+          },
+          "label_audit": {
+            "passed": true,
+            "path": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_attention_native_rawtrace_label_audit.json",
+            "reason": null
+          },
+          "opportunity_capture": {
+            "passed": true,
+            "reference": 0.0,
+            "threshold": 0.0,
+            "value": 0.2594594594594595
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.00419224785535776
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.25,
+            "value": 0.18771331058020477
+          },
+          "top3": {
+            "passed": true,
+            "threshold": 0.6,
+            "value": 0.689419795221843
+          }
+        },
+        "passed": false,
+        "thresholds": {
+          "avoidable_fallback_margin": 0.0,
+          "opportunity_capture_margin": 0.0,
+          "precision": 0.25,
+          "recall": 0.7,
+          "top1": 0.25,
+          "top3": 0.6
+        }
+      },
+      "interpretation": "diagnostic_fail",
+      "promotion_candidate_gate": {
+        "anti_inconclusive": false,
+        "anti_reference": {
+          "capture": 0.0,
+          "fallback": 1.0
+        },
+        "checks": {
+          "avoidable_fallback": {
+            "passed": true,
+            "reference": 1.0,
+            "threshold": 0.95,
+            "value": 0.5621621621621622
+          },
+          "harmful_precision": {
+            "passed": true,
+            "threshold": 0.28,
+            "value": 0.2900355871886121
+          },
+          "harmful_recall": {
+            "passed": false,
+            "threshold": 0.78,
+            "value": 0.7459954233409611
+          },
+          "high_margin_count": {
+            "passed": true,
+            "threshold": 50,
+            "value": 185
+          },
+          "label_audit": {
+            "passed": true,
+            "path": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_attention_native_rawtrace_label_audit.json",
+            "reason": null
+          },
+          "opportunity_capture": {
+            "passed": true,
+            "reference": 0.0,
+            "threshold": 0.05,
+            "value": 0.2594594594594595
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.00419224785535776
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.32,
+            "value": 0.18771331058020477
+          },
+          "top3": {
+            "passed": true,
+            "threshold": 0.65,
+            "value": 0.689419795221843
+          }
+        },
+        "passed": false,
+        "thresholds": {
+          "avoidable_fallback_margin": 0.05,
+          "opportunity_capture_margin": 0.05,
+          "precision": 0.28,
+          "recall": 0.78,
+          "top1": 0.32,
+          "top3": 0.65
+        }
+      },
+      "runtime_claim_seed_gate": {
+        "checks": {
+          "harmful_precision": {
+            "passed": false,
+            "threshold": 0.3,
+            "value": 0.2900355871886121
+          },
+          "harmful_recall": {
+            "passed": false,
+            "threshold": 0.8,
+            "value": 0.7459954233409611
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.00419224785535776
+          },
+          "strict_anti_escape_gate": {
+            "passed": false
+          },
+          "strict_attention_native_gate": {
+            "passed": false
+          },
+          "strict_phase4f_gate": {
+            "passed": false
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.35,
+            "value": 0.18771331058020477
+          },
+          "top3": {
+            "passed": false,
+            "threshold": 0.7,
+            "value": 0.689419795221843
+          }
+        },
+        "note": "Diagnostic only. Phase5.5 still requires the existing strict final multi-seed gate.",
+        "passed": false,
+        "thresholds": {
+          "precision": 0.3,
+          "recall": 0.8,
+          "top1": 0.35,
+          "top3": 0.7
+        }
+      },
+      "seed": 61,
+      "summary_json": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_rawtrace_edge_sf_global_pair_rank2_anti2_eval_seed61_summary.json",
+      "values": {
+        "anti_capture": 0.2594594594594595,
+        "anti_passed": false,
+        "attention_native_passed": false,
+        "avoidable_fallback": 0.5621621621621622,
+        "delta": 0.00419224785535776,
+        "harmful_precision": 0.2900355871886121,
+        "harmful_recall": 0.7459954233409611,
+        "phase4f_passed": false,
+        "positive_delta_proxy": 0.00419224785535776,
+        "selected_vs_additive_delta": 0.00419224785535776,
+        "top1": 0.18771331058020477,
+        "top3": 0.689419795221843
+      },
+      "variant": "phase4f_repair5_rawtrace_edge_sf_global_pair_rank2_anti2"
+    },
+    {
+      "dataset": "/root/shared-nvme/czr004_phase4_repair1_43633e7/artifacts/teacher/laur/full_repair5_attention_native_rawtrace/update_labels/phase4_laur_attention_native_rawtrace_dataset.jsonl",
+      "development_gate": {
+        "anti_inconclusive": false,
+        "anti_reference": {
+          "capture": 0.0,
+          "fallback": 1.0
+        },
+        "checks": {
+          "avoidable_fallback": {
+            "passed": true,
+            "reference": 1.0,
+            "threshold": 1.0,
+            "value": 0.3837837837837838
+          },
+          "harmful_precision": {
+            "passed": true,
+            "threshold": 0.25,
+            "value": 0.2751159196290572
+          },
+          "harmful_recall": {
+            "passed": true,
+            "threshold": 0.7,
+            "value": 0.8146453089244852
+          },
+          "high_margin_count": {
+            "passed": true,
+            "threshold": 50,
+            "value": 185
+          },
+          "label_audit": {
+            "passed": true,
+            "path": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_attention_native_rawtrace_label_audit.json",
+            "reason": null
+          },
+          "opportunity_capture": {
+            "passed": true,
+            "reference": 0.0,
+            "threshold": 0.0,
+            "value": 0.3027027027027027
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.0037781165729336165
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.25,
+            "value": 0.18430034129692832
+          },
+          "top3": {
+            "passed": true,
+            "threshold": 0.6,
+            "value": 0.689419795221843
+          }
+        },
+        "passed": false,
+        "thresholds": {
+          "avoidable_fallback_margin": 0.0,
+          "opportunity_capture_margin": 0.0,
+          "precision": 0.25,
+          "recall": 0.7,
+          "top1": 0.25,
+          "top3": 0.6
+        }
+      },
+      "interpretation": "diagnostic_fail",
+      "promotion_candidate_gate": {
+        "anti_inconclusive": false,
+        "anti_reference": {
+          "capture": 0.0,
+          "fallback": 1.0
+        },
+        "checks": {
+          "avoidable_fallback": {
+            "passed": true,
+            "reference": 1.0,
+            "threshold": 0.95,
+            "value": 0.3837837837837838
+          },
+          "harmful_precision": {
+            "passed": false,
+            "threshold": 0.28,
+            "value": 0.2751159196290572
+          },
+          "harmful_recall": {
+            "passed": true,
+            "threshold": 0.78,
+            "value": 0.8146453089244852
+          },
+          "high_margin_count": {
+            "passed": true,
+            "threshold": 50,
+            "value": 185
+          },
+          "label_audit": {
+            "passed": true,
+            "path": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_attention_native_rawtrace_label_audit.json",
+            "reason": null
+          },
+          "opportunity_capture": {
+            "passed": true,
+            "reference": 0.0,
+            "threshold": 0.05,
+            "value": 0.3027027027027027
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.0037781165729336165
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.32,
+            "value": 0.18430034129692832
+          },
+          "top3": {
+            "passed": true,
+            "threshold": 0.65,
+            "value": 0.689419795221843
+          }
+        },
+        "passed": false,
+        "thresholds": {
+          "avoidable_fallback_margin": 0.05,
+          "opportunity_capture_margin": 0.05,
+          "precision": 0.28,
+          "recall": 0.78,
+          "top1": 0.32,
+          "top3": 0.65
+        }
+      },
+      "runtime_claim_seed_gate": {
+        "checks": {
+          "harmful_precision": {
+            "passed": false,
+            "threshold": 0.3,
+            "value": 0.2751159196290572
+          },
+          "harmful_recall": {
+            "passed": true,
+            "threshold": 0.8,
+            "value": 0.8146453089244852
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.0037781165729336165
+          },
+          "strict_anti_escape_gate": {
+            "passed": false
+          },
+          "strict_attention_native_gate": {
+            "passed": false
+          },
+          "strict_phase4f_gate": {
+            "passed": false
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.35,
+            "value": 0.18430034129692832
+          },
+          "top3": {
+            "passed": false,
+            "threshold": 0.7,
+            "value": 0.689419795221843
+          }
+        },
+        "note": "Diagnostic only. Phase5.5 still requires the existing strict final multi-seed gate.",
+        "passed": false,
+        "thresholds": {
+          "precision": 0.3,
+          "recall": 0.8,
+          "top1": 0.35,
+          "top3": 0.7
+        }
+      },
+      "seed": 61,
+      "summary_json": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_rawtrace_edge_sf_global_rank3_anti3_eval_seed61_summary.json",
+      "values": {
+        "anti_capture": 0.3027027027027027,
+        "anti_passed": false,
+        "attention_native_passed": false,
+        "avoidable_fallback": 0.3837837837837838,
+        "delta": 0.0037781165729336165,
+        "harmful_precision": 0.2751159196290572,
+        "harmful_recall": 0.8146453089244852,
+        "phase4f_passed": false,
+        "positive_delta_proxy": 0.0037781165729336165,
+        "selected_vs_additive_delta": 0.0037781165729336165,
+        "top1": 0.18430034129692832,
+        "top3": 0.689419795221843
+      },
+      "variant": "phase4f_repair5_rawtrace_edge_sf_global_rank3_anti3"
+    },
+    {
+      "dataset": "/root/shared-nvme/czr004_phase4_repair1_43633e7/artifacts/teacher/laur/full_repair5_attention_native_rawtrace/update_labels/phase4_laur_attention_native_rawtrace_dataset.jsonl",
+      "development_gate": {
+        "anti_inconclusive": false,
+        "anti_reference": {
+          "capture": 0.0,
+          "fallback": 1.0
+        },
+        "checks": {
+          "avoidable_fallback": {
+            "passed": true,
+            "reference": 1.0,
+            "threshold": 1.0,
+            "value": 0.10810810810810811
+          },
+          "harmful_precision": {
+            "passed": true,
+            "threshold": 0.25,
+            "value": 0.308411214953271
+          },
+          "harmful_recall": {
+            "passed": false,
+            "threshold": 0.7,
+            "value": 0.07551487414187644
+          },
+          "high_margin_count": {
+            "passed": true,
+            "threshold": 50,
+            "value": 185
+          },
+          "label_audit": {
+            "passed": true,
+            "path": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_attention_native_rawtrace_label_audit.json",
+            "reason": null
+          },
+          "opportunity_capture": {
+            "passed": true,
+            "reference": 0.0,
+            "threshold": 0.0,
+            "value": 0.5513513513513514
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.005414136049950716
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.25,
+            "value": 0.24232081911262798
+          },
+          "top3": {
+            "passed": true,
+            "threshold": 0.6,
+            "value": 0.6552901023890785
+          }
+        },
+        "passed": false,
+        "thresholds": {
+          "avoidable_fallback_margin": 0.0,
+          "opportunity_capture_margin": 0.0,
+          "precision": 0.25,
+          "recall": 0.7,
+          "top1": 0.25,
+          "top3": 0.6
+        }
+      },
+      "interpretation": "diagnostic_fail",
+      "promotion_candidate_gate": {
+        "anti_inconclusive": false,
+        "anti_reference": {
+          "capture": 0.0,
+          "fallback": 1.0
+        },
+        "checks": {
+          "avoidable_fallback": {
+            "passed": true,
+            "reference": 1.0,
+            "threshold": 0.95,
+            "value": 0.10810810810810811
+          },
+          "harmful_precision": {
+            "passed": true,
+            "threshold": 0.28,
+            "value": 0.308411214953271
+          },
+          "harmful_recall": {
+            "passed": false,
+            "threshold": 0.78,
+            "value": 0.07551487414187644
+          },
+          "high_margin_count": {
+            "passed": true,
+            "threshold": 50,
+            "value": 185
+          },
+          "label_audit": {
+            "passed": true,
+            "path": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_attention_native_rawtrace_label_audit.json",
+            "reason": null
+          },
+          "opportunity_capture": {
+            "passed": true,
+            "reference": 0.0,
+            "threshold": 0.05,
+            "value": 0.5513513513513514
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.005414136049950716
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.32,
+            "value": 0.24232081911262798
+          },
+          "top3": {
+            "passed": true,
+            "threshold": 0.65,
+            "value": 0.6552901023890785
+          }
+        },
+        "passed": false,
+        "thresholds": {
+          "avoidable_fallback_margin": 0.05,
+          "opportunity_capture_margin": 0.05,
+          "precision": 0.28,
+          "recall": 0.78,
+          "top1": 0.32,
+          "top3": 0.65
+        }
+      },
+      "runtime_claim_seed_gate": {
+        "checks": {
+          "harmful_precision": {
+            "passed": true,
+            "threshold": 0.3,
+            "value": 0.308411214953271
+          },
+          "harmful_recall": {
+            "passed": false,
+            "threshold": 0.8,
+            "value": 0.07551487414187644
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.005414136049950716
+          },
+          "strict_anti_escape_gate": {
+            "passed": true
+          },
+          "strict_attention_native_gate": {
+            "passed": false
+          },
+          "strict_phase4f_gate": {
+            "passed": false
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.35,
+            "value": 0.24232081911262798
+          },
+          "top3": {
+            "passed": false,
+            "threshold": 0.7,
+            "value": 0.6552901023890785
+          }
+        },
+        "note": "Diagnostic only. Phase5.5 still requires the existing strict final multi-seed gate.",
+        "passed": false,
+        "thresholds": {
+          "precision": 0.3,
+          "recall": 0.8,
+          "top1": 0.35,
+          "top3": 0.7
+        }
+      },
+      "seed": 61,
+      "summary_json": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_rawtrace_edge_sf_hpw1_lh12_eval_seed61_summary.json",
+      "values": {
+        "anti_capture": 0.5513513513513514,
+        "anti_passed": true,
+        "attention_native_passed": false,
+        "avoidable_fallback": 0.10810810810810811,
+        "delta": 0.005414136049950716,
+        "harmful_precision": 0.308411214953271,
+        "harmful_recall": 0.07551487414187644,
+        "phase4f_passed": false,
+        "positive_delta_proxy": 0.005414136049950716,
+        "selected_vs_additive_delta": 0.005414136049950716,
+        "top1": 0.24232081911262798,
+        "top3": 0.6552901023890785
+      },
+      "variant": "phase4f_repair5_rawtrace_edge_sf_hpw1_lh12"
+    },
+    {
+      "dataset": "/root/shared-nvme/czr004_phase4_repair1_43633e7/artifacts/teacher/laur/full_repair5_attention_native_rawtrace/update_labels/phase4_laur_attention_native_rawtrace_dataset.jsonl",
+      "development_gate": {
+        "anti_inconclusive": false,
+        "anti_reference": {
+          "capture": 0.0,
+          "fallback": 1.0
+        },
+        "checks": {
+          "avoidable_fallback": {
+            "passed": true,
+            "reference": 1.0,
+            "threshold": 1.0,
+            "value": 0.2702702702702703
+          },
+          "harmful_precision": {
+            "passed": true,
+            "threshold": 0.25,
+            "value": 0.3372093023255814
+          },
+          "harmful_recall": {
+            "passed": false,
+            "threshold": 0.7,
+            "value": 0.13272311212814644
+          },
+          "high_margin_count": {
+            "passed": true,
+            "threshold": 50,
+            "value": 185
+          },
+          "label_audit": {
+            "passed": true,
+            "path": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_attention_native_rawtrace_label_audit.json",
+            "reason": null
+          },
+          "opportunity_capture": {
+            "passed": true,
+            "reference": 0.0,
+            "threshold": 0.0,
+            "value": 0.4648648648648649
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.013572036079291059
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.25,
+            "value": 0.21160409556313994
+          },
+          "top3": {
+            "passed": false,
+            "threshold": 0.6,
+            "value": 0.5938566552901023
+          }
+        },
+        "passed": false,
+        "thresholds": {
+          "avoidable_fallback_margin": 0.0,
+          "opportunity_capture_margin": 0.0,
+          "precision": 0.25,
+          "recall": 0.7,
+          "top1": 0.25,
+          "top3": 0.6
+        }
+      },
+      "interpretation": "diagnostic_fail",
+      "promotion_candidate_gate": {
+        "anti_inconclusive": false,
+        "anti_reference": {
+          "capture": 0.0,
+          "fallback": 1.0
+        },
+        "checks": {
+          "avoidable_fallback": {
+            "passed": true,
+            "reference": 1.0,
+            "threshold": 0.95,
+            "value": 0.2702702702702703
+          },
+          "harmful_precision": {
+            "passed": true,
+            "threshold": 0.28,
+            "value": 0.3372093023255814
+          },
+          "harmful_recall": {
+            "passed": false,
+            "threshold": 0.78,
+            "value": 0.13272311212814644
+          },
+          "high_margin_count": {
+            "passed": true,
+            "threshold": 50,
+            "value": 185
+          },
+          "label_audit": {
+            "passed": true,
+            "path": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_attention_native_rawtrace_label_audit.json",
+            "reason": null
+          },
+          "opportunity_capture": {
+            "passed": true,
+            "reference": 0.0,
+            "threshold": 0.05,
+            "value": 0.4648648648648649
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.013572036079291059
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.32,
+            "value": 0.21160409556313994
+          },
+          "top3": {
+            "passed": false,
+            "threshold": 0.65,
+            "value": 0.5938566552901023
+          }
+        },
+        "passed": false,
+        "thresholds": {
+          "avoidable_fallback_margin": 0.05,
+          "opportunity_capture_margin": 0.05,
+          "precision": 0.28,
+          "recall": 0.78,
+          "top1": 0.32,
+          "top3": 0.65
+        }
+      },
+      "runtime_claim_seed_gate": {
+        "checks": {
+          "harmful_precision": {
+            "passed": true,
+            "threshold": 0.3,
+            "value": 0.3372093023255814
+          },
+          "harmful_recall": {
+            "passed": false,
+            "threshold": 0.8,
+            "value": 0.13272311212814644
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.013572036079291059
+          },
+          "strict_anti_escape_gate": {
+            "passed": true
+          },
+          "strict_attention_native_gate": {
+            "passed": false
+          },
+          "strict_phase4f_gate": {
+            "passed": false
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.35,
+            "value": 0.21160409556313994
+          },
+          "top3": {
+            "passed": false,
+            "threshold": 0.7,
+            "value": 0.5938566552901023
+          }
+        },
+        "note": "Diagnostic only. Phase5.5 still requires the existing strict final multi-seed gate.",
+        "passed": false,
+        "thresholds": {
+          "precision": 0.3,
+          "recall": 0.8,
+          "top1": 0.35,
+          "top3": 0.7
+        }
+      },
+      "seed": 61,
+      "summary_json": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_rawtrace_edge_sf_hpw1_lh8_eval_seed61_summary.json",
+      "values": {
+        "anti_capture": 0.4648648648648649,
+        "anti_passed": true,
+        "attention_native_passed": false,
+        "avoidable_fallback": 0.2702702702702703,
+        "delta": 0.013572036079291059,
+        "harmful_precision": 0.3372093023255814,
+        "harmful_recall": 0.13272311212814644,
+        "phase4f_passed": false,
+        "positive_delta_proxy": 0.013572036079291059,
+        "selected_vs_additive_delta": 0.013572036079291059,
+        "top1": 0.21160409556313994,
+        "top3": 0.5938566552901023
+      },
+      "variant": "phase4f_repair5_rawtrace_edge_sf_hpw1_lh8"
+    },
+    {
+      "dataset": "/root/shared-nvme/czr004_phase4_repair1_43633e7/artifacts/teacher/laur/full_repair5_attention_native_rawtrace/update_labels/phase4_laur_attention_native_rawtrace_dataset.jsonl",
+      "development_gate": {
+        "anti_inconclusive": false,
+        "anti_reference": {
+          "capture": 0.0,
+          "fallback": 1.0
+        },
+        "checks": {
+          "avoidable_fallback": {
+            "passed": true,
+            "reference": 1.0,
+            "threshold": 1.0,
+            "value": 0.22702702702702704
+          },
+          "harmful_precision": {
+            "passed": true,
+            "threshold": 0.25,
+            "value": 0.2936046511627907
+          },
+          "harmful_recall": {
+            "passed": false,
+            "threshold": 0.7,
+            "value": 0.2311212814645309
+          },
+          "high_margin_count": {
+            "passed": true,
+            "threshold": 50,
+            "value": 185
+          },
+          "label_audit": {
+            "passed": true,
+            "path": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_attention_native_rawtrace_label_audit.json",
+            "reason": null
+          },
+          "opportunity_capture": {
+            "passed": true,
+            "reference": 0.0,
+            "threshold": 0.0,
+            "value": 0.5081081081081081
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.01067540326608789
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.25,
+            "value": 0.19112627986348124
+          },
+          "top3": {
+            "passed": true,
+            "threshold": 0.6,
+            "value": 0.6450511945392492
+          }
+        },
+        "passed": false,
+        "thresholds": {
+          "avoidable_fallback_margin": 0.0,
+          "opportunity_capture_margin": 0.0,
+          "precision": 0.25,
+          "recall": 0.7,
+          "top1": 0.25,
+          "top3": 0.6
+        }
+      },
+      "interpretation": "diagnostic_fail",
+      "promotion_candidate_gate": {
+        "anti_inconclusive": false,
+        "anti_reference": {
+          "capture": 0.0,
+          "fallback": 1.0
+        },
+        "checks": {
+          "avoidable_fallback": {
+            "passed": true,
+            "reference": 1.0,
+            "threshold": 0.95,
+            "value": 0.22702702702702704
+          },
+          "harmful_precision": {
+            "passed": true,
+            "threshold": 0.28,
+            "value": 0.2936046511627907
+          },
+          "harmful_recall": {
+            "passed": false,
+            "threshold": 0.78,
+            "value": 0.2311212814645309
+          },
+          "high_margin_count": {
+            "passed": true,
+            "threshold": 50,
+            "value": 185
+          },
+          "label_audit": {
+            "passed": true,
+            "path": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_attention_native_rawtrace_label_audit.json",
+            "reason": null
+          },
+          "opportunity_capture": {
+            "passed": true,
+            "reference": 0.0,
+            "threshold": 0.05,
+            "value": 0.5081081081081081
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.01067540326608789
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.32,
+            "value": 0.19112627986348124
+          },
+          "top3": {
+            "passed": false,
+            "threshold": 0.65,
+            "value": 0.6450511945392492
+          }
+        },
+        "passed": false,
+        "thresholds": {
+          "avoidable_fallback_margin": 0.05,
+          "opportunity_capture_margin": 0.05,
+          "precision": 0.28,
+          "recall": 0.78,
+          "top1": 0.32,
+          "top3": 0.65
+        }
+      },
+      "runtime_claim_seed_gate": {
+        "checks": {
+          "harmful_precision": {
+            "passed": false,
+            "threshold": 0.3,
+            "value": 0.2936046511627907
+          },
+          "harmful_recall": {
+            "passed": false,
+            "threshold": 0.8,
+            "value": 0.2311212814645309
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.01067540326608789
+          },
+          "strict_anti_escape_gate": {
+            "passed": true
+          },
+          "strict_attention_native_gate": {
+            "passed": false
+          },
+          "strict_phase4f_gate": {
+            "passed": false
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.35,
+            "value": 0.19112627986348124
+          },
+          "top3": {
+            "passed": false,
+            "threshold": 0.7,
+            "value": 0.6450511945392492
+          }
+        },
+        "note": "Diagnostic only. Phase5.5 still requires the existing strict final multi-seed gate.",
+        "passed": false,
+        "thresholds": {
+          "precision": 0.3,
+          "recall": 0.8,
+          "top1": 0.35,
+          "top3": 0.7
+        }
+      },
+      "seed": 61,
+      "summary_json": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_rawtrace_edge_sf_hpw2_lh8_eval_seed61_summary.json",
+      "values": {
+        "anti_capture": 0.5081081081081081,
+        "anti_passed": true,
+        "attention_native_passed": false,
+        "avoidable_fallback": 0.22702702702702704,
+        "delta": 0.01067540326608789,
+        "harmful_precision": 0.2936046511627907,
+        "harmful_recall": 0.2311212814645309,
+        "phase4f_passed": false,
+        "positive_delta_proxy": 0.01067540326608789,
+        "selected_vs_additive_delta": 0.01067540326608789,
+        "top1": 0.19112627986348124,
+        "top3": 0.6450511945392492
+      },
+      "variant": "phase4f_repair5_rawtrace_edge_sf_hpw2_lh8"
+    },
+    {
+      "dataset": "/root/shared-nvme/czr004_phase4_repair1_43633e7/artifacts/teacher/laur/full_repair5_attention_native_rawtrace/update_labels/phase4_laur_attention_native_rawtrace_dataset.jsonl",
+      "development_gate": {
+        "anti_inconclusive": false,
+        "anti_reference": {
+          "capture": 0.0,
+          "fallback": 1.0
+        },
+        "checks": {
+          "avoidable_fallback": {
+            "passed": true,
+            "reference": 1.0,
+            "threshold": 1.0,
+            "value": 0.43243243243243246
+          },
+          "harmful_precision": {
+            "passed": true,
+            "threshold": 0.25,
+            "value": 0.281767955801105
+          },
+          "harmful_recall": {
+            "passed": true,
+            "threshold": 0.7,
+            "value": 0.816933638443936
+          },
+          "high_margin_count": {
+            "passed": true,
+            "threshold": 50,
+            "value": 185
+          },
+          "label_audit": {
+            "passed": true,
+            "path": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_attention_native_rawtrace_label_audit.json",
+            "reason": null
+          },
+          "opportunity_capture": {
+            "passed": true,
+            "reference": 0.0,
+            "threshold": 0.0,
+            "value": 0.2756756756756757
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.005700274521320026
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.25,
+            "value": 0.18088737201365188
+          },
+          "top3": {
+            "passed": true,
+            "threshold": 0.6,
+            "value": 0.6621160409556314
+          }
+        },
+        "passed": false,
+        "thresholds": {
+          "avoidable_fallback_margin": 0.0,
+          "opportunity_capture_margin": 0.0,
+          "precision": 0.25,
+          "recall": 0.7,
+          "top1": 0.25,
+          "top3": 0.6
+        }
+      },
+      "interpretation": "diagnostic_fail",
+      "promotion_candidate_gate": {
+        "anti_inconclusive": false,
+        "anti_reference": {
+          "capture": 0.0,
+          "fallback": 1.0
+        },
+        "checks": {
+          "avoidable_fallback": {
+            "passed": true,
+            "reference": 1.0,
+            "threshold": 0.95,
+            "value": 0.43243243243243246
+          },
+          "harmful_precision": {
+            "passed": true,
+            "threshold": 0.28,
+            "value": 0.281767955801105
+          },
+          "harmful_recall": {
+            "passed": true,
+            "threshold": 0.78,
+            "value": 0.816933638443936
+          },
+          "high_margin_count": {
+            "passed": true,
+            "threshold": 50,
+            "value": 185
+          },
+          "label_audit": {
+            "passed": true,
+            "path": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_attention_native_rawtrace_label_audit.json",
+            "reason": null
+          },
+          "opportunity_capture": {
+            "passed": true,
+            "reference": 0.0,
+            "threshold": 0.05,
+            "value": 0.2756756756756757
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.005700274521320026
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.32,
+            "value": 0.18088737201365188
+          },
+          "top3": {
+            "passed": true,
+            "threshold": 0.65,
+            "value": 0.6621160409556314
+          }
+        },
+        "passed": false,
+        "thresholds": {
+          "avoidable_fallback_margin": 0.05,
+          "opportunity_capture_margin": 0.05,
+          "precision": 0.28,
+          "recall": 0.78,
+          "top1": 0.32,
+          "top3": 0.65
+        }
+      },
+      "runtime_claim_seed_gate": {
+        "checks": {
+          "harmful_precision": {
+            "passed": false,
+            "threshold": 0.3,
+            "value": 0.281767955801105
+          },
+          "harmful_recall": {
+            "passed": true,
+            "threshold": 0.8,
+            "value": 0.816933638443936
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.005700274521320026
+          },
+          "strict_anti_escape_gate": {
+            "passed": false
+          },
+          "strict_attention_native_gate": {
+            "passed": false
+          },
+          "strict_phase4f_gate": {
+            "passed": false
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.35,
+            "value": 0.18088737201365188
+          },
+          "top3": {
+            "passed": false,
+            "threshold": 0.7,
+            "value": 0.6621160409556314
+          }
+        },
+        "note": "Diagnostic only. Phase5.5 still requires the existing strict final multi-seed gate.",
+        "passed": false,
+        "thresholds": {
+          "precision": 0.3,
+          "recall": 0.8,
+          "top1": 0.35,
+          "top3": 0.7
+        }
+      },
+      "seed": 61,
+      "summary_json": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_rawtrace_edge_sf_pair_focal_m035_lh4_eval_seed61_summary.json",
+      "values": {
+        "anti_capture": 0.2756756756756757,
+        "anti_passed": false,
+        "attention_native_passed": false,
+        "avoidable_fallback": 0.43243243243243246,
+        "delta": 0.005700274521320026,
+        "harmful_precision": 0.281767955801105,
+        "harmful_recall": 0.816933638443936,
+        "phase4f_passed": false,
+        "positive_delta_proxy": 0.005700274521320026,
+        "selected_vs_additive_delta": 0.005700274521320026,
+        "top1": 0.18088737201365188,
+        "top3": 0.6621160409556314
+      },
+      "variant": "phase4f_repair5_rawtrace_edge_sf_pair_focal_m035_lh4"
+    },
+    {
+      "dataset": "/root/shared-nvme/czr004_phase4_repair1_43633e7/artifacts/teacher/laur/full_repair5_attention_native_rawtrace/update_labels/phase4_laur_attention_native_rawtrace_dataset.jsonl",
+      "development_gate": {
+        "anti_inconclusive": false,
+        "anti_reference": {
+          "capture": 0.0,
+          "fallback": 1.0
+        },
+        "checks": {
+          "avoidable_fallback": {
+            "passed": true,
+            "reference": 1.0,
+            "threshold": 1.0,
+            "value": 0.3567567567567568
+          },
+          "harmful_precision": {
+            "passed": true,
+            "threshold": 0.25,
+            "value": 0.31145833333333334
+          },
+          "harmful_recall": {
+            "passed": false,
+            "threshold": 0.7,
+            "value": 0.6842105263157895
+          },
+          "high_margin_count": {
+            "passed": true,
+            "threshold": 50,
+            "value": 185
+          },
+          "label_audit": {
+            "passed": true,
+            "path": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_attention_native_rawtrace_label_audit.json",
+            "reason": null
+          },
+          "opportunity_capture": {
+            "passed": true,
+            "reference": 0.0,
+            "threshold": 0.0,
+            "value": 0.33513513513513515
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.008596097071324617
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.25,
+            "value": 0.20819112627986347
+          },
+          "top3": {
+            "passed": true,
+            "threshold": 0.6,
+            "value": 0.6416382252559727
+          }
+        },
+        "passed": false,
+        "thresholds": {
+          "avoidable_fallback_margin": 0.0,
+          "opportunity_capture_margin": 0.0,
+          "precision": 0.25,
+          "recall": 0.7,
+          "top1": 0.25,
+          "top3": 0.6
+        }
+      },
+      "interpretation": "diagnostic_fail",
+      "promotion_candidate_gate": {
+        "anti_inconclusive": false,
+        "anti_reference": {
+          "capture": 0.0,
+          "fallback": 1.0
+        },
+        "checks": {
+          "avoidable_fallback": {
+            "passed": true,
+            "reference": 1.0,
+            "threshold": 0.95,
+            "value": 0.3567567567567568
+          },
+          "harmful_precision": {
+            "passed": true,
+            "threshold": 0.28,
+            "value": 0.31145833333333334
+          },
+          "harmful_recall": {
+            "passed": false,
+            "threshold": 0.78,
+            "value": 0.6842105263157895
+          },
+          "high_margin_count": {
+            "passed": true,
+            "threshold": 50,
+            "value": 185
+          },
+          "label_audit": {
+            "passed": true,
+            "path": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_attention_native_rawtrace_label_audit.json",
+            "reason": null
+          },
+          "opportunity_capture": {
+            "passed": true,
+            "reference": 0.0,
+            "threshold": 0.05,
+            "value": 0.33513513513513515
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.008596097071324617
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.32,
+            "value": 0.20819112627986347
+          },
+          "top3": {
+            "passed": false,
+            "threshold": 0.65,
+            "value": 0.6416382252559727
+          }
+        },
+        "passed": false,
+        "thresholds": {
+          "avoidable_fallback_margin": 0.05,
+          "opportunity_capture_margin": 0.05,
+          "precision": 0.28,
+          "recall": 0.78,
+          "top1": 0.32,
+          "top3": 0.65
+        }
+      },
+      "runtime_claim_seed_gate": {
+        "checks": {
+          "harmful_precision": {
+            "passed": true,
+            "threshold": 0.3,
+            "value": 0.31145833333333334
+          },
+          "harmful_recall": {
+            "passed": false,
+            "threshold": 0.8,
+            "value": 0.6842105263157895
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.008596097071324617
+          },
+          "strict_anti_escape_gate": {
+            "passed": false
+          },
+          "strict_attention_native_gate": {
+            "passed": false
+          },
+          "strict_phase4f_gate": {
+            "passed": false
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.35,
+            "value": 0.20819112627986347
+          },
+          "top3": {
+            "passed": false,
+            "threshold": 0.7,
+            "value": 0.6416382252559727
+          }
+        },
+        "note": "Diagnostic only. Phase5.5 still requires the existing strict final multi-seed gate.",
+        "passed": false,
+        "thresholds": {
+          "precision": 0.3,
+          "recall": 0.8,
+          "top1": 0.35,
+          "top3": 0.7
+        }
+      },
+      "seed": 61,
+      "summary_json": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_rawtrace_edge_sf_pair_m035_lh4_neg1_eval_seed61_summary.json",
+      "values": {
+        "anti_capture": 0.33513513513513515,
+        "anti_passed": false,
+        "attention_native_passed": false,
+        "avoidable_fallback": 0.3567567567567568,
+        "delta": 0.008596097071324617,
+        "harmful_precision": 0.31145833333333334,
+        "harmful_recall": 0.6842105263157895,
+        "phase4f_passed": false,
+        "positive_delta_proxy": 0.008596097071324617,
+        "selected_vs_additive_delta": 0.008596097071324617,
+        "top1": 0.20819112627986347,
+        "top3": 0.6416382252559727
+      },
+      "variant": "phase4f_repair5_rawtrace_edge_sf_pair_m035_lh4_neg1"
+    },
+    {
+      "dataset": "/root/shared-nvme/czr004_phase4_repair1_43633e7/artifacts/teacher/laur/full_repair5_attention_native_rawtrace/update_labels/phase4_laur_attention_native_rawtrace_dataset.jsonl",
+      "development_gate": {
+        "anti_inconclusive": false,
+        "anti_reference": {
+          "capture": 0.0,
+          "fallback": 1.0
+        },
+        "checks": {
+          "avoidable_fallback": {
+            "passed": true,
+            "reference": 1.0,
+            "threshold": 1.0,
+            "value": 0.4594594594594595
+          },
+          "harmful_precision": {
+            "passed": true,
+            "threshold": 0.25,
+            "value": 0.29491833030852993
+          },
+          "harmful_recall": {
+            "passed": true,
+            "threshold": 0.7,
+            "value": 0.7437070938215103
+          },
+          "high_margin_count": {
+            "passed": true,
+            "threshold": 50,
+            "value": 185
+          },
+          "label_audit": {
+            "passed": true,
+            "path": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_attention_native_rawtrace_label_audit.json",
+            "reason": null
+          },
+          "opportunity_capture": {
+            "passed": true,
+            "reference": 0.0,
+            "threshold": 0.0,
+            "value": 0.3027027027027027
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.014323520870012856
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.25,
+            "value": 0.15358361774744028
+          },
+          "top3": {
+            "passed": true,
+            "threshold": 0.6,
+            "value": 0.6825938566552902
+          }
+        },
+        "passed": false,
+        "thresholds": {
+          "avoidable_fallback_margin": 0.0,
+          "opportunity_capture_margin": 0.0,
+          "precision": 0.25,
+          "recall": 0.7,
+          "top1": 0.25,
+          "top3": 0.6
+        }
+      },
+      "interpretation": "diagnostic_fail",
+      "promotion_candidate_gate": {
+        "anti_inconclusive": false,
+        "anti_reference": {
+          "capture": 0.0,
+          "fallback": 1.0
+        },
+        "checks": {
+          "avoidable_fallback": {
+            "passed": true,
+            "reference": 1.0,
+            "threshold": 0.95,
+            "value": 0.4594594594594595
+          },
+          "harmful_precision": {
+            "passed": true,
+            "threshold": 0.28,
+            "value": 0.29491833030852993
+          },
+          "harmful_recall": {
+            "passed": false,
+            "threshold": 0.78,
+            "value": 0.7437070938215103
+          },
+          "high_margin_count": {
+            "passed": true,
+            "threshold": 50,
+            "value": 185
+          },
+          "label_audit": {
+            "passed": true,
+            "path": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_attention_native_rawtrace_label_audit.json",
+            "reason": null
+          },
+          "opportunity_capture": {
+            "passed": true,
+            "reference": 0.0,
+            "threshold": 0.05,
+            "value": 0.3027027027027027
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.014323520870012856
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.32,
+            "value": 0.15358361774744028
+          },
+          "top3": {
+            "passed": true,
+            "threshold": 0.65,
+            "value": 0.6825938566552902
+          }
+        },
+        "passed": false,
+        "thresholds": {
+          "avoidable_fallback_margin": 0.05,
+          "opportunity_capture_margin": 0.05,
+          "precision": 0.28,
+          "recall": 0.78,
+          "top1": 0.32,
+          "top3": 0.65
+        }
+      },
+      "runtime_claim_seed_gate": {
+        "checks": {
+          "harmful_precision": {
+            "passed": false,
+            "threshold": 0.3,
+            "value": 0.29491833030852993
+          },
+          "harmful_recall": {
+            "passed": false,
+            "threshold": 0.8,
+            "value": 0.7437070938215103
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.014323520870012856
+          },
+          "strict_anti_escape_gate": {
+            "passed": false
+          },
+          "strict_attention_native_gate": {
+            "passed": false
+          },
+          "strict_phase4f_gate": {
+            "passed": false
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.35,
+            "value": 0.15358361774744028
+          },
+          "top3": {
+            "passed": false,
+            "threshold": 0.7,
+            "value": 0.6825938566552902
+          }
+        },
+        "note": "Diagnostic only. Phase5.5 still requires the existing strict final multi-seed gate.",
+        "passed": false,
+        "thresholds": {
+          "precision": 0.3,
+          "recall": 0.8,
+          "top1": 0.35,
+          "top3": 0.7
+        }
+      },
+      "seed": 61,
+      "summary_json": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_rawtrace_edge_sf_pair_m050_lh3_neg2_eval_seed61_summary.json",
+      "values": {
+        "anti_capture": 0.3027027027027027,
+        "anti_passed": false,
+        "attention_native_passed": false,
+        "avoidable_fallback": 0.4594594594594595,
+        "delta": 0.014323520870012856,
+        "harmful_precision": 0.29491833030852993,
+        "harmful_recall": 0.7437070938215103,
+        "phase4f_passed": false,
+        "positive_delta_proxy": 0.014323520870012856,
+        "selected_vs_additive_delta": 0.014323520870012856,
+        "top1": 0.15358361774744028,
+        "top3": 0.6825938566552902
+      },
+      "variant": "phase4f_repair5_rawtrace_edge_sf_pair_m050_lh3_neg2"
+    },
+    {
+      "dataset": "/root/shared-nvme/czr004_phase4_repair1_43633e7/artifacts/teacher/laur/full_repair5_attention_native_rawtrace/update_labels/phase4_laur_attention_native_rawtrace_dataset.jsonl",
+      "development_gate": {
+        "anti_inconclusive": false,
+        "anti_reference": {
+          "capture": 0.0,
+          "fallback": 1.0
+        },
+        "checks": {
+          "avoidable_fallback": {
+            "passed": true,
+            "reference": 1.0,
+            "threshold": 1.0,
+            "value": 0.5945945945945946
+          },
+          "harmful_precision": {
+            "passed": true,
+            "threshold": 0.25,
+            "value": 0.2556862745098039
+          },
+          "harmful_recall": {
+            "passed": true,
+            "threshold": 0.7,
+            "value": 0.7459954233409611
+          },
+          "high_margin_count": {
+            "passed": true,
+            "threshold": 50,
+            "value": 185
+          },
+          "label_audit": {
+            "passed": true,
+            "path": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_attention_native_rawtrace_label_audit.json",
+            "reason": null
+          },
+          "opportunity_capture": {
+            "passed": true,
+            "reference": 0.0,
+            "threshold": 0.0,
+            "value": 0.2810810810810811
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.004457986445089928
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.25,
+            "value": 0.19112627986348124
+          },
+          "top3": {
+            "passed": true,
+            "threshold": 0.6,
+            "value": 0.7098976109215017
+          }
+        },
+        "passed": false,
+        "thresholds": {
+          "avoidable_fallback_margin": 0.0,
+          "opportunity_capture_margin": 0.0,
+          "precision": 0.25,
+          "recall": 0.7,
+          "top1": 0.25,
+          "top3": 0.6
+        }
+      },
+      "interpretation": "diagnostic_fail",
+      "promotion_candidate_gate": {
+        "anti_inconclusive": false,
+        "anti_reference": {
+          "capture": 0.0,
+          "fallback": 1.0
+        },
+        "checks": {
+          "avoidable_fallback": {
+            "passed": true,
+            "reference": 1.0,
+            "threshold": 0.95,
+            "value": 0.5945945945945946
+          },
+          "harmful_precision": {
+            "passed": false,
+            "threshold": 0.28,
+            "value": 0.2556862745098039
+          },
+          "harmful_recall": {
+            "passed": false,
+            "threshold": 0.78,
+            "value": 0.7459954233409611
+          },
+          "high_margin_count": {
+            "passed": true,
+            "threshold": 50,
+            "value": 185
+          },
+          "label_audit": {
+            "passed": true,
+            "path": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_attention_native_rawtrace_label_audit.json",
+            "reason": null
+          },
+          "opportunity_capture": {
+            "passed": true,
+            "reference": 0.0,
+            "threshold": 0.05,
+            "value": 0.2810810810810811
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.004457986445089928
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.32,
+            "value": 0.19112627986348124
+          },
+          "top3": {
+            "passed": true,
+            "threshold": 0.65,
+            "value": 0.7098976109215017
+          }
+        },
+        "passed": false,
+        "thresholds": {
+          "avoidable_fallback_margin": 0.05,
+          "opportunity_capture_margin": 0.05,
+          "precision": 0.28,
+          "recall": 0.78,
+          "top1": 0.32,
+          "top3": 0.65
+        }
+      },
+      "runtime_claim_seed_gate": {
+        "checks": {
+          "harmful_precision": {
+            "passed": false,
+            "threshold": 0.3,
+            "value": 0.2556862745098039
+          },
+          "harmful_recall": {
+            "passed": false,
+            "threshold": 0.8,
+            "value": 0.7459954233409611
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.004457986445089928
+          },
+          "strict_anti_escape_gate": {
+            "passed": false
+          },
+          "strict_attention_native_gate": {
+            "passed": false
+          },
+          "strict_phase4f_gate": {
+            "passed": false
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.35,
+            "value": 0.19112627986348124
+          },
+          "top3": {
+            "passed": true,
+            "threshold": 0.7,
+            "value": 0.7098976109215017
+          }
+        },
+        "note": "Diagnostic only. Phase5.5 still requires the existing strict final multi-seed gate.",
+        "passed": false,
+        "thresholds": {
+          "precision": 0.3,
+          "recall": 0.8,
+          "top1": 0.35,
+          "top3": 0.7
+        }
+      },
+      "seed": 61,
+      "summary_json": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_rawtrace_edge_sf_target_ce1_margin1_hm4_eval_seed61_summary.json",
+      "values": {
+        "anti_capture": 0.2810810810810811,
+        "anti_passed": false,
+        "attention_native_passed": false,
+        "avoidable_fallback": 0.5945945945945946,
+        "delta": 0.004457986445089928,
+        "harmful_precision": 0.2556862745098039,
+        "harmful_recall": 0.7459954233409611,
+        "phase4f_passed": false,
+        "positive_delta_proxy": 0.004457986445089928,
+        "selected_vs_additive_delta": 0.004457986445089928,
+        "top1": 0.19112627986348124,
+        "top3": 0.7098976109215017
+      },
+      "variant": "phase4f_repair5_rawtrace_edge_sf_target_ce1_margin1_hm4"
+    },
+    {
+      "dataset": "/root/shared-nvme/czr004_phase4_repair1_43633e7/artifacts/teacher/laur/full_repair5_attention_native_rawtrace/update_labels/phase4_laur_attention_native_rawtrace_dataset.jsonl",
+      "development_gate": {
+        "anti_inconclusive": false,
+        "anti_reference": {
+          "capture": 0.0,
+          "fallback": 1.0
+        },
+        "checks": {
+          "avoidable_fallback": {
+            "passed": true,
+            "reference": 1.0,
+            "threshold": 1.0,
+            "value": 0.5567567567567567
+          },
+          "harmful_precision": {
+            "passed": true,
+            "threshold": 0.25,
+            "value": 0.2778675282714055
+          },
+          "harmful_recall": {
+            "passed": true,
+            "threshold": 0.7,
+            "value": 0.7871853546910755
+          },
+          "high_margin_count": {
+            "passed": true,
+            "threshold": 50,
+            "value": 185
+          },
+          "label_audit": {
+            "passed": true,
+            "path": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_attention_native_rawtrace_label_audit.json",
+            "reason": null
+          },
+          "opportunity_capture": {
+            "passed": true,
+            "reference": 0.0,
+            "threshold": 0.0,
+            "value": 0.25405405405405407
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.002751132135410248
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.25,
+            "value": 0.14334470989761092
+          },
+          "top3": {
+            "passed": true,
+            "threshold": 0.6,
+            "value": 0.7064846416382252
+          }
+        },
+        "passed": false,
+        "thresholds": {
+          "avoidable_fallback_margin": 0.0,
+          "opportunity_capture_margin": 0.0,
+          "precision": 0.25,
+          "recall": 0.7,
+          "top1": 0.25,
+          "top3": 0.6
+        }
+      },
+      "interpretation": "diagnostic_fail",
+      "promotion_candidate_gate": {
+        "anti_inconclusive": false,
+        "anti_reference": {
+          "capture": 0.0,
+          "fallback": 1.0
+        },
+        "checks": {
+          "avoidable_fallback": {
+            "passed": true,
+            "reference": 1.0,
+            "threshold": 0.95,
+            "value": 0.5567567567567567
+          },
+          "harmful_precision": {
+            "passed": false,
+            "threshold": 0.28,
+            "value": 0.2778675282714055
+          },
+          "harmful_recall": {
+            "passed": true,
+            "threshold": 0.78,
+            "value": 0.7871853546910755
+          },
+          "high_margin_count": {
+            "passed": true,
+            "threshold": 50,
+            "value": 185
+          },
+          "label_audit": {
+            "passed": true,
+            "path": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_attention_native_rawtrace_label_audit.json",
+            "reason": null
+          },
+          "opportunity_capture": {
+            "passed": true,
+            "reference": 0.0,
+            "threshold": 0.05,
+            "value": 0.25405405405405407
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.002751132135410248
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.32,
+            "value": 0.14334470989761092
+          },
+          "top3": {
+            "passed": true,
+            "threshold": 0.65,
+            "value": 0.7064846416382252
+          }
+        },
+        "passed": false,
+        "thresholds": {
+          "avoidable_fallback_margin": 0.05,
+          "opportunity_capture_margin": 0.05,
+          "precision": 0.28,
+          "recall": 0.78,
+          "top1": 0.32,
+          "top3": 0.65
+        }
+      },
+      "runtime_claim_seed_gate": {
+        "checks": {
+          "harmful_precision": {
+            "passed": false,
+            "threshold": 0.3,
+            "value": 0.2778675282714055
+          },
+          "harmful_recall": {
+            "passed": false,
+            "threshold": 0.8,
+            "value": 0.7871853546910755
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.002751132135410248
+          },
+          "strict_anti_escape_gate": {
+            "passed": false
+          },
+          "strict_attention_native_gate": {
+            "passed": false
+          },
+          "strict_phase4f_gate": {
+            "passed": false
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.35,
+            "value": 0.14334470989761092
+          },
+          "top3": {
+            "passed": true,
+            "threshold": 0.7,
+            "value": 0.7064846416382252
+          }
+        },
+        "note": "Diagnostic only. Phase5.5 still requires the existing strict final multi-seed gate.",
+        "passed": false,
+        "thresholds": {
+          "precision": 0.3,
+          "recall": 0.8,
+          "top1": 0.35,
+          "top3": 0.7
+        }
+      },
+      "seed": 61,
+      "summary_json": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_rawtrace_edge_sf_target_ce2_margin1_hm3_eval_seed61_summary.json",
+      "values": {
+        "anti_capture": 0.25405405405405407,
+        "anti_passed": false,
+        "attention_native_passed": false,
+        "avoidable_fallback": 0.5567567567567567,
+        "delta": 0.002751132135410248,
+        "harmful_precision": 0.2778675282714055,
+        "harmful_recall": 0.7871853546910755,
+        "phase4f_passed": false,
+        "positive_delta_proxy": 0.002751132135410248,
+        "selected_vs_additive_delta": 0.002751132135410248,
+        "top1": 0.14334470989761092,
+        "top3": 0.7064846416382252
+      },
+      "variant": "phase4f_repair5_rawtrace_edge_sf_target_ce2_margin1_hm3"
+    },
+    {
+      "dataset": "/root/shared-nvme/czr004_phase4_repair1_43633e7/artifacts/teacher/laur/full_repair5_attention_native_rawtrace/update_labels/phase4_laur_attention_native_rawtrace_dataset.jsonl",
+      "development_gate": {
+        "anti_inconclusive": false,
+        "anti_reference": {
+          "capture": 0.0,
+          "fallback": 1.0
+        },
+        "checks": {
+          "avoidable_fallback": {
+            "passed": true,
+            "reference": 1.0,
+            "threshold": 1.0,
+            "value": 0.43783783783783786
+          },
+          "harmful_precision": {
+            "passed": true,
+            "threshold": 0.25,
+            "value": 0.270516717325228
+          },
+          "harmful_recall": {
+            "passed": true,
+            "threshold": 0.7,
+            "value": 0.8146453089244852
+          },
+          "high_margin_count": {
+            "passed": true,
+            "threshold": 50,
+            "value": 185
+          },
+          "label_audit": {
+            "passed": true,
+            "path": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_attention_native_rawtrace_label_audit.json",
+            "reason": null
+          },
+          "opportunity_capture": {
+            "passed": true,
+            "reference": 0.0,
+            "threshold": 0.0,
+            "value": 0.3567567567567568
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.0039328747482869665
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.25,
+            "value": 0.22184300341296928
+          },
+          "top3": {
+            "passed": true,
+            "threshold": 0.6,
+            "value": 0.689419795221843
+          }
+        },
+        "passed": false,
+        "thresholds": {
+          "avoidable_fallback_margin": 0.0,
+          "opportunity_capture_margin": 0.0,
+          "precision": 0.25,
+          "recall": 0.7,
+          "top1": 0.25,
+          "top3": 0.6
+        }
+      },
+      "interpretation": "diagnostic_fail",
+      "promotion_candidate_gate": {
+        "anti_inconclusive": false,
+        "anti_reference": {
+          "capture": 0.0,
+          "fallback": 1.0
+        },
+        "checks": {
+          "avoidable_fallback": {
+            "passed": true,
+            "reference": 1.0,
+            "threshold": 0.95,
+            "value": 0.43783783783783786
+          },
+          "harmful_precision": {
+            "passed": false,
+            "threshold": 0.28,
+            "value": 0.270516717325228
+          },
+          "harmful_recall": {
+            "passed": true,
+            "threshold": 0.78,
+            "value": 0.8146453089244852
+          },
+          "high_margin_count": {
+            "passed": true,
+            "threshold": 50,
+            "value": 185
+          },
+          "label_audit": {
+            "passed": true,
+            "path": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_attention_native_rawtrace_label_audit.json",
+            "reason": null
+          },
+          "opportunity_capture": {
+            "passed": true,
+            "reference": 0.0,
+            "threshold": 0.05,
+            "value": 0.3567567567567568
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.0039328747482869665
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.32,
+            "value": 0.22184300341296928
+          },
+          "top3": {
+            "passed": true,
+            "threshold": 0.65,
+            "value": 0.689419795221843
+          }
+        },
+        "passed": false,
+        "thresholds": {
+          "avoidable_fallback_margin": 0.05,
+          "opportunity_capture_margin": 0.05,
+          "precision": 0.28,
+          "recall": 0.78,
+          "top1": 0.32,
+          "top3": 0.65
+        }
+      },
+      "runtime_claim_seed_gate": {
+        "checks": {
+          "harmful_precision": {
+            "passed": false,
+            "threshold": 0.3,
+            "value": 0.270516717325228
+          },
+          "harmful_recall": {
+            "passed": true,
+            "threshold": 0.8,
+            "value": 0.8146453089244852
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.0039328747482869665
+          },
+          "strict_anti_escape_gate": {
+            "passed": false
+          },
+          "strict_attention_native_gate": {
+            "passed": false
+          },
+          "strict_phase4f_gate": {
+            "passed": false
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.35,
+            "value": 0.22184300341296928
+          },
+          "top3": {
+            "passed": false,
+            "threshold": 0.7,
+            "value": 0.689419795221843
+          }
+        },
+        "note": "Diagnostic only. Phase5.5 still requires the existing strict final multi-seed gate.",
+        "passed": false,
+        "thresholds": {
+          "precision": 0.3,
+          "recall": 0.8,
+          "top1": 0.35,
+          "top3": 0.7
+        }
+      },
+      "seed": 61,
+      "summary_json": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_rawtrace_edge_sf_target_margin2_rank3_safe5_eval_seed61_summary.json",
+      "values": {
+        "anti_capture": 0.3567567567567568,
+        "anti_passed": false,
+        "attention_native_passed": false,
+        "avoidable_fallback": 0.43783783783783786,
+        "delta": 0.0039328747482869665,
+        "harmful_precision": 0.270516717325228,
+        "harmful_recall": 0.8146453089244852,
+        "phase4f_passed": false,
+        "positive_delta_proxy": 0.0039328747482869665,
+        "selected_vs_additive_delta": 0.0039328747482869665,
+        "top1": 0.22184300341296928,
+        "top3": 0.689419795221843
+      },
+      "variant": "phase4f_repair5_rawtrace_edge_sf_target_margin2_rank3_safe5"
+    },
+    {
+      "dataset": "/root/shared-nvme/czr004_phase4_repair1_43633e7/artifacts/teacher/laur/full_repair5_attention_native_expand5000_rawtrace/update_labels/phase4_laur_attention_native_expand5000_rawtrace_dataset.jsonl",
+      "development_gate": {
+        "anti_inconclusive": false,
+        "anti_reference": {
+          "capture": 0.0,
+          "fallback": 1.0
+        },
+        "checks": {
+          "avoidable_fallback": {
+            "passed": true,
+            "reference": 1.0,
+            "threshold": 1.0,
+            "value": 0.4483870967741935
+          },
+          "harmful_precision": {
+            "passed": true,
+            "threshold": 0.25,
+            "value": 0.30837988826815643
+          },
+          "harmful_recall": {
+            "passed": true,
+            "threshold": 0.7,
+            "value": 0.7369826435246996
+          },
+          "high_margin_count": {
+            "passed": true,
+            "threshold": 50,
+            "value": 310
+          },
+          "label_audit": {
+            "passed": true,
+            "path": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_attention_native_expand5000_rawtrace_label_audit.json",
+            "reason": null
+          },
+          "opportunity_capture": {
+            "passed": true,
+            "reference": 0.0,
+            "threshold": 0.0,
+            "value": 0.36774193548387096
+          },
+          "positive_delta_proxy": {
+            "passed": false,
+            "threshold": 0.0,
+            "value": -0.00012984526082879396
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.25,
+            "value": 0.18633540372670807
+          },
+          "top3": {
+            "passed": true,
+            "threshold": 0.6,
+            "value": 0.6645962732919255
+          }
+        },
+        "passed": false,
+        "thresholds": {
+          "avoidable_fallback_margin": 0.0,
+          "opportunity_capture_margin": 0.0,
+          "precision": 0.25,
+          "recall": 0.7,
+          "top1": 0.25,
+          "top3": 0.6
+        }
+      },
+      "interpretation": "diagnostic_fail",
+      "promotion_candidate_gate": {
+        "anti_inconclusive": false,
+        "anti_reference": {
+          "capture": 0.0,
+          "fallback": 1.0
+        },
+        "checks": {
+          "avoidable_fallback": {
+            "passed": true,
+            "reference": 1.0,
+            "threshold": 0.95,
+            "value": 0.4483870967741935
+          },
+          "harmful_precision": {
+            "passed": true,
+            "threshold": 0.28,
+            "value": 0.30837988826815643
+          },
+          "harmful_recall": {
+            "passed": false,
+            "threshold": 0.78,
+            "value": 0.7369826435246996
+          },
+          "high_margin_count": {
+            "passed": true,
+            "threshold": 50,
+            "value": 310
+          },
+          "label_audit": {
+            "passed": true,
+            "path": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_attention_native_expand5000_rawtrace_label_audit.json",
+            "reason": null
+          },
+          "opportunity_capture": {
+            "passed": true,
+            "reference": 0.0,
+            "threshold": 0.05,
+            "value": 0.36774193548387096
+          },
+          "positive_delta_proxy": {
+            "passed": false,
+            "threshold": 0.0,
+            "value": -0.00012984526082879396
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.32,
+            "value": 0.18633540372670807
+          },
+          "top3": {
+            "passed": true,
+            "threshold": 0.65,
+            "value": 0.6645962732919255
+          }
+        },
+        "passed": false,
+        "thresholds": {
+          "avoidable_fallback_margin": 0.05,
+          "opportunity_capture_margin": 0.05,
+          "precision": 0.28,
+          "recall": 0.78,
+          "top1": 0.32,
+          "top3": 0.65
+        }
+      },
+      "runtime_claim_seed_gate": {
+        "checks": {
+          "harmful_precision": {
+            "passed": true,
+            "threshold": 0.3,
+            "value": 0.30837988826815643
+          },
+          "harmful_recall": {
+            "passed": false,
+            "threshold": 0.8,
+            "value": 0.7369826435246996
+          },
+          "positive_delta_proxy": {
+            "passed": false,
+            "threshold": 0.0,
+            "value": -0.00012984526082879396
+          },
+          "strict_anti_escape_gate": {
+            "passed": false
+          },
+          "strict_attention_native_gate": {
+            "passed": false
+          },
+          "strict_phase4f_gate": {
+            "passed": false
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.35,
+            "value": 0.18633540372670807
+          },
+          "top3": {
+            "passed": false,
+            "threshold": 0.7,
+            "value": 0.6645962732919255
+          }
+        },
+        "note": "Diagnostic only. Phase5.5 still requires the existing strict final multi-seed gate.",
+        "passed": false,
+        "thresholds": {
+          "precision": 0.3,
+          "recall": 0.8,
+          "top1": 0.35,
+          "top3": 0.7
+        }
+      },
+      "seed": 61,
+      "summary_json": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_expand5000_ex5000_linear_target_global_eval_seed61_summary.json",
+      "values": {
+        "anti_capture": 0.36774193548387096,
+        "anti_passed": false,
+        "attention_native_passed": false,
+        "avoidable_fallback": 0.4483870967741935,
+        "delta": -0.00012984526082879396,
+        "harmful_precision": 0.30837988826815643,
+        "harmful_recall": 0.7369826435246996,
+        "phase4f_passed": false,
+        "positive_delta_proxy": -0.00012984526082879396,
+        "selected_vs_additive_delta": -0.00012984526082879396,
+        "top1": 0.18633540372670807,
+        "top3": 0.6645962732919255
+      },
+      "variant": "phase4f_repair5_expand5000_ex5000_linear_target_global"
+    },
+    {
+      "dataset": "/root/shared-nvme/czr004_phase4_repair1_43633e7/artifacts/teacher/laur/full_repair5_attention_native_expand5000_rawtrace/update_labels/phase4_laur_attention_native_expand5000_rawtrace_dataset.jsonl",
+      "development_gate": {
+        "anti_inconclusive": false,
+        "anti_reference": {
+          "capture": 0.0,
+          "fallback": 1.0
+        },
+        "checks": {
+          "avoidable_fallback": {
+            "passed": true,
+            "reference": 1.0,
+            "threshold": 1.0,
+            "value": 0.4870967741935484
+          },
+          "harmful_precision": {
+            "passed": true,
+            "threshold": 0.25,
+            "value": 0.28439519852262235
+          },
+          "harmful_recall": {
+            "passed": true,
+            "threshold": 0.7,
+            "value": 0.822429906542056
+          },
+          "high_margin_count": {
+            "passed": true,
+            "threshold": 50,
+            "value": 310
+          },
+          "label_audit": {
+            "passed": true,
+            "path": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_attention_native_expand5000_rawtrace_label_audit.json",
+            "reason": null
+          },
+          "opportunity_capture": {
+            "passed": true,
+            "reference": 0.0,
+            "threshold": 0.0,
+            "value": 0.2903225806451613
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.0005924399816382926
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.25,
+            "value": 0.19668737060041408
+          },
+          "top3": {
+            "passed": true,
+            "threshold": 0.6,
+            "value": 0.6666666666666666
+          }
+        },
+        "passed": false,
+        "thresholds": {
+          "avoidable_fallback_margin": 0.0,
+          "opportunity_capture_margin": 0.0,
+          "precision": 0.25,
+          "recall": 0.7,
+          "top1": 0.25,
+          "top3": 0.6
+        }
+      },
+      "interpretation": "diagnostic_fail",
+      "promotion_candidate_gate": {
+        "anti_inconclusive": false,
+        "anti_reference": {
+          "capture": 0.0,
+          "fallback": 1.0
+        },
+        "checks": {
+          "avoidable_fallback": {
+            "passed": true,
+            "reference": 1.0,
+            "threshold": 0.95,
+            "value": 0.4870967741935484
+          },
+          "harmful_precision": {
+            "passed": true,
+            "threshold": 0.28,
+            "value": 0.28439519852262235
+          },
+          "harmful_recall": {
+            "passed": true,
+            "threshold": 0.78,
+            "value": 0.822429906542056
+          },
+          "high_margin_count": {
+            "passed": true,
+            "threshold": 50,
+            "value": 310
+          },
+          "label_audit": {
+            "passed": true,
+            "path": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_attention_native_expand5000_rawtrace_label_audit.json",
+            "reason": null
+          },
+          "opportunity_capture": {
+            "passed": true,
+            "reference": 0.0,
+            "threshold": 0.05,
+            "value": 0.2903225806451613
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.0005924399816382926
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.32,
+            "value": 0.19668737060041408
+          },
+          "top3": {
+            "passed": true,
+            "threshold": 0.65,
+            "value": 0.6666666666666666
+          }
+        },
+        "passed": false,
+        "thresholds": {
+          "avoidable_fallback_margin": 0.05,
+          "opportunity_capture_margin": 0.05,
+          "precision": 0.28,
+          "recall": 0.78,
+          "top1": 0.32,
+          "top3": 0.65
+        }
+      },
+      "runtime_claim_seed_gate": {
+        "checks": {
+          "harmful_precision": {
+            "passed": false,
+            "threshold": 0.3,
+            "value": 0.28439519852262235
+          },
+          "harmful_recall": {
+            "passed": true,
+            "threshold": 0.8,
+            "value": 0.822429906542056
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.0005924399816382926
+          },
+          "strict_anti_escape_gate": {
+            "passed": false
+          },
+          "strict_attention_native_gate": {
+            "passed": false
+          },
+          "strict_phase4f_gate": {
+            "passed": false
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.35,
+            "value": 0.19668737060041408
+          },
+          "top3": {
+            "passed": false,
+            "threshold": 0.7,
+            "value": 0.6666666666666666
+          }
+        },
+        "note": "Diagnostic only. Phase5.5 still requires the existing strict final multi-seed gate.",
+        "passed": false,
+        "thresholds": {
+          "precision": 0.3,
+          "recall": 0.8,
+          "top1": 0.35,
+          "top3": 0.7
+        }
+      },
+      "seed": 61,
+      "summary_json": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_expand5000_ex5000_mlp_safety_light_eval_seed61_summary.json",
+      "values": {
+        "anti_capture": 0.2903225806451613,
+        "anti_passed": false,
+        "attention_native_passed": false,
+        "avoidable_fallback": 0.4870967741935484,
+        "delta": 0.0005924399816382926,
+        "harmful_precision": 0.28439519852262235,
+        "harmful_recall": 0.822429906542056,
+        "phase4f_passed": false,
+        "positive_delta_proxy": 0.0005924399816382926,
+        "selected_vs_additive_delta": 0.0005924399816382926,
+        "top1": 0.19668737060041408,
+        "top3": 0.6666666666666666
+      },
+      "variant": "phase4f_repair5_expand5000_ex5000_mlp_safety_light"
+    },
+    {
+      "dataset": "/root/shared-nvme/czr004_phase4_repair1_43633e7/artifacts/teacher/laur/full_repair5_attention_native_expand5000_rawtrace/update_labels/phase4_laur_attention_native_expand5000_rawtrace_dataset.jsonl",
+      "development_gate": {
+        "anti_inconclusive": false,
+        "anti_reference": {
+          "capture": 0.0,
+          "fallback": 1.0
+        },
+        "checks": {
+          "avoidable_fallback": {
+            "passed": true,
+            "reference": 1.0,
+            "threshold": 1.0,
+            "value": 0.3741935483870968
+          },
+          "harmful_precision": {
+            "passed": true,
+            "threshold": 0.25,
+            "value": 0.3202779532533165
+          },
+          "harmful_recall": {
+            "passed": false,
+            "threshold": 0.7,
+            "value": 0.6769025367156208
+          },
+          "high_margin_count": {
+            "passed": true,
+            "threshold": 50,
+            "value": 310
+          },
+          "label_audit": {
+            "passed": true,
+            "path": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_attention_native_expand5000_rawtrace_label_audit.json",
+            "reason": null
+          },
+          "opportunity_capture": {
+            "passed": true,
+            "reference": 0.0,
+            "threshold": 0.0,
+            "value": 0.38064516129032255
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.006214684332570314
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.25,
+            "value": 0.21325051759834368
+          },
+          "top3": {
+            "passed": true,
+            "threshold": 0.6,
+            "value": 0.6625258799171843
+          }
+        },
+        "passed": false,
+        "thresholds": {
+          "avoidable_fallback_margin": 0.0,
+          "opportunity_capture_margin": 0.0,
+          "precision": 0.25,
+          "recall": 0.7,
+          "top1": 0.25,
+          "top3": 0.6
+        }
+      },
+      "interpretation": "diagnostic_fail",
+      "promotion_candidate_gate": {
+        "anti_inconclusive": false,
+        "anti_reference": {
+          "capture": 0.0,
+          "fallback": 1.0
+        },
+        "checks": {
+          "avoidable_fallback": {
+            "passed": true,
+            "reference": 1.0,
+            "threshold": 0.95,
+            "value": 0.3741935483870968
+          },
+          "harmful_precision": {
+            "passed": true,
+            "threshold": 0.28,
+            "value": 0.3202779532533165
+          },
+          "harmful_recall": {
+            "passed": false,
+            "threshold": 0.78,
+            "value": 0.6769025367156208
+          },
+          "high_margin_count": {
+            "passed": true,
+            "threshold": 50,
+            "value": 310
+          },
+          "label_audit": {
+            "passed": true,
+            "path": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_attention_native_expand5000_rawtrace_label_audit.json",
+            "reason": null
+          },
+          "opportunity_capture": {
+            "passed": true,
+            "reference": 0.0,
+            "threshold": 0.05,
+            "value": 0.38064516129032255
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.006214684332570314
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.32,
+            "value": 0.21325051759834368
+          },
+          "top3": {
+            "passed": true,
+            "threshold": 0.65,
+            "value": 0.6625258799171843
+          }
+        },
+        "passed": false,
+        "thresholds": {
+          "avoidable_fallback_margin": 0.05,
+          "opportunity_capture_margin": 0.05,
+          "precision": 0.28,
+          "recall": 0.78,
+          "top1": 0.32,
+          "top3": 0.65
+        }
+      },
+      "runtime_claim_seed_gate": {
+        "checks": {
+          "harmful_precision": {
+            "passed": true,
+            "threshold": 0.3,
+            "value": 0.3202779532533165
+          },
+          "harmful_recall": {
+            "passed": false,
+            "threshold": 0.8,
+            "value": 0.6769025367156208
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.006214684332570314
+          },
+          "strict_anti_escape_gate": {
+            "passed": false
+          },
+          "strict_attention_native_gate": {
+            "passed": false
+          },
+          "strict_phase4f_gate": {
+            "passed": false
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.35,
+            "value": 0.21325051759834368
+          },
+          "top3": {
+            "passed": false,
+            "threshold": 0.7,
+            "value": 0.6625258799171843
+          }
+        },
+        "note": "Diagnostic only. Phase5.5 still requires the existing strict final multi-seed gate.",
+        "passed": false,
+        "thresholds": {
+          "precision": 0.3,
+          "recall": 0.8,
+          "top1": 0.35,
+          "top3": 0.7
+        }
+      },
+      "seed": 61,
+      "summary_json": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_expand5000_ex5000_mlp_target_global_eval_seed61_summary.json",
+      "values": {
+        "anti_capture": 0.38064516129032255,
+        "anti_passed": false,
+        "attention_native_passed": false,
+        "avoidable_fallback": 0.3741935483870968,
+        "delta": 0.006214684332570314,
+        "harmful_precision": 0.3202779532533165,
+        "harmful_recall": 0.6769025367156208,
+        "phase4f_passed": false,
+        "positive_delta_proxy": 0.006214684332570314,
+        "selected_vs_additive_delta": 0.006214684332570314,
+        "top1": 0.21325051759834368,
+        "top3": 0.6625258799171843
+      },
+      "variant": "phase4f_repair5_expand5000_ex5000_mlp_target_global"
+    },
+    {
+      "dataset": "/root/shared-nvme/czr004_phase4_repair1_43633e7/artifacts/teacher/laur/full_repair5_attention_native_expand5000_rawtrace/update_labels/phase4_laur_attention_native_expand5000_rawtrace_dataset.jsonl",
+      "development_gate": {
+        "anti_inconclusive": false,
+        "anti_reference": {
+          "capture": 0.0,
+          "fallback": 1.0
+        },
+        "checks": {
+          "avoidable_fallback": {
+            "passed": true,
+            "reference": 1.0,
+            "threshold": 1.0,
+            "value": 0.4129032258064516
+          },
+          "harmful_precision": {
+            "passed": true,
+            "threshold": 0.25,
+            "value": 0.30684931506849317
+          },
+          "harmful_recall": {
+            "passed": true,
+            "threshold": 0.7,
+            "value": 0.7476635514018691
+          },
+          "high_margin_count": {
+            "passed": true,
+            "threshold": 50,
+            "value": 310
+          },
+          "label_audit": {
+            "passed": true,
+            "path": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_attention_native_expand5000_rawtrace_label_audit.json",
+            "reason": null
+          },
+          "opportunity_capture": {
+            "passed": true,
+            "reference": 0.0,
+            "threshold": 0.0,
+            "value": 0.3419354838709677
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.0019174720854631903
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.25,
+            "value": 0.18426501035196688
+          },
+          "top3": {
+            "passed": true,
+            "threshold": 0.6,
+            "value": 0.6645962732919255
+          }
+        },
+        "passed": false,
+        "thresholds": {
+          "avoidable_fallback_margin": 0.0,
+          "opportunity_capture_margin": 0.0,
+          "precision": 0.25,
+          "recall": 0.7,
+          "top1": 0.25,
+          "top3": 0.6
+        }
+      },
+      "interpretation": "diagnostic_fail",
+      "promotion_candidate_gate": {
+        "anti_inconclusive": false,
+        "anti_reference": {
+          "capture": 0.0,
+          "fallback": 1.0
+        },
+        "checks": {
+          "avoidable_fallback": {
+            "passed": true,
+            "reference": 1.0,
+            "threshold": 0.95,
+            "value": 0.4129032258064516
+          },
+          "harmful_precision": {
+            "passed": true,
+            "threshold": 0.28,
+            "value": 0.30684931506849317
+          },
+          "harmful_recall": {
+            "passed": false,
+            "threshold": 0.78,
+            "value": 0.7476635514018691
+          },
+          "high_margin_count": {
+            "passed": true,
+            "threshold": 50,
+            "value": 310
+          },
+          "label_audit": {
+            "passed": true,
+            "path": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_attention_native_expand5000_rawtrace_label_audit.json",
+            "reason": null
+          },
+          "opportunity_capture": {
+            "passed": true,
+            "reference": 0.0,
+            "threshold": 0.05,
+            "value": 0.3419354838709677
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.0019174720854631903
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.32,
+            "value": 0.18426501035196688
+          },
+          "top3": {
+            "passed": true,
+            "threshold": 0.65,
+            "value": 0.6645962732919255
+          }
+        },
+        "passed": false,
+        "thresholds": {
+          "avoidable_fallback_margin": 0.05,
+          "opportunity_capture_margin": 0.05,
+          "precision": 0.28,
+          "recall": 0.78,
+          "top1": 0.32,
+          "top3": 0.65
+        }
+      },
+      "runtime_claim_seed_gate": {
+        "checks": {
+          "harmful_precision": {
+            "passed": true,
+            "threshold": 0.3,
+            "value": 0.30684931506849317
+          },
+          "harmful_recall": {
+            "passed": false,
+            "threshold": 0.8,
+            "value": 0.7476635514018691
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.0019174720854631903
+          },
+          "strict_anti_escape_gate": {
+            "passed": false
+          },
+          "strict_attention_native_gate": {
+            "passed": false
+          },
+          "strict_phase4f_gate": {
+            "passed": false
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.35,
+            "value": 0.18426501035196688
+          },
+          "top3": {
+            "passed": false,
+            "threshold": 0.7,
+            "value": 0.6645962732919255
+          }
+        },
+        "note": "Diagnostic only. Phase5.5 still requires the existing strict final multi-seed gate.",
+        "passed": false,
+        "thresholds": {
+          "precision": 0.3,
+          "recall": 0.8,
+          "top1": 0.35,
+          "top3": 0.7
+        }
+      },
+      "seed": 61,
+      "summary_json": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_expand5000_followup_ex5000_follow_global_rank3_anti3_eval_seed61_summary.json",
+      "values": {
+        "anti_capture": 0.3419354838709677,
+        "anti_passed": false,
+        "attention_native_passed": false,
+        "avoidable_fallback": 0.4129032258064516,
+        "delta": 0.0019174720854631903,
+        "harmful_precision": 0.30684931506849317,
+        "harmful_recall": 0.7476635514018691,
+        "phase4f_passed": false,
+        "positive_delta_proxy": 0.0019174720854631903,
+        "selected_vs_additive_delta": 0.0019174720854631903,
+        "top1": 0.18426501035196688,
+        "top3": 0.6645962732919255
+      },
+      "variant": "phase4f_repair5_expand5000_followup_ex5000_follow_global_rank3_anti3"
+    },
+    {
+      "dataset": "/root/shared-nvme/czr004_phase4_repair1_43633e7/artifacts/teacher/laur/full_repair5_attention_native_expand5000_rawtrace/update_labels/phase4_laur_attention_native_expand5000_rawtrace_dataset.jsonl",
+      "development_gate": {
+        "anti_inconclusive": false,
+        "anti_reference": {
+          "capture": 0.0,
+          "fallback": 1.0
+        },
+        "checks": {
+          "avoidable_fallback": {
+            "passed": true,
+            "reference": 1.0,
+            "threshold": 1.0,
+            "value": 0.6161290322580645
+          },
+          "harmful_precision": {
+            "passed": true,
+            "threshold": 0.25,
+            "value": 0.2750912408759124
+          },
+          "harmful_recall": {
+            "passed": true,
+            "threshold": 0.7,
+            "value": 0.8050734312416555
+          },
+          "high_margin_count": {
+            "passed": true,
+            "threshold": 50,
+            "value": 310
+          },
+          "label_audit": {
+            "passed": true,
+            "path": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_attention_native_expand5000_rawtrace_label_audit.json",
+            "reason": null
+          },
+          "opportunity_capture": {
+            "passed": true,
+            "reference": 0.0,
+            "threshold": 0.0,
+            "value": 0.18064516129032257
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.0020923863782431914
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.25,
+            "value": 0.12836438923395446
+          },
+          "top3": {
+            "passed": true,
+            "threshold": 0.6,
+            "value": 0.6832298136645962
+          }
+        },
+        "passed": false,
+        "thresholds": {
+          "avoidable_fallback_margin": 0.0,
+          "opportunity_capture_margin": 0.0,
+          "precision": 0.25,
+          "recall": 0.7,
+          "top1": 0.25,
+          "top3": 0.6
+        }
+      },
+      "interpretation": "diagnostic_fail",
+      "promotion_candidate_gate": {
+        "anti_inconclusive": false,
+        "anti_reference": {
+          "capture": 0.0,
+          "fallback": 1.0
+        },
+        "checks": {
+          "avoidable_fallback": {
+            "passed": true,
+            "reference": 1.0,
+            "threshold": 0.95,
+            "value": 0.6161290322580645
+          },
+          "harmful_precision": {
+            "passed": false,
+            "threshold": 0.28,
+            "value": 0.2750912408759124
+          },
+          "harmful_recall": {
+            "passed": true,
+            "threshold": 0.78,
+            "value": 0.8050734312416555
+          },
+          "high_margin_count": {
+            "passed": true,
+            "threshold": 50,
+            "value": 310
+          },
+          "label_audit": {
+            "passed": true,
+            "path": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_attention_native_expand5000_rawtrace_label_audit.json",
+            "reason": null
+          },
+          "opportunity_capture": {
+            "passed": true,
+            "reference": 0.0,
+            "threshold": 0.05,
+            "value": 0.18064516129032257
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.0020923863782431914
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.32,
+            "value": 0.12836438923395446
+          },
+          "top3": {
+            "passed": true,
+            "threshold": 0.65,
+            "value": 0.6832298136645962
+          }
+        },
+        "passed": false,
+        "thresholds": {
+          "avoidable_fallback_margin": 0.05,
+          "opportunity_capture_margin": 0.05,
+          "precision": 0.28,
+          "recall": 0.78,
+          "top1": 0.32,
+          "top3": 0.65
+        }
+      },
+      "runtime_claim_seed_gate": {
+        "checks": {
+          "harmful_precision": {
+            "passed": false,
+            "threshold": 0.3,
+            "value": 0.2750912408759124
+          },
+          "harmful_recall": {
+            "passed": true,
+            "threshold": 0.8,
+            "value": 0.8050734312416555
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.0020923863782431914
+          },
+          "strict_anti_escape_gate": {
+            "passed": false
+          },
+          "strict_attention_native_gate": {
+            "passed": false
+          },
+          "strict_phase4f_gate": {
+            "passed": false
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.35,
+            "value": 0.12836438923395446
+          },
+          "top3": {
+            "passed": false,
+            "threshold": 0.7,
+            "value": 0.6832298136645962
+          }
+        },
+        "note": "Diagnostic only. Phase5.5 still requires the existing strict final multi-seed gate.",
+        "passed": false,
+        "thresholds": {
+          "precision": 0.3,
+          "recall": 0.8,
+          "top1": 0.35,
+          "top3": 0.7
+        }
+      },
+      "seed": 61,
+      "summary_json": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_expand5000_followup_ex5000_follow_pair_focal_m035_lh4_eval_seed61_summary.json",
+      "values": {
+        "anti_capture": 0.18064516129032257,
+        "anti_passed": false,
+        "attention_native_passed": false,
+        "avoidable_fallback": 0.6161290322580645,
+        "delta": 0.0020923863782431914,
+        "harmful_precision": 0.2750912408759124,
+        "harmful_recall": 0.8050734312416555,
+        "phase4f_passed": false,
+        "positive_delta_proxy": 0.0020923863782431914,
+        "selected_vs_additive_delta": 0.0020923863782431914,
+        "top1": 0.12836438923395446,
+        "top3": 0.6832298136645962
+      },
+      "variant": "phase4f_repair5_expand5000_followup_ex5000_follow_pair_focal_m035_lh4"
+    },
+    {
+      "dataset": "/root/shared-nvme/czr004_phase4_repair1_43633e7/artifacts/teacher/laur/full_repair5_attention_native_expand5000_rawtrace/update_labels/phase4_laur_attention_native_expand5000_rawtrace_dataset.jsonl",
+      "development_gate": {
+        "anti_inconclusive": false,
+        "anti_reference": {
+          "capture": 0.0,
+          "fallback": 1.0
+        },
+        "checks": {
+          "avoidable_fallback": {
+            "passed": true,
+            "reference": 1.0,
+            "threshold": 1.0,
+            "value": 0.5612903225806452
+          },
+          "harmful_precision": {
+            "passed": true,
+            "threshold": 0.25,
+            "value": 0.27586206896551724
+          },
+          "harmful_recall": {
+            "passed": true,
+            "threshold": 0.7,
+            "value": 0.8651535380507344
+          },
+          "high_margin_count": {
+            "passed": true,
+            "threshold": 50,
+            "value": 310
+          },
+          "label_audit": {
+            "passed": true,
+            "path": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_attention_native_expand5000_rawtrace_label_audit.json",
+            "reason": null
+          },
+          "opportunity_capture": {
+            "passed": true,
+            "reference": 0.0,
+            "threshold": 0.0,
+            "value": 0.2967741935483871
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.0030470683629112336
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.25,
+            "value": 0.16149068322981366
+          },
+          "top3": {
+            "passed": true,
+            "threshold": 0.6,
+            "value": 0.6790890269151139
+          }
+        },
+        "passed": false,
+        "thresholds": {
+          "avoidable_fallback_margin": 0.0,
+          "opportunity_capture_margin": 0.0,
+          "precision": 0.25,
+          "recall": 0.7,
+          "top1": 0.25,
+          "top3": 0.6
+        }
+      },
+      "interpretation": "diagnostic_fail",
+      "promotion_candidate_gate": {
+        "anti_inconclusive": false,
+        "anti_reference": {
+          "capture": 0.0,
+          "fallback": 1.0
+        },
+        "checks": {
+          "avoidable_fallback": {
+            "passed": true,
+            "reference": 1.0,
+            "threshold": 0.95,
+            "value": 0.5612903225806452
+          },
+          "harmful_precision": {
+            "passed": false,
+            "threshold": 0.28,
+            "value": 0.27586206896551724
+          },
+          "harmful_recall": {
+            "passed": true,
+            "threshold": 0.78,
+            "value": 0.8651535380507344
+          },
+          "high_margin_count": {
+            "passed": true,
+            "threshold": 50,
+            "value": 310
+          },
+          "label_audit": {
+            "passed": true,
+            "path": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_attention_native_expand5000_rawtrace_label_audit.json",
+            "reason": null
+          },
+          "opportunity_capture": {
+            "passed": true,
+            "reference": 0.0,
+            "threshold": 0.05,
+            "value": 0.2967741935483871
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.0030470683629112336
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.32,
+            "value": 0.16149068322981366
+          },
+          "top3": {
+            "passed": true,
+            "threshold": 0.65,
+            "value": 0.6790890269151139
+          }
+        },
+        "passed": false,
+        "thresholds": {
+          "avoidable_fallback_margin": 0.05,
+          "opportunity_capture_margin": 0.05,
+          "precision": 0.28,
+          "recall": 0.78,
+          "top1": 0.32,
+          "top3": 0.65
+        }
+      },
+      "runtime_claim_seed_gate": {
+        "checks": {
+          "harmful_precision": {
+            "passed": false,
+            "threshold": 0.3,
+            "value": 0.27586206896551724
+          },
+          "harmful_recall": {
+            "passed": true,
+            "threshold": 0.8,
+            "value": 0.8651535380507344
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.0030470683629112336
+          },
+          "strict_anti_escape_gate": {
+            "passed": false
+          },
+          "strict_attention_native_gate": {
+            "passed": false
+          },
+          "strict_phase4f_gate": {
+            "passed": false
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.35,
+            "value": 0.16149068322981366
+          },
+          "top3": {
+            "passed": false,
+            "threshold": 0.7,
+            "value": 0.6790890269151139
+          }
+        },
+        "note": "Diagnostic only. Phase5.5 still requires the existing strict final multi-seed gate.",
+        "passed": false,
+        "thresholds": {
+          "precision": 0.3,
+          "recall": 0.8,
+          "top1": 0.35,
+          "top3": 0.7
+        }
+      },
+      "seed": 61,
+      "summary_json": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_expand5000_followup_ex5000_follow_target_ce2_margin1_hm3_eval_seed61_summary.json",
+      "values": {
+        "anti_capture": 0.2967741935483871,
+        "anti_passed": false,
+        "attention_native_passed": false,
+        "avoidable_fallback": 0.5612903225806452,
+        "delta": 0.0030470683629112336,
+        "harmful_precision": 0.27586206896551724,
+        "harmful_recall": 0.8651535380507344,
+        "phase4f_passed": false,
+        "positive_delta_proxy": 0.0030470683629112336,
+        "selected_vs_additive_delta": 0.0030470683629112336,
+        "top1": 0.16149068322981366,
+        "top3": 0.6790890269151139
+      },
+      "variant": "phase4f_repair5_expand5000_followup_ex5000_follow_target_ce2_margin1_hm3"
+    },
+    {
+      "dataset": "/root/shared-nvme/czr004_phase4_repair1_43633e7/artifacts/teacher/laur/full_repair5_attention_native_expand5000_rawtrace/update_labels/phase4_laur_attention_native_expand5000_rawtrace_dataset.jsonl",
+      "development_gate": {
+        "anti_inconclusive": false,
+        "anti_reference": {
+          "capture": 0.0,
+          "fallback": 1.0
+        },
+        "checks": {
+          "avoidable_fallback": {
+            "passed": true,
+            "reference": 1.0,
+            "threshold": 1.0,
+            "value": 0.47096774193548385
+          },
+          "harmful_precision": {
+            "passed": true,
+            "threshold": 0.25,
+            "value": 0.31328751431844215
+          },
+          "harmful_recall": {
+            "passed": true,
+            "threshold": 0.7,
+            "value": 0.7303070761014686
+          },
+          "high_margin_count": {
+            "passed": true,
+            "threshold": 50,
+            "value": 310
+          },
+          "label_audit": {
+            "passed": true,
+            "path": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_attention_native_expand5000_rawtrace_label_audit.json",
+            "reason": null
+          },
+          "opportunity_capture": {
+            "passed": true,
+            "reference": 0.0,
+            "threshold": 0.0,
+            "value": 0.33548387096774196
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.000446387115559479
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.25,
+            "value": 0.17184265010351968
+          },
+          "top3": {
+            "passed": true,
+            "threshold": 0.6,
+            "value": 0.6749482401656315
+          }
+        },
+        "passed": false,
+        "thresholds": {
+          "avoidable_fallback_margin": 0.0,
+          "opportunity_capture_margin": 0.0,
+          "precision": 0.25,
+          "recall": 0.7,
+          "top1": 0.25,
+          "top3": 0.6
+        }
+      },
+      "interpretation": "diagnostic_fail",
+      "promotion_candidate_gate": {
+        "anti_inconclusive": false,
+        "anti_reference": {
+          "capture": 0.0,
+          "fallback": 1.0
+        },
+        "checks": {
+          "avoidable_fallback": {
+            "passed": true,
+            "reference": 1.0,
+            "threshold": 0.95,
+            "value": 0.47096774193548385
+          },
+          "harmful_precision": {
+            "passed": true,
+            "threshold": 0.28,
+            "value": 0.31328751431844215
+          },
+          "harmful_recall": {
+            "passed": false,
+            "threshold": 0.78,
+            "value": 0.7303070761014686
+          },
+          "high_margin_count": {
+            "passed": true,
+            "threshold": 50,
+            "value": 310
+          },
+          "label_audit": {
+            "passed": true,
+            "path": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_attention_native_expand5000_rawtrace_label_audit.json",
+            "reason": null
+          },
+          "opportunity_capture": {
+            "passed": true,
+            "reference": 0.0,
+            "threshold": 0.05,
+            "value": 0.33548387096774196
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.000446387115559479
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.32,
+            "value": 0.17184265010351968
+          },
+          "top3": {
+            "passed": true,
+            "threshold": 0.65,
+            "value": 0.6749482401656315
+          }
+        },
+        "passed": false,
+        "thresholds": {
+          "avoidable_fallback_margin": 0.05,
+          "opportunity_capture_margin": 0.05,
+          "precision": 0.28,
+          "recall": 0.78,
+          "top1": 0.32,
+          "top3": 0.65
+        }
+      },
+      "runtime_claim_seed_gate": {
+        "checks": {
+          "harmful_precision": {
+            "passed": true,
+            "threshold": 0.3,
+            "value": 0.31328751431844215
+          },
+          "harmful_recall": {
+            "passed": false,
+            "threshold": 0.8,
+            "value": 0.7303070761014686
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.000446387115559479
+          },
+          "strict_anti_escape_gate": {
+            "passed": false
+          },
+          "strict_attention_native_gate": {
+            "passed": false
+          },
+          "strict_phase4f_gate": {
+            "passed": false
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.35,
+            "value": 0.17184265010351968
+          },
+          "top3": {
+            "passed": false,
+            "threshold": 0.7,
+            "value": 0.6749482401656315
+          }
+        },
+        "note": "Diagnostic only. Phase5.5 still requires the existing strict final multi-seed gate.",
+        "passed": false,
+        "thresholds": {
+          "precision": 0.3,
+          "recall": 0.8,
+          "top1": 0.35,
+          "top3": 0.7
+        }
+      },
+      "seed": 61,
+      "summary_json": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_expand5000_followup_ex5000_follow_target_margin2_rank3_safe5_eval_seed61_summary.json",
+      "values": {
+        "anti_capture": 0.33548387096774196,
+        "anti_passed": false,
+        "attention_native_passed": false,
+        "avoidable_fallback": 0.47096774193548385,
+        "delta": 0.000446387115559479,
+        "harmful_precision": 0.31328751431844215,
+        "harmful_recall": 0.7303070761014686,
+        "phase4f_passed": false,
+        "positive_delta_proxy": 0.000446387115559479,
+        "selected_vs_additive_delta": 0.000446387115559479,
+        "top1": 0.17184265010351968,
+        "top3": 0.6749482401656315
+      },
+      "variant": "phase4f_repair5_expand5000_followup_ex5000_follow_target_margin2_rank3_safe5"
+    },
+    {
+      "dataset": "/root/shared-nvme/czr004_phase4_repair1_43633e7/artifacts/teacher/laur/full_repair5_attention_native_expand5000_rawtrace_hightoken/update_labels/phase4_laur_attention_native_expand5000_rawtrace_hightoken_dataset.jsonl",
+      "development_gate": {
+        "anti_inconclusive": false,
+        "anti_reference": {
+          "capture": 0.0,
+          "fallback": 1.0
+        },
+        "checks": {
+          "avoidable_fallback": {
+            "passed": true,
+            "reference": 1.0,
+            "threshold": 1.0,
+            "value": 0.46774193548387094
+          },
+          "harmful_precision": {
+            "passed": true,
+            "threshold": 0.25,
+            "value": 0.30059820538384846
+          },
+          "harmful_recall": {
+            "passed": true,
+            "threshold": 0.7,
+            "value": 0.8050734312416555
+          },
+          "high_margin_count": {
+            "passed": true,
+            "threshold": 50,
+            "value": 310
+          },
+          "label_audit": {
+            "passed": true,
+            "path": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_attention_native_expand5000_rawtrace_hightoken_label_audit.json",
+            "reason": null
+          },
+          "opportunity_capture": {
+            "passed": true,
+            "reference": 0.0,
+            "threshold": 0.0,
+            "value": 0.29354838709677417
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.0028174332139860106
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.25,
+            "value": 0.17391304347826086
+          },
+          "top3": {
+            "passed": true,
+            "threshold": 0.6,
+            "value": 0.6687370600414079
+          }
+        },
+        "passed": false,
+        "thresholds": {
+          "avoidable_fallback_margin": 0.0,
+          "opportunity_capture_margin": 0.0,
+          "precision": 0.25,
+          "recall": 0.7,
+          "top1": 0.25,
+          "top3": 0.6
+        }
+      },
+      "interpretation": "diagnostic_fail",
+      "promotion_candidate_gate": {
+        "anti_inconclusive": false,
+        "anti_reference": {
+          "capture": 0.0,
+          "fallback": 1.0
+        },
+        "checks": {
+          "avoidable_fallback": {
+            "passed": true,
+            "reference": 1.0,
+            "threshold": 0.95,
+            "value": 0.46774193548387094
+          },
+          "harmful_precision": {
+            "passed": true,
+            "threshold": 0.28,
+            "value": 0.30059820538384846
+          },
+          "harmful_recall": {
+            "passed": true,
+            "threshold": 0.78,
+            "value": 0.8050734312416555
+          },
+          "high_margin_count": {
+            "passed": true,
+            "threshold": 50,
+            "value": 310
+          },
+          "label_audit": {
+            "passed": true,
+            "path": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_attention_native_expand5000_rawtrace_hightoken_label_audit.json",
+            "reason": null
+          },
+          "opportunity_capture": {
+            "passed": true,
+            "reference": 0.0,
+            "threshold": 0.05,
+            "value": 0.29354838709677417
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.0028174332139860106
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.32,
+            "value": 0.17391304347826086
+          },
+          "top3": {
+            "passed": true,
+            "threshold": 0.65,
+            "value": 0.6687370600414079
+          }
+        },
+        "passed": false,
+        "thresholds": {
+          "avoidable_fallback_margin": 0.05,
+          "opportunity_capture_margin": 0.05,
+          "precision": 0.28,
+          "recall": 0.78,
+          "top1": 0.32,
+          "top3": 0.65
+        }
+      },
+      "runtime_claim_seed_gate": {
+        "checks": {
+          "harmful_precision": {
+            "passed": true,
+            "threshold": 0.3,
+            "value": 0.30059820538384846
+          },
+          "harmful_recall": {
+            "passed": true,
+            "threshold": 0.8,
+            "value": 0.8050734312416555
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.0028174332139860106
+          },
+          "strict_anti_escape_gate": {
+            "passed": false
+          },
+          "strict_attention_native_gate": {
+            "passed": false
+          },
+          "strict_phase4f_gate": {
+            "passed": false
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.35,
+            "value": 0.17391304347826086
+          },
+          "top3": {
+            "passed": false,
+            "threshold": 0.7,
+            "value": 0.6687370600414079
+          }
+        },
+        "note": "Diagnostic only. Phase5.5 still requires the existing strict final multi-seed gate.",
+        "passed": false,
+        "thresholds": {
+          "precision": 0.3,
+          "recall": 0.8,
+          "top1": 0.35,
+          "top3": 0.7
+        }
+      },
+      "seed": 61,
+      "summary_json": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_expand5000_hightoken_ht_linear_target_global_eval_seed61_summary.json",
+      "values": {
+        "anti_capture": 0.29354838709677417,
+        "anti_passed": false,
+        "attention_native_passed": false,
+        "avoidable_fallback": 0.46774193548387094,
+        "delta": 0.0028174332139860106,
+        "harmful_precision": 0.30059820538384846,
+        "harmful_recall": 0.8050734312416555,
+        "phase4f_passed": false,
+        "positive_delta_proxy": 0.0028174332139860106,
+        "selected_vs_additive_delta": 0.0028174332139860106,
+        "top1": 0.17391304347826086,
+        "top3": 0.6687370600414079
+      },
+      "variant": "phase4f_repair5_expand5000_hightoken_ht_linear_target_global"
+    },
+    {
+      "dataset": "/root/shared-nvme/czr004_phase4_repair1_43633e7/artifacts/teacher/laur/full_repair5_attention_native_expand5000_rawtrace_hightoken/update_labels/phase4_laur_attention_native_expand5000_rawtrace_hightoken_dataset.jsonl",
+      "development_gate": {
+        "anti_inconclusive": false,
+        "anti_reference": {
+          "capture": 0.0,
+          "fallback": 1.0
+        },
+        "checks": {
+          "avoidable_fallback": {
+            "passed": true,
+            "reference": 1.0,
+            "threshold": 1.0,
+            "value": 0.5516129032258065
+          },
+          "harmful_precision": {
+            "passed": true,
+            "threshold": 0.25,
+            "value": 0.31425426527242706
+          },
+          "harmful_recall": {
+            "passed": true,
+            "threshold": 0.7,
+            "value": 0.7623497997329773
+          },
+          "high_margin_count": {
+            "passed": true,
+            "threshold": 50,
+            "value": 310
+          },
+          "label_audit": {
+            "passed": true,
+            "path": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_attention_native_expand5000_rawtrace_hightoken_label_audit.json",
+            "reason": null
+          },
+          "opportunity_capture": {
+            "passed": true,
+            "reference": 0.0,
+            "threshold": 0.0,
+            "value": 0.2838709677419355
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.0009267253924302559
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.25,
+            "value": 0.14492753623188406
+          },
+          "top3": {
+            "passed": true,
+            "threshold": 0.6,
+            "value": 0.6997929606625258
+          }
+        },
+        "passed": false,
+        "thresholds": {
+          "avoidable_fallback_margin": 0.0,
+          "opportunity_capture_margin": 0.0,
+          "precision": 0.25,
+          "recall": 0.7,
+          "top1": 0.25,
+          "top3": 0.6
+        }
+      },
+      "interpretation": "diagnostic_fail",
+      "promotion_candidate_gate": {
+        "anti_inconclusive": false,
+        "anti_reference": {
+          "capture": 0.0,
+          "fallback": 1.0
+        },
+        "checks": {
+          "avoidable_fallback": {
+            "passed": true,
+            "reference": 1.0,
+            "threshold": 0.95,
+            "value": 0.5516129032258065
+          },
+          "harmful_precision": {
+            "passed": true,
+            "threshold": 0.28,
+            "value": 0.31425426527242706
+          },
+          "harmful_recall": {
+            "passed": false,
+            "threshold": 0.78,
+            "value": 0.7623497997329773
+          },
+          "high_margin_count": {
+            "passed": true,
+            "threshold": 50,
+            "value": 310
+          },
+          "label_audit": {
+            "passed": true,
+            "path": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_attention_native_expand5000_rawtrace_hightoken_label_audit.json",
+            "reason": null
+          },
+          "opportunity_capture": {
+            "passed": true,
+            "reference": 0.0,
+            "threshold": 0.05,
+            "value": 0.2838709677419355
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.0009267253924302559
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.32,
+            "value": 0.14492753623188406
+          },
+          "top3": {
+            "passed": true,
+            "threshold": 0.65,
+            "value": 0.6997929606625258
+          }
+        },
+        "passed": false,
+        "thresholds": {
+          "avoidable_fallback_margin": 0.05,
+          "opportunity_capture_margin": 0.05,
+          "precision": 0.28,
+          "recall": 0.78,
+          "top1": 0.32,
+          "top3": 0.65
+        }
+      },
+      "runtime_claim_seed_gate": {
+        "checks": {
+          "harmful_precision": {
+            "passed": true,
+            "threshold": 0.3,
+            "value": 0.31425426527242706
+          },
+          "harmful_recall": {
+            "passed": false,
+            "threshold": 0.8,
+            "value": 0.7623497997329773
+          },
+          "positive_delta_proxy": {
+            "passed": true,
+            "threshold": 0.0,
+            "value": 0.0009267253924302559
+          },
+          "strict_anti_escape_gate": {
+            "passed": false
+          },
+          "strict_attention_native_gate": {
+            "passed": false
+          },
+          "strict_phase4f_gate": {
+            "passed": false
+          },
+          "top1": {
+            "passed": false,
+            "threshold": 0.35,
+            "value": 0.14492753623188406
+          },
+          "top3": {
+            "passed": false,
+            "threshold": 0.7,
+            "value": 0.6997929606625258
+          }
+        },
+        "note": "Diagnostic only. Phase5.5 still requires the existing strict final multi-seed gate.",
+        "passed": false,
+        "thresholds": {
+          "precision": 0.3,
+          "recall": 0.8,
+          "top1": 0.35,
+          "top3": 0.7
+        }
+      },
+      "seed": 61,
+      "summary_json": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair5_expand5000_hightoken_ht_mlp_target_global_eval_seed61_summary.json",
+      "values": {
+        "anti_capture": 0.2838709677419355,
+        "anti_passed": false,
+        "attention_native_passed": false,
+        "avoidable_fallback": 0.5516129032258065,
+        "delta": 0.0009267253924302559,
+        "harmful_precision": 0.31425426527242706,
+        "harmful_recall": 0.7623497997329773,
+        "phase4f_passed": false,
+        "positive_delta_proxy": 0.0009267253924302559,
+        "selected_vs_additive_delta": 0.0009267253924302559,
+        "top1": 0.14492753623188406,
+        "top3": 0.6997929606625258
+      },
+      "variant": "phase4f_repair5_expand5000_hightoken_ht_mlp_target_global"
+    }
+  ],
+  "schema_version": "phase4f_repair5_layered_gate_summary_v1",
+  "summary_globs": [
+    "outputs/reports/phase4f_repair5_attention_native_eval_seed*_summary.json",
+    "outputs/reports/phase4f_repair5_rawtrace_edge_eval_seed*_summary.json",
+    "outputs/reports/phase4f_repair5_rawtrace_edge_sf_*_eval_seed*_summary.json",
+    "outputs/reports/phase4f_repair5_expand5000_*_eval_seed*_summary.json"
+  ]
+}

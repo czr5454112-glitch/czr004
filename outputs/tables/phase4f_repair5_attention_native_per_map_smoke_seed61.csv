@@ -1,0 +1,9 @@
+split,map_name,agents,sample_count,use_nonadditive_target_count,top1,top3,decision_accuracy,high_margin_opportunity_count,high_margin_capture_rate,global_additive_or_defer_rate
+validation,empty-48-48,50,60,27,0.0,0.7777777777777778,0.55,12,0.0,1.0
+validation,empty-48-48,100,60,35,0.0,0.8857142857142857,0.4166666666666667,18,0.0,1.0
+validation,empty-48-48,200,60,29,0.0,0.5172413793103449,0.5166666666666667,8,0.0,1.0
+validation,empty-48-48,400,60,39,0.0,0.7948717948717948,0.35,10,0.0,1.0
+validation,maze-32-32-4,50,60,46,0.0,0.5434782608695652,0.23333333333333334,31,0.0,1.0
+validation,maze-32-32-4,100,60,43,0.0,0.627906976744186,0.2833333333333333,34,0.0,1.0
+validation,maze-32-32-4,200,60,48,0.0,0.6875,0.2,46,0.0,1.0
+validation,maze-32-32-4,400,39,26,0.0,0.6923076923076923,0.3333333333333333,26,0.0,1.0

@@ -1673,7 +1673,9 @@ conservative additive fallback
 safety-gated rule selection
 ```
 
-高级模型和 stable target 不是二选一：
+2026-05-27 Repair5 更新后，上述判断只作为 Repair3/Repair4 的历史解释保留。Repair3 stable target 仍是 conservative baseline / compatibility metric，但不再作为后续高级 attention 模型的 primary training label。新的 primary label 见第 29 节：attention-native utility / opportunity / anti-escape labels。
+
+高级模型和 stable target 曾经不是二选一：
 
 ```text
 target formulation: defines what the model should learn
@@ -1962,10 +1964,11 @@ optional:  LAU-TopoBiasAttention-v1
 
 ```text
 Phase4F.4:
-  redo advanced update-rule models with Repair3 stable targets
+  historical first attempt: redo advanced update-rule models with Repair3 stable targets
+  current Repair5 update: regenerate attention-native labels and anti-escape gates
 
 Phase5.5-update:
-  only after offline promotion gate, export and integrate the passing advanced update model
+  only after offline promotion gate and anti-escape gate, export and integrate the passing advanced update model
 ```
 
 Promotion rule:
@@ -1981,7 +1984,8 @@ Relationship to old Repair2:
 ```text
 Repair2 attention failed before stable-target formulation became the central target.
 Repair2 is not the final verdict on attention.
-Any new attention attempt must use Repair3 stable targets and must compare against Repair3 MLP.
+Any new attention attempt must not use Repair3 stable targets as the primary label.
+It must compare against Repair3 MLP, but should train on the Repair5 attention-native label family in section 29.
 ```
 
 ---
@@ -2374,6 +2378,8 @@ Stop. Fix parity before any experiment.
 
 This route is now an allowed next attempt after Phase5C.
 
+2026-05-27 Repair5 supersession note: this section records the historical stable-target attention route. For new advanced attention attempts, Repair3 stable targets are baseline / compatibility targets only; the primary training target must be the Repair5 attention-native label family in section 29.
+
 Reason:
 
 ```text
@@ -2391,7 +2397,8 @@ not LaGAT-style agent policy replacement.
 Allowed:
 
 ```text
-stable target / tie-aware labels
+Repair3 stable target / tie-aware labels as baseline and compatibility metric
+Repair5 attention-native labels as primary target for new runs
 rule-conditioned attention
 Set Transformer over global + top-K traffic edge tokens
 compressed trace/event tokens if needed
@@ -2470,12 +2477,25 @@ soft_rule_target_stable
 soft_rule_target_probe
 ```
 
-Main target:
+Historical Repair3/Repair4 target:
 
 ```text
 rule_class_stable
 rule_delta_vector
 rule_harmful_vector
+```
+
+Repair5 target, for any new advanced attention run:
+
+```text
+attention_native_target_rule
+risk_adjusted_utility_vector
+pairwise_dominance_matrix
+safe_rule_mask
+has_nonadditive_opportunity
+has_high_margin_nonadditive_opportunity
+defer_ltm meta-decision
+anti_escape_candidate_mask
 ```
 
 Executable rule vocabulary:
@@ -3849,4 +3869,1934 @@ Completion decision：
 Phase4F offline stable-target pass, with Phase5 conservative fallback precondition.
 ```
 
-Phase4F 可以关闭。后续工作应新开 Phase5：runtime parity / force-additive parity / conservative fallback smoke / learned-runtime ablation。不得把 Phase4F offline pass 表述为 closed-loop learned runtime performance。
+该结论在当时只表示 Repair3 stable-target offline gate 可以关闭。2026-05-27 Repair5 更新后，若继续追求高级 neural attention learned update，则 Phase4F 需要以第 29 节的 attention-native label / anti-escape 口径重新打开；不得把 Repair3 offline pass 表述为 closed-loop learned runtime performance。
+
+---
+
+## 29. 2026-05-27 Phase4F Repair5：attention-native labels / anti-escape
+
+### 29.1 Decision
+
+采纳 GPTPro `phase4f_repair5_attention_native_labels_codex_plan.md` 的核心建议，并覆盖第 12.1.8 / 15A 中“继续以 Repair3 stable target 作为高级 attention primary label”的旧假设。
+
+Repair3 不被否定，但定位调整为：
+
+```text
+offline-pass conservative baseline
+Phase5C runtime/parity baseline
+fallback reference
+compatibility metric
+```
+
+Repair3 stable target 不能再作为后续高级 neural attention 模型的主训练目标。原因是：
+
+```text
+Repair3 的通过主要来自 stable target / tie handling，而不是强 learned update。
+Repair3 tie policy 明显偏向 additive_ltm fallback。
+Phase5C 没有证明 Repair3 MLP runtime 稳定优于普通 LTM。
+Repair4 继承 Repair3 label 后虽有 ranking/delta 信号，但 safety tradeoff 未过，且仍有 additive/fallback 倾向。
+继续堆 Transformer 很可能得到更复杂的 fallback classifier，而不是更强的 learned UpdateLTM policy。
+```
+
+Repair5 的研究目标改为：
+
+```text
+not: learn to pass the offline gate conservatively
+yes: learn when a non-additive LTM update is genuinely safe and useful
+```
+
+### 29.2 Scope
+
+Repair5 仍属于 LAU / LAUR-LTM 主线：
+
+```text
+LaCAM* + LTM
+  -> teacher/probe/checkpoint/trace
+  -> learned UpdateLTM policy
+  -> C++ runtime parity/smoke only after all gates pass
+```
+
+Allowed:
+
+```text
+redesign Phase4F label
+regenerate dataset
+train rule-conditioned / edge-trace attention model
+use Repair1 checkpoints/probes/raw trace
+use Repair3 / Phase5C MLP runtime as baseline
+add anti-escape evaluation
+```
+
+Not allowed:
+
+```text
+agent action prediction
+PIBT replacement
+LaCAM* conflict semantics changes
+candidate action domain changes
+incumbent pruning / rewrite changes
+learned restart
+validation/test threshold tuning
+lowering any Phase4F gate
+counting defer/additive as non-additive learning success
+calling smoke/parity a Phase6-scale performance claim
+```
+
+### 29.3 Attention-native label schema
+
+New schema:
+
+```text
+phase4_laur_attention_native_label_dataset_v1
+```
+
+Primary label family:
+
+```text
+per-rule risk-adjusted utility
+pairwise rule dominance matrix
+per-rule harmful labels
+safe rule masks
+non-additive opportunity labels
+explicit defer_ltm meta-decision
+high-margin safe-opportunity slices
+anti-escape supervision masks
+```
+
+Executable rule vocabulary stays unchanged:
+
+```text
+additive_ltm
+commit_heavy
+block_heavy
+block_light
+wait_light
+wait_heavy
+decay_095
+decay_090
+```
+
+`defer_ltm` is not an executable rule. Runtime maps it to `additive_ltm`; evaluation must count it separately and must not count it as non-additive learning success.
+
+### 29.4 Utility and opportunity definitions
+
+Per rule:
+
+```text
+delta_i = delta_ratio_vs_additive(rule_i)
+harmful_i = harmful(rule_i)
+success_i = success(rule_i) if available, else true
+ttfs_regression_i = ttfs_regression_ratio(rule_i) if available, else 1.0
+delta_additive = 0.0
+```
+
+Risk-adjusted utility:
+
+```text
+utility_i =
+    delta_i
+  - harm_penalty * I[harmful_i]
+  - failure_penalty * I[success_i == false]
+  - ttfs_penalty * max(0, ttfs_regression_i - 1.0)
+```
+
+Initial parameters:
+
+```yaml
+harm_penalty: 0.050
+failure_penalty: 0.100
+ttfs_penalty: 0.010
+utility_clip_min: -0.100
+utility_clip_max: 0.100
+opportunity_margin: 0.010
+high_margin_opportunity_margin: 0.020
+pairwise_margin: 0.005
+softmax_temperature: 0.010
+harmful_floor: -0.050
+```
+
+Safe mask:
+
+```text
+safe_i = success_i && !harmful_i
+```
+
+If `harmful_i` is missing, treat `safe_i = false` and report missing coverage. Do not invent better labels from missing evidence.
+
+Non-additive opportunity:
+
+```text
+best_safe_nonadditive =
+    argmax_i utility_i where i != additive_ltm and safe_i
+
+best_safe_nonadditive_advantage =
+    utility_best_safe_nonadditive - utility_additive
+
+has_nonadditive_opportunity =
+    exists safe non-additive rule with
+      utility_i - utility_additive >= 0.010
+      and utility_i > 0.000
+
+has_high_margin_nonadditive_opportunity =
+    exists safe non-additive rule with
+      utility_i - utility_additive >= 0.020
+      and utility_i > 0.000
+```
+
+Defer decision:
+
+```text
+if no safe non-additive exists:
+    decision_target = defer_ltm
+    defer_reason = all_nonadditive_unsafe
+elif best_safe_nonadditive_advantage < 0:
+    decision_target = defer_ltm
+    defer_reason = additive_is_best_safe
+elif 0 <= best_safe_nonadditive_advantage < opportunity_margin:
+    decision_target = defer_ltm
+    defer_reason = ambiguous_low_margin
+else:
+    decision_target = use_nonadditive
+    target_rule = best_safe_nonadditive
+```
+
+### 29.5 Label variants
+
+Run Repair5 as a controlled comparison, not a single label guess:
+
+```text
+R5-A: risk_adjusted_listwise
+R5-B: pairwise_dominance / RankNet
+R5-C: opportunity_first two-stage
+R5-A+C combined
+R5-B+C combined
+R5-D: trace-credit auxiliary, optional only
+R5-E: defer-as-policy, required with A/B/C when possible
+```
+
+Model priority:
+
+```text
+1. LAU-EdgeTraceTransformer-v4
+2. LAU-SetRuleTransformer-v2
+3. LAU-TopoBiasAttention-v1 optional
+```
+
+Seeds:
+
+```text
+61
+103
+107
+```
+
+### 29.6 Original gates remain
+
+Do not lower the existing Phase4F gate:
+
+```text
+validation top1 >= 0.35
+validation top3 >= 0.70
+harmful recall >= 0.80
+harmful precision >= 0.30
+mean selected delta > 0.0
+validation non-neutral checkpoints >= 50
+schema validation pass
+split leakage == 0
+```
+
+For Repair5, top1/top3 are computed against the attention-native target. Also report compatibility metrics against Repair3 stable target, but those are not the primary pass condition.
+
+### 29.7 Anti-escape gate
+
+New required report:
+
+```text
+outputs/reports/phase4f_repair5_anti_escape_gate_summary.json
+```
+
+Definitions:
+
+```text
+opportunity_sample =
+    has_nonadditive_opportunity == true
+
+high_margin_opportunity_sample =
+    has_high_margin_nonadditive_opportunity == true
+
+captured_opportunity =
+    selected_rule != additive_ltm
+    and selected_decision != defer_ltm
+    and selected_rule is safe
+    and selected_delta - additive_delta >= opportunity_margin
+```
+
+Required metrics:
+
+```text
+validation_opportunity_count
+validation_high_margin_opportunity_count
+nonadditive_capture_rate
+high_margin_nonadditive_capture_rate
+avoidable_additive_fallback_rate
+avoidable_defer_rate
+anti_escape_mean_selected_vs_additive_delta
+global_additive_or_defer_rate
+opportunity_additive_or_defer_rate
+selected_rule_distribution
+decision_distribution
+```
+
+Initial thresholds:
+
+```yaml
+min_validation_high_margin_opportunity_count: 50
+high_margin_nonadditive_capture_rate_min: 0.40
+avoidable_additive_or_defer_rate_max: 0.60
+anti_escape_mean_selected_vs_additive_delta_min: 0.005
+opportunity_nonadditive_selection_rate_min: 0.35
+global_additive_or_defer_rate_max: 0.70
+```
+
+If high-margin opportunity count `< 50`, anti-escape is inconclusive and Phase5.5 runtime is forbidden until the probe/validation evidence is expanded or regenerated.
+
+### 29.8 Implementation tasks
+
+Add Repair5 as a new experimental line; do not delete Repair3/Repair4 code.
+
+```text
+src/czr004_teacher/attention_native_labels_laur.py
+src/czr004_teacher/attention_native_schema_laur.py
+src/models/laur_attention_native.py
+src/train/losses_laur_attention_native.py
+src/train/train_laur_attention_native.py
+src/eval/eval_laur_attention_native.py
+src/eval/eval_laur_anti_escape.py
+src/eval/eval_laur_repair5_final_gate.py
+configs/phase4/laur_ltm_full_repair5_attention_native_labels.yaml
+tests/test_phase4f_attention_native_labels.py
+tests/test_phase4f_attention_native_eval.py
+```
+
+Required outputs:
+
+```text
+outputs/reports/phase4f_repair5_attention_native_label_audit.md
+outputs/reports/phase4f_repair5_attention_native_label_audit.json
+outputs/reports/phase4f_repair5_attention_native_eval_seed61.md
+outputs/reports/phase4f_repair5_attention_native_eval_seed103.md
+outputs/reports/phase4f_repair5_attention_native_eval_seed107.md
+outputs/reports/phase4f_repair5_anti_escape_report.md
+outputs/reports/phase4f_repair5_anti_escape_gate_summary.json
+outputs/reports/phase4f_repair5_final_gate_summary.json
+```
+
+### 29.9 Runtime promotion rule
+
+Repair5 runtime is allowed only if all required gates pass:
+
+```text
+runtime_allowed =
+    original_phase4f_gate.pass
+    and attention_native_phase4f_gate.pass
+    and safety_gate.pass
+    and anti_escape_gate.pass
+    and multi_seed_gate.pass
+```
+
+If original Phase4F gate passes but anti-escape fails:
+
+```text
+runtime_allowed = false
+conclusion = model still escapes to LTM/additive
+```
+
+If anti-escape passes but safety fails:
+
+```text
+runtime_allowed = false
+conclusion = non-additive learning unsafe
+```
+
+If all gates pass:
+
+```text
+runtime_allowed = true for Phase5.5 parity/smoke only
+not a Phase6-scale performance claim
+```
+
+The current raw-trace Repair5 edge-trace job may remain useful as an intermediate diagnostic, but the accepted next plan is attention-native Repair5 if stable-target raw-trace attention still fails or shows additive escape.
+
+### 29.10 Current execution status - 2026-05-27 20:45 +08:00
+
+Repair5 attention-native implementation is now running as the active advanced-model route.
+
+Completed local/remote setup:
+
+```text
+label audit:
+  outputs/reports/phase4f_repair5_attention_native_label_audit.json
+  samples = 2985
+  train / validation = 2526 / 459
+  schema_errors = 0
+  split_leakage = 0
+  validation_high_margin_opportunity_count = 185
+  passed = true
+
+negative local diagnostic:
+  seed61, 40 epochs, LAU-SetRuleTransformer-v2
+  top1 = 0.2116 < 0.35
+  top3 = 0.6688 < 0.70
+  harmful_recall = 0.7689 < 0.80
+  harmful_precision = 0.2847 < 0.30
+  high_margin_nonadditive_capture = 0.3514 < 0.40
+  conclusion = not Phase5.5 eligible
+```
+
+Server long run:
+
+```text
+server workspace:
+  /root/shared-nvme/czr004_phase4_repair1_43633e7
+
+tmux:
+  repair5_attn_native_20260527
+
+main log:
+  outputs/logs/phase4f_repair5_attention_native_pipeline_20260527_204507.log
+
+script:
+  run_repair5_attention_native_pipeline.sh
+
+sequence:
+  1. LAU-SetRuleTransformer-v2, seeds 61/103/107, 160 epochs each
+  2. eval each seed with safety calibration and anti-escape report
+  3. run Repair5 final multi-seed gate
+  4. if final gate fails, regenerate raw-trace attention-native labels
+     and run LAU-EdgeTraceTransformer-v4, seeds 61/103/107
+```
+
+Raw-trace attention-native fallback:
+
+```text
+config:
+  configs/phase4/laur_ltm_full_repair5_attention_native_rawtrace_edge.yaml
+
+raw trace:
+  artifacts/teacher/laur/full_repair1/traces/phase4_laur_trace_full_repair1.jsonl.zst
+
+important boundary:
+  raw trace is used only as richer Repair5 attention-native token evidence.
+  It is not a return to Repair3 stable-target primary labels.
+  It does not predict agent actions, replace PIBT/LaCAM*, or introduce learned restart.
+```
+
+### 29.11 Current execution status - 2026-05-28 08:45 +08:00
+
+Repair5 remains active, but no runtime promotion is allowed yet.
+
+Completed evidence:
+
+```text
+set-rule attention-native final gate:
+  outputs/reports/phase4f_repair5_final_gate_summary.json
+  runtime_allowed = false
+  phase5p5_allowed = false
+  phase6_allowed = false
+  conclusion = non-additive learning unsafe
+
+raw-trace edge attention final gate:
+  outputs/reports/phase4f_repair5_rawtrace_edge_final_gate_summary.json
+  runtime_allowed = false
+  phase5p5_allowed = false
+  phase6_allowed = false
+  conclusion = non-additive learning unsafe
+
+raw-trace label audit:
+  outputs/reports/phase4f_repair5_attention_native_rawtrace_label_audit.json
+  label audit passed
+
+safety-focused seed61 sweep:
+  outputs/logs/phase4f_repair5_rawtrace_safety_sweep_20260528_080336.log
+```
+
+Safety sweep summary:
+
+| variant | top1 | top3 | harmful recall | harmful precision | anti-escape | result |
+|---|---:|---:|---:|---:|---|---|
+| `sf_hpw1_lh8` | 0.211604 | 0.593857 | 0.132723 | 0.337209 | pass | fail original/attention/safety |
+| `sf_hpw2_lh8` | 0.191126 | 0.645051 | 0.231121 | 0.293605 | pass | fail original/attention/safety |
+| `sf_hpw1_lh12` | 0.242321 | 0.655290 | 0.075515 | 0.308411 | pass | fail original/attention/safety |
+
+Interpretation:
+
+```text
+Anti-escape can be made to pass, but the harmful head still cannot maintain
+high recall and high precision together while preserving top3 ranking.
+This is a negative result, not a promotion signal.
+```
+
+Repair5 next attempt now running:
+
+```text
+tmux:
+  repair5_pairwise_waiter_20260528
+
+log:
+  outputs/logs/phase4f_repair5_pairwise_waiter_20260528_083008.log
+  outputs/logs/phase4f_repair5_pairwise_resume_20260528_084526.log
+
+new local/remote change:
+  harmful safety pairwise-margin loss
+  gate-balanced checkpoint selection
+  optional calibrated-safety checkpoint selection
+
+local tests:
+  tests/test_phase4f_attention_native_eval.py
+  tests/test_phase4f_attention_native_labels.py
+  result: 12 passed
+
+generated configs:
+  configs/phase4/generated_repair5_pairwise/sf_pair_focal_m035_lh4.yaml
+  configs/phase4/generated_repair5_pairwise/sf_pair_m035_lh4_neg1.yaml
+  configs/phase4/generated_repair5_pairwise/sf_pair_m050_lh3_neg2.yaml
+```
+
+First pairwise seed61 result:
+
+| variant | top1 | top3 | harmful recall | harmful precision | anti-escape | result |
+|---|---:|---:|---:|---:|---|---|
+| `sf_pair_focal_m035_lh4` | 0.180887 | 0.662116 | 0.816934 | 0.281768 | fail | fail attention/safety/anti |
+
+This is a useful diagnostic because the new safety-balanced checkpoint selection preserved high recall better than the prior late anti-only checkpoints, but it still does not pass the gate.
+
+Promotion boundary remains unchanged:
+
+```text
+Do not enter Phase5.5 until original Phase4F gate, attention-native gate,
+safety gate, anti-escape gate, and multi-seed gate all pass.
+Do not enter Phase6 from offline Repair5 evidence alone.
+```
+
+Promotion remains forbidden unless all of the following pass:
+
+```text
+original Phase4F gate
+attention-native gate
+safety gate
+anti-escape gate
+multi-seed gate
+```
+
+Phase5.5, if unlocked, is parity/smoke only. Phase6 still requires separate closed-loop learned-benefit evidence.
+
+### 29.12 Current execution status - 2026-05-28 09:30 +08:00
+
+Repair5 is still active. No runtime promotion is allowed.
+
+Completed additional negative evidence:
+
+```text
+pairwise recovery log:
+  outputs/logs/phase4f_repair5_pairwise_resume_20260528_084526.log
+
+pairwise seed61:
+  sf_pair_focal_m035_lh4:
+    top1 = 0.180887
+    top3 = 0.662116
+    harmful recall = 0.816934
+    harmful precision = 0.281768
+    anti_escape = false
+  sf_pair_m035_lh4_neg1:
+    top1 = 0.208191
+    top3 = 0.641638
+    harmful recall = 0.684211
+    harmful precision = 0.311458
+    anti_escape = false
+  sf_pair_m050_lh3_neg2:
+    top1 = 0.153584
+    top3 = 0.682594
+    harmful recall = 0.743707
+    harmful precision = 0.294918
+    anti_escape = false
+
+result:
+  no seed61 promotion
+  no Phase5.5
+  no Phase6
+```
+
+Global-safety sweep is running:
+
+```text
+tmux:
+  repair5_global_safety_waiter_20260528
+
+log:
+  outputs/logs/phase4f_repair5_global_safety_waiter_20260528_085606.log
+
+first completed seed61 variant:
+  sf_global_pair_neg2_anti2
+  outputs/reports/phase4f_repair5_rawtrace_edge_sf_global_pair_neg2_anti2_eval_seed61_summary.json
+  outputs/reports/phase4f_repair5_rawtrace_edge_sf_global_pair_neg2_anti2_anti_escape_gate_seed61_summary.json
+
+metrics:
+  top1 = 0.232082
+  top3 = 0.706485
+  harmful recall = 0.576659
+  harmful precision = 0.313433
+  anti_escape = true
+
+result:
+  top3 / precision / anti_escape improved
+  top1 and harmful recall failed
+  no promotion
+```
+
+The next queued Repair5 attempt adds target-rule pressure without changing gates:
+
+```text
+new optional loss terms:
+  attention-native target-rule CE
+  target-rule margin
+  high-margin opportunity weighting for target-rule losses
+
+default behavior:
+  lambda_rule_ce = 0
+  lambda_rule_margin = 0
+  existing configs unchanged unless a generated Repair5 variant enables the terms
+
+tests:
+  local Repair5 tests = 15 passed
+  remote Repair5 tests = 15 passed
+```
+
+Queued tmux:
+
+```text
+tmux:
+  repair5_target_rule_margin_waiter_20260528
+
+log:
+  outputs/logs/phase4f_repair5_target_rule_margin_waiter_20260528_0930.log
+
+script:
+  run_repair5_target_rule_margin_waiter.sh
+
+behavior:
+  waits for repair5_global_safety_waiter_20260528
+  runs seed61 first
+  promotes to seeds 103/107 only if seed61 passes all required gates
+
+generated configs:
+  configs/phase4/generated_repair5_target_rule_margin/sf_target_ce1_margin1_hm4.yaml
+  configs/phase4/generated_repair5_target_rule_margin/sf_target_ce2_margin1_hm3.yaml
+  configs/phase4/generated_repair5_target_rule_margin/sf_target_margin2_rank3_safe5.yaml
+```
+
+Promotion boundary remains unchanged:
+
+```text
+Phase5.5 allowed only after original Phase4F gate,
+attention-native gate, safety gate, anti-escape gate,
+and multi-seed gate all pass.
+
+Phase6 still requires separate closed-loop learned-benefit evidence.
+```
+
+### 29.13 Data-volume branch queued - 2026-05-28 10:00 +08:00
+
+Repair5 remains active. No runtime promotion is allowed.
+
+The current data-volume diagnosis is:
+
+```text
+raw-trace attention-native audit:
+  total rows ~= 2985
+  train rows ~= 2526
+  validation rows ~= 459
+  validation use_nonadditive rows ~= 293
+  validation high-margin opportunity rows ~= 185
+
+interpretation:
+  data volume / opportunity coverage is a plausible blocker
+  it is not a success claim
+```
+
+Global-safety sweep completed with no seed61 promotion:
+
+```text
+log:
+  outputs/logs/phase4f_repair5_global_safety_waiter_20260528_085606.log
+
+sf_global_pair_neg2_anti2:
+  top1 = 0.232082
+  top3 = 0.706485
+  harmful recall = 0.576659
+  harmful precision = 0.313433
+  anti_escape = true
+  result = fail top1 + safety recall
+
+sf_global_pair_rank2_anti2:
+  top1 = 0.187713
+  top3 = 0.689420
+  harmful recall = 0.745995
+  harmful precision = 0.290036
+  anti_escape = false
+  result = fail attention/safety/anti
+
+sf_global_rank3_anti3:
+  top1 = 0.184300
+  top3 = 0.689420
+  harmful recall = 0.814645
+  harmful precision = 0.275116
+  anti_escape = false
+  result = fail attention/safety precision/anti
+```
+
+The target-rule queue is active:
+
+```text
+tmux:
+  repair5_target_rule_margin_waiter_20260528
+
+log:
+  outputs/logs/phase4f_repair5_target_rule_margin_waiter_20260528_0930.log
+
+latest observed:
+  sf_target_ce1_margin1_hm4 reached epoch 200
+  selected validation metrics still below gate
+  no promotion evidence yet
+```
+
+A 5000+ sample data branch is queued after the target-rule run:
+
+```text
+new configs:
+  configs/phase4/laur_ltm_repair5_expand5000_scenario_manifest.jsonl
+  configs/phase4/laur_ltm_full_repair5_expand5000.yaml
+  configs/phase4/laur_ltm_full_repair5_attention_native_expand5000_rawtrace_edge.yaml
+
+scope:
+  instances = 1..25
+  runs = 1275
+  max checkpoints/probe rows ~= 5100
+  outputs are under repair5_expand5000 paths
+  original 2985-row evidence is preserved
+```
+
+Queued tmux:
+
+```text
+tmux:
+  repair5_expand5000_waiter_20260528
+
+log:
+  outputs/logs/phase4f_repair5_expand5000_waiter_20260528.log
+
+script:
+  run_repair5_expand5000_waiter_20260528.sh
+
+behavior:
+  waits for repair5_target_rule_margin_waiter_20260528
+  runs record/probe on the 25-instance config
+  builds attention-native raw-trace labels
+  audits expanded label distribution
+  screens seed61 first for three variants
+```
+
+Generated expanded-data variants will be:
+
+```text
+configs/phase4/generated_repair5_expand5000/ex5000_mlp_target_global.yaml
+configs/phase4/generated_repair5_expand5000/ex5000_linear_target_global.yaml
+configs/phase4/generated_repair5_expand5000/ex5000_mlp_safety_light.yaml
+```
+
+Code and verification:
+
+```text
+new optional attention model head:
+  head_hidden_dim
+  head_dropout
+
+default:
+  head_hidden_dim = 0
+  previous linear-head behavior is preserved
+
+tests:
+  local Repair5 tests = 16 passed, 1 warning
+  remote Repair5 tests = 16 passed, 1 warning
+```
+
+Promotion boundary remains unchanged:
+
+```text
+No gate was lowered.
+Phase5.5 remains forbidden.
+Phase6 remains forbidden.
+Only original Phase4F + attention-native + safety + anti-escape + multi-seed can unlock Phase5.5 parity/smoke.
+```
+
+### 29.14 Target-rule partial result and expanded-audit diagnostic - 2026-05-28 10:20 +08:00
+
+Repair5 remains active. No runtime promotion is allowed.
+
+The target-rule CE/margin queue has produced two formal seed61 negatives:
+
+```text
+sf_target_ce1_margin1_hm4:
+  top1 = 0.191126
+  top3 = 0.709898
+  harmful recall = 0.745995
+  harmful precision = 0.255686
+  mean delta = 0.004458
+  anti_escape = false
+  result = no promotion
+
+sf_target_ce2_margin1_hm3:
+  top1 = 0.143345
+  top3 = 0.706485
+  harmful recall = 0.787185
+  harmful precision = 0.277868
+  mean delta = 0.002751
+  anti_escape = false
+  result = no promotion
+```
+
+The third target-rule variant is still training:
+
+```text
+sf_target_margin2_rank3_safe5:
+  active under tmux repair5_target_rule_margin_waiter_20260528
+  by epoch 80 there was no positive gate evidence
+```
+
+Observed pattern:
+
+```text
+target-rule pressure can make top3 pass on some checkpoints
+but on the 2985-row dataset it still does not align top1,
+safety, positive delta, and anti-escape at the same selected checkpoint
+```
+
+An audit-only diagnostic was added before expand5000 label generation:
+
+```text
+file:
+  src/czr004_teacher/attention_native_schema_laur.py
+
+new summary field:
+  split_diagnostics
+
+contains per split:
+  sample_count
+  decision_distribution
+  target_rule_distribution
+  defer_reason_distribution
+  nonadditive_opportunity_count
+  high_margin_nonadditive_opportunity_count
+```
+
+This does not change labels, training, eval, or gates. It only makes the expanded-data label audit stronger.
+
+Verification:
+
+```text
+local Repair5 tests = 16 passed, 1 warning
+remote Repair5 tests = 16 passed, 1 warning
+```
+
+Current remote queue:
+
+```text
+active:
+  repair5_target_rule_margin_waiter_20260528
+
+waiting:
+  repair5_expand5000_waiter_20260528
+```
+
+Promotion boundary remains unchanged:
+
+```text
+No gate was lowered.
+Phase5.5 remains forbidden.
+Phase6 remains forbidden.
+```
+
+### 29.15 Target-rule completed; expand5000 active; high-token queued - 2026-05-28 10:40 +08:00
+
+Repair5 remains active. No runtime promotion is allowed.
+
+The target-rule CE/margin queue is now complete, with no seed61 promotion:
+
+```text
+sf_target_ce1_margin1_hm4:
+  top1 = 0.191126
+  top3 = 0.709898
+  harmful recall = 0.745995
+  harmful precision = 0.255686
+  mean delta = 0.004458
+  anti_escape = false
+
+sf_target_ce2_margin1_hm3:
+  top1 = 0.143345
+  top3 = 0.706485
+  harmful recall = 0.787185
+  harmful precision = 0.277868
+  mean delta = 0.002751
+  anti_escape = false
+
+sf_target_margin2_rank3_safe5:
+  top1 = 0.221843
+  top3 = 0.689420
+  harmful recall = 0.814645
+  harmful precision = 0.270517
+  mean delta = 0.003933
+  anti_escape = false
+```
+
+Conclusion:
+
+```text
+target-rule pressure can pass top3 or recall separately,
+but it still does not satisfy top1, safety precision,
+positive utility, and anti-escape together
+```
+
+The expanded-data run is now active:
+
+```text
+tmux:
+  repair5_expand5000_waiter_20260528
+
+log:
+  outputs/logs/phase4f_repair5_expand5000_waiter_20260528.log
+
+status at 2026-05-28 10:35 +08:00:
+  record/probe stage active
+  record logs = 372
+  checkpoint rows = 738
+  probe rows = not started yet
+  disk free ~= 93G
+```
+
+Compression decision:
+
+```text
+zstd compression is lossless
+compressed raw trace does not remove trace events
+information bottleneck is tokenization/truncation, not compression
+```
+
+Therefore the next information-capacity branch keeps zstd but increases token budgets:
+
+```text
+config:
+  configs/phase4/laur_ltm_full_repair5_attention_native_expand5000_rawtrace_hightoken.yaml
+
+tokenization:
+  max_edge_tokens = 96
+  max_trace_tokens = 256
+
+training:
+  batch_size = 64
+```
+
+Queued high-token tmux:
+
+```text
+tmux:
+  repair5_expand5000_hightoken_waiter_20260528
+
+log:
+  outputs/logs/phase4f_repair5_expand5000_hightoken_waiter_20260528.log
+
+script:
+  run_repair5_expand5000_hightoken_waiter_20260528.sh
+
+behavior:
+  waits for repair5_expand5000_waiter_20260528
+  rebuilds high-token labels from the same compressed raw trace
+  audits split/rule/opportunity coverage
+  screens seed61 first
+```
+
+Generated high-token variants:
+
+```text
+configs/phase4/generated_repair5_expand5000_hightoken/ht_mlp_target_global.yaml
+configs/phase4/generated_repair5_expand5000_hightoken/ht_linear_target_global.yaml
+```
+
+Promotion boundary remains unchanged:
+
+```text
+No gate was lowered.
+Phase5.5 remains forbidden.
+Phase6 remains forbidden.
+```
+
+### 29.16 Expand5000 sleep-check - 2026-05-28 10:50 +08:00
+
+Repair5 remains active. No runtime promotion is allowed.
+
+Remote health check:
+
+```text
+tmux alive:
+  repair5_expand5000_waiter_20260528
+  repair5_expand5000_hightoken_waiter_20260528
+
+disk:
+  100G total
+  8.3G used
+  92G free
+
+GPU:
+  RTX 4090 idle
+```
+
+This is expected because expand5000 is still generating record/probe data.
+The neural-network training stage has not started yet.
+
+Expand5000 progress at 2026-05-28 10:47 +08:00:
+
+```text
+record log files = 428
+approx completed record commands = 214
+checkpoint rows = 835
+compressed raw trace = 1.46GB
+probe rows = not started yet
+normal-token label dataset = not generated yet
+high-token label dataset = not generated yet
+```
+
+Error scan:
+
+```text
+searched:
+  Traceback
+  Exception
+  ERROR
+  FAILED
+  No space
+  Killed
+  CUDA out of memory
+
+result:
+  no matching failure lines
+  recent record stderr files empty
+```
+
+Recent record stdout contains both successful and infeasible MAPF samples.
+Those are valid teacher-data outcomes, not process crashes.
+
+Local Repair5 verification was rerun in the correct conda environment:
+
+```text
+conda run -n czr004 python -m pytest \
+  tests/test_phase4f_attention_native_eval.py \
+  tests/test_phase4f_attention_native_labels.py -q
+
+result:
+  16 passed, 1 warning
+```
+
+Compression status:
+
+```text
+zstd is lossless
+turning compression off does not expose extra trace events
+more raw-trace information is tested by increasing token budgets
+```
+
+Promotion boundary remains unchanged:
+
+```text
+No gate was lowered.
+Phase5.5 remains forbidden.
+Phase6 remains forbidden.
+```
+
+### 29.21 Final-gate explicit-field hardening - 2026-05-28 13:42 +08:00
+
+Repair5 remains active. No runtime promotion is allowed.
+
+While the expand5000 branch remained in the late probe tail, the queued waiters were prechecked:
+
+```text
+scripts:
+  run_repair5_expand5000_waiter_20260528.sh
+  run_repair5_expand5000_hightoken_waiter_20260528.sh
+  run_repair5_expand5000_followup_waiter_20260528.sh
+  run_repair5_progress_monitor_20260528.sh
+
+remote validation:
+  bash -n passed for all scripts
+  required Repair5 configs and Python modules were present
+```
+
+The final gate was hardened:
+
+```text
+file:
+  src/eval/eval_laur_repair5_final_gate.py
+
+change:
+  do not fallback missing top-level phase4f_gate to validation attention_native_gate
+  do not fallback missing validation attention_native_gate to phase4f_gate
+  do not fallback missing top-level anti_escape_gate to validation metrics
+  record missing_required_gate_fields per seed result
+```
+
+Reason:
+
+```text
+The objective requires explicit evidence for:
+  original Phase4F gate
+  attention-native gate
+  safety gate
+  anti-escape gate
+  multi-seed gate
+
+If an eval summary is malformed or incomplete, final gate must fail loudly rather than infer a pass from a neighboring field.
+```
+
+Tests added:
+
+```text
+missing phase4f_gate fails final gate
+missing metrics_by_split.validation.attention_native_gate fails final gate
+```
+
+Verification:
+
+```text
+local:
+  tests/test_phase4f_attention_native_labels.py
+  tests/test_phase4f_attention_native_eval.py
+  result = 21 passed, 1 warning
+
+remote:
+  tests/test_phase4f_attention_native_labels.py
+  tests/test_phase4f_attention_native_eval.py
+  result = 21 passed, 1 warning
+```
+
+Promotion boundary remains unchanged:
+
+```text
+No gate was lowered.
+Phase5.5 remains forbidden.
+Phase6 remains forbidden.
+```
+
+Final lightweight remote status at 2026-05-28 13:42 +08:00:
+
+```text
+probe log files = 2068
+probe rows = 32648 and increasing
+active process = phase4_laur_probe at about 99.8% CPU
+label datasets = not generated yet
+expand5000 summaries = not generated yet
+error scan = clean
+```
+
+### 29.22 Expand5000 recovery after script failures - 2026-05-28 18:42 +08:00
+
+Repair5 remains active. No runtime promotion is allowed.
+
+Remote state at 2026-05-28 18:35 +08:00:
+
+```text
+record log files = 2550
+probe log files = 2550
+checkpoint rows = 4956
+probe rows = 40360
+disk = 100G total, 13G used, 88G free
+GPU = idle
+```
+
+Main normal-token waiter failed after data generation:
+
+```text
+log:
+  outputs/logs/phase4f_repair5_expand5000_waiter_20260528.log
+
+failure:
+  scripts/run_phase4_laur_batch.py completed record/probe artifacts
+  then failed while writing the batch report
+
+exception:
+  AttributeError: 'NoneType' object has no attribute 'get'
+
+effect:
+  normal-token attention-native label dataset/audit was not built
+
+interpretation:
+  data-generation succeeded
+  this is a report/write-path failure, not a teacher-data failure
+```
+
+High-token branch status:
+
+```text
+label audit:
+  outputs/reports/phase4f_repair5_attention_native_expand5000_rawtrace_hightoken_label_audit.json
+  passed = true
+  sample_count = 4956
+  train / validation = 4194 / 762
+  validation high-margin opportunity count = 310
+  validation non-additive opportunity count = 483
+
+training:
+  did not actually start
+  generated configs used unknown model name:
+    LAU-EdgeTraceTransformer-v4-high-token
+  error:
+    ValueError: unknown LAU attention-native model
+
+interpretation:
+  this is a config naming bug, not a negative model result
+```
+
+Follow-up waiter status:
+
+```text
+log:
+  outputs/logs/phase4f_repair5_expand5000_followup_waiter_20260528.log
+
+result:
+  failed fast because normal-token dataset/audit was missing
+  no follow-up variants were evaluated
+```
+
+Fix:
+
+```text
+file:
+  configs/phase4/laur_ltm_full_repair5_attention_native_expand5000_rawtrace_hightoken.yaml
+
+change:
+  model.name = LAU-EdgeTraceTransformer-v4
+
+note:
+  high-token is a tokenization/data-capacity variant
+  it is not a new architecture name
+```
+
+Recovery queued:
+
+```text
+script:
+  run_repair5_expand5000_recovery_20260528.sh
+
+tmux:
+  repair5_expand5000_recovery_20260528
+
+log:
+  outputs/logs/phase4f_repair5_expand5000_recovery_20260528.log
+
+remote validation:
+  bash -n passed
+  hightoken model name check passed
+
+sequence:
+  rerun normal-token waiter
+    skip completed record/probe artifacts
+    build normal-token labels
+    screen seed61 variants
+  rerun high-token waiter
+    reuse existing high-token labels
+    regenerate configs with corrected model name
+    screen seed61 variants
+  rerun follow-up waiter
+```
+
+Liveness at 2026-05-28 18:41 +08:00:
+
+```text
+active process:
+  attention_native_labels_laur.py
+  config = configs/phase4/laur_ltm_full_repair5_attention_native_expand5000_rawtrace_edge.yaml
+  CPU about 100%
+
+trace aggregation progress:
+  rows = 10,000,000
+  matched = 9,999,999
+  checkpoints = 713
+
+normal-token dataset/audit:
+  not finished yet
+```
+
+Promotion boundary remains unchanged:
+
+```text
+No gate was lowered.
+High-token failed attempt is not counted as a model negative because no model was trained.
+Phase5.5 remains forbidden.
+Phase6 remains forbidden.
+```
+
+### 29.20 Expand5000 probe-stage health check - 2026-05-28 13:35 +08:00
+
+Repair5 remains active. No runtime promotion is allowed.
+
+Remote progress at 2026-05-28 13:32 +08:00:
+
+```text
+tmux alive:
+  repair5_expand5000_waiter_20260528
+  repair5_expand5000_hightoken_waiter_20260528
+  repair5_expand5000_progress_monitor_20260528
+  repair5_expand5000_followup_waiter_20260528
+
+disk:
+  100G total
+  13G used
+  88G free
+
+GPU:
+  RTX 4090 idle
+
+record log files = 2550
+record phase = complete for 1275 runs
+checkpoint rows = 4956
+compressed raw trace = 6.08GB
+
+probe log files = 2034
+approx completed probe commands = 1017 / 1275
+probe rows = 32136 and increasing
+
+label datasets = not generated yet
+expand5000 summaries = not generated yet
+```
+
+Liveness evidence:
+
+```text
+active process:
+  phase4_laur_probe
+  about 99.9% CPU
+
+latest probe logs:
+  clean stdout/stderr
+  still emitting probe_rows for warehouse-20-40-10-2-1 cases
+
+error scan:
+  clean
+```
+
+Interpretation:
+
+```text
+The job is slow in the late probe tail, not stuck.
+No expand5000 label audit, train result, anti-escape result, or final gate exists yet.
+The queued normal-token, high-token, and follow-up branches remain valid waiters.
+```
+
+Promotion boundary remains unchanged:
+
+```text
+No gate was lowered.
+Phase5.5 remains forbidden.
+Phase6 remains forbidden.
+```
+
+### 29.17 Expand5000 progress monitor - 2026-05-28 11:01 +08:00
+
+Repair5 remains active. No runtime promotion is allowed.
+
+Remote progress at 2026-05-28 10:58 +08:00:
+
+```text
+tmux alive:
+  repair5_expand5000_waiter_20260528
+  repair5_expand5000_hightoken_waiter_20260528
+
+disk:
+  100G total
+  9.0G used
+  91G free
+
+GPU:
+  RTX 4090 idle
+
+record log files = 484
+approx completed record commands = 242
+checkpoint rows = 934
+compressed raw trace = 2.25GB
+probe rows = not started yet
+label datasets = not generated yet
+```
+
+The record-log error scan remains clean:
+
+```text
+no Traceback / Exception / ERROR / FAILED / No space / Killed / CUDA OOM
+```
+
+A lightweight monitor tmux was started:
+
+```text
+tmux:
+  repair5_expand5000_progress_monitor_20260528
+
+log:
+  outputs/logs/phase4f_repair5_expand5000_progress_monitor_20260528.log
+
+cadence:
+  every 10 minutes, up to 96 samples
+```
+
+First monitor sample at 2026-05-28 11:01 +08:00:
+
+```text
+disk:
+  100G total
+  9.3G used
+  91G free
+
+record log files = 508
+approx completed record commands = 254
+checkpoint rows = 975
+compressed raw trace = 2.50GB
+probe rows = not started yet
+label datasets = not generated yet
+```
+
+This monitor is evidence-only. It does not modify record/probe/label/train
+artifacts or any gate.
+
+Promotion boundary remains unchanged:
+
+```text
+No gate was lowered.
+Phase5.5 remains forbidden.
+Phase6 remains forbidden.
+```
+
+### 29.18 Dataset strategy and union guardrail - 2026-05-28 11:20 +08:00
+
+Repair5 remains active. No runtime promotion is allowed.
+
+Dataset strategy:
+
+```text
+1. Evaluate expand5000 by itself first.
+   Purpose: isolate whether data volume / opportunity coverage is the blocker.
+
+2. If expand5000 improves but still misses the full gate,
+   build a formal old+new union branch.
+
+3. Do not manually cat JSONL files.
+   A union dataset must pass schema audit, duplicate checks,
+   token-shape checks, split leakage checks, and anti-escape audit.
+```
+
+The old 2985-row dataset remains useful as:
+
+```text
+historical diagnostic
+compatibility / fallback reference
+cross-dataset validation evidence
+```
+
+New guardrail tool:
+
+```text
+src/czr004_teacher/attention_native_union_laur.py
+```
+
+Default behavior:
+
+```text
+reject duplicate checkpoint_id values
+reject token-shape mismatches
+reuse audit_attention_native_rows
+record union_source per row
+write union audit JSON / MD
+```
+
+This prevents accidental mixing of normal-token and high-token rows, and
+prevents old validation evidence from leaking into training through an
+uncontrolled merge.
+
+Verification:
+
+```text
+conda run -n czr004 python -m pytest \
+  tests/test_phase4f_attention_native_labels.py \
+  tests/test_phase4f_attention_native_eval.py -q
+
+result:
+  19 passed, 1 warning
+```
+
+Remote progress at 2026-05-28 11:16 +08:00:
+
+```text
+tmux alive:
+  repair5_expand5000_waiter_20260528
+  repair5_expand5000_hightoken_waiter_20260528
+  repair5_expand5000_progress_monitor_20260528
+
+disk:
+  100G total
+  11G used
+  90G free
+
+GPU:
+  RTX 4090 idle
+
+record log files = 1300
+approx completed record commands = 650
+checkpoint rows = 2543
+compressed raw trace = 3.53GB
+probe rows = not started yet
+label datasets = not generated yet
+```
+
+The record-log error scan remains clean.
+
+Promotion boundary remains unchanged:
+
+```text
+No gate was lowered.
+Phase5.5 remains forbidden.
+Phase6 remains forbidden.
+```
+
+### 29.19 Expand5000 follow-up waiter - 2026-05-28 11:30 +08:00
+
+Repair5 remains active. No runtime promotion is allowed.
+
+Remote progress at 2026-05-28 11:25 +08:00:
+
+```text
+tmux alive:
+  repair5_expand5000_waiter_20260528
+  repair5_expand5000_hightoken_waiter_20260528
+  repair5_expand5000_progress_monitor_20260528
+
+disk:
+  100G total
+  11G used
+  90G free
+
+GPU:
+  RTX 4090 idle
+
+record log files = 1428
+approx completed record commands = 714
+checkpoint rows = 2790
+compressed raw trace = 4.16GB
+probe rows = not started yet
+label datasets = not generated yet
+```
+
+The record-log error scan remains clean.
+
+A follow-up waiter was queued:
+
+```text
+script:
+  run_repair5_expand5000_followup_waiter_20260528.sh
+
+tmux:
+  repair5_expand5000_followup_waiter_20260528
+
+log:
+  outputs/logs/phase4f_repair5_expand5000_followup_waiter_20260528.log
+
+remote validation:
+  bash -n passed
+```
+
+Behavior:
+
+```text
+waits for:
+  repair5_expand5000_waiter_20260528
+  repair5_expand5000_hightoken_waiter_20260528
+
+if any expand5000 final gate already allows Phase5.5:
+  skip follow-up variants
+
+otherwise screen seed61 on normal-token expand5000 for:
+  ex5000_follow_pair_focal_m035_lh4
+  ex5000_follow_global_rank3_anti3
+  ex5000_follow_target_ce2_margin1_hm3
+  ex5000_follow_target_margin2_rank3_safe5
+```
+
+Promotion policy is unchanged:
+
+```text
+seed61 must pass:
+  original Phase4F gate
+  attention-native gate
+  safety gate
+  anti-escape gate
+
+only then:
+  run seeds 103/107
+  run final multi-seed gate
+```
+
+This is still the isolated expand5000 branch, not the old+new union branch.
+
+Promotion boundary remains unchanged:
+
+```text
+No gate was lowered.
+Phase5.5 remains forbidden.
+Phase6 remains forbidden.
+```
+
+### 29.23 Expand5000 negative result and nextwave launch - 2026-05-29 09:20 +08:00
+
+Repair5 remains active. No runtime promotion is allowed.
+
+The expand5000 recovery run completed. The larger dataset is valid, but all
+seed61 model variants failed promotion. Phase5.5 and Phase6 are still
+forbidden.
+
+Evidence:
+
+```text
+normal-token label audit:
+  outputs/reports/phase4f_repair5_attention_native_expand5000_rawtrace_label_audit.json
+
+high-token label audit:
+  outputs/reports/phase4f_repair5_attention_native_expand5000_rawtrace_hightoken_label_audit.json
+
+sample_count:
+  4956
+
+train / validation:
+  4194 / 762
+
+validation high-margin opportunity count:
+  310
+```
+
+Seed61 recovery outcomes:
+
+| variant | top1 | top3 | harmful recall | harmful precision | delta | attention | anti-escape |
+|---|---:|---:|---:|---:|---:|---|---|
+| `ex5000_mlp_target_global` | 0.2133 | 0.6625 | 0.6769 | 0.3203 | 0.0062 | fail | fail |
+| `ex5000_linear_target_global` | 0.1863 | 0.6646 | 0.7370 | 0.3084 | -0.0001 | fail | fail |
+| `ex5000_mlp_safety_light` | 0.1967 | 0.6667 | 0.8224 | 0.2844 | 0.0006 | fail | fail |
+| `hightoken_ht_mlp_target_global` | 0.1449 | 0.6998 | 0.7623 | 0.3143 | 0.0009 | fail | fail |
+| `hightoken_ht_linear_target_global` | 0.1739 | 0.6687 | 0.8051 | 0.3006 | 0.0028 | fail | fail |
+| `followup_ex5000_follow_pair_focal_m035_lh4` | 0.1284 | 0.6832 | 0.8051 | 0.2751 | 0.0021 | fail | fail |
+| `followup_ex5000_follow_global_rank3_anti3` | 0.1843 | 0.6646 | 0.7477 | 0.3068 | 0.0019 | fail | fail |
+| `followup_ex5000_follow_target_ce2_margin1_hm3` | 0.1615 | 0.6791 | 0.8652 | 0.2759 | 0.0030 | fail | fail |
+| `followup_ex5000_follow_target_margin2_rank3_safe5` | 0.1718 | 0.6749 | 0.7303 | 0.3133 | 0.0004 | fail | fail |
+
+Interpretation:
+
+```text
+The larger dataset helped coverage and produced near-top3 variants,
+but no checkpoint passed ranking, safety, and anti-escape together.
+The dominant failure remains anti-escape / safety-rank coupling,
+not label-audit coverage.
+```
+
+Implementation update:
+
+```text
+added optional Repair5 losses:
+  lambda_high_margin_harmful
+  lambda_anti_candidate_safety
+
+defaults:
+  zero, so old configs remain comparable
+
+verification:
+  local Repair5 tests = 22 passed, 1 warning
+  remote Repair5 tests = 22 passed, 1 warning
+```
+
+Naming clarification:
+
+```text
+Old generated names containing "mlp" meant a shallow output head on top of
+LAU-EdgeTraceTransformer-v4. They did not mean the Phase5C MLP-only baseline.
+
+New variants use:
+  attn_mlp_head_*
+  attn_linear_head_*
+```
+
+Nextwave run:
+
+```text
+script:
+  run_repair5_expand5000_nextwave_20260529.sh
+
+tmux:
+  repair5_expand5000_nextwave_20260529
+
+log:
+  outputs/logs/phase4f_repair5_expand5000_nextwave_20260529.log
+
+generated configs:
+  configs/phase4/generated_repair5_expand5000_nextwave/hightoken_attn_mlp_head_candidate_safe_lh5.yaml
+  configs/phase4/generated_repair5_expand5000_nextwave/hightoken_attn_linear_head_candidate_safe_lh6.yaml
+  configs/phase4/generated_repair5_expand5000_nextwave/normal_attn_mlp_head_highcap_candidate_safe.yaml
+  configs/phase4/generated_repair5_expand5000_nextwave/normal_attn_linear_head_rank_safe.yaml
+```
+
+The nextwave variants still train the LAUR / LAU LTM `UpdateLTM` rule only.
+They do not predict agent actions, replace PIBT / LaCAM*, or introduce learned
+restart.
+
+Promotion policy remains unchanged:
+
+```text
+seed61 must pass:
+  original Phase4F gate
+  attention-native gate
+  safety gate
+  anti-escape gate
+
+only then:
+  run seeds 103/107
+  run final multi-seed gate
+```
+
+Initial liveness at 2026-05-29 09:21 +08:00:
+
+```text
+tmux alive:
+  repair5_expand5000_nextwave_20260529
+
+active training:
+  hightoken_attn_mlp_head_candidate_safe_lh5 seed61
+
+GPU:
+  1213 / 12282 MB
+
+epoch1:
+  top1 = 0.0497
+  top3 = 0.6936
+  harmful recall = 0.9065
+  harmful precision = 0.2002
+  anti_escape_capture = 0.1645
+```
+
+Promotion boundary remains unchanged:
+
+```text
+No gate was lowered.
+Phase5.5 remains forbidden.
+Phase6 remains forbidden.
+```
+
+### 29.24 Post-nextwave waiter queued - 2026-05-29 09:40 +08:00
+
+Repair5 remains active. No runtime promotion is allowed.
+
+Current nextwave first-variant trajectory:
+
+| epoch | top1 | top3 | harmful recall | harmful precision | anti capture | anti gate |
+|---:|---:|---:|---:|---:|---:|---|
+| 1 | 0.0497 | 0.6936 | 0.9065 | 0.2002 | 0.1645 | fail |
+| 20 | 0.1739 | 0.6729 | 0.8291 | 0.2739 | 0.3387 | fail |
+| 40 | 0.2008 | 0.6418 | 0.6168 | 0.3014 | 0.4806 | pass |
+| 60 | 0.1988 | 0.6749 | 0.5033 | 0.2655 | 0.4548 | pass |
+| 80 | 0.2277 | 0.6480 | 0.3231 | 0.2597 | 0.4419 | pass |
+| 100 | 0.2340 | 0.6253 | 0.2069 | 0.2230 | 0.4419 | pass |
+
+Interpretation:
+
+```text
+The anti/high-margin losses can push anti-escape over the threshold,
+but this first variant trades away harmful recall and still misses top1/top3.
+```
+
+A post-nextwave waiter was queued without interrupting the active run:
+
+```text
+script:
+  run_repair5_expand5000_postnext_20260529.sh
+
+tmux:
+  repair5_expand5000_postnext_20260529
+
+log:
+  outputs/logs/phase4f_repair5_expand5000_postnext_20260529.log
+
+waits for:
+  repair5_expand5000_nextwave_20260529
+```
+
+If any expand5000 final gate already allows Phase5.5, the post-nextwave
+script exits without training. Otherwise it screens seed61 with variants
+that reduce direct anti-candidate safety pressure, increase target-rule
+top1/ranking pressure, and use per-rule safety calibration:
+
+```text
+configs/phase4/generated_repair5_expand5000_postnext/hightoken_attn_mlp_head_rank_recall_perrule.yaml
+configs/phase4/generated_repair5_expand5000_postnext/hightoken_attn_linear_head_rank_recall_lowanti.yaml
+configs/phase4/generated_repair5_expand5000_postnext/normal_attn_mlp_head_top1_focus_perrule.yaml
+configs/phase4/generated_repair5_expand5000_postnext/normal_attn_mlp_head_balanced_rank_anti.yaml
+```
+
+Promotion boundary remains unchanged:
+
+```text
+No gate was lowered.
+No Repair5 runtime promotion is allowed.
+Phase5.5 remains forbidden.
+Phase6 remains forbidden.
+```
+
+Current liveness update at 2026-05-29 09:42 +08:00:
+
+```text
+tmux alive:
+  repair5_expand5000_nextwave_20260529
+  repair5_expand5000_postnext_20260529
+
+active training:
+  hightoken_attn_mlp_head_candidate_safe_lh5 seed61
+
+epoch120:
+  top1 = 0.2050
+  top3 = 0.6315
+  harmful recall = 0.1816
+  harmful precision = 0.2278
+  anti_capture = 0.4355
+  anti gate = pass
+```
+
+No eval summary exists yet because training is still active. This continues
+to support the same diagnosis: anti-escape pressure is effective, but this
+variant is trading away recall and remains far below top1/top3 promotion.
+
+### 29.25 Layered Repair5 gates after GPTPro advice - 2026-05-29 09:55 +08:00
+
+Repair5 remains active. No runtime promotion is allowed.
+
+GPTPro's recommendation is accepted as a diagnostic-policy correction, not as
+a final-gate relaxation:
+
+```text
+Do not lower final claim gates.
+Do split early Repair5 judgement into layered gates.
+Do not let Repair3-style hard-label top1/top3 prematurely kill
+attention-native utility/opportunity experiments.
+Do require closed-loop LTM comparison before any performance claim.
+```
+
+The Repair5 gate stack is now documented as three layers:
+
+```text
+A. Development gate
+   Purpose:
+     decide whether a label/loss/model/data direction is worth continuing
+   Thresholds:
+     label/schema audit pass
+     positive delta proxy
+     top1 >= 0.25
+     top3 >= 0.60
+     harmful recall >= 0.70
+     harmful precision >= 0.25
+     high-margin opportunity capture better than additive/defer reference
+     avoidable additive/defer fallback better than additive/defer reference
+   Meaning:
+     not runtime permission
+
+B. Promotion-candidate gate
+   Purpose:
+     decide whether to spend larger training or prepare tightly scoped smoke
+   Thresholds:
+     top1 >= 0.32
+     top3 >= 0.65
+     harmful recall >= 0.78
+     harmful precision >= 0.28
+     mean delta > 0
+     opportunity capture >= reference + 0.05
+     avoidable fallback <= reference - 0.05
+     multi-seed stability must be checked before any serious promotion
+   Meaning:
+     not final success
+
+C. Runtime / paper-claim gate
+   Purpose:
+     decide Phase5.5 runtime parity/smoke permission and later claims
+   Rule:
+     original Phase4F + attention-native + safety + anti-escape + multi-seed
+     remain strict; Phase6 still needs closed-loop learned-benefit evidence.
+```
+
+Added diagnostic evaluator:
+
+```text
+src/eval/eval_laur_repair5_layered_gate.py
+
+outputs:
+  outputs/reports/phase4f_repair5_layered_gate_summary.json
+  outputs/reports/phase4f_repair5_layered_gate_report.md
+```
+
+This evaluator never sets `phase5p5_allowed` or `phase6_allowed` true.
+It is only a research triage report.
+
+Verification:
+
+```text
+local Repair5 tests:
+  24 passed, 1 warning
+
+remote Repair5 tests:
+  24 passed, 1 warning
+```
+
+Remote re-score of completed Repair5 summaries:
+
+```text
+summaries re-scored:
+  27
+
+development pass:
+  0
+
+promotion-candidate pass:
+  0
+
+strict seed pass:
+  0
+```
+
+Best diagnostic rows:
+
+| variant | top1 | top3 | recall | precision | anti capture | anti pass | note |
+|---|---:|---:|---:|---:|---:|---|---|
+| `rawtrace_edge_sf_target_ce1_margin1_hm4` | 0.1911 | 0.7099 | 0.7460 | 0.2557 | 0.2811 | false | top3 OK, anti/top1 incomplete |
+| `rawtrace_edge_sf_global_pair_neg2_anti2` | 0.2321 | 0.7065 | 0.5767 | 0.3134 | 0.4378 | true | anti OK, recall/top1 incomplete |
+| `expand5000_hightoken_ht_mlp_target_global` | 0.1449 | 0.6998 | 0.7623 | 0.3143 | 0.2839 | false | near top3, anti/top1 incomplete |
+| `expand5000_follow_target_ce2_margin1_hm3` | 0.1615 | 0.6791 | 0.8652 | 0.2759 | 0.2968 | false | recall OK, anti/top1 incomplete |
+
+Interpretation:
+
+```text
+The layered framework is useful and should guide future Repair5 triage.
+However, no completed historical Repair5 run passes even the development gate.
+The current nextwave/postnext queue remains necessary.
+```
+
+Promotion boundary remains unchanged:
+
+```text
+No final gate was lowered.
+No completed Repair5 result permits Phase5.5.
+Phase6 remains forbidden.
+```
+

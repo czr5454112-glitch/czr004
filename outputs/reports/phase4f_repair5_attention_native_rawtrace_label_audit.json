@@ -1,0 +1,79 @@
+{
+  "branch": "phase4-laur-ltm",
+  "checkpoint_jsonl": "/root/shared-nvme/czr004_phase4_repair1_43633e7/artifacts/teacher/laur/full_repair1/checkpoints/phase4_laur_checkpoints_full_repair1.jsonl",
+  "commit": "43633e7",
+  "dataset_schema_version": "phase4_laur_attention_native_label_dataset_v1",
+  "decision_distribution": {
+    "defer_ltm": 1000,
+    "use_nonadditive": 1985
+  },
+  "defer_reason_distribution": {
+    "additive_is_best_safe": 158,
+    "all_nonadditive_unsafe": 110,
+    "ambiguous_low_margin": 732
+  },
+  "dirty": "tracked-dirty_untracked-present",
+  "edge_feature_count": 27,
+  "global_feature_count": 22,
+  "high_margin_nonadditive_opportunity_count": 1412,
+  "high_margin_nonadditive_opportunity_rate": 0.4730318257956449,
+  "label_params": {
+    "failure_penalty": 0.1,
+    "harm_penalty": 0.05,
+    "harmful_floor": -0.05,
+    "high_margin_opportunity_margin": 0.02,
+    "min_safe_utility": 0.0,
+    "opportunity_margin": 0.01,
+    "pairwise_margin": 0.005,
+    "softmax_temperature": 0.01,
+    "ttfs_penalty": 0.01,
+    "utility_clip_max": 0.1,
+    "utility_clip_min": -0.1
+  },
+  "max_edge_tokens": 64,
+  "max_trace_tokens": 128,
+  "missing_delta_coverage_count": 0,
+  "missing_harmful_coverage_count": 0,
+  "model_family": "LAU-AttentionNative-v1",
+  "nonadditive_opportunity_count": 1985,
+  "nonadditive_opportunity_rate": 0.6649916247906198,
+  "output_jsonl": "/root/shared-nvme/czr004_phase4_repair1_43633e7/artifacts/teacher/laur/full_repair5_attention_native_rawtrace/update_labels/phase4_laur_attention_native_rawtrace_dataset.jsonl",
+  "passed": true,
+  "probe_jsonl": "/root/shared-nvme/czr004_phase4_repair1_43633e7/artifacts/teacher/laur/full_repair1/probes/phase4_laur_probe_full_repair1.jsonl",
+  "rule_feature_count": 12,
+  "rule_ids": [
+    "additive_ltm",
+    "commit_heavy",
+    "block_heavy",
+    "block_light",
+    "wait_light",
+    "wait_heavy",
+    "decay_095",
+    "decay_090"
+  ],
+  "sample_count": 2985,
+  "schema_error_count": 0,
+  "schema_errors": [],
+  "schema_version": "phase4_laur_attention_native_label_audit_v1",
+  "split_counts": {
+    "train": 2526,
+    "validation": 459
+  },
+  "split_leakage_error_count": 0,
+  "split_leakage_errors": [],
+  "target_rule_distribution": {
+    "None": 110,
+    "block_heavy": 623,
+    "block_light": 319,
+    "commit_heavy": 592,
+    "decay_090": 192,
+    "decay_095": 308,
+    "wait_heavy": 323,
+    "wait_light": 518
+  },
+  "trace_feature_count": 9,
+  "trace_jsonl": "/root/shared-nvme/czr004_phase4_repair1_43633e7/artifacts/teacher/laur/full_repair1/traces/phase4_laur_trace_full_repair1.jsonl.zst",
+  "uses_raw_trace_tokens": true,
+  "validation_high_margin_opportunity_count": 185,
+  "validation_opportunity_count": 293
+}

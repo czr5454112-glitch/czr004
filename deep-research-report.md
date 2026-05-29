@@ -1,3 +1,56 @@
+﻿## 2026-05-29 Repair5 layered gate research policy
+
+GPTPro's recommendation is incorporated as a Repair5 evaluation-policy update.
+It does not lower the final runtime or paper-claim gate.
+
+Key decision:
+
+```text
+Use layered gates for research triage.
+Keep final runtime/paper gates strict.
+Do not use Repair3-style hard-label top1/top3 as the only early signal for
+attention-native labels.
+Require closed-loop benefit over LTM before performance claims.
+```
+
+Repair5 now distinguishes:
+
+```text
+Development gate:
+  asks whether a direction is worth continuing.
+  It may use softer top1/top3/safety thresholds and opportunity-subset
+  anti-escape diagnostics.
+
+Promotion-candidate gate:
+  asks whether a direction deserves larger training or tightly scoped
+  closed-loop smoke planning.
+
+Runtime / paper-claim gate:
+  remains strict and requires original Phase4F, attention-native, safety,
+  anti-escape, and multi-seed gates, followed by closed-loop evidence.
+```
+
+The new diagnostic evaluator is:
+
+```text
+src/eval/eval_laur_repair5_layered_gate.py
+outputs/reports/phase4f_repair5_layered_gate_summary.json
+outputs/reports/phase4f_repair5_layered_gate_report.md
+```
+
+Remote re-score of completed Repair5 summaries under this policy:
+
+```text
+summaries: 27
+development pass: 0
+promotion-candidate pass: 0
+strict seed pass: 0
+```
+
+This means the layered policy is useful for analysis, but it does not make any
+completed Repair5 scheme eligible for Phase5.5. Current nextwave/postnext
+experiments remain necessary. Phase6 remains forbidden until closed-loop
+learned-benefit evidence exists.
 # NTM for Lightweight Traffic Map 项目指南
 
 生成日期：2026-05-20  
@@ -285,19 +338,43 @@ NTM 的学术贡献不能只写成“用神经网络拟合 LTM 权重”。纯 e
 
 ```text
 Phase4F.4:
-  redo advanced LAU update-rule models with Repair3 stable targets
+  historical first attempt: redo advanced LAU update-rule models with Repair3 stable targets
+  current Repair5 update: regenerate attention-native LAUR labels and anti-escape gates
 
 Phase5.5-update:
-  only if offline gate passes, export and integrate the advanced update model
+  only if offline gate and anti-escape gates pass, export and integrate the advanced update model
 ```
 
 该路线被允许尝试的原因：
 
 - 它仍然预测 LTM `UpdateLTM` rule / update parameters，不预测 agent action。
 - 它不替换 PIBT、不替换 LaCAM*、不改变候选动作域和冲突语义。
-- 它沿用 Repair3 stable target / tie-aware label，避免重复 Repair2 的 unstable hard-label 问题。
+- 历史 stable-attention 版本沿用 Repair3 stable target / tie-aware label，避免重复 Repair2 的 unstable hard-label 问题；2026-05-27 Repair5 更新后，Repair3 stable target 只保留为 conservative baseline / compatibility metric，不再作为高级 attention 模型的 primary label。
 - 它保留 Phase5C MLP runtime 作为可回退 baseline。
-- 它要求 advanced model 先过 offline gate，再进入 runtime；不得先接 solver 再找理由。
+- 它要求 advanced model 先过 offline gate 和 anti-escape gate，再进入 runtime；不得先接 solver 再找理由。
+
+补充决策更新：2026-05-27 +08:00，用户提供 GPTPro `phase4f_repair5_attention_native_labels_codex_plan.md`，本总纲采纳其核心判断：Repair3 不是被否定，而是从“高级模型训练目标”降级为历史通过证据、conservative runtime baseline 和 fallback reference。Repair3 的 offline pass 主要来自 stable target / tie handling，且 tie policy 明显偏向 `additive_ltm`；Phase5C 也未证明 Repair3 MLP runtime 稳定优于普通 LTM。因此继续在 Repair3 label 上堆 Transformer，风险是学到更复杂的“回 additive 最稳”分类器，而不是更强的 learned UpdateLTM policy。
+
+Repair5 的新主线是 `attention_native_label_v1`：
+
+- 从 probe outcomes / rule utility / pairwise dominance / high-margin opportunity 重新生成 LAUR label。
+- 训练目标从单一 hard stable target 改为 per-rule risk-adjusted utility、pairwise rule dominance、per-rule harmful、non-additive opportunity、explicit `defer_ltm`、high-margin safe-opportunity slices 和 anti-escape masks。
+- `defer_ltm` 是非 executable meta-decision，runtime 映射到 `additive_ltm`，但 eval 必须单独统计，不能计为 non-additive learning success。
+- Repair5 仍只学习 LTM `UpdateLTM` rule / update policy，不预测 agent action，不替换 PIBT / LaCAM*，不改 candidate domain、conflict semantics、incumbent pruning 或 learned restart。
+- Phase5.5-update 只能在 original Phase4F gates、attention-native gates、safety gates、anti-escape gates 和多 seed evidence 全部通过后进入 parity/smoke；即使进入 Phase5.5，也不能直接声称 Phase6-scale learned-benefit。
+
+Repair5 新增 anti-escape 验收必须报告并约束：
+
+```text
+validation high-margin opportunity count >= 50
+high-margin non-additive capture rate >= 0.40
+avoidable additive/defer rate <= 0.60
+anti-escape mean selected-vs-additive delta >= 0.005
+opportunity non-additive selection rate >= 0.35
+global additive/defer rate <= 0.70
+```
+
+如果 original Phase4F gate 通过但 anti-escape fail，结论必须写成 `model still escapes to LTM/additive`，不得进入 Phase5.5 runtime。
 
 推荐命名：
 

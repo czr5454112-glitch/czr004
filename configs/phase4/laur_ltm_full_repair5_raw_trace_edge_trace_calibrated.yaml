@@ -1,0 +1,82 @@
+schema_version: phase4_laur_stable_attention_config_v1
+mode: phase4-full-repair5-raw-trace-edge-trace-calibrated
+
+base_stable_target_config: configs/phase4/laur_ltm_full_repair3_stable_tie001.yaml
+
+stable_attention:
+  model_family: LAU-StableAttention-v1
+  checkpoint_jsonl: artifacts/teacher/laur/full_repair1/checkpoints/phase4_laur_checkpoints_full_repair1.jsonl
+  stable_dataset_jsonl: artifacts/teacher/laur/full_repair3_stable_targets/update_labels/phase4_laur_update_dataset_full_repair3_stable_tie001.jsonl
+  probe_jsonl: artifacts/teacher/laur/full_repair1/probes/phase4_laur_probe_full_repair1.jsonl
+  trace_jsonl: artifacts/teacher/laur/full_repair1/traces/phase4_laur_trace_full_repair1.jsonl.zst
+  dataset_jsonl: artifacts/teacher/laur/full_repair5_raw_trace_edge_trace/update_labels/phase4_laur_stable_attention_dataset.jsonl
+  dataset_summary_json: outputs/reports/phase4f_repair5_raw_trace_edge_trace_dataset_summary.json
+  dataset_summary_csv: outputs/tables/phase4f_repair5_raw_trace_edge_trace_dataset_summary.csv
+  dataset_report_md: outputs/reports/phase4f_repair5_raw_trace_edge_trace_dataset_report.md
+
+  tokenization:
+    max_edge_tokens: 96
+    max_trace_tokens: 256
+    soft_target_temperature: 0.010
+    soft_target_hard_mix: 0.5
+
+  model:
+    name: LAU-EdgeTraceTransformer-v3
+    d_model: 96
+    n_heads: 4
+    n_layers: 2
+    dropout: 0.1
+
+  loss:
+    lambda_listwise: 1.0
+    lambda_pairwise: 0.5
+    lambda_delta: 0.5
+    lambda_safe: 2.5
+    lambda_family: 0.15
+    lambda_conf: 0.1
+    lambda_additive: 0.1
+    pairwise_margin: 0.005
+    harmful_pos_weight: auto
+
+  training:
+    model_output_dir: artifacts/models/laur_ltm/full_repair5_raw_trace_edge_trace_seed{seed}
+    model_path: artifacts/models/laur_ltm/full_repair5_raw_trace_edge_trace_seed{seed}/laur_stable_attention_v1.pt
+    train_report_md: outputs/reports/phase4f_repair5_raw_trace_edge_trace_train_seed{seed}.md
+    train_summary_json: outputs/reports/phase4f_repair5_raw_trace_edge_trace_train_seed{seed}_summary.json
+    train_summary_csv: outputs/tables/phase4f_repair5_raw_trace_edge_trace_train_seed{seed}.csv
+    seed: 61
+    batch_size: 96
+    epochs: 260
+    eval_interval: 5
+    selection_score_mode: phase4f_gate
+    learning_rate: 0.001
+    weight_decay: 0.0005
+    device: auto
+
+  eval:
+    model_path: artifacts/models/laur_ltm/full_repair5_raw_trace_edge_trace_seed{seed}/laur_stable_attention_v1.pt
+    eval_report_md: outputs/reports/phase4f_repair5_raw_trace_edge_trace_report_seed{seed}.md
+    eval_summary_json: outputs/reports/phase4f_repair5_raw_trace_edge_trace_summary_seed{seed}.json
+    eval_summary_csv: outputs/tables/phase4f_repair5_raw_trace_edge_trace_eval_seed{seed}.csv
+    per_map_csv: outputs/tables/phase4f_repair5_raw_trace_edge_trace_per_map_seed{seed}.csv
+    confusion_csv: outputs/tables/phase4f_repair5_raw_trace_edge_trace_confusion_seed{seed}.csv
+    threshold_sweep_csv: outputs/tables/phase4f_repair5_raw_trace_edge_trace_threshold_sweep_seed{seed}.csv
+    repair3_baseline_summary_json: outputs/reports/phase4f_repair3_stable_tie001_eval_h010_summary.json
+    promotion_seeds: [61, 103, 107]
+    threshold_sweep: [0.10, 0.20, 0.30, 0.40, 0.45, 0.50, 0.55, 0.60, 0.70]
+    safety_calibration_thresholds: [0.05, 0.10, 0.20, 0.30, 0.40, 0.45, 0.50, 0.55, 0.60, 0.70, 0.80]
+    calibrate_safety_thresholds: true
+    batch_size: 96
+    safety_threshold: 0.50
+    safety_penalty: 0.02
+    confidence_margin: 0.002
+    device: auto
+
+gate:
+  validation_top1_min: 0.35
+  validation_top3_min: 0.70
+  harmful_recall_min: 0.80
+  harmful_precision_min: 0.30
+  predicted_rule_mean_delta_min_exclusive: 0.0
+  validation_non_neutral_min: 50
+  phase5p5_runtime_requires_offline_promotion: true

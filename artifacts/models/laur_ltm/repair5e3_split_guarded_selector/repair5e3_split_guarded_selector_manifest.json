@@ -1,0 +1,180 @@
+{
+  "agent_counts": [
+    50,
+    100
+  ],
+  "bounded_delta_updateparams": false,
+  "candidate_name": "repair5e3_split_guarded_selector",
+  "commit_heavy_cap_or_penalty": "commit_heavy excluded from train-only recovery table",
+  "created_at": "2026-05-31T19:06:16.627721",
+  "diagnostic_only": true,
+  "eval_instance_ids_forbidden": [
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13
+  ],
+  "eval_log_paths": [],
+  "file_hashes": {
+    "ood_feature_stats_train_csv": "f60e415d1936f550485346024cf6c7a805c87442dd704412ac50c6815f686425",
+    "recovery_csv": "70de37c25d2367d6d8d69ab156023821e5aaef2567f5cb599245b3c8e82bdf5e",
+    "source_runtime_files": {
+      "delta_head_bias.csv": "a45e57a35a76b4667a47c63b1a1fac603e5fc8082c0dc0a486bee314267e4ec5",
+      "delta_head_weight.csv": "a71a59f52837df57966741048da45e77960ffde6aeb786fc52188791b7dd26b0",
+      "features.txt": "181c4972215083db02a83fd8a931748faf20f30ab2b6a5421adffa937972f160",
+      "laur_mlp_v1_feature_stats.json": "ad8f4b8b3c8cf758738fe5bc7235986ef100640ef752f6b16923017d4b417555",
+      "laur_mlp_v1_rules.json": "4669c3913561294583db6fa1fa9155e2f13f57574ba5398b72877113fa6327ae",
+      "laur_mlp_v1_weights.json": "3a3be5f70e76c9fbdda46873b0df1b97d44a3f1db6d3cccdaf45f747d2e287ce",
+      "layer0_bias.csv": "36acf727f51097270f1c300fc14a66691a3850997996c980b528de24550b891c",
+      "layer0_weight.csv": "51681319e83f464d5f5cb3c7306444a60b976eac0fecb5de9b9c1ed6914fe280",
+      "mean.csv": "e759c75c219dff6276c91d1538c4b076027bdd92785ecd341f0644afefbca4a0",
+      "rule_head_bias.csv": "0b77a956ac47d383bd358f6fb6b8b8f6e97250f63586ccc0e11ac922c04de837",
+      "rule_head_weight.csv": "28b5f9e7b0752264c023923a5faae67b120d96d405ecbb93070bbaaf9201489e",
+      "rules.csv": "8a76595c41924b253829a567e87269ed14b03bf2d6035fce2ed7b89bb08f445a",
+      "safety_head_bias.csv": "5849727b60d6b0fb741d2829a9796d103c9705c33f0047851654f3b55f209658",
+      "safety_head_weight.csv": "79c8b60f98386d21a93e2eff98c9aedac86ab754863ba4641eecd1dc13a43fd7",
+      "std.csv": "e983b30985b874b011a371efd54a9be44b4e29c13a3ddcf264a55e15e5da0392"
+    },
+    "train_raw_jsonl": "d0009262a5aa70ea14f7e5eadffbc3505fa4f0bfbc6dc478e660cdd30a11cfdb",
+    "train_update_jsonl": "fea13edd5e7e77a0f3e2ba7ecb82ea3fd51b67d2858834bf9dd07c4d72346b6d"
+  },
+  "forbidden_eval_support_paths": [],
+  "maps": [
+    "random-32-32-20",
+    "maze-32-32-4",
+    "warehouse-10-20-10-2-1"
+  ],
+  "notes": [
+    "Uses Repair5D distilled runtime as the base scorer.",
+    "Keeps the OOD/defer guard and additive fallback.",
+    "Learns/reranks only from train-support oracle/static rows.",
+    "Does not read eval logs while creating this runtime artifact."
+  ],
+  "ood_feature_stats": {
+    "feature_count": 23,
+    "path": "artifacts\\models\\laur_ltm\\repair5e3_split_guarded_selector\\ood_feature_stats_train.csv",
+    "row_count": 804
+  },
+  "ood_stat_source": "train_support_update_logs_only",
+  "output_space": "existing_8_rules_plus_additive_defer",
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "recovery_rules": [
+    {
+      "agents": 100.0,
+      "map": "maze-32-32-4",
+      "map_height": 32.0,
+      "map_width": 32.0,
+      "obstacle_ratio_max": 0.238515625,
+      "obstacle_ratio_min": 0.218515625,
+      "rule_id": "block_light",
+      "source": "repair5e_caseb_oracle_static_support",
+      "support_better": 3,
+      "support_equal": 0,
+      "support_mean_delta": -0.01617138095666674,
+      "support_rows": 3,
+      "support_worse": 0
+    },
+    {
+      "agents": 50.0,
+      "map": "random-32-32-20",
+      "map_height": 32.0,
+      "map_width": 32.0,
+      "obstacle_ratio_max": 0.20921875,
+      "obstacle_ratio_min": 0.18921875,
+      "rule_id": "block_light",
+      "source": "repair5e_caseb_oracle_static_support",
+      "support_better": 0,
+      "support_equal": 3,
+      "support_mean_delta": 0.0,
+      "support_rows": 3,
+      "support_worse": 0
+    },
+    {
+      "agents": 100.0,
+      "map": "random-32-32-20",
+      "map_height": 32.0,
+      "map_width": 32.0,
+      "obstacle_ratio_max": 0.20921875,
+      "obstacle_ratio_min": 0.18921875,
+      "rule_id": "decay_095",
+      "source": "repair5e_caseb_oracle_static_support",
+      "support_better": 3,
+      "support_equal": 0,
+      "support_mean_delta": -0.01840053936999997,
+      "support_rows": 3,
+      "support_worse": 0
+    },
+    {
+      "agents": 50.0,
+      "map": "warehouse-10-20-10-2-1",
+      "map_height": 63.0,
+      "map_width": 161.0,
+      "obstacle_ratio_max": 0.01,
+      "obstacle_ratio_min": 0.0,
+      "rule_id": "block_light",
+      "source": "repair5e_caseb_oracle_static_support",
+      "support_better": 0,
+      "support_equal": 3,
+      "support_mean_delta": 0.0,
+      "support_rows": 3,
+      "support_worse": 0
+    },
+    {
+      "agents": 100.0,
+      "map": "warehouse-10-20-10-2-1",
+      "map_height": 63.0,
+      "map_width": 161.0,
+      "obstacle_ratio_max": 0.01,
+      "obstacle_ratio_min": 0.0,
+      "rule_id": "block_light",
+      "source": "repair5e_caseb_oracle_static_support",
+      "support_better": 0,
+      "support_equal": 3,
+      "support_mean_delta": 0.0,
+      "support_rows": 3,
+      "support_worse": 0
+    }
+  ],
+  "richer_ltm_representation": false,
+  "runtime_dir": "artifacts\\models\\laur_ltm\\repair5e3_split_guarded_selector",
+  "schema_version": "phase5p5_repair5e3_split_guarded_selector_runtime_v1",
+  "shuffled_support_ablation_manifest": {
+    "created_at": "2026-05-31T19:06:16.594496",
+    "diagnostic_only": true,
+    "notes": [
+      "Ablation only: E2 support rule ids are rotated across contexts.",
+      "This artifact is not a learned selector and must not be promoted."
+    ],
+    "phase5p5_allowed": false,
+    "phase6_allowed": false,
+    "runtime_dir": "artifacts\\models\\laur_ltm\\repair5e3_e2_shuffled_support_diagnostic",
+    "schema_version": "phase5p5_repair5e3_e2_shuffled_support_diagnostic_v1",
+    "solver_semantic_changes": false,
+    "source_recovery_csv": "artifacts\\models\\laur_ltm\\repair5e2_guarded_oracle_aligned_selector\\repair5e2_recovery_rules.csv",
+    "source_recovery_sha256": "70de37c25d2367d6d8d69ab156023821e5aaef2567f5cb599245b3c8e82bdf5e",
+    "source_runtime_dir": "artifacts\\models\\laur_ltm\\repair5e2_guarded_oracle_aligned_selector"
+  },
+  "shuffled_support_ablation_runtime_dir": "artifacts\\models\\laur_ltm\\repair5e3_e2_shuffled_support_diagnostic",
+  "solver_semantic_changes": false,
+  "source_runtime_dir": "artifacts\\models\\laur_ltm\\repair5d_composite_distilled",
+  "support_rule_distribution": {
+    "block_light": 4,
+    "decay_095": 1
+  },
+  "train_instance_ids": [
+    1,
+    2,
+    3
+  ],
+  "train_support_paths": [
+    "outputs\\logs\\phase5p5_repair5e_caseb_preflight\\phase5p5_repair5e_caseb_preflight.jsonl",
+    "outputs\\logs\\phase5p5_repair5e_caseb_preflight\\phase5p5_repair5e_caseb_preflight_laur_updates.jsonl"
+  ]
+}

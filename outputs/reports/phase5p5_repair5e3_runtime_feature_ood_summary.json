@@ -1,0 +1,311 @@
+{
+  "analyzed_rows": 149,
+  "any_one_feature_accounts_for_gt_50pct_ood_triggers": true,
+  "created_at": "2026-05-31T22:07:33.149976",
+  "diagnostic_only": true,
+  "entropy_edge_usage_ood_trigger_share": 0.0,
+  "inputs": {
+    "runtime_dir": "C:\\PROGRAMING\\czr004\\artifacts\\models\\laur_ltm\\repair5e3_split_guarded_selector",
+    "update_jsonl": "C:\\PROGRAMING\\czr004\\outputs\\logs\\phase5p5_repair5e3_preflight\\phase5p5_repair5e3_preflight_laur_updates.jsonl"
+  },
+  "methods": [
+    "repair5e3_split_guarded_selector"
+  ],
+  "missing_required_field_counts": {},
+  "notes": [
+    "Feature z-scores are recomputed from runtime_feature_names/runtime_feature_values and the runtime model stats.",
+    "If one feature dominates OOD triggers, Repair5E.2 must avoid treating that feature as a universal veto."
+  ],
+  "one_feature_dominates_ood": true,
+  "ood_trigger_rate_by_map_agents_iteration": [
+    {
+      "agents": 50,
+      "iteration": 1,
+      "map": "maze-32-32-4",
+      "ood_trigger_rate": 1.0,
+      "rows": 10
+    },
+    {
+      "agents": 50,
+      "iteration": 2,
+      "map": "maze-32-32-4",
+      "ood_trigger_rate": 1.0,
+      "rows": 10
+    },
+    {
+      "agents": 50,
+      "iteration": 3,
+      "map": "maze-32-32-4",
+      "ood_trigger_rate": 1.0,
+      "rows": 10
+    },
+    {
+      "agents": 100,
+      "iteration": 1,
+      "map": "maze-32-32-4",
+      "ood_trigger_rate": 1.0,
+      "rows": 10
+    },
+    {
+      "agents": 100,
+      "iteration": 2,
+      "map": "maze-32-32-4",
+      "ood_trigger_rate": 1.0,
+      "rows": 10
+    },
+    {
+      "agents": 100,
+      "iteration": 3,
+      "map": "maze-32-32-4",
+      "ood_trigger_rate": 1.0,
+      "rows": 10
+    },
+    {
+      "agents": 50,
+      "iteration": 1,
+      "map": "random-32-32-20",
+      "ood_trigger_rate": 1.0,
+      "rows": 10
+    },
+    {
+      "agents": 50,
+      "iteration": 2,
+      "map": "random-32-32-20",
+      "ood_trigger_rate": 1.0,
+      "rows": 10
+    },
+    {
+      "agents": 50,
+      "iteration": 3,
+      "map": "random-32-32-20",
+      "ood_trigger_rate": 1.0,
+      "rows": 10
+    },
+    {
+      "agents": 100,
+      "iteration": 1,
+      "map": "random-32-32-20",
+      "ood_trigger_rate": 1.0,
+      "rows": 10
+    },
+    {
+      "agents": 100,
+      "iteration": 2,
+      "map": "random-32-32-20",
+      "ood_trigger_rate": 1.0,
+      "rows": 10
+    },
+    {
+      "agents": 100,
+      "iteration": 3,
+      "map": "random-32-32-20",
+      "ood_trigger_rate": 1.0,
+      "rows": 10
+    },
+    {
+      "agents": 50,
+      "iteration": 1,
+      "map": "warehouse-10-20-10-2-1",
+      "ood_trigger_rate": 1.0,
+      "rows": 10
+    },
+    {
+      "agents": 50,
+      "iteration": 2,
+      "map": "warehouse-10-20-10-2-1",
+      "ood_trigger_rate": 1.0,
+      "rows": 9
+    },
+    {
+      "agents": 100,
+      "iteration": 1,
+      "map": "warehouse-10-20-10-2-1",
+      "ood_trigger_rate": 1.0,
+      "rows": 10
+    }
+  ],
+  "outputs": {
+    "report": "C:\\PROGRAMING\\czr004\\outputs\\reports\\phase5p5_repair5e3_runtime_feature_ood_report.md",
+    "rows_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase5p5_repair5e3_runtime_feature_ood_rows.csv",
+    "summary_json": "C:\\PROGRAMING\\czr004\\outputs\\reports\\phase5p5_repair5e3_runtime_feature_ood_summary.json"
+  },
+  "per_feature": {
+    "agents": {
+      "max_abs_z": 1.030309886169429,
+      "mean_abs_z": 0.998641962423729,
+      "raw_mean": 73.48993288590604,
+      "raw_std": 24.954352271917056,
+      "rows": 149
+    },
+    "best_ratio_before": {
+      "max_abs_z": 1.1422914328525613,
+      "mean_abs_z": 0.6727697625977735,
+      "raw_mean": 1.2198812073044296,
+      "raw_std": 0.10185059646428798,
+      "rows": 149
+    },
+    "blocked_count": {
+      "max_abs_z": 2509.0,
+      "mean_abs_z": 523.4563758389262,
+      "raw_mean": 523.4563758389262,
+      "raw_std": 538.7195418222991,
+      "rows": 149
+    },
+    "blocked_per_agent": {
+      "max_abs_z": 25.09,
+      "mean_abs_z": 6.392684563758389,
+      "raw_mean": 6.392684563758389,
+      "raw_std": 5.259498870005319,
+      "rows": 149
+    },
+    "blocked_per_committed": {
+      "max_abs_z": 0.206115702479,
+      "mean_abs_z": 0.060248063931754026,
+      "raw_mean": 0.060248063931754026,
+      "raw_std": 0.03950591389616994,
+      "rows": 149
+    },
+    "committed_count": {
+      "max_abs_z": 126300.0,
+      "mean_abs_z": 8750.335570469799,
+      "raw_mean": 8750.335570469799,
+      "raw_std": 15136.613347964654,
+      "rows": 149
+    },
+    "committed_per_agent": {
+      "max_abs_z": 1263.0,
+      "mean_abs_z": 110.1006711409396,
+      "raw_mean": 110.1006711409396,
+      "raw_std": 150.13017818624652,
+      "rows": 149
+    },
+    "density": {
+      "max_abs_z": 1.4415307486807447,
+      "mean_abs_z": 0.8215338892165375,
+      "raw_mean": 0.07740183435103591,
+      "raw_std": 0.04271079902744789,
+      "rows": 149
+    },
+    "entropy_edge_usage": {
+      "max_abs_z": 7.84572594715,
+      "mean_abs_z": 5.7995420884333555,
+      "raw_mean": 5.7995420884333555,
+      "raw_std": 2.304469082712511,
+      "rows": 149
+    },
+    "free_cells": {
+      "max_abs_z": 0.7202058762233511,
+      "mean_abs_z": 0.5728278652121861,
+      "raw_mean": 1757.1208053691275,
+      "raw_std": 1937.855892969374,
+      "rows": 149
+    },
+    "goal_wait_ignored_count": {
+      "max_abs_z": 117237.0,
+      "mean_abs_z": 5950.3892617449665,
+      "raw_mean": 5950.3892617449665,
+      "raw_std": 14047.779930986066,
+      "rows": 149
+    },
+    "has_solution_before": {
+      "max_abs_z": 0.6407232755171873,
+      "mean_abs_z": 0.6407232755171873,
+      "raw_mean": 1.0,
+      "raw_std": 0.0,
+      "rows": 149
+    },
+    "improved_last_iteration": {
+      "max_abs_z": 1.0,
+      "mean_abs_z": 0.2348993288590604,
+      "raw_mean": 0.2348993288590604,
+      "raw_std": 0.4239358844927183,
+      "rows": 149
+    },
+    "iteration": {
+      "max_abs_z": 1.5404817280437924,
+      "mean_abs_z": 0.736995866848453,
+      "raw_mean": 1.8657718120805369,
+      "raw_std": 0.80816070998606,
+      "rows": 149
+    },
+    "map_height": {
+      "max_abs_z": 1.8618986725025257,
+      "mean_abs_z": 0.7949355715847127,
+      "raw_mean": 38.033557046979865,
+      "raw_std": 12.273404491713595,
+      "rows": 149
+    },
+    "map_width": {
+      "max_abs_z": 1.8618986725025255,
+      "mean_abs_z": 0.7949355715847127,
+      "raw_mean": 57.10738255033557,
+      "raw_std": 51.0731993364856,
+      "rows": 149
+    },
+    "max_raw_before": {
+      "max_abs_z": 501.0,
+      "mean_abs_z": 50.61744966442953,
+      "raw_mean": 50.61744966442953,
+      "raw_std": 69.02179378759192,
+      "rows": 149
+    },
+    "nonzero_edges_before": {
+      "max_abs_z": 6162.0,
+      "mean_abs_z": 2272.1275167785234,
+      "raw_mean": 2272.1275167785234,
+      "raw_std": 1464.4777216339926,
+      "rows": 149
+    },
+    "obstacle_ratio": {
+      "max_abs_z": 3.0212426754946757,
+      "mean_abs_z": 1.0204833539816913,
+      "raw_mean": 0.2579098107425503,
+      "raw_std": 0.08950452458259614,
+      "rows": 149
+    },
+    "returned_solutions_count_so_far": {
+      "max_abs_z": 0.0,
+      "mean_abs_z": 0.0,
+      "raw_mean": 1.0,
+      "raw_std": 0.0,
+      "rows": 149
+    },
+    "wait_event_count": {
+      "max_abs_z": 1262.0,
+      "mean_abs_z": 226.80536912751677,
+      "raw_mean": 226.80536912751677,
+      "raw_std": 237.4426579410251,
+      "rows": 149
+    },
+    "wait_per_committed": {
+      "max_abs_z": 0.0853719008264,
+      "mean_abs_z": 0.0256120852611798,
+      "raw_mean": 0.0256120852611798,
+      "raw_std": 0.016606076727608426,
+      "rows": 149
+    },
+    "weight_entropy": {
+      "max_abs_z": 8.48993308133,
+      "mean_abs_z": 7.202171212261208,
+      "raw_mean": 7.202171212261208,
+      "raw_std": 0.5862455405068882,
+      "rows": 149
+    }
+  },
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "rows_with_full_runtime_features": 149,
+  "rule_before_after_source_counts": {
+    "commit_heavy->additive_ltm:ood_guard": 146,
+    "wait_light->additive_ltm:ood_guard": 3
+  },
+  "runtime_dir": "C:\\PROGRAMING\\czr004\\artifacts\\models\\laur_ltm\\repair5e3_split_guarded_selector",
+  "schema_version": "phase5p5_repair5e2_runtime_feature_ood_v1",
+  "top_features_triggering_ood": {
+    "committed_count": 129,
+    "nonzero_edges_before": 20
+  },
+  "top_ood_trigger_feature": "committed_count",
+  "top_ood_trigger_share": 0.8657718120805369,
+  "update_rows": 2716
+}

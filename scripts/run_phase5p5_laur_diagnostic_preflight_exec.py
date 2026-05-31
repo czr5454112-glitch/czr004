@@ -47,6 +47,8 @@ DEFAULT_REPAIR5D_SPEC = "outputs/reports/phase4f_repair5d_best_composite_spec.js
 DEFAULT_REPAIR5D_RUNTIME = "artifacts/models/laur_ltm/repair5d_composite_distilled"
 DEFAULT_REPAIR5E_OOD_GUARD_RUNTIME = "artifacts/models/laur_ltm/repair5d_composite_distilled_ood_guard"
 DEFAULT_REPAIR5E2_RUNTIME = "artifacts/models/laur_ltm/repair5e2_guarded_oracle_aligned_selector"
+DEFAULT_REPAIR5E3_RUNTIME = "artifacts/models/laur_ltm/repair5e3_split_guarded_selector"
+DEFAULT_REPAIR5E3_E2_SHUFFLED_RUNTIME = "artifacts/models/laur_ltm/repair5e3_e2_shuffled_support_diagnostic"
 DEFAULT_ORACLE_SUMMARY_JSON = "outputs/reports/phase5p5_oracle_update_preflight_summary.json"
 DEFAULT_ORACLE_REPORT = "outputs/reports/phase5p5_oracle_update_preflight_report.md"
 
@@ -176,12 +178,17 @@ def build_methods(
     repair5d_runtime: Path | None,
     repair5e_ood_guard_runtime: Path | None,
     repair5e2_runtime: Path | None = None,
+    repair5e3_runtime: Path | None = None,
+    repair5e3_e2_shuffled_runtime: Path | None = None,
     include_static_proxies: bool,
     include_oracle_static_probe: bool,
     include_ood_guard_candidate: bool = False,
     include_repair5e2_candidate: bool = False,
+    include_repair5e3_candidate: bool = False,
+    include_repair5e3_e2_ablation_candidates: bool = False,
     ood_guard_z_threshold: float = 5.0,
     repair5e2_ood_guard_z_threshold: float = 5.0,
+    repair5e3_ood_guard_z_threshold: float = 5.0,
 ) -> tuple[list[MethodSpec], list[dict[str, Any]]]:
     methods = [
         MethodSpec("lacam_star", "lacam_star"),
@@ -309,6 +316,91 @@ def build_methods(
             }
         )
 
+    if include_repair5e3_candidate and repair5e3_runtime is not None:
+        methods.extend(
+            [
+                MethodSpec(
+                    "lacam_star_lau_ltm",
+                    "repair5e3_split_guarded_selector",
+                    (
+                        "--laur-model-path",
+                        str(repair5e3_runtime),
+                        "--laur-safety-threshold",
+                        "0.30",
+                        "--laur-ood-z-threshold",
+                        str(float(repair5e3_ood_guard_z_threshold)),
+                    ),
+                    "Repair5E.3 train-only split guarded selector, diagnostic only",
+                ),
+                MethodSpec(
+                    "lacam_star_lau_ltm",
+                    "repair5e3_split_guarded_selector_force_additive_parity",
+                    (
+                        "--laur-force-additive",
+                        "--laur-model-path",
+                        str(repair5e3_runtime),
+                        "--laur-ood-z-threshold",
+                        str(float(repair5e3_ood_guard_z_threshold)),
+                    ),
+                    "Repair5E.3 runtime path with forced additive/defer parity",
+                ),
+            ]
+        )
+    elif include_repair5e3_candidate:
+        skipped.append(
+            {
+                "method": "repair5e3_split_guarded_selector",
+                "reason": "runtime_model_unavailable",
+            }
+        )
+
+    if include_repair5e3_e2_ablation_candidates and repair5e2_runtime is not None:
+        methods.append(
+            MethodSpec(
+                "lacam_star_lau_ltm",
+                "repair5e3_e2_recovery_disabled_parity",
+                (
+                    "--laur-force-additive",
+                    "--laur-model-path",
+                    str(repair5e2_runtime),
+                    "--laur-ood-z-threshold",
+                    str(float(repair5e2_ood_guard_z_threshold)),
+                ),
+                "Repair5E.3 ablation: disable E2 recovery by forcing additive/defer parity",
+            )
+        )
+    elif include_repair5e3_e2_ablation_candidates:
+        skipped.append(
+            {
+                "method": "repair5e3_e2_recovery_disabled_parity",
+                "reason": "repair5e2_runtime_model_unavailable",
+            }
+        )
+
+    if include_repair5e3_e2_ablation_candidates and repair5e3_e2_shuffled_runtime is not None:
+        methods.append(
+            MethodSpec(
+                "lacam_star_lau_ltm",
+                "repair5e3_e2_recovery_shuffled_support_diagnostic",
+                (
+                    "--laur-model-path",
+                    str(repair5e3_e2_shuffled_runtime),
+                    "--laur-safety-threshold",
+                    "0.30",
+                    "--laur-ood-z-threshold",
+                    str(float(repair5e2_ood_guard_z_threshold)),
+                ),
+                "Repair5E.3 ablation: shuffled E2 support table diagnostic",
+            )
+        )
+    elif include_repair5e3_e2_ablation_candidates:
+        skipped.append(
+            {
+                "method": "repair5e3_e2_recovery_shuffled_support_diagnostic",
+                "reason": "shuffled_runtime_model_unavailable",
+            }
+        )
+
     if include_static_proxies:
         for rule in ("block_heavy", "wait_light", "decay_095"):
             methods.append(
@@ -355,7 +447,7 @@ def run_solver_grid(
     command_log: Path,
     maps: list[str],
     agent_counts: list[int],
-    instances_per_setting: int,
+    instance_ids: list[int],
     time_limit_sec: float,
     ltm_max_iterations: int,
     scenario_dir: Path,
@@ -368,7 +460,7 @@ def run_solver_grid(
         map_path = root / MAPS[map_name]
         if not map_path.exists():
             raise FileNotFoundError(f"missing map path {map_path}")
-        for instance_id in range(1, int(instances_per_setting) + 1):
+        for instance_id in instance_ids:
             scen_path = scenario_dir / f"{map_name}-random-{instance_id}.scen"
             if not scen_path.exists():
                 raise FileNotFoundError(f"missing scenario path {scen_path}")
@@ -639,18 +731,63 @@ def paired_method_stats(paired: list[dict[str, Any]]) -> dict[str, dict[str, Any
     return out
 
 
-def decision_table_interpretation(method_stats: dict[str, dict[str, Any]]) -> dict[str, Any]:
-    repair5d = method_stats.get("repair5d_composite_diagnostic_distilled", {})
+def decision_table_interpretation(
+    method_stats: dict[str, dict[str, Any]],
+    method_flags: dict[str, dict[str, Any]] | None = None,
+) -> dict[str, Any]:
+    method_flags = method_flags or {}
+
+    def clean_positive(method: str) -> bool:
+        stats = method_stats.get(method, {})
+        flags = method_flags.get(method, {})
+        return (
+            stats.get("mean_delta_ratio_vs_ltm") is not None
+            and float(stats["mean_delta_ratio_vs_ltm"]) < 0.0
+            and int(stats.get("better") or 0) > int(stats.get("worse") or 0)
+            and int(flags.get("success_worse_than_ltm_groups") or 0) == 0
+            and int(flags.get("ratio_worse_than_ltm_groups") or 0) <= 1
+        )
+
     oracle = method_stats.get("oracle_teacher_forced_best_safe_update_static_proxy", {})
-    repair5d_positive = (
-        repair5d.get("mean_delta_ratio_vs_ltm") is not None
-        and float(repair5d["mean_delta_ratio_vs_ltm"]) <= 0.0
-        and int(repair5d.get("worse") or 0) <= int(repair5d.get("better") or 0)
-    )
     oracle_positive = (
         oracle.get("mean_delta_ratio_vs_ltm") is not None
         and float(oracle["mean_delta_ratio_vs_ltm"]) < 0.0
         and int(oracle.get("better") or 0) > int(oracle.get("worse") or 0)
+    )
+    has_e3 = "repair5e3_split_guarded_selector" in method_stats
+    if has_e3:
+        e3_positive = clean_positive("repair5e3_split_guarded_selector")
+        e2_positive = clean_positive("repair5e2_guarded_oracle_aligned_selector")
+        if e3_positive:
+            case = "A"
+            action = "larger_multi_map_validation_then_phase5p5_runtime_export_design"
+        elif e2_positive:
+            case = "B"
+            action = "improve_utility_or_ranking_labels_do_not_jump_to_delta_updateparams"
+        elif "repair5e2_guarded_oracle_aligned_selector" in method_stats:
+            case = "C"
+            action = "treat_e2_as_same_scope_oracle_support_overfit_train_better_selector_do_not_promote"
+        elif oracle_positive:
+            case = "D"
+            action = "open_repair5f_discussion_bounded_delta_updateparams_or_richer_ltm_representation"
+        else:
+            case = "C"
+            action = "do_not_promote_rebuild_train_eval_selector_evidence"
+        return {
+            "case": case,
+            "recommended_action": action,
+            "repair5e2_survives_heldout": e2_positive,
+            "repair5e3_split_selector_positive": e3_positive,
+            "oracle_positive": oracle_positive,
+            "phase5p5_allowed": False,
+            "phase6_allowed": False,
+        }
+
+    repair5d = method_stats.get("repair5d_composite_diagnostic_distilled", {})
+    repair5d_positive = (
+        repair5d.get("mean_delta_ratio_vs_ltm") is not None
+        and float(repair5d["mean_delta_ratio_vs_ltm"]) <= 0.0
+        and int(repair5d.get("worse") or 0) <= int(repair5d.get("better") or 0)
     )
     if repair5d_positive and oracle_positive:
         case = "A"
@@ -742,6 +879,11 @@ def write_report(path: Path, *, summary: dict[str, Any]) -> None:
         handle.write(f"- raw JSONL: `{summary.get('raw_jsonl')}`\n")
         handle.write(f"- LAUR update log JSONL: `{summary.get('laur_update_log_jsonl')}`\n")
         handle.write(f"- command log: `{summary.get('command_log_jsonl')}`\n\n")
+        handle.write("## Provenance\n\n")
+        handle.write(f"- git branch: `{summary.get('branch')}`\n")
+        handle.write(f"- git commit: `{summary.get('commit')}`\n")
+        handle.write(f"- git dirty state: `{summary.get('dirty')}`\n")
+        handle.write(f"- clean tracked worktree: `{summary.get('clean_tracked_worktree')}`\n\n")
 
         handle.write("## Scope\n\n")
         scope = summary.get("scope", {})
@@ -811,17 +953,47 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--repair5d-runtime-dir", type=Path, default=Path(DEFAULT_REPAIR5D_RUNTIME))
     parser.add_argument("--repair5e-ood-guard-runtime-dir", type=Path, default=Path(DEFAULT_REPAIR5E_OOD_GUARD_RUNTIME))
     parser.add_argument("--repair5e2-runtime-dir", type=Path, default=Path(DEFAULT_REPAIR5E2_RUNTIME))
+    parser.add_argument("--repair5e3-runtime-dir", type=Path, default=Path(DEFAULT_REPAIR5E3_RUNTIME))
+    parser.add_argument(
+        "--repair5e3-e2-shuffled-runtime-dir",
+        type=Path,
+        default=Path(DEFAULT_REPAIR5E3_E2_SHUFFLED_RUNTIME),
+    )
     parser.add_argument("--maps", nargs="+", choices=sorted(MAPS), default=list(MAPS))
     parser.add_argument("--agent-counts", nargs="+", type=int, default=[50, 100])
     parser.add_argument("--instances-per-setting", type=int, default=3)
+    parser.add_argument(
+        "--instance-start",
+        type=int,
+        default=1,
+        help="First scenario instance id when --instance-ids is not supplied.",
+    )
+    parser.add_argument(
+        "--instance-ids",
+        nargs="+",
+        type=int,
+        help="Explicit scenario instance ids for held-out/train split validation.",
+    )
     parser.add_argument("--time-limit-sec", type=float, default=3.0)
     parser.add_argument("--ltm-max-iterations", type=int, default=4)
     parser.add_argument("--include-static-proxies", action="store_true")
     parser.add_argument("--include-oracle-static-probe", action="store_true")
     parser.add_argument("--include-ood-guard-candidate", action="store_true")
     parser.add_argument("--include-repair5e2-candidate", action="store_true")
+    parser.add_argument("--include-repair5e3-candidate", action="store_true")
+    parser.add_argument("--include-repair5e3-e2-ablation-candidates", action="store_true")
+    parser.add_argument(
+        "--only-method-aliases",
+        nargs="+",
+        help=(
+            "Restrict execution and summarization to specific report aliases. "
+            "If oracle_teacher_forced_best_safe_update_static_proxy is listed, "
+            "the hidden oracle_probe_static_* support rows are retained."
+        ),
+    )
     parser.add_argument("--ood-guard-z-threshold", type=float, default=5.0)
     parser.add_argument("--repair5e2-ood-guard-z-threshold", type=float, default=5.0)
+    parser.add_argument("--repair5e3-ood-guard-z-threshold", type=float, default=5.0)
     parser.add_argument("--skip-solver", action="store_true", help="Only summarize an existing --output-jsonl.")
     return parser.parse_args(argv)
 
@@ -844,6 +1016,8 @@ def main(argv: list[str] | None = None) -> int:
     repair5d_runtime_dir = resolve_path(args.repair5d_runtime_dir, root)
     repair5e_ood_guard_runtime_dir = resolve_path(args.repair5e_ood_guard_runtime_dir, root)
     repair5e2_runtime_dir = resolve_path(args.repair5e2_runtime_dir, root)
+    repair5e3_runtime_dir = resolve_path(args.repair5e3_runtime_dir, root)
+    repair5e3_e2_shuffled_runtime_dir = resolve_path(args.repair5e3_e2_shuffled_runtime_dir, root)
     if None in (
         binary,
         scenario_dir,
@@ -860,13 +1034,15 @@ def main(argv: list[str] | None = None) -> int:
         repair5d_runtime_dir,
         repair5e_ood_guard_runtime_dir,
         repair5e2_runtime_dir,
+        repair5e3_runtime_dir,
+        repair5e3_e2_shuffled_runtime_dir,
     ):
         raise ValueError("required paths could not be resolved")
     assert binary and scenario_dir and output_dir and summary_json and summary_csv and paired_csv and report
     assert oracle_summary_json and oracle_report
     assert repair3_weights and repair3_runtime_dir
     assert repair5d_spec_json and repair5d_runtime_dir and repair5e_ood_guard_runtime_dir
-    assert repair5e2_runtime_dir
+    assert repair5e2_runtime_dir and repair5e3_runtime_dir and repair5e3_e2_shuffled_runtime_dir
 
     output_dir.mkdir(parents=True, exist_ok=True)
     output_jsonl = resolve_path(args.output_jsonl, root) if args.output_jsonl else _jsonl_name(output_dir)
@@ -899,6 +1075,18 @@ def main(argv: list[str] | None = None) -> int:
         and (repair5e2_runtime_dir / "repair5e2_recovery_rules.csv").exists()
         else None
     )
+    repair5e3_runtime = (
+        repair5e3_runtime_dir
+        if all((repair5e3_runtime_dir / name).exists() for name in required_runtime_files)
+        and (repair5e3_runtime_dir / "repair5e2_recovery_rules.csv").exists()
+        else None
+    )
+    repair5e3_e2_shuffled_runtime = (
+        repair5e3_e2_shuffled_runtime_dir
+        if all((repair5e3_e2_shuffled_runtime_dir / name).exists() for name in required_runtime_files)
+        and (repair5e3_e2_shuffled_runtime_dir / "repair5e2_recovery_rules.csv").exists()
+        else None
+    )
     methods, skipped_methods = build_methods(
         root=root,
         additive_model=additive_model,
@@ -906,13 +1094,26 @@ def main(argv: list[str] | None = None) -> int:
         repair5d_runtime=repair5d_runtime,
         repair5e_ood_guard_runtime=repair5e_ood_guard_runtime,
         repair5e2_runtime=repair5e2_runtime,
+        repair5e3_runtime=repair5e3_runtime,
+        repair5e3_e2_shuffled_runtime=repair5e3_e2_shuffled_runtime,
         include_static_proxies=bool(args.include_static_proxies),
         include_oracle_static_probe=bool(args.include_oracle_static_probe),
         include_ood_guard_candidate=bool(args.include_ood_guard_candidate),
         include_repair5e2_candidate=bool(args.include_repair5e2_candidate),
+        include_repair5e3_candidate=bool(args.include_repair5e3_candidate),
+        include_repair5e3_e2_ablation_candidates=bool(args.include_repair5e3_e2_ablation_candidates),
         ood_guard_z_threshold=float(args.ood_guard_z_threshold),
         repair5e2_ood_guard_z_threshold=float(args.repair5e2_ood_guard_z_threshold),
+        repair5e3_ood_guard_z_threshold=float(args.repair5e3_ood_guard_z_threshold),
     )
+    only_aliases = set(args.only_method_aliases or [])
+    oracle_requested_by_filter = "oracle_teacher_forced_best_safe_update_static_proxy" in only_aliases
+    if only_aliases:
+        methods = [
+            method
+            for method in methods
+            if method.alias in only_aliases or (oracle_requested_by_filter and method.hide_from_report)
+        ]
     skipped_methods.append({"method": "repair3_runtime_export", "reason": repair3_status})
     skipped_methods.append(
         {
@@ -938,6 +1139,24 @@ def main(argv: list[str] | None = None) -> int:
             "reason": "available" if repair5e2_runtime is not None else "missing_runtime_dir_or_required_files",
         }
     )
+    skipped_methods.append(
+        {
+            "method": "repair5e3_split_guarded_selector_runtime",
+            "reason": "available" if repair5e3_runtime is not None else "missing_runtime_dir_or_required_files",
+        }
+    )
+    skipped_methods.append(
+        {
+            "method": "repair5e3_e2_shuffled_support_diagnostic_runtime",
+            "reason": "available" if repair5e3_e2_shuffled_runtime is not None else "missing_runtime_dir_or_required_files",
+        }
+    )
+
+    instance_ids = (
+        [int(value) for value in args.instance_ids]
+        if args.instance_ids
+        else list(range(int(args.instance_start), int(args.instance_start) + int(args.instances_per_setting)))
+    )
 
     if not args.skip_solver:
         if not binary.exists():
@@ -951,7 +1170,7 @@ def main(argv: list[str] | None = None) -> int:
             command_log=command_log,
             maps=list(args.maps),
             agent_counts=[int(value) for value in args.agent_counts],
-            instances_per_setting=int(args.instances_per_setting),
+            instance_ids=instance_ids,
             time_limit_sec=float(args.time_limit_sec),
             ltm_max_iterations=int(args.ltm_max_iterations),
             scenario_dir=scenario_dir,
@@ -961,6 +1180,13 @@ def main(argv: list[str] | None = None) -> int:
 
     raw_rows = _read_jsonl(output_jsonl)
     normalized_rows = [normalize_run_row(row) for row in raw_rows]
+    if only_aliases:
+        allowed_raw_aliases = set(only_aliases)
+        if oracle_requested_by_filter:
+            allowed_raw_aliases.update(f"oracle_probe_static_{rule}" for rule in ORACLE_STATIC_RULES)
+        normalized_rows = [
+            row for row in normalized_rows if str(row.get("method", "")) in allowed_raw_aliases
+        ]
     schema_errors: list[str] = []
     for index, row in enumerate(normalized_rows, 1):
         schema_errors.extend(f"row {index}: {error}" for error in validate_run_row(row))
@@ -969,7 +1195,11 @@ def main(argv: list[str] | None = None) -> int:
     summary_rows = add_ltm_group_deltas(summarize_rows(report_rows))
     paired = paired_rows(report_rows)
     method_stats = paired_method_stats(paired)
-    decision_interpretation = decision_table_interpretation(method_stats)
+    stop_conditions = stop_condition_snapshot(summary_rows, paired)
+    decision_interpretation = decision_table_interpretation(
+        method_stats,
+        stop_conditions.get("method_flags", {}),
+    )
     oracle_summary = {
         "schema_version": "phase5p5_oracle_update_preflight_v1",
         "created_at": datetime.now().isoformat(),
@@ -988,6 +1218,7 @@ def main(argv: list[str] | None = None) -> int:
         "branch": git_value(["branch", "--show-current"], root),
         "commit": git_value(["rev-parse", "--short", "HEAD"], root),
         "dirty": dirty_state(root),
+        "clean_tracked_worktree": dirty_state(root) in {"clean", "untracked-present"},
         "phase5p5_allowed": False,
         "phase6_allowed": False,
         "raw_jsonl": str(output_jsonl),
@@ -1002,6 +1233,7 @@ def main(argv: list[str] | None = None) -> int:
             "maps": list(args.maps),
             "agent_counts": [int(value) for value in args.agent_counts],
             "instances_per_setting": int(args.instances_per_setting),
+            "instance_ids": instance_ids,
             "time_limit_sec": float(args.time_limit_sec),
             "ltm_max_iterations": int(args.ltm_max_iterations),
             "methods": [method.alias for method in methods if not method.hide_from_report]
@@ -1014,7 +1246,7 @@ def main(argv: list[str] | None = None) -> int:
         "decision_table_interpretation": decision_interpretation,
         "summary_rows": summary_rows,
         "paired_row_count": len(paired),
-        "stop_conditions": stop_condition_snapshot(summary_rows, paired),
+        "stop_conditions": stop_conditions,
     }
     _write_csv(
         summary_csv,

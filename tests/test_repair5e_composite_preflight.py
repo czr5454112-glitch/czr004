@@ -25,6 +25,7 @@ from analyze_repair5e2_runtime_feature_ood import (  # noqa: E402
     REQUIRED_UPDATE_LOG_FIELDS,
     analyze_rows,
 )
+from audit_repair5e3_oracle_support_leakage import audit_leakage  # noqa: E402
 
 
 def _best_grid_row(tmp_path: Path) -> dict:
@@ -212,6 +213,40 @@ def test_repair5e2_guarded_selector_candidate_is_wired(tmp_path: Path) -> None:
     assert not any(row["method"] == "repair5e2_guarded_oracle_aligned_selector" for row in skipped)
 
 
+def test_repair5e3_split_selector_and_ablation_candidates_are_wired(tmp_path: Path) -> None:
+    methods, skipped = build_methods(
+        root=ROOT,
+        additive_model=tmp_path / "additive",
+        repair3_runtime=None,
+        repair5d_runtime=None,
+        repair5e_ood_guard_runtime=None,
+        repair5e2_runtime=tmp_path / "repair5e2_runtime",
+        repair5e3_runtime=tmp_path / "repair5e3_runtime",
+        repair5e3_e2_shuffled_runtime=tmp_path / "repair5e3_shuffled",
+        include_static_proxies=False,
+        include_oracle_static_probe=False,
+        include_repair5e3_candidate=True,
+        include_repair5e3_e2_ablation_candidates=True,
+        repair5e3_ood_guard_z_threshold=4.0,
+    )
+
+    by_alias = {method.alias: method for method in methods}
+    guarded = by_alias["repair5e3_split_guarded_selector"]
+    assert "--laur-model-path" in guarded.extra_args
+    assert "--laur-ood-z-threshold" in guarded.extra_args
+    assert "4.0" in guarded.extra_args
+
+    parity = by_alias["repair5e3_split_guarded_selector_force_additive_parity"]
+    assert "--laur-force-additive" in parity.extra_args
+
+    disabled = by_alias["repair5e3_e2_recovery_disabled_parity"]
+    assert "--laur-force-additive" in disabled.extra_args
+
+    shuffled = by_alias["repair5e3_e2_recovery_shuffled_support_diagnostic"]
+    assert "--laur-model-path" in shuffled.extra_args
+    assert not any(row["method"] == "repair5e3_split_guarded_selector" for row in skipped)
+
+
 def test_repair5e2_update_log_runtime_feature_fields_are_analyzable(tmp_path: Path) -> None:
     runtime_dir = tmp_path / "runtime"
     runtime_dir.mkdir()
@@ -251,3 +286,55 @@ def test_repair5e2_update_log_runtime_feature_fields_are_analyzable(tmp_path: Pa
     assert summary["missing_required_field_counts"] == {}
     assert details[0]["top_feature_by_abs_z"] == "entropy_edge_usage"
     assert summary["rule_before_after_source_counts"]["commit_heavy->additive_ltm:ood_guard"] == 1
+
+
+def test_repair5e3_auditor_catches_overlapping_support_and_eval_paths(tmp_path: Path) -> None:
+    eval_jsonl = tmp_path / "eval.jsonl"
+    eval_jsonl.write_text(
+        json.dumps({"method": "lacam_star_ltm", "map": "random-32-32-20", "agents": 50, "seed": 4}) + "\n",
+        encoding="utf-8",
+    )
+    manifest = tmp_path / "manifest.json"
+    manifest.write_text(
+        json.dumps(
+            {
+                "train_support_paths": [str(eval_jsonl)],
+                "train_instance_ids": [4],
+                "maps": ["random-32-32-20"],
+                "agent_counts": [50],
+                "recovery_rules": [
+                    {
+                        "map": "random-32-32-20",
+                        "agents": 50,
+                        "rule_id": "block_light",
+                        "support_rows": 1,
+                        "support_better": 1,
+                        "support_equal": 0,
+                        "support_worse": 0,
+                    }
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    support_csv = tmp_path / "repair5e2_recovery_rules.csv"
+    support_csv.write_text(
+        "map_width,map_height,obstacle_ratio_min,obstacle_ratio_max,agents,rule_id,support_mean_delta,support_rows,source\n"
+        "32,32,0.1,0.2,50,block_light,-0.1,1,test\n",
+        encoding="utf-8",
+    )
+
+    summary, provenance = audit_leakage(
+        root=tmp_path,
+        runtime_dir=tmp_path,
+        manifest_path=manifest,
+        support_csv=support_csv,
+        eval_jsonl_paths=[eval_jsonl],
+        preflight_summary_paths=[],
+    )
+
+    assert summary["leakage_detected"] is True
+    assert summary["eval_raw_jsonl_paths_appear_in_train_support_metadata"] is True
+    assert summary["support_eval_instance_overlap_count"] == 1
+    assert "git_head_sha" in provenance
+    assert "runtime_manifest_sha256" in provenance

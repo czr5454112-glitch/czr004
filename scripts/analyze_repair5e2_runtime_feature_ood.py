@@ -84,6 +84,23 @@ def read_vector_csv(path: Path) -> list[float]:
     return out
 
 
+def read_stat_overrides(path: Path) -> dict[str, tuple[float, float]]:
+    if not path.exists():
+        return {}
+    out: dict[str, tuple[float, float]] = {}
+    with path.open("r", encoding="utf-8", newline="") as handle:
+        reader = csv.DictReader(handle)
+        for row in reader:
+            name = str(row.get("feature_name", "")).strip()
+            if not name:
+                continue
+            stdev = finite(row.get("std", row.get("stdev")), 1.0)
+            if abs(stdev) <= 1.0e-12:
+                stdev = 1.0
+            out[name] = (finite(row.get("mean"), 0.0), stdev)
+    return out
+
+
 def write_csv(path: Path, rows: list[dict[str, Any]], fields: list[str]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8", newline="") as handle:
@@ -98,7 +115,19 @@ def runtime_stats(runtime_dir: Path) -> tuple[list[str], list[float], list[float
         for line in (runtime_dir / "features.txt").read_text(encoding="utf-8").splitlines()
         if line.strip()
     ]
-    return names, read_vector_csv(runtime_dir / "mean.csv"), read_vector_csv(runtime_dir / "std.csv")
+    means = read_vector_csv(runtime_dir / "mean.csv")
+    stds = read_vector_csv(runtime_dir / "std.csv")
+    overrides = read_stat_overrides(runtime_dir / "ood_feature_stats_override.csv")
+    for index, name in enumerate(names):
+        override = overrides.get(name)
+        if override is None:
+            continue
+        while len(means) <= index:
+            means.append(0.0)
+        while len(stds) <= index:
+            stds.append(1.0)
+        means[index], stds[index] = override
+    return names, means, stds
 
 
 def row_features(row: dict[str, Any]) -> dict[str, float]:
@@ -209,6 +238,8 @@ def analyze_rows(
     ]
     total_ood = sum(top_ood_features.values())
     entropy_ood = top_ood_features.get("entropy_edge_usage", 0)
+    top_ood_feature, top_ood_count = top_ood_features.most_common(1)[0] if top_ood_features else ("", 0)
+    top_ood_share = top_ood_count / total_ood if total_ood else 0.0
     summary = {
         "schema_version": "phase5p5_repair5e2_runtime_feature_ood_v1",
         "created_at": datetime.now().isoformat(),
@@ -223,8 +254,11 @@ def analyze_rows(
         "missing_required_field_counts": dict(sorted(missing_fields.items())),
         "per_feature": per_feature,
         "top_features_triggering_ood": dict(top_ood_features.most_common()),
+        "top_ood_trigger_feature": top_ood_feature,
+        "top_ood_trigger_share": top_ood_share,
         "entropy_edge_usage_ood_trigger_share": entropy_ood / total_ood if total_ood else 0.0,
-        "one_feature_dominates_ood": (entropy_ood / total_ood >= 0.8) if total_ood else False,
+        "any_one_feature_accounts_for_gt_50pct_ood_triggers": top_ood_share > 0.5,
+        "one_feature_dominates_ood": top_ood_share > 0.5,
         "rule_before_after_source_counts": {
             f"{before}->{after}:{source}": count
             for (before, after, source), count in sorted(rule_transitions.items())
@@ -255,8 +289,12 @@ def write_report(path: Path, summary: dict[str, Any]) -> None:
         handle.write(f"- rows with full runtime features: `{summary.get('rows_with_full_runtime_features')}`\n")
         handle.write(f"- missing required fields: `{summary.get('missing_required_field_counts')}`\n")
         handle.write(f"- top OOD trigger features: `{summary.get('top_features_triggering_ood')}`\n")
+        handle.write(f"- top OOD trigger share: `{summary.get('top_ood_trigger_share')}`\n")
         handle.write(f"- entropy_edge_usage OOD trigger share: `{summary.get('entropy_edge_usage_ood_trigger_share')}`\n")
-        handle.write(f"- one feature dominates OOD: `{summary.get('one_feature_dominates_ood')}`\n\n")
+        handle.write(
+            "- any one feature accounts for >50% of OOD triggers: "
+            f"`{summary.get('any_one_feature_accounts_for_gt_50pct_ood_triggers')}`\n\n"
+        )
         handle.write("## Top Feature Z-Scores\n\n")
         handle.write("| feature | rows | max abs z | mean abs z | raw mean | raw std |\n")
         handle.write("|---|---:|---:|---:|---:|---:|\n")

@@ -1,0 +1,6 @@
+map_width,map_height,obstacle_ratio_min,obstacle_ratio_max,agents,rule_id,support_mean_delta,support_rows,source
+32.0,32.0,0.218515625,0.238515625,100.0,block_light,-0.01617138095666674,3,repair5e_caseb_oracle_static_support
+32.0,32.0,0.18921875,0.20921875,50.0,block_light,0.0,3,repair5e_caseb_oracle_static_support
+32.0,32.0,0.18921875,0.20921875,100.0,decay_095,-0.01840053936999997,3,repair5e_caseb_oracle_static_support
+161.0,63.0,0.0,0.01,50.0,block_light,0.0,3,repair5e_caseb_oracle_static_support
+161.0,63.0,0.0,0.01,100.0,block_light,0.0,3,repair5e_caseb_oracle_static_support

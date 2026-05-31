@@ -576,24 +576,31 @@ RunStats run_lacam_star_ltm(const Instance& instance, const Args& args)
                 "fallback_additive", "missing_update_context", false);
             return additive;
           }
-          const auto features = czr004::ntm::build_laur_features(
-              *context.instance, *context.traffic_before,
-              *context.trace_events, context.stats);
           if (args.laur_post_first_solution_only &&
               !context.stats.has_incumbent_before) {
             ++stats.laur_additive_fallback_count;
             append_laur_update_log_jsonl(
                 args, context, "additive_ltm", "additive_ltm", 0.0, 0.0, 0.0,
-                "fallback_additive", "pre_first_solution", true, &features);
+                "fallback_additive", "pre_first_solution", true);
             return additive;
           }
           if (context.stats.iteration % args.laur_every_k_restarts != 0) {
             ++stats.laur_additive_fallback_count;
             append_laur_update_log_jsonl(
                 args, context, "additive_ltm", "additive_ltm", 0.0, 0.0, 0.0,
-                "fallback_additive", "update_period_skip", true, &features);
+                "fallback_additive", "update_period_skip", true);
             return additive;
           }
+          if (args.laur_force_additive) {
+            ++stats.laur_selected_rules["additive_ltm"];
+            append_laur_update_log_jsonl(
+                args, context, "additive_ltm", "additive_ltm", 0.0, 0.0, 0.0,
+                "force_additive", "force_additive", true);
+            return additive;
+          }
+          const auto features = czr004::ntm::build_laur_features(
+              *context.instance, *context.traffic_before,
+              *context.trace_events, context.stats);
           if (!args.laur_static_rule.empty()) {
             ++stats.laur_selected_rules[args.laur_static_rule];
             append_laur_update_log_jsonl(

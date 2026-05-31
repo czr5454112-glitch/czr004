@@ -13,7 +13,9 @@ struct LaurRuntimeOptions {
   bool safety_enabled = true;
   bool post_first_solution_only = true;
   bool bottleneck_trigger_only = false;
+  bool ood_guard_enabled = false;
   uint update_period_restarts = 1;
+  double ood_z_threshold = 5.0;
   std::string model_path;
 };
 
@@ -28,6 +30,12 @@ struct LaurPrediction {
   double safety_harmful_prob = 1.0;
   double predicted_delta_ratio = 0.0;
   double inference_ms = 0.0;
+  double feature_max_abs_z = 0.0;
+  double feature_mean_abs_z = 0.0;
+  uint feature_outside_3sigma_count = 0;
+  uint feature_outside_5sigma_count = 0;
+  double ood_z_threshold = 0.0;
+  bool ood_guard_triggered = false;
   bool enabled = false;
 };
 

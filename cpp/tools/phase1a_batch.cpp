@@ -48,8 +48,10 @@ struct Args {
   bool laur_force_additive = false;
   bool laur_safety_enabled = true;
   bool laur_post_first_solution_only = true;
+  bool laur_ood_guard_enabled = false;
   uint laur_every_k_restarts = 1;
   double laur_safety_threshold = 0.30;
+  double laur_ood_z_threshold = 5.0;
   int verbose = 0;
 };
 
@@ -224,6 +226,14 @@ Args parse_args(int argc, char** argv)
       !parse_double(values["laur-safety-threshold"], &args.laur_safety_threshold)) {
     throw std::runtime_error("invalid --laur-safety-threshold");
   }
+  if (values.count("laur-ood-z-threshold")) {
+    args.laur_ood_guard_enabled = true;
+    if (!parse_double(values["laur-ood-z-threshold"],
+                      &args.laur_ood_z_threshold) ||
+        args.laur_ood_z_threshold <= 0.0) {
+      throw std::runtime_error("invalid --laur-ood-z-threshold");
+    }
+  }
   if (args.laur_disable && args.laur_enable) {
     throw std::runtime_error("--laur-enable and --laur-disable are mutually exclusive");
   }
@@ -382,7 +392,13 @@ void append_laur_update_log_jsonl(
     const std::string& predicted_rule, const std::string& applied_rule,
     double safety_harmful_prob, double predicted_delta_ratio, double inference_ms,
     const std::string& decision_status, const std::string& fallback_reason,
-    bool prediction_enabled)
+    bool prediction_enabled,
+    double feature_max_abs_z = std::numeric_limits<double>::quiet_NaN(),
+    double feature_mean_abs_z = std::numeric_limits<double>::quiet_NaN(),
+    uint feature_outside_3sigma_count = 0,
+    uint feature_outside_5sigma_count = 0,
+    bool ood_guard_triggered = false,
+    double ood_z_threshold = std::numeric_limits<double>::quiet_NaN())
 {
   if (args.laur_update_log_jsonl.empty()) return;
 
@@ -415,6 +431,12 @@ void append_laur_update_log_jsonl(
   out << ",\"safety_harmful_prob\":" << json_number_or_null(safety_harmful_prob);
   out << ",\"predicted_delta_ratio\":" << json_number_or_null(predicted_delta_ratio);
   out << ",\"inference_ms\":" << json_number_or_null(inference_ms);
+  out << ",\"feature_max_abs_z\":" << json_number_or_null(feature_max_abs_z);
+  out << ",\"feature_mean_abs_z\":" << json_number_or_null(feature_mean_abs_z);
+  out << ",\"feature_outside_3sigma_count\":" << feature_outside_3sigma_count;
+  out << ",\"feature_outside_5sigma_count\":" << feature_outside_5sigma_count;
+  out << ",\"ood_guard_triggered\":" << (ood_guard_triggered ? "true" : "false");
+  out << ",\"ood_z_threshold\":" << json_number_or_null(ood_z_threshold);
   out << ",\"laur_force_additive\":" << (args.laur_force_additive ? "true" : "false");
   out << ",\"laur_static_rule\":" << json_string(args.laur_static_rule);
   out << ",\"laur_safety_threshold\":" << json_number_or_null(args.laur_safety_threshold);
@@ -459,6 +481,8 @@ RunStats run_lacam_star_ltm(const Instance& instance, const Args& args)
     stats.laur_update_mode = "force_additive";
   } else if (!stats.laur_static_rule.empty()) {
     stats.laur_update_mode = "static_rule";
+  } else if (args.laur_ood_guard_enabled) {
+    stats.laur_update_mode = "runtime_ood_guard";
   } else {
     stats.laur_update_mode = "runtime";
   }
@@ -484,6 +508,8 @@ RunStats run_lacam_star_ltm(const Instance& instance, const Args& args)
     runtime_options.model_path = args.laur_model_path;
     runtime_options.post_first_solution_only = args.laur_post_first_solution_only;
     runtime_options.update_period_restarts = args.laur_every_k_restarts;
+    runtime_options.ood_guard_enabled = args.laur_ood_guard_enabled;
+    runtime_options.ood_z_threshold = args.laur_ood_z_threshold;
     if (!runtime.load(runtime_options)) {
       throw std::runtime_error("failed to load LAUR runtime model path " +
                                args.laur_model_path);
@@ -537,7 +563,24 @@ RunStats run_lacam_star_ltm(const Instance& instance, const Args& args)
                 args, context, prediction.rule_id, "additive_ltm",
                 prediction.safety_harmful_prob, prediction.predicted_delta_ratio,
                 prediction.inference_ms, "fallback_additive",
-                "prediction_disabled", false);
+                "prediction_disabled", false, prediction.feature_max_abs_z,
+                prediction.feature_mean_abs_z,
+                prediction.feature_outside_3sigma_count,
+                prediction.feature_outside_5sigma_count,
+                prediction.ood_guard_triggered, prediction.ood_z_threshold);
+            return additive;
+          }
+          if (prediction.ood_guard_triggered) {
+            ++stats.laur_additive_fallback_count;
+            append_laur_update_log_jsonl(
+                args, context, prediction.rule_id, "additive_ltm",
+                prediction.safety_harmful_prob, prediction.predicted_delta_ratio,
+                prediction.inference_ms, "fallback_additive", "ood_guard",
+                true, prediction.feature_max_abs_z,
+                prediction.feature_mean_abs_z,
+                prediction.feature_outside_3sigma_count,
+                prediction.feature_outside_5sigma_count,
+                prediction.ood_guard_triggered, prediction.ood_z_threshold);
             return additive;
           }
           if (!args.laur_force_additive && args.laur_safety_enabled &&
@@ -548,7 +591,11 @@ RunStats run_lacam_star_ltm(const Instance& instance, const Args& args)
                 args, context, prediction.rule_id, "additive_ltm",
                 prediction.safety_harmful_prob, prediction.predicted_delta_ratio,
                 prediction.inference_ms, "fallback_additive", "safety_gate",
-                true);
+                true, prediction.feature_max_abs_z,
+                prediction.feature_mean_abs_z,
+                prediction.feature_outside_3sigma_count,
+                prediction.feature_outside_5sigma_count,
+                prediction.ood_guard_triggered, prediction.ood_z_threshold);
             return additive;
           }
           append_laur_update_log_jsonl(
@@ -556,7 +603,11 @@ RunStats run_lacam_star_ltm(const Instance& instance, const Args& args)
               prediction.safety_harmful_prob, prediction.predicted_delta_ratio,
               prediction.inference_ms,
               args.laur_force_additive ? "force_additive" : "applied",
-              args.laur_force_additive ? "force_additive" : "", true);
+              args.laur_force_additive ? "force_additive" : "", true,
+              prediction.feature_max_abs_z, prediction.feature_mean_abs_z,
+              prediction.feature_outside_3sigma_count,
+              prediction.feature_outside_5sigma_count,
+              prediction.ood_guard_triggered, prediction.ood_z_threshold);
           return prediction.params;
         };
   }
@@ -646,6 +697,10 @@ void append_jsonl(const Args& args, const std::filesystem::path& binary_path,
   out << ",\"laur_update_mode\":" << json_string(stats.laur_update_mode);
   out << ",\"laur_model_path\":" << json_string(stats.laur_model_path);
   out << ",\"laur_static_rule\":" << json_string(stats.laur_static_rule);
+  out << ",\"laur_ood_guard_enabled\":"
+      << (args.laur_ood_guard_enabled ? "true" : "false");
+  out << ",\"laur_ood_z_threshold\":"
+      << json_number_or_null(args.laur_ood_z_threshold);
   out << ",\"laur_inference_count\":" << stats.laur_inference_count;
   out << ",\"laur_inference_total_ms\":"
       << json_number_or_null(stats.laur_inference_total_ms);

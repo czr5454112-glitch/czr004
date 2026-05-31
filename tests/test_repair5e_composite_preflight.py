@@ -17,6 +17,7 @@ from eval.repair5d_composite_spec import (  # noqa: E402
 )
 from run_phase5p5_laur_diagnostic_preflight_exec import (  # noqa: E402
     add_ltm_group_deltas,
+    build_methods,
     synthesize_oracle_static_proxy_rows,
 )
 from distill_repair5d_composite_to_runtime import runtime_feature_vector  # noqa: E402
@@ -152,3 +153,31 @@ def test_repair5e_preflight_synthesizes_static_oracle_proxy_and_deltas() -> None
     assert oracle[0]["method"] == "oracle_teacher_forced_best_safe_update_static_proxy"
     assert oracle[0]["oracle_proxy_source_method"] == "oracle_probe_static_block_heavy"
     assert summary[1]["ratio_delta_vs_ltm"] == -0.09999999999999987
+
+
+def test_repair5e_caseb_ood_guard_candidate_is_wired(tmp_path: Path) -> None:
+    methods, skipped = build_methods(
+        root=ROOT,
+        additive_model=tmp_path / "additive",
+        repair3_runtime=None,
+        repair5d_runtime=None,
+        repair5e_ood_guard_runtime=tmp_path / "guard_runtime",
+        include_static_proxies=False,
+        include_oracle_static_probe=False,
+        include_ood_guard_candidate=True,
+        ood_guard_z_threshold=4.5,
+    )
+
+    by_alias = {method.alias: method for method in methods}
+
+    guarded = by_alias["repair5e_caseb_ood_guard_distilled"]
+    assert "--laur-ood-z-threshold" in guarded.extra_args
+    assert "4.5" in guarded.extra_args
+    assert "--laur-safety-threshold" in guarded.extra_args
+
+    parity = by_alias["repair5e_caseb_ood_guard_force_additive_parity"]
+    assert "--laur-force-additive" in parity.extra_args
+    assert "--laur-ood-z-threshold" in parity.extra_args
+
+    assert any(row["method"] == "repair3_safe_runtime" for row in skipped)
+    assert any(row["method"] == "repair5d_composite_diagnostic_distilled" for row in skipped)

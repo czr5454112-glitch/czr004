@@ -224,6 +224,36 @@ LaurPrediction LaurLtmRuntime::predict(const LaurFeatureVector& features) const
     x[index] = (value - mean) / stdev;
   }
 
+  double max_abs_z = 0.0;
+  double sum_abs_z = 0.0;
+  uint outside_3sigma = 0;
+  uint outside_5sigma = 0;
+  for (const auto value : x) {
+    const auto abs_z = std::fabs(value);
+    max_abs_z = std::max(max_abs_z, abs_z);
+    sum_abs_z += abs_z;
+    if (abs_z > 3.0) ++outside_3sigma;
+    if (abs_z > 5.0) ++outside_5sigma;
+  }
+  const auto mean_abs_z = x.empty() ? 0.0 : sum_abs_z / x.size();
+  const auto attach_ood_metrics = [&](LaurPrediction& prediction) {
+    prediction.feature_max_abs_z = max_abs_z;
+    prediction.feature_mean_abs_z = mean_abs_z;
+    prediction.feature_outside_3sigma_count = outside_3sigma;
+    prediction.feature_outside_5sigma_count = outside_5sigma;
+    prediction.ood_z_threshold =
+        options_.ood_guard_enabled ? options_.ood_z_threshold : 0.0;
+  };
+
+  if (options_.ood_guard_enabled && options_.ood_z_threshold > 0.0 &&
+      std::isfinite(options_.ood_z_threshold) &&
+      max_abs_z >= options_.ood_z_threshold) {
+    auto prediction = additive_prediction(elapsed(), true);
+    attach_ood_metrics(prediction);
+    prediction.ood_guard_triggered = true;
+    return prediction;
+  }
+
   auto hidden = std::vector<double>(hidden_dim_, 0.0);
   for (uint row = 0; row < hidden_dim_; ++row) {
     const auto bias = row < layer0_bias_.size() ? layer0_bias_[row] : 0.0;
@@ -255,6 +285,7 @@ LaurPrediction LaurLtmRuntime::predict(const LaurFeatureVector& features) const
         dot_row(delta_head_weight_, hidden_dim_, 0, hidden) + bias;
   }
   prediction.inference_ms = elapsed();
+  attach_ood_metrics(prediction);
   return prediction;
 }
 

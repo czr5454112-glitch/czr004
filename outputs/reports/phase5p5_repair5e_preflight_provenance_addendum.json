@@ -1,0 +1,11 @@
+{
+  "schema_version": "phase5p5_repair5e_preflight_provenance_addendum_v1",
+  "pushed_commit_reviewed": "df8801c1ed0e23db813511d4982c87e1376528de",
+  "generated_report_internal_commit": "f27ac22",
+  "reason": "generated before staging/committing Repair5E files",
+  "dirty_state": "tracked-dirty_untracked-present",
+  "note": "unrelated existing local changes and historical outputs were intentionally not staged",
+  "scientific_result": "diagnostic-only",
+  "phase5p5_allowed": false,
+  "phase6_allowed": false
+}

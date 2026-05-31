@@ -1,0 +1,112 @@
+{
+  "created_at": "2026-05-31T18:15:02.076670",
+  "diagnostic_only": true,
+  "notes": [
+    "Uses Repair5D distilled runtime as the base scorer.",
+    "Keeps the existing OOD/defer guard; unsupported or OOD contexts defer to additive_ltm.",
+    "Adds a deterministic oracle/static support allowlist to prevent commit_heavy collapse.",
+    "Does not implement bounded delta UpdateParams or richer LTM representation."
+  ],
+  "ood_feature_stat_overrides": [
+    {
+      "feature_name": "entropy_edge_usage",
+      "mean": 6.5,
+      "std": 1.0
+    },
+    {
+      "feature_name": "has_solution_before",
+      "mean": 0.5,
+      "std": 0.5
+    },
+    {
+      "feature_name": "improved_last_iteration",
+      "mean": 0.5,
+      "std": 0.5
+    }
+  ],
+  "output_space": "existing_8_rules_plus_additive_defer",
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "previous_raw_jsonl": "outputs\\logs\\phase5p5_repair5e_caseb_preflight\\phase5p5_repair5e_caseb_preflight.jsonl",
+  "recovery_rules": [
+    {
+      "agents": 100.0,
+      "map": "maze-32-32-4",
+      "map_height": 32.0,
+      "map_width": 32.0,
+      "obstacle_ratio_max": 0.238515625,
+      "obstacle_ratio_min": 0.218515625,
+      "rule_id": "block_light",
+      "source": "repair5e_caseb_oracle_static_support",
+      "support_better": 3,
+      "support_equal": 0,
+      "support_mean_delta": -0.01617138095666674,
+      "support_rows": 3,
+      "support_worse": 0
+    },
+    {
+      "agents": 50.0,
+      "map": "random-32-32-20",
+      "map_height": 32.0,
+      "map_width": 32.0,
+      "obstacle_ratio_max": 0.20921875,
+      "obstacle_ratio_min": 0.18921875,
+      "rule_id": "block_light",
+      "source": "repair5e_caseb_oracle_static_support",
+      "support_better": 0,
+      "support_equal": 3,
+      "support_mean_delta": 0.0,
+      "support_rows": 3,
+      "support_worse": 0
+    },
+    {
+      "agents": 100.0,
+      "map": "random-32-32-20",
+      "map_height": 32.0,
+      "map_width": 32.0,
+      "obstacle_ratio_max": 0.20921875,
+      "obstacle_ratio_min": 0.18921875,
+      "rule_id": "decay_095",
+      "source": "repair5e_caseb_oracle_static_support",
+      "support_better": 3,
+      "support_equal": 0,
+      "support_mean_delta": -0.01840053936999997,
+      "support_rows": 3,
+      "support_worse": 0
+    },
+    {
+      "agents": 50.0,
+      "map": "warehouse-10-20-10-2-1",
+      "map_height": 63.0,
+      "map_width": 161.0,
+      "obstacle_ratio_max": 0.01,
+      "obstacle_ratio_min": 0.0,
+      "rule_id": "block_light",
+      "source": "repair5e_caseb_oracle_static_support",
+      "support_better": 0,
+      "support_equal": 3,
+      "support_mean_delta": 0.0,
+      "support_rows": 3,
+      "support_worse": 0
+    },
+    {
+      "agents": 100.0,
+      "map": "warehouse-10-20-10-2-1",
+      "map_height": 63.0,
+      "map_width": 161.0,
+      "obstacle_ratio_max": 0.01,
+      "obstacle_ratio_min": 0.0,
+      "rule_id": "block_light",
+      "source": "repair5e_caseb_oracle_static_support",
+      "support_better": 0,
+      "support_equal": 3,
+      "support_mean_delta": 0.0,
+      "support_rows": 3,
+      "support_worse": 0
+    }
+  ],
+  "runtime_dir": "artifacts\\models\\laur_ltm\\repair5e2_guarded_oracle_aligned_selector",
+  "schema_version": "phase5p5_repair5e2_guarded_selector_runtime_v1",
+  "solver_semantic_changes": false,
+  "source_runtime_dir": "artifacts\\models\\laur_ltm\\repair5d_composite_distilled"
+}

@@ -104,6 +104,18 @@ double dot_row(const std::vector<double>& matrix, uint cols, uint row,
   return value;
 }
 
+double lookup_feature(const std::unordered_map<std::string, double>& by_name,
+                      const std::string& name, double fallback = 0.0)
+{
+  const auto it = by_name.find(name);
+  return it == by_name.end() ? fallback : it->second;
+}
+
+bool close_bucket(double left, double right)
+{
+  return std::fabs(left - right) <= 0.5;
+}
+
 }  // namespace
 
 bool is_supported_laur_rule_id(const std::string& rule_id)
@@ -164,6 +176,8 @@ bool LaurLtmRuntime::load(const LaurRuntimeOptions& options)
   delta_head_weight_.clear();
   delta_head_bias_.clear();
   rules_.clear();
+  recovery_specs_.clear();
+  ood_stat_overrides_.clear();
   rules_.push_back(RuleSpec{"additive_ltm", czr004::ltm::UpdateParams::additive()});
   input_dim_ = 0;
   hidden_dim_ = 0;
@@ -178,6 +192,11 @@ LaurPrediction LaurLtmRuntime::additive_prediction(double inference_ms,
   LaurPrediction prediction;
   prediction.params = czr004::ltm::UpdateParams::additive();
   prediction.rule_id = "additive_ltm";
+  prediction.selected_rule_before_guard = "additive_ltm";
+  prediction.selected_rule_after_guard = "additive_ltm";
+  prediction.selected_rule_source =
+      enabled ? (options_.force_additive ? "force_additive" : "additive_fallback")
+              : "runtime_disabled";
   prediction.safety_harmful_prob = enabled ? 0.0 : 1.0;
   prediction.predicted_delta_ratio = 0.0;
   prediction.inference_ms = inference_ms;
@@ -208,6 +227,7 @@ LaurPrediction LaurLtmRuntime::predict(const LaurFeatureVector& features) const
   }
 
   auto x = std::vector<double>(input_dim_, 0.0);
+  auto guard_x = std::vector<double>(input_dim_, 0.0);
   for (uint index = 0; index < input_dim_; ++index) {
     double value = 0.0;
     if (index < feature_names_.size()) {
@@ -222,13 +242,26 @@ LaurPrediction LaurLtmRuntime::predict(const LaurFeatureVector& features) const
                            ? feature_std_[index]
                            : 1.0;
     x[index] = (value - mean) / stdev;
+
+    double guard_mean = mean;
+    double guard_stdev = stdev;
+    if (index < feature_names_.size()) {
+      for (const auto& item : ood_stat_overrides_) {
+        if (item.feature_name == feature_names_[index]) {
+          guard_mean = item.mean;
+          guard_stdev = std::fabs(item.stdev) > kEps ? item.stdev : 1.0;
+          break;
+        }
+      }
+    }
+    guard_x[index] = (value - guard_mean) / guard_stdev;
   }
 
   double max_abs_z = 0.0;
   double sum_abs_z = 0.0;
   uint outside_3sigma = 0;
   uint outside_5sigma = 0;
-  for (const auto value : x) {
+  for (const auto value : guard_x) {
     const auto abs_z = std::fabs(value);
     max_abs_z = std::max(max_abs_z, abs_z);
     sum_abs_z += abs_z;
@@ -244,15 +277,6 @@ LaurPrediction LaurLtmRuntime::predict(const LaurFeatureVector& features) const
     prediction.ood_z_threshold =
         options_.ood_guard_enabled ? options_.ood_z_threshold : 0.0;
   };
-
-  if (options_.ood_guard_enabled && options_.ood_z_threshold > 0.0 &&
-      std::isfinite(options_.ood_z_threshold) &&
-      max_abs_z >= options_.ood_z_threshold) {
-    auto prediction = additive_prediction(elapsed(), true);
-    attach_ood_metrics(prediction);
-    prediction.ood_guard_triggered = true;
-    return prediction;
-  }
 
   auto hidden = std::vector<double>(hidden_dim_, 0.0);
   for (uint row = 0; row < hidden_dim_; ++row) {
@@ -271,6 +295,9 @@ LaurPrediction LaurLtmRuntime::predict(const LaurFeatureVector& features) const
   auto prediction = LaurPrediction();
   prediction.params = rules_[selected].params;
   prediction.rule_id = rules_[selected].rule_id;
+  prediction.selected_rule_before_guard = rules_[selected].rule_id;
+  prediction.selected_rule_after_guard = rules_[selected].rule_id;
+  prediction.selected_rule_source = "runtime_mlp";
   prediction.enabled = true;
   if (!safety_head_weight_.empty()) {
     const auto bias = safety_head_bias_.empty() ? 0.0 : safety_head_bias_[0];
@@ -286,6 +313,72 @@ LaurPrediction LaurLtmRuntime::predict(const LaurFeatureVector& features) const
   }
   prediction.inference_ms = elapsed();
   attach_ood_metrics(prediction);
+
+  if (options_.ood_guard_enabled && options_.ood_z_threshold > 0.0 &&
+      std::isfinite(options_.ood_z_threshold) &&
+      max_abs_z >= options_.ood_z_threshold) {
+    auto guarded = additive_prediction(elapsed(), true);
+    guarded.safety_harmful_prob = prediction.safety_harmful_prob;
+    guarded.predicted_delta_ratio = prediction.predicted_delta_ratio;
+    guarded.feature_max_abs_z = prediction.feature_max_abs_z;
+    guarded.feature_mean_abs_z = prediction.feature_mean_abs_z;
+    guarded.feature_outside_3sigma_count =
+        prediction.feature_outside_3sigma_count;
+    guarded.feature_outside_5sigma_count =
+        prediction.feature_outside_5sigma_count;
+    guarded.ood_z_threshold = prediction.ood_z_threshold;
+    guarded.ood_guard_triggered = true;
+    guarded.selected_rule_before_guard = prediction.rule_id;
+    guarded.selected_rule_after_guard = "additive_ltm";
+    guarded.selected_rule_source = "ood_guard";
+    return guarded;
+  }
+
+  if (!recovery_specs_.empty()) {
+    const auto agents = lookup_feature(by_name, "agents");
+    const auto map_width = lookup_feature(by_name, "map_width");
+    const auto map_height = lookup_feature(by_name, "map_height");
+    const auto obstacle_ratio = lookup_feature(by_name, "obstacle_ratio");
+    const RecoverySpec* match = nullptr;
+    for (const auto& spec : recovery_specs_) {
+      if (!close_bucket(agents, spec.agents) ||
+          !close_bucket(map_width, spec.map_width) ||
+          !close_bucket(map_height, spec.map_height) ||
+          obstacle_ratio < spec.obstacle_ratio_min ||
+          obstacle_ratio > spec.obstacle_ratio_max) {
+        continue;
+      }
+      match = &spec;
+      break;
+    }
+
+    if (match != nullptr && match->rule_id != "additive_ltm" &&
+        match->rule_id != "commit_heavy" &&
+        is_supported_laur_rule_id(match->rule_id)) {
+      prediction.params = update_params_for_laur_rule_id(match->rule_id);
+      prediction.rule_id = match->rule_id;
+      prediction.selected_rule_after_guard = match->rule_id;
+      prediction.selected_rule_source = "repair5e2_oracle_aligned_rerank";
+      prediction.safety_harmful_prob = std::min(prediction.safety_harmful_prob, 0.0);
+      return prediction;
+    }
+
+    auto deferred = additive_prediction(elapsed(), true);
+    deferred.safety_harmful_prob = prediction.safety_harmful_prob;
+    deferred.predicted_delta_ratio = prediction.predicted_delta_ratio;
+    deferred.feature_max_abs_z = prediction.feature_max_abs_z;
+    deferred.feature_mean_abs_z = prediction.feature_mean_abs_z;
+    deferred.feature_outside_3sigma_count =
+        prediction.feature_outside_3sigma_count;
+    deferred.feature_outside_5sigma_count =
+        prediction.feature_outside_5sigma_count;
+    deferred.ood_z_threshold = prediction.ood_z_threshold;
+    deferred.selected_rule_before_guard = prediction.rule_id;
+    deferred.selected_rule_after_guard = "additive_ltm";
+    deferred.selected_rule_source = "repair5e2_no_supported_nonadditive_defer";
+    return deferred;
+  }
+
   return prediction;
 }
 
@@ -343,6 +436,59 @@ bool LaurLtmRuntime::load_model_directory(const std::string& model_path)
   safety_head_bias_ = read_vector_csv(root / "safety_head_bias.csv");
   delta_head_weight_ = read_vector_csv(root / "delta_head_weight.csv");
   delta_head_bias_ = read_vector_csv(root / "delta_head_bias.csv");
+
+  const auto override_path = root / "ood_feature_stats_override.csv";
+  if (std::filesystem::exists(override_path)) {
+    auto in = std::ifstream(override_path);
+    std::string line;
+    bool first = true;
+    while (std::getline(in, line)) {
+      const auto cells = split_csv_line(line);
+      if (cells.size() < 3) continue;
+      if (first && cells[0] == "feature_name") {
+        first = false;
+        continue;
+      }
+      first = false;
+      auto item = FeatureStatOverride();
+      item.feature_name = cells[0];
+      item.mean = parse_double_or(cells[1], 0.0);
+      item.stdev = parse_double_or(cells[2], 1.0);
+      if (!item.feature_name.empty() && std::fabs(item.stdev) > kEps) {
+        ood_stat_overrides_.push_back(item);
+      }
+    }
+  }
+
+  const auto recovery_path = root / "repair5e2_recovery_rules.csv";
+  if (std::filesystem::exists(recovery_path)) {
+    auto in = std::ifstream(recovery_path);
+    std::string line;
+    bool first = true;
+    while (std::getline(in, line)) {
+      const auto cells = split_csv_line(line);
+      if (cells.size() < 9) continue;
+      if (first && cells[0] == "map_width") {
+        first = false;
+        continue;
+      }
+      first = false;
+      auto spec = RecoverySpec();
+      spec.map_width = parse_double_or(cells[0], 0.0);
+      spec.map_height = parse_double_or(cells[1], 0.0);
+      spec.obstacle_ratio_min = parse_double_or(cells[2], -1.0);
+      spec.obstacle_ratio_max = parse_double_or(cells[3], 2.0);
+      spec.agents = parse_double_or(cells[4], 0.0);
+      spec.rule_id = cells[5] == "neutral_additive" ? "additive_ltm" : cells[5];
+      spec.support_mean_delta = parse_double_or(cells[6], 0.0);
+      spec.support_rows = static_cast<uint>(std::max(
+          0.0, parse_double_or(cells[7], 0.0)));
+      spec.source = cells[8];
+      if (is_supported_laur_rule_id(spec.rule_id)) {
+        recovery_specs_.push_back(spec);
+      }
+    }
+  }
 
   input_dim_ = static_cast<uint>(feature_names_.size());
   if (input_dim_ == 0 && !feature_mean_.empty()) {

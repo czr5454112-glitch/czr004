@@ -27,6 +27,9 @@ struct LaurFeatureVector {
 struct LaurPrediction {
   czr004::ltm::UpdateParams params = czr004::ltm::UpdateParams::additive();
   std::string rule_id = "additive_ltm";
+  std::string selected_rule_before_guard = "additive_ltm";
+  std::string selected_rule_after_guard = "additive_ltm";
+  std::string selected_rule_source = "additive_fallback";
   double safety_harmful_prob = 1.0;
   double predicted_delta_ratio = 0.0;
   double inference_ms = 0.0;
@@ -54,6 +57,24 @@ class LaurLtmRuntime {
     czr004::ltm::UpdateParams params = czr004::ltm::UpdateParams::additive();
   };
 
+  struct RecoverySpec {
+    double map_width = 0.0;
+    double map_height = 0.0;
+    double obstacle_ratio_min = -1.0;
+    double obstacle_ratio_max = 2.0;
+    double agents = 0.0;
+    std::string rule_id = "additive_ltm";
+    double support_mean_delta = 0.0;
+    uint support_rows = 0;
+    std::string source = "";
+  };
+
+  struct FeatureStatOverride {
+    std::string feature_name;
+    double mean = 0.0;
+    double stdev = 1.0;
+  };
+
   LaurRuntimeOptions options_;
   bool loaded_ = false;
   bool has_mlp_ = false;
@@ -69,6 +90,8 @@ class LaurLtmRuntime {
   std::vector<double> delta_head_weight_;
   std::vector<double> delta_head_bias_;
   std::vector<RuleSpec> rules_;
+  std::vector<RecoverySpec> recovery_specs_;
+  std::vector<FeatureStatOverride> ood_stat_overrides_;
   uint input_dim_ = 0;
   uint hidden_dim_ = 0;
 

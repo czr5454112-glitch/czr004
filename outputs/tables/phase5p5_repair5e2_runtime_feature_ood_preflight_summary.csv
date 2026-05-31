@@ -1,0 +1,9 @@
+map,agents,method,runs,successes,success_rate,sum_of_loss_ratio_mean,expanded_nodes_mean,time_to_first_solution_ms_mean,returned_solutions_count_mean,low_level_pibt_calls_mean,laur_overhead_ms_mean,laur_inference_count_mean,laur_additive_fallback_count_mean,laur_safety_disabled_count_mean,fallback_defer_rate,non_additive_update_rate,selected_harmful_update_rate,selected_rules,ratio_delta_vs_ltm,expanded_delta_vs_ltm,ttfs_delta_vs_ltm
+random-32-32-20,50,always_additive_defer,1,1,1.0,1.13415710503,328.0,169.0,1.0,28657.0,0.0015,3.0,1.0,0.0,0.25,0.0,,"{""additive_ltm"": 3}",0.0,0.0,-2.0
+random-32-32-20,50,lacam_star,1,1,1.0,1.15269196823,21574.0,3302.3539,1.0,,0.0,0.0,0.0,0.0,,,,{},0.018534863200000196,21246.0,3131.3539
+random-32-32-20,50,lacam_star_ltm,1,1,1.0,1.13415710503,328.0,171.0,1.0,28657.0,0.0,0.0,0.0,0.0,,,,{},,,
+random-32-32-20,50,repair3_safe_runtime,1,1,1.0,1.13415710503,358.0,175.0,1.0,32327.0,0.3554,3.0,1.0,0.0,0.25,0.75,,"{""block_light"": 1, ""commit_heavy"": 2}",0.0,30.0,4.0
+random-32-32-20,50,repair5d_composite_diagnostic_distilled,1,1,1.0,1.13415710503,358.0,170.0,1.0,32327.0,0.3867,3.0,1.0,0.0,0.25,0.75,,"{""commit_heavy"": 3}",0.0,30.0,-1.0
+random-32-32-20,50,repair5d_force_additive_defer_parity,1,1,1.0,1.13415710503,328.0,162.0,1.0,28657.0,0.0013,3.0,1.0,0.0,0.25,0.0,,"{""additive_ltm"": 3}",0.0,0.0,-9.0
+random-32-32-20,50,repair5e_caseb_ood_guard_distilled,1,1,1.0,1.13415710503,328.0,165.0,1.0,28657.0,0.3676,3.0,4.0,0.0,0.5714285714285714,0.0,,"{""additive_ltm"": 3}",0.0,0.0,-6.0
+random-32-32-20,50,repair5e_caseb_ood_guard_force_additive_parity,1,1,1.0,1.13415710503,328.0,161.0,1.0,28657.0,0.0014,3.0,1.0,0.0,0.25,0.0,,"{""additive_ltm"": 3}",0.0,0.0,-10.0

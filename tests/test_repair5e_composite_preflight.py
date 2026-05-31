@@ -21,6 +21,10 @@ from run_phase5p5_laur_diagnostic_preflight_exec import (  # noqa: E402
     synthesize_oracle_static_proxy_rows,
 )
 from distill_repair5d_composite_to_runtime import runtime_feature_vector  # noqa: E402
+from analyze_repair5e2_runtime_feature_ood import (  # noqa: E402
+    REQUIRED_UPDATE_LOG_FIELDS,
+    analyze_rows,
+)
 
 
 def _best_grid_row(tmp_path: Path) -> dict:
@@ -181,3 +185,69 @@ def test_repair5e_caseb_ood_guard_candidate_is_wired(tmp_path: Path) -> None:
 
     assert any(row["method"] == "repair3_safe_runtime" for row in skipped)
     assert any(row["method"] == "repair5d_composite_diagnostic_distilled" for row in skipped)
+
+
+def test_repair5e2_guarded_selector_candidate_is_wired(tmp_path: Path) -> None:
+    methods, skipped = build_methods(
+        root=ROOT,
+        additive_model=tmp_path / "additive",
+        repair3_runtime=None,
+        repair5d_runtime=None,
+        repair5e_ood_guard_runtime=None,
+        repair5e2_runtime=tmp_path / "repair5e2_runtime",
+        include_static_proxies=False,
+        include_oracle_static_probe=False,
+        include_repair5e2_candidate=True,
+        repair5e2_ood_guard_z_threshold=5.0,
+    )
+
+    by_alias = {method.alias: method for method in methods}
+    guarded = by_alias["repair5e2_guarded_oracle_aligned_selector"]
+    assert "--laur-model-path" in guarded.extra_args
+    assert "--laur-ood-z-threshold" in guarded.extra_args
+    assert "--laur-safety-threshold" in guarded.extra_args
+
+    parity = by_alias["repair5e2_guarded_oracle_aligned_selector_force_additive_parity"]
+    assert "--laur-force-additive" in parity.extra_args
+    assert not any(row["method"] == "repair5e2_guarded_oracle_aligned_selector" for row in skipped)
+
+
+def test_repair5e2_update_log_runtime_feature_fields_are_analyzable(tmp_path: Path) -> None:
+    runtime_dir = tmp_path / "runtime"
+    runtime_dir.mkdir()
+    (runtime_dir / "features.txt").write_text("agents\nentropy_edge_usage\n", encoding="utf-8")
+    (runtime_dir / "mean.csv").write_text("50,2.75\n", encoding="utf-8")
+    (runtime_dir / "std.csv").write_text("10,0.05\n", encoding="utf-8")
+
+    row = {
+        "method": "repair5e2_guarded_oracle_aligned_selector",
+        "map": "random-32-32-20",
+        "agents": 50,
+        "seed": 1,
+        "scen": "random-32-32-20-random-1.scen",
+        "iteration": 1,
+        "predicted_rule": "commit_heavy",
+        "applied_rule": "additive_ltm",
+        "runtime_feature_names": ["agents", "entropy_edge_usage"],
+        "runtime_feature_values": [50.0, 0.0],
+        "feature_max_abs_z": 55.0,
+        "feature_mean_abs_z": 27.5,
+        "feature_outside_3sigma_count": 1,
+        "feature_outside_5sigma_count": 1,
+        "ood_guard_triggered": True,
+        "ood_z_threshold": 5.0,
+        "selected_rule_before_guard": "commit_heavy",
+        "selected_rule_after_guard": "additive_ltm",
+        "selected_rule_source": "ood_guard",
+    }
+    assert all(field in row for field in REQUIRED_UPDATE_LOG_FIELDS)
+
+    summary, details = analyze_rows(
+        [row],
+        runtime_dir=runtime_dir,
+        methods={"repair5e2_guarded_oracle_aligned_selector"},
+    )
+
+    assert summary["missing_required_field_counts"] == {}
+    assert details[0]["top_feature_by_abs_z"] == "entropy_edge_usage"
+    assert summary["rule_before_after_source_counts"]["commit_heavy->additive_ltm:ood_guard"] == 1

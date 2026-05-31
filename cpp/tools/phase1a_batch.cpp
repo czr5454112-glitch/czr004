@@ -16,6 +16,7 @@
 #include <string>
 #include <unordered_map>
 #include <unordered_set>
+#include <vector>
 
 namespace {
 
@@ -107,6 +108,28 @@ void append_json_string_uint_map(std::ostream& out,
     out << json_string(key) << ":" << value;
   }
   out << "}";
+}
+
+void append_json_string_array(std::ostream& out,
+                              const std::vector<std::string>& values)
+{
+  out << "[";
+  for (std::size_t index = 0; index < values.size(); ++index) {
+    if (index > 0) out << ",";
+    out << json_string(values[index]);
+  }
+  out << "]";
+}
+
+void append_json_number_array(std::ostream& out,
+                              const std::vector<double>& values)
+{
+  out << "[";
+  for (std::size_t index = 0; index < values.size(); ++index) {
+    if (index > 0) out << ",";
+    out << json_number_or_null(values[index]);
+  }
+  out << "]";
 }
 
 bool parse_uint(const std::string& value, uint* out)
@@ -393,12 +416,16 @@ void append_laur_update_log_jsonl(
     double safety_harmful_prob, double predicted_delta_ratio, double inference_ms,
     const std::string& decision_status, const std::string& fallback_reason,
     bool prediction_enabled,
+    const czr004::ntm::LaurFeatureVector* runtime_features = nullptr,
     double feature_max_abs_z = std::numeric_limits<double>::quiet_NaN(),
     double feature_mean_abs_z = std::numeric_limits<double>::quiet_NaN(),
     uint feature_outside_3sigma_count = 0,
     uint feature_outside_5sigma_count = 0,
     bool ood_guard_triggered = false,
-    double ood_z_threshold = std::numeric_limits<double>::quiet_NaN())
+    double ood_z_threshold = std::numeric_limits<double>::quiet_NaN(),
+    const std::string& selected_rule_before_guard = "",
+    const std::string& selected_rule_after_guard = "",
+    const std::string& selected_rule_source = "")
 {
   if (args.laur_update_log_jsonl.empty()) return;
 
@@ -425,12 +452,35 @@ void append_laur_update_log_jsonl(
   out << ",\"returned_solutions_count_so_far\":" << context.stats.returned_solutions_count_so_far;
   out << ",\"predicted_rule\":" << json_string(predicted_rule);
   out << ",\"applied_rule\":" << json_string(applied_rule);
+  out << ",\"selected_rule_before_guard\":"
+      << json_string(selected_rule_before_guard.empty() ? predicted_rule
+                                                        : selected_rule_before_guard);
+  out << ",\"selected_rule_after_guard\":"
+      << json_string(selected_rule_after_guard.empty() ? applied_rule
+                                                       : selected_rule_after_guard);
+  out << ",\"selected_rule_source\":"
+      << json_string(selected_rule_source.empty()
+                         ? (!fallback_reason.empty() ? fallback_reason
+                                                     : decision_status)
+                         : selected_rule_source);
   out << ",\"decision_status\":" << json_string(decision_status);
   out << ",\"fallback_reason\":" << json_string(fallback_reason);
   out << ",\"prediction_enabled\":" << (prediction_enabled ? "true" : "false");
   out << ",\"safety_harmful_prob\":" << json_number_or_null(safety_harmful_prob);
   out << ",\"predicted_delta_ratio\":" << json_number_or_null(predicted_delta_ratio);
   out << ",\"inference_ms\":" << json_number_or_null(inference_ms);
+  out << ",\"runtime_feature_names\":";
+  if (runtime_features == nullptr) {
+    out << "[]";
+  } else {
+    append_json_string_array(out, runtime_features->names);
+  }
+  out << ",\"runtime_feature_values\":";
+  if (runtime_features == nullptr) {
+    out << "[]";
+  } else {
+    append_json_number_array(out, runtime_features->values);
+  }
   out << ",\"feature_max_abs_z\":" << json_number_or_null(feature_max_abs_z);
   out << ",\"feature_mean_abs_z\":" << json_number_or_null(feature_mean_abs_z);
   out << ",\"feature_outside_3sigma_count\":" << feature_outside_3sigma_count;
@@ -526,32 +576,32 @@ RunStats run_lacam_star_ltm(const Instance& instance, const Args& args)
                 "fallback_additive", "missing_update_context", false);
             return additive;
           }
+          const auto features = czr004::ntm::build_laur_features(
+              *context.instance, *context.traffic_before,
+              *context.trace_events, context.stats);
           if (args.laur_post_first_solution_only &&
               !context.stats.has_incumbent_before) {
             ++stats.laur_additive_fallback_count;
             append_laur_update_log_jsonl(
                 args, context, "additive_ltm", "additive_ltm", 0.0, 0.0, 0.0,
-                "fallback_additive", "pre_first_solution", true);
+                "fallback_additive", "pre_first_solution", true, &features);
             return additive;
           }
           if (context.stats.iteration % args.laur_every_k_restarts != 0) {
             ++stats.laur_additive_fallback_count;
             append_laur_update_log_jsonl(
                 args, context, "additive_ltm", "additive_ltm", 0.0, 0.0, 0.0,
-                "fallback_additive", "update_period_skip", true);
+                "fallback_additive", "update_period_skip", true, &features);
             return additive;
           }
           if (!args.laur_static_rule.empty()) {
             ++stats.laur_selected_rules[args.laur_static_rule];
             append_laur_update_log_jsonl(
                 args, context, args.laur_static_rule, args.laur_static_rule, 0.0,
-                0.0, 0.0, "applied", "static_rule", true);
+                0.0, 0.0, "applied", "static_rule", true, &features);
             return static_params;
           }
 
-          const auto features = czr004::ntm::build_laur_features(
-              *context.instance, *context.traffic_before,
-              *context.trace_events, context.stats);
           const auto prediction = runtime.predict(features);
           ++stats.laur_inference_count;
           stats.laur_inference_total_ms += prediction.inference_ms;
@@ -563,11 +613,15 @@ RunStats run_lacam_star_ltm(const Instance& instance, const Args& args)
                 args, context, prediction.rule_id, "additive_ltm",
                 prediction.safety_harmful_prob, prediction.predicted_delta_ratio,
                 prediction.inference_ms, "fallback_additive",
-                "prediction_disabled", false, prediction.feature_max_abs_z,
+                "prediction_disabled", false, &features,
+                prediction.feature_max_abs_z,
                 prediction.feature_mean_abs_z,
                 prediction.feature_outside_3sigma_count,
                 prediction.feature_outside_5sigma_count,
-                prediction.ood_guard_triggered, prediction.ood_z_threshold);
+                prediction.ood_guard_triggered, prediction.ood_z_threshold,
+                prediction.selected_rule_before_guard,
+                prediction.selected_rule_after_guard,
+                prediction.selected_rule_source);
             return additive;
           }
           if (prediction.ood_guard_triggered) {
@@ -576,11 +630,14 @@ RunStats run_lacam_star_ltm(const Instance& instance, const Args& args)
                 args, context, prediction.rule_id, "additive_ltm",
                 prediction.safety_harmful_prob, prediction.predicted_delta_ratio,
                 prediction.inference_ms, "fallback_additive", "ood_guard",
-                true, prediction.feature_max_abs_z,
+                true, &features, prediction.feature_max_abs_z,
                 prediction.feature_mean_abs_z,
                 prediction.feature_outside_3sigma_count,
                 prediction.feature_outside_5sigma_count,
-                prediction.ood_guard_triggered, prediction.ood_z_threshold);
+                prediction.ood_guard_triggered, prediction.ood_z_threshold,
+                prediction.selected_rule_before_guard,
+                prediction.selected_rule_after_guard,
+                prediction.selected_rule_source);
             return additive;
           }
           if (!args.laur_force_additive && args.laur_safety_enabled &&
@@ -591,11 +648,13 @@ RunStats run_lacam_star_ltm(const Instance& instance, const Args& args)
                 args, context, prediction.rule_id, "additive_ltm",
                 prediction.safety_harmful_prob, prediction.predicted_delta_ratio,
                 prediction.inference_ms, "fallback_additive", "safety_gate",
-                true, prediction.feature_max_abs_z,
+                true, &features, prediction.feature_max_abs_z,
                 prediction.feature_mean_abs_z,
                 prediction.feature_outside_3sigma_count,
                 prediction.feature_outside_5sigma_count,
-                prediction.ood_guard_triggered, prediction.ood_z_threshold);
+                prediction.ood_guard_triggered, prediction.ood_z_threshold,
+                prediction.selected_rule_before_guard,
+                "additive_ltm", "safety_gate");
             return additive;
           }
           append_laur_update_log_jsonl(
@@ -603,11 +662,14 @@ RunStats run_lacam_star_ltm(const Instance& instance, const Args& args)
               prediction.safety_harmful_prob, prediction.predicted_delta_ratio,
               prediction.inference_ms,
               args.laur_force_additive ? "force_additive" : "applied",
-              args.laur_force_additive ? "force_additive" : "", true,
+              args.laur_force_additive ? "force_additive" : "", true, &features,
               prediction.feature_max_abs_z, prediction.feature_mean_abs_z,
               prediction.feature_outside_3sigma_count,
               prediction.feature_outside_5sigma_count,
-              prediction.ood_guard_triggered, prediction.ood_z_threshold);
+              prediction.ood_guard_triggered, prediction.ood_z_threshold,
+              prediction.selected_rule_before_guard,
+              prediction.selected_rule_after_guard,
+              prediction.selected_rule_source);
           return prediction.params;
         };
   }

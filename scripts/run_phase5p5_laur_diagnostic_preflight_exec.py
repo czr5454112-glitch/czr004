@@ -46,6 +46,7 @@ DEFAULT_REPAIR3_RUNTIME = "outputs/tmp/phase5/laur_repair3_stable_tie001_mlp_run
 DEFAULT_REPAIR5D_SPEC = "outputs/reports/phase4f_repair5d_best_composite_spec.json"
 DEFAULT_REPAIR5D_RUNTIME = "artifacts/models/laur_ltm/repair5d_composite_distilled"
 DEFAULT_REPAIR5E_OOD_GUARD_RUNTIME = "artifacts/models/laur_ltm/repair5d_composite_distilled_ood_guard"
+DEFAULT_REPAIR5E2_RUNTIME = "artifacts/models/laur_ltm/repair5e2_guarded_oracle_aligned_selector"
 DEFAULT_ORACLE_SUMMARY_JSON = "outputs/reports/phase5p5_oracle_update_preflight_summary.json"
 DEFAULT_ORACLE_REPORT = "outputs/reports/phase5p5_oracle_update_preflight_report.md"
 
@@ -174,10 +175,13 @@ def build_methods(
     repair3_runtime: Path | None,
     repair5d_runtime: Path | None,
     repair5e_ood_guard_runtime: Path | None,
+    repair5e2_runtime: Path | None = None,
     include_static_proxies: bool,
     include_oracle_static_probe: bool,
     include_ood_guard_candidate: bool = False,
+    include_repair5e2_candidate: bool = False,
     ood_guard_z_threshold: float = 5.0,
+    repair5e2_ood_guard_z_threshold: float = 5.0,
 ) -> tuple[list[MethodSpec], list[dict[str, Any]]]:
     methods = [
         MethodSpec("lacam_star", "lacam_star"),
@@ -263,6 +267,44 @@ def build_methods(
         skipped.append(
             {
                 "method": "repair5e_caseb_ood_guard_distilled",
+                "reason": "runtime_model_unavailable",
+            }
+        )
+
+    if include_repair5e2_candidate and repair5e2_runtime is not None:
+        methods.extend(
+            [
+                MethodSpec(
+                    "lacam_star_lau_ltm",
+                    "repair5e2_guarded_oracle_aligned_selector",
+                    (
+                        "--laur-model-path",
+                        str(repair5e2_runtime),
+                        "--laur-safety-threshold",
+                        "0.30",
+                        "--laur-ood-z-threshold",
+                        str(float(repair5e2_ood_guard_z_threshold)),
+                    ),
+                    "Repair5E.2 guarded oracle-aligned non-additive recovery selector, diagnostic only",
+                ),
+                MethodSpec(
+                    "lacam_star_lau_ltm",
+                    "repair5e2_guarded_oracle_aligned_selector_force_additive_parity",
+                    (
+                        "--laur-force-additive",
+                        "--laur-model-path",
+                        str(repair5e2_runtime),
+                        "--laur-ood-z-threshold",
+                        str(float(repair5e2_ood_guard_z_threshold)),
+                    ),
+                    "Repair5E.2 runtime path with forced additive/defer parity",
+                ),
+            ]
+        )
+    elif include_repair5e2_candidate:
+        skipped.append(
+            {
+                "method": "repair5e2_guarded_oracle_aligned_selector",
                 "reason": "runtime_model_unavailable",
             }
         )
@@ -768,6 +810,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--repair5d-spec-json", type=Path, default=Path(DEFAULT_REPAIR5D_SPEC))
     parser.add_argument("--repair5d-runtime-dir", type=Path, default=Path(DEFAULT_REPAIR5D_RUNTIME))
     parser.add_argument("--repair5e-ood-guard-runtime-dir", type=Path, default=Path(DEFAULT_REPAIR5E_OOD_GUARD_RUNTIME))
+    parser.add_argument("--repair5e2-runtime-dir", type=Path, default=Path(DEFAULT_REPAIR5E2_RUNTIME))
     parser.add_argument("--maps", nargs="+", choices=sorted(MAPS), default=list(MAPS))
     parser.add_argument("--agent-counts", nargs="+", type=int, default=[50, 100])
     parser.add_argument("--instances-per-setting", type=int, default=3)
@@ -776,7 +819,9 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--include-static-proxies", action="store_true")
     parser.add_argument("--include-oracle-static-probe", action="store_true")
     parser.add_argument("--include-ood-guard-candidate", action="store_true")
+    parser.add_argument("--include-repair5e2-candidate", action="store_true")
     parser.add_argument("--ood-guard-z-threshold", type=float, default=5.0)
+    parser.add_argument("--repair5e2-ood-guard-z-threshold", type=float, default=5.0)
     parser.add_argument("--skip-solver", action="store_true", help="Only summarize an existing --output-jsonl.")
     return parser.parse_args(argv)
 
@@ -798,6 +843,7 @@ def main(argv: list[str] | None = None) -> int:
     repair5d_spec_json = resolve_path(args.repair5d_spec_json, root)
     repair5d_runtime_dir = resolve_path(args.repair5d_runtime_dir, root)
     repair5e_ood_guard_runtime_dir = resolve_path(args.repair5e_ood_guard_runtime_dir, root)
+    repair5e2_runtime_dir = resolve_path(args.repair5e2_runtime_dir, root)
     if None in (
         binary,
         scenario_dir,
@@ -813,12 +859,14 @@ def main(argv: list[str] | None = None) -> int:
         repair5d_spec_json,
         repair5d_runtime_dir,
         repair5e_ood_guard_runtime_dir,
+        repair5e2_runtime_dir,
     ):
         raise ValueError("required paths could not be resolved")
     assert binary and scenario_dir and output_dir and summary_json and summary_csv and paired_csv and report
     assert oracle_summary_json and oracle_report
     assert repair3_weights and repair3_runtime_dir
     assert repair5d_spec_json and repair5d_runtime_dir and repair5e_ood_guard_runtime_dir
+    assert repair5e2_runtime_dir
 
     output_dir.mkdir(parents=True, exist_ok=True)
     output_jsonl = resolve_path(args.output_jsonl, root) if args.output_jsonl else _jsonl_name(output_dir)
@@ -845,16 +893,25 @@ def main(argv: list[str] | None = None) -> int:
         if all((repair5e_ood_guard_runtime_dir / name).exists() for name in required_runtime_files)
         else None
     )
+    repair5e2_runtime = (
+        repair5e2_runtime_dir
+        if all((repair5e2_runtime_dir / name).exists() for name in required_runtime_files)
+        and (repair5e2_runtime_dir / "repair5e2_recovery_rules.csv").exists()
+        else None
+    )
     methods, skipped_methods = build_methods(
         root=root,
         additive_model=additive_model,
         repair3_runtime=repair3_runtime,
         repair5d_runtime=repair5d_runtime,
         repair5e_ood_guard_runtime=repair5e_ood_guard_runtime,
+        repair5e2_runtime=repair5e2_runtime,
         include_static_proxies=bool(args.include_static_proxies),
         include_oracle_static_probe=bool(args.include_oracle_static_probe),
         include_ood_guard_candidate=bool(args.include_ood_guard_candidate),
+        include_repair5e2_candidate=bool(args.include_repair5e2_candidate),
         ood_guard_z_threshold=float(args.ood_guard_z_threshold),
+        repair5e2_ood_guard_z_threshold=float(args.repair5e2_ood_guard_z_threshold),
     )
     skipped_methods.append({"method": "repair3_runtime_export", "reason": repair3_status})
     skipped_methods.append(
@@ -873,6 +930,12 @@ def main(argv: list[str] | None = None) -> int:
         {
             "method": "repair5e_ood_guard_runtime",
             "reason": "available" if repair5e_ood_guard_runtime is not None else "missing_runtime_dir_or_required_files",
+        }
+    )
+    skipped_methods.append(
+        {
+            "method": "repair5e2_guarded_oracle_aligned_selector_runtime",
+            "reason": "available" if repair5e2_runtime is not None else "missing_runtime_dir_or_required_files",
         }
     )
 

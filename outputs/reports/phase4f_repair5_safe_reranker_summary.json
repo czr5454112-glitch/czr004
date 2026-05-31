@@ -1,0 +1,33 @@
+{
+  "base_eval_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase4f_repair5_expand5000_postnext_hightoken_attn_mlp_head_rank_recall_perrule_eval_seed61.csv",
+  "branch": "phase4f5p5-stable-attention-lau",
+  "commit": "387003a",
+  "created_at": "2026-05-31T13:18:22.858900",
+  "dataset": "C:\\PROGRAMING\\czr004\\artifacts\\teacher\\laur\\full_repair5_attention_native_expand5000_rawtrace_hightoken\\update_labels\\phase4_laur_attention_native_expand5000_rawtrace_hightoken_dataset.jsonl.zst",
+  "dirty": "tracked-dirty_untracked-present",
+  "metrics": {
+    "fallback_defer_rate": 0.7808398950131233,
+    "high_margin_capture": 0.25806451612903225,
+    "sample_count": 762,
+    "selected_harmful_rate": 0.0,
+    "selected_rule_distribution": {
+      "additive_ltm": 595,
+      "commit_heavy": 112,
+      "decay_095": 1,
+      "wait_light": 54
+    },
+    "selected_vs_additive_delta": 0.005536192921109192,
+    "selected_vs_additive_utility": 0.004486324154704993,
+    "target_in_candidate_set": 0.6430446194225722,
+    "top1_among_candidates": 0.2821522309711286,
+    "utility_regret_to_oracle": 0.026019541901074875
+  },
+  "model_path": "C:\\PROGRAMING\\czr004\\artifacts\\models\\laur_ltm\\repair5c_top3_reranker_seed61\\model.pt",
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "reranker_status": "loaded",
+  "safety_scope": "per_rule",
+  "schema_version": "phase4f_repair5_safe_reranker_v1",
+  "split": "validation",
+  "top_k": 3
+}

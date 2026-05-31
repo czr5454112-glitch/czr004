@@ -2176,3 +2176,66 @@
   - Seeds 103/107 are not permitted because seed61 did not pass.
   - Phase5.5 and Phase6 remain forbidden.
   - Remote server had no active training process and GPU memory was idle after completion.
+
+## 2026-05-31 13:30 - Repair5D diagnostic preflight and output-space triage
+
+- Request:
+  - Complete `czr004_laur_repair5d_preflight_outputspace_plan.md`.
+  - Treat `deep-research-report.md` and `phase4_6_laur_ltm_codex_execution_plan.md` as boundary context.
+- Implemented diagnostic-only tools:
+  - `scripts/run_phase5p5_laur_diagnostic_preflight_exec.py`
+  - `src/eval/eval_laur_repair5_composite_grid.py`
+  - `src/eval/eval_laur_repair5_selected_safety_alignment.py`
+  - `src/eval/eval_laur_repair5_safe_reranker.py`
+  - `tests/test_repair5c_laur_tools.py`
+- Closed-loop diagnostic preflight:
+  - Raw solver JSONL: `outputs/logs/phase5p5_laur_diagnostic_preflight/phase5p5_laur_diagnostic_preflight_20260531_131839.jsonl`
+  - Command log: `outputs/logs/phase5p5_laur_diagnostic_preflight/phase5p5_laur_diagnostic_preflight_20260531_131839_commands.jsonl`
+  - Summary: `outputs/reports/phase5p5_laur_diagnostic_preflight_summary.json`
+  - Report: `outputs/reports/phase5p5_laur_diagnostic_preflight_report.md`
+  - Tables:
+    - `outputs/tables/phase5p5_laur_diagnostic_preflight_summary.csv`
+    - `outputs/tables/phase5p5_laur_diagnostic_preflight_paired.csv`
+- Preflight scope:
+  - maps: `random-32-32-20`, `maze-32-32-4`, `warehouse-10-20-10-2-1`
+  - agents: 50, 100
+  - instances per setting: 3
+  - time limit: 3s
+  - methods executed: `lacam_star`, `lacam_star_ltm`, `always_additive_defer`, `repair3_safe_runtime`
+  - rows: 72 solver rows, 0 schema errors.
+- Preflight observations:
+  - `always_additive_defer` exactly matches `lacam_star_ltm` on ratio in all six map-agent groups and has zero non-additive updates.
+  - `repair3_safe_runtime` preserves success in all groups and uses non-additive updates, but is ratio-worse than LTM in one group; this remains a conservative baseline, not a learned-benefit result.
+  - Attention-native Repair5C composite and oracle replay were explicitly marked not executed in closed loop because there is no C++ runtime export / teacher-forced hook for that policy yet.
+- Composite grid:
+  - Summary: `outputs/reports/phase4f_repair5d_composite_grid_summary.json`
+  - Report: `outputs/reports/phase4f_repair5d_composite_grid.md`
+  - Table: `outputs/tables/phase4f_repair5d_composite_grid_summary.csv`
+  - Best no-retraining multi-source mode:
+    - rank: `expand5000_nextwave_normal_attn_linear_head_rank_safe`
+    - safety: `expand5000_hightoken_ht_mlp_target_global`
+    - anti: `postnext_hightoken_attn_mlp_head_rank_recall_perrule`
+    - mode: top5 + per-rule safety + utility rerank
+    - top1 0.498965, top3 0.871636, selected-vs-additive delta 0.008891, regret 0.021851, recall 0.801068, precision 0.300451, selected harmful 0.005249, high-margin capture 0.419355.
+- Selected-safety alignment:
+  - Summary: `outputs/reports/phase4f_repair5_selected_safety_alignment.json`
+  - Report: `outputs/reports/phase4f_repair5_selected_safety_alignment.md`
+  - For current `top3_per_rule_safety_utility`, all-rule safety remains just short of gate (recall 0.783712, precision 0.289591), but selected harmful rate is low at 0.007874.
+  - Selected harmful false negatives concentrate in `maze-32-32-4`, with `decay_095` and `wait_light` selected false negatives.
+- Safe reranker wrapper:
+  - Summary: `outputs/reports/phase4f_repair5_safe_reranker_summary.json`
+  - Report: `outputs/reports/phase4f_repair5_safe_reranker.md`
+  - Table: `outputs/tables/phase4f_repair5_safe_reranker.csv`
+  - Existing top3 reranker model loaded successfully, but wrapper is conservative: selected harmful 0.0, selected-vs-additive delta 0.005536, high-margin capture 0.258065, fallback/defer 0.780840.
+- Interpretation:
+  - Repair5D does not unlock Phase5.5 or Phase6.
+  - Offline multi-source composition improved safety alignment enough to justify further export/composition work before jumping to bounded `UpdateParams`.
+  - The current blocker is still runtime/export and selection-safety composition, not evidence that the eight-preset space is exhausted.
+- Verification:
+  - `python -m py_compile scripts\run_phase5p5_laur_diagnostic_preflight_exec.py src\eval\eval_laur_repair5_composite_grid.py src\eval\eval_laur_repair5_selected_safety_alignment.py src\eval\eval_laur_repair5_safe_reranker.py tests\test_repair5c_laur_tools.py`: passed.
+  - `conda run -n czr004 python -m pytest tests\test_repair5c_laur_tools.py tests\test_czr004_metrics.py tests\test_phase5_laur_runtime_parity.py -q`: 18 passed.
+- Boundary:
+  - No gate was lowered.
+  - No agent-action policy, learned restart, PIBT replacement, LaCAM* semantic change, conflict/candidate/pruning change, or runtime promotion was added.
+  - Phase5.5 remains forbidden.
+  - Phase6 remains forbidden.

@@ -10,9 +10,12 @@ sys.path.insert(0, str(ROOT / "src"))
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from czr004_teacher.stable_attention_tokens_laur import EXECUTABLE_RULE_IDS  # noqa: E402
+from eval.eval_laur_repair5_safe_reranker import safe_reranker_records  # noqa: E402
+from eval.eval_laur_repair5_selected_safety_alignment import summarize_alignment  # noqa: E402
 from eval.eval_laur_repair5_composite_inference import composite_records  # noqa: E402
 from eval.eval_laur_repair5_final_gate import safety_calibration_label  # noqa: E402
 from run_phase5p5_laur_diagnostic_preflight import build_preflight_plan  # noqa: E402
+from run_phase5p5_laur_diagnostic_preflight_exec import summarize_rows  # noqa: E402
 from train.train_laur_attention_native import calibrate_safety_thresholds_from_scores  # noqa: E402
 from train.train_laur_attention_reranker import build_reranker_example  # noqa: E402
 
@@ -137,3 +140,92 @@ def test_diagnostic_preflight_plan_never_unlocks_phase5p5() -> None:
     assert plan["diagnostic_preflight_warranted"] is True
     assert plan["phase5p5_allowed"] is False
     assert plan["phase6_allowed"] is False
+
+
+def test_selected_safety_alignment_counts_selected_false_negative() -> None:
+    records = [
+        {
+            "mode": "top3_per_rule_safety_utility",
+            "map_name": "empty-8-8",
+            "selected_rule": "block_heavy",
+            "harmful_labels": json.dumps([0, 0, 1, 0, 0, 0, 0, 0]),
+            "harmful_predictions": json.dumps([0, 0, 0, 0, 0, 0, 0, 0]),
+        }
+    ]
+
+    summary = summarize_alignment(
+        records,
+        calibration={"threshold_by_rule": {rule: 0.50 for rule in EXECUTABLE_RULE_IDS}},
+        default_threshold=0.50,
+    )
+
+    mode = summary["top3_per_rule_safety_utility"]
+    assert mode["all_rule_safety"]["fn"] == 1
+    assert mode["selected_rule_safety"]["fn"] == 1
+    assert mode["selected_harmful_false_negative_by_rule"] == {"block_heavy": 1}
+
+
+def test_safe_reranker_masks_unsafe_top_candidate_and_recovers_target() -> None:
+    metrics_records, metrics = safe_reranker_records(
+        labels={"case-1": _label_row()},
+        eval_rows={"case-1": _eval_row()},
+        calibration={"threshold_by_rule": {rule: 0.50 for rule in EXECUTABLE_RULE_IDS}},
+        scorer=None,
+        top_k=3,
+        safety_scope="per_rule",
+        default_threshold=0.50,
+        opportunity_threshold=0.50,
+        defer_threshold=0.50,
+        min_utility_margin=0.0,
+    )
+
+    assert metrics_records[0]["selected_rule"] == "block_heavy"
+    assert metrics_records[0]["selected_decision"] == "use_nonadditive"
+    assert metrics["selected_harmful_rate"] == 0.0
+    assert metrics["selected_vs_additive_delta"] > 0.0
+
+
+def test_preflight_exec_summary_reports_laur_update_rates_without_unlocking() -> None:
+    rows = [
+        {
+            "method": "repair3_safe_runtime",
+            "map": "empty-8-8",
+            "scen": "empty-8-8-random-1.scen",
+            "agents": 16,
+            "seed": 1,
+            "time_limit_sec": 1.0,
+            "objective": "sum_of_loss",
+            "valid_instance": True,
+            "success": True,
+            "feasible": True,
+            "sum_of_loss": 12,
+            "lower_bound": 10,
+            "sum_of_loss_ratio": 1.2,
+            "makespan": 5,
+            "runtime_ms": 10.0,
+            "time_to_first_solution_ms": 4.0,
+            "returned_solutions_count": 1,
+            "loop_cnt": 2,
+            "expanded_nodes": 3,
+            "high_level_expansions": 2,
+            "low_level_pibt_calls": 7,
+            "laur_inference_total_ms": 0.2,
+            "laur_inference_count": 2,
+            "laur_additive_fallback_count": 1,
+            "laur_safety_disabled_count": 0,
+            "laur_selected_rules": {"block_heavy": 1},
+            "git_commit": "test",
+            "external_lacam2_commit": "test",
+            "branch": "test",
+            "dirty": "test",
+            "binary_path": "test",
+            "config_path": "test",
+            "platform": "test",
+        }
+    ]
+
+    summary = summarize_rows(rows)
+
+    assert summary[0]["non_additive_update_rate"] == 0.5
+    assert summary[0]["fallback_defer_rate"] == 0.5
+    assert summary[0]["selected_harmful_update_rate"] is None

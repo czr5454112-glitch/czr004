@@ -5800,3 +5800,388 @@ No completed Repair5 result permits Phase5.5.
 Phase6 remains forbidden.
 ```
 
+### 29.26 Repair5B next-round plan from GPTPro - 2026-05-31 +08:00
+
+GPTPro's `phase4f55_laur_repair5b_next_round_codex_plan.md` is accepted as
+the next Repair5B research plan. It does not change the project direction and
+does not relax any runtime or paper-claim gate.
+
+Current interpretation:
+
+```text
+expand5000 / high-token data is valid and opportunity-rich
+sample_count = 4956
+train / validation = 4194 / 762
+use_nonadditive = 3274
+defer_ltm = 1682
+high_margin_nonadditive_opportunity_count = 2325
+schema_error_count = 0
+
+27 completed Repair5 summaries:
+  development pass = 0
+  promotion-candidate pass = 0
+  strict seed pass = 0
+```
+
+Therefore the failure is not "no signal" or "bad data pipeline." The sharper
+diagnosis is:
+
+```text
+attention-native labels, raw-trace evidence, and anti-escape evaluation work;
+individual subgoals can improve;
+but the current flat multi-task selector has not jointly solved
+ranking + safety + anti-escape + positive utility.
+```
+
+Repair5B next objective:
+
+```text
+Build hierarchical attention-native LAUR for learned UpdateLTM only.
+
+No agent-action policy.
+No learned restart.
+No PIBT / LaCAM* semantic change.
+No candidate/conflict/pruning/rewrite semantic change.
+No final-gate lowering.
+```
+
+The next phase is not another blind loss sweep. The required sequence is:
+
+```text
+R5B-0 failure decomposition + oracle upper bound
+R5B-1 per-rule / per-family safety calibration
+R5B-2 hierarchical normal-token rank-first curriculum
+R5B-3 hierarchical high-token rank-first curriculum
+R5B-4 hierarchical high-token safety-first curriculum
+R5B-5 high-margin specialist diagnostic
+
+Only if these show real signal:
+R5B-6 hierarchical high-token + stratified sampler
+R5B-7 hierarchical high-token + per-rule safety + rank-first
+R5B-8 hierarchical high-token + hard-case replay
+R5B-9 hierarchical high-token + map-family balanced fine-tune
+R5B-10 bounded parameter/residual head diagnostic
+       only if oracle shows static rule action space is limiting
+```
+
+First required diagnostic:
+
+```text
+src/eval/diagnose_laur_repair5_failure_modes.py
+
+outputs:
+  outputs/reports/phase4f_repair5_failure_decomposition.md
+  outputs/reports/phase4f_repair5_failure_decomposition.json
+  outputs/tables/phase4f_repair5_failure_by_rule.csv
+  outputs/tables/phase4f_repair5_failure_by_map.csv
+  outputs/tables/phase4f_repair5_failure_by_opportunity.csv
+  outputs/tables/phase4f_repair5_oracle_gap.csv
+```
+
+The failure decomposition must compare at least:
+
+```text
+always_additive / always_defer_ltm
+Repair3 stable-target MLP baseline
+best completed Repair5 by top3
+best completed Repair5 by recall
+best completed Repair5 by anti-escape
+best completed expand5000 high-token variant
+oracle_best_safe_rule
+oracle_best_safe_nonadditive_rule
+oracle_defer_when_no_safe_opportunity
+```
+
+Required grouped metrics:
+
+```text
+rule_top1 / rule_top3
+safe_utility_top1 / safe_utility_top3
+utility_regret_to_oracle
+selected_vs_additive_delta
+selected_vs_additive_utility
+high_margin_nonadditive_capture
+avoidable_additive_or_defer
+harmful false negatives by selected rule
+harmful false positives by selected rule
+defer reason confusion
+decision accuracy: defer_ltm vs use_nonadditive
+```
+
+Oracle decision rule:
+
+```text
+if oracle_vs_additive_mean_delta <= small_epsilon
+   or oracle_high_margin_capture_possible is low:
+       the current static rule space may be the bottleneck;
+       consider bounded UpdateLTM parameter/residual heads only as a diagnostic.
+else:
+       continue hierarchical attention-native LAUR.
+```
+
+Hierarchical model target:
+
+```text
+LAU-HierEdgeTraceTransformer-v5
+
+global_context_encoder
+edge_trace_encoder
+rule_token_encoder
+cross_attention
+decision_head: defer_ltm vs use_nonadditive
+safety_head: per-rule harmful probability
+rule_rank_head: rank non-additive rules only
+utility_head: selected-vs-additive / risk-adjusted utility
+optional uncertainty / abstention head
+```
+
+Hierarchical selection logic must be explicit and logged:
+
+```text
+if decision_head says defer_ltm:
+    select additive_ltm / defer_ltm
+else:
+    apply calibrated per-rule safety mask
+    rank safe non-additive rules
+    select best safe non-additive only if margin over additive/defer is sufficient
+    otherwise defer with reason = insufficient_margin
+
+must log:
+  selected_rule
+  selection_stage
+  defer_reason
+  safety_threshold_by_rule
+  safety_mask
+  best_safe_nonadditive_rule
+  best_safe_nonadditive_score
+  margin_vs_additive
+  margin_vs_defer
+```
+
+Per-rule / per-family safety calibration is now a first-class Repair5B step:
+
+```text
+src/eval/calibrate_laur_repair5_per_rule_safety.py
+
+outputs:
+  outputs/reports/phase4f_repair5_per_rule_safety_calibration.json
+  outputs/reports/phase4f_repair5_per_rule_safety_calibration.md
+  outputs/tables/phase4f_repair5_per_rule_safety_thresholds.csv
+
+target remains:
+  harmful recall >= 0.80
+  harmful precision >= 0.30
+```
+
+Training must use structured curricula rather than simultaneous pressure on all
+losses:
+
+```text
+configs/phase4/generated_repair5_hier_curriculum/
+
+rank-first:
+  early decision + ranking + utility
+  middle add safety and calibration
+  late add anti-escape / high-margin pressure
+
+safety-first:
+  early harmful + high-margin harmful + decision
+  middle add rule ranking
+  late add anti-escape and per-rule calibration
+
+high-margin specialist:
+  train/evaluate hard opportunity subset as diagnostic only
+```
+
+Sampler and data aggregation requirements:
+
+```text
+train_laur_attention_native.py:
+  --sampler stratified
+
+stratify by:
+  split
+  map family
+  agent count bucket
+  target rule family / target rule
+  harmful positive / negative
+  high-margin opportunity
+  defer reason
+  anti_escape_sample
+
+hard-case replay index:
+  artifacts/teacher/laur/repair5_hardcase_index.jsonl
+```
+
+Hard-case mining is preferred over blindly scaling the dataset. Generate new
+Phase4F data only for buckets exposed by failure decomposition:
+
+```text
+specific map family has high regret
+specific rule family has high harmful false-negative rate
+high-margin opportunity is under-sampled for a rule family
+anti-escape passes but selected utility remains poor
+```
+
+Recent AI / robotics / MAPF literature may be used only for architecture and
+experiment inspiration. Required memo:
+
+```text
+outputs/reports/phase4f_repair5_recent_ai_robotics_architecture_memo.md
+
+Scope:
+  read at least six 2023-2026 AI / robotics / MAPF / planning-learning papers
+  extract transferable architecture / training / gate / ablation ideas
+  state what cannot be used because it violates LAUR constraints
+  propose 2-4 LAUR-compatible variants
+  do not bypass existing gates
+```
+
+Phase5.5 remains forbidden until all of the following hold:
+
+```text
+seed61 strict Repair5B gate pass
+seeds 103/107 pass
+final multi-seed gate pass
+anti-escape pass by high-margin opportunity subset
+per-rule or global safety calibration report clean
+selected_vs_additive_delta positive
+no missing gate fields
+deterministic inference/export path exists
+additive/defer fallback reasons logged
+```
+
+If Phase5.5 is unlocked, runtime smoke must compare:
+
+```text
+LaCAM*
+LaCAM*+LTM
+Repair3 MLP safe runtime
+Repair5B LAUR
+Repair5B force-additive / defer-only
+Repair5B without anti-escape
+Repair5B without safety
+Repair5B static selected-rule ablations
+```
+
+Phase5.5 smoke output:
+
+```text
+outputs/reports/phase5p5_laur_repair5b_runtime_smoke_report.md
+```
+
+Scaling boundary:
+
+```text
+Do not start 20-40 hour or 100 hour training until Repair5B seed61 reaches
+promotion-candidate or near-strict evidence, oracle gap shows the model rather
+than static action space is the bottleneck, and high-margin capture / recall /
+top3 improve together.
+
+100 hour scale additionally requires 20k-50k checkpoint labels, enough
+high-margin validation evidence, non-collapsing multi-seed behavior, Phase5.5
+smoke not worse than LTM, and ablations proving attention/raw-trace/anti/safety
+contribution.
+```
+
+### 29.27 GPTPro/Claude gate clarification - 2026-05-31 +08:00
+
+The GPTPro/Claude discussion is accepted as a research-evaluation clarification,
+not as a Phase5.5 runtime relaxation.
+
+Key distinction:
+
+```text
+Research / paper KPI:
+  eventually judged by closed-loop learned benefit over additive LTM and
+  LaCAM*+LTM, with safety, utility regret, high-margin capture, overhead,
+  and ablation evidence.
+
+Engineering / Phase5.5 runtime gate:
+  remains strict. It protects solver-loop semantics, fallback/parity behavior,
+  safety, anti-escape, deterministic export, and multi-seed stability.
+```
+
+Repair5 attention-native labels are not Repair3-style stable hard labels.
+Therefore all-class top1 is no longer the primary Repair5 research KPI:
+
+```text
+top1:
+  diagnostic only for Repair5B research triage.
+
+primary Repair5B research signals:
+  safe utility top-k
+  utility regret to oracle
+  selected_vs_additive_delta
+  harmful recall / precision
+  high-margin opportunity capture
+  avoidable additive/defer behavior
+  fallback/defer reason distribution
+  later closed-loop transfer versus additive LTM
+```
+
+The operational gate stack is now:
+
+```text
+A. Development / research-triage gate
+   schema/split/audit clean
+   top3 >= 0.60, or approaching 0.65 with clear positive delta
+   harmful recall >= 0.70
+   harmful precision >= 0.25
+   selected_vs_additive_delta > 0
+   high-margin capture better than always-additive / Repair3 reference
+   utility regret to oracle reported
+   top1 diagnostic only
+   meaning: continue exploration only
+
+B. Promotion-candidate / diagnostic preflight gate
+   top3 >= 0.65
+   harmful recall >= 0.78
+   harmful precision >= 0.28
+   selected_vs_additive_delta > 0
+   anti-escape clearly improves versus additive/defer and Repair3 reference
+   high-margin opportunity capture >= 0.30 or clearly above reference
+   utility regret acceptable
+   meaning: may plan diagnostic closed-loop preflight only
+
+C. Runtime / Phase5.5 engineering gate
+   original Phase4F or formally approved utility-equivalent gate
+   attention-native gate
+   harmful recall >= 0.80
+   harmful precision >= 0.30
+   anti-escape hard pass or behaviorally equivalent proof
+   seed61 + seeds 103/107 + final multi-seed gate
+   force-additive / defer parity
+   deterministic export
+   no solver semantic changes
+   meaning: Phase5.5 parity/smoke only
+
+D. Phase6 / paper-claim gate
+   closed-loop > additive LTM / LaCAM*+LTM
+   multi-map / multi-seed statistics
+   success, SoL ratio, anytime AUC, expanded nodes, TTFS, runtime overhead
+   ablations: no learned LAUR, no anti-escape, no safety,
+     Repair3 baseline, additive LTM baseline
+```
+
+Diagnostic closed-loop preflight may be planned before Phase5.5 only if it is
+explicitly labeled:
+
+```text
+not Phase5.5 permission
+not runtime promotion
+not Phase6 evidence
+hard safety mask enabled
+force-additive/defer parity checked
+only measures offline-to-closed-loop transfer
+```
+
+This clarification changes interpretation, not final gates:
+
+```text
+Do lower the early research burden of all-class top1.
+Do re-rank Repair5B by closed-loop relevance.
+Do not lower Phase5.5 safety, anti-escape, parity, export, or multi-seed gates.
+Do not claim Phase6 without closed-loop learned-benefit evidence.
+```
+

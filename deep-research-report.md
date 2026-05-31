@@ -51,6 +51,169 @@ This means the layered policy is useful for analysis, but it does not make any
 completed Repair5 scheme eligible for Phase5.5. Current nextwave/postnext
 experiments remain necessary. Phase6 remains forbidden until closed-loop
 learned-benefit evidence exists.
+
+## 2026-05-31 Repair5B next-round research policy
+
+GPTPro's `phase4f55_laur_repair5b_next_round_codex_plan.md` is incorporated as
+the next research-policy update for Repair5B. This is not a direction switch and
+not a gate relaxation.
+
+Core interpretation:
+
+```text
+expand5000 / high-token data is valid and opportunity-rich.
+Repair5 has not shown that the current flat attention selector can jointly
+satisfy ranking + safety + anti-escape.
+The next step is structured diagnosis and hierarchical LAUR, not another
+unstructured loss-weight sweep.
+```
+
+The main route remains:
+
+```text
+learned UpdateLTM / LAUR only
+no agent-action policy
+no learned restart
+no PIBT or LaCAM* semantic change
+no collision/candidate/pruning/rewrite semantic change
+no final-gate lowering
+```
+
+Repair5B research sequence:
+
+```text
+1. failure decomposition + oracle upper bound
+2. per-rule / per-family safety calibration
+3. hierarchical attention-native LAUR controller
+4. curriculum training: rank-first, safety-first, high-margin specialist
+5. stratified sampler and hard-case replay
+6. active hard-case data aggregation when diagnostics justify it
+7. bounded UpdateLTM parameter/residual head only if oracle shows the static
+   rule space is limiting
+8. recent AI / robotics / MAPF architecture memo for inspiration only
+```
+
+The most important new scientific question is the oracle gap:
+
+```text
+If oracle_best_safe_rule cannot beat additive LTM by a meaningful margin,
+then the eight static update rules may be too coarse.
+If oracle_best_safe_rule is strong but models have high regret, then the model,
+training, calibration, or data balance is the bottleneck.
+```
+
+Hierarchical LAUR is preferred over the current flat selector because the failed
+Repair5 runs show a recurring tradeoff:
+
+```text
+anti-escape pressure improves non-additive selection but can hurt recall;
+safety pressure can suppress opportunity capture;
+target-rule pressure can improve top3 while leaving safety/anti unstable.
+```
+
+Repair5B should separate these decisions:
+
+```text
+decision_head: defer_ltm vs use_nonadditive
+safety_head: per-rule harmful probability
+rank_head: rank safe non-additive rules
+utility_head: risk-adjusted utility / selected-vs-additive gain
+fallback logic: defer when safety or margin is insufficient
+```
+
+This is compatible with recent hybrid learning/planning practice only at the
+architecture and experiment-design level. The project may borrow ideas such as
+graph/cross attention, modular controllers, curriculum, uncertainty/abstention,
+hard-case mining, pretrain/fine-tune, and ablation discipline. It must not
+borrow agent action decoders, learned collision handling, diffusion robot action
+generation, VLA action policies, learned restart, or replacements for PIBT /
+LaCAM*.
+
+New expected evidence artifacts:
+
+```text
+outputs/reports/phase4f_repair5_failure_decomposition.md
+outputs/reports/phase4f_repair5_failure_decomposition.json
+outputs/tables/phase4f_repair5_oracle_gap.csv
+outputs/reports/phase4f_repair5_per_rule_safety_calibration.md
+outputs/tables/phase4f_repair5_per_rule_safety_thresholds.csv
+outputs/reports/phase4f_repair5_recent_ai_robotics_architecture_memo.md
+artifacts/teacher/laur/repair5_hardcase_index.jsonl
+```
+
+Phase5.5 remains forbidden until strict Repair5B seed61 passes, seeds 103/107
+also pass, final multi-seed gate passes, safety and anti-escape are clean,
+selected-vs-additive delta is positive, deterministic export exists, and
+fallback/defer reasons are logged. Phase6 still requires later closed-loop
+learned-benefit evidence against LTM.
+
+## 2026-05-31 GPTPro/Claude evaluation-policy clarification
+
+The GPTPro/Claude discussion is incorporated as a distinction between paper
+evaluation and engineering promotion. It does not make any current Repair5 or
+Repair5B result eligible for Phase5.5.
+
+Accepted:
+
+```text
+All-class Repair3-style top1 is not the main Repair5 research KPI.
+Repair5 attention-native labels should be judged by closed-loop relevance:
+  safe utility top-k
+  utility regret to oracle
+  selected_vs_additive_delta
+  high-margin opportunity capture
+  harmful recall / precision
+  fallback/defer behavior
+  later closed-loop benefit over additive LTM
+The final paper claim must be closed-loop learned benefit over LTM,
+not offline classifier fit alone.
+```
+
+Not accepted as a runtime rule:
+
+```text
+Do not replace Phase5.5 engineering gates with paper KPIs.
+Do not use "closed-loop is what matters" to bypass offline safety,
+anti-escape, force-additive/defer parity, deterministic export, or multi-seed.
+Do not treat current Repair5 evidence as publication-ready.
+It is directional signal, not a stable candidate.
+```
+
+The policy is:
+
+```text
+Development gate:
+  softer research-triage gate, top1 diagnostic only, no runtime permission.
+
+Promotion-candidate gate:
+  may trigger diagnostic closed-loop preflight planning only.
+  This is not Phase5.5 promotion and not Phase6 evidence.
+
+Runtime / Phase5.5 gate:
+  strict original or formally approved utility-equivalent gate,
+  harmful recall >= 0.80, harmful precision >= 0.30,
+  anti-escape hard pass or equivalent behavioral proof,
+  final multi-seed evidence, parity, deterministic export,
+  no solver semantic change.
+
+Phase6 / paper gate:
+  closed-loop > additive LTM / LaCAM*+LTM,
+  multi-map / multi-seed statistics,
+  ablations without learned LAUR, without anti-escape, without safety,
+  Repair3 baseline, and additive LTM baseline.
+```
+
+Any diagnostic closed-loop preflight must be labeled:
+
+```text
+not Phase5.5 permission
+not runtime promotion
+not Phase6 evidence
+hard safety mask enabled
+force-additive/defer parity checked
+only measuring offline-to-closed-loop transfer
+```
+
 # NTM for Lightweight Traffic Map 项目指南
 
 生成日期：2026-05-20  

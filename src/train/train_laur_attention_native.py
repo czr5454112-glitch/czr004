@@ -34,6 +34,7 @@ from czr004_teacher.stable_attention_tokens_laur import (  # noqa: E402
 )
 from models.laur_attention_native import (  # noqa: E402
     EDGE_TRACE_TRANSFORMER_NAME,
+    HIER_EDGE_TRACE_TRANSFORMER_NAME,
     MODEL_SCHEMA_VERSION,
     SET_RULE_TRANSFORMER_NAME,
     build_model,
@@ -276,6 +277,126 @@ def batched(rows: list[dict[str, Any]], batch_size: int, *, shuffle: bool = Fals
     return [values[index : index + size] for index in range(0, len(values), size)]
 
 
+def load_hardcase_checkpoint_ids(path: Path | None) -> set[str]:
+    if path is None or not path.exists():
+        return set()
+    ids: set[str] = set()
+    with path.open("r", encoding="utf-8") as handle:
+        for line in handle:
+            text = line.strip()
+            if not text:
+                continue
+            try:
+                item = json.loads(text)
+            except json.JSONDecodeError:
+                continue
+            checkpoint = str(item.get("checkpoint_id", ""))
+            if checkpoint:
+                ids.add(checkpoint)
+    return ids
+
+
+def sample_epoch_rows(rows: list[dict[str, Any]], train_config: dict[str, Any], root: Path) -> list[dict[str, Any]]:
+    if not rows:
+        return []
+    sampler = str(train_config.get("sampler", "uniform")).strip().lower()
+    hardcase_path = resolve_path(train_config.get("hardcase_index_jsonl") or train_config.get("hardcase_index"), root)
+    hardcase_ids = load_hardcase_checkpoint_ids(hardcase_path)
+    if sampler != "stratified" and not hardcase_ids:
+        return list(rows)
+
+    target_counts = Counter(str(row.get("target_rule", "")) for row in rows if row.get("target_rule"))
+    max_target_count = max(target_counts.values()) if target_counts else 1
+    defer_counts = Counter(str(row.get("defer_reason") or row.get("decision_target") or "") for row in rows)
+    max_defer_count = max(defer_counts.values()) if defer_counts else 1
+    high_margin_weight = float(train_config.get("high_margin_weight", 1.0))
+    harmful_positive_weight = float(train_config.get("harmful_positive_weight", 1.0))
+    rare_rule_weight = float(train_config.get("rare_rule_weight", 1.0))
+    hardcase_replay_weight = float(train_config.get("hardcase_replay_weight", 1.0))
+    balance_defer = bool(train_config.get("defer_reason_balance", False))
+    weights: list[float] = []
+    for row in rows:
+        weight = 1.0
+        if bool(row.get("has_high_margin_nonadditive_opportunity")):
+            weight *= max(0.0, high_margin_weight)
+        if any(bool(value) for value in row.get("probe_harmful_vector", [])):
+            weight *= max(0.0, harmful_positive_weight)
+        target_rule = str(row.get("target_rule", ""))
+        if target_rule and target_counts.get(target_rule):
+            rarity = max_target_count / max(1, target_counts[target_rule])
+            weight *= 1.0 + max(0.0, rare_rule_weight - 1.0) * min(rarity, 5.0) / 5.0
+        if balance_defer:
+            reason = str(row.get("defer_reason") or row.get("decision_target") or "")
+            weight *= max_defer_count / max(1, defer_counts.get(reason, 1))
+        if str(row.get("checkpoint_id", "")) in hardcase_ids:
+            weight *= max(0.0, hardcase_replay_weight)
+        weights.append(max(weight, 1.0e-6))
+    sample_count = int(train_config.get("sampler_epoch_size", len(rows)))
+    return random.choices(rows, weights=weights, k=max(1, sample_count))
+
+
+def loss_config_for_epoch(
+    base_loss_config: dict[str, Any],
+    curriculum_config: dict[str, Any],
+    epoch: int,
+) -> dict[str, Any]:
+    merged = dict(base_loss_config)
+    merged["_curriculum_stage"] = "base"
+    if not isinstance(curriculum_config, dict):
+        return merged
+    stages = curriculum_config.get("stages", [])
+    if not isinstance(stages, list):
+        return merged
+    for stage in stages:
+        if not isinstance(stage, dict):
+            continue
+        start_epoch = int(stage.get("from_epoch", stage.get("start_epoch", 1)))
+        end_value = stage.get("until_epoch", stage.get("end_epoch"))
+        end_epoch = int(end_value) if end_value is not None else None
+        if int(epoch) < start_epoch:
+            continue
+        if end_epoch is not None and int(epoch) > end_epoch:
+            continue
+        loss_overrides = stage.get("loss", {})
+        if isinstance(loss_overrides, dict):
+            merged.update(loss_overrides)
+        merged["_curriculum_stage"] = str(stage.get("name", f"stage_{start_epoch}"))
+        return merged
+    return merged
+
+
+def make_loss_weights(
+    loss_config: dict[str, Any],
+    *,
+    harmful_pos_weight: float,
+    opportunity_pos_weight: float,
+) -> AttentionNativeLossWeights:
+    return AttentionNativeLossWeights(
+        lambda_listwise=float(loss_config.get("lambda_listwise", 1.0)),
+        lambda_pairwise=float(loss_config.get("lambda_pairwise", 1.0)),
+        lambda_rule_ce=float(loss_config.get("lambda_rule_ce", 0.0)),
+        lambda_rule_margin=float(loss_config.get("lambda_rule_margin", 0.0)),
+        lambda_delta=float(loss_config.get("lambda_delta", 0.5)),
+        lambda_harmful=float(loss_config.get("lambda_harmful", 2.0)),
+        lambda_harmful_pairwise=float(loss_config.get("lambda_harmful_pairwise", 0.0)),
+        lambda_high_margin_harmful=float(loss_config.get("lambda_high_margin_harmful", 0.0)),
+        lambda_anti_candidate_safety=float(loss_config.get("lambda_anti_candidate_safety", 0.0)),
+        lambda_opportunity=float(loss_config.get("lambda_opportunity", 1.0)),
+        lambda_defer=float(loss_config.get("lambda_defer", 0.5)),
+        lambda_anti_escape=float(loss_config.get("lambda_anti_escape", 2.0)),
+        lambda_family=float(loss_config.get("lambda_family", 0.1)),
+        anti_escape_score_margin=float(loss_config.get("anti_escape_score_margin", 0.005)),
+        rule_margin=float(loss_config.get("rule_margin", 0.010)),
+        rule_ce_high_margin_weight=float(loss_config.get("rule_ce_high_margin_weight", 1.0)),
+        rule_margin_high_margin_weight=float(loss_config.get("rule_margin_high_margin_weight", 1.0)),
+        harmful_pairwise_margin=float(loss_config.get("harmful_pairwise_margin", 0.25)),
+        harmful_pos_weight=float(loss_config.get("harmful_pos_weight", harmful_pos_weight)),
+        harmful_negative_weight=float(loss_config.get("harmful_negative_weight", 1.0)),
+        harmful_focal_gamma=float(loss_config.get("harmful_focal_gamma", 0.0)),
+        opportunity_pos_weight=float(loss_config.get("opportunity_pos_weight", opportunity_pos_weight)),
+    )
+
+
 def topk_indices(values: list[float], k: int) -> list[int]:
     return sorted(range(len(values)), key=lambda index: values[index], reverse=True)[:k]
 
@@ -301,6 +422,43 @@ def safety_threshold_for_index(safety_threshold: Any, index: int) -> float:
     return float(safety_threshold)
 
 
+def _selection_return(
+    *,
+    selected_decision: str,
+    selected_index: int,
+    fallback_reason: str,
+    selection_stage: str,
+    adjusted_scores: list[float],
+    safety_threshold_by_rule: list[float],
+    safety_mask: list[bool],
+    best_safe_nonadditive_index: int | None,
+    margin_vs_additive: float | None,
+    margin_vs_defer: float,
+) -> dict[str, Any]:
+    return {
+        "selected_decision": selected_decision,
+        "selected_index": int(selected_index),
+        "fallback_reason": fallback_reason,
+        "defer_reason": fallback_reason if selected_decision == "defer_ltm" else "",
+        "selection_stage": selection_stage,
+        "scores": adjusted_scores,
+        "safety_threshold_by_rule": safety_threshold_by_rule,
+        "safety_mask": safety_mask,
+        "best_safe_nonadditive_rule": (
+            EXECUTABLE_RULE_IDS[int(best_safe_nonadditive_index)]
+            if best_safe_nonadditive_index is not None
+            else ""
+        ),
+        "best_safe_nonadditive_score": (
+            float(adjusted_scores[int(best_safe_nonadditive_index)])
+            if best_safe_nonadditive_index is not None
+            else None
+        ),
+        "margin_vs_additive": margin_vs_additive,
+        "margin_vs_defer": float(margin_vs_defer),
+    }
+
+
 def select_attention_native(
     rule_scores: list[float],
     harmful_probs: list[float],
@@ -314,6 +472,14 @@ def select_attention_native(
     confidence_margin: float,
 ) -> dict[str, Any]:
     additive_index = EXECUTABLE_RULE_IDS.index("additive_ltm")
+    safety_threshold_by_rule = [
+        safety_threshold_for_index(safety_threshold, index)
+        for index in range(len(EXECUTABLE_RULE_IDS))
+    ]
+    safety_mask = [
+        float(harmful_probs[index]) < safety_threshold_by_rule[index]
+        for index in range(len(EXECUTABLE_RULE_IDS))
+    ]
     adjusted = [
         float(score) - float(safety_penalty) * float(harmful)
         for score, harmful in zip(rule_scores, harmful_probs)
@@ -322,43 +488,80 @@ def select_attention_native(
         index
         for index in range(len(EXECUTABLE_RULE_IDS))
         if index != additive_index
-        and float(harmful_probs[index]) < safety_threshold_for_index(safety_threshold, index)
+        and safety_mask[index]
     ]
+    best_nonadditive = max(safe_nonadditive, key=lambda index: adjusted[index]) if safe_nonadditive else None
+    margin_vs_additive = (
+        float(adjusted[int(best_nonadditive)] - adjusted[additive_index])
+        if best_nonadditive is not None
+        else None
+    )
+    margin_vs_defer = float(opportunity_prob) - float(defer_prob)
     if float(opportunity_prob) < float(opportunity_threshold):
-        return {
-            "selected_decision": "defer_ltm",
-            "selected_index": additive_index,
-            "fallback_reason": "low_opportunity",
-            "scores": adjusted,
-        }
+        return _selection_return(
+            selected_decision="defer_ltm",
+            selected_index=additive_index,
+            fallback_reason="low_opportunity",
+            selection_stage="defer_low_opportunity",
+            adjusted_scores=adjusted,
+            safety_threshold_by_rule=safety_threshold_by_rule,
+            safety_mask=safety_mask,
+            best_safe_nonadditive_index=best_nonadditive,
+            margin_vs_additive=margin_vs_additive,
+            margin_vs_defer=margin_vs_defer,
+        )
     if float(defer_prob) >= float(defer_threshold):
-        return {
-            "selected_decision": "defer_ltm",
-            "selected_index": additive_index,
-            "fallback_reason": "defer_head",
-            "scores": adjusted,
-        }
+        return _selection_return(
+            selected_decision="defer_ltm",
+            selected_index=additive_index,
+            fallback_reason="defer_head",
+            selection_stage="defer_head",
+            adjusted_scores=adjusted,
+            safety_threshold_by_rule=safety_threshold_by_rule,
+            safety_mask=safety_mask,
+            best_safe_nonadditive_index=best_nonadditive,
+            margin_vs_additive=margin_vs_additive,
+            margin_vs_defer=margin_vs_defer,
+        )
     if not safe_nonadditive:
-        return {
-            "selected_decision": "defer_ltm",
-            "selected_index": additive_index,
-            "fallback_reason": "unsafe",
-            "scores": adjusted,
-        }
-    best_nonadditive = max(safe_nonadditive, key=lambda index: adjusted[index])
-    if adjusted[best_nonadditive] - adjusted[additive_index] < float(confidence_margin):
-        return {
-            "selected_decision": "defer_ltm",
-            "selected_index": additive_index,
-            "fallback_reason": "low_confidence",
-            "scores": adjusted,
-        }
-    return {
-        "selected_decision": "use_nonadditive",
-        "selected_index": int(best_nonadditive),
-        "fallback_reason": "selected",
-        "scores": adjusted,
-    }
+        return _selection_return(
+            selected_decision="defer_ltm",
+            selected_index=additive_index,
+            fallback_reason="unsafe",
+            selection_stage="defer_unsafe",
+            adjusted_scores=adjusted,
+            safety_threshold_by_rule=safety_threshold_by_rule,
+            safety_mask=safety_mask,
+            best_safe_nonadditive_index=best_nonadditive,
+            margin_vs_additive=margin_vs_additive,
+            margin_vs_defer=margin_vs_defer,
+        )
+    assert best_nonadditive is not None and margin_vs_additive is not None
+    if margin_vs_additive < float(confidence_margin):
+        return _selection_return(
+            selected_decision="defer_ltm",
+            selected_index=additive_index,
+            fallback_reason="low_confidence",
+            selection_stage="defer_insufficient_margin",
+            adjusted_scores=adjusted,
+            safety_threshold_by_rule=safety_threshold_by_rule,
+            safety_mask=safety_mask,
+            best_safe_nonadditive_index=best_nonadditive,
+            margin_vs_additive=margin_vs_additive,
+            margin_vs_defer=margin_vs_defer,
+        )
+    return _selection_return(
+        selected_decision="use_nonadditive",
+        selected_index=int(best_nonadditive),
+        fallback_reason="selected",
+        selection_stage="select_safe_nonadditive",
+        adjusted_scores=adjusted,
+        safety_threshold_by_rule=safety_threshold_by_rule,
+        safety_mask=safety_mask,
+        best_safe_nonadditive_index=best_nonadditive,
+        margin_vs_additive=margin_vs_additive,
+        margin_vs_defer=margin_vs_defer,
+    )
 
 
 def _mean(values: list[float]) -> float | None:
@@ -590,6 +793,8 @@ def evaluate_model(
                         "target_rule": row["target_rule"],
                         "predicted_rule": EXECUTABLE_RULE_IDS[selected_index],
                         "fallback_reason": selection["fallback_reason"],
+                        "defer_reason": selection["defer_reason"],
+                        "selection_stage": selection["selection_stage"],
                         "attention_top1": bool(use_nonadditive_target and selected_index == target_index),
                         "attention_top3": bool(use_nonadditive_target and target_index in top3),
                         "decision_correct": row["decision_target"] == selection["selected_decision"],
@@ -609,6 +814,12 @@ def evaluate_model(
                         "harmful_probs": json.dumps([float(value) for value in harmful_prob]),
                         "opportunity_prob": float(opportunity_prob),
                         "defer_prob": float(defer_prob),
+                        "safety_threshold_by_rule": json.dumps(selection["safety_threshold_by_rule"]),
+                        "safety_mask": json.dumps(selection["safety_mask"]),
+                        "best_safe_nonadditive_rule": selection["best_safe_nonadditive_rule"],
+                        "best_safe_nonadditive_score": selection["best_safe_nonadditive_score"],
+                        "margin_vs_additive": selection["margin_vs_additive"],
+                        "margin_vs_defer": selection["margin_vs_defer"],
                         "top3_rules": json.dumps([EXECUTABLE_RULE_IDS[index] for index in top3]),
                         "harmful_labels": json.dumps(harmful_vector),
                     }
@@ -917,7 +1128,10 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--report", type=Path)
     parser.add_argument("--summary-json", type=Path)
     parser.add_argument("--summary-csv", type=Path)
-    parser.add_argument("--model-name", choices=[SET_RULE_TRANSFORMER_NAME, EDGE_TRACE_TRANSFORMER_NAME])
+    parser.add_argument(
+        "--model-name",
+        choices=[SET_RULE_TRANSFORMER_NAME, EDGE_TRACE_TRANSFORMER_NAME, HIER_EDGE_TRACE_TRANSFORMER_NAME],
+    )
     parser.add_argument("--seed", type=int)
     parser.add_argument("--epochs", type=int)
     parser.add_argument("--batch-size", type=int)
@@ -935,6 +1149,7 @@ def main(argv: list[str] | None = None) -> int:
     model_config = config_get(config, "attention_native", "model", default={}) or {}
     eval_config = config_get(config, "attention_native", "eval", default={}) or {}
     loss_config = config_get(config, "attention_native", "loss", default={}) or {}
+    curriculum_config = config_get(config, "attention_native", "curriculum", default={}) or {}
     gate_config = config.get("gate", {}) if isinstance(config.get("gate"), dict) else {}
     anti_thresholds = config.get("anti_escape", {}) if isinstance(config.get("anti_escape"), dict) else {}
 
@@ -992,31 +1207,6 @@ def main(argv: list[str] | None = None) -> int:
     harmful_pos_weight = (total_harm - positives) / max(1, positives)
     opp_pos = sum(1 for row in train_rows if row["has_nonadditive_opportunity"])
     opportunity_pos_weight = (len(train_rows) - opp_pos) / max(1, opp_pos)
-    loss_weights = AttentionNativeLossWeights(
-        lambda_listwise=float(loss_config.get("lambda_listwise", 1.0)),
-        lambda_pairwise=float(loss_config.get("lambda_pairwise", 1.0)),
-        lambda_rule_ce=float(loss_config.get("lambda_rule_ce", 0.0)),
-        lambda_rule_margin=float(loss_config.get("lambda_rule_margin", 0.0)),
-        lambda_delta=float(loss_config.get("lambda_delta", 0.5)),
-        lambda_harmful=float(loss_config.get("lambda_harmful", 2.0)),
-        lambda_harmful_pairwise=float(loss_config.get("lambda_harmful_pairwise", 0.0)),
-        lambda_high_margin_harmful=float(loss_config.get("lambda_high_margin_harmful", 0.0)),
-        lambda_anti_candidate_safety=float(loss_config.get("lambda_anti_candidate_safety", 0.0)),
-        lambda_opportunity=float(loss_config.get("lambda_opportunity", 1.0)),
-        lambda_defer=float(loss_config.get("lambda_defer", 0.5)),
-        lambda_anti_escape=float(loss_config.get("lambda_anti_escape", 2.0)),
-        lambda_family=float(loss_config.get("lambda_family", 0.1)),
-        anti_escape_score_margin=float(loss_config.get("anti_escape_score_margin", 0.005)),
-        rule_margin=float(loss_config.get("rule_margin", 0.010)),
-        rule_ce_high_margin_weight=float(loss_config.get("rule_ce_high_margin_weight", 1.0)),
-        rule_margin_high_margin_weight=float(loss_config.get("rule_margin_high_margin_weight", 1.0)),
-        harmful_pairwise_margin=float(loss_config.get("harmful_pairwise_margin", 0.25)),
-        harmful_pos_weight=float(loss_config.get("harmful_pos_weight", harmful_pos_weight)),
-        harmful_negative_weight=float(loss_config.get("harmful_negative_weight", 1.0)),
-        harmful_focal_gamma=float(loss_config.get("harmful_focal_gamma", 0.0)),
-        opportunity_pos_weight=float(loss_config.get("opportunity_pos_weight", opportunity_pos_weight)),
-    )
-
     additive_index = EXECUTABLE_RULE_IDS.index("additive_ltm")
     safety_threshold: Any = float(eval_config.get("safety_threshold", 0.10))
     best_score = -1.0e9
@@ -1027,7 +1217,14 @@ def main(argv: list[str] | None = None) -> int:
         model.train()
         epoch_losses: Counter[str] = Counter()
         batch_count = 0
-        for batch_rows in batched(train_rows, batch_size, shuffle=True):
+        epoch_loss_config = loss_config_for_epoch(loss_config, curriculum_config, epoch)
+        loss_weights = make_loss_weights(
+            epoch_loss_config,
+            harmful_pos_weight=harmful_pos_weight,
+            opportunity_pos_weight=opportunity_pos_weight,
+        )
+        epoch_rows = sample_epoch_rows(train_rows, train_config, root)
+        for batch_rows in batched(epoch_rows, batch_size, shuffle=True):
             batch = rows_to_batch(batch_rows, stats, device)
             optimizer.zero_grad(set_to_none=True)
             outputs = model(batch)
@@ -1081,6 +1278,7 @@ def main(argv: list[str] | None = None) -> int:
                     "epoch": epoch,
                     "score": score,
                     "loss": epoch_losses["total"] / max(1, batch_count),
+                    "curriculum_stage": epoch_loss_config.get("_curriculum_stage", "base"),
                     "validation_top1": metrics.get("rule_top1_accuracy"),
                     "validation_top3": metrics.get("rule_top3_accuracy"),
                     "harmful_recall": metrics.get("harmful_update_recall"),
@@ -1168,6 +1366,8 @@ def main(argv: list[str] | None = None) -> int:
         "epochs": epochs,
         "batch_size": batch_size,
         "device": str(device),
+        "sampler": train_config.get("sampler", "uniform"),
+        "curriculum": curriculum_config,
         "training_time_sec": time.time() - start,
         "history": history,
         "safety_calibration": safety_calibration,

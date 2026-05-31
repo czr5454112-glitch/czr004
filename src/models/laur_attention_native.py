@@ -16,6 +16,7 @@ MODEL_SCHEMA_VERSION = "laur_attention_native_v1_checkpoint"
 MODEL_FAMILY_NAME = "LAU-AttentionNative-v1"
 SET_RULE_TRANSFORMER_NAME = "LAU-SetRuleTransformer-v2"
 EDGE_TRACE_TRANSFORMER_NAME = "LAU-EdgeTraceTransformer-v4"
+HIER_EDGE_TRACE_TRANSFORMER_NAME = "LAU-HierEdgeTraceTransformer-v5"
 
 
 def torch_available() -> bool:
@@ -264,6 +265,67 @@ if torch_available():
             pooled = self.context_norm(encoded[:, 0, :])
             return rule_hidden, pooled
 
+
+    class LAUHierEdgeTraceTransformerV5(LAUEdgeTraceTransformerV4):
+        """Hierarchical Repair5B edge/trace transformer with separated control heads."""
+
+        def __init__(
+            self,
+            *,
+            global_dim: int,
+            edge_dim: int,
+            trace_dim: int,
+            rule_dim: int,
+            num_rules: int,
+            num_families: int,
+            d_model: int = 96,
+            n_heads: int = 4,
+            n_layers: int = 2,
+            dropout: float = 0.1,
+            head_hidden_dim: int = 0,
+            head_dropout: float | None = None,
+        ) -> None:
+            super().__init__(
+                global_dim=global_dim,
+                edge_dim=edge_dim,
+                trace_dim=trace_dim,
+                rule_dim=rule_dim,
+                num_rules=num_rules,
+                num_families=num_families,
+                d_model=d_model,
+                n_heads=n_heads,
+                n_layers=n_layers,
+                dropout=dropout,
+                head_hidden_dim=head_hidden_dim,
+                head_dropout=head_dropout,
+            )
+            self.model_name = HIER_EDGE_TRACE_TRANSFORMER_NAME
+            self.rule_score_head = scalar_head(self.d_model, self.head_hidden_dim, self.head_dropout)
+            self.delta_head = scalar_head(self.d_model, self.head_hidden_dim, self.head_dropout)
+            self.harmful_head = scalar_head(self.d_model, self.head_hidden_dim, self.head_dropout)
+            self.decision_head = scalar_head(self.d_model, self.head_hidden_dim, self.head_dropout)
+            self.uncertainty_head = scalar_head(self.d_model, self.head_hidden_dim, self.head_dropout)
+
+        def forward(self, batch: dict[str, Any]) -> dict[str, Any]:
+            rule_hidden, pooled = self._rule_hidden(batch)
+            rank_score = self.rule_score_head(rule_hidden).squeeze(-1)
+            utility_score = self.delta_head(rule_hidden).squeeze(-1)
+            harmful_logit = self.harmful_head(rule_hidden).squeeze(-1)
+            opportunity_logit = self.opportunity_head(pooled).squeeze(-1)
+            defer_logit = self.defer_head(pooled).squeeze(-1)
+            return {
+                "rule_score": rank_score,
+                "delta_pred": utility_score,
+                "harmful_logit": harmful_logit,
+                "family_logits": self.family_head(rule_hidden),
+                "opportunity_logit": opportunity_logit,
+                "defer_logit": defer_logit,
+                "rank_score": rank_score,
+                "utility_score": utility_score,
+                "decision_logit": self.decision_head(pooled).squeeze(-1),
+                "uncertainty_logit": self.uncertainty_head(pooled).squeeze(-1),
+            }
+
 else:
 
     class LAUSetRuleTransformerV2:  # type: ignore[no-redef]
@@ -272,6 +334,11 @@ else:
 
 
     class LAUEdgeTraceTransformerV4:  # type: ignore[no-redef]
+        def __init__(self, *_args: Any, **_kwargs: Any) -> None:
+            require_torch()
+
+
+    class LAUHierEdgeTraceTransformerV5:  # type: ignore[no-redef]
         def __init__(self, *_args: Any, **_kwargs: Any) -> None:
             require_torch()
 
@@ -288,4 +355,6 @@ def build_model(model_name: str, **kwargs: Any) -> Any:
         return LAUSetRuleTransformerV2(**filtered)
     if model_name == EDGE_TRACE_TRANSFORMER_NAME:
         return LAUEdgeTraceTransformerV4(**kwargs)
+    if model_name == HIER_EDGE_TRACE_TRANSFORMER_NAME:
+        return LAUHierEdgeTraceTransformerV5(**kwargs)
     raise ValueError(f"unknown LAU attention-native model {model_name}")

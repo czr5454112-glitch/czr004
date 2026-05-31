@@ -1,0 +1,148 @@
+{
+  "branch": "phase4f5p5-stable-attention-lau",
+  "commit": "7bf0b0a",
+  "created_at": "2026-05-31T09:04:42.916417",
+  "dirty": "tracked-dirty_untracked-present",
+  "eval_csvs": [
+    "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase4f_repair5_expand5000_hightoken_ht_mlp_target_global_eval_seed61.csv"
+  ],
+  "global_threshold": {
+    "f1": 0.43376898622394916,
+    "fn": 135,
+    "fp": 1468,
+    "negative_count": 5347,
+    "passed": false,
+    "positive_count": 749,
+    "precision": 0.29490874159462055,
+    "recall": 0.8197596795727636,
+    "selection_reason": "best_available_below_target",
+    "support": 6096,
+    "threshold": 0.35,
+    "tn": 3879,
+    "tp": 614
+  },
+  "global_threshold_pass": false,
+  "per_family_application": {
+    "f1": 0.44126284875183563,
+    "fn": 148,
+    "fp": 1374,
+    "negative_count": 5347,
+    "passed": true,
+    "positive_count": 749,
+    "precision": 0.30430379746835445,
+    "recall": 0.8024032042723631,
+    "support": 6096,
+    "tn": 3973,
+    "tp": 601
+  },
+  "per_family_threshold_pass": true,
+  "per_rule_application": {
+    "f1": 0.44120781527531083,
+    "fn": 128,
+    "fp": 1445,
+    "negative_count": 5347,
+    "passed": true,
+    "positive_count": 749,
+    "precision": 0.3005808325266215,
+    "recall": 0.829105473965287,
+    "support": 6096,
+    "tn": 3902,
+    "tp": 621
+  },
+  "per_rule_threshold_pass": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "schema_version": "phase4f_repair5b_per_rule_safety_calibration_v1",
+  "selected_false_negative_distribution": {
+    "global": {
+      "selected_harmful_false_negative_by_rule": {
+        "block_heavy": 2,
+        "block_light": 1,
+        "commit_heavy": 5,
+        "wait_light": 5
+      },
+      "selected_safe_false_positive_by_rule": {
+        "block_heavy": 6,
+        "block_light": 7,
+        "commit_heavy": 13,
+        "wait_light": 23
+      }
+    },
+    "per_family": {
+      "selected_harmful_false_negative_by_rule": {
+        "block_heavy": 2,
+        "block_light": 1,
+        "commit_heavy": 6,
+        "wait_light": 5
+      },
+      "selected_safe_false_positive_by_rule": {
+        "additive_ltm": 1,
+        "block_heavy": 6,
+        "block_light": 7,
+        "wait_light": 23
+      }
+    },
+    "per_rule": {
+      "selected_harmful_false_negative_by_rule": {
+        "block_heavy": 2,
+        "commit_heavy": 6,
+        "wait_light": 2
+      },
+      "selected_safe_false_positive_by_rule": {
+        "additive_ltm": 1,
+        "block_light": 17,
+        "wait_light": 36
+      }
+    }
+  },
+  "targets": {
+    "harmful_precision_min": 0.3,
+    "harmful_recall_min": 0.8
+  },
+  "threshold_by_family": {
+    "additive": 0.01,
+    "block": 0.35,
+    "commit": 0.4,
+    "decay": 0.4,
+    "wait": 0.35
+  },
+  "threshold_by_rule": {
+    "additive_ltm": 0.01,
+    "block_heavy": 0.45,
+    "block_light": 0.3,
+    "commit_heavy": 0.4,
+    "decay_090": 0.35,
+    "decay_095": 0.4,
+    "wait_heavy": 0.35,
+    "wait_light": 0.3
+  },
+  "threshold_grid": [
+    0.01,
+    0.02,
+    0.03,
+    0.04,
+    0.05,
+    0.07,
+    0.09,
+    0.1,
+    0.12,
+    0.15,
+    0.17,
+    0.2,
+    0.25,
+    0.3,
+    0.35,
+    0.4,
+    0.45,
+    0.5,
+    0.55,
+    0.6,
+    0.65,
+    0.7,
+    0.75,
+    0.8,
+    0.85,
+    0.9,
+    0.95
+  ]
+}

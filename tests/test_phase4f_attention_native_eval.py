@@ -23,7 +23,11 @@ from train.train_laur_attention_native import (  # noqa: E402
     model_selection_score,
     select_attention_native,
 )
-from models.laur_attention_native import EDGE_TRACE_TRANSFORMER_NAME, build_model  # noqa: E402
+from models.laur_attention_native import (  # noqa: E402
+    EDGE_TRACE_TRANSFORMER_NAME,
+    HIER_EDGE_TRACE_TRANSFORMER_NAME,
+    build_model,
+)
 
 
 def _record(**overrides: object) -> dict:
@@ -55,6 +59,9 @@ def test_attention_native_selection_defers_when_opportunity_head_is_low() -> Non
 
     assert result["selected_decision"] == "defer_ltm"
     assert result["fallback_reason"] == "low_opportunity"
+    assert result["defer_reason"] == "low_opportunity"
+    assert result["selection_stage"] == "defer_low_opportunity"
+    assert len(result["safety_mask"]) == 8
 
 
 def test_attention_native_selection_uses_best_safe_nonadditive() -> None:
@@ -72,6 +79,9 @@ def test_attention_native_selection_uses_best_safe_nonadditive() -> None:
 
     assert result["selected_decision"] == "use_nonadditive"
     assert result["selected_index"] == 3
+    assert result["selection_stage"] == "select_safe_nonadditive"
+    assert result["best_safe_nonadditive_rule"] == "block_light"
+    assert result["margin_vs_additive"] is not None
 
 
 def test_attention_native_gate_keeps_original_phase4f_thresholds() -> None:
@@ -318,6 +328,42 @@ def test_attention_native_model_supports_optional_mlp_heads() -> None:
     assert outputs["rule_score"].shape == (2, 8)
     assert outputs["harmful_logit"].shape == (2, 8)
     assert outputs["family_logits"].shape == (2, 8, 4)
+
+
+def test_hier_edge_trace_model_exports_compatible_and_hierarchical_heads() -> None:
+    torch = pytest.importorskip("torch")
+    model = build_model(
+        HIER_EDGE_TRACE_TRANSFORMER_NAME,
+        global_dim=5,
+        edge_dim=4,
+        trace_dim=3,
+        rule_dim=6,
+        num_rules=8,
+        num_families=4,
+        d_model=16,
+        n_heads=4,
+        n_layers=1,
+        dropout=0.0,
+        head_hidden_dim=12,
+        head_dropout=0.0,
+    )
+    batch = {
+        "global_features": torch.zeros(2, 5),
+        "edge_tokens": torch.zeros(2, 3, 4),
+        "edge_mask": torch.tensor([[1, 1, 0], [1, 0, 0]], dtype=torch.bool),
+        "trace_tokens": torch.zeros(2, 2, 3),
+        "trace_mask": torch.tensor([[1, 0], [1, 1]], dtype=torch.bool),
+        "rule_tokens": torch.zeros(2, 8, 6),
+    }
+
+    outputs = model(batch)
+
+    assert outputs["rule_score"].shape == (2, 8)
+    assert outputs["delta_pred"].shape == (2, 8)
+    assert outputs["rank_score"].shape == (2, 8)
+    assert outputs["utility_score"].shape == (2, 8)
+    assert outputs["decision_logit"].shape == (2,)
+    assert outputs["uncertainty_logit"].shape == (2,)
 
 
 def test_anti_escape_resolve_path_expands_seed_placeholder() -> None:

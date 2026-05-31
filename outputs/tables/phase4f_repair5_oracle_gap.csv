@@ -1,0 +1,3 @@
+split,sample_count,additive_mean_delta,oracle_best_safe_rule_mean_delta,oracle_vs_additive_mean_delta,oracle_best_safe_nonadditive_vs_additive_mean_delta,oracle_high_margin_capture_possible,oracle_nonadditive_high_margin_capture_possible,oracle_harmful_rate,oracle_nonadditive_harmful_rate
+validation,762,0.0,0.07490846923774867,0.07490846923774867,0.07477287728311977,1.0,1.0,0.0,0.0
+all,4956,0.0,0.06361474501862188,0.06361474501862188,0.06331179296104672,1.0,1.0,0.0,0.0

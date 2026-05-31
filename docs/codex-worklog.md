@@ -2037,3 +2037,142 @@
   - No final gate was lowered.
   - No completed historical Repair5 result permits Phase5.5.
   - Phase6 remains forbidden.
+
+## 2026-05-31 08:57 - Start Repair5B failure decomposition
+
+- Request:
+  - Continue czr004 on the Repair5 attention-native LAUR label route until the Phase6 entry conditions can be honestly evaluated.
+  - Treat `phase4f55_laur_repair5b_next_round_codex_plan.md`, `deep-research-report.md`, and `phase4_6_laur_ltm_codex_execution_plan.md` as the governing docs.
+- Files planned:
+  - `src/eval/diagnose_laur_repair5_failure_modes.py`
+  - `src/eval/calibrate_laur_repair5_per_rule_safety.py`
+  - `outputs/reports/phase4f_repair5_failure_decomposition.md`
+  - `outputs/reports/phase4f_repair5_failure_decomposition.json`
+  - `outputs/tables/phase4f_repair5_failure_by_rule.csv`
+  - `outputs/tables/phase4f_repair5_failure_by_map.csv`
+  - `outputs/tables/phase4f_repair5_failure_by_opportunity.csv`
+  - `outputs/tables/phase4f_repair5_oracle_gap.csv`
+  - `outputs/reports/phase4f_repair5_per_rule_safety_calibration.md`
+  - `outputs/reports/phase4f_repair5_per_rule_safety_calibration.json`
+  - `outputs/tables/phase4f_repair5_per_rule_safety_thresholds.csv`
+- Key constraints:
+  - Learned UpdateLTM / LAUR only.
+  - No agent-action policy, learned restart, PIBT replacement, LaCAM* semantic change, or gate lowering.
+  - Phase5.5 and Phase6 remain forbidden unless the strict Repair5B multi-seed and later closed-loop conditions pass.
+- Key observations:
+  - Current branch is `phase4f5p5-stable-attention-lau` at `7bf0b0a`.
+  - The workspace has many existing dirty/untracked experiment artifacts; this round will not revert or clean them.
+  - Expand5000 attention-native datasets exist locally as compressed `.jsonl.zst` files.
+- Follow-up:
+  - Run the new diagnostics locally first, then decide whether oracle gap supports hierarchical LAUR or points to static-rule action-space limits.
+
+## 2026-05-31 09:32 - Repair5B hierarchical LAUR control path scaffolded
+
+- Implemented the Repair5B attention-native continuation path from `phase4f55_laur_repair5b_next_round_codex_plan.md`.
+- Added model/controller support:
+  - `LAU-HierEdgeTraceTransformer-v5` in `src/models/laur_attention_native.py`.
+  - Compatibility outputs remain: `rule_score`, `delta_pred`, `harmful_logit`, `family_logits`, `opportunity_logit`, `defer_logit`.
+  - Hierarchical aliases/logits added for diagnostics: `rank_score`, `utility_score`, `decision_logit`, `uncertainty_logit`.
+- Added selection logging and train controls in `src/train/train_laur_attention_native.py`:
+  - `selection_stage`, `defer_reason`, per-rule safety thresholds, safety mask, best safe nonadditive rule/score, and margins.
+  - Stratified sampler with high-margin, harmful-positive, rare-rule, defer-reason balance, and hard-case replay weighting.
+  - Epoch curriculum loss overrides without changing default behavior for old configs.
+- Added hard-case replay export to `src/eval/diagnose_laur_repair5_failure_modes.py`.
+  - Output: `artifacts/teacher/laur/repair5_hardcase_index.jsonl`.
+  - Current index count: 5000.
+  - Current distribution: false_negative_harmful_selected 178, high_margin_avoidable_defer 1081, rule_family_confusion 1194, top3_miss_high_utility 753, wrong_rule_top1_but_top3_contains_target 1794.
+- Added Repair5B curriculum configs:
+  - `configs/phase4/generated_repair5_hier_curriculum/hier_normal_rank_first.yaml`
+  - `configs/phase4/generated_repair5_hier_curriculum/hier_hightoken_rank_first.yaml`
+  - `configs/phase4/generated_repair5_hier_curriculum/hier_hightoken_safety_first.yaml`
+  - `configs/phase4/generated_repair5_hier_curriculum/hier_high_margin_specialist.yaml`
+- Verification:
+  - `py_compile` passed for modified model/train/eval scripts.
+  - `pytest tests/test_phase4f_attention_native_eval.py tests/test_phase4f_attention_native_labels.py -q`: 25 passed, 2 warnings.
+  - Rerun failure decomposition: decision remains `continue_hierarchical_attention_native_laur`.
+  - CPU smoke train with `hier_normal_rank_first.yaml --epochs 1 --batch-size 256 --device cpu` completed.
+  - Smoke train epoch-1 validation: top1 0.0, top3 0.610766, harmful recall 0.942590, harmful precision 0.162486, anti-escape failed as expected for a 1-epoch smoke.
+- Boundary:
+  - No gate was lowered.
+  - No final Repair5B seed passes exist yet.
+  - Phase5.5 and Phase6 remain forbidden.
+
+## 2026-05-31 10:12 - Repair5B R5B-2 seed61 formal result
+
+- Ran `hier_normal_rank_first.yaml` on the 4090 remote server as `repair5b_hier_normal_rank_first_seed61`.
+- Artifacts pulled back:
+  - `outputs/reports/phase4f_repair5b_hier_normal_rank_first_train_seed61_summary.json`
+  - `outputs/reports/phase4f_repair5b_hier_normal_rank_first_train_seed61.md`
+  - `outputs/tables/phase4f_repair5b_hier_normal_rank_first_train_seed61.csv`
+  - `outputs/logs/repair5b_hier_normal_rank_first_seed61/train.log`
+- Validation summary:
+  - top1: 0.074534
+  - top3: 0.631470
+  - harmful recall: 0.599466
+  - harmful precision: 0.281681
+  - selected-vs-additive mean delta: 0.002686
+  - anti-escape high-margin nonadditive capture: 0.193548
+  - global additive-or-defer rate: 0.759843
+- Decision:
+  - R5B-2 seed61 failed the strict attention-native gate and anti-escape gate.
+  - Positive selected-vs-additive delta exists but is too weak to compensate for low top1/top3, recall, precision, and anti-escape capture.
+  - Continue to R5B-3 `hier_hightoken_rank_first.yaml` before considering safety-first specialization.
+- Boundary:
+  - No final gate was lowered.
+  - Seeds 103/107 are not permitted yet because seed61 did not pass.
+  - Phase5.5 and Phase6 remain forbidden.
+
+## 2026-05-31 10:48 - Repair5B R5B-3 seed61 formal result
+
+- Ran `hier_hightoken_rank_first.yaml` on the 4090 remote server as `repair5b_hier_hightoken_rank_first_seed61`.
+- Artifacts pulled back:
+  - `outputs/reports/phase4f_repair5b_hier_hightoken_rank_first_train_seed61_summary.json`
+  - `outputs/reports/phase4f_repair5b_hier_hightoken_rank_first_train_seed61.md`
+  - `outputs/tables/phase4f_repair5b_hier_hightoken_rank_first_train_seed61.csv`
+  - `outputs/logs/repair5b_hier_hightoken_rank_first_seed61/train.log`
+- Best validation summary selected by training score, epoch 40:
+  - top1: 0.134576
+  - top3: 0.610766
+  - harmful recall: 0.704940
+  - harmful precision: 0.258824
+  - selected-vs-additive mean delta: 0.001650
+  - anti-escape high-margin nonadditive capture: 0.225806
+  - opportunity nonadditive selection rate: 0.376812
+  - global additive-or-defer rate: 0.679790
+- Decision:
+  - R5B-3 seed61 failed the strict attention-native gate and anti-escape gate.
+  - High-token rank-first improved top1 and some anti-escape distribution checks versus R5B-2, but it lost harmful recall and still missed high-margin capture.
+  - Continue to R5B-4 `hier_hightoken_safety_first.yaml`.
+- Boundary:
+  - No final gate was lowered.
+  - Seeds 103/107 are still not permitted because seed61 did not pass.
+  - Phase5.5 and Phase6 remain forbidden.
+
+## 2026-05-31 11:27 - Repair5B R5B-4 seed61 formal result and stop point
+
+- Ran `hier_hightoken_safety_first.yaml` on the 4090 remote server as `repair5b_hier_hightoken_safety_first_seed61`.
+- Artifacts pulled back:
+  - `outputs/reports/phase4f_repair5b_hier_hightoken_safety_first_train_seed61_summary.json`
+  - `outputs/reports/phase4f_repair5b_hier_hightoken_safety_first_train_seed61.md`
+  - `outputs/tables/phase4f_repair5b_hier_hightoken_safety_first_train_seed61.csv`
+  - `outputs/logs/repair5b_hier_hightoken_safety_first_seed61/train.log`
+- Best validation summary selected by training score, epoch 40:
+  - top1: 0.140787
+  - top3: 0.666667
+  - harmful recall: 0.612817
+  - harmful precision: 0.247573
+  - selected-vs-additive mean delta: -0.003786
+  - anti-escape high-margin nonadditive capture: 0.264516
+  - opportunity nonadditive selection rate: 0.337474
+  - global additive-or-defer rate: 0.729659
+- Late anti-escape observation:
+  - epoch 180 high-margin capture reached 0.396774, close to the 0.40 hard line, but harmful recall collapsed to 0.105474 and top3 was 0.602484.
+- Decision:
+  - R5B-4 seed61 failed the strict attention-native gate and anti-escape gate.
+  - Safety-first protected early recall at epoch 20, but rank/anti stages again traded away harmful recall and utility.
+  - Per user instruction, stop experiments after this completed run; do not launch R5B-5 in this round.
+- Boundary:
+  - No final gate was lowered.
+  - Seeds 103/107 are not permitted because seed61 did not pass.
+  - Phase5.5 and Phase6 remain forbidden.
+  - Remote server had no active training process and GPU memory was idle after completion.

@@ -1,97 +1,120 @@
 {
   "branch": "phase4f5p5-stable-attention-lau",
-  "commit": "7bf0b0a",
-  "created_at": "2026-05-31T09:04:42.916417",
+  "calibration_split": "train",
+  "calibration_support": 33552,
+  "commit": "70951f0",
+  "created_at": "2026-05-31T12:12:15.785314",
   "dirty": "tracked-dirty_untracked-present",
   "eval_csvs": [
-    "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase4f_repair5_expand5000_hightoken_ht_mlp_target_global_eval_seed61.csv"
+    "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase4f_repair5_expand5000_postnext_hightoken_attn_mlp_head_rank_recall_perrule_eval_seed61.csv"
   ],
+  "evaluation_split": "validation",
+  "evaluation_support": 6096,
+  "global_calibration": {
+    "f1": 0.4514390427940067,
+    "fn": 922,
+    "fp": 9256,
+    "negative_count": 28442,
+    "passed": true,
+    "positive_count": 5110,
+    "precision": 0.31151443022909847,
+    "recall": 0.8195694716242662,
+    "selection_reason": "meets_recall_precision_targets",
+    "support": 33552,
+    "threshold": 0.35,
+    "tn": 19186,
+    "tp": 4188
+  },
   "global_threshold": {
-    "f1": 0.43376898622394916,
-    "fn": 135,
+    "calibration": {
+      "f1": 0.4514390427940067,
+      "fn": 922,
+      "fp": 9256,
+      "negative_count": 28442,
+      "passed": true,
+      "positive_count": 5110,
+      "precision": 0.31151443022909847,
+      "recall": 0.8195694716242662,
+      "selection_reason": "meets_recall_precision_targets",
+      "support": 33552,
+      "threshold": 0.35,
+      "tn": 19186,
+      "tp": 4188
+    },
+    "f1": 0.4246045694200351,
+    "fn": 145,
+    "fp": 1492,
+    "negative_count": 5347,
+    "passed": false,
+    "positive_count": 749,
+    "precision": 0.2881679389312977,
+    "recall": 0.8064085447263017,
+    "support": 6096,
+    "threshold": 0.35,
+    "tn": 3855,
+    "tp": 604
+  },
+  "global_threshold_pass": false,
+  "per_family_application": {
+    "f1": 0.4243070362473347,
+    "fn": 152,
     "fp": 1468,
     "negative_count": 5347,
     "passed": false,
     "positive_count": 749,
-    "precision": 0.29490874159462055,
-    "recall": 0.8197596795727636,
-    "selection_reason": "best_available_below_target",
+    "precision": 0.2891041162227603,
+    "recall": 0.7970627503337784,
     "support": 6096,
-    "threshold": 0.35,
     "tn": 3879,
-    "tp": 614
+    "tp": 597
   },
-  "global_threshold_pass": false,
-  "per_family_application": {
-    "f1": 0.44126284875183563,
-    "fn": 148,
-    "fp": 1374,
-    "negative_count": 5347,
-    "passed": true,
-    "positive_count": 749,
-    "precision": 0.30430379746835445,
-    "recall": 0.8024032042723631,
-    "support": 6096,
-    "tn": 3973,
-    "tp": 601
-  },
-  "per_family_threshold_pass": true,
+  "per_family_threshold_pass": false,
   "per_rule_application": {
-    "f1": 0.44120781527531083,
-    "fn": 128,
-    "fp": 1445,
+    "f1": 0.42291066282420753,
+    "fn": 162,
+    "fp": 1440,
     "negative_count": 5347,
-    "passed": true,
+    "passed": false,
     "positive_count": 749,
-    "precision": 0.3005808325266215,
-    "recall": 0.829105473965287,
+    "precision": 0.289590527873705,
+    "recall": 0.7837116154873164,
     "support": 6096,
-    "tn": 3902,
-    "tp": 621
+    "tn": 3907,
+    "tp": 587
   },
-  "per_rule_threshold_pass": true,
+  "per_rule_threshold_pass": false,
   "phase5p5_allowed": false,
   "phase6_allowed": false,
   "schema_version": "phase4f_repair5b_per_rule_safety_calibration_v1",
   "selected_false_negative_distribution": {
     "global": {
       "selected_harmful_false_negative_by_rule": {
-        "block_heavy": 2,
-        "block_light": 1,
         "commit_heavy": 5,
-        "wait_light": 5
+        "wait_light": 8
       },
       "selected_safe_false_positive_by_rule": {
-        "block_heavy": 6,
-        "block_light": 7,
-        "commit_heavy": 13,
-        "wait_light": 23
+        "commit_heavy": 4,
+        "wait_heavy": 8
       }
     },
     "per_family": {
       "selected_harmful_false_negative_by_rule": {
-        "block_heavy": 2,
-        "block_light": 1,
-        "commit_heavy": 6,
-        "wait_light": 5
+        "commit_heavy": 5,
+        "wait_light": 8
       },
       "selected_safe_false_positive_by_rule": {
         "additive_ltm": 1,
-        "block_heavy": 6,
-        "block_light": 7,
-        "wait_light": 23
+        "wait_heavy": 8
       }
     },
     "per_rule": {
       "selected_harmful_false_negative_by_rule": {
-        "block_heavy": 2,
-        "commit_heavy": 6,
-        "wait_light": 2
+        "commit_heavy": 5,
+        "wait_heavy": 2,
+        "wait_light": 8
       },
       "selected_safe_false_positive_by_rule": {
-        "additive_ltm": 1,
-        "block_light": 17,
-        "wait_light": 36
+        "additive_ltm": 1
       }
     }
   },
@@ -103,18 +126,18 @@
     "additive": 0.01,
     "block": 0.35,
     "commit": 0.4,
-    "decay": 0.4,
+    "decay": 0.35,
     "wait": 0.35
   },
   "threshold_by_rule": {
     "additive_ltm": 0.01,
-    "block_heavy": 0.45,
-    "block_light": 0.3,
+    "block_heavy": 0.35,
+    "block_light": 0.35,
     "commit_heavy": 0.4,
     "decay_090": 0.35,
-    "decay_095": 0.4,
-    "wait_heavy": 0.35,
-    "wait_light": 0.3
+    "decay_095": 0.35,
+    "wait_heavy": 0.45,
+    "wait_light": 0.35
   },
   "threshold_grid": [
     0.01,

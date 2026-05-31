@@ -31,6 +31,7 @@ from czr004_teacher.stable_attention_tokens_laur import (  # noqa: E402
     RULE_FAMILY_IDS,
     RULE_FEATURE_NAMES,
     TRACE_FEATURE_NAMES,
+    rule_family,
 )
 from models.laur_attention_native import (  # noqa: E402
     EDGE_TRACE_TRANSFORMER_NAME,
@@ -1005,6 +1006,77 @@ def calibrate_global_safety_threshold_from_scores(
     }
 
 
+def calibrate_family_safety_thresholds_from_scores(
+    records: list[dict[str, Any]],
+    *,
+    candidate_thresholds: list[float],
+    min_recall: float = 0.80,
+    min_precision: float = 0.30,
+) -> dict[str, Any]:
+    candidates = sorted({float(value) for value in candidate_thresholds}) or [0.5]
+    family_records: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    for record in records:
+        rule_id = str(record.get("rule_id") or EXECUTABLE_RULE_IDS[int(record["rule_index"])])
+        family_records[rule_family(rule_id)].append(record)
+    threshold_by_family: dict[str, float] = {}
+    per_family: dict[str, Any] = {}
+    for family_id in RULE_FAMILY_IDS:
+        values = family_records.get(family_id, [])
+        positives = sum(int(record["label"]) for record in values)
+        if not values or positives == 0:
+            threshold_by_family[family_id] = 1.01
+            per_family[family_id] = {
+                "threshold": 1.01,
+                "positive_count": positives,
+                "reason": "no_positive_train_labels",
+                "precision": 0.0,
+                "recall": 0.0,
+            }
+            continue
+        scored: list[dict[str, Any]] = []
+        for threshold in candidates:
+            metrics = _binary_metrics_from_scores(values, [threshold] * len(EXECUTABLE_RULE_IDS))
+            scored.append({"threshold": threshold, **metrics})
+        feasible = [
+            item
+            for item in scored
+            if float(item["recall"]) >= float(min_recall)
+            and float(item["precision"]) >= float(min_precision)
+        ]
+        if feasible:
+            best = max(feasible, key=lambda item: (float(item["precision"]), float(item["recall"]), float(item["threshold"])))
+            reason = "meets_family_safety_targets"
+        else:
+            pool = [item for item in scored if float(item["recall"]) >= float(min_recall)] or scored
+            best = max(pool, key=lambda item: (float(item["f1"]), float(item["recall"]), float(item["precision"])))
+            reason = "best_available_family_threshold"
+        threshold_by_family[family_id] = float(best["threshold"])
+        per_family[family_id] = {
+            "threshold": float(best["threshold"]),
+            "positive_count": positives,
+            "reason": reason,
+            "precision": float(best["precision"]),
+            "recall": float(best["recall"]),
+            "f1": float(best["f1"]),
+        }
+    thresholds = [
+        float(threshold_by_family.get(rule_family(rule_id), 0.5))
+        for rule_id in EXECUTABLE_RULE_IDS
+    ]
+    aggregate = _binary_metrics_from_scores(records, thresholds)
+    return {
+        "schema_version": "phase4f_repair5_family_safety_threshold_calibration_v1",
+        "thresholds": thresholds,
+        "threshold_by_rule": dict(zip(EXECUTABLE_RULE_IDS, thresholds)),
+        "threshold_by_family": threshold_by_family,
+        "per_family": per_family,
+        "train_metrics": aggregate,
+        "candidate_thresholds": candidates,
+        "min_recall": float(min_recall),
+        "min_precision": float(min_precision),
+    }
+
+
 def calibrate_safety_thresholds_from_scores(
     records: list[dict[str, Any]],
     *,
@@ -1015,6 +1087,13 @@ def calibrate_safety_thresholds_from_scores(
 ) -> dict[str, Any]:
     if str(mode) == "global":
         return calibrate_global_safety_threshold_from_scores(
+            records,
+            candidate_thresholds=candidate_thresholds,
+            min_recall=min_recall,
+            min_precision=min_precision,
+        )
+    if str(mode) == "per_family":
+        return calibrate_family_safety_thresholds_from_scores(
             records,
             candidate_thresholds=candidate_thresholds,
             min_recall=min_recall,

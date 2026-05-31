@@ -70,10 +70,24 @@ def safety_gate(summary: dict[str, Any]) -> dict[str, Any]:
     return checks
 
 
+def safety_calibration_label(
+    safety: dict[str, Any],
+    *,
+    safety_calibration_report: dict[str, Any] | None = None,
+) -> str:
+    if bool(safety.get("passed")):
+        return "strict_safety_gate_passed"
+    report = safety_calibration_report or {}
+    if bool(report.get("per_rule_threshold_pass")) or bool(report.get("per_family_threshold_pass")):
+        return "candidate_for_composite_or_preflight"
+    return "safety_gate_failed"
+
+
 def aggregate_final_gate(
     summaries: list[dict[str, Any]],
     *,
     label_audit: dict[str, Any] | None = None,
+    safety_calibration_report: dict[str, Any] | None = None,
     required_seeds: list[int] | None = None,
 ) -> dict[str, Any]:
     seeds = [int(summary.get("seed", -1)) for summary in summaries]
@@ -86,6 +100,10 @@ def aggregate_final_gate(
         attention = _validation(summary).get("attention_native_gate", {})
         anti = summary.get("anti_escape_gate", {})
         safety = safety_gate(summary)
+        calibration_label = safety_calibration_label(
+            safety,
+            safety_calibration_report=safety_calibration_report,
+        )
         seed_results.append(
             {
                 "seed": seed,
@@ -104,6 +122,7 @@ def aggregate_final_gate(
                     if not isinstance(gate, dict) or "passed" not in gate
                 ],
                 "safety_gate": safety,
+                "safety_calibration_label": calibration_label,
                 "anti_escape_reason": anti.get("reason"),
                 "runtime_allowed_for_seed": bool(
                     phase4f.get("passed")
@@ -138,6 +157,13 @@ def aggregate_final_gate(
             "required": required,
             "available": seeds,
         },
+        "safety_calibration_report": {
+            "schema_version": safety_calibration_report.get("schema_version"),
+            "per_rule_threshold_pass": safety_calibration_report.get("per_rule_threshold_pass"),
+            "per_family_threshold_pass": safety_calibration_report.get("per_family_threshold_pass"),
+        }
+        if safety_calibration_report
+        else None,
         "runtime_allowed": runtime_allowed,
         "phase5p5_allowed": runtime_allowed,
         "phase6_allowed": False,
@@ -162,6 +188,7 @@ def write_report(path: Path, summary: dict[str, Any]) -> None:
                 f"- seed `{result.get('seed')}`: original `{result.get('original_phase4f_gate_passed')}`, "
                 f"attention `{result.get('attention_native_gate_passed')}`, "
                 f"safety `{result.get('safety_gate_passed')}`, "
+                f"safety_label `{result.get('safety_calibration_label')}`, "
                 f"anti_escape `{result.get('anti_escape_gate_passed')}`, "
                 f"runtime `{result.get('runtime_allowed_for_seed')}`\n"
             )
@@ -176,6 +203,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--config", type=Path)
     parser.add_argument("--summary-json", action="append", type=Path, default=[])
     parser.add_argument("--label-audit-json", type=Path)
+    parser.add_argument("--safety-calibration-json", type=Path)
     parser.add_argument("--output-json", type=Path)
     parser.add_argument("--report-md", type=Path)
     return parser.parse_args(argv)
@@ -195,14 +223,22 @@ def main(argv: list[str] | None = None) -> int:
     summaries = [payload for payload in (load_json(path) for path in summary_paths) if payload]
     label_audit_path = resolve_path(args.label_audit_json or outputs.get("label_audit_json"), root)
     label_audit = load_json(label_audit_path)
+    safety_calibration_path = resolve_path(args.safety_calibration_json or outputs.get("safety_calibration_json"), root)
+    safety_calibration_report = load_json(safety_calibration_path)
     output_path = resolve_path(args.output_json or outputs.get("final_gate_summary_json"), root)
     report_path = resolve_path(args.report_md or outputs.get("final_gate_report_md"), root)
     if None in (output_path, report_path):
         raise ValueError("output/report paths are required")
     assert output_path and report_path
-    summary = aggregate_final_gate(summaries, label_audit=label_audit, required_seeds=seeds)
+    summary = aggregate_final_gate(
+        summaries,
+        label_audit=label_audit,
+        safety_calibration_report=safety_calibration_report,
+        required_seeds=seeds,
+    )
     summary["summary_paths"] = [str(path) for path in summary_paths if path is not None]
     summary["label_audit_json"] = str(label_audit_path) if label_audit_path else None
+    summary["safety_calibration_json"] = str(safety_calibration_path) if safety_calibration_path else None
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     write_report(report_path, summary)

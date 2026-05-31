@@ -217,6 +217,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--batch-size", type=int)
     parser.add_argument("--device", choices=["cpu", "cuda", "auto"])
     parser.add_argument("--calibrate-safety", action="store_true")
+    parser.add_argument("--safety-calibration-mode", choices=["global", "per_rule", "per_family"])
     return parser.parse_args(argv)
 
 
@@ -279,7 +280,7 @@ def main(argv: list[str] | None = None) -> int:
             candidate_thresholds=calibration_grid,
             min_recall=float(gate_config.get("harmful_recall_min", 0.80)),
             min_precision=float(gate_config.get("harmful_precision_min", 0.30)),
-            mode=str(eval_config.get("safety_calibration_mode", "per_rule")),
+            mode=str(args.safety_calibration_mode or eval_config.get("safety_calibration_mode", "per_rule")),
         )
         safety_threshold = list(safety_calibration["thresholds"])
     selection = checkpoint.get("selection", {})

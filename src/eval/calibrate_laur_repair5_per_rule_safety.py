@@ -204,14 +204,14 @@ def choose_threshold(
     return best
 
 
-def load_items(paths: list[Path]) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+def load_items(paths: list[Path], *, split: str) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
     items: list[dict[str, Any]] = []
     selected_records: list[dict[str, Any]] = []
     for path in paths:
         with path.open("r", encoding="utf-8", newline="") as handle:
             reader = csv.DictReader(handle)
             for row in reader:
-                if str(row.get("split", "")) != "validation":
+                if str(row.get("split", "")) != str(split):
                     continue
                 probs = [finite(value) for value in parse_list(row.get("harmful_probs"))]
                 labels = [1 if parse_bool(value) else 0 for value in parse_list(row.get("harmful_labels"))]
@@ -335,6 +335,8 @@ def write_report(path: Path, *, root: Path, summary: dict[str, Any]) -> None:
         handle.write("## Inputs\n\n")
         for path_text in summary["eval_csvs"]:
             handle.write(f"- `{path_text}`\n")
+        handle.write(f"\n- calibration split: `{summary.get('calibration_split')}`\n")
+        handle.write(f"- evaluation split: `{summary.get('evaluation_split')}`\n")
         handle.write("\n## Results\n\n")
         handle.write(
             f"- global threshold `{global_result['threshold']}`: recall `{global_result['recall']}`, "
@@ -360,6 +362,13 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--summary-json", type=Path, default=Path("outputs/reports/phase4f_repair5_per_rule_safety_calibration.json"))
     parser.add_argument("--report", type=Path, default=Path("outputs/reports/phase4f_repair5_per_rule_safety_calibration.md"))
     parser.add_argument("--thresholds-csv", type=Path, default=Path("outputs/tables/phase4f_repair5_per_rule_safety_thresholds.csv"))
+    parser.add_argument(
+        "--comparison-report",
+        type=Path,
+        default=Path("outputs/reports/phase4f_repair5_safety_calibration_comparison.md"),
+    )
+    parser.add_argument("--calibration-split", default="train")
+    parser.add_argument("--eval-split", default="validation")
     parser.add_argument("--min-recall", type=float, default=0.80)
     parser.add_argument("--min-precision", type=float, default=0.30)
     parser.add_argument("--threshold", action="append", type=float, default=[])
@@ -373,21 +382,36 @@ def main(argv: list[str] | None = None) -> int:
     if not paths:
         paths = [default_eval_csv(root)]
     thresholds = sorted(set(args.threshold or DEFAULT_THRESHOLDS))
-    items, selected_records = load_items(paths)
-    if not items:
-        raise ValueError("no validation harmful_probs/harmful_labels rows found")
+    calibration_items, _calibration_selected = load_items(paths, split=str(args.calibration_split))
+    eval_items, selected_records = load_items(paths, split=str(args.eval_split))
+    if not calibration_items:
+        raise ValueError(f"no {args.calibration_split} harmful_probs/harmful_labels rows found")
+    if not eval_items:
+        raise ValueError(f"no {args.eval_split} harmful_probs/harmful_labels rows found")
 
-    global_result = choose_threshold(
-        items,
+    global_calibration = choose_threshold(
+        calibration_items,
         thresholds,
         min_recall=args.min_recall,
         min_precision=args.min_precision,
     )
-    global_thresholds = {"global": float(global_result["threshold"])}
+    global_thresholds = {"global": float(global_calibration["threshold"])}
+    global_application = apply_group_thresholds(
+        eval_items,
+        global_thresholds,
+        group_key="rule",
+        min_recall=args.min_recall,
+        min_precision=args.min_precision,
+    )
+    global_result = {
+        "threshold": float(global_calibration["threshold"]),
+        **global_application,
+        "calibration": global_calibration,
+    }
 
     by_rule: dict[str, list[dict[str, Any]]] = defaultdict(list)
     by_family: dict[str, list[dict[str, Any]]] = defaultdict(list)
-    for item in items:
+    for item in calibration_items:
         by_rule[str(item["rule"])].append(item)
         by_family[str(item["family"])].append(item)
 
@@ -413,14 +437,14 @@ def main(argv: list[str] | None = None) -> int:
         threshold_rows.append({"scope": "family", "group": family, **result})
 
     per_rule_application = apply_group_thresholds(
-        items,
+        eval_items,
         per_rule_thresholds,
         group_key="rule",
         min_recall=args.min_recall,
         min_precision=args.min_precision,
     )
     per_family_application = apply_group_thresholds(
-        items,
+        eval_items,
         per_family_thresholds,
         group_key="family",
         min_recall=args.min_recall,
@@ -459,12 +483,17 @@ def main(argv: list[str] | None = None) -> int:
         "commit": git_value(["rev-parse", "--short", "HEAD"], root),
         "dirty": dirty_state(root),
         "eval_csvs": [str(path) for path in paths],
+        "calibration_split": str(args.calibration_split),
+        "evaluation_split": str(args.eval_split),
+        "calibration_support": len(calibration_items),
+        "evaluation_support": len(eval_items),
         "threshold_grid": thresholds,
         "targets": {
             "harmful_recall_min": args.min_recall,
             "harmful_precision_min": args.min_precision,
         },
         "global_threshold": global_result,
+        "global_calibration": global_calibration,
         "threshold_by_rule": per_rule_thresholds,
         "threshold_by_family": per_family_thresholds,
         "per_rule_application": per_rule_application,
@@ -484,6 +513,7 @@ def main(argv: list[str] | None = None) -> int:
     summary_path.parent.mkdir(parents=True, exist_ok=True)
     summary_path.write_text(json.dumps(summary, indent=2, sort_keys=True), encoding="utf-8")
     write_report(root / args.report, root=root, summary=summary)
+    write_report(root / args.comparison_report, root=root, summary=summary)
     return 0
 
 

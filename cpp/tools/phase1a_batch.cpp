@@ -37,6 +37,7 @@ struct Args {
   std::string traffic_map_edge_filter = "all";
   std::string laur_model_path;
   std::string laur_static_rule;
+  std::string laur_update_log_jsonl;
   std::string method_alias;
   uint agents = 0;
   uint seed = 0;
@@ -184,6 +185,8 @@ Args parse_args(int argc, char** argv)
       values.count("laur-model-path") ? values["laur-model-path"] : "";
   args.laur_static_rule =
       values.count("laur-static-rule") ? values["laur-static-rule"] : "";
+  args.laur_update_log_jsonl =
+      values.count("laur-update-log-jsonl") ? values["laur-update-log-jsonl"] : "";
   args.method_alias =
       values.count("method-alias") ? values["method-alias"] : "";
   args.laur_enable = values.count("laur-enable") > 0;
@@ -374,6 +377,50 @@ void append_traffic_map_jsonl(const Args& args, const Instance& instance,
   }
 }
 
+void append_laur_update_log_jsonl(
+    const Args& args, const czr004::ltm::LtmUpdateContext& context,
+    const std::string& predicted_rule, const std::string& applied_rule,
+    double safety_harmful_prob, double predicted_delta_ratio, double inference_ms,
+    const std::string& decision_status, const std::string& fallback_reason,
+    bool prediction_enabled)
+{
+  if (args.laur_update_log_jsonl.empty()) return;
+
+  const auto output_path = std::filesystem::path(args.laur_update_log_jsonl);
+  if (output_path.has_parent_path()) {
+    std::filesystem::create_directories(output_path.parent_path());
+  }
+
+  std::ofstream out(output_path, std::ios::app);
+  if (!out) throw std::runtime_error("cannot open LAUR update log JSONL");
+
+  const auto output_method =
+      args.method_alias.empty() ? args.method : args.method_alias;
+  out << "{";
+  out << "\"schema_version\":\"phase5p5_repair5e_laur_update_log_v1\"";
+  out << ",\"method\":" << json_string(output_method);
+  out << ",\"map\":" << json_string(args.map_name);
+  out << ",\"scen\":" << json_string(args.scen_id);
+  out << ",\"agents\":" << args.agents;
+  out << ",\"seed\":" << args.seed;
+  out << ",\"iteration\":" << context.stats.iteration;
+  out << ",\"has_incumbent_before\":" << (context.stats.has_incumbent_before ? "true" : "false");
+  out << ",\"best_ratio_before\":" << json_number_or_null(context.stats.best_ratio_before);
+  out << ",\"returned_solutions_count_so_far\":" << context.stats.returned_solutions_count_so_far;
+  out << ",\"predicted_rule\":" << json_string(predicted_rule);
+  out << ",\"applied_rule\":" << json_string(applied_rule);
+  out << ",\"decision_status\":" << json_string(decision_status);
+  out << ",\"fallback_reason\":" << json_string(fallback_reason);
+  out << ",\"prediction_enabled\":" << (prediction_enabled ? "true" : "false");
+  out << ",\"safety_harmful_prob\":" << json_number_or_null(safety_harmful_prob);
+  out << ",\"predicted_delta_ratio\":" << json_number_or_null(predicted_delta_ratio);
+  out << ",\"inference_ms\":" << json_number_or_null(inference_ms);
+  out << ",\"laur_force_additive\":" << (args.laur_force_additive ? "true" : "false");
+  out << ",\"laur_static_rule\":" << json_string(args.laur_static_rule);
+  out << ",\"laur_safety_threshold\":" << json_number_or_null(args.laur_safety_threshold);
+  out << "}\n";
+}
+
 RunStats run_lacam_star(const Instance& instance, const Args& args)
 {
   RunStats stats;
@@ -448,19 +495,31 @@ RunStats run_lacam_star_ltm(const Instance& instance, const Args& args)
           if (context.instance == nullptr || context.traffic_before == nullptr ||
               context.trace_events == nullptr) {
             ++stats.laur_additive_fallback_count;
+            append_laur_update_log_jsonl(
+                args, context, "additive_ltm", "additive_ltm", 1.0, 0.0, 0.0,
+                "fallback_additive", "missing_update_context", false);
             return additive;
           }
           if (args.laur_post_first_solution_only &&
               !context.stats.has_incumbent_before) {
             ++stats.laur_additive_fallback_count;
+            append_laur_update_log_jsonl(
+                args, context, "additive_ltm", "additive_ltm", 0.0, 0.0, 0.0,
+                "fallback_additive", "pre_first_solution", true);
             return additive;
           }
           if (context.stats.iteration % args.laur_every_k_restarts != 0) {
             ++stats.laur_additive_fallback_count;
+            append_laur_update_log_jsonl(
+                args, context, "additive_ltm", "additive_ltm", 0.0, 0.0, 0.0,
+                "fallback_additive", "update_period_skip", true);
             return additive;
           }
           if (!args.laur_static_rule.empty()) {
             ++stats.laur_selected_rules[args.laur_static_rule];
+            append_laur_update_log_jsonl(
+                args, context, args.laur_static_rule, args.laur_static_rule, 0.0,
+                0.0, 0.0, "applied", "static_rule", true);
             return static_params;
           }
 
@@ -474,14 +533,30 @@ RunStats run_lacam_star_ltm(const Instance& instance, const Args& args)
 
           if (!prediction.enabled) {
             ++stats.laur_additive_fallback_count;
+            append_laur_update_log_jsonl(
+                args, context, prediction.rule_id, "additive_ltm",
+                prediction.safety_harmful_prob, prediction.predicted_delta_ratio,
+                prediction.inference_ms, "fallback_additive",
+                "prediction_disabled", false);
             return additive;
           }
           if (!args.laur_force_additive && args.laur_safety_enabled &&
               prediction.safety_harmful_prob >= args.laur_safety_threshold) {
             ++stats.laur_safety_disabled_count;
             ++stats.laur_additive_fallback_count;
+            append_laur_update_log_jsonl(
+                args, context, prediction.rule_id, "additive_ltm",
+                prediction.safety_harmful_prob, prediction.predicted_delta_ratio,
+                prediction.inference_ms, "fallback_additive", "safety_gate",
+                true);
             return additive;
           }
+          append_laur_update_log_jsonl(
+              args, context, prediction.rule_id, prediction.rule_id,
+              prediction.safety_harmful_prob, prediction.predicted_delta_ratio,
+              prediction.inference_ms,
+              args.laur_force_additive ? "force_additive" : "applied",
+              args.laur_force_additive ? "force_additive" : "", true);
           return prediction.params;
         };
   }

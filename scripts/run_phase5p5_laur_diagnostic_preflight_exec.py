@@ -1,9 +1,10 @@
-"""Run a diagnostic-only Phase5.5 LAUR closed-loop preflight.
+"""Run a diagnostic-only Phase5.5/Repair5E LAUR closed-loop preflight.
 
 This runner executes the existing solver binary on a tiny MAPF scope and
 summarizes the result. It is intentionally diagnostic-only: it never grants
-Phase5.5 or Phase6 permission, and it records when Repair5C attention-native
-composite/oracle replay are not yet executable as C++ runtime policies.
+Phase5.5 or Phase6 permission. Repair5E can run a frozen Repair5D composite
+through a distilled MLP runtime bridge and, optionally, a static-rule oracle
+probe as an upper-bound diagnostic.
 """
 
 from __future__ import annotations
@@ -42,6 +43,10 @@ DEFAULT_SUMMARY_CSV = "outputs/tables/phase5p5_laur_diagnostic_preflight_summary
 DEFAULT_PAIRED_CSV = "outputs/tables/phase5p5_laur_diagnostic_preflight_paired.csv"
 DEFAULT_REPAIR3_WEIGHTS = "artifacts/models/laur_ltm/full_repair3_stable_tie001_mlp/laur_mlp_v1_weights.json"
 DEFAULT_REPAIR3_RUNTIME = "outputs/tmp/phase5/laur_repair3_stable_tie001_mlp_runtime"
+DEFAULT_REPAIR5D_SPEC = "outputs/reports/phase4f_repair5d_best_composite_spec.json"
+DEFAULT_REPAIR5D_RUNTIME = "artifacts/models/laur_ltm/repair5d_composite_distilled"
+DEFAULT_ORACLE_SUMMARY_JSON = "outputs/reports/phase5p5_oracle_update_preflight_summary.json"
+DEFAULT_ORACLE_REPORT = "outputs/reports/phase5p5_oracle_update_preflight_report.md"
 
 MAPS = {
     "random-32-32-20": "external/lacam2/scripts/map/random-32-32-20.map",
@@ -59,6 +64,8 @@ NONADDITIVE_RULES = {
     "decay_090",
 }
 
+ORACLE_STATIC_RULES = tuple(sorted(NONADDITIVE_RULES))
+
 
 @dataclass(frozen=True)
 class MethodSpec:
@@ -66,6 +73,7 @@ class MethodSpec:
     alias: str
     extra_args: tuple[str, ...] = ()
     diagnostic_note: str = ""
+    hide_from_report: bool = False
 
 
 def repo_root() -> Path:
@@ -163,7 +171,9 @@ def build_methods(
     root: Path,
     additive_model: Path,
     repair3_runtime: Path | None,
+    repair5d_runtime: Path | None,
     include_static_proxies: bool,
+    include_oracle_static_probe: bool,
 ) -> tuple[list[MethodSpec], list[dict[str, Any]]]:
     methods = [
         MethodSpec("lacam_star", "lacam_star"),
@@ -188,6 +198,33 @@ def build_methods(
     else:
         skipped.append({"method": "repair3_safe_runtime", "reason": "runtime_model_unavailable"})
 
+    if repair5d_runtime is not None:
+        methods.extend(
+            [
+                MethodSpec(
+                    "lacam_star_lau_ltm",
+                    "repair5d_composite_diagnostic_distilled",
+                    ("--laur-model-path", str(repair5d_runtime), "--laur-safety-threshold", "0.30"),
+                    "Repair5D composite distilled into existing LAUR MLP runtime, diagnostic only",
+                ),
+                MethodSpec(
+                    "lacam_star_lau_ltm",
+                    "repair5d_force_additive_defer_parity",
+                    ("--laur-force-additive", "--laur-model-path", str(repair5d_runtime)),
+                    "Repair5D runtime path with forced additive/defer parity",
+                ),
+            ]
+        )
+        skipped.append(
+            {
+                "method": "repair5d_native_composite_export",
+                "reason": "not_feasible_current_cxx_runtime_accepts_single_mlp_runtime_only_distilled_bridge_used",
+            }
+        )
+    else:
+        skipped.append({"method": "repair5d_composite_diagnostic_distilled", "reason": "runtime_model_unavailable"})
+        skipped.append({"method": "repair5d_force_additive_defer_parity", "reason": "runtime_model_unavailable"})
+
     if include_static_proxies:
         for rule in ("block_heavy", "wait_light", "decay_095"):
             methods.append(
@@ -199,18 +236,30 @@ def build_methods(
                 )
             )
 
-    skipped.extend(
-        [
+    if include_oracle_static_probe:
+        for rule in ORACLE_STATIC_RULES:
+            methods.append(
+                MethodSpec(
+                    "lacam_star_lau_ltm",
+                    f"oracle_probe_static_{rule}",
+                    ("--laur-static-rule", rule),
+                    "support row for static-rule oracle upper-bound diagnostic",
+                    hide_from_report=True,
+                )
+            )
+        skipped.append(
             {
-                "method": "repair5c_top3_per_rule_safety_utility_composite",
-                "reason": "not_executed_attention_native_composite_has_no_cxx_runtime_export",
-            },
+                "method": "oracle_teacher_forced_best_safe_update_full_hook",
+                "reason": "full_per_update_teacher_force_hook_not_available_static_rule_probe_proxy_executed",
+            }
+        )
+    else:
+        skipped.append(
             {
-                "method": "oracle_replay_or_teacher_forced_update_choices",
-                "reason": "not_feasible_no_closed_loop_teacher_force_hook",
-            },
-        ]
-    )
+                "method": "oracle_teacher_forced_best_safe_update",
+                "reason": "not_executed_pass_include_oracle_static_probe_for_static_upper_bound_proxy",
+            }
+        )
     return methods, skipped
 
 
@@ -227,6 +276,7 @@ def run_solver_grid(
     ltm_max_iterations: int,
     scenario_dir: Path,
     methods: list[MethodSpec],
+    laur_update_log_jsonl: Path,
 ) -> list[dict[str, Any]]:
     command_log.parent.mkdir(parents=True, exist_ok=True)
     command_rows: list[dict[str, Any]] = []
@@ -240,6 +290,9 @@ def run_solver_grid(
                 raise FileNotFoundError(f"missing scenario path {scen_path}")
             for agents in agent_counts:
                 for spec in methods:
+                    extra_args = list(spec.extra_args)
+                    if spec.method == "lacam_star_lau_ltm":
+                        extra_args.extend(["--laur-update-log-jsonl", str(laur_update_log_jsonl)])
                     command = [
                         str(binary),
                         "--method",
@@ -276,7 +329,7 @@ def run_solver_grid(
                         dirty_state(root),
                         "--platform",
                         "Windows Phase5.5 LAUR diagnostic preflight",
-                        *spec.extra_args,
+                        *extra_args,
                     ]
                     completed = subprocess.run(command, cwd=root, text=True, capture_output=True)
                     row = {
@@ -355,6 +408,46 @@ def summarize_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return summary
 
 
+def add_ltm_group_deltas(summary_rows: list[dict[str, Any]], baseline: str = "lacam_star_ltm") -> list[dict[str, Any]]:
+    baselines = {
+        (row["map"], int(row["agents"])): row
+        for row in summary_rows
+        if row["method"] == baseline
+    }
+    out: list[dict[str, Any]] = []
+    for row in summary_rows:
+        next_row = dict(row)
+        base = baselines.get((row["map"], int(row["agents"])))
+        if base is None or row["method"] == baseline:
+            next_row["ratio_delta_vs_ltm"] = None
+            next_row["expanded_delta_vs_ltm"] = None
+            next_row["ttfs_delta_vs_ltm"] = None
+        else:
+            ratio = row.get("sum_of_loss_ratio_mean")
+            base_ratio = base.get("sum_of_loss_ratio_mean")
+            expanded = row.get("expanded_nodes_mean")
+            base_expanded = base.get("expanded_nodes_mean")
+            ttfs = row.get("time_to_first_solution_ms_mean")
+            base_ttfs = base.get("time_to_first_solution_ms_mean")
+            next_row["ratio_delta_vs_ltm"] = (
+                float(ratio) - float(base_ratio)
+                if ratio is not None and base_ratio is not None
+                else None
+            )
+            next_row["expanded_delta_vs_ltm"] = (
+                float(expanded) - float(base_expanded)
+                if expanded is not None and base_expanded is not None
+                else None
+            )
+            next_row["ttfs_delta_vs_ltm"] = (
+                float(ttfs) - float(base_ttfs)
+                if ttfs is not None and base_ttfs is not None
+                else None
+            )
+        out.append(next_row)
+    return out
+
+
 def paired_rows(rows: list[dict[str, Any]], baseline: str = "lacam_star_ltm") -> list[dict[str, Any]]:
     by_key: dict[tuple[Any, ...], dict[str, dict[str, Any]]] = {}
     for raw in rows:
@@ -401,6 +494,102 @@ def paired_rows(rows: list[dict[str, Any]], baseline: str = "lacam_star_ltm") ->
     return pairs
 
 
+def is_oracle_probe_row(row: dict[str, Any]) -> bool:
+    return str(row.get("method", "")).startswith("oracle_probe_static_")
+
+
+def synthesize_oracle_static_proxy_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Choose the best static-rule probe per scenario as an oracle proxy row."""
+
+    grouped: dict[tuple[Any, ...], list[dict[str, Any]]] = {}
+    for raw in rows:
+        row = normalize_run_row(raw)
+        if not is_oracle_probe_row(row):
+            continue
+        key = (row.get("map"), int(row.get("agents", 0)), row.get("seed"), row.get("scen"))
+        grouped.setdefault(key, []).append(row)
+
+    def score(row: dict[str, Any]) -> tuple[int, float, float, float]:
+        success = 0 if row.get("success") else 1
+        ratio = _number(row, "sum_of_loss_ratio")
+        expanded = _number(row, "expanded_nodes")
+        ttfs = _number(row, "time_to_first_solution_ms")
+        return (
+            success,
+            float(ratio) if ratio is not None else float("inf"),
+            float(expanded) if expanded is not None else float("inf"),
+            float(ttfs) if ttfs is not None else float("inf"),
+        )
+
+    out: list[dict[str, Any]] = []
+    for candidates in grouped.values():
+        best = min(candidates, key=score)
+        row = dict(best)
+        source_method = str(row.get("method", ""))
+        row["method"] = "oracle_teacher_forced_best_safe_update_static_proxy"
+        row["oracle_upper_bound_diagnostic"] = True
+        row["oracle_proxy_source_method"] = source_method
+        row["oracle_proxy_scope"] = "best_static_preset_rule_per_scenario_not_per_update_teacher_force"
+        out.append(row)
+    return out
+
+
+def paired_method_stats(paired: list[dict[str, Any]]) -> dict[str, dict[str, Any]]:
+    grouped: dict[str, list[dict[str, Any]]] = {}
+    for row in paired:
+        grouped.setdefault(str(row["contender_method"]), []).append(row)
+    out: dict[str, dict[str, Any]] = {}
+    for method, rows in sorted(grouped.items()):
+        deltas = [
+            float(row["delta_ratio"])
+            for row in rows
+            if row.get("delta_ratio") is not None
+        ]
+        out[method] = {
+            "rows": len(rows),
+            "better": sum(1 for row in rows if row.get("contender_better") is True),
+            "worse": sum(1 for value in deltas if value > 1.0e-12),
+            "equal": sum(1 for value in deltas if abs(value) <= 1.0e-12),
+            "mean_delta_ratio_vs_ltm": _mean(deltas),
+        }
+    return out
+
+
+def decision_table_interpretation(method_stats: dict[str, dict[str, Any]]) -> dict[str, Any]:
+    repair5d = method_stats.get("repair5d_composite_diagnostic_distilled", {})
+    oracle = method_stats.get("oracle_teacher_forced_best_safe_update_static_proxy", {})
+    repair5d_positive = (
+        repair5d.get("mean_delta_ratio_vs_ltm") is not None
+        and float(repair5d["mean_delta_ratio_vs_ltm"]) <= 0.0
+        and int(repair5d.get("worse") or 0) <= int(repair5d.get("better") or 0)
+    )
+    oracle_positive = (
+        oracle.get("mean_delta_ratio_vs_ltm") is not None
+        and float(oracle["mean_delta_ratio_vs_ltm"]) < 0.0
+        and int(oracle.get("better") or 0) > int(oracle.get("worse") or 0)
+    )
+    if repair5d_positive and oracle_positive:
+        case = "A"
+        action = "prepare_multi_seed_composite_grid_and_formal_phase5p5_runtime_path"
+    elif oracle_positive and not repair5d_positive:
+        case = "B"
+        action = "improve_composite_or_reranker_do_not_jump_to_delta_updateparams"
+    elif not oracle_positive:
+        case = "C"
+        action = "stop_offline_gate_optimization_and_redesign_labels_or_output_space"
+    else:
+        case = "D"
+        action = "tighten_selected_safety_and_defer_before_more_training"
+    return {
+        "case": case,
+        "recommended_action": action,
+        "repair5d_positive": repair5d_positive,
+        "oracle_positive": oracle_positive,
+        "phase5p5_allowed": False,
+        "phase6_allowed": False,
+    }
+
+
 def stop_condition_snapshot(summary_rows: list[dict[str, Any]], paired: list[dict[str, Any]]) -> dict[str, Any]:
     ltm_by_group = {
         (row["map"], int(row["agents"])): row
@@ -439,14 +628,25 @@ def stop_condition_snapshot(summary_rows: list[dict[str, Any]], paired: list[dic
             for row in summary_rows
         ),
         "repair5c_composite_closed_loop_executed": False,
-        "oracle_replay_executed": False,
+        "repair5d_composite_closed_loop_executed": any(
+            row["method"] == "repair5d_composite_diagnostic_distilled"
+            for row in summary_rows
+        ),
+        "oracle_replay_executed": any(
+            row["method"] == "oracle_teacher_forced_best_safe_update_static_proxy"
+            for row in summary_rows
+        ),
+        "oracle_replay_scope": "static_rule_proxy" if any(
+            row["method"] == "oracle_teacher_forced_best_safe_update_static_proxy"
+            for row in summary_rows
+        ) else "not_executed",
     }
 
 
 def write_report(path: Path, *, summary: dict[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8", newline="\n") as handle:
-        handle.write("# Phase5.5 LAUR Diagnostic Preflight Report\n\n")
+        handle.write("# Phase5.5 Repair5E LAUR Diagnostic Preflight Report\n\n")
         handle.write(f"Date: {datetime.now().strftime('%Y-%m-%d %H:%M:%S %z').strip()}\n\n")
         handle.write("## Boundary\n\n")
         handle.write(
@@ -456,6 +656,7 @@ def write_report(path: Path, *, summary: dict[str, Any]) -> None:
         handle.write(f"- Phase5.5 allowed: `{summary.get('phase5p5_allowed')}`\n")
         handle.write(f"- Phase6 allowed: `{summary.get('phase6_allowed')}`\n")
         handle.write(f"- raw JSONL: `{summary.get('raw_jsonl')}`\n")
+        handle.write(f"- LAUR update log JSONL: `{summary.get('laur_update_log_jsonl')}`\n")
         handle.write(f"- command log: `{summary.get('command_log_jsonl')}`\n\n")
 
         handle.write("## Scope\n\n")
@@ -467,20 +668,45 @@ def write_report(path: Path, *, summary: dict[str, Any]) -> None:
             handle.write(f"- `{skipped['method']}`: `{skipped['reason']}`\n")
         handle.write("\n## Group Summary\n\n")
         handle.write(
-            "| map | agents | method | runs | success | ratio | expanded | TTFS ms | pibt | fallback | non-additive | overhead ms |\n"
+            "| map | agents | method | runs | success | ratio | d ratio | expanded | d expanded | TTFS ms | d TTFS | pibt | fallback | non-additive | overhead ms |\n"
         )
-        handle.write("|---|---:|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|\n")
+        handle.write("|---|---:|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|\n")
         for row in summary.get("summary_rows", []):
             handle.write(
                 f"| {row['map']} | {row['agents']} | {row['method']} | {row['runs']} | "
                 f"{row['success_rate']:.6f} | {row.get('sum_of_loss_ratio_mean')} | "
-                f"{row.get('expanded_nodes_mean')} | {row.get('time_to_first_solution_ms_mean')} | "
+                f"{row.get('ratio_delta_vs_ltm')} | "
+                f"{row.get('expanded_nodes_mean')} | {row.get('expanded_delta_vs_ltm')} | "
+                f"{row.get('time_to_first_solution_ms_mean')} | {row.get('ttfs_delta_vs_ltm')} | "
                 f"{row.get('low_level_pibt_calls_mean')} | {row.get('fallback_defer_rate')} | "
                 f"{row.get('non_additive_update_rate')} | {row.get('laur_overhead_ms_mean')} |\n"
             )
         handle.write("\n## Stop Condition Snapshot\n\n")
         handle.write(json.dumps(summary.get("stop_conditions"), indent=2, sort_keys=True))
+        handle.write("\n\n## Decision Table Interpretation\n\n")
+        handle.write(json.dumps(summary.get("decision_table_interpretation"), indent=2, sort_keys=True))
         handle.write("\n")
+
+
+def write_oracle_report(path: Path, *, oracle: dict[str, Any]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", encoding="utf-8", newline="\n") as handle:
+        handle.write("# Phase5.5 Oracle Update Preflight Diagnostic\n\n")
+        handle.write(f"Date: {datetime.now().strftime('%Y-%m-%d %H:%M:%S %z').strip()}\n\n")
+        handle.write("This is an upper-bound diagnostic only. The full per-update teacher-force hook is not implemented; Repair5E used a best static preset-rule proxy per scenario.\n\n")
+        handle.write("- phase5p5_allowed: `False`\n")
+        handle.write("- phase6_allowed: `False`\n")
+        handle.write(f"- scope: `{oracle.get('oracle_scope')}`\n")
+        handle.write(f"- support rows: `{oracle.get('support_rows')}`\n")
+        stats = oracle.get("paired_stats", {})
+        handle.write(f"- paired rows: `{stats.get('rows')}`\n")
+        handle.write(f"- better/equal/worse vs LTM: `{stats.get('better')}` / `{stats.get('equal')}` / `{stats.get('worse')}`\n")
+        handle.write(f"- mean delta ratio vs LTM: `{stats.get('mean_delta_ratio_vs_ltm')}`\n\n")
+        handle.write("## Interpretation\n\n")
+        handle.write(
+            "The static proxy is positive if its mean paired ratio delta is below zero and it wins more rows than it loses. "
+            "Positive proxy evidence means there is closed-loop headroom in the preset update space, but it is not a learned runtime claim.\n"
+        )
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
@@ -493,14 +719,19 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--summary-csv", type=Path, default=Path(DEFAULT_SUMMARY_CSV))
     parser.add_argument("--paired-csv", type=Path, default=Path(DEFAULT_PAIRED_CSV))
     parser.add_argument("--report", type=Path, default=Path(DEFAULT_REPORT))
+    parser.add_argument("--oracle-summary-json", type=Path, default=Path(DEFAULT_ORACLE_SUMMARY_JSON))
+    parser.add_argument("--oracle-report", type=Path, default=Path(DEFAULT_ORACLE_REPORT))
     parser.add_argument("--repair3-weights-json", type=Path, default=Path(DEFAULT_REPAIR3_WEIGHTS))
     parser.add_argument("--repair3-runtime-dir", type=Path, default=Path(DEFAULT_REPAIR3_RUNTIME))
+    parser.add_argument("--repair5d-spec-json", type=Path, default=Path(DEFAULT_REPAIR5D_SPEC))
+    parser.add_argument("--repair5d-runtime-dir", type=Path, default=Path(DEFAULT_REPAIR5D_RUNTIME))
     parser.add_argument("--maps", nargs="+", choices=sorted(MAPS), default=list(MAPS))
     parser.add_argument("--agent-counts", nargs="+", type=int, default=[50, 100])
     parser.add_argument("--instances-per-setting", type=int, default=3)
     parser.add_argument("--time-limit-sec", type=float, default=3.0)
     parser.add_argument("--ltm-max-iterations", type=int, default=4)
     parser.add_argument("--include-static-proxies", action="store_true")
+    parser.add_argument("--include-oracle-static-probe", action="store_true")
     parser.add_argument("--skip-solver", action="store_true", help="Only summarize an existing --output-jsonl.")
     return parser.parse_args(argv)
 
@@ -515,26 +746,74 @@ def main(argv: list[str] | None = None) -> int:
     summary_csv = resolve_path(args.summary_csv, root)
     paired_csv = resolve_path(args.paired_csv, root)
     report = resolve_path(args.report, root)
+    oracle_summary_json = resolve_path(args.oracle_summary_json, root)
+    oracle_report = resolve_path(args.oracle_report, root)
     repair3_weights = resolve_path(args.repair3_weights_json, root)
     repair3_runtime_dir = resolve_path(args.repair3_runtime_dir, root)
-    if None in (binary, scenario_dir, output_dir, summary_json, summary_csv, paired_csv, report, repair3_weights, repair3_runtime_dir):
+    repair5d_spec_json = resolve_path(args.repair5d_spec_json, root)
+    repair5d_runtime_dir = resolve_path(args.repair5d_runtime_dir, root)
+    if None in (
+        binary,
+        scenario_dir,
+        output_dir,
+        summary_json,
+        summary_csv,
+        paired_csv,
+        report,
+        oracle_summary_json,
+        oracle_report,
+        repair3_weights,
+        repair3_runtime_dir,
+        repair5d_spec_json,
+        repair5d_runtime_dir,
+    ):
         raise ValueError("required paths could not be resolved")
     assert binary and scenario_dir and output_dir and summary_json and summary_csv and paired_csv and report
+    assert oracle_summary_json and oracle_report
     assert repair3_weights and repair3_runtime_dir
+    assert repair5d_spec_json and repair5d_runtime_dir
 
     output_dir.mkdir(parents=True, exist_ok=True)
     output_jsonl = resolve_path(args.output_jsonl, root) if args.output_jsonl else _jsonl_name(output_dir)
     assert output_jsonl
     command_log = output_jsonl.with_name(output_jsonl.stem + "_commands.jsonl")
+    laur_update_log = output_jsonl.with_name(output_jsonl.stem + "_laur_updates.jsonl")
     additive_model = root / "configs/phase5/laur_additive_only"
     repair3_runtime, repair3_status = ensure_repair3_runtime(root, repair3_weights, repair3_runtime_dir)
+    required_runtime_files = [
+        "features.txt",
+        "rules.csv",
+        "layer0_weight.csv",
+        "rule_head_weight.csv",
+        "rule_head_bias.csv",
+    ]
+    repair5d_runtime = (
+        repair5d_runtime_dir
+        if repair5d_spec_json.exists()
+        and all((repair5d_runtime_dir / name).exists() for name in required_runtime_files)
+        else None
+    )
     methods, skipped_methods = build_methods(
         root=root,
         additive_model=additive_model,
         repair3_runtime=repair3_runtime,
+        repair5d_runtime=repair5d_runtime,
         include_static_proxies=bool(args.include_static_proxies),
+        include_oracle_static_probe=bool(args.include_oracle_static_probe),
     )
     skipped_methods.append({"method": "repair3_runtime_export", "reason": repair3_status})
+    skipped_methods.append(
+        {
+            "method": "repair5d_spec",
+            "reason": "available" if repair5d_spec_json.exists() else "missing_spec_json",
+        }
+    )
+    skipped_methods.append(
+        {
+            "method": "repair5d_runtime_distill",
+            "reason": "available" if repair5d_runtime is not None else "missing_runtime_dir_or_required_files",
+        }
+    )
 
     if not args.skip_solver:
         if not binary.exists():
@@ -553,6 +832,7 @@ def main(argv: list[str] | None = None) -> int:
             ltm_max_iterations=int(args.ltm_max_iterations),
             scenario_dir=scenario_dir,
             methods=methods,
+            laur_update_log_jsonl=laur_update_log,
         )
 
     raw_rows = _read_jsonl(output_jsonl)
@@ -560,8 +840,24 @@ def main(argv: list[str] | None = None) -> int:
     schema_errors: list[str] = []
     for index, row in enumerate(normalized_rows, 1):
         schema_errors.extend(f"row {index}: {error}" for error in validate_run_row(row))
-    summary_rows = summarize_rows(normalized_rows)
-    paired = paired_rows(normalized_rows)
+    oracle_proxy_rows = synthesize_oracle_static_proxy_rows(normalized_rows)
+    report_rows = [row for row in normalized_rows if not is_oracle_probe_row(row)] + oracle_proxy_rows
+    summary_rows = add_ltm_group_deltas(summarize_rows(report_rows))
+    paired = paired_rows(report_rows)
+    method_stats = paired_method_stats(paired)
+    decision_interpretation = decision_table_interpretation(method_stats)
+    oracle_summary = {
+        "schema_version": "phase5p5_oracle_update_preflight_v1",
+        "created_at": datetime.now().isoformat(),
+        "oracle_scope": "static_rule_proxy",
+        "full_teacher_force_hook_executed": False,
+        "static_proxy_executed": bool(oracle_proxy_rows),
+        "support_rows": sum(1 for row in normalized_rows if is_oracle_probe_row(row)),
+        "oracle_rows": len(oracle_proxy_rows),
+        "paired_stats": method_stats.get("oracle_teacher_forced_best_safe_update_static_proxy", {}),
+        "phase5p5_allowed": False,
+        "phase6_allowed": False,
+    }
     summary = {
         "schema_version": "phase5p5_laur_diagnostic_preflight_exec_v1",
         "created_at": datetime.now().isoformat(),
@@ -572,8 +868,11 @@ def main(argv: list[str] | None = None) -> int:
         "phase6_allowed": False,
         "raw_jsonl": str(output_jsonl),
         "command_log_jsonl": str(command_log),
+        "laur_update_log_jsonl": str(laur_update_log),
         "summary_csv": str(summary_csv),
         "paired_csv": str(paired_csv),
+        "oracle_summary_json": str(oracle_summary_json),
+        "oracle_report": str(oracle_report),
         "schema_errors": schema_errors,
         "scope": {
             "maps": list(args.maps),
@@ -581,9 +880,14 @@ def main(argv: list[str] | None = None) -> int:
             "instances_per_setting": int(args.instances_per_setting),
             "time_limit_sec": float(args.time_limit_sec),
             "ltm_max_iterations": int(args.ltm_max_iterations),
-            "methods": [method.alias for method in methods],
+            "methods": [method.alias for method in methods if not method.hide_from_report]
+            + (["oracle_teacher_forced_best_safe_update_static_proxy"] if oracle_proxy_rows else []),
+            "support_methods": [method.alias for method in methods if method.hide_from_report],
         },
         "skipped_methods": skipped_methods,
+        "oracle_proxy_rows": len(oracle_proxy_rows),
+        "paired_method_stats": method_stats,
+        "decision_table_interpretation": decision_interpretation,
         "summary_rows": summary_rows,
         "paired_row_count": len(paired),
         "stop_conditions": stop_condition_snapshot(summary_rows, paired),
@@ -611,6 +915,9 @@ def main(argv: list[str] | None = None) -> int:
             "non_additive_update_rate",
             "selected_harmful_update_rate",
             "selected_rules",
+            "ratio_delta_vs_ltm",
+            "expanded_delta_vs_ltm",
+            "ttfs_delta_vs_ltm",
         ],
     )
     _write_csv(
@@ -633,8 +940,22 @@ def main(argv: list[str] | None = None) -> int:
     )
     summary_json.parent.mkdir(parents=True, exist_ok=True)
     summary_json.write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    oracle_summary_json.parent.mkdir(parents=True, exist_ok=True)
+    oracle_summary_json.write_text(json.dumps(oracle_summary, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     write_report(report, summary=summary)
-    print(json.dumps({"summary_json": str(summary_json), "summary_csv": str(summary_csv), "paired_csv": str(paired_csv), "report": str(report)}))
+    write_oracle_report(oracle_report, oracle=oracle_summary)
+    print(
+        json.dumps(
+            {
+                "summary_json": str(summary_json),
+                "summary_csv": str(summary_csv),
+                "paired_csv": str(paired_csv),
+                "report": str(report),
+                "oracle_summary_json": str(oracle_summary_json),
+                "oracle_report": str(oracle_report),
+            }
+        )
+    )
     return 0 if not schema_errors else 2
 
 

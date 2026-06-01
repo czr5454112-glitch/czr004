@@ -2347,3 +2347,24 @@
   - No C++ solver code was changed.
   - No PIBT, LaCAM*, candidate generation, pruning, conflict, restart, or search semantics were changed.
   - `phase5p5_allowed=false`, `phase6_allowed=false`.
+
+## 2026-06-01 19:25 - Repair5F report authenticity audit
+
+- Request:
+  - Check whether the Repair5F report data is truthful/consistent, then push to remote GitHub.
+- Files changed:
+  - `outputs/reports/phase5p5_repair5f_candidate_probe_audit.md`
+- Checks run:
+  - Recomputed raw coverage from `outputs/logs/phase5p5_repair5f_candidate_probe/phase5p5_repair5f_candidate_probe.jsonl`.
+  - Recomputed paired stats for E5, E5 shuffled, Repair5F random/shuffled diagnostics, and the lattice oracle.
+  - Checked CSV row counts and raw log hashes.
+- Key observations:
+  - Raw rows before dedupe: 1,775.
+  - Unique raw rows after dedupe: 1,530 / 1,530 expected, 0 missing.
+  - Duplicate rows dropped: 245, caused by the prior duplicate-writer incident.
+  - Long CSV rows: 1,410; wide CSV rows: 30.
+  - All recomputed paired stats match `phase5p5_repair5f_candidate_probe_summary.json`.
+  - The report conclusion remains unchanged: oracle metric headroom is strong, but the final Repair5F gate is safety-blocked by force-additive parity.
+- Boundary:
+  - Audit-only; no solver/runtime behavior changed.
+  - No selector/runtime artifact was created.

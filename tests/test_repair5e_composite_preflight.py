@@ -247,6 +247,43 @@ def test_repair5e3_split_selector_and_ablation_candidates_are_wired(tmp_path: Pa
     assert not any(row["method"] == "repair5e3_split_guarded_selector" for row in skipped)
 
 
+def test_repair5e4_closed_loop_selector_and_ablation_candidates_are_wired(tmp_path: Path) -> None:
+    methods, skipped = build_methods(
+        root=ROOT,
+        additive_model=tmp_path / "additive",
+        repair3_runtime=None,
+        repair5d_runtime=None,
+        repair5e_ood_guard_runtime=None,
+        repair5e4_runtime=tmp_path / "repair5e4_runtime",
+        repair5e4_shuffled_runtime=tmp_path / "repair5e4_shuffled",
+        repair5e4_e3_calibrated_runtime=tmp_path / "repair5e4_e3_calibrated",
+        include_static_proxies=False,
+        include_oracle_static_probe=False,
+        include_repair5e4_candidate=True,
+        include_repair5e4_ablation_candidates=True,
+        repair5e4_ood_guard_z_threshold=4.5,
+    )
+
+    by_alias = {method.alias: method for method in methods}
+    guarded = by_alias["repair5e4_closed_loop_utility_selector"]
+    assert "--laur-model-path" in guarded.extra_args
+    assert "--laur-ood-z-threshold" in guarded.extra_args
+    assert "4.5" in guarded.extra_args
+
+    parity = by_alias["repair5e4_closed_loop_utility_selector_force_additive_parity"]
+    assert "--laur-force-additive" in parity.extra_args
+
+    disabled = by_alias["repair5e4_closed_loop_utility_selector_recovery_disabled_parity"]
+    assert "--laur-force-additive" in disabled.extra_args
+
+    no_ood = by_alias["repair5e4_closed_loop_utility_selector_no_ood_guard_diagnostic"]
+    assert "--laur-ood-z-threshold" not in no_ood.extra_args
+
+    shuffled = by_alias["repair5e4_closed_loop_utility_selector_shuffled_labels_diagnostic"]
+    assert "--laur-model-path" in shuffled.extra_args
+    assert "repair5e4_closed_loop_utility_selector" not in {row["method"] for row in skipped}
+
+
 def test_repair5e2_update_log_runtime_feature_fields_are_analyzable(tmp_path: Path) -> None:
     runtime_dir = tmp_path / "runtime"
     runtime_dir.mkdir()

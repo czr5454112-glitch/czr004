@@ -1,0 +1,109 @@
+{
+  "bounded_delta_updateparams": false,
+  "calibrated_guard_only_on_e3_split_manifest": {
+    "calibrated_stats_hashes": {
+      "ood_feature_stats_override.csv": "a1e91f811ebb0c3d0b3ebdfb7566511c44ef6d3da8fdfd38a58e81a0841152fa",
+      "ood_feature_stats_train.csv": "f5522e30ef0b105020544b73984943e7b8957deef630ca394f4edfbe74cc551a"
+    },
+    "created_at": "2026-06-01T10:34:37.237522",
+    "diagnostic_only": true,
+    "notes": [
+      "Ablation: keep E3 split selector support table, replace only OOD stats with E4 train-support calibration."
+    ],
+    "phase5p5_allowed": false,
+    "phase6_allowed": false,
+    "runtime_dir": "C:\\PROGRAMING\\czr004\\artifacts\\models\\laur_ltm\\repair5e4_calibrated_guard_only_on_e3_split",
+    "schema_version": "phase5p5_repair5e4_calibrated_guard_only_on_e3_split_v1",
+    "source_runtime_dir": "C:\\PROGRAMING\\czr004\\artifacts\\models\\laur_ltm\\repair5e3_split_guarded_selector"
+  },
+  "calibrated_guard_only_on_e3_split_runtime_dir": "artifacts\\models\\laur_ltm\\repair5e4_calibrated_guard_only_on_e3_split",
+  "candidate_name": "repair5e4_closed_loop_utility_selector",
+  "closed_loop_utility_table": "outputs\\tables\\phase5p5_repair5e4_closed_loop_rule_utility_train.csv",
+  "closed_loop_utility_table_sha256": "7a77ac13622355f1607258a97b65cff23a087f2278d72037f4ed9d554f3613df",
+  "created_at": "2026-06-01T10:34:37.238611",
+  "diagnostic_only": true,
+  "eval_instance_ids_forbidden": [
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+  ],
+  "eval_log_paths": [],
+  "feature_stats_sha256": "f5522e30ef0b105020544b73984943e7b8957deef630ca394f4edfbe74cc551a",
+  "git_branch": "phase4f5p5-stable-attention-lau",
+  "git_head_sha": "48b5c6da438376f99c207a1deebc0d3dd0efdc1a",
+  "max_commit_heavy_share": 0.2,
+  "min_predicted_margin_ratio": 0.001,
+  "min_support_neighbors": 5,
+  "notes": [
+    "Deterministic feature-space nearest-neighbor reranker from closed-loop utility labels.",
+    "Unsupported, low-margin, or low-support contexts defer to additive_ltm.",
+    "No eval logs are consumed while creating this runtime artifact."
+  ],
+  "output_space": "existing_8_rules_plus_additive_defer",
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "richer_ltm_representation": false,
+  "runtime_dir": "artifacts\\models\\laur_ltm\\repair5e4_closed_loop_utility_selector",
+  "schema_version": "phase5p5_repair5e4_closed_loop_utility_selector_runtime_v1",
+  "selector_csv": "artifacts\\models\\laur_ltm\\repair5e4_closed_loop_utility_selector\\repair5e4_utility_selector.csv",
+  "selector_rows": 24,
+  "selector_rule_distribution": {
+    "block_heavy": 20,
+    "decay_090": 4
+  },
+  "shuffled_labels_diagnostic_manifest": {
+    "created_at": "2026-06-01T10:34:37.184427",
+    "diagnostic_only": true,
+    "notes": [
+      "Ablation only: selector labels are rotated across support rows."
+    ],
+    "phase5p5_allowed": false,
+    "phase6_allowed": false,
+    "runtime_dir": "C:\\PROGRAMING\\czr004\\artifacts\\models\\laur_ltm\\repair5e4_closed_loop_utility_selector_shuffled_labels_diagnostic",
+    "schema_version": "phase5p5_repair5e4_shuffled_labels_runtime_v1",
+    "selector_rows": 24
+  },
+  "shuffled_labels_diagnostic_runtime_dir": "artifacts\\models\\laur_ltm\\repair5e4_closed_loop_utility_selector_shuffled_labels_diagnostic",
+  "solver_semantic_changes": false,
+  "source_runtime_dir": "artifacts\\models\\laur_ltm\\repair5d_composite_distilled",
+  "source_runtime_hashes": {
+    "delta_head_bias.csv": "a45e57a35a76b4667a47c63b1a1fac603e5fc8082c0dc0a486bee314267e4ec5",
+    "delta_head_weight.csv": "a71a59f52837df57966741048da45e77960ffde6aeb786fc52188791b7dd26b0",
+    "features.txt": "181c4972215083db02a83fd8a931748faf20f30ab2b6a5421adffa937972f160",
+    "laur_mlp_v1_feature_stats.json": "ad8f4b8b3c8cf758738fe5bc7235986ef100640ef752f6b16923017d4b417555",
+    "laur_mlp_v1_rules.json": "4669c3913561294583db6fa1fa9155e2f13f57574ba5398b72877113fa6327ae",
+    "laur_mlp_v1_weights.json": "3a3be5f70e76c9fbdda46873b0df1b97d44a3f1db6d3cccdaf45f747d2e287ce",
+    "layer0_bias.csv": "36acf727f51097270f1c300fc14a66691a3850997996c980b528de24550b891c",
+    "layer0_weight.csv": "51681319e83f464d5f5cb3c7306444a60b976eac0fecb5de9b9c1ed6914fe280",
+    "mean.csv": "e759c75c219dff6276c91d1538c4b076027bdd92785ecd341f0644afefbca4a0",
+    "rule_head_bias.csv": "0b77a956ac47d383bd358f6fb6b8b8f6e97250f63586ccc0e11ac922c04de837",
+    "rule_head_weight.csv": "28b5f9e7b0752264c023923a5faae67b120d96d405ecbb93070bbaaf9201489e",
+    "rules.csv": "8a76595c41924b253829a567e87269ed14b03bf2d6035fce2ed7b89bb08f445a",
+    "safety_head_bias.csv": "5849727b60d6b0fb741d2829a9796d103c9705c33f0047851654f3b55f209658",
+    "safety_head_weight.csv": "79c8b60f98386d21a93e2eff98c9aedac86ab754863ba4641eecd1dc13a43fd7",
+    "std.csv": "e983b30985b874b011a371efd54a9be44b4e29c13a3ddcf264a55e15e5da0392"
+  },
+  "train_instance_ids": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "train_support_paths": [
+    "outputs\\logs\\phase5p5_repair5e4_train_support\\phase5p5_repair5e4_train_support.jsonl",
+    "outputs\\logs\\phase5p5_repair5e4_train_support\\phase5p5_repair5e4_train_support_laur_updates.jsonl"
+  ]
+}

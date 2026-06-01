@@ -1,0 +1,216 @@
+{
+  "branch": "phase4f5p5-stable-attention-lau",
+  "clean_tracked_worktree": false,
+  "command_log_jsonl": "C:\\PROGRAMING\\czr004\\outputs\\logs\\phase5p5_repair5e4_train_support_smoke\\phase5p5_repair5e4_train_support_smoke_commands.jsonl",
+  "commit": "48b5c6d",
+  "created_at": "2026-06-01T09:32:55.104407",
+  "decision_table_interpretation": {
+    "case": "C",
+    "oracle_positive": false,
+    "phase5p5_allowed": false,
+    "phase6_allowed": false,
+    "recommended_action": "stop_offline_gate_optimization_and_redesign_labels_or_output_space",
+    "repair5d_positive": false
+  },
+  "dirty": "tracked-dirty_untracked-present",
+  "laur_update_log_jsonl": "C:\\PROGRAMING\\czr004\\outputs\\logs\\phase5p5_repair5e4_train_support_smoke\\phase5p5_repair5e4_train_support_smoke_laur_updates.jsonl",
+  "oracle_proxy_rows": 1,
+  "oracle_report": "C:\\PROGRAMING\\czr004\\outputs\\reports\\phase5p5_repair5e4_train_support_smoke_oracle_report.md",
+  "oracle_summary_json": "C:\\PROGRAMING\\czr004\\outputs\\reports\\phase5p5_repair5e4_train_support_smoke_oracle_summary.json",
+  "paired_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase5p5_repair5e4_train_support_smoke_paired.csv",
+  "paired_method_stats": {
+    "always_additive_defer": {
+      "better": 0,
+      "equal": 1,
+      "mean_delta_ratio_vs_ltm": 0.0,
+      "rows": 1,
+      "worse": 0
+    },
+    "oracle_teacher_forced_best_safe_update_static_proxy": {
+      "better": 0,
+      "equal": 1,
+      "mean_delta_ratio_vs_ltm": 0.0,
+      "rows": 1,
+      "worse": 0
+    }
+  },
+  "paired_row_count": 2,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "raw_jsonl": "C:\\PROGRAMING\\czr004\\outputs\\logs\\phase5p5_repair5e4_train_support_smoke\\phase5p5_repair5e4_train_support_smoke.jsonl",
+  "schema_errors": [],
+  "schema_version": "phase5p5_laur_diagnostic_preflight_exec_v1",
+  "scope": {
+    "agent_counts": [
+      50
+    ],
+    "instance_ids": [
+      1
+    ],
+    "instances_per_setting": 3,
+    "ltm_max_iterations": 4,
+    "maps": [
+      "random-32-32-20"
+    ],
+    "methods": [
+      "lacam_star_ltm",
+      "always_additive_defer",
+      "oracle_teacher_forced_best_safe_update_static_proxy"
+    ],
+    "support_methods": [
+      "oracle_probe_static_block_heavy",
+      "oracle_probe_static_block_light",
+      "oracle_probe_static_commit_heavy",
+      "oracle_probe_static_decay_090",
+      "oracle_probe_static_decay_095",
+      "oracle_probe_static_wait_heavy",
+      "oracle_probe_static_wait_light"
+    ],
+    "time_limit_sec": 3.0
+  },
+  "skipped_methods": [
+    {
+      "method": "repair5d_native_composite_export",
+      "reason": "not_feasible_current_cxx_runtime_accepts_single_mlp_runtime_only_distilled_bridge_used"
+    },
+    {
+      "method": "oracle_teacher_forced_best_safe_update_full_hook",
+      "reason": "full_per_update_teacher_force_hook_not_available_static_rule_probe_proxy_executed"
+    },
+    {
+      "method": "repair3_runtime_export",
+      "reason": "existing_runtime_dir"
+    },
+    {
+      "method": "repair5d_spec",
+      "reason": "available"
+    },
+    {
+      "method": "repair5d_runtime_distill",
+      "reason": "available"
+    },
+    {
+      "method": "repair5e_ood_guard_runtime",
+      "reason": "available"
+    },
+    {
+      "method": "repair5e2_guarded_oracle_aligned_selector_runtime",
+      "reason": "available"
+    },
+    {
+      "method": "repair5e3_split_guarded_selector_runtime",
+      "reason": "available"
+    },
+    {
+      "method": "repair5e3_e2_shuffled_support_diagnostic_runtime",
+      "reason": "available"
+    },
+    {
+      "method": "repair5e4_closed_loop_utility_selector_runtime",
+      "reason": "missing_runtime_dir_or_required_files"
+    },
+    {
+      "method": "repair5e4_closed_loop_utility_selector_shuffled_labels_runtime",
+      "reason": "missing_runtime_dir_or_required_files"
+    },
+    {
+      "method": "repair5e4_calibrated_guard_only_on_e3_split_runtime",
+      "reason": "missing_runtime_dir_or_required_files"
+    }
+  ],
+  "stop_conditions": {
+    "method_flags": {
+      "always_additive_defer": {
+        "ratio_worse_than_ltm_groups": 0,
+        "success_worse_than_ltm_groups": 0,
+        "zero_nonadditive_groups": 1
+      },
+      "oracle_teacher_forced_best_safe_update_static_proxy": {
+        "ratio_worse_than_ltm_groups": 0,
+        "success_worse_than_ltm_groups": 0,
+        "zero_nonadditive_groups": 0
+      }
+    },
+    "oracle_replay_executed": true,
+    "oracle_replay_scope": "static_rule_proxy",
+    "paired_rows": 2,
+    "repair5c_composite_closed_loop_executed": false,
+    "repair5d_composite_closed_loop_executed": false,
+    "strict_safety_mask_blocks_all_learned_choices": false
+  },
+  "summary_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase5p5_repair5e4_train_support_smoke_summary.csv",
+  "summary_rows": [
+    {
+      "agents": 50,
+      "expanded_delta_vs_ltm": 0.0,
+      "expanded_nodes_mean": 328.0,
+      "fallback_defer_rate": 0.25,
+      "laur_additive_fallback_count_mean": 1.0,
+      "laur_inference_count_mean": 0.0,
+      "laur_overhead_ms_mean": 0.0,
+      "laur_safety_disabled_count_mean": 0.0,
+      "low_level_pibt_calls_mean": 28657.0,
+      "map": "random-32-32-20",
+      "method": "always_additive_defer",
+      "non_additive_update_rate": 0.0,
+      "ratio_delta_vs_ltm": 0.0,
+      "returned_solutions_count_mean": 1.0,
+      "runs": 1,
+      "selected_harmful_update_rate": null,
+      "selected_rules": "{\"additive_ltm\": 3}",
+      "success_rate": 1.0,
+      "successes": 1,
+      "sum_of_loss_ratio_mean": 1.13415710503,
+      "time_to_first_solution_ms_mean": 170.0,
+      "ttfs_delta_vs_ltm": 3.0
+    },
+    {
+      "agents": 50,
+      "expanded_delta_vs_ltm": null,
+      "expanded_nodes_mean": 328.0,
+      "fallback_defer_rate": null,
+      "laur_additive_fallback_count_mean": 0.0,
+      "laur_inference_count_mean": 0.0,
+      "laur_overhead_ms_mean": 0.0,
+      "laur_safety_disabled_count_mean": 0.0,
+      "low_level_pibt_calls_mean": 28657.0,
+      "map": "random-32-32-20",
+      "method": "lacam_star_ltm",
+      "non_additive_update_rate": null,
+      "ratio_delta_vs_ltm": null,
+      "returned_solutions_count_mean": 1.0,
+      "runs": 1,
+      "selected_harmful_update_rate": null,
+      "selected_rules": "{}",
+      "success_rate": 1.0,
+      "successes": 1,
+      "sum_of_loss_ratio_mean": 1.13415710503,
+      "time_to_first_solution_ms_mean": 167.0,
+      "ttfs_delta_vs_ltm": null
+    },
+    {
+      "agents": 50,
+      "expanded_delta_vs_ltm": -107.0,
+      "expanded_nodes_mean": 221.0,
+      "fallback_defer_rate": 0.25,
+      "laur_additive_fallback_count_mean": 1.0,
+      "laur_inference_count_mean": 0.0,
+      "laur_overhead_ms_mean": 0.0,
+      "laur_safety_disabled_count_mean": 0.0,
+      "low_level_pibt_calls_mean": 10846.0,
+      "map": "random-32-32-20",
+      "method": "oracle_teacher_forced_best_safe_update_static_proxy",
+      "non_additive_update_rate": 0.75,
+      "ratio_delta_vs_ltm": 0.0,
+      "returned_solutions_count_mean": 1.0,
+      "runs": 1,
+      "selected_harmful_update_rate": null,
+      "selected_rules": "{\"wait_light\": 3}",
+      "success_rate": 1.0,
+      "successes": 1,
+      "sum_of_loss_ratio_mean": 1.13415710503,
+      "time_to_first_solution_ms_mean": 159.0,
+      "ttfs_delta_vs_ltm": -8.0
+    }
+  ]
+}

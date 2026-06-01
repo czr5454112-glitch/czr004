@@ -32,6 +32,9 @@ struct LaurPrediction {
   std::string selected_rule_source = "additive_fallback";
   double safety_harmful_prob = 1.0;
   double predicted_delta_ratio = 0.0;
+  double predicted_margin_ratio = 0.0;
+  uint nearest_support_count = 0;
+  std::string guard_reason = "";
   double inference_ms = 0.0;
   double feature_max_abs_z = 0.0;
   double feature_mean_abs_z = 0.0;
@@ -75,6 +78,35 @@ class LaurLtmRuntime {
     double stdev = 1.0;
   };
 
+  struct RobustFeatureStat {
+    std::string feature_name;
+    double mean = 0.0;
+    double stdev = 1.0;
+    double median = 0.0;
+    double mad = 0.0;
+    double p01 = 0.0;
+    double p99 = 0.0;
+    double min_value = 0.0;
+    double max_value = 0.0;
+    uint rows_non_missing = 0;
+    bool required = true;
+  };
+
+  struct UtilityNeighbor {
+    std::string rule_id = "additive_ltm";
+    double map_width = 0.0;
+    double map_height = 0.0;
+    double obstacle_ratio_min = -1.0;
+    double obstacle_ratio_max = 2.0;
+    double agents = 0.0;
+    double predicted_margin_ratio = 0.0;
+    uint nearest_support_count = 0;
+    uint min_support_neighbors = 5;
+    double min_predicted_margin_ratio = 0.001;
+    std::vector<double> feature_values;
+    std::string source = "";
+  };
+
   LaurRuntimeOptions options_;
   bool loaded_ = false;
   bool has_mlp_ = false;
@@ -92,6 +124,8 @@ class LaurLtmRuntime {
   std::vector<RuleSpec> rules_;
   std::vector<RecoverySpec> recovery_specs_;
   std::vector<FeatureStatOverride> ood_stat_overrides_;
+  std::vector<RobustFeatureStat> robust_feature_stats_;
+  std::vector<UtilityNeighbor> utility_neighbors_;
   uint input_dim_ = 0;
   uint hidden_dim_ = 0;
 

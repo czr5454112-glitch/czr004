@@ -1,0 +1,183 @@
+{
+  "created_at": "2026-06-01T11:44:59.931924",
+  "diagnostic_only": true,
+  "e3_e4_ood_comparison": {
+    "e3_committed_count_max_abs_z": 126300.0,
+    "e3_top_trigger_concentration": 0.8657718120805369,
+    "e3_top_trigger_feature": "committed_count",
+    "e4_committed_count_max_abs_z": 8.191661429636884,
+    "e4_top_trigger_concentration": 0.0,
+    "e4_top_trigger_feature": ""
+  },
+  "feature_stats_valid": true,
+  "inputs": {
+    "update_jsonl": [
+      "outputs\\logs\\phase5p5_repair5e4_preflight\\phase5p5_repair5e4_preflight_laur_updates.jsonl"
+    ]
+  },
+  "invalid_features": [],
+  "outputs": {
+    "report": "outputs\\reports\\phase5p5_repair5e4_runtime_feature_stats_report.md",
+    "summary_json": "outputs\\reports\\phase5p5_repair5e4_runtime_feature_stats_summary.json"
+  },
+  "pass_condition": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_dir": "artifacts\\models\\laur_ltm\\repair5e4_closed_loop_utility_selector",
+  "runtime_ood_analysis": {
+    "after_guard_rule_counts": {
+      "additive_ltm": 1466,
+      "block_heavy": 180,
+      "block_light": 150,
+      "commit_heavy": 295,
+      "decay_090": 180,
+      "decay_095": 150,
+      "wait_heavy": 148,
+      "wait_light": 151
+    },
+    "analyzed_update_rows": 2720,
+    "before_guard_after_guard_transition_counts": {
+      "additive_ltm->additive_ltm:force_additive": 299,
+      "additive_ltm->additive_ltm:pre_first_solution": 780,
+      "block_heavy->block_heavy:repair5e4_closed_loop_utility_selector": 30,
+      "block_heavy->block_heavy:static_rule": 150,
+      "block_light->block_light:static_rule": 150,
+      "commit_heavy->additive_ltm:ood_guard": 295,
+      "commit_heavy->additive_ltm:repair5e4_no_supported_neighbor_defer": 87,
+      "commit_heavy->commit_heavy:runtime_mlp": 145,
+      "commit_heavy->commit_heavy:static_rule": 150,
+      "decay_090->decay_090:repair5e4_closed_loop_utility_selector": 30,
+      "decay_090->decay_090:static_rule": 150,
+      "decay_095->decay_095:static_rule": 150,
+      "wait_heavy->wait_heavy:static_rule": 148,
+      "wait_light->additive_ltm:ood_guard": 3,
+      "wait_light->additive_ltm:repair5e4_no_supported_neighbor_defer": 2,
+      "wait_light->wait_light:runtime_mlp": 2,
+      "wait_light->wait_light:static_rule": 149
+    },
+    "learned_choices_all_blocked_by_ood": false,
+    "per_feature": {
+      "agents": {
+        "max_abs_z": 1.0418383443118187,
+        "mean_abs_z": 0.9989710374364887,
+        "rows": 2720
+      },
+      "best_ratio_before": {
+        "max_abs_z": 1.5510884769979765,
+        "mean_abs_z": 0.8772607414245228,
+        "rows": 2720
+      },
+      "blocked_count": {
+        "max_abs_z": 5.270827273247983,
+        "mean_abs_z": 0.853302176735126,
+        "rows": 2720
+      },
+      "blocked_per_agent": {
+        "max_abs_z": 5.353605447211177,
+        "mean_abs_z": 0.8520538496456168,
+        "rows": 2720
+      },
+      "blocked_per_committed": {
+        "max_abs_z": 3.4075411672522375,
+        "mean_abs_z": 0.8197671723324648,
+        "rows": 2720
+      },
+      "committed_count": {
+        "max_abs_z": 8.191661429636884,
+        "mean_abs_z": 0.4884052600611191,
+        "rows": 2720
+      },
+      "committed_per_agent": {
+        "max_abs_z": 7.781196266220048,
+        "mean_abs_z": 0.5252363109431745,
+        "rows": 2720
+      },
+      "density": {
+        "max_abs_z": 1.5108279064692758,
+        "mean_abs_z": 0.880849517480375,
+        "rows": 2720
+      },
+      "entropy_edge_usage": {
+        "max_abs_z": 3.17458596445598,
+        "mean_abs_z": 0.5654743262357977,
+        "rows": 2720
+      },
+      "free_cells": {
+        "max_abs_z": 1.8352906894498107,
+        "mean_abs_z": 0.8484845742585062,
+        "rows": 2720
+      },
+      "goal_wait_ignored_count": {
+        "max_abs_z": 8.684536267054106,
+        "mean_abs_z": 0.389596240700035,
+        "rows": 2720
+      },
+      "has_solution_before": {
+        "max_abs_z": 1.567907310185565,
+        "mean_abs_z": 0.9045168169054064,
+        "rows": 2720
+      },
+      "improved_last_iteration": {
+        "max_abs_z": 1.0895358066831928,
+        "mean_abs_z": 0.991116053381342,
+        "rows": 2720
+      },
+      "iteration": {
+        "max_abs_z": 1.5367527677398989,
+        "mean_abs_z": 0.8756302776118233,
+        "rows": 2720
+      },
+      "map_height": {
+        "max_abs_z": 1.835325870964494,
+        "mean_abs_z": 0.8485008392418572,
+        "rows": 2720
+      },
+      "map_width": {
+        "max_abs_z": 1.8353258709644942,
+        "mean_abs_z": 0.8485008392418572,
+        "rows": 2720
+      },
+      "max_raw_before": {
+        "max_abs_z": 13.802611164825265,
+        "mean_abs_z": 0.610874417769798,
+        "rows": 2720
+      },
+      "nonzero_edges_before": {
+        "max_abs_z": 2.957865257407054,
+        "mean_abs_z": 0.7085723566079006,
+        "rows": 2720
+      },
+      "obstacle_ratio": {
+        "max_abs_z": 1.8194823310639276,
+        "mean_abs_z": 0.841176114453268,
+        "rows": 2720
+      },
+      "returned_solutions_count_so_far": {
+        "max_abs_z": 0.04254998126028322,
+        "mean_abs_z": 0.04254998126028322,
+        "rows": 2720
+      },
+      "wait_event_count": {
+        "max_abs_z": 6.747205195055991,
+        "mean_abs_z": 0.8382370398033782,
+        "rows": 2720
+      },
+      "wait_per_committed": {
+        "max_abs_z": 3.223584619121613,
+        "mean_abs_z": 0.8115524836544109,
+        "rows": 2720
+      },
+      "weight_entropy": {
+        "max_abs_z": 1.5507349999674878,
+        "mean_abs_z": 0.8996911174482375,
+        "rows": 2720
+      }
+    },
+    "top_features_triggering_ood": {},
+    "top_ood_trigger_feature": "",
+    "top_ood_trigger_share": 0.0
+  },
+  "schema_version": "phase5p5_repair5e4_runtime_feature_stats_audit_v1",
+  "stats_csv": "artifacts\\models\\laur_ltm\\repair5e4_closed_loop_utility_selector\\ood_feature_stats_train.csv",
+  "top_trigger_physical_explanation": ""
+}

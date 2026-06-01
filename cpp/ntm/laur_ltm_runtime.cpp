@@ -6,6 +6,7 @@
 #include <cstddef>
 #include <filesystem>
 #include <fstream>
+#include <limits>
 #include <sstream>
 #include <unordered_map>
 
@@ -32,6 +33,15 @@ std::vector<std::string> split_csv_line(const std::string& line)
   return out;
 }
 
+std::vector<std::string> split_semicolon_list(const std::string& line)
+{
+  auto out = std::vector<std::string>();
+  auto stream = std::stringstream(line);
+  std::string cell;
+  while (std::getline(stream, cell, ';')) out.push_back(trim(cell));
+  return out;
+}
+
 bool parse_bool(const std::string& value)
 {
   const auto normalized = trim(value);
@@ -44,6 +54,15 @@ double parse_double_or(const std::string& value, double fallback)
   try {
     const auto parsed = std::stod(trim(value));
     return std::isfinite(parsed) ? parsed : fallback;
+  } catch (...) {
+    return fallback;
+  }
+}
+
+uint parse_uint_or(const std::string& value, uint fallback)
+{
+  try {
+    return static_cast<uint>(std::stoul(trim(value)));
   } catch (...) {
     return fallback;
   }
@@ -116,6 +135,25 @@ bool close_bucket(double left, double right)
   return std::fabs(left - right) <= 0.5;
 }
 
+std::unordered_map<std::string, std::size_t> header_index(
+    const std::vector<std::string>& header)
+{
+  auto out = std::unordered_map<std::string, std::size_t>();
+  for (std::size_t index = 0; index < header.size(); ++index) {
+    out[header[index]] = index;
+  }
+  return out;
+}
+
+std::string cell_at(const std::vector<std::string>& cells,
+                    const std::unordered_map<std::string, std::size_t>& index,
+                    const std::string& key)
+{
+  const auto it = index.find(key);
+  if (it == index.end() || it->second >= cells.size()) return "";
+  return cells[it->second];
+}
+
 }  // namespace
 
 bool is_supported_laur_rule_id(const std::string& rule_id)
@@ -178,6 +216,8 @@ bool LaurLtmRuntime::load(const LaurRuntimeOptions& options)
   rules_.clear();
   recovery_specs_.clear();
   ood_stat_overrides_.clear();
+  robust_feature_stats_.clear();
+  utility_neighbors_.clear();
   rules_.push_back(RuleSpec{"additive_ltm", czr004::ltm::UpdateParams::additive()});
   input_dim_ = 0;
   hidden_dim_ = 0;
@@ -199,6 +239,9 @@ LaurPrediction LaurLtmRuntime::additive_prediction(double inference_ms,
               : "runtime_disabled";
   prediction.safety_harmful_prob = enabled ? 0.0 : 1.0;
   prediction.predicted_delta_ratio = 0.0;
+  prediction.predicted_margin_ratio = 0.0;
+  prediction.nearest_support_count = 0;
+  prediction.guard_reason = prediction.selected_rule_source;
   prediction.inference_ms = inference_ms;
   prediction.enabled = enabled;
   return prediction;
@@ -257,6 +300,52 @@ LaurPrediction LaurLtmRuntime::predict(const LaurFeatureVector& features) const
     guard_x[index] = (value - guard_mean) / guard_stdev;
   }
 
+  uint robust_outside_count = 0;
+  uint robust_extreme_count = 0;
+  bool robust_missing_required = false;
+  std::string guard_reason;
+  if (!robust_feature_stats_.empty()) {
+    for (const auto& stat : robust_feature_stats_) {
+      const auto it = by_name.find(stat.feature_name);
+      if (it == by_name.end()) {
+        if (stat.required) {
+          robust_missing_required = true;
+          if (guard_reason.empty()) {
+            guard_reason = "missing_required_feature:" + stat.feature_name;
+          }
+        }
+        continue;
+      }
+      if (stat.rows_non_missing == 0) {
+        robust_missing_required = true;
+        if (guard_reason.empty()) {
+          guard_reason = "invalid_feature_stats:" + stat.feature_name;
+        }
+        continue;
+      }
+      const auto robust_scale = std::max(
+          {std::fabs(stat.p99 - stat.p01),
+           std::fabs(stat.stdev) > kEps ? 2.0 * std::fabs(stat.stdev) : 0.0,
+           std::fabs(stat.mad) > kEps ? 6.0 * std::fabs(stat.mad) : 0.0,
+           1.0});
+      const auto low = stat.p01 - robust_scale;
+      const auto high = stat.p99 + robust_scale;
+      const auto extreme_low = stat.min_value - 2.0 * robust_scale;
+      const auto extreme_high = stat.max_value + 2.0 * robust_scale;
+      const auto value = it->second;
+      if (value < low || value > high) {
+        ++robust_outside_count;
+        if (guard_reason.empty()) {
+          guard_reason = "robust_threshold:" + stat.feature_name;
+        }
+      }
+      if (value < extreme_low || value > extreme_high) {
+        ++robust_extreme_count;
+        guard_reason = "extreme_percentile_bound:" + stat.feature_name;
+      }
+    }
+  }
+
   double max_abs_z = 0.0;
   double sum_abs_z = 0.0;
   uint outside_3sigma = 0;
@@ -276,6 +365,7 @@ LaurPrediction LaurLtmRuntime::predict(const LaurFeatureVector& features) const
     prediction.feature_outside_5sigma_count = outside_5sigma;
     prediction.ood_z_threshold =
         options_.ood_guard_enabled ? options_.ood_z_threshold : 0.0;
+    prediction.guard_reason = guard_reason;
   };
 
   auto hidden = std::vector<double>(hidden_dim_, 0.0);
@@ -314,12 +404,21 @@ LaurPrediction LaurLtmRuntime::predict(const LaurFeatureVector& features) const
   prediction.inference_ms = elapsed();
   attach_ood_metrics(prediction);
 
-  if (options_.ood_guard_enabled && options_.ood_z_threshold > 0.0 &&
-      std::isfinite(options_.ood_z_threshold) &&
-      max_abs_z >= options_.ood_z_threshold) {
+  const auto ood_triggered =
+      options_.ood_guard_enabled &&
+      ((!robust_feature_stats_.empty() &&
+        (robust_missing_required || robust_extreme_count > 0 ||
+         robust_outside_count >= 2)) ||
+       (robust_feature_stats_.empty() && options_.ood_z_threshold > 0.0 &&
+        std::isfinite(options_.ood_z_threshold) &&
+        max_abs_z >= options_.ood_z_threshold));
+
+  if (ood_triggered) {
     auto guarded = additive_prediction(elapsed(), true);
     guarded.safety_harmful_prob = prediction.safety_harmful_prob;
     guarded.predicted_delta_ratio = prediction.predicted_delta_ratio;
+    guarded.predicted_margin_ratio = prediction.predicted_margin_ratio;
+    guarded.nearest_support_count = prediction.nearest_support_count;
     guarded.feature_max_abs_z = prediction.feature_max_abs_z;
     guarded.feature_mean_abs_z = prediction.feature_mean_abs_z;
     guarded.feature_outside_3sigma_count =
@@ -331,7 +430,87 @@ LaurPrediction LaurLtmRuntime::predict(const LaurFeatureVector& features) const
     guarded.selected_rule_before_guard = prediction.rule_id;
     guarded.selected_rule_after_guard = "additive_ltm";
     guarded.selected_rule_source = "ood_guard";
+    guarded.guard_reason =
+        guard_reason.empty() ? "max_abs_z_threshold" : guard_reason;
     return guarded;
+  }
+
+  if (!utility_neighbors_.empty()) {
+    const UtilityNeighbor* nearest = nullptr;
+    double nearest_distance = std::numeric_limits<double>::infinity();
+    const auto agents = lookup_feature(by_name, "agents");
+    const auto map_width = lookup_feature(by_name, "map_width");
+    const auto map_height = lookup_feature(by_name, "map_height");
+    const auto obstacle_ratio = lookup_feature(by_name, "obstacle_ratio");
+    for (const auto& neighbor : utility_neighbors_) {
+      if (neighbor.feature_values.size() < input_dim_) continue;
+      if (!close_bucket(agents, neighbor.agents) ||
+          !close_bucket(map_width, neighbor.map_width) ||
+          !close_bucket(map_height, neighbor.map_height) ||
+          obstacle_ratio < neighbor.obstacle_ratio_min ||
+          obstacle_ratio > neighbor.obstacle_ratio_max) {
+        continue;
+      }
+      double distance_sq = 0.0;
+      uint used = 0;
+      for (uint index = 0; index < input_dim_; ++index) {
+        const auto feature_name =
+            index < feature_names_.size() ? feature_names_[index] : "";
+        const auto it = by_name.find(feature_name);
+        if (it == by_name.end()) continue;
+        const auto stdev = index < feature_std_.size() &&
+                                   std::fabs(feature_std_[index]) > kEps
+                               ? feature_std_[index]
+                               : 1.0;
+        const auto diff = (it->second - neighbor.feature_values[index]) / stdev;
+        distance_sq += diff * diff;
+        ++used;
+      }
+      if (used == 0) continue;
+      const auto distance = std::sqrt(distance_sq / used);
+      if (distance < nearest_distance) {
+        nearest_distance = distance;
+        nearest = &neighbor;
+      }
+    }
+
+    if (nearest != nullptr && nearest->rule_id != "additive_ltm" &&
+        nearest->nearest_support_count >= nearest->min_support_neighbors &&
+        nearest->predicted_margin_ratio >= nearest->min_predicted_margin_ratio &&
+        is_supported_laur_rule_id(nearest->rule_id)) {
+      prediction.params = update_params_for_laur_rule_id(nearest->rule_id);
+      prediction.rule_id = nearest->rule_id;
+      prediction.selected_rule_before_guard = nearest->rule_id;
+      prediction.selected_rule_after_guard = nearest->rule_id;
+      prediction.selected_rule_source = "repair5e4_closed_loop_utility_selector";
+      prediction.safety_harmful_prob = std::min(prediction.safety_harmful_prob, 0.0);
+      prediction.predicted_margin_ratio = nearest->predicted_margin_ratio;
+      prediction.predicted_delta_ratio = -nearest->predicted_margin_ratio;
+      prediction.nearest_support_count = nearest->nearest_support_count;
+      prediction.guard_reason = "passed";
+      return prediction;
+    }
+
+    auto deferred = additive_prediction(elapsed(), true);
+    deferred.safety_harmful_prob = prediction.safety_harmful_prob;
+    deferred.predicted_delta_ratio = prediction.predicted_delta_ratio;
+    deferred.predicted_margin_ratio =
+        nearest == nullptr ? 0.0 : nearest->predicted_margin_ratio;
+    deferred.nearest_support_count =
+        nearest == nullptr ? 0 : nearest->nearest_support_count;
+    deferred.feature_max_abs_z = prediction.feature_max_abs_z;
+    deferred.feature_mean_abs_z = prediction.feature_mean_abs_z;
+    deferred.feature_outside_3sigma_count =
+        prediction.feature_outside_3sigma_count;
+    deferred.feature_outside_5sigma_count =
+        prediction.feature_outside_5sigma_count;
+    deferred.ood_z_threshold = prediction.ood_z_threshold;
+    deferred.selected_rule_before_guard = prediction.rule_id;
+    deferred.selected_rule_after_guard = "additive_ltm";
+    deferred.selected_rule_source = "repair5e4_no_supported_neighbor_defer";
+    deferred.guard_reason =
+        nearest == nullptr ? "no_neighbor" : "insufficient_margin_or_support";
+    return deferred;
   }
 
   if (!recovery_specs_.empty()) {
@@ -456,6 +635,84 @@ bool LaurLtmRuntime::load_model_directory(const std::string& model_path)
       item.stdev = parse_double_or(cells[2], 1.0);
       if (!item.feature_name.empty() && std::fabs(item.stdev) > kEps) {
         ood_stat_overrides_.push_back(item);
+      }
+    }
+  }
+
+  const auto robust_stats_path = root / "ood_feature_stats_train.csv";
+  if (std::filesystem::exists(robust_stats_path)) {
+    auto in = std::ifstream(robust_stats_path);
+    std::string line;
+    if (std::getline(in, line)) {
+      const auto header = split_csv_line(line);
+      const auto index = header_index(header);
+      const auto has_robust_columns =
+          index.count("feature_name") > 0 && index.count("p01") > 0 &&
+          index.count("p99") > 0 && index.count("min") > 0 &&
+          index.count("max") > 0 && index.count("rows_non_missing") > 0;
+      if (has_robust_columns) {
+        while (std::getline(in, line)) {
+          const auto cells = split_csv_line(line);
+          auto stat = RobustFeatureStat();
+          stat.feature_name = cell_at(cells, index, "feature_name");
+          if (stat.feature_name.empty()) continue;
+          stat.mean = parse_double_or(cell_at(cells, index, "mean"), 0.0);
+          stat.stdev = parse_double_or(cell_at(cells, index, "std"), 1.0);
+          if (std::fabs(stat.stdev) <= kEps) stat.stdev = 1.0;
+          stat.median = parse_double_or(cell_at(cells, index, "median"), stat.mean);
+          stat.mad = parse_double_or(cell_at(cells, index, "mad"), 0.0);
+          stat.p01 = parse_double_or(cell_at(cells, index, "p01"), stat.mean);
+          stat.p99 = parse_double_or(cell_at(cells, index, "p99"), stat.mean);
+          stat.min_value = parse_double_or(cell_at(cells, index, "min"), stat.p01);
+          stat.max_value = parse_double_or(cell_at(cells, index, "max"), stat.p99);
+          stat.rows_non_missing =
+              parse_uint_or(cell_at(cells, index, "rows_non_missing"), 0);
+          stat.required =
+              cell_at(cells, index, "required").empty()
+                  ? true
+                  : parse_bool(cell_at(cells, index, "required"));
+          robust_feature_stats_.push_back(stat);
+        }
+      }
+    }
+  }
+
+  const auto selector_path = root / "repair5e4_utility_selector.csv";
+  if (std::filesystem::exists(selector_path)) {
+    auto in = std::ifstream(selector_path);
+    std::string line;
+    if (std::getline(in, line)) {
+      const auto header = split_csv_line(line);
+      const auto index = header_index(header);
+      while (std::getline(in, line)) {
+        const auto cells = split_csv_line(line);
+        auto item = UtilityNeighbor();
+        item.rule_id = cell_at(cells, index, "rule_id");
+        if (item.rule_id == "neutral_additive") item.rule_id = "additive_ltm";
+        item.map_width = parse_double_or(cell_at(cells, index, "map_width"), 0.0);
+        item.map_height = parse_double_or(cell_at(cells, index, "map_height"), 0.0);
+        item.obstacle_ratio_min =
+            parse_double_or(cell_at(cells, index, "obstacle_ratio_min"), -1.0);
+        item.obstacle_ratio_max =
+            parse_double_or(cell_at(cells, index, "obstacle_ratio_max"), 2.0);
+        item.agents = parse_double_or(cell_at(cells, index, "agents"), 0.0);
+        item.predicted_margin_ratio =
+            parse_double_or(cell_at(cells, index, "predicted_margin_ratio"), 0.0);
+        item.nearest_support_count =
+            parse_uint_or(cell_at(cells, index, "nearest_support_count"), 0);
+        item.min_support_neighbors =
+            parse_uint_or(cell_at(cells, index, "min_support_neighbors"), 5);
+        item.min_predicted_margin_ratio =
+            parse_double_or(cell_at(cells, index, "min_predicted_margin_ratio"), 0.001);
+        item.source = cell_at(cells, index, "source");
+        const auto value_cells = split_semicolon_list(cell_at(cells, index, "feature_values"));
+        for (const auto& value : value_cells) {
+          item.feature_values.push_back(parse_double_or(value, 0.0));
+        }
+        if (is_supported_laur_rule_id(item.rule_id) &&
+            item.feature_values.size() >= feature_names_.size()) {
+          utility_neighbors_.push_back(item);
+        }
       }
     }
   }

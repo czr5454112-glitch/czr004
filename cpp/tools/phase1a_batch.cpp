@@ -425,7 +425,10 @@ void append_laur_update_log_jsonl(
     double ood_z_threshold = std::numeric_limits<double>::quiet_NaN(),
     const std::string& selected_rule_before_guard = "",
     const std::string& selected_rule_after_guard = "",
-    const std::string& selected_rule_source = "")
+    const std::string& selected_rule_source = "",
+    double predicted_margin_ratio = 0.0,
+    uint nearest_support_count = 0,
+    const std::string& guard_reason = "")
 {
   if (args.laur_update_log_jsonl.empty()) return;
 
@@ -468,6 +471,9 @@ void append_laur_update_log_jsonl(
   out << ",\"prediction_enabled\":" << (prediction_enabled ? "true" : "false");
   out << ",\"safety_harmful_prob\":" << json_number_or_null(safety_harmful_prob);
   out << ",\"predicted_delta_ratio\":" << json_number_or_null(predicted_delta_ratio);
+  out << ",\"predicted_margin_ratio\":" << json_number_or_null(predicted_margin_ratio);
+  out << ",\"nearest_support_count\":" << nearest_support_count;
+  out << ",\"guard_reason\":" << json_string(guard_reason);
   out << ",\"inference_ms\":" << json_number_or_null(inference_ms);
   out << ",\"runtime_feature_names\":";
   if (runtime_features == nullptr) {
@@ -576,31 +582,31 @@ RunStats run_lacam_star_ltm(const Instance& instance, const Args& args)
                 "fallback_additive", "missing_update_context", false);
             return additive;
           }
+          const auto features = czr004::ntm::build_laur_features(
+              *context.instance, *context.traffic_before,
+              *context.trace_events, context.stats);
           if (args.laur_post_first_solution_only &&
               !context.stats.has_incumbent_before) {
             ++stats.laur_additive_fallback_count;
             append_laur_update_log_jsonl(
                 args, context, "additive_ltm", "additive_ltm", 0.0, 0.0, 0.0,
-                "fallback_additive", "pre_first_solution", true);
+                "fallback_additive", "pre_first_solution", true, &features);
             return additive;
           }
           if (context.stats.iteration % args.laur_every_k_restarts != 0) {
             ++stats.laur_additive_fallback_count;
             append_laur_update_log_jsonl(
                 args, context, "additive_ltm", "additive_ltm", 0.0, 0.0, 0.0,
-                "fallback_additive", "update_period_skip", true);
+                "fallback_additive", "update_period_skip", true, &features);
             return additive;
           }
           if (args.laur_force_additive) {
             ++stats.laur_selected_rules["additive_ltm"];
             append_laur_update_log_jsonl(
                 args, context, "additive_ltm", "additive_ltm", 0.0, 0.0, 0.0,
-                "force_additive", "force_additive", true);
+                "force_additive", "force_additive", true, &features);
             return additive;
           }
-          const auto features = czr004::ntm::build_laur_features(
-              *context.instance, *context.traffic_before,
-              *context.trace_events, context.stats);
           if (!args.laur_static_rule.empty()) {
             ++stats.laur_selected_rules[args.laur_static_rule];
             append_laur_update_log_jsonl(
@@ -628,7 +634,8 @@ RunStats run_lacam_star_ltm(const Instance& instance, const Args& args)
                 prediction.ood_guard_triggered, prediction.ood_z_threshold,
                 prediction.selected_rule_before_guard,
                 prediction.selected_rule_after_guard,
-                prediction.selected_rule_source);
+                prediction.selected_rule_source, prediction.predicted_margin_ratio,
+                prediction.nearest_support_count, prediction.guard_reason);
             return additive;
           }
           if (prediction.ood_guard_triggered) {
@@ -644,7 +651,8 @@ RunStats run_lacam_star_ltm(const Instance& instance, const Args& args)
                 prediction.ood_guard_triggered, prediction.ood_z_threshold,
                 prediction.selected_rule_before_guard,
                 prediction.selected_rule_after_guard,
-                prediction.selected_rule_source);
+                prediction.selected_rule_source, prediction.predicted_margin_ratio,
+                prediction.nearest_support_count, prediction.guard_reason);
             return additive;
           }
           if (!args.laur_force_additive && args.laur_safety_enabled &&
@@ -661,7 +669,8 @@ RunStats run_lacam_star_ltm(const Instance& instance, const Args& args)
                 prediction.feature_outside_5sigma_count,
                 prediction.ood_guard_triggered, prediction.ood_z_threshold,
                 prediction.selected_rule_before_guard,
-                "additive_ltm", "safety_gate");
+                "additive_ltm", "safety_gate", prediction.predicted_margin_ratio,
+                prediction.nearest_support_count, prediction.guard_reason);
             return additive;
           }
           append_laur_update_log_jsonl(
@@ -676,7 +685,8 @@ RunStats run_lacam_star_ltm(const Instance& instance, const Args& args)
               prediction.ood_guard_triggered, prediction.ood_z_threshold,
               prediction.selected_rule_before_guard,
               prediction.selected_rule_after_guard,
-              prediction.selected_rule_source);
+              prediction.selected_rule_source, prediction.predicted_margin_ratio,
+              prediction.nearest_support_count, prediction.guard_reason);
           return prediction.params;
         };
   }

@@ -1,0 +1,12 @@
+{
+  "created_at": "2026-06-01T10:34:37.184427",
+  "diagnostic_only": true,
+  "notes": [
+    "Ablation only: selector labels are rotated across support rows."
+  ],
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_dir": "C:\\PROGRAMING\\czr004\\artifacts\\models\\laur_ltm\\repair5e4_closed_loop_utility_selector_shuffled_labels_diagnostic",
+  "schema_version": "phase5p5_repair5e4_shuffled_labels_runtime_v1",
+  "selector_rows": 24
+}

@@ -1,0 +1,4 @@
+map,agents,method,runs,successes,success_rate,sum_of_loss_ratio_mean,expanded_nodes_mean,time_to_first_solution_ms_mean,returned_solutions_count_mean,low_level_pibt_calls_mean,laur_overhead_ms_mean,laur_inference_count_mean,laur_additive_fallback_count_mean,laur_safety_disabled_count_mean,fallback_defer_rate,non_additive_update_rate,selected_harmful_update_rate,selected_rules,ratio_delta_vs_ltm,expanded_delta_vs_ltm,ttfs_delta_vs_ltm
+random-32-32-20,50,lacam_star_ltm,1,1,1.0,1.1421686747,308.0,172.0,1.0,30012.0,0.0,0.0,0.0,0.0,,,,{},,,
+random-32-32-20,50,repair5e4_closed_loop_utility_selector,1,1,1.0,1.1421686747,206.0,166.0,1.0,10579.0,2.3295,3.0,1.0,0.0,0.25,0.75,,"{""block_heavy"": 2, ""decay_090"": 1}",0.0,-102.0,-6.0
+random-32-32-20,50,repair5e4_closed_loop_utility_selector_force_additive_parity,1,1,1.0,1.1421686747,308.0,172.0,1.0,30012.0,0.0,0.0,1.0,0.0,0.25,0.0,,"{""additive_ltm"": 3}",0.0,0.0,0.0

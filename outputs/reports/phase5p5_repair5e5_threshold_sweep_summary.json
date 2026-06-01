@@ -1,0 +1,73 @@
+{
+  "created_at": "2026-06-01T12:51:20.896444",
+  "diagnostic_only": true,
+  "epsilon_ratio": 0.001,
+  "input_wide_csv": "outputs\\tables\\phase5p5_repair5e5_crossfold_utility_wide.csv",
+  "output_csv": "outputs\\tables\\phase5p5_repair5e5_threshold_sweep.csv",
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "schema_version": "phase5p5_repair5e5_threshold_sweep_v1",
+  "selected_row": {
+    "allow_commit_heavy": false,
+    "better": 484,
+    "equal": 1616,
+    "max_neighbor_distance": 1000000000.0,
+    "max_rule_risk": 0.25,
+    "mean_delta_ratio_vs_ltm": -0.005011278128230476,
+    "min_fold_agreement": 1,
+    "min_predicted_margin": 0.001,
+    "min_support_count": 4,
+    "non_additive_budget": 3,
+    "passes_primary_goal": true,
+    "ratio_worse_than_ltm_groups": 0,
+    "rows": 2100,
+    "rule_risk_caps": "{\"commit_heavy\": 0.0}",
+    "selected_nonadditive_rows": 484,
+    "selected_rule_distribution": {
+      "block_heavy": 276,
+      "block_light": 56,
+      "decay_090": 32,
+      "decay_095": 16,
+      "wait_heavy": 72,
+      "wait_light": 32
+    },
+    "success_worse_than_ltm_groups": 0,
+    "total_groups": 6,
+    "worse": 0,
+    "zero_nonadditive_groups": 3
+  },
+  "selected_thresholds": {
+    "allow_commit_heavy": false,
+    "max_neighbor_distance": 1000000000.0,
+    "max_rule_risk": 0.25,
+    "min_fold_agreement": 1,
+    "min_predicted_margin": 0.001,
+    "min_support_count": 4,
+    "non_additive_budget": 3,
+    "rule_risk_caps": {
+      "commit_heavy": 0.0
+    }
+  },
+  "shuffled_label_diagnostic": {
+    "better": 420,
+    "equal": 1676,
+    "mean_delta_ratio_vs_ltm": -0.004162080055539524,
+    "ratio_worse_than_ltm_groups": 0,
+    "rows": 2100,
+    "selected_nonadditive_rows": 438,
+    "selected_rule_distribution": {
+      "block_heavy": 252,
+      "block_light": 50,
+      "decay_090": 29,
+      "decay_095": 14,
+      "wait_heavy": 65,
+      "wait_light": 28
+    },
+    "success_worse_than_ltm_groups": 0,
+    "total_groups": 6,
+    "worse": 4,
+    "zero_nonadditive_groups": 3
+  },
+  "shuffled_label_matches_real": false,
+  "sweep_rows": 9600
+}

@@ -477,12 +477,15 @@ LaurPrediction LaurLtmRuntime::predict(const LaurFeatureVector& features) const
     if (nearest != nullptr && nearest->rule_id != "additive_ltm" &&
         nearest->nearest_support_count >= nearest->min_support_neighbors &&
         nearest->predicted_margin_ratio >= nearest->min_predicted_margin_ratio &&
+        nearest_distance <= nearest->max_neighbor_distance &&
         is_supported_laur_rule_id(nearest->rule_id)) {
       prediction.params = update_params_for_laur_rule_id(nearest->rule_id);
       prediction.rule_id = nearest->rule_id;
       prediction.selected_rule_before_guard = nearest->rule_id;
       prediction.selected_rule_after_guard = nearest->rule_id;
-      prediction.selected_rule_source = "repair5e4_closed_loop_utility_selector";
+      prediction.selected_rule_source =
+          nearest->source.empty() ? "repair5e4_closed_loop_utility_selector"
+                                  : nearest->source;
       prediction.safety_harmful_prob = std::min(prediction.safety_harmful_prob, 0.0);
       prediction.predicted_margin_ratio = nearest->predicted_margin_ratio;
       prediction.predicted_delta_ratio = -nearest->predicted_margin_ratio;
@@ -509,7 +512,11 @@ LaurPrediction LaurLtmRuntime::predict(const LaurFeatureVector& features) const
     deferred.selected_rule_after_guard = "additive_ltm";
     deferred.selected_rule_source = "repair5e4_no_supported_neighbor_defer";
     deferred.guard_reason =
-        nearest == nullptr ? "no_neighbor" : "insufficient_margin_or_support";
+        nearest == nullptr
+            ? "no_neighbor"
+            : (nearest_distance > nearest->max_neighbor_distance
+                   ? "neighbor_distance_above_threshold"
+                   : "insufficient_margin_or_support");
     return deferred;
   }
 
@@ -704,6 +711,8 @@ bool LaurLtmRuntime::load_model_directory(const std::string& model_path)
             parse_uint_or(cell_at(cells, index, "min_support_neighbors"), 5);
         item.min_predicted_margin_ratio =
             parse_double_or(cell_at(cells, index, "min_predicted_margin_ratio"), 0.001);
+        item.max_neighbor_distance =
+            parse_double_or(cell_at(cells, index, "max_neighbor_distance"), 1.0e9);
         item.source = cell_at(cells, index, "source");
         const auto value_cells = split_semicolon_list(cell_at(cells, index, "feature_values"));
         for (const auto& value : value_cells) {

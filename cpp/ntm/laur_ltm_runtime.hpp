@@ -103,6 +103,7 @@ class LaurLtmRuntime {
     uint nearest_support_count = 0;
     uint min_support_neighbors = 5;
     double min_predicted_margin_ratio = 0.001;
+    double max_neighbor_distance = 1.0e9;
     std::vector<double> feature_values;
     std::string source = "";
   };

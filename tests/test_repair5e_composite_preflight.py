@@ -284,6 +284,45 @@ def test_repair5e4_closed_loop_selector_and_ablation_candidates_are_wired(tmp_pa
     assert "repair5e4_closed_loop_utility_selector" not in {row["method"] for row in skipped}
 
 
+def test_repair5e5_crossfold_reranker_and_ablation_candidates_are_wired(tmp_path: Path) -> None:
+    methods, skipped = build_methods(
+        root=ROOT,
+        additive_model=tmp_path / "additive",
+        repair3_runtime=None,
+        repair5d_runtime=None,
+        repair5e_ood_guard_runtime=None,
+        repair5e5_runtime=tmp_path / "repair5e5_runtime",
+        repair5e5_shuffled_runtime=tmp_path / "repair5e5_shuffled",
+        repair5e5_loose_runtime=tmp_path / "repair5e5_loose",
+        repair5e5_strict_runtime=tmp_path / "repair5e5_strict",
+        include_static_proxies=False,
+        include_oracle_static_probe=False,
+        include_repair5e5_candidate=True,
+        include_repair5e5_ablation_candidates=True,
+        repair5e5_ood_guard_z_threshold=4.25,
+    )
+
+    by_alias = {method.alias: method for method in methods}
+    guarded = by_alias["repair5e5_crossfold_utility_reranker"]
+    assert "--laur-model-path" in guarded.extra_args
+    assert "--laur-ood-z-threshold" in guarded.extra_args
+    assert "4.25" in guarded.extra_args
+
+    parity = by_alias["repair5e5_crossfold_utility_reranker_force_additive_parity"]
+    assert "--laur-force-additive" in parity.extra_args
+
+    disabled = by_alias["repair5e5_crossfold_utility_reranker_recovery_disabled_parity"]
+    assert "--laur-force-additive" in disabled.extra_args
+
+    no_ood = by_alias["repair5e5_crossfold_utility_reranker_no_ood_guard_diagnostic"]
+    assert "--laur-ood-z-threshold" not in no_ood.extra_args
+
+    assert by_alias["repair5e5_crossfold_utility_reranker_shuffled_labels_diagnostic"]
+    assert by_alias["repair5e5_crossfold_utility_reranker_loose_threshold_diagnostic"]
+    assert by_alias["repair5e5_crossfold_utility_reranker_strict_threshold_diagnostic"]
+    assert "repair5e5_crossfold_utility_reranker" not in {row["method"] for row in skipped}
+
+
 def test_repair5e2_update_log_runtime_feature_fields_are_analyzable(tmp_path: Path) -> None:
     runtime_dir = tmp_path / "runtime"
     runtime_dir.mkdir()

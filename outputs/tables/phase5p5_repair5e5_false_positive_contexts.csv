@@ -1,0 +1,5 @@
+map,agents,seed,scen,realized_delta_ratio,selected_rules,max_predicted_margin,mean_predicted_margin,max_support_count,mean_support_count,min_neighbor_distance,nonadditive_selected_rules,nonadditive_update_count
+random-32-32-20,50,16,random-32-32-20-random-16.scen,0.010109519789999855,"{""decay_090"": 3}",0.02559055118,0.019192913385,10.0,7.5,0.14243484396106657,{'decay_090': 3},3
+random-32-32-20,50,17,random-32-32-20-random-17.scen,0.007601351349999952,"{""decay_090"": 3}",0.02559055118,0.019192913385,10.0,7.5,0.026693040331501095,{'decay_090': 3},3
+random-32-32-20,100,11,random-32-32-20-random-11.scen,0.03553719007999989,"{""block_heavy"": 3}",0.02789699571,0.01701069762,10.0,7.5,0.0726895126271345,{'block_heavy': 3},3
+random-32-32-20,100,13,random-32-32-20-random-13.scen,0.010204081629999973,"{""block_heavy"": 3}",0.02789699571,0.01701069762,10.0,7.5,0.04470378288382165,{'block_heavy': 3},3

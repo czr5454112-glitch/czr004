@@ -52,6 +52,10 @@ DEFAULT_REPAIR5E3_E2_SHUFFLED_RUNTIME = "artifacts/models/laur_ltm/repair5e3_e2_
 DEFAULT_REPAIR5E4_RUNTIME = "artifacts/models/laur_ltm/repair5e4_closed_loop_utility_selector"
 DEFAULT_REPAIR5E4_SHUFFLED_RUNTIME = "artifacts/models/laur_ltm/repair5e4_closed_loop_utility_selector_shuffled_labels_diagnostic"
 DEFAULT_REPAIR5E4_E3_CALIBRATED_RUNTIME = "artifacts/models/laur_ltm/repair5e4_calibrated_guard_only_on_e3_split"
+DEFAULT_REPAIR5E5_RUNTIME = "artifacts/models/laur_ltm/repair5e5_crossfold_utility_reranker"
+DEFAULT_REPAIR5E5_SHUFFLED_RUNTIME = "artifacts/models/laur_ltm/repair5e5_crossfold_utility_reranker_shuffled_labels_diagnostic"
+DEFAULT_REPAIR5E5_LOOSE_RUNTIME = "artifacts/models/laur_ltm/repair5e5_crossfold_utility_reranker_loose_threshold_diagnostic"
+DEFAULT_REPAIR5E5_STRICT_RUNTIME = "artifacts/models/laur_ltm/repair5e5_crossfold_utility_reranker_strict_threshold_diagnostic"
 DEFAULT_ORACLE_SUMMARY_JSON = "outputs/reports/phase5p5_oracle_update_preflight_summary.json"
 DEFAULT_ORACLE_REPORT = "outputs/reports/phase5p5_oracle_update_preflight_report.md"
 
@@ -186,6 +190,10 @@ def build_methods(
     repair5e4_runtime: Path | None = None,
     repair5e4_shuffled_runtime: Path | None = None,
     repair5e4_e3_calibrated_runtime: Path | None = None,
+    repair5e5_runtime: Path | None = None,
+    repair5e5_shuffled_runtime: Path | None = None,
+    repair5e5_loose_runtime: Path | None = None,
+    repair5e5_strict_runtime: Path | None = None,
     include_static_proxies: bool,
     include_oracle_static_probe: bool,
     include_ood_guard_candidate: bool = False,
@@ -194,10 +202,13 @@ def build_methods(
     include_repair5e3_e2_ablation_candidates: bool = False,
     include_repair5e4_candidate: bool = False,
     include_repair5e4_ablation_candidates: bool = False,
+    include_repair5e5_candidate: bool = False,
+    include_repair5e5_ablation_candidates: bool = False,
     ood_guard_z_threshold: float = 5.0,
     repair5e2_ood_guard_z_threshold: float = 5.0,
     repair5e3_ood_guard_z_threshold: float = 5.0,
     repair5e4_ood_guard_z_threshold: float = 5.0,
+    repair5e5_ood_guard_z_threshold: float = 5.0,
 ) -> tuple[list[MethodSpec], list[dict[str, Any]]]:
     methods = [
         MethodSpec("lacam_star", "lacam_star"),
@@ -529,6 +540,152 @@ def build_methods(
             {
                 "method": "repair5e4_closed_loop_utility_selector_shuffled_labels_diagnostic",
                 "reason": "shuffled_runtime_model_unavailable",
+            }
+        )
+
+    if include_repair5e5_candidate and repair5e5_runtime is not None:
+        methods.extend(
+            [
+                MethodSpec(
+                    "lacam_star_lau_ltm",
+                    "repair5e5_crossfold_utility_reranker",
+                    (
+                        "--laur-model-path",
+                        str(repair5e5_runtime),
+                        "--laur-safety-threshold",
+                        "0.30",
+                        "--laur-ood-z-threshold",
+                        str(float(repair5e5_ood_guard_z_threshold)),
+                    ),
+                    "Repair5E.5 cross-fold utility reranker, diagnostic only",
+                ),
+                MethodSpec(
+                    "lacam_star_lau_ltm",
+                    "repair5e5_crossfold_utility_reranker_force_additive_parity",
+                    (
+                        "--laur-force-additive",
+                        "--laur-model-path",
+                        str(repair5e5_runtime),
+                        "--laur-ood-z-threshold",
+                        str(float(repair5e5_ood_guard_z_threshold)),
+                    ),
+                    "Repair5E.5 runtime path with forced additive/defer parity",
+                ),
+            ]
+        )
+    elif include_repair5e5_candidate:
+        skipped.append(
+            {
+                "method": "repair5e5_crossfold_utility_reranker",
+                "reason": "runtime_model_unavailable",
+            }
+        )
+
+    if include_repair5e5_ablation_candidates and repair5e5_runtime is not None:
+        methods.extend(
+            [
+                MethodSpec(
+                    "lacam_star_lau_ltm",
+                    "repair5e5_crossfold_utility_reranker_recovery_disabled_parity",
+                    (
+                        "--laur-force-additive",
+                        "--laur-model-path",
+                        str(repair5e5_runtime),
+                        "--laur-ood-z-threshold",
+                        str(float(repair5e5_ood_guard_z_threshold)),
+                    ),
+                    "Repair5E.5 ablation: disable utility recovery by forcing additive/defer parity",
+                ),
+                MethodSpec(
+                    "lacam_star_lau_ltm",
+                    "repair5e5_crossfold_utility_reranker_no_ood_guard_diagnostic",
+                    (
+                        "--laur-model-path",
+                        str(repair5e5_runtime),
+                        "--laur-safety-threshold",
+                        "0.30",
+                    ),
+                    "Repair5E.5 ablation: cross-fold utility reranker with OOD guard disabled",
+                ),
+            ]
+        )
+    elif include_repair5e5_ablation_candidates:
+        skipped.append(
+            {
+                "method": "repair5e5_crossfold_utility_reranker_ablation",
+                "reason": "runtime_model_unavailable",
+            }
+        )
+
+    if include_repair5e5_ablation_candidates and repair5e5_shuffled_runtime is not None:
+        methods.append(
+            MethodSpec(
+                "lacam_star_lau_ltm",
+                "repair5e5_crossfold_utility_reranker_shuffled_labels_diagnostic",
+                (
+                    "--laur-model-path",
+                    str(repair5e5_shuffled_runtime),
+                    "--laur-safety-threshold",
+                    "0.30",
+                    "--laur-ood-z-threshold",
+                    str(float(repair5e5_ood_guard_z_threshold)),
+                ),
+                "Repair5E.5 ablation: shuffled cross-fold utility labels",
+            )
+        )
+    elif include_repair5e5_ablation_candidates:
+        skipped.append(
+            {
+                "method": "repair5e5_crossfold_utility_reranker_shuffled_labels_diagnostic",
+                "reason": "shuffled_runtime_model_unavailable",
+            }
+        )
+
+    if include_repair5e5_ablation_candidates and repair5e5_loose_runtime is not None:
+        methods.append(
+            MethodSpec(
+                "lacam_star_lau_ltm",
+                "repair5e5_crossfold_utility_reranker_loose_threshold_diagnostic",
+                (
+                    "--laur-model-path",
+                    str(repair5e5_loose_runtime),
+                    "--laur-safety-threshold",
+                    "0.30",
+                    "--laur-ood-z-threshold",
+                    str(float(repair5e5_ood_guard_z_threshold)),
+                ),
+                "Repair5E.5 ablation: loose threshold diagnostic",
+            )
+        )
+    elif include_repair5e5_ablation_candidates:
+        skipped.append(
+            {
+                "method": "repair5e5_crossfold_utility_reranker_loose_threshold_diagnostic",
+                "reason": "loose_runtime_model_unavailable",
+            }
+        )
+
+    if include_repair5e5_ablation_candidates and repair5e5_strict_runtime is not None:
+        methods.append(
+            MethodSpec(
+                "lacam_star_lau_ltm",
+                "repair5e5_crossfold_utility_reranker_strict_threshold_diagnostic",
+                (
+                    "--laur-model-path",
+                    str(repair5e5_strict_runtime),
+                    "--laur-safety-threshold",
+                    "0.30",
+                    "--laur-ood-z-threshold",
+                    str(float(repair5e5_ood_guard_z_threshold)),
+                ),
+                "Repair5E.5 ablation: strict threshold diagnostic",
+            )
+        )
+    elif include_repair5e5_ablation_candidates:
+        skipped.append(
+            {
+                "method": "repair5e5_crossfold_utility_reranker_strict_threshold_diagnostic",
+                "reason": "strict_runtime_model_unavailable",
             }
         )
 
@@ -885,6 +1042,26 @@ def decision_table_interpretation(
         and float(oracle["mean_delta_ratio_vs_ltm"]) < 0.0
         and int(oracle.get("better") or 0) > int(oracle.get("worse") or 0)
     )
+    has_e5 = "repair5e5_crossfold_utility_reranker" in method_stats
+    if has_e5:
+        e5_positive = clean_positive("repair5e5_crossfold_utility_reranker")
+        if e5_positive:
+            case = "A"
+            action = "larger_multi_map_validation_then_phase5p5_runtime_export_design"
+        elif oracle_positive:
+            case = "B"
+            action = "e5_not_promotable_inspect_crossfold_utility_reranker"
+        else:
+            case = "C"
+            action = "do_not_promote_repair5e5_consider_repair5f_side_branch_after_diagnostics"
+        return {
+            "case": case,
+            "recommended_action": action,
+            "repair5e5_crossfold_utility_reranker_positive": e5_positive,
+            "oracle_positive": oracle_positive,
+            "phase5p5_allowed": False,
+            "phase6_allowed": False,
+        }
     has_e4 = "repair5e4_closed_loop_utility_selector" in method_stats
     if has_e4:
         e4_positive = clean_positive("repair5e4_closed_loop_utility_selector")
@@ -1117,6 +1294,10 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         type=Path,
         default=Path(DEFAULT_REPAIR5E4_E3_CALIBRATED_RUNTIME),
     )
+    parser.add_argument("--repair5e5-runtime-dir", type=Path, default=Path(DEFAULT_REPAIR5E5_RUNTIME))
+    parser.add_argument("--repair5e5-shuffled-runtime-dir", type=Path, default=Path(DEFAULT_REPAIR5E5_SHUFFLED_RUNTIME))
+    parser.add_argument("--repair5e5-loose-runtime-dir", type=Path, default=Path(DEFAULT_REPAIR5E5_LOOSE_RUNTIME))
+    parser.add_argument("--repair5e5-strict-runtime-dir", type=Path, default=Path(DEFAULT_REPAIR5E5_STRICT_RUNTIME))
     parser.add_argument("--maps", nargs="+", choices=sorted(MAPS), default=list(MAPS))
     parser.add_argument("--agent-counts", nargs="+", type=int, default=[50, 100])
     parser.add_argument("--instances-per-setting", type=int, default=3)
@@ -1142,6 +1323,8 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--include-repair5e3-e2-ablation-candidates", action="store_true")
     parser.add_argument("--include-repair5e4-candidate", action="store_true")
     parser.add_argument("--include-repair5e4-ablation-candidates", action="store_true")
+    parser.add_argument("--include-repair5e5-candidate", action="store_true")
+    parser.add_argument("--include-repair5e5-ablation-candidates", action="store_true")
     parser.add_argument(
         "--only-method-aliases",
         nargs="+",
@@ -1155,6 +1338,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--repair5e2-ood-guard-z-threshold", type=float, default=5.0)
     parser.add_argument("--repair5e3-ood-guard-z-threshold", type=float, default=5.0)
     parser.add_argument("--repair5e4-ood-guard-z-threshold", type=float, default=5.0)
+    parser.add_argument("--repair5e5-ood-guard-z-threshold", type=float, default=5.0)
     parser.add_argument("--skip-solver", action="store_true", help="Only summarize an existing --output-jsonl.")
     return parser.parse_args(argv)
 
@@ -1182,6 +1366,10 @@ def main(argv: list[str] | None = None) -> int:
     repair5e4_runtime_dir = resolve_path(args.repair5e4_runtime_dir, root)
     repair5e4_shuffled_runtime_dir = resolve_path(args.repair5e4_shuffled_runtime_dir, root)
     repair5e4_e3_calibrated_runtime_dir = resolve_path(args.repair5e4_e3_calibrated_runtime_dir, root)
+    repair5e5_runtime_dir = resolve_path(args.repair5e5_runtime_dir, root)
+    repair5e5_shuffled_runtime_dir = resolve_path(args.repair5e5_shuffled_runtime_dir, root)
+    repair5e5_loose_runtime_dir = resolve_path(args.repair5e5_loose_runtime_dir, root)
+    repair5e5_strict_runtime_dir = resolve_path(args.repair5e5_strict_runtime_dir, root)
     if None in (
         binary,
         scenario_dir,
@@ -1203,6 +1391,10 @@ def main(argv: list[str] | None = None) -> int:
         repair5e4_runtime_dir,
         repair5e4_shuffled_runtime_dir,
         repair5e4_e3_calibrated_runtime_dir,
+        repair5e5_runtime_dir,
+        repair5e5_shuffled_runtime_dir,
+        repair5e5_loose_runtime_dir,
+        repair5e5_strict_runtime_dir,
     ):
         raise ValueError("required paths could not be resolved")
     assert binary and scenario_dir and output_dir and summary_json and summary_csv and paired_csv and report
@@ -1211,6 +1403,8 @@ def main(argv: list[str] | None = None) -> int:
     assert repair5d_spec_json and repair5d_runtime_dir and repair5e_ood_guard_runtime_dir
     assert repair5e2_runtime_dir and repair5e3_runtime_dir and repair5e3_e2_shuffled_runtime_dir
     assert repair5e4_runtime_dir and repair5e4_shuffled_runtime_dir and repair5e4_e3_calibrated_runtime_dir
+    assert repair5e5_runtime_dir and repair5e5_shuffled_runtime_dir and repair5e5_loose_runtime_dir
+    assert repair5e5_strict_runtime_dir
 
     output_dir.mkdir(parents=True, exist_ok=True)
     output_jsonl = resolve_path(args.output_jsonl, root) if args.output_jsonl else _jsonl_name(output_dir)
@@ -1273,6 +1467,30 @@ def main(argv: list[str] | None = None) -> int:
         and (repair5e4_e3_calibrated_runtime_dir / "repair5e2_recovery_rules.csv").exists()
         else None
     )
+    repair5e5_runtime = (
+        repair5e5_runtime_dir
+        if all((repair5e5_runtime_dir / name).exists() for name in required_runtime_files)
+        and (repair5e5_runtime_dir / "repair5e4_utility_selector.csv").exists()
+        else None
+    )
+    repair5e5_shuffled_runtime = (
+        repair5e5_shuffled_runtime_dir
+        if all((repair5e5_shuffled_runtime_dir / name).exists() for name in required_runtime_files)
+        and (repair5e5_shuffled_runtime_dir / "repair5e4_utility_selector.csv").exists()
+        else None
+    )
+    repair5e5_loose_runtime = (
+        repair5e5_loose_runtime_dir
+        if all((repair5e5_loose_runtime_dir / name).exists() for name in required_runtime_files)
+        and (repair5e5_loose_runtime_dir / "repair5e4_utility_selector.csv").exists()
+        else None
+    )
+    repair5e5_strict_runtime = (
+        repair5e5_strict_runtime_dir
+        if all((repair5e5_strict_runtime_dir / name).exists() for name in required_runtime_files)
+        and (repair5e5_strict_runtime_dir / "repair5e4_utility_selector.csv").exists()
+        else None
+    )
     methods, skipped_methods = build_methods(
         root=root,
         additive_model=additive_model,
@@ -1285,6 +1503,10 @@ def main(argv: list[str] | None = None) -> int:
         repair5e4_runtime=repair5e4_runtime,
         repair5e4_shuffled_runtime=repair5e4_shuffled_runtime,
         repair5e4_e3_calibrated_runtime=repair5e4_e3_calibrated_runtime,
+        repair5e5_runtime=repair5e5_runtime,
+        repair5e5_shuffled_runtime=repair5e5_shuffled_runtime,
+        repair5e5_loose_runtime=repair5e5_loose_runtime,
+        repair5e5_strict_runtime=repair5e5_strict_runtime,
         include_static_proxies=bool(args.include_static_proxies),
         include_oracle_static_probe=bool(args.include_oracle_static_probe),
         include_ood_guard_candidate=bool(args.include_ood_guard_candidate),
@@ -1293,10 +1515,13 @@ def main(argv: list[str] | None = None) -> int:
         include_repair5e3_e2_ablation_candidates=bool(args.include_repair5e3_e2_ablation_candidates),
         include_repair5e4_candidate=bool(args.include_repair5e4_candidate),
         include_repair5e4_ablation_candidates=bool(args.include_repair5e4_ablation_candidates),
+        include_repair5e5_candidate=bool(args.include_repair5e5_candidate),
+        include_repair5e5_ablation_candidates=bool(args.include_repair5e5_ablation_candidates),
         ood_guard_z_threshold=float(args.ood_guard_z_threshold),
         repair5e2_ood_guard_z_threshold=float(args.repair5e2_ood_guard_z_threshold),
         repair5e3_ood_guard_z_threshold=float(args.repair5e3_ood_guard_z_threshold),
         repair5e4_ood_guard_z_threshold=float(args.repair5e4_ood_guard_z_threshold),
+        repair5e5_ood_guard_z_threshold=float(args.repair5e5_ood_guard_z_threshold),
     )
     only_aliases = set(args.only_method_aliases or [])
     oracle_requested_by_filter = "oracle_teacher_forced_best_safe_update_static_proxy" in only_aliases
@@ -1359,6 +1584,30 @@ def main(argv: list[str] | None = None) -> int:
         {
             "method": "repair5e4_calibrated_guard_only_on_e3_split_runtime",
             "reason": "available" if repair5e4_e3_calibrated_runtime is not None else "missing_runtime_dir_or_required_files",
+        }
+    )
+    skipped_methods.append(
+        {
+            "method": "repair5e5_crossfold_utility_reranker_runtime",
+            "reason": "available" if repair5e5_runtime is not None else "missing_runtime_dir_or_required_files",
+        }
+    )
+    skipped_methods.append(
+        {
+            "method": "repair5e5_crossfold_utility_reranker_shuffled_labels_runtime",
+            "reason": "available" if repair5e5_shuffled_runtime is not None else "missing_runtime_dir_or_required_files",
+        }
+    )
+    skipped_methods.append(
+        {
+            "method": "repair5e5_crossfold_utility_reranker_loose_threshold_runtime",
+            "reason": "available" if repair5e5_loose_runtime is not None else "missing_runtime_dir_or_required_files",
+        }
+    )
+    skipped_methods.append(
+        {
+            "method": "repair5e5_crossfold_utility_reranker_strict_threshold_runtime",
+            "reason": "available" if repair5e5_strict_runtime is not None else "missing_runtime_dir_or_required_files",
         }
     )
 

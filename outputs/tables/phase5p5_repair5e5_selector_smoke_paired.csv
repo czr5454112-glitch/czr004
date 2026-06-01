@@ -1,0 +1,8 @@
+map,agents,seed,scen,baseline_method,contender_method,baseline_success,contender_success,baseline_ratio,contender_ratio,delta_ratio,contender_better
+random-32-32-20,50,21,random-32-32-20-random-21.scen,lacam_star_ltm,repair5e5_crossfold_utility_reranker,True,True,1.1421686747,1.1421686747,0.0,False
+random-32-32-20,50,21,random-32-32-20-random-21.scen,lacam_star_ltm,repair5e5_crossfold_utility_reranker_force_additive_parity,True,True,1.1421686747,1.1421686747,0.0,False
+random-32-32-20,50,21,random-32-32-20-random-21.scen,lacam_star_ltm,repair5e5_crossfold_utility_reranker_loose_threshold_diagnostic,True,True,1.1421686747,1.1421686747,0.0,False
+random-32-32-20,50,21,random-32-32-20-random-21.scen,lacam_star_ltm,repair5e5_crossfold_utility_reranker_no_ood_guard_diagnostic,True,True,1.1421686747,1.1421686747,0.0,False
+random-32-32-20,50,21,random-32-32-20-random-21.scen,lacam_star_ltm,repair5e5_crossfold_utility_reranker_recovery_disabled_parity,True,True,1.1421686747,1.1421686747,0.0,False
+random-32-32-20,50,21,random-32-32-20-random-21.scen,lacam_star_ltm,repair5e5_crossfold_utility_reranker_shuffled_labels_diagnostic,True,True,1.1421686747,1.1421686747,0.0,False
+random-32-32-20,50,21,random-32-32-20-random-21.scen,lacam_star_ltm,repair5e5_crossfold_utility_reranker_strict_threshold_diagnostic,True,True,1.1421686747,1.1421686747,0.0,False

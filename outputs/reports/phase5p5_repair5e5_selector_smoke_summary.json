@@ -1,0 +1,409 @@
+{
+  "branch": "phase4f5p5-stable-attention-lau",
+  "clean_tracked_worktree": false,
+  "command_log_jsonl": "C:\\PROGRAMING\\czr004\\outputs\\logs\\phase5p5_repair5e5_selector_smoke\\phase5p5_repair5e5_selector_smoke_commands.jsonl",
+  "commit": "db0f494",
+  "created_at": "2026-06-01T12:52:23.538079",
+  "decision_table_interpretation": {
+    "case": "C",
+    "oracle_positive": false,
+    "phase5p5_allowed": false,
+    "phase6_allowed": false,
+    "recommended_action": "do_not_promote_repair5e5_consider_repair5f_side_branch_after_diagnostics",
+    "repair5e5_crossfold_utility_reranker_positive": false
+  },
+  "dirty": "tracked-dirty_untracked-present",
+  "laur_update_log_jsonl": "C:\\PROGRAMING\\czr004\\outputs\\logs\\phase5p5_repair5e5_selector_smoke\\phase5p5_repair5e5_selector_smoke_laur_updates.jsonl",
+  "oracle_proxy_rows": 0,
+  "oracle_report": "C:\\PROGRAMING\\czr004\\outputs\\reports\\phase5p5_repair5e5_selector_smoke_oracle_report.md",
+  "oracle_summary_json": "C:\\PROGRAMING\\czr004\\outputs\\reports\\phase5p5_repair5e5_selector_smoke_oracle_summary.json",
+  "paired_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase5p5_repair5e5_selector_smoke_paired.csv",
+  "paired_method_stats": {
+    "repair5e5_crossfold_utility_reranker": {
+      "better": 0,
+      "equal": 1,
+      "mean_delta_ratio_vs_ltm": 0.0,
+      "rows": 1,
+      "worse": 0
+    },
+    "repair5e5_crossfold_utility_reranker_force_additive_parity": {
+      "better": 0,
+      "equal": 1,
+      "mean_delta_ratio_vs_ltm": 0.0,
+      "rows": 1,
+      "worse": 0
+    },
+    "repair5e5_crossfold_utility_reranker_loose_threshold_diagnostic": {
+      "better": 0,
+      "equal": 1,
+      "mean_delta_ratio_vs_ltm": 0.0,
+      "rows": 1,
+      "worse": 0
+    },
+    "repair5e5_crossfold_utility_reranker_no_ood_guard_diagnostic": {
+      "better": 0,
+      "equal": 1,
+      "mean_delta_ratio_vs_ltm": 0.0,
+      "rows": 1,
+      "worse": 0
+    },
+    "repair5e5_crossfold_utility_reranker_recovery_disabled_parity": {
+      "better": 0,
+      "equal": 1,
+      "mean_delta_ratio_vs_ltm": 0.0,
+      "rows": 1,
+      "worse": 0
+    },
+    "repair5e5_crossfold_utility_reranker_shuffled_labels_diagnostic": {
+      "better": 0,
+      "equal": 1,
+      "mean_delta_ratio_vs_ltm": 0.0,
+      "rows": 1,
+      "worse": 0
+    },
+    "repair5e5_crossfold_utility_reranker_strict_threshold_diagnostic": {
+      "better": 0,
+      "equal": 1,
+      "mean_delta_ratio_vs_ltm": 0.0,
+      "rows": 1,
+      "worse": 0
+    }
+  },
+  "paired_row_count": 7,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "raw_jsonl": "C:\\PROGRAMING\\czr004\\outputs\\logs\\phase5p5_repair5e5_selector_smoke\\phase5p5_repair5e5_selector_smoke.jsonl",
+  "schema_errors": [],
+  "schema_version": "phase5p5_laur_diagnostic_preflight_exec_v1",
+  "scope": {
+    "agent_counts": [
+      50
+    ],
+    "instance_ids": [
+      21
+    ],
+    "instances_per_setting": 3,
+    "ltm_max_iterations": 4,
+    "maps": [
+      "random-32-32-20"
+    ],
+    "methods": [
+      "lacam_star_ltm",
+      "repair5e5_crossfold_utility_reranker",
+      "repair5e5_crossfold_utility_reranker_force_additive_parity",
+      "repair5e5_crossfold_utility_reranker_recovery_disabled_parity",
+      "repair5e5_crossfold_utility_reranker_no_ood_guard_diagnostic",
+      "repair5e5_crossfold_utility_reranker_shuffled_labels_diagnostic",
+      "repair5e5_crossfold_utility_reranker_loose_threshold_diagnostic",
+      "repair5e5_crossfold_utility_reranker_strict_threshold_diagnostic"
+    ],
+    "support_methods": [],
+    "time_limit_sec": 3.0
+  },
+  "skipped_methods": [
+    {
+      "method": "repair5d_native_composite_export",
+      "reason": "not_feasible_current_cxx_runtime_accepts_single_mlp_runtime_only_distilled_bridge_used"
+    },
+    {
+      "method": "oracle_teacher_forced_best_safe_update",
+      "reason": "not_executed_pass_include_oracle_static_probe_for_static_upper_bound_proxy"
+    },
+    {
+      "method": "repair3_runtime_export",
+      "reason": "existing_runtime_dir"
+    },
+    {
+      "method": "repair5d_spec",
+      "reason": "available"
+    },
+    {
+      "method": "repair5d_runtime_distill",
+      "reason": "available"
+    },
+    {
+      "method": "repair5e_ood_guard_runtime",
+      "reason": "available"
+    },
+    {
+      "method": "repair5e2_guarded_oracle_aligned_selector_runtime",
+      "reason": "available"
+    },
+    {
+      "method": "repair5e3_split_guarded_selector_runtime",
+      "reason": "available"
+    },
+    {
+      "method": "repair5e3_e2_shuffled_support_diagnostic_runtime",
+      "reason": "available"
+    },
+    {
+      "method": "repair5e4_closed_loop_utility_selector_runtime",
+      "reason": "available"
+    },
+    {
+      "method": "repair5e4_closed_loop_utility_selector_shuffled_labels_runtime",
+      "reason": "available"
+    },
+    {
+      "method": "repair5e4_calibrated_guard_only_on_e3_split_runtime",
+      "reason": "available"
+    },
+    {
+      "method": "repair5e5_crossfold_utility_reranker_runtime",
+      "reason": "available"
+    },
+    {
+      "method": "repair5e5_crossfold_utility_reranker_shuffled_labels_runtime",
+      "reason": "available"
+    },
+    {
+      "method": "repair5e5_crossfold_utility_reranker_loose_threshold_runtime",
+      "reason": "available"
+    },
+    {
+      "method": "repair5e5_crossfold_utility_reranker_strict_threshold_runtime",
+      "reason": "available"
+    }
+  ],
+  "stop_conditions": {
+    "method_flags": {
+      "repair5e5_crossfold_utility_reranker": {
+        "ratio_worse_than_ltm_groups": 0,
+        "success_worse_than_ltm_groups": 0,
+        "zero_nonadditive_groups": 0
+      },
+      "repair5e5_crossfold_utility_reranker_force_additive_parity": {
+        "ratio_worse_than_ltm_groups": 0,
+        "success_worse_than_ltm_groups": 0,
+        "zero_nonadditive_groups": 1
+      },
+      "repair5e5_crossfold_utility_reranker_loose_threshold_diagnostic": {
+        "ratio_worse_than_ltm_groups": 0,
+        "success_worse_than_ltm_groups": 0,
+        "zero_nonadditive_groups": 0
+      },
+      "repair5e5_crossfold_utility_reranker_no_ood_guard_diagnostic": {
+        "ratio_worse_than_ltm_groups": 0,
+        "success_worse_than_ltm_groups": 0,
+        "zero_nonadditive_groups": 0
+      },
+      "repair5e5_crossfold_utility_reranker_recovery_disabled_parity": {
+        "ratio_worse_than_ltm_groups": 0,
+        "success_worse_than_ltm_groups": 0,
+        "zero_nonadditive_groups": 1
+      },
+      "repair5e5_crossfold_utility_reranker_shuffled_labels_diagnostic": {
+        "ratio_worse_than_ltm_groups": 0,
+        "success_worse_than_ltm_groups": 0,
+        "zero_nonadditive_groups": 0
+      },
+      "repair5e5_crossfold_utility_reranker_strict_threshold_diagnostic": {
+        "ratio_worse_than_ltm_groups": 0,
+        "success_worse_than_ltm_groups": 0,
+        "zero_nonadditive_groups": 0
+      }
+    },
+    "oracle_replay_executed": false,
+    "oracle_replay_scope": "not_executed",
+    "paired_rows": 7,
+    "repair5c_composite_closed_loop_executed": false,
+    "repair5d_composite_closed_loop_executed": false,
+    "strict_safety_mask_blocks_all_learned_choices": false
+  },
+  "summary_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase5p5_repair5e5_selector_smoke_summary.csv",
+  "summary_rows": [
+    {
+      "agents": 50,
+      "expanded_delta_vs_ltm": null,
+      "expanded_nodes_mean": 308.0,
+      "fallback_defer_rate": null,
+      "laur_additive_fallback_count_mean": 0.0,
+      "laur_inference_count_mean": 0.0,
+      "laur_overhead_ms_mean": 0.0,
+      "laur_safety_disabled_count_mean": 0.0,
+      "low_level_pibt_calls_mean": 30012.0,
+      "map": "random-32-32-20",
+      "method": "lacam_star_ltm",
+      "non_additive_update_rate": null,
+      "ratio_delta_vs_ltm": null,
+      "returned_solutions_count_mean": 1.0,
+      "runs": 1,
+      "selected_harmful_update_rate": null,
+      "selected_rules": "{}",
+      "success_rate": 1.0,
+      "successes": 1,
+      "sum_of_loss_ratio_mean": 1.1421686747,
+      "time_to_first_solution_ms_mean": 163.0,
+      "ttfs_delta_vs_ltm": null
+    },
+    {
+      "agents": 50,
+      "expanded_delta_vs_ltm": 15.0,
+      "expanded_nodes_mean": 323.0,
+      "fallback_defer_rate": 0.25,
+      "laur_additive_fallback_count_mean": 1.0,
+      "laur_inference_count_mean": 3.0,
+      "laur_overhead_ms_mean": 0.4329,
+      "laur_safety_disabled_count_mean": 0.0,
+      "low_level_pibt_calls_mean": 29911.0,
+      "map": "random-32-32-20",
+      "method": "repair5e5_crossfold_utility_reranker",
+      "non_additive_update_rate": 0.75,
+      "ratio_delta_vs_ltm": 0.0,
+      "returned_solutions_count_mean": 1.0,
+      "runs": 1,
+      "selected_harmful_update_rate": null,
+      "selected_rules": "{\"block_heavy\": 2, \"wait_heavy\": 1}",
+      "success_rate": 1.0,
+      "successes": 1,
+      "sum_of_loss_ratio_mean": 1.1421686747,
+      "time_to_first_solution_ms_mean": 164.0,
+      "ttfs_delta_vs_ltm": 1.0
+    },
+    {
+      "agents": 50,
+      "expanded_delta_vs_ltm": 0.0,
+      "expanded_nodes_mean": 308.0,
+      "fallback_defer_rate": 0.25,
+      "laur_additive_fallback_count_mean": 1.0,
+      "laur_inference_count_mean": 0.0,
+      "laur_overhead_ms_mean": 0.0,
+      "laur_safety_disabled_count_mean": 0.0,
+      "low_level_pibt_calls_mean": 30012.0,
+      "map": "random-32-32-20",
+      "method": "repair5e5_crossfold_utility_reranker_force_additive_parity",
+      "non_additive_update_rate": 0.0,
+      "ratio_delta_vs_ltm": 0.0,
+      "returned_solutions_count_mean": 1.0,
+      "runs": 1,
+      "selected_harmful_update_rate": null,
+      "selected_rules": "{\"additive_ltm\": 3}",
+      "success_rate": 1.0,
+      "successes": 1,
+      "sum_of_loss_ratio_mean": 1.1421686747,
+      "time_to_first_solution_ms_mean": 168.0,
+      "ttfs_delta_vs_ltm": 5.0
+    },
+    {
+      "agents": 50,
+      "expanded_delta_vs_ltm": 15.0,
+      "expanded_nodes_mean": 323.0,
+      "fallback_defer_rate": 0.25,
+      "laur_additive_fallback_count_mean": 1.0,
+      "laur_inference_count_mean": 3.0,
+      "laur_overhead_ms_mean": 0.3981,
+      "laur_safety_disabled_count_mean": 0.0,
+      "low_level_pibt_calls_mean": 29911.0,
+      "map": "random-32-32-20",
+      "method": "repair5e5_crossfold_utility_reranker_loose_threshold_diagnostic",
+      "non_additive_update_rate": 0.75,
+      "ratio_delta_vs_ltm": 0.0,
+      "returned_solutions_count_mean": 1.0,
+      "runs": 1,
+      "selected_harmful_update_rate": null,
+      "selected_rules": "{\"block_heavy\": 2, \"wait_heavy\": 1}",
+      "success_rate": 1.0,
+      "successes": 1,
+      "sum_of_loss_ratio_mean": 1.1421686747,
+      "time_to_first_solution_ms_mean": 166.0,
+      "ttfs_delta_vs_ltm": 3.0
+    },
+    {
+      "agents": 50,
+      "expanded_delta_vs_ltm": 15.0,
+      "expanded_nodes_mean": 323.0,
+      "fallback_defer_rate": 0.25,
+      "laur_additive_fallback_count_mean": 1.0,
+      "laur_inference_count_mean": 3.0,
+      "laur_overhead_ms_mean": 0.4027,
+      "laur_safety_disabled_count_mean": 0.0,
+      "low_level_pibt_calls_mean": 29911.0,
+      "map": "random-32-32-20",
+      "method": "repair5e5_crossfold_utility_reranker_no_ood_guard_diagnostic",
+      "non_additive_update_rate": 0.75,
+      "ratio_delta_vs_ltm": 0.0,
+      "returned_solutions_count_mean": 1.0,
+      "runs": 1,
+      "selected_harmful_update_rate": null,
+      "selected_rules": "{\"block_heavy\": 2, \"wait_heavy\": 1}",
+      "success_rate": 1.0,
+      "successes": 1,
+      "sum_of_loss_ratio_mean": 1.1421686747,
+      "time_to_first_solution_ms_mean": 161.0,
+      "ttfs_delta_vs_ltm": -2.0
+    },
+    {
+      "agents": 50,
+      "expanded_delta_vs_ltm": 0.0,
+      "expanded_nodes_mean": 308.0,
+      "fallback_defer_rate": 0.25,
+      "laur_additive_fallback_count_mean": 1.0,
+      "laur_inference_count_mean": 0.0,
+      "laur_overhead_ms_mean": 0.0,
+      "laur_safety_disabled_count_mean": 0.0,
+      "low_level_pibt_calls_mean": 30012.0,
+      "map": "random-32-32-20",
+      "method": "repair5e5_crossfold_utility_reranker_recovery_disabled_parity",
+      "non_additive_update_rate": 0.0,
+      "ratio_delta_vs_ltm": 0.0,
+      "returned_solutions_count_mean": 1.0,
+      "runs": 1,
+      "selected_harmful_update_rate": null,
+      "selected_rules": "{\"additive_ltm\": 3}",
+      "success_rate": 1.0,
+      "successes": 1,
+      "sum_of_loss_ratio_mean": 1.1421686747,
+      "time_to_first_solution_ms_mean": 165.0,
+      "ttfs_delta_vs_ltm": 2.0
+    },
+    {
+      "agents": 50,
+      "expanded_delta_vs_ltm": 15.0,
+      "expanded_nodes_mean": 323.0,
+      "fallback_defer_rate": 0.25,
+      "laur_additive_fallback_count_mean": 1.0,
+      "laur_inference_count_mean": 3.0,
+      "laur_overhead_ms_mean": 0.5145,
+      "laur_safety_disabled_count_mean": 0.0,
+      "low_level_pibt_calls_mean": 29911.0,
+      "map": "random-32-32-20",
+      "method": "repair5e5_crossfold_utility_reranker_shuffled_labels_diagnostic",
+      "non_additive_update_rate": 0.75,
+      "ratio_delta_vs_ltm": 0.0,
+      "returned_solutions_count_mean": 1.0,
+      "runs": 1,
+      "selected_harmful_update_rate": null,
+      "selected_rules": "{\"block_heavy\": 2, \"wait_heavy\": 1}",
+      "success_rate": 1.0,
+      "successes": 1,
+      "sum_of_loss_ratio_mean": 1.1421686747,
+      "time_to_first_solution_ms_mean": 163.0,
+      "ttfs_delta_vs_ltm": 0.0
+    },
+    {
+      "agents": 50,
+      "expanded_delta_vs_ltm": -8.0,
+      "expanded_nodes_mean": 300.0,
+      "fallback_defer_rate": 0.25,
+      "laur_additive_fallback_count_mean": 1.0,
+      "laur_inference_count_mean": 3.0,
+      "laur_overhead_ms_mean": 0.4158,
+      "laur_safety_disabled_count_mean": 0.0,
+      "low_level_pibt_calls_mean": 28418.0,
+      "map": "random-32-32-20",
+      "method": "repair5e5_crossfold_utility_reranker_strict_threshold_diagnostic",
+      "non_additive_update_rate": 0.75,
+      "ratio_delta_vs_ltm": 0.0,
+      "returned_solutions_count_mean": 1.0,
+      "runs": 1,
+      "selected_harmful_update_rate": null,
+      "selected_rules": "{\"block_heavy\": 1, \"wait_heavy\": 2}",
+      "success_rate": 1.0,
+      "successes": 1,
+      "sum_of_loss_ratio_mean": 1.1421686747,
+      "time_to_first_solution_ms_mean": 164.0,
+      "ttfs_delta_vs_ltm": 1.0
+    }
+  ]
+}

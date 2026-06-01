@@ -2239,3 +2239,75 @@
   - No agent-action policy, learned restart, PIBT replacement, LaCAM* semantic change, conflict/candidate/pruning change, or runtime promotion was added.
   - Phase5.5 remains forbidden.
   - Phase6 remains forbidden.
+
+## 2026-06-01 16:56 - Start Repair5F bounded UpdateParams diagnostic
+
+- Request:
+  - Finish `czr004_repair5f_bounded_updateparams_decision_plan.md`.
+  - Use `deep-research-report.md` and `phase4_6_laur_ltm_codex_execution_plan.md` as boundary context.
+- Files planned:
+  - `outputs/reports/phase5p5_repair5e5_final_interpretation.md`
+  - `scripts/create_repair5f_updateparam_candidates.py`
+  - `scripts/run_repair5f_updateparam_probe_table.py`
+  - `outputs/tables/phase5p5_repair5f_candidate_lattice.csv`
+  - `outputs/reports/phase5p5_repair5f_candidate_lattice_report.md`
+  - `outputs/reports/phase5p5_repair5f_candidate_lattice_summary.json`
+  - `outputs/logs/phase5p5_repair5f_candidate_probe/`
+  - `outputs/tables/phase5p5_repair5f_updateparam_utility_long.csv`
+  - `outputs/tables/phase5p5_repair5f_updateparam_utility_wide.csv`
+  - `outputs/reports/phase5p5_repair5f_candidate_probe_report.md`
+  - `outputs/reports/phase5p5_repair5f_candidate_probe_summary.json`
+- Key constraints:
+  - Diagnostic-only bounded `UpdateParams` side branch.
+  - No solver semantic changes, no learned restart, no action prediction, no richer traffic-map state.
+  - Keep Phase5.5 and Phase6 forbidden.
+- Follow-up:
+  - Implement candidate lattice and closed-loop probe-table tooling, then run a bounded smoke probe if runtime permits.
+
+## 2026-06-01 17:36 - Repair5F bounded UpdateParams F0/F1 artifacts
+
+- Request:
+  - Continue Repair5F as a bounded `UpdateParams` diagnostic side branch.
+- Files changed:
+  - `czr004_repair5f_bounded_updateparams_decision_plan.md` confirmed present.
+  - `outputs/reports/phase5p5_repair5e5_final_interpretation.md`
+  - `scripts/create_repair5f_updateparam_candidates.py`
+  - `scripts/run_repair5f_updateparam_probe_table.py`
+  - `tests/test_repair5f_updateparams.py`
+  - `outputs/tables/phase5p5_repair5f_candidate_lattice.csv`
+  - `outputs/reports/phase5p5_repair5f_candidate_lattice_report.md`
+  - `outputs/reports/phase5p5_repair5f_candidate_lattice_summary.json`
+  - `outputs/tables/phase5p5_repair5f_updateparam_utility_long.csv`
+  - `outputs/tables/phase5p5_repair5f_updateparam_utility_wide.csv`
+  - `outputs/reports/phase5p5_repair5f_candidate_probe_report.md`
+  - `outputs/reports/phase5p5_repair5f_candidate_probe_summary.json`
+- Commands run:
+  - `python scripts\create_repair5f_updateparam_candidates.py`
+  - `python scripts\run_repair5f_updateparam_probe_table.py --instance-ids 21 22 23 24 25 --maps random-32-32-20 --agent-counts 50 --time-limit-sec 3 --ltm-max-iterations 4 --overwrite`
+  - `python scripts\run_repair5f_updateparam_probe_table.py --instance-ids 21 22 23 24 25 --maps random-32-32-20 --agent-counts 50 --time-limit-sec 3 --ltm-max-iterations 4 --skip-solver`
+  - `python -m py_compile scripts\create_repair5f_updateparam_candidates.py scripts\run_repair5f_updateparam_probe_table.py tests\test_repair5f_updateparams.py`
+  - `conda run -n czr004 python -m pytest tests\test_repair5f_updateparams.py -q`
+  - `git diff --check`
+- Key observations:
+  - Candidate lattice has 47 candidates, sparse versus 375 full Cartesian points.
+  - Exact additive and all eight old preset-equivalent candidates are included.
+  - Probe uses one-rule LAUR runtime directories to apply arbitrary bounded parameters through the existing runtime/update path.
+  - Probe raw JSONL exists under ignored `outputs/logs/phase5p5_repair5f_candidate_probe/`.
+  - One-map final-ID smoke scope: `random-32-32-20`, 50 agents, IDs 21..25, 3s, 4 LTM iterations.
+  - Oracle static proxy in this scope: 3 / 2 / 0 better/equal/worse, mean delta ratio vs LTM `-0.007741062115999941`.
+  - E5 real selector in the same scope: 0 / 3 / 2, mean delta ratio vs LTM `0.007638777474000014`.
+  - E5 shuffled-label diagnostic in the same scope: 0 / 3 / 2, mean delta ratio vs LTM `0.004401304884000012`.
+  - Random candidate diagnostic: 0 / 3 / 2, mean delta ratio vs LTM `0.007098641640000025`.
+  - Shuffled utility diagnostic: 0 / 3 / 2, mean delta ratio vs LTM `0.0036766672020000168`.
+  - Formal Repair5F gate is not passed because full multi-map/agent F1 scope was not evaluated.
+- Tests / validation:
+  - `py_compile`: passed.
+  - Focused pytest: 3 passed.
+  - `git diff --check`: passed with existing CRLF warnings only.
+- Boundary:
+  - Diagnostic-only; no selector runtime artifact was created.
+  - No C++ solver code was changed.
+  - No PIBT, LaCAM*, candidate generation, pruning, conflict, restart, or search semantics were changed.
+  - `phase5p5_allowed=false`, `phase6_allowed=false`.
+- Follow-up:
+  - To evaluate the formal F1 oracle gate, run the same probe on all required maps/agent counts for final IDs 21..25, then only consider selector export if the oracle remains stronger than E5 and beats random/shuffled diagnostics.

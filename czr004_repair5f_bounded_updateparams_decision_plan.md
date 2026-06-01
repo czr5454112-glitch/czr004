@@ -1,10 +1,12 @@
 # czr004 Repair5F Decision Plan: Bounded UpdateParams Diagnostic for Learned UpdateLTM
 
-**Status:** planning / diagnostic-only  
+**Status:** F1 diagnostic completed / safety-blocked / diagnostic-only
 **Recommended branch:** `phase4f5p5-stable-attention-lau`  
 **Create after:** `1b0f93e01f71a19ae1137f0710e29639d802952d`  
 **Promotion status:** `phase5p5_allowed=false`, `phase6_allowed=false`  
 **Primary project goal:** use learning-enhanced `UpdateLTM` to replace the coarse additive update in the LTM paper and beat `LaCAM*+LTM` under closed-loop solver metrics.
+
+**F1 execution note (2026-06-01):** the full final-holdout bounded lattice probe was run over all required maps, agent counts, and IDs 21..25. The lattice oracle metric gate is strong (`17 / 13 / 0`, mean delta ratio vs LTM `-0.018311948514033324`), but the strict force-additive defer parity control failed on one full-holdout group. The exact additive lattice candidate itself is parity-exact, so the lattice evidence remains useful, but selector/runtime export is deferred until the parity-control discrepancy is resolved.
 
 ---
 

@@ -2311,3 +2311,39 @@
   - `phase5p5_allowed=false`, `phase6_allowed=false`.
 - Follow-up:
   - To evaluate the formal F1 oracle gate, run the same probe on all required maps/agent counts for final IDs 21..25, then only consider selector export if the oracle remains stronger than E5 and beats random/shuffled diagnostics.
+
+## 2026-06-01 19:05 - Repair5F full final-holdout probe decision
+
+- Request:
+  - Finish the full Repair5F bounded `UpdateParams` decision pass.
+- Files changed:
+  - `czr004_repair5f_bounded_updateparams_decision_plan.md`
+  - `scripts/run_repair5f_updateparam_probe_table.py`
+  - `tests/test_repair5f_updateparams.py`
+  - `outputs/tables/phase5p5_repair5f_updateparam_utility_long.csv`
+  - `outputs/tables/phase5p5_repair5f_updateparam_utility_wide.csv`
+  - `outputs/reports/phase5p5_repair5f_candidate_probe_report.md`
+  - `outputs/reports/phase5p5_repair5f_candidate_probe_summary.json`
+- Commands run:
+  - `python scripts\run_repair5f_updateparam_probe_table.py --resume --instance-ids 21 22 23 24 25 --maps random-32-32-20 maze-32-32-4 warehouse-10-20-10-2-1 --agent-counts 50 100 --time-limit-sec 3 --ltm-max-iterations 4`
+  - `python scripts\run_repair5f_updateparam_probe_table.py --skip-solver --instance-ids 21 22 23 24 25 --maps random-32-32-20 maze-32-32-4 warehouse-10-20-10-2-1 --agent-counts 50 100 --time-limit-sec 3 --ltm-max-iterations 4`
+  - `python -m py_compile scripts\create_repair5f_updateparam_candidates.py scripts\run_repair5f_updateparam_probe_table.py tests\test_repair5f_updateparams.py`
+  - `C:\Users\38908\.conda\envs\czr004\python.exe -m pytest tests\test_repair5f_updateparams.py -q`
+- Key observations:
+  - Full raw coverage is complete after dedupe: 1,530 / 1,530 expected rows, 0 missing.
+  - A duplicate-writer incident produced 245 duplicate raw JSONL rows; the report now dedupes by `(map, agents, seed, method)` and records the duplicate count.
+  - Oracle metric gate is strong: 17 / 13 / 0 better/equal/worse, mean delta ratio vs LTM `-0.018311948514033324`, ratio-worse groups 0, success-worse groups 0.
+  - E5 real selector on the same final holdout remains 4 / 22 / 4, mean delta ratio vs LTM `-0.0009245170596666741`.
+  - E5 shuffled diagnostic is 7 / 19 / 4, mean delta ratio vs LTM `-0.0023428887448333343`.
+  - Repair5F random diagnostic is 6 / 17 / 7, mean delta ratio vs LTM `0.00297909950036667`.
+  - Repair5F shuffled utility diagnostic is 4 / 17 / 9, mean delta ratio vs LTM `0.002559801023448285`.
+  - Strict force-additive defer parity failed on one warehouse final-holdout group, so `safety_gates_passed=false` and `candidate_lattice_oracle_gate_passed=false`.
+  - Exact additive candidate parity is exact, so the bounded lattice path remains informative, but selector/runtime export is deferred.
+- Tests / validation:
+  - `py_compile`: passed.
+  - Focused pytest: 6 passed.
+- Boundary:
+  - Diagnostic-only; no selector runtime artifact was created.
+  - No C++ solver code was changed.
+  - No PIBT, LaCAM*, candidate generation, pruning, conflict, restart, or search semantics were changed.
+  - `phase5p5_allowed=false`, `phase6_allowed=false`.

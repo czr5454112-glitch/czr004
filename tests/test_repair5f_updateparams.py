@@ -11,6 +11,10 @@ sys.path.insert(0, str(ROOT / "scripts"))
 
 from create_repair5f_updateparam_candidates import build_candidates  # noqa: E402
 from run_repair5f_updateparam_probe_table import (  # noqa: E402
+    completed_probe_keys,
+    dedupe_probe_rows,
+    exact_additive_candidate_parity_exact,
+    force_additive_parity_exact,
     synthesize_diagnostics,
     write_candidate_runtime,
 )
@@ -127,3 +131,48 @@ def test_repair5f_synthesizes_oracle_random_and_shuffled_diagnostics() -> None:
         if row["method"] == "repair5f_candidate_lattice_oracle_static_proxy"
     }
     assert oracle_candidates == {21: "b", 22: "a"}
+
+
+def test_repair5f_completed_probe_keys_support_resume() -> None:
+    rows = [
+        {"map": "random-32-32-20", "agents": "50", "seed": "21", "method": "lacam_star_ltm"},
+        {"map": "random-32-32-20", "agents": 50, "seed": 21, "method": "repair5f_candidate_a"},
+    ]
+
+    assert completed_probe_keys(rows) == {
+        ("random-32-32-20", 50, 21, "lacam_star_ltm"),
+        ("random-32-32-20", 50, 21, "repair5f_candidate_a"),
+    }
+
+
+def test_repair5f_dedupes_probe_rows_by_case_method() -> None:
+    rows = [
+        {"map": "m", "agents": 50, "seed": 21, "method": "a", "value": 1},
+        {"map": "m", "agents": 50, "seed": 21, "method": "a", "value": 2},
+        {"map": "m", "agents": 50, "seed": 21, "method": "b", "value": 3},
+    ]
+
+    assert dedupe_probe_rows(rows) == [
+        {"map": "m", "agents": 50, "seed": 21, "method": "a", "value": 1},
+        {"map": "m", "agents": 50, "seed": 21, "method": "b", "value": 3},
+    ]
+
+
+def test_repair5f_tracks_force_and_exact_additive_parity_separately() -> None:
+    common = {
+        "map": "m",
+        "agents": 50,
+        "seed": 21,
+        "scen": "case.scen",
+        "success": True,
+        "lower_bound": 10,
+        "makespan": 5,
+    }
+    rows = [
+        {**common, "method": "lacam_star_ltm", "sum_of_loss": 12, "sum_of_loss_ratio": 1.2},
+        {**common, "method": "always_additive_defer", "sum_of_loss": 13, "sum_of_loss_ratio": 1.3},
+        {**common, "method": "repair5f_candidate_additive_ltm", "sum_of_loss": 12, "sum_of_loss_ratio": 1.2},
+    ]
+
+    assert not force_additive_parity_exact(rows)
+    assert exact_additive_candidate_parity_exact(rows)

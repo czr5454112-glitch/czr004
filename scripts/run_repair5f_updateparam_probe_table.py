@@ -175,6 +175,37 @@ def read_jsonl(path: Path) -> list[dict[str, Any]]:
     return rows
 
 
+def completed_probe_keys(rows: list[dict[str, Any]]) -> set[tuple[str, int, int, str]]:
+    return {
+        (str(row.get("map")), finite_int(row.get("agents")), finite_int(row.get("seed")), str(row.get("method")))
+        for row in rows
+    }
+
+
+def dedupe_probe_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    seen: set[tuple[str, int, int, str]] = set()
+    out: list[dict[str, Any]] = []
+    for row in rows:
+        key = (str(row.get("map")), finite_int(row.get("agents")), finite_int(row.get("seed")), str(row.get("method")))
+        if key in seen:
+            continue
+        seen.add(key)
+        out.append(row)
+    return out
+
+
+def expected_probe_keys(
+    *, maps: list[str], agent_counts: list[int], instance_ids: list[int], methods: list[MethodSpec]
+) -> set[tuple[str, int, int, str]]:
+    return {
+        (map_name, int(agents), int(instance_id), method.alias)
+        for map_name in maps
+        for agents in agent_counts
+        for instance_id in instance_ids
+        for method in methods
+    }
+
+
 def read_candidates(path: Path) -> list[Candidate]:
     with path.open("r", encoding="utf-8", newline="") as handle:
         rows = list(csv.DictReader(handle))
@@ -369,9 +400,11 @@ def run_solver_grid(
     time_limit_sec: float,
     ltm_max_iterations: int,
     methods: list[MethodSpec],
+    completed_keys: set[tuple[str, int, int, str]] | None = None,
 ) -> list[dict[str, Any]]:
     command_log.parent.mkdir(parents=True, exist_ok=True)
     command_rows: list[dict[str, Any]] = []
+    completed_keys = completed_keys or set()
     for map_name in maps:
         map_path = root / MAPS[map_name]
         if not map_path.exists():
@@ -382,6 +415,9 @@ def run_solver_grid(
                 raise FileNotFoundError(scen_path)
             for agents in agent_counts:
                 for spec in methods:
+                    key = (map_name, int(agents), int(instance_id), spec.alias)
+                    if key in completed_keys:
+                        continue
                     extra_args = list(spec.extra_args)
                     if spec.method == "lacam_star_lau_ltm":
                         extra_args.extend(["--laur-update-log-jsonl", str(laur_update_log)])
@@ -674,14 +710,14 @@ def summarize_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return summary
 
 
-def force_additive_parity_exact(rows: list[dict[str, Any]]) -> bool:
+def method_parity_exact(rows: list[dict[str, Any]], comparison_method: str) -> bool:
     by_case: dict[tuple[Any, ...], dict[str, dict[str, Any]]] = {}
     for row in rows:
         by_case.setdefault(case_key(row), {})[str(row.get("method"))] = row
     checked = 0
     for methods in by_case.values():
         base = methods.get("lacam_star_ltm")
-        additive = methods.get("always_additive_defer")
+        additive = methods.get(comparison_method)
         if base is None or additive is None:
             continue
         checked += 1
@@ -689,6 +725,14 @@ def force_additive_parity_exact(rows: list[dict[str, Any]]) -> bool:
             if base.get(key) != additive.get(key):
                 return False
     return checked > 0
+
+
+def force_additive_parity_exact(rows: list[dict[str, Any]]) -> bool:
+    return method_parity_exact(rows, "always_additive_defer")
+
+
+def exact_additive_candidate_parity_exact(rows: list[dict[str, Any]]) -> bool:
+    return method_parity_exact(rows, "repair5f_candidate_additive_ltm")
 
 
 def group_flags(summary_rows: list[dict[str, Any]]) -> dict[str, dict[str, int]]:
@@ -858,6 +902,8 @@ def gate_summary(
     maps: list[str],
     agent_counts: list[int],
     instance_ids: list[int],
+    full_raw_probe_coverage: bool,
+    safety_gates_passed: bool,
 ) -> dict[str, Any]:
     oracle_method = "repair5f_candidate_lattice_oracle_static_proxy"
     stats = method_stats.get(oracle_method, {})
@@ -868,8 +914,11 @@ def gate_summary(
         final_holdout_ids_covered
         and set(MAPS).issubset(set(maps))
         and {50, 100}.issubset({int(value) for value in agent_counts})
+        and full_raw_probe_coverage
     )
     passed = (
+        safety_gates_passed
+        and
         full_f1_scope
         and int(stats.get("better") or 0) > int(stats.get("worse") or 0)
         and mean_delta is not None
@@ -879,8 +928,17 @@ def gate_summary(
     )
     return {
         "final_holdout_ids_covered": final_holdout_ids_covered,
+        "full_raw_probe_coverage": full_raw_probe_coverage,
         "full_f1_scope_evaluated": full_f1_scope,
         "candidate_lattice_oracle_gate_passed": passed,
+        "candidate_lattice_oracle_metric_gate_passed": (
+            full_f1_scope
+            and int(stats.get("better") or 0) > int(stats.get("worse") or 0)
+            and mean_delta is not None
+            and float(mean_delta) <= -0.003
+            and int(flag.get("ratio_worse_than_ltm_groups") or 0) <= 1
+            and int(flag.get("success_worse_than_ltm_groups") or 0) == 0
+        ),
         "candidate_lattice_oracle_better_gt_worse": int(stats.get("better") or 0) > int(stats.get("worse") or 0),
         "candidate_lattice_oracle_mean_delta_le_m003": (
             mean_delta is not None and float(mean_delta) <= -0.003
@@ -910,6 +968,12 @@ def write_report(path: Path, summary: dict[str, Any]) -> None:
         handle.write(f"- candidate_count: `{scope['candidate_count']}`\n")
         handle.write(f"- time_limit_sec: `{scope['time_limit_sec']}`\n")
         handle.write(f"- ltm_max_iterations: `{scope['ltm_max_iterations']}`\n\n")
+        handle.write("## Raw Coverage\n\n")
+        handle.write(f"- expected_raw_probe_rows: `{summary.get('expected_raw_probe_rows')}`\n")
+        handle.write(f"- raw_rows_before_dedupe: `{summary.get('raw_rows_before_dedupe')}`\n")
+        handle.write(f"- raw_rows_after_dedupe: `{summary.get('raw_rows_after_dedupe')}`\n")
+        handle.write(f"- duplicate_raw_rows_dropped: `{summary.get('duplicate_raw_rows_dropped')}`\n")
+        handle.write(f"- missing_raw_probe_rows: `{summary.get('missing_raw_probe_rows')}`\n\n")
         handle.write("## Gates\n\n")
         for key, value in gates.items():
             handle.write(f"- {key}: `{value}`\n")
@@ -924,10 +988,18 @@ def write_report(path: Path, summary: dict[str, Any]) -> None:
                 f"{row.get('worse')} | {row.get('mean_delta_ratio_vs_ltm')} |\n"
             )
         handle.write("\n## Interpretation\n\n")
-        handle.write(
-            "The lattice oracle is a headroom diagnostic over bounded UpdateParams candidates. "
-            "A selector/runtime claim remains deferred until full held-out evidence beats random and shuffled diagnostics.\n"
-        )
+        if gates.get("candidate_lattice_oracle_metric_gate_passed") and not gates.get("safety_gates_passed"):
+            handle.write(
+                "The bounded UpdateParams lattice shows strong oracle headroom, but the strict safety gate does not pass "
+                "because the force-additive defer control is not exact on the full holdout. The exact additive candidate "
+                "itself matches LaCAM*+LTM, so the lattice path remains informative, but a selector/runtime artifact is "
+                "deferred until the parity-control discrepancy is resolved.\n"
+            )
+        else:
+            handle.write(
+                "The lattice oracle is a headroom diagnostic over bounded UpdateParams candidates. "
+                "A selector/runtime claim remains deferred until full held-out evidence beats random and shuffled diagnostics.\n"
+            )
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
@@ -956,6 +1028,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--include-repair5e5-shuffled", action=argparse.BooleanOptionalAction, default=True)
     parser.add_argument("--skip-solver", action="store_true")
     parser.add_argument("--overwrite", action="store_true")
+    parser.add_argument("--resume", action="store_true")
     return parser.parse_args(argv)
 
 
@@ -977,6 +1050,9 @@ def main(argv: list[str] | None = None) -> int:
     repair5e5_shuffled_runtime = resolve_path(args.repair5e5_shuffled_runtime_dir, root)
     command_log = output_jsonl.with_name(output_jsonl.stem + "_commands.jsonl")
     laur_update_log = output_jsonl.with_name(output_jsonl.stem + "_laur_updates.jsonl")
+
+    if args.overwrite and args.resume:
+        raise ValueError("--overwrite and --resume cannot be used together")
 
     if not candidate_csv.exists():
         raise FileNotFoundError(f"candidate lattice missing: {candidate_csv}")
@@ -1001,7 +1077,10 @@ def main(argv: list[str] | None = None) -> int:
     if not args.skip_solver:
         if not binary.exists():
             raise FileNotFoundError(binary)
-        if output_jsonl.exists():
+        completed_keys: set[tuple[str, int, int, str]] = set()
+        if output_jsonl.exists() and args.resume:
+            completed_keys = completed_probe_keys(read_jsonl(output_jsonl))
+        elif output_jsonl.exists():
             raise FileExistsError(f"output JSONL already exists: {output_jsonl}")
         run_solver_grid(
             root=root,
@@ -1016,9 +1095,19 @@ def main(argv: list[str] | None = None) -> int:
             time_limit_sec=float(args.time_limit_sec),
             ltm_max_iterations=int(args.ltm_max_iterations),
             methods=methods,
+            completed_keys=completed_keys,
         )
 
-    raw_rows = [normalize_run_row(row) for row in read_jsonl(output_jsonl)]
+    raw_jsonl_rows = read_jsonl(output_jsonl)
+    raw_rows = [normalize_run_row(row) for row in dedupe_probe_rows(raw_jsonl_rows)]
+    expected_keys = expected_probe_keys(
+        maps=list(args.maps),
+        agent_counts=[int(value) for value in args.agent_counts],
+        instance_ids=[int(value) for value in args.instance_ids],
+        methods=methods,
+    )
+    observed_keys = completed_probe_keys(raw_rows)
+    missing_keys = sorted(expected_keys - observed_keys)
     schema_errors: list[str] = []
     for index, row in enumerate(raw_rows, 1):
         schema_errors.extend(f"row {index}: {error}" for error in validate_run_row(row))
@@ -1028,18 +1117,28 @@ def main(argv: list[str] | None = None) -> int:
     method_stats = paired_method_stats(paired)
     summary_rows = summarize_rows(report_rows)
     flags = group_flags(summary_rows)
+    force_additive_parity = force_additive_parity_exact(raw_rows)
+    exact_additive_candidate_parity = exact_additive_candidate_parity_exact(raw_rows)
+    safety_gates_passed = (
+        force_additive_parity
+        and not bool(set(TRAIN_IDS) & set(FINAL_HOLDOUT_IDS))
+    )
     gates = {
-        "force_additive_parity_exact": force_additive_parity_exact(raw_rows),
+        "force_additive_parity_exact": force_additive_parity,
+        "exact_additive_candidate_parity_exact": exact_additive_candidate_parity,
         "support_eval_leakage": bool(set(TRAIN_IDS) & set(FINAL_HOLDOUT_IDS)),
         "phase5p5_allowed": False,
         "phase6_allowed": False,
         "solver_semantic_changes": False,
+        "safety_gates_passed": safety_gates_passed,
         **gate_summary(
             method_stats=method_stats,
             flags=flags,
             maps=list(args.maps),
             agent_counts=[int(value) for value in args.agent_counts],
             instance_ids=[int(value) for value in args.instance_ids],
+            full_raw_probe_coverage=not missing_keys,
+            safety_gates_passed=safety_gates_passed,
         ),
     }
     long_rows = build_long_rows(rows=report_rows, candidates_by_id=candidates_by_id)
@@ -1089,6 +1188,14 @@ def main(argv: list[str] | None = None) -> int:
         "long_csv": str(long_csv),
         "wide_csv": str(wide_csv),
         "report": str(report),
+        "raw_rows_before_dedupe": len(raw_jsonl_rows),
+        "raw_rows_after_dedupe": len(raw_rows),
+        "duplicate_raw_rows_dropped": len(raw_jsonl_rows) - len(raw_rows),
+        "expected_raw_probe_rows": len(expected_keys),
+        "missing_raw_probe_rows": len(missing_keys),
+        "missing_raw_probe_examples": [
+            {"map": key[0], "agents": key[1], "seed": key[2], "method": key[3]} for key in missing_keys[:50]
+        ],
         "schema_errors": schema_errors,
         "scope": {
             "maps": list(args.maps),

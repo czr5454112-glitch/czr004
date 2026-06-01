@@ -33,7 +33,55 @@
   - `powershell -ExecutionPolicy Bypass -File scripts\build_phase1a_batch.ps1`: passed.
   - `& 'C:\PROGRAMING\anaconda\Scripts\conda.exe' run -n czr004 python -m pytest tests\test_czr004_metrics.py tests\test_phase3_teacher_data.py`: 10 passed.
   - `& 'C:\PROGRAMING\anaconda\Scripts\conda.exe' run -n czr004 python scripts\run_phase3_teacher_data.py --config configs\phase3\teacher_data.yaml --overwrite`: passed.
-- Follow-up:
+- Files changed:
+  - `cpp/tools/phase1a_batch.cpp`
+  - `scripts/analyze_repair5f_force_additive_parity.py`
+  - `scripts/run_repair5f_force_additive_parity_reproducer.py`
+  - `tests/test_repair5f_updateparams.py`
+  - `czr004_repair5f_bounded_updateparams_decision_plan.md`
+  - `czr004_repair5f1_safety_parity_closure_plan.md`
+  - `outputs/reports/phase5p5_repair5f_f1_decision_report.md`
+  - `outputs/reports/phase5p5_repair5f_f1_decision_summary.json`
+  - `outputs/reports/phase5p5_repair5f_force_additive_parity_autopsy.md`
+  - `outputs/reports/phase5p5_repair5f_force_additive_parity_autopsy_summary.json`
+  - `outputs/tables/phase5p5_repair5f_force_additive_mismatch_rows.csv`
+  - `outputs/reports/phase5p5_repair5f_force_additive_reproducer_report.md`
+  - `outputs/reports/phase5p5_repair5f_force_additive_reproducer_summary.json`
+  - `outputs/reports/phase5p5_repair5f_candidate_probe_rerun_report.md`
+  - `outputs/reports/phase5p5_repair5f_candidate_probe_rerun_summary.json`
+  - `outputs/reports/phase5p5_repair5f_candidate_probe_rerun_audit.md`
+  - `outputs/tables/phase5p5_repair5f_updateparam_utility_rerun_long.csv`
+  - `outputs/tables/phase5p5_repair5f_updateparam_utility_rerun_wide.csv`
+- Commands run:
+  - `python scripts\analyze_repair5f_force_additive_parity.py`
+  - `powershell -ExecutionPolicy Bypass -File scripts\build_phase1a_batch.ps1`
+  - `python scripts\run_repair5f_force_additive_parity_reproducer.py --overwrite`
+  - `python scripts\run_repair5f_updateparam_probe_table.py --overwrite --instance-ids 21 22 23 24 25 --maps random-32-32-20 maze-32-32-4 warehouse-10-20-10-2-1 --agent-counts 50 100 --time-limit-sec 3 --ltm-max-iterations 4 --runtime-root outputs\tmp\phase5p5_repair5f_candidate_runtimes_rerun --output-dir outputs\logs\phase5p5_repair5f_candidate_probe_rerun --output-jsonl outputs\logs\phase5p5_repair5f_candidate_probe_rerun\phase5p5_repair5f_candidate_probe_rerun.jsonl --long-csv outputs\tables\phase5p5_repair5f_updateparam_utility_rerun_long.csv --wide-csv outputs\tables\phase5p5_repair5f_updateparam_utility_rerun_wide.csv --report outputs\reports\phase5p5_repair5f_candidate_probe_rerun_report.md --summary-json outputs\reports\phase5p5_repair5f_candidate_probe_rerun_summary.json`
+  - `python -m py_compile scripts\analyze_repair5f_force_additive_parity.py scripts\run_repair5f_force_additive_parity_reproducer.py scripts\run_repair5f_updateparam_probe_table.py scripts\create_repair5f_updateparam_candidates.py tests\test_repair5f_updateparams.py`
+  - `C:\Users\38908\.conda\envs\czr004\python.exe -m pytest tests\test_repair5f_updateparams.py -q`
+  - `git diff --check`
+- Key observations:
+  - Autopsy mismatch: only `warehouse-10-20-10-2-1`, 50 agents, seed 25.
+  - Duplicate rows did not affect the mismatch control row.
+  - The fix keeps `--laur-force-additive` strict by bypassing LAUR feature/runtime work and using canonical additive LTM update semantics directly.
+  - Reproducer parity after fix: `always_additive_defer`, exact additive candidate, `--laur-disable`, and direct `--laur-force-additive` all match `lacam_star_ltm`.
+  - Full rerun raw coverage: 1,530 / 1,530 expected rows, 0 missing, 0 duplicates.
+  - Full rerun force-additive parity: 0 / 30 / 0, mean delta `0.0`.
+  - Full rerun exact additive candidate parity: 0 / 30 / 0, mean delta `0.0`.
+  - Full rerun lattice oracle: 17 / 13 / 0, mean delta `-0.018311948514033324`.
+  - Repair5F random diagnostic: 6 / 18 / 6, mean delta `0.001419514395033339`.
+  - Repair5F shuffled utility diagnostic: 4 / 19 / 7, mean delta `0.0009148892173333441`.
+  - `safety_gates_passed=true` and `candidate_lattice_oracle_gate_passed=true` in the rerun.
+- Tests / validation:
+  - `py_compile`: passed.
+  - Default `python -m pytest` unavailable because the default Python lacks pytest.
+  - Conda `czr004` focused pytest: 8 passed.
+  - `scripts\build_phase1a_batch.ps1`: passed with existing MSVC warnings.
+  - `git diff --check`: passed with existing CRLF warnings only.
+- Boundary:
+  - No selector/runtime artifact was exported.
+  - No PIBT, LaCAM*, candidate generation, pruning, conflict, restart, OPEN/EXPLORED, or incumbent semantics were changed.
+  - `phase5p5_allowed=false`, `phase6_allowed=false`.
   - Phase4 can start from the tracked manifest and choose the first warm-start model without changing split rules.
 
 ## 2026-05-25 - complete Phase2 metrics harness
@@ -2368,3 +2416,26 @@
 - Boundary:
   - Audit-only; no solver/runtime behavior changed.
   - No selector/runtime artifact was created.
+
+## 2026-06-01 20:05 - Repair5F.1 force-additive parity closure
+
+- Request:
+  - Finish `czr004_repair5f1_safety_parity_closure_plan.md`.
+- Files planned:
+  - `outputs/reports/phase5p5_repair5f_f1_decision_report.md`
+  - `outputs/reports/phase5p5_repair5f_f1_decision_summary.json`
+  - `scripts/analyze_repair5f_force_additive_parity.py`
+  - `scripts/run_repair5f_force_additive_parity_reproducer.py`
+  - `cpp/tools/phase1a_batch.cpp`
+  - `tests/test_repair5f_updateparams.py`
+  - rerun reports/tables under `phase5p5_repair5f_*_rerun_*`
+- Key constraints:
+  - Close force-additive parity without lowering the safety gate.
+  - Preserve `--laur-disable` and exact additive candidate parity.
+  - Do not export a selector/runtime artifact before parity closure.
+  - Keep `phase5p5_allowed=false` and `phase6_allowed=false`.
+- Initial observation:
+  - The mismatch is isolated to `warehouse-10-20-10-2-1`, 50 agents, seed 25.
+  - The current `--laur-force-additive` path builds LAUR features before returning additive params, which can consume enough wall-clock budget to change the bounded anytime loop count under a 3s run.
+  - The intended fix is to route force-additive through the canonical additive LTM update path directly, avoiding runtime feature work and preserving exact parity semantics.
+- Follow-up:

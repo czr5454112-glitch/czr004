@@ -8,6 +8,8 @@
 
 **F1 execution note (2026-06-01):** the full final-holdout bounded lattice probe was run over all required maps, agent counts, and IDs 21..25. The lattice oracle metric gate is strong (`17 / 13 / 0`, mean delta ratio vs LTM `-0.018311948514033324`), but the strict force-additive defer parity control failed on one full-holdout group. The exact additive lattice candidate itself is parity-exact, so the lattice evidence remains useful, but selector/runtime export is deferred until the parity-control discrepancy is resolved.
 
+**F1.1 closure note (2026-06-01):** the force-additive discrepancy was isolated to `warehouse-10-20-10-2-1`, 50 agents, seed 25. The legacy force-additive wrapper performed LAUR update-policy/feature work before returning additive params, which made the tight 3s anytime loop wall-clock-sensitive. `--laur-force-additive` now bypasses that runtime path and uses canonical additive LTM update semantics directly. The mismatch reproducer and full rerun both close parity: `always_additive_defer = 0 / 30 / 0`, `repair5f_candidate_additive_ltm = 0 / 30 / 0`, both with mean delta `0.0`. The rerun lattice oracle remains strong (`17 / 13 / 0`, mean `-0.018311948514033324`), with `candidate_lattice_oracle_gate_passed=true`, while `phase5p5_allowed=false` and `phase6_allowed=false` remain mandatory. No selector/runtime artifact was exported.
+
 ---
 
 ## 0. Executive decision

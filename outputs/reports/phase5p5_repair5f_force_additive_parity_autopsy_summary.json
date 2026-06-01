@@ -1,0 +1,49 @@
+{
+  "canonical_exact_additive_candidate_parity_exact": true,
+  "conclusion": "Fix the real force-additive wrapper bug by routing --laur-force-additive through the canonical additive LTM update path. Do not lower the safety gate.",
+  "created_at": "2026-06-01T20:27:00.082649",
+  "diagnostic_only": true,
+  "duplicate_raw_rows_dropped": 245,
+  "duplicate_rows_touch_mismatch": 0,
+  "force_additive_parity_exact": false,
+  "inputs": {
+    "laur_updates_jsonl": "outputs\\logs\\phase5p5_repair5f_candidate_probe\\phase5p5_repair5f_candidate_probe_laur_updates.jsonl",
+    "long_csv": "outputs\\tables\\phase5p5_repair5f_updateparam_utility_long.csv",
+    "probe_summary_json": "outputs\\reports\\phase5p5_repair5f_candidate_probe_summary.json",
+    "raw_jsonl": "outputs\\logs\\phase5p5_repair5f_candidate_probe\\phase5p5_repair5f_candidate_probe.jsonl",
+    "wide_csv": "outputs\\tables\\phase5p5_repair5f_updateparam_utility_wide.csv"
+  },
+  "long_csv_rows": 1410,
+  "mismatch_case_count": 1,
+  "mismatch_cases": [
+    {
+      "agents": 50,
+      "canonical_exact_additive_candidate_parity_exact": true,
+      "force_additive_parity_exact": false,
+      "map": "warehouse-10-20-10-2-1",
+      "seed": 25
+    }
+  ],
+  "mismatch_maps": [
+    "warehouse-10-20-10-2-1"
+  ],
+  "outputs": {
+    "mismatch_csv": "outputs\\tables\\phase5p5_repair5f_force_additive_mismatch_rows.csv",
+    "report": "outputs\\reports\\phase5p5_repair5f_force_additive_parity_autopsy.md",
+    "summary_json": "outputs\\reports\\phase5p5_repair5f_force_additive_parity_autopsy_summary.json"
+  },
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "post_first_solution_behavior": {
+    "all_control_rows_post_first_solution_only": [
+      "True"
+    ],
+    "wrapper_difference": "legacy_force_additive_used_update_policy_feature_path_before_fix"
+  },
+  "probe_summary_exact_additive_candidate_parity_exact": true,
+  "probe_summary_force_additive_parity_exact": false,
+  "raw_rows_after_dedupe": 1530,
+  "raw_rows_before_dedupe": 1775,
+  "schema_version": "phase5p5_repair5f_force_additive_parity_autopsy_v1",
+  "wide_csv_rows": 30
+}

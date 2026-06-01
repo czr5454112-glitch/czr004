@@ -1,0 +1,44 @@
+{
+  "audit_result": "candidate_probe_report_consistent_with_raw_logs_and_derived_tables",
+  "candidate_lattice_oracle": {
+    "better": 17,
+    "equal": 13,
+    "mean_delta_ratio_vs_ltm": -0.018311948514033324,
+    "ratio_worse_than_ltm_groups": 0,
+    "rows": 30,
+    "success_worse_than_ltm_groups": 0,
+    "worse": 0
+  },
+  "diagnostic_only": true,
+  "exact_additive_candidate_parity_exact": true,
+  "force_additive_parity_exact": false,
+  "full_raw_coverage": {
+    "deduped_unique_rows": 1530,
+    "duplicate_raw_rows_dropped": 245,
+    "expected_unique_rows": 1530,
+    "missing_rows": 0
+  },
+  "gates": {
+    "candidate_lattice_oracle_metric_gate_passed": true,
+    "phase5p5_allowed": false,
+    "phase6_allowed": false,
+    "safety_gates_passed": false,
+    "support_eval_leakage": false
+  },
+  "random_candidate_diagnostic": {
+    "better": 6,
+    "equal": 17,
+    "mean_delta_ratio_vs_ltm": 0.00297909950036667,
+    "rows": 30,
+    "worse": 7
+  },
+  "schema_version": "phase5p5_repair5f_f1_decision_summary_v1",
+  "selector_runtime_artifact_exported": false,
+  "shuffled_utility_diagnostic": {
+    "better": 4,
+    "equal": 17,
+    "mean_delta_ratio_vs_ltm": 0.002559801023448285,
+    "rows": 30,
+    "worse": 9
+  }
+}

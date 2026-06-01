@@ -556,7 +556,9 @@ RunStats run_lacam_star_ltm(const Instance& instance, const Args& args)
       !args.laur_static_rule.empty()
           ? czr004::ntm::update_params_for_laur_rule_id(args.laur_static_rule)
           : czr004::ltm::UpdateParams::additive();
-  if (stats.laur_enabled) {
+  // Force-additive is the canonical parity path: use the same additive
+  // update loop as plain LaCAM*+LTM, without runtime feature work.
+  if (stats.laur_enabled && !args.laur_force_additive) {
     czr004::ntm::LaurRuntimeOptions runtime_options;
     runtime_options.enabled = true;
     runtime_options.force_additive = args.laur_force_additive;

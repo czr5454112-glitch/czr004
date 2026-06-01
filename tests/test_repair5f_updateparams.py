@@ -18,6 +18,14 @@ from run_repair5f_updateparam_probe_table import (  # noqa: E402
     synthesize_diagnostics,
     write_candidate_runtime,
 )
+from analyze_repair5f_force_additive_parity import (  # noqa: E402
+    build_mismatch_rows,
+    dedupe_rows as dedupe_autopsy_rows,
+    summarize_update_logs,
+)
+from run_repair5f_force_additive_parity_reproducer import (  # noqa: E402
+    build_reproducer_methods,
+)
 
 
 def test_repair5f_lattice_is_sparse_bounded_and_contains_old_presets() -> None:
@@ -176,3 +184,89 @@ def test_repair5f_tracks_force_and_exact_additive_parity_separately() -> None:
 
     assert not force_additive_parity_exact(rows)
     assert exact_additive_candidate_parity_exact(rows)
+
+
+def test_repair5f_autopsy_reports_legacy_force_mismatch_only() -> None:
+    common = {
+        "map": "warehouse-10-20-10-2-1",
+        "agents": 50,
+        "seed": 25,
+        "scen": "case.scen",
+        "success": True,
+        "lower_bound": 10,
+        "makespan": 5,
+    }
+    raw_rows = [
+        {**common, "method": "lacam_star_ltm", "sum_of_loss": 12, "sum_of_loss_ratio": 1.2},
+        {
+            **common,
+            "method": "always_additive_defer",
+            "sum_of_loss": 13,
+            "sum_of_loss_ratio": 1.3,
+            "laur_force_additive": True,
+        },
+        {
+            **common,
+            "method": "always_additive_defer",
+            "sum_of_loss": 13,
+            "sum_of_loss_ratio": 1.3,
+            "laur_force_additive": True,
+        },
+        {
+            **common,
+            "method": "repair5f_candidate_additive_ltm",
+            "sum_of_loss": 12,
+            "sum_of_loss_ratio": 1.2,
+            "laur_force_additive": False,
+        },
+    ]
+    update_logs = [
+        {
+            **common,
+            "method": "always_additive_defer",
+            "iteration": 1,
+            "decision_status": "force_additive",
+            "fallback_reason": "force_additive",
+            "selected_rule_source": "force_additive",
+            "applied_rule": "additive_ltm",
+        }
+    ]
+
+    deduped, duplicate_status = dedupe_autopsy_rows(raw_rows)
+    mismatch_cases, detail_rows = build_mismatch_rows(
+        deduped_rows=deduped,
+        duplicate_status=duplicate_status,
+        update_summaries=summarize_update_logs(update_logs),
+    )
+
+    assert mismatch_cases == [
+        {
+            "map": "warehouse-10-20-10-2-1",
+            "agents": 50,
+            "seed": 25,
+            "force_additive_parity_exact": False,
+            "canonical_exact_additive_candidate_parity_exact": True,
+        }
+    ]
+    force_row = next(row for row in detail_rows if row["method"] == "always_additive_defer")
+    assert force_row["duplicate_raw_row_count"] == 2
+    assert force_row["decision_status_counts"] == '{"force_additive": 1}'
+
+
+def test_repair5f_reproducer_includes_canonical_controls(tmp_path: Path) -> None:
+    methods = build_reproducer_methods(
+        runtime_root=tmp_path / "runtime",
+        additive_runtime=tmp_path / "additive_only",
+    )
+    by_alias = {method.alias: method for method in methods}
+
+    assert set(by_alias) == {
+        "lacam_star_ltm",
+        "always_additive_defer",
+        "repair5f_candidate_additive_ltm",
+        "laur_disable",
+        "laur_force_additive_direct",
+    }
+    assert "--laur-force-additive" in by_alias["always_additive_defer"].extra_args
+    assert "--laur-model-path" in by_alias["always_additive_defer"].extra_args
+    assert by_alias["laur_force_additive_direct"].extra_args == ("--laur-force-additive",)

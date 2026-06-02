@@ -30,6 +30,12 @@ from run_repair5f_runtime_export_eval import selected_candidate_from_row  # noqa
 from run_repair5f3_runtime_parity_reproducer import (  # noqa: E402
     build_reproducer_methods as build_f3_reproducer_methods,
 )
+from run_repair5f4_static_updateparams_validation import (  # noqa: E402
+    COMPONENT_ABLATIONS,
+    DEFAULT_METHOD_ORDER as F4_DEFAULT_METHOD_ORDER,
+    LOCKED_MAIN_CANDIDATE,
+    stable_random_candidate_id,
+)
 
 
 def test_repair5f_lattice_is_sparse_bounded_and_contains_old_presets() -> None:
@@ -308,3 +314,21 @@ def test_repair5f3_reproducer_includes_runtime_parity_controls() -> None:
     assert by_alias["repair5f_candidate_additive_ltm"].extra_args == ()
     assert by_alias["laur_disable"].method == "laur_disable"
     assert by_alias["laur_force_additive_direct"].method == "laur_force_additive_direct"
+
+
+def test_repair5f4_default_methods_include_static_ablation_controls() -> None:
+    assert f"repair5f_static_{LOCKED_MAIN_CANDIDATE}" in F4_DEFAULT_METHOD_ORDER
+    assert set(COMPONENT_ABLATIONS) <= set(F4_DEFAULT_METHOD_ORDER)
+    assert "repair5f_f4_deterministic_random_candidate_diagnostic" in F4_DEFAULT_METHOD_ORDER
+
+
+def test_repair5f4_deterministic_random_candidate_is_stable() -> None:
+    candidate_ids = ["additive_ltm", "c100_b100_w075_d090", "c100_b100_w100_d090"]
+
+    first = stable_random_candidate_id(candidate_ids, "random-32-32-20", 50, 26)
+    second = stable_random_candidate_id(list(reversed(candidate_ids)), "random-32-32-20", 50, 26)
+    different_case = stable_random_candidate_id(candidate_ids, "random-32-32-20", 100, 26)
+
+    assert first == second
+    assert first in candidate_ids
+    assert different_case in candidate_ids

@@ -2597,3 +2597,38 @@
   - No learned restart, action prediction, or richer traffic-map state was introduced.
   - `phase5p5_allowed=false` and `phase6_allowed=false` remain mandatory.
   - Decision: proceed to Repair5F.4 larger validation of support-trained static bounded UpdateParams only.
+
+## 2026-06-02 15:59 - Repair5F.4 static UpdateParams larger validation
+
+- Request:
+  - Finish `czr004_repair5f4_static_updateparams_larger_validation_plan.md`.
+- Files planned:
+  - `scripts/run_repair5f4_static_updateparams_validation.py`
+  - `outputs/reports/phase5p5_repair5f31_carry_forward_to_f4.md`
+  - `outputs/logs/phase5p5_repair5f4_static_updateparams_validation/`
+  - `outputs/tables/phase5p5_repair5f4_static_updateparams_validation_*.csv`
+  - `outputs/reports/phase5p5_repair5f4_static_updateparams_validation_*.md`
+  - `outputs/reports/phase5p5_repair5f4_static_updateparams_validation_*.json`
+  - `outputs/tmp/phase5p5_repair5f4_static_updateparams_validation_runtimes/`
+  - `outputs/tmp/phase5p5_repair5f4_static_updateparams_validation_scenarios/`
+- Key constraints:
+  - The main rule is locked to `c100_b100_w075_d090`; F4 outcomes must not retune it.
+  - Primary F4 validation uses fresh IDs after 25 only.
+  - If IDs 26..45 scenarios are missing, generate them deterministically with the existing Phase1a scenario policy and record the seed policy.
+  - Report support-trained static bounded UpdateParams only, not context-adaptive selection.
+  - Do not modify `external/lacam2/lacam2/**` or change PIBT / LaCAM* semantics.
+- Initial observation:
+  - Existing generated scenarios stop at IDs 1..25 for the requested maps, so F4 needs a fresh deterministic scenario directory.
+- Follow-up:
+  - Implemented `scripts/run_repair5f4_static_updateparams_validation.py` with resume, overwrite, chunk-size, deterministic fresh scenario generation, deterministic random candidate diagnostic, static candidate runtime export, paired stats, bootstrap CIs, component ablations, and freshness/leakage audit.
+  - Wrote `outputs/reports/phase5p5_repair5f31_carry_forward_to_f4.md`.
+  - Generated fresh F4 scenarios for IDs 26..45 in `outputs/tmp/phase5p5_repair5f4_static_updateparams_validation_scenarios/` using the Phase1a deterministic seed policy (`base_seed=20260522`).
+  - F4-A completed 1800 / 1800 expected rows across 3 maps, 2 agent counts, 20 fresh IDs, and 15 methods. Missing rows = 0; schema errors = 0.
+  - Freshness gates passed: no IDs 1..20, no IDs 21..25, F4 outcomes were not used to choose the locked rule.
+  - Parity controls passed exactly: force-additive selector parity, exact additive candidate, `laur_disable`, and direct force-additive.
+  - Selector runtime selected `c100_b100_w075_d090` on 120 / 120 cases, and selector/static outcome metrics were identical. One warehouse case had effort-counter differences only.
+  - Locked static `c100_b100_w075_d090` did not generalize on F4-A: 25 / 68 / 27 better/equal/worse, mean delta ratio `0.0000451908770666587`, bootstrap 95% CI `[-0.0025432106323166875, 0.002837331297599984]`, ratio-worse groups 2, success-worse groups 0.
+  - The deterministic random candidate diagnostic had mean delta ratio `-0.0007488671398916735`, so the locked static rule did not beat it.
+  - Component ablations showed the locked full rule did not beat/tie wait-only, decay-only, or wait+mild-decay on mean delta; it only beat/tied mild decay.
+  - Decision: F4-A fails the performance gates. Do not promote, do not retune from F4 outcomes, and keep `phase5p5_allowed=false`, `phase6_allowed=false`.
+  - Validation: `py_compile` passed for the new F4 runner and required F3 scripts; `pytest` is unavailable in the active Python, so a manual fallback harness ran all 12 `tests/test_repair5f_updateparams.py` tests with 0 failures; `git diff --check` passed. C++ was not changed, so `scripts/build_phase1a_batch.ps1` was not run.

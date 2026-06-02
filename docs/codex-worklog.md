@@ -2555,3 +2555,45 @@
   - Runtime-vs-table audit found 0 mismatches; selected candidate, UpdateParams, and deterministic outcomes match the F2 table policy.
   - Runtime gates did not pass because `force_additive_parity_exact=false` and `exact_additive_candidate_parity_exact=false`; Phase5.5 and Phase6 remain forbidden.
   - Validation: `py_compile` passed, C++ `phase1a_batch` build passed after stopping stale F2 probe processes holding the exe, `git diff --check` passed, and a manual fallback harness ran all 8 `tests/test_repair5f_updateparams.py` tests with 0 failures because `pytest` is not installed in the active Python and no conda executable is available.
+
+## 2026-06-02 15:10 - Repair5F.3.1 runtime parity closure
+
+- Request:
+  - Finish `czr004_repair5f31_runtime_parity_closure_plan.md`.
+- Files changed / added:
+  - `cpp/tools/phase1a_batch.cpp`
+  - `scripts/analyze_repair5f3_runtime_parity.py`
+  - `scripts/run_repair5f3_runtime_parity_reproducer.py`
+  - `scripts/run_repair5f_runtime_export_eval.py`
+  - `scripts/audit_repair5f_runtime_vs_table.py`
+  - `tests/test_repair5f_updateparams.py`
+  - `outputs/reports/phase5p5_repair5f3_final_interpretation.md`
+  - `outputs/reports/phase5p5_repair5f3_runtime_parity_autopsy.md`
+  - `outputs/reports/phase5p5_repair5f3_runtime_parity_autopsy_summary.json`
+  - `outputs/tables/phase5p5_repair5f3_runtime_parity_mismatches.csv`
+  - `outputs/reports/phase5p5_repair5f3_runtime_parity_reproducer_report.md`
+  - `outputs/reports/phase5p5_repair5f3_runtime_parity_reproducer_summary.json`
+  - `outputs/tables/phase5p5_repair5f3_runtime_parity_reproducer_paired.csv`
+  - `outputs/reports/phase5p5_repair5f3_parity_closure_eval_report.md`
+  - `outputs/reports/phase5p5_repair5f3_parity_closure_eval_summary.json`
+  - `outputs/reports/phase5p5_repair5f3_parity_closure_eval_audit.md`
+  - `outputs/reports/phase5p5_repair5f3_parity_closure_eval_audit_summary.json`
+  - `outputs/reports/phase5p5_repair5f3_parity_closure_decision.md`
+  - `outputs/tables/phase5p5_repair5f3_parity_closure_eval_paired.csv`
+  - `outputs/tables/phase5p5_repair5f3_parity_closure_eval_summary.csv`
+  - `outputs/tables/phase5p5_repair5f3_parity_closure_eval_runtime_vs_table_mismatches.csv`
+- Key observations:
+  - Autopsy of the original F3 run found three core additive-control mismatches, all on `warehouse-10-20-10-2-1`, 100 agents, seed 21.
+  - The exact additive candidate path was still loading a runtime artifact and writing feature-extraction update logs in the original F3 run.
+  - The parity fix routes Repair5F additive-control aliases through canonical `lacam_star_ltm`, bypassing runtime feature extraction, runtime prediction, artifact loading, and LAUR update logging.
+  - Minimal reproducer replayed the mismatch case plus one control case three times. All five parity controls matched `lacam_star_ltm` on outcome and effort fields, with zero LAUR update-log rows.
+  - Closure eval completed 360 / 360 expected rows, 0 missing, 0 schema errors.
+  - Closure gates passed: force-additive parity, exact additive candidate parity, `laur_disable` parity, direct force-additive parity, support/final leakage false, runtime selected candidate matches table policy, and runtime UpdateParams match artifact.
+  - Runtime selector remained positive: 6 / 19 / 5 better/equal/worse, mean delta ratio `-0.0027415721339999993`, ratio-worse groups 1, success-worse groups 0.
+  - Static `c100_b100_w075_d090` ablation stayed metric-identical to the selector runtime, so the result remains support-trained static bounded UpdateParams rather than context-adaptive selection.
+  - Runtime-vs-table audit on closure output found 0 mismatches.
+- Boundary:
+  - No PIBT, LaCAM*, candidate generation, pruning, conflict handling, OPEN/EXPLORED, incumbent pruning, rewrite, or restart semantics were changed.
+  - No learned restart, action prediction, or richer traffic-map state was introduced.
+  - `phase5p5_allowed=false` and `phase6_allowed=false` remain mandatory.
+  - Decision: proceed to Repair5F.4 larger validation of support-trained static bounded UpdateParams only.

@@ -1,38 +1,30 @@
 # Repair5F.3.1 Parity Closure Decision
 
-Decision: proceed to Repair5F.4 larger validation of the support-trained static
-bounded UpdateParams rule.
+Repair5F.3.1 closed the runtime additive parity controls for the same
+final-holdout scope used by Repair5F.3.
 
-## Closure Evidence
+## Evidence
 
-- force_additive_parity_exact: `true`
-- exact_additive_candidate_parity_exact: `true`
-- laur_disable_parity_exact: `true`
-- laur_force_additive_direct_parity_exact: `true`
-- runtime_selected_candidate_matches_table_policy: `true`
-- runtime_updateparams_match_artifact: `true`
-- support_final_leakage_false: `true`
+- Closure eval rows: `360 / 360`, with `missing_rows = 0` and no schema errors.
+- `force_additive_parity_exact = true`
+- `exact_additive_candidate_parity_exact = true`
+- `laur_disable_parity_exact = true`
+- `laur_force_additive_direct_parity_exact = true`
+- Runtime-vs-table audit mismatch count: `0`
+- `runtime_selected_candidate_matches_table_policy = true`
+- `runtime_updateparams_match_artifact = true`
 
-## Runtime Result
+The runtime selector again selected `c100_b100_w075_d090` on all 30 final
+holdout cases. Its closure metrics were 6 better, 19 equal, and 5 worse
+versus additive LTM, with mean delta ratio `-0.0027415721339999993`,
+`ratio_worse_than_ltm_groups = 1`, and `success_worse_than_ltm_groups = 0`.
+The static `c100_b100_w075_d090` ablation was metric-identical.
 
-The Repair5F.3.1 closure rerun kept the F3 interpretation intact. The runtime
-selector and static `c100_b100_w075_d090` ablation were metric-identical on the
-30 final-holdout cases:
+## Decision
 
-- better / equal / worse: `6 / 19 / 5`
-- mean_delta_ratio_vs_ltm: `-0.0027415721339999993`
-- ratio_worse_than_ltm_groups: `1`
-- success_worse_than_ltm_groups: `0`
-- selected candidate distribution: `c100_b100_w075_d090: 30`
+Proceed to Repair5F.4 larger validation of support-trained static bounded
+UpdateParams.
 
-The selector beat the Repair5F random and shuffled-utility diagnostics and
-improved over the Repair5E5 real selector on mean delta ratio. This is still
-evidence for a support-trained static bounded UpdateParams replacement, not
-context-adaptive selection.
-
-## Boundary
-
-No Phase5.5 or Phase6 permission is granted. `phase5p5_allowed=false` and
-`phase6_allowed=false` remain mandatory. The next branch should validate the
-static bounded UpdateParams rule at larger scope without changing LaCAM*/PIBT
-semantics.
+This is not evidence for context-adaptive UpdateParams selection. It is not
+Phase5.5 or Phase6 permission. `phase5p5_allowed = false` and
+`phase6_allowed = false` remain mandatory.

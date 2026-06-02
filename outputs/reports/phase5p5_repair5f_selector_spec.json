@@ -35,7 +35,7 @@
     "weight_entropy",
     "saturated_edge_count"
   ],
-  "created_at": "2026-06-02T12:22:20.844633",
+  "created_at": "2026-06-02T12:28:12.384707",
   "diagnostic_only": true,
   "feature_stats": {
     "agents": {
@@ -673,15 +673,15 @@
   ],
   "selector_method": "repair5f_support_trained_selector_simulation",
   "selector_spec": {
-    "additive_fallback_threshold": 0.001,
+    "additive_fallback_threshold": 0.0,
     "candidate_blacklist": [],
     "candidate_whitelist": [],
-    "max_candidate_worse_rate": 1.0,
-    "max_group_worse_rate": 1.0,
+    "max_candidate_worse_rate": 0.5,
+    "max_group_worse_rate": 0.5,
     "max_neighbor_distance": 999.0,
     "min_effective_neighbors": 3,
-    "min_predicted_margin": 0.001,
-    "min_support_count": 10,
+    "min_predicted_margin": 0.0,
+    "min_support_count": 5,
     "non_additive_budget": 1.0,
     "selector_type": "group_balanced_utility"
   },

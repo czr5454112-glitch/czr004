@@ -12,12 +12,12 @@ This sweep is trained/tuned only on support IDs. It does not permit Phase5.5 or 
 ## Best Support Spec
 
 - selector_type: `group_balanced_utility`
-- min_support_count: `10`
+- min_support_count: `5`
 - min_effective_neighbors: `3`
 - max_neighbor_distance: `999.0`
-- min_predicted_margin: `0.001`
-- max_candidate_worse_rate: `1.0`
-- max_group_worse_rate: `1.0`
+- min_predicted_margin: `0.0`
+- max_candidate_worse_rate: `0.5`
+- max_group_worse_rate: `0.5`
 - non_additive_budget: `1.0`
 - support_primary_passed: `True`
 - better: `31`

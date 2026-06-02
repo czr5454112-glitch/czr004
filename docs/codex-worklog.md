@@ -2465,7 +2465,7 @@
   - Support probe IDs 1..20 completed for 3 maps, 2 agent counts, and 47 bounded candidates: 5,640 candidate rows, 0 missing.
   - Support controls pass: force-additive parity exact, exact additive candidate parity exact, support/final overlap 0.
   - Selector context tables contain 120 support rows and 30 holdout rows. Holdout outcomes and best-candidate fields are not context features.
-  - Support-only threshold sweep uses 12 conservative deterministic specs across KNN, radius-neighbor abstention, group-balanced utility, and candidate-risk-capped selectors.
+  - Support-only threshold sweep uses 384 conservative deterministic specs across KNN, radius-neighbor abstention, group-balanced utility, and candidate-risk-capped selectors.
   - Best support selector is `group_balanced_utility`, selecting `c100_b100_w075_d090` on nearly all support cases: 31 / 66 / 23, mean delta ratio vs LTM `-0.0028752109667166794`.
   - Final holdout table simulation selects `c100_b100_w075_d090` on all 30 holdout cases and passes F2 gates: 6 / 19 / 5, mean delta ratio vs LTM `-0.0027415721339999993`, ratio-worse groups 1, success-worse groups 0.
   - The selector beats Repair5F random and shuffled-utility diagnostics and improves over E5 real selector under the F2 table metric.
@@ -2474,3 +2474,4 @@
   - Runtime export was not created in this pass.
   - `phase5p5_allowed=false` and `phase6_allowed=false`.
   - No C++ solver code, PIBT, LaCAM*, candidate generation, pruning, conflict, restart, or search semantics were changed.
+  - Follow-up audit refreshed threshold sweep artifacts and the simulation summary so the selected spec, sweep row count, and final holdout summary are internally consistent before push.

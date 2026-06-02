@@ -2632,3 +2632,45 @@
   - Component ablations showed the locked full rule did not beat/tie wait-only, decay-only, or wait+mild-decay on mean delta; it only beat/tied mild decay.
   - Decision: F4-A fails the performance gates. Do not promote, do not retune from F4 outcomes, and keep `phase5p5_allowed=false`, `phase6_allowed=false`.
   - Validation: `py_compile` passed for the new F4 runner and required F3 scripts; `pytest` is unavailable in the active Python, so a manual fallback harness ran all 12 `tests/test_repair5f_updateparams.py` tests with 0 failures; `git diff --check` passed. C++ was not changed, so `scripts/build_phase1a_batch.ps1` was not run.
+
+## 2026-06-02 20:31 - Repair5F.4.1 fresh failure oracle diagnosis
+
+- Request:
+  - Finish `czr004_repair5f41_fresh_failure_oracle_diagnosis_plan.md`.
+- Files changed / added:
+  - `scripts/analyze_repair5f4_static_failure.py`
+  - `scripts/analyze_repair5f4_full_lattice_oracle.py`
+  - `scripts/merge_repair5f4_full_lattice_probe_chunks.py`
+  - `scripts/run_repair5f_updateparam_probe_table.py`
+  - `outputs/reports/phase5p5_repair5f4_final_interpretation.md`
+  - `outputs/reports/phase5p5_repair5f4_static_failure_autopsy.md`
+  - `outputs/reports/phase5p5_repair5f4_static_failure_autopsy_summary.json`
+  - `outputs/tables/phase5p5_repair5f4_static_failure_cases.csv`
+  - `outputs/tables/phase5p5_repair5f4_static_failure_by_group.csv`
+  - `outputs/tables/phase5p5_repair5f4_component_dominance.csv`
+  - `outputs/logs/phase5p5_repair5f4_full_lattice_probe/`
+  - `outputs/tables/phase5p5_repair5f4_full_lattice_utility_long.csv`
+  - `outputs/tables/phase5p5_repair5f4_full_lattice_utility_wide.csv`
+  - `outputs/reports/phase5p5_repair5f4_full_lattice_probe_report.md`
+  - `outputs/reports/phase5p5_repair5f4_full_lattice_probe_summary.json`
+  - `outputs/reports/phase5p5_repair5f4_full_lattice_probe_audit.md`
+  - `outputs/reports/phase5p5_repair5f4_full_lattice_oracle_report.md`
+  - `outputs/reports/phase5p5_repair5f4_full_lattice_oracle_summary.json`
+  - `outputs/tables/phase5p5_repair5f4_full_lattice_oracle_by_case.csv`
+  - `outputs/tables/phase5p5_repair5f4_full_lattice_static_candidate_ranking.csv`
+  - `outputs/tables/phase5p5_repair5f4_full_lattice_group_best_candidates.csv`
+  - `outputs/tables/phase5p5_repair5f4_support_vs_f4_rank_correlation.csv`
+  - `outputs/reports/phase5p5_repair5f4_failure_oracle_diagnosis_decision.md`
+- Key observations:
+  - Static autopsy confirmed F4-A was a clean diagnostic failure, not an engineering failure: freshness and parity controls passed, but locked `c100_b100_w075_d090` did not generalize and did not beat the deterministic random candidate diagnostic.
+  - Full-lattice F4 diagnostic completed 5,880 raw rows: 120 cases times 49 methods (`lacam_star_ltm`, additive defer, and 47 bounded candidates). Missing raw rows = 0 and schema errors = 0.
+  - Full-lattice oracle was strong: 67 / 53 / 0 better/equal/worse, mean delta ratio `-0.017388555948699997`, ratio-worse groups 0, success-worse groups 0.
+  - Best single static candidate on F4 was `c125_b125_w075_d095`: 35 / 64 / 21, mean delta ratio `-0.0028050352278249997`, ratio-worse groups 0. This is diagnostic-only because F4 observed it.
+  - Leave-one-map-agent-group-out static selection remained positive: 31 / 66 / 23, mean delta ratio `-0.0024372178218000046`.
+  - Support-vs-F4 rank transfer was poor: Spearman `0.18987049028677153`; the locked rule was support rank 1 but F4 rank 27.
+  - Decision: plan a new static-candidate protocol with allowed support/validation training and a new untouched final holdout such as IDs 46..65 or later. Do not promote and do not retune from F4 outcomes.
+- Boundary:
+  - No C++ solver semantics were changed.
+  - No PIBT, LaCAM*, candidate generation, pruning, conflict handling, OPEN/EXPLORED, incumbent pruning, rewrite, or restart semantics were changed.
+  - No learned restart, action prediction, or richer traffic-map state was introduced.
+  - `phase5p5_allowed=false` and `phase6_allowed=false` remain mandatory.

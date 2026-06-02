@@ -1,0 +1,14 @@
+selection_type,map,agents,selected_candidate_id,rows,better,equal,worse,mean_delta_ratio_vs_ltm,ratio_worse_than_ltm_groups
+best_static_within_group_diagnostic,maze-32-32-4,50,c125_b075_w125_d095,20,,,,-0.0030945711421000166,
+best_static_within_group_diagnostic,maze-32-32-4,100,c100_b075_w100_d090,20,,,,-0.0051376910955000295,
+best_static_within_group_diagnostic,random-32-32-20,50,c125_b075_w125_d095,20,,,,-0.0020160738445000105,
+best_static_within_group_diagnostic,random-32-32-20,100,c100_b100_w125_d095,20,,,,-0.007703208107300019,
+best_static_within_group_diagnostic,warehouse-10-20-10-2-1,50,c075_b100_w125_d090,20,,,,-0.007319134656999992,
+best_static_within_group_diagnostic,warehouse-10-20-10-2-1,100,additive_ltm,20,,,,0.0,
+best_single_static_on_f4_diagnostic,all,all,c125_b125_w075_d095,120,35,64,21,-0.0028050352278249997,0
+group_adaptive_oracle,maze-32-32-4,50,c125_b075_w125_d095,20,9,8,3,-0.0030945711421000166,0
+group_adaptive_oracle,maze-32-32-4,100,c100_b075_w100_d090,20,11,0,9,-0.0051376910955000295,0
+group_adaptive_oracle,random-32-32-20,50,c125_b075_w125_d095,20,2,17,1,-0.0020160738445000105,0
+group_adaptive_oracle,random-32-32-20,100,c100_b100_w125_d095,20,8,6,6,-0.007703208107300019,0
+group_adaptive_oracle,warehouse-10-20-10-2-1,50,c075_b100_w125_d090,20,2,18,0,-0.007319134656999992,0
+group_adaptive_oracle,warehouse-10-20-10-2-1,100,additive_ltm,20,0,20,0,0.0,0

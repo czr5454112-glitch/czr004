@@ -1,0 +1,605 @@
+{
+  "best_groups": [
+    {
+      "agents": 100,
+      "better": 7,
+      "equal": 4,
+      "equal_share": 0.2,
+      "label": "locked wait 0.75 + decay 0.90",
+      "map": "random-32-32-20",
+      "mean_delta_ratio_vs_ltm": -0.0011319122852000041,
+      "median_delta_ratio_vs_ltm": 0.0,
+      "method": "repair5f_static_c100_b100_w075_d090",
+      "mostly_no_effect": false,
+      "rows": 20,
+      "success_improvements": 0,
+      "success_regressions": 0,
+      "worse": 9,
+      "worse_share": 0.45
+    },
+    {
+      "agents": 50,
+      "better": 8,
+      "equal": 6,
+      "equal_share": 0.3,
+      "label": "locked wait 0.75 + decay 0.90",
+      "map": "maze-32-32-4",
+      "mean_delta_ratio_vs_ltm": -0.0008071347669000139,
+      "median_delta_ratio_vs_ltm": 0.0,
+      "method": "repair5f_static_c100_b100_w075_d090",
+      "mostly_no_effect": false,
+      "rows": 20,
+      "success_improvements": 0,
+      "success_regressions": 0,
+      "worse": 6,
+      "worse_share": 0.3
+    },
+    {
+      "agents": 50,
+      "better": 0,
+      "equal": 20,
+      "equal_share": 1.0,
+      "label": "locked wait 0.75 + decay 0.90",
+      "map": "warehouse-10-20-10-2-1",
+      "mean_delta_ratio_vs_ltm": 0.0,
+      "median_delta_ratio_vs_ltm": 0.0,
+      "method": "repair5f_static_c100_b100_w075_d090",
+      "mostly_no_effect": true,
+      "rows": 20,
+      "success_improvements": 0,
+      "success_regressions": 0,
+      "worse": 0,
+      "worse_share": 0.0
+    },
+    {
+      "agents": 100,
+      "better": 0,
+      "equal": 20,
+      "equal_share": 1.0,
+      "label": "locked wait 0.75 + decay 0.90",
+      "map": "warehouse-10-20-10-2-1",
+      "mean_delta_ratio_vs_ltm": 0.0,
+      "median_delta_ratio_vs_ltm": 0.0,
+      "method": "repair5f_static_c100_b100_w075_d090",
+      "mostly_no_effect": true,
+      "rows": 20,
+      "success_improvements": 0,
+      "success_regressions": 0,
+      "worse": 0,
+      "worse_share": 0.0
+    },
+    {
+      "agents": 50,
+      "better": 0,
+      "equal": 18,
+      "equal_share": 0.9,
+      "label": "locked wait 0.75 + decay 0.90",
+      "map": "random-32-32-20",
+      "mean_delta_ratio_vs_ltm": 0.0009064062550000029,
+      "median_delta_ratio_vs_ltm": 0.0,
+      "method": "repair5f_static_c100_b100_w075_d090",
+      "mostly_no_effect": true,
+      "rows": 20,
+      "success_improvements": 0,
+      "success_regressions": 0,
+      "worse": 2,
+      "worse_share": 0.1
+    },
+    {
+      "agents": 100,
+      "better": 10,
+      "equal": 0,
+      "equal_share": 0.0,
+      "label": "locked wait 0.75 + decay 0.90",
+      "map": "maze-32-32-4",
+      "mean_delta_ratio_vs_ltm": 0.0013037860594999674,
+      "median_delta_ratio_vs_ltm": -0.00021774872500002207,
+      "method": "repair5f_static_c100_b100_w075_d090",
+      "mostly_no_effect": false,
+      "rows": 20,
+      "success_improvements": 0,
+      "success_regressions": 0,
+      "worse": 10,
+      "worse_share": 0.5
+    }
+  ],
+  "branch": "phase4f5p5-stable-attention-lau",
+  "commit": "ca4dfb6",
+  "component_best_by_mean": {
+    "better": 25,
+    "bootstrap_95ci_mean_delta_ratio_vs_ltm": "[-0.0035289097079583397, 0.0018576541593999906]",
+    "bootstrap_probability_mean_delta_lt_0": 0.727,
+    "candidate_id": "c100_b100_w075_d100",
+    "candidate_method": "repair5f_static_c100_b100_w075_d100",
+    "equal": 72,
+    "label": "wait 0.75 only",
+    "mean_delta_ratio_vs_ltm": -0.0008398811590833434,
+    "median_delta_ratio_vs_ltm": 0.0,
+    "pairwise_beats_minus_losses": 8,
+    "pairwise_matrix": "{\"repair5f_static_c100_b100_w075_d090\": {\"compared\": 120, \"losses\": 27, \"ties\": 70, \"wins\": 23}, \"repair5f_static_c100_b100_w075_d095\": {\"compared\": 120, \"losses\": 20, \"ties\": 74, \"wins\": 26}, \"repair5f_static_c100_b100_w100_d090\": {\"compared\": 120, \"losses\": 21, \"ties\": 76, \"wins\": 23}, \"repair5f_static_c100_b100_w100_d095\": {\"compared\": 120, \"losses\": 20, \"ties\": 76, \"wins\": 24}}",
+    "pairwise_total_losses": 88,
+    "pairwise_total_wins": 96,
+    "ratio_worse_than_ltm_groups": 2,
+    "rows": 120,
+    "success_worse_than_ltm_groups": 0,
+    "worse": 23
+  },
+  "component_pairwise_matrix": {
+    "repair5f_static_c100_b100_w075_d090": {
+      "repair5f_static_c100_b100_w075_d095": {
+        "compared": 120,
+        "losses": 24,
+        "ties": 69,
+        "wins": 27
+      },
+      "repair5f_static_c100_b100_w075_d100": {
+        "compared": 120,
+        "losses": 23,
+        "ties": 70,
+        "wins": 27
+      },
+      "repair5f_static_c100_b100_w100_d090": {
+        "compared": 120,
+        "losses": 24,
+        "ties": 70,
+        "wins": 26
+      },
+      "repair5f_static_c100_b100_w100_d095": {
+        "compared": 120,
+        "losses": 21,
+        "ties": 70,
+        "wins": 29
+      }
+    },
+    "repair5f_static_c100_b100_w075_d095": {
+      "repair5f_static_c100_b100_w075_d090": {
+        "compared": 120,
+        "losses": 27,
+        "ties": 69,
+        "wins": 24
+      },
+      "repair5f_static_c100_b100_w075_d100": {
+        "compared": 120,
+        "losses": 26,
+        "ties": 74,
+        "wins": 20
+      },
+      "repair5f_static_c100_b100_w100_d090": {
+        "compared": 120,
+        "losses": 22,
+        "ties": 74,
+        "wins": 24
+      },
+      "repair5f_static_c100_b100_w100_d095": {
+        "compared": 120,
+        "losses": 23,
+        "ties": 75,
+        "wins": 22
+      }
+    },
+    "repair5f_static_c100_b100_w075_d100": {
+      "repair5f_static_c100_b100_w075_d090": {
+        "compared": 120,
+        "losses": 27,
+        "ties": 70,
+        "wins": 23
+      },
+      "repair5f_static_c100_b100_w075_d095": {
+        "compared": 120,
+        "losses": 20,
+        "ties": 74,
+        "wins": 26
+      },
+      "repair5f_static_c100_b100_w100_d090": {
+        "compared": 120,
+        "losses": 21,
+        "ties": 76,
+        "wins": 23
+      },
+      "repair5f_static_c100_b100_w100_d095": {
+        "compared": 120,
+        "losses": 20,
+        "ties": 76,
+        "wins": 24
+      }
+    },
+    "repair5f_static_c100_b100_w100_d090": {
+      "repair5f_static_c100_b100_w075_d090": {
+        "compared": 120,
+        "losses": 26,
+        "ties": 70,
+        "wins": 24
+      },
+      "repair5f_static_c100_b100_w075_d095": {
+        "compared": 120,
+        "losses": 24,
+        "ties": 74,
+        "wins": 22
+      },
+      "repair5f_static_c100_b100_w075_d100": {
+        "compared": 120,
+        "losses": 23,
+        "ties": 76,
+        "wins": 21
+      },
+      "repair5f_static_c100_b100_w100_d095": {
+        "compared": 120,
+        "losses": 20,
+        "ties": 77,
+        "wins": 23
+      }
+    },
+    "repair5f_static_c100_b100_w100_d095": {
+      "repair5f_static_c100_b100_w075_d090": {
+        "compared": 120,
+        "losses": 29,
+        "ties": 70,
+        "wins": 21
+      },
+      "repair5f_static_c100_b100_w075_d095": {
+        "compared": 120,
+        "losses": 22,
+        "ties": 75,
+        "wins": 23
+      },
+      "repair5f_static_c100_b100_w075_d100": {
+        "compared": 120,
+        "losses": 24,
+        "ties": 76,
+        "wins": 20
+      },
+      "repair5f_static_c100_b100_w100_d090": {
+        "compared": 120,
+        "losses": 23,
+        "ties": 77,
+        "wins": 20
+      }
+    }
+  },
+  "component_rows": [
+    {
+      "better": 25,
+      "bootstrap_95ci_mean_delta_ratio_vs_ltm": "[-0.0035289097079583397, 0.0018576541593999906]",
+      "bootstrap_probability_mean_delta_lt_0": 0.727,
+      "candidate_id": "c100_b100_w075_d100",
+      "candidate_method": "repair5f_static_c100_b100_w075_d100",
+      "equal": 72,
+      "label": "wait 0.75 only",
+      "mean_delta_ratio_vs_ltm": -0.0008398811590833434,
+      "median_delta_ratio_vs_ltm": 0.0,
+      "pairwise_beats_minus_losses": 8,
+      "pairwise_matrix": "{\"repair5f_static_c100_b100_w075_d090\": {\"compared\": 120, \"losses\": 27, \"ties\": 70, \"wins\": 23}, \"repair5f_static_c100_b100_w075_d095\": {\"compared\": 120, \"losses\": 20, \"ties\": 74, \"wins\": 26}, \"repair5f_static_c100_b100_w100_d090\": {\"compared\": 120, \"losses\": 21, \"ties\": 76, \"wins\": 23}, \"repair5f_static_c100_b100_w100_d095\": {\"compared\": 120, \"losses\": 20, \"ties\": 76, \"wins\": 24}}",
+      "pairwise_total_losses": 88,
+      "pairwise_total_wins": 96,
+      "ratio_worse_than_ltm_groups": 2,
+      "rows": 120,
+      "success_worse_than_ltm_groups": 0,
+      "worse": 23
+    },
+    {
+      "better": 22,
+      "bootstrap_95ci_mean_delta_ratio_vs_ltm": "[-0.003262461136049995, 0.0014584445334583419]",
+      "bootstrap_probability_mean_delta_lt_0": 0.7504,
+      "candidate_id": "c100_b100_w075_d095",
+      "candidate_method": "repair5f_static_c100_b100_w075_d095",
+      "equal": 76,
+      "label": "wait 0.75 + decay 0.95",
+      "mean_delta_ratio_vs_ltm": -0.0008186365335416705,
+      "median_delta_ratio_vs_ltm": 0.0,
+      "pairwise_beats_minus_losses": -8,
+      "pairwise_matrix": "{\"repair5f_static_c100_b100_w075_d090\": {\"compared\": 120, \"losses\": 27, \"ties\": 69, \"wins\": 24}, \"repair5f_static_c100_b100_w075_d100\": {\"compared\": 120, \"losses\": 26, \"ties\": 74, \"wins\": 20}, \"repair5f_static_c100_b100_w100_d090\": {\"compared\": 120, \"losses\": 22, \"ties\": 74, \"wins\": 24}, \"repair5f_static_c100_b100_w100_d095\": {\"compared\": 120, \"losses\": 23, \"ties\": 75, \"wins\": 22}}",
+      "pairwise_total_losses": 98,
+      "pairwise_total_wins": 90,
+      "ratio_worse_than_ltm_groups": 2,
+      "rows": 120,
+      "success_worse_than_ltm_groups": 0,
+      "worse": 22
+    },
+    {
+      "better": 23,
+      "bootstrap_95ci_mean_delta_ratio_vs_ltm": "[-0.0023377890459249985, 0.0017873470575750033]",
+      "bootstrap_probability_mean_delta_lt_0": 0.6148,
+      "candidate_id": "c100_b100_w100_d090",
+      "candidate_method": "repair5f_static_c100_b100_w100_d090",
+      "equal": 74,
+      "label": "decay 0.90 only",
+      "mean_delta_ratio_vs_ltm": -0.0003064312557916717,
+      "median_delta_ratio_vs_ltm": 0.0,
+      "pairwise_beats_minus_losses": -3,
+      "pairwise_matrix": "{\"repair5f_static_c100_b100_w075_d090\": {\"compared\": 120, \"losses\": 26, \"ties\": 70, \"wins\": 24}, \"repair5f_static_c100_b100_w075_d095\": {\"compared\": 120, \"losses\": 24, \"ties\": 74, \"wins\": 22}, \"repair5f_static_c100_b100_w075_d100\": {\"compared\": 120, \"losses\": 23, \"ties\": 76, \"wins\": 21}, \"repair5f_static_c100_b100_w100_d095\": {\"compared\": 120, \"losses\": 20, \"ties\": 77, \"wins\": 23}}",
+      "pairwise_total_losses": 93,
+      "pairwise_total_wins": 90,
+      "ratio_worse_than_ltm_groups": 1,
+      "rows": 120,
+      "success_worse_than_ltm_groups": 0,
+      "worse": 23
+    },
+    {
+      "better": 25,
+      "bootstrap_95ci_mean_delta_ratio_vs_ltm": "[-0.0025520060482666805, 0.0027488667566999887]",
+      "bootstrap_probability_mean_delta_lt_0": 0.5014,
+      "candidate_id": "c100_b100_w075_d090",
+      "candidate_method": "repair5f_static_c100_b100_w075_d090",
+      "equal": 68,
+      "label": "locked wait 0.75 + decay 0.90",
+      "mean_delta_ratio_vs_ltm": 4.51908770666587e-05,
+      "median_delta_ratio_vs_ltm": 0.0,
+      "pairwise_beats_minus_losses": 17,
+      "pairwise_matrix": "{\"repair5f_static_c100_b100_w075_d095\": {\"compared\": 120, \"losses\": 24, \"ties\": 69, \"wins\": 27}, \"repair5f_static_c100_b100_w075_d100\": {\"compared\": 120, \"losses\": 23, \"ties\": 70, \"wins\": 27}, \"repair5f_static_c100_b100_w100_d090\": {\"compared\": 120, \"losses\": 24, \"ties\": 70, \"wins\": 26}, \"repair5f_static_c100_b100_w100_d095\": {\"compared\": 120, \"losses\": 21, \"ties\": 70, \"wins\": 29}}",
+      "pairwise_total_losses": 92,
+      "pairwise_total_wins": 109,
+      "ratio_worse_than_ltm_groups": 2,
+      "rows": 120,
+      "success_worse_than_ltm_groups": 0,
+      "worse": 27
+    },
+    {
+      "better": 25,
+      "bootstrap_95ci_mean_delta_ratio_vs_ltm": "[-0.0017178233221999998, 0.001991228750250011]",
+      "bootstrap_probability_mean_delta_lt_0": 0.4514,
+      "candidate_id": "c100_b100_w100_d095",
+      "candidate_method": "repair5f_static_c100_b100_w100_d095",
+      "equal": 74,
+      "label": "decay 0.95 only",
+      "mean_delta_ratio_vs_ltm": 0.00012301019519166494,
+      "median_delta_ratio_vs_ltm": 0.0,
+      "pairwise_beats_minus_losses": -14,
+      "pairwise_matrix": "{\"repair5f_static_c100_b100_w075_d090\": {\"compared\": 120, \"losses\": 29, \"ties\": 70, \"wins\": 21}, \"repair5f_static_c100_b100_w075_d095\": {\"compared\": 120, \"losses\": 22, \"ties\": 75, \"wins\": 23}, \"repair5f_static_c100_b100_w075_d100\": {\"compared\": 120, \"losses\": 24, \"ties\": 76, \"wins\": 20}, \"repair5f_static_c100_b100_w100_d090\": {\"compared\": 120, \"losses\": 23, \"ties\": 77, \"wins\": 20}}",
+      "pairwise_total_losses": 98,
+      "pairwise_total_wins": 84,
+      "ratio_worse_than_ltm_groups": 3,
+      "rows": 120,
+      "success_worse_than_ltm_groups": 0,
+      "worse": 21
+    }
+  ],
+  "created_at": "2026-06-02T18:18:50.455122",
+  "diagnostic_comparisons": {
+    "repair5e5_crossfold_utility_reranker": {
+      "available": true,
+      "label": "Repair5E5 real diagnostic",
+      "locked_beats_comparator_on_mean": true,
+      "locked_mean_minus_comparator_mean": -0.0004094668680250056,
+      "metrics": {
+        "better": 13,
+        "bootstrap_95ci_mean_delta_ratio_vs_ltm": [
+          -0.0008379923147999994,
+          0.0017530525812916706
+        ],
+        "bootstrap_probability_mean_delta_lt_0": 0.2588,
+        "equal": 92,
+        "mean_delta_ratio_vs_ltm": 0.0004546577450916643,
+        "median_delta_ratio_vs_ltm": 0.0,
+        "ratio_worse_than_ltm_groups": 3,
+        "rows": 120,
+        "success_improvements": 0,
+        "success_regressions": 0,
+        "success_worse_than_ltm_groups": 0,
+        "worse": 15
+      }
+    },
+    "repair5e5_crossfold_utility_reranker_shuffled_labels_diagnostic": {
+      "available": true,
+      "label": "Repair5E5 shuffled diagnostic",
+      "locked_beats_comparator_on_mean": false,
+      "locked_mean_minus_comparator_mean": 0.0004944540015083275,
+      "metrics": {
+        "better": 15,
+        "bootstrap_95ci_mean_delta_ratio_vs_ltm": [
+          -0.001833283271725003,
+          0.0009070559224666671
+        ],
+        "bootstrap_probability_mean_delta_lt_0": 0.7298,
+        "equal": 92,
+        "mean_delta_ratio_vs_ltm": -0.00044926312444166876,
+        "median_delta_ratio_vs_ltm": 0.0,
+        "ratio_worse_than_ltm_groups": 1,
+        "rows": 120,
+        "success_improvements": 0,
+        "success_regressions": 0,
+        "success_worse_than_ltm_groups": 0,
+        "worse": 13
+      }
+    },
+    "repair5f_f4_deterministic_random_candidate_diagnostic": {
+      "available": true,
+      "label": "deterministic random candidate diagnostic",
+      "locked_beats_comparator_on_mean": false,
+      "locked_mean_minus_comparator_mean": 0.0007940580169583322,
+      "metrics": {
+        "better": 22,
+        "bootstrap_95ci_mean_delta_ratio_vs_ltm": [
+          -0.0028394731621333323,
+          0.0012917824954916687
+        ],
+        "bootstrap_probability_mean_delta_lt_0": 0.7548,
+        "equal": 71,
+        "mean_delta_ratio_vs_ltm": -0.0007488671398916735,
+        "median_delta_ratio_vs_ltm": 0.0,
+        "ratio_worse_than_ltm_groups": 2,
+        "rows": 120,
+        "success_improvements": 0,
+        "success_regressions": 0,
+        "success_worse_than_ltm_groups": 0,
+        "worse": 27
+      }
+    }
+  },
+  "diagnostic_only": true,
+  "dirty": "tracked-dirty_untracked-present",
+  "f4_outcomes_used_for_retuning": false,
+  "freshness_and_parity_controls": {
+    "exact_additive_candidate_parity_exact": true,
+    "f2f3_holdout_validation_overlap_count": 0,
+    "force_additive_parity_exact": true,
+    "laur_disable_parity_exact": true,
+    "laur_force_additive_direct_parity_exact": true,
+    "support_validation_overlap_count": 0
+  },
+  "interpretation": "F4-A was a clean diagnostic failure, not an engineering failure. Coverage, freshness, and parity controls passed, but the locked c100_b100_w075_d090 rule did not generalize and did not beat the deterministic random candidate diagnostic on mean delta. Component evidence points to decay 0.90 and global static selection as plausible causes, but those observations are diagnostic-only.",
+  "locked_candidate_generalized": false,
+  "locked_failure_concentration": {
+    "maze-32-32-4": {
+      "better": 18,
+      "equal": 6,
+      "mostly_no_effect": false,
+      "rows": 40,
+      "worse": 16,
+      "worse_share_of_all_worse": 0.5925925925925926,
+      "worse_share_of_map": 0.4
+    },
+    "random-32-32-20": {
+      "better": 7,
+      "equal": 22,
+      "mostly_no_effect": false,
+      "rows": 40,
+      "worse": 11,
+      "worse_share_of_all_worse": 0.4074074074074074,
+      "worse_share_of_map": 0.275
+    },
+    "warehouse-10-20-10-2-1": {
+      "better": 0,
+      "equal": 40,
+      "mostly_no_effect": true,
+      "rows": 40,
+      "worse": 0,
+      "worse_share_of_all_worse": 0.0,
+      "worse_share_of_map": 0.0
+    }
+  },
+  "locked_method": "repair5f_static_c100_b100_w075_d090",
+  "locked_metrics": {
+    "better": 25,
+    "bootstrap_95ci_mean_delta_ratio_vs_ltm": [
+      -0.0025520060482666805,
+      0.0027488667566999887
+    ],
+    "bootstrap_probability_mean_delta_lt_0": 0.5014,
+    "equal": 68,
+    "mean_delta_ratio_vs_ltm": 4.51908770666587e-05,
+    "median_delta_ratio_vs_ltm": 0.0,
+    "ratio_worse_than_ltm_groups": 2,
+    "rows": 120,
+    "success_improvements": 0,
+    "success_regressions": 0,
+    "success_worse_than_ltm_groups": 0,
+    "worse": 27
+  },
+  "outputs": {
+    "component_dominance_csv": "outputs\\tables\\phase5p5_repair5f4_component_dominance.csv",
+    "failure_by_group_csv": "outputs\\tables\\phase5p5_repair5f4_static_failure_by_group.csv",
+    "failure_cases_csv": "outputs\\tables\\phase5p5_repair5f4_static_failure_cases.csv",
+    "report": "outputs\\reports\\phase5p5_repair5f4_static_failure_autopsy.md",
+    "summary_json": "outputs\\reports\\phase5p5_repair5f4_static_failure_autopsy_summary.json"
+  },
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "schema_version": "phase5p5_repair5f4_static_failure_autopsy_v1",
+  "source_validation_report": "outputs/reports/phase5p5_repair5f4_static_updateparams_validation_report.md",
+  "source_validation_summary_json": "outputs\\reports\\phase5p5_repair5f4_static_updateparams_validation_summary.json",
+  "warehouse_mostly_no_effect": true,
+  "worst_groups": [
+    {
+      "agents": 100,
+      "better": 10,
+      "equal": 0,
+      "equal_share": 0.0,
+      "label": "locked wait 0.75 + decay 0.90",
+      "map": "maze-32-32-4",
+      "mean_delta_ratio_vs_ltm": 0.0013037860594999674,
+      "median_delta_ratio_vs_ltm": -0.00021774872500002207,
+      "method": "repair5f_static_c100_b100_w075_d090",
+      "mostly_no_effect": false,
+      "rows": 20,
+      "success_improvements": 0,
+      "success_regressions": 0,
+      "worse": 10,
+      "worse_share": 0.5
+    },
+    {
+      "agents": 50,
+      "better": 0,
+      "equal": 18,
+      "equal_share": 0.9,
+      "label": "locked wait 0.75 + decay 0.90",
+      "map": "random-32-32-20",
+      "mean_delta_ratio_vs_ltm": 0.0009064062550000029,
+      "median_delta_ratio_vs_ltm": 0.0,
+      "method": "repair5f_static_c100_b100_w075_d090",
+      "mostly_no_effect": true,
+      "rows": 20,
+      "success_improvements": 0,
+      "success_regressions": 0,
+      "worse": 2,
+      "worse_share": 0.1
+    },
+    {
+      "agents": 50,
+      "better": 0,
+      "equal": 20,
+      "equal_share": 1.0,
+      "label": "locked wait 0.75 + decay 0.90",
+      "map": "warehouse-10-20-10-2-1",
+      "mean_delta_ratio_vs_ltm": 0.0,
+      "median_delta_ratio_vs_ltm": 0.0,
+      "method": "repair5f_static_c100_b100_w075_d090",
+      "mostly_no_effect": true,
+      "rows": 20,
+      "success_improvements": 0,
+      "success_regressions": 0,
+      "worse": 0,
+      "worse_share": 0.0
+    },
+    {
+      "agents": 100,
+      "better": 0,
+      "equal": 20,
+      "equal_share": 1.0,
+      "label": "locked wait 0.75 + decay 0.90",
+      "map": "warehouse-10-20-10-2-1",
+      "mean_delta_ratio_vs_ltm": 0.0,
+      "median_delta_ratio_vs_ltm": 0.0,
+      "method": "repair5f_static_c100_b100_w075_d090",
+      "mostly_no_effect": true,
+      "rows": 20,
+      "success_improvements": 0,
+      "success_regressions": 0,
+      "worse": 0,
+      "worse_share": 0.0
+    },
+    {
+      "agents": 50,
+      "better": 8,
+      "equal": 6,
+      "equal_share": 0.3,
+      "label": "locked wait 0.75 + decay 0.90",
+      "map": "maze-32-32-4",
+      "mean_delta_ratio_vs_ltm": -0.0008071347669000139,
+      "median_delta_ratio_vs_ltm": 0.0,
+      "method": "repair5f_static_c100_b100_w075_d090",
+      "mostly_no_effect": false,
+      "rows": 20,
+      "success_improvements": 0,
+      "success_regressions": 0,
+      "worse": 6,
+      "worse_share": 0.3
+    },
+    {
+      "agents": 100,
+      "better": 7,
+      "equal": 4,
+      "equal_share": 0.2,
+      "label": "locked wait 0.75 + decay 0.90",
+      "map": "random-32-32-20",
+      "mean_delta_ratio_vs_ltm": -0.0011319122852000041,
+      "median_delta_ratio_vs_ltm": 0.0,
+      "method": "repair5f_static_c100_b100_w075_d090",
+      "mostly_no_effect": false,
+      "rows": 20,
+      "success_improvements": 0,
+      "success_regressions": 0,
+      "worse": 9,
+      "worse_share": 0.45
+    }
+  ]
+}

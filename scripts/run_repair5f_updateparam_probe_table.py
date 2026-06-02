@@ -38,6 +38,7 @@ DEFAULT_WIDE_CSV = "outputs/tables/phase5p5_repair5f_updateparam_utility_wide.cs
 DEFAULT_REPORT = "outputs/reports/phase5p5_repair5f_candidate_probe_report.md"
 DEFAULT_SUMMARY = "outputs/reports/phase5p5_repair5f_candidate_probe_summary.json"
 DEFAULT_AUDIT_REPORT = ""
+DEFAULT_EXTERNAL_FRESHNESS_AUDIT = ""
 DEFAULT_ADDITIVE_RUNTIME = "configs/phase5/laur_additive_only"
 DEFAULT_REPAIR5E5_RUNTIME = "artifacts/models/laur_ltm/repair5e5_crossfold_utility_reranker"
 DEFAULT_REPAIR5E5_SHUFFLED_RUNTIME = "artifacts/models/laur_ltm/repair5e5_crossfold_utility_reranker_shuffled_labels_diagnostic"
@@ -186,6 +187,12 @@ def read_jsonl(path: Path) -> list[dict[str, Any]]:
     return rows
 
 
+def read_json(path: Path) -> dict[str, Any]:
+    if not path.exists():
+        return {}
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
 def completed_probe_keys(rows: list[dict[str, Any]]) -> set[tuple[str, int, int, str]]:
     return {
         (str(row.get("map")), finite_int(row.get("agents")), finite_int(row.get("seed")), str(row.get("method")))
@@ -254,6 +261,16 @@ def choose_candidates(candidates: list[Candidate], max_candidates: int) -> list[
             if len(selected) >= max_candidates:
                 return selected
     return selected
+
+
+def filter_candidate_ids(candidates: list[Candidate], candidate_ids: list[str]) -> list[Candidate]:
+    if not candidate_ids:
+        return candidates
+    by_id = {candidate.candidate_id: candidate for candidate in candidates}
+    missing = [candidate_id for candidate_id in candidate_ids if candidate_id not in by_id]
+    if missing:
+        raise KeyError(f"candidate ids not found in lattice: {missing}")
+    return [by_id[candidate_id] for candidate_id in candidate_ids]
 
 
 def write_candidate_runtime(runtime_root: Path, candidate: Candidate) -> Path:
@@ -1056,7 +1073,11 @@ def write_audit_report(path: Path, summary: dict[str, Any]) -> None:
         for key in [
             "force_additive_parity_exact",
             "exact_additive_candidate_parity_exact",
+            "laur_disable_parity_exact",
+            "laur_force_additive_direct_parity_exact",
             "safety_gates_passed",
+            "support_validation_overlap_count",
+            "f2f3_holdout_validation_overlap_count",
             "support_eval_leakage",
             "support_final_overlap_count",
             "full_raw_probe_coverage",
@@ -1110,6 +1131,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--report", type=Path, default=Path(DEFAULT_REPORT))
     parser.add_argument("--summary-json", type=Path, default=Path(DEFAULT_SUMMARY))
     parser.add_argument("--audit-report", type=Path, default=None)
+    parser.add_argument("--external-freshness-audit-summary-json", type=Path, default=Path(DEFAULT_EXTERNAL_FRESHNESS_AUDIT))
     parser.add_argument("--additive-runtime-dir", type=Path, default=Path(DEFAULT_ADDITIVE_RUNTIME))
     parser.add_argument("--repair5e5-runtime-dir", type=Path, default=Path(DEFAULT_REPAIR5E5_RUNTIME))
     parser.add_argument("--repair5e5-shuffled-runtime-dir", type=Path, default=Path(DEFAULT_REPAIR5E5_SHUFFLED_RUNTIME))
@@ -1119,6 +1141,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--time-limit-sec", type=float, default=1.0)
     parser.add_argument("--ltm-max-iterations", type=int, default=4)
     parser.add_argument("--max-candidates", type=int, default=0)
+    parser.add_argument("--candidate-ids", nargs="*", default=[])
     parser.add_argument("--include-lacam-star", action="store_true")
     parser.add_argument("--include-repair5e5", action=argparse.BooleanOptionalAction, default=True)
     parser.add_argument("--include-repair5e5-shuffled", action=argparse.BooleanOptionalAction, default=True)
@@ -1142,6 +1165,11 @@ def main(argv: list[str] | None = None) -> int:
     report = resolve_path(args.report, root)
     summary_json = resolve_path(args.summary_json, root)
     audit_report = resolve_path(args.audit_report, root) if args.audit_report is not None else None
+    external_freshness_audit = (
+        resolve_path(args.external_freshness_audit_summary_json, root)
+        if str(args.external_freshness_audit_summary_json)
+        else None
+    )
     additive_runtime = resolve_path(args.additive_runtime_dir, root)
     repair5e5_runtime = resolve_path(args.repair5e5_runtime_dir, root)
     repair5e5_shuffled_runtime = resolve_path(args.repair5e5_shuffled_runtime_dir, root)
@@ -1153,7 +1181,10 @@ def main(argv: list[str] | None = None) -> int:
 
     if not candidate_csv.exists():
         raise FileNotFoundError(f"candidate lattice missing: {candidate_csv}")
-    candidates = choose_candidates(read_candidates(candidate_csv), int(args.max_candidates))
+    candidates = filter_candidate_ids(
+        choose_candidates(read_candidates(candidate_csv), int(args.max_candidates)),
+        [str(value) for value in args.candidate_ids],
+    )
     candidates_by_id = {candidate.candidate_id: candidate for candidate in candidates}
     methods, skipped_methods = build_methods(
         candidates=candidates,
@@ -1224,6 +1255,7 @@ def main(argv: list[str] | None = None) -> int:
     flags = group_flags(summary_rows)
     force_additive_parity = force_additive_parity_exact(raw_rows)
     exact_additive_candidate_parity = exact_additive_candidate_parity_exact(raw_rows)
+    external_controls = read_json(external_freshness_audit) if external_freshness_audit else {}
     safety_gates_passed = (
         force_additive_parity
         and not bool(set(TRAIN_IDS) & set(FINAL_HOLDOUT_IDS))
@@ -1232,6 +1264,10 @@ def main(argv: list[str] | None = None) -> int:
     gates = {
         "force_additive_parity_exact": force_additive_parity,
         "exact_additive_candidate_parity_exact": exact_additive_candidate_parity,
+        "laur_disable_parity_exact": external_controls.get("laur_disable_parity_exact"),
+        "laur_force_additive_direct_parity_exact": external_controls.get("laur_force_additive_direct_parity_exact"),
+        "support_validation_overlap_count": external_controls.get("support_validation_overlap_count"),
+        "f2f3_holdout_validation_overlap_count": external_controls.get("f2f3_holdout_validation_overlap_count"),
         "support_eval_leakage": bool(set(TRAIN_IDS) & set(FINAL_HOLDOUT_IDS)),
         "support_final_overlap_count": len(support_final_overlap_ids),
         "support_final_overlap_ids": support_final_overlap_ids,
@@ -1329,6 +1365,8 @@ def main(argv: list[str] | None = None) -> int:
             "candidate_methods": [method.alias for method in methods if method.hidden_support],
         },
         "skipped_methods": skipped_methods,
+        "external_freshness_audit_summary_json": str(external_freshness_audit) if external_freshness_audit else "",
+        "external_f4_static_controls": external_controls,
         "synthetic_rows": len(synthetic_rows),
         "paired_method_stats": method_stats,
         "summary_rows": summary_rows,

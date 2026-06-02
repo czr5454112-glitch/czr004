@@ -38,8 +38,30 @@ struct TrafficSnapshot {
   uint nonzero_edges = 0;
   double max_raw = 0.0;
   double max_normalized = 0.0;
+  uint flow_nonzero_edges = 0;
+  double max_flow_raw = 0.0;
+  double max_normalized_flow = 0.0;
   std::vector<TrafficEdgeSnapshot> raw_topk;
   std::vector<TrafficEdgeSnapshot> normalized_topk;
+};
+
+struct TrafficCostAudit {
+  bool all_finite = true;
+  bool within_configured_bounds = true;
+  double min_cost = std::numeric_limits<double>::infinity();
+  double max_cost = -std::numeric_limits<double>::infinity();
+};
+
+struct DualChannelUpdateStats {
+  uint congestion_update_count = 0;
+  uint flow_update_count = 0;
+  double congestion_delta_total = 0.0;
+  double flow_delta_total = 0.0;
+  uint committed_progress_events = 0;
+  uint committed_nonprogress_events = 0;
+  uint blocked_events = 0;
+  uint wait_progress_edges = 0;
+  uint wait_nonprogress_edges = 0;
 };
 
 struct UpdateParams {
@@ -51,6 +73,19 @@ struct UpdateParams {
   double contraflow_penalty = 0.0;
   bool enable_local_saturation = false;
   bool force_additive = false;
+  bool enable_dual_channel = false;
+  double alpha_cong_commit_nonprogress = 1.0;
+  double alpha_cong_block = 1.0;
+  double alpha_cong_wait_progress = 1.0;
+  double alpha_cong_wait_nonprogress = 1.0;
+  double alpha_flow_commit_progress = 0.0;
+  double alpha_flow_wait_progress = 0.0;
+  double rho_cong_decay = 1.0;
+  double rho_flow_decay = 1.0;
+  double lambda_cong = 1.0;
+  double lambda_flow = 0.0;
+  double min_edge_cost = 0.25;
+  double max_edge_cost = 11.0;
 
   static UpdateParams additive()
   {
@@ -63,6 +98,7 @@ struct UpdateParams {
     params.contraflow_penalty = 0.0;
     params.enable_local_saturation = false;
     params.force_additive = true;
+    params.enable_dual_channel = false;
     return params;
   }
 };
@@ -91,17 +127,33 @@ class DirectedTrafficMap {
   void update_from_trace(const std::vector<TraceEvent>& events);
   void update_from_trace(const std::vector<TraceEvent>& events,
                          const UpdateParams& params);
+  void update_from_trace(const std::vector<TraceEvent>& events,
+                         const UpdateParams& params,
+                         const Instance* instance);
 
   bool has_edge(uint from_id, uint to_id) const;
   double raw_count(uint from_id, uint to_id) const;
   double normalized_weight(uint from_id, uint to_id) const;
+  double flow_raw_count(uint from_id, uint to_id) const;
+  double normalized_flow_weight(uint from_id, uint to_id) const;
   double traversal_cost(uint from_id, uint to_id) const;
   uint nonzero_raw_edges() const;
+  uint nonzero_flow_edges() const;
   double max_raw_count() const;
   double max_normalized_weight() const;
+  double max_flow_raw_count() const;
+  double max_normalized_flow_weight() const;
+  bool dual_channel_enabled() const { return dual_channel_cost_enabled_; }
+  const DualChannelUpdateStats& last_update_stats() const
+  {
+    return last_update_stats_;
+  }
+  TrafficCostAudit cost_audit() const;
   TrafficSnapshot snapshot(uint topk_edges) const;
   double lower_bound() const { return lower_bound_; }
   double upper_bound() const { return upper_bound_; }
+  double configured_min_edge_cost() const { return min_edge_cost_; }
+  double configured_max_edge_cost() const { return max_edge_cost_; }
   const Graph& graph() const { return graph_; }
 
  private:
@@ -110,13 +162,26 @@ class DirectedTrafficMap {
   double upper_bound_;
   std::unordered_map<std::uint64_t, double> raw_counts_;
   std::unordered_map<std::uint64_t, double> normalized_weights_;
+  std::unordered_map<std::uint64_t, double> flow_raw_counts_;
+  std::unordered_map<std::uint64_t, double> normalized_flow_weights_;
+  bool dual_channel_cost_enabled_ = false;
+  double lambda_cong_ = 1.0;
+  double lambda_flow_ = 0.0;
+  double min_edge_cost_ = 0.25;
+  double max_edge_cost_ = 11.0;
+  DualChannelUpdateStats last_update_stats_;
 
   static std::uint64_t key(uint from_id, uint to_id);
   void apply_decay(const UpdateParams& params);
+  void apply_dual_decay(const UpdateParams& params);
   void increment_event(const TraceEvent& event, const UpdateParams& params);
+  void increment_dual_event(const TraceEvent& event, const UpdateParams& params,
+                            const Instance& instance, DistTable& distances);
   void increment_edge(uint from_id, uint to_id, double delta);
+  void increment_flow_edge(uint from_id, uint to_id, double delta);
   void renormalize();
   void renormalize(const UpdateParams& params);
+  void renormalize_flow();
 };
 
 class WeightedDistanceTable {
@@ -222,6 +287,7 @@ struct LtmRunResult {
   uint iterations = 0;
   uint last_node_budget = 0;
   TraceSummary trace_summary;
+  DualChannelUpdateStats dual_channel_update_stats;
   bool timeout = false;
   double time_to_first_solution_ms = std::numeric_limits<double>::quiet_NaN();
 

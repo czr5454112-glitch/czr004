@@ -1,0 +1,246 @@
+{
+  "agent_counts": [
+    50,
+    100
+  ],
+  "all_dual_costs_finite": true,
+  "always_additive_defer_parity_exact": true,
+  "build_passed": true,
+  "cost_bounds_respected": true,
+  "created_at": "2026-06-02T21:21:49.603816",
+  "dual_additive_parity_exact": true,
+  "expected_row_count": 108,
+  "instance_ids": [
+    26,
+    27
+  ],
+  "laur_disable_parity_exact": true,
+  "laur_force_additive_direct_parity_exact": true,
+  "maps": [
+    "random-32-32-20",
+    "maze-32-32-4",
+    "warehouse-10-20-10-2-1"
+  ],
+  "methods": [
+    "lacam_star_ltm",
+    "always_additive_defer",
+    "repair5f_candidate_additive_ltm",
+    "laur_disable",
+    "laur_force_additive_direct",
+    "repair5g_dual_additive_parity",
+    "repair5g_dual_flow_only_025",
+    "repair5g_dual_block_wait_cong_flow025",
+    "repair5g_dual_goal_gated_wait_025"
+  ],
+  "missing_examples": [],
+  "missing_rows": 0,
+  "no_solver_crashes": true,
+  "paired_method_stats": {
+    "always_additive_defer": {
+      "better": 0,
+      "equal": 12,
+      "mean_delta_ratio_vs_ltm": 0.0,
+      "method": "always_additive_defer",
+      "rows": 12,
+      "worse": 0
+    },
+    "laur_disable": {
+      "better": 0,
+      "equal": 12,
+      "mean_delta_ratio_vs_ltm": 0.0,
+      "method": "laur_disable",
+      "rows": 12,
+      "worse": 0
+    },
+    "laur_force_additive_direct": {
+      "better": 0,
+      "equal": 12,
+      "mean_delta_ratio_vs_ltm": 0.0,
+      "method": "laur_force_additive_direct",
+      "rows": 12,
+      "worse": 0
+    },
+    "repair5f_candidate_additive_ltm": {
+      "better": 0,
+      "equal": 12,
+      "mean_delta_ratio_vs_ltm": 0.0,
+      "method": "repair5f_candidate_additive_ltm",
+      "rows": 12,
+      "worse": 0
+    },
+    "repair5g_dual_additive_parity": {
+      "better": 0,
+      "equal": 12,
+      "mean_delta_ratio_vs_ltm": 0.0,
+      "method": "repair5g_dual_additive_parity",
+      "rows": 12,
+      "worse": 0
+    },
+    "repair5g_dual_block_wait_cong_flow025": {
+      "better": 0,
+      "equal": 9,
+      "mean_delta_ratio_vs_ltm": 0.015531397574999994,
+      "method": "repair5g_dual_block_wait_cong_flow025",
+      "rows": 12,
+      "worse": 3
+    },
+    "repair5g_dual_flow_only_025": {
+      "better": 0,
+      "equal": 9,
+      "mean_delta_ratio_vs_ltm": 0.019149001821666678,
+      "method": "repair5g_dual_flow_only_025",
+      "rows": 12,
+      "worse": 3
+    },
+    "repair5g_dual_goal_gated_wait_025": {
+      "better": 1,
+      "equal": 8,
+      "mean_delta_ratio_vs_ltm": 0.01617144799666668,
+      "method": "repair5g_dual_goal_gated_wait_025",
+      "rows": 12,
+      "worse": 3
+    }
+  },
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "repair5f_candidate_additive_ltm_parity_exact": true,
+  "row_count": 108,
+  "scenario_audit": {
+    "agent_counts": [
+      50,
+      100
+    ],
+    "created_at": "2026-06-02T21:15:58.570053",
+    "effective_instance_ids": [
+      26,
+      27
+    ],
+    "final_missing_count": 0,
+    "final_missing_examples": [],
+    "generated_count": 6,
+    "generated_examples": [
+      {
+        "instance_id": 26,
+        "map": "random-32-32-20",
+        "pairs": 100,
+        "path": "outputs\\tmp\\phase5p5_repair5g_dual_channel_scenarios\\random-32-32-20-random-26.scen",
+        "sha256": "1c6606e85ceed850eb0458938f58a550db4450acfb7cb161222f4bb0cc19e781"
+      },
+      {
+        "instance_id": 27,
+        "map": "random-32-32-20",
+        "pairs": 100,
+        "path": "outputs\\tmp\\phase5p5_repair5g_dual_channel_scenarios\\random-32-32-20-random-27.scen",
+        "sha256": "3a7eb8733b7642099792af759954ca518c242643b837acbcaa11b24a94923f59"
+      },
+      {
+        "instance_id": 26,
+        "map": "maze-32-32-4",
+        "pairs": 100,
+        "path": "outputs\\tmp\\phase5p5_repair5g_dual_channel_scenarios\\maze-32-32-4-random-26.scen",
+        "sha256": "a967699a2da3db654be37d095b1c54b977829201754af18c7c6c13b2a18b8ab0"
+      },
+      {
+        "instance_id": 27,
+        "map": "maze-32-32-4",
+        "pairs": 100,
+        "path": "outputs\\tmp\\phase5p5_repair5g_dual_channel_scenarios\\maze-32-32-4-random-27.scen",
+        "sha256": "35a306a6a4366de924b8e4feac01614c0fc05ee2ba538de1b4e73e273af16005"
+      },
+      {
+        "instance_id": 26,
+        "map": "warehouse-10-20-10-2-1",
+        "pairs": 100,
+        "path": "outputs\\tmp\\phase5p5_repair5g_dual_channel_scenarios\\warehouse-10-20-10-2-1-random-26.scen",
+        "sha256": "6f8215e9158d3aea0208144a40f9072ede69f772fb2982a4a5ddfecabf8abb6b"
+      },
+      {
+        "instance_id": 27,
+        "map": "warehouse-10-20-10-2-1",
+        "pairs": 100,
+        "path": "outputs\\tmp\\phase5p5_repair5g_dual_channel_scenarios\\warehouse-10-20-10-2-1-random-27.scen",
+        "sha256": "828ebdd555d72688b974ac022989e23fb8d19c11b7546957b710fabeed73e557"
+      }
+    ],
+    "generated_missing_scenarios": true,
+    "generator_policy": {
+      "base_seed": 20260522,
+      "equivalent_command": "python scripts/generate_phase1a_scenarios.py --manifest <f4 maps with instances 26..45> --output-dir outputs\\tmp\\phase5p5_repair5g_dual_channel_scenarios --base-seed 20260522",
+      "script_version": "phase1a-scenario-generator-v1",
+      "seed_function": "sha256(script_version|base_seed|map_name|instance_id)",
+      "source": "scripts/generate_phase1a_scenarios.py functions"
+    },
+    "initial_missing_count": 6,
+    "initial_missing_examples": [
+      {
+        "instance_id": 26,
+        "map": "random-32-32-20"
+      },
+      {
+        "instance_id": 27,
+        "map": "random-32-32-20"
+      },
+      {
+        "instance_id": 26,
+        "map": "maze-32-32-4"
+      },
+      {
+        "instance_id": 27,
+        "map": "maze-32-32-4"
+      },
+      {
+        "instance_id": 26,
+        "map": "warehouse-10-20-10-2-1"
+      },
+      {
+        "instance_id": 27,
+        "map": "warehouse-10-20-10-2-1"
+      }
+    ],
+    "reduced_scope_reason": "",
+    "requested_instance_ids": [
+      26,
+      27
+    ],
+    "requested_maps": [
+      "random-32-32-20",
+      "maze-32-32-4",
+      "warehouse-10-20-10-2-1"
+    ],
+    "scenario_dir": "outputs\\tmp\\phase5p5_repair5g_dual_channel_scenarios",
+    "scenario_metadata": "outputs\\reports\\phase5p5_repair5g_dual_channel_scenario_generation.json",
+    "schema_version": "phase5p5_repair5f4_scenario_generation_v1",
+    "source_missing_count": 6,
+    "source_missing_examples": [
+      {
+        "instance_id": 26,
+        "map": "random-32-32-20"
+      },
+      {
+        "instance_id": 27,
+        "map": "random-32-32-20"
+      },
+      {
+        "instance_id": 26,
+        "map": "maze-32-32-4"
+      },
+      {
+        "instance_id": 27,
+        "map": "maze-32-32-4"
+      },
+      {
+        "instance_id": 26,
+        "map": "warehouse-10-20-10-2-1"
+      },
+      {
+        "instance_id": 27,
+        "map": "warehouse-10-20-10-2-1"
+      }
+    ],
+    "source_scenario_dir": "outputs\\tmp\\phase1a\\generated\\phase1a-generated-random"
+  },
+  "schema_errors": 0,
+  "schema_version": "phase5p5_repair5g_dual_channel_smoke_summary_v1",
+  "scope": "smoke",
+  "solver_crash_count": 0
+}

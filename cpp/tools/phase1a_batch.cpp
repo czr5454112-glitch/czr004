@@ -40,6 +40,10 @@ struct Args {
   std::string laur_static_rule;
   std::string laur_update_log_jsonl;
   std::string method_alias;
+  std::string repair5g_candidate_id;
+  std::string repair5g_update_mode = "disabled";
+  czr004::ltm::UpdateParams repair5g_update_params =
+      czr004::ltm::UpdateParams::additive();
   uint agents = 0;
   uint seed = 0;
   double time_limit_sec = 30.0;
@@ -50,6 +54,7 @@ struct Args {
   bool laur_safety_enabled = true;
   bool laur_post_first_solution_only = true;
   bool laur_ood_guard_enabled = false;
+  bool repair5g_enabled = false;
   uint laur_every_k_restarts = 1;
   double laur_safety_threshold = 0.30;
   double laur_ood_z_threshold = 5.0;
@@ -193,6 +198,142 @@ std::string repair5f_static_runtime_path()
   return "artifacts/models/laur_ltm/repair5f_static_c100_b100_w075_d090";
 }
 
+struct Repair5GMethodSpec {
+  bool recognized = false;
+  std::string candidate_id;
+  std::string update_mode;
+  czr004::ltm::UpdateParams params = czr004::ltm::UpdateParams::additive();
+};
+
+czr004::ltm::UpdateParams repair5g_base_dual_params()
+{
+  auto params = czr004::ltm::UpdateParams();
+  params.enable_dual_channel = true;
+  params.force_additive = false;
+  params.alpha_commit = 1.0;
+  params.alpha_block = 1.0;
+  params.alpha_wait_spillover = 1.0;
+  params.rho_decay = 1.0;
+  params.alpha_cong_commit_nonprogress = 0.0;
+  params.alpha_cong_block = 1.0;
+  params.alpha_cong_wait_progress = 1.0;
+  params.alpha_cong_wait_nonprogress = 1.0;
+  params.alpha_flow_commit_progress = 1.0;
+  params.alpha_flow_wait_progress = 0.0;
+  params.rho_cong_decay = 1.0;
+  params.rho_flow_decay = 1.0;
+  params.lambda_cong = 1.0;
+  params.lambda_flow = 0.25;
+  params.min_edge_cost = 0.25;
+  params.max_edge_cost = 11.0;
+  return params;
+}
+
+Repair5GMethodSpec repair5g_method_spec(const std::string& method)
+{
+  auto spec = Repair5GMethodSpec();
+  auto set = [&](const std::string& candidate_id,
+                 czr004::ltm::UpdateParams params,
+                 const std::string& update_mode) {
+    spec.recognized = true;
+    spec.candidate_id = candidate_id;
+    spec.params = params;
+    spec.update_mode = update_mode;
+  };
+
+  if (method == "repair5g_dual_additive_parity") {
+    set("dcltm_additive_parity", czr004::ltm::UpdateParams::additive(),
+        "additive_parity");
+  } else if (method == "repair5g_dual_c_only_locked_f4") {
+    auto params = repair5g_base_dual_params();
+    params.alpha_cong_commit_nonprogress = 1.0;
+    params.alpha_cong_block = 1.0;
+    params.alpha_cong_wait_progress = 0.75;
+    params.alpha_cong_wait_nonprogress = 0.75;
+    params.alpha_flow_commit_progress = 0.0;
+    params.alpha_flow_wait_progress = 0.0;
+    params.rho_cong_decay = 0.90;
+    params.rho_flow_decay = 1.0;
+    params.lambda_cong = 1.0;
+    params.lambda_flow = 0.0;
+    set("dcltm_c_only_locked_f4", params, "dual_c_only");
+  } else if (method == "repair5g_dual_c_only_best_f4_observed") {
+    auto params = repair5g_base_dual_params();
+    params.alpha_cong_commit_nonprogress = 1.25;
+    params.alpha_cong_block = 1.25;
+    params.alpha_cong_wait_progress = 0.75;
+    params.alpha_cong_wait_nonprogress = 0.75;
+    params.alpha_flow_commit_progress = 0.0;
+    params.alpha_flow_wait_progress = 0.0;
+    params.rho_cong_decay = 0.95;
+    params.rho_flow_decay = 1.0;
+    params.lambda_cong = 1.0;
+    params.lambda_flow = 0.0;
+    set("dcltm_c_only_best_f4_observed", params, "dual_c_only");
+  } else if (method == "repair5g_dual_flow_only_025" ||
+             method == "repair5g_dual_flow_only_050") {
+    auto params = repair5g_base_dual_params();
+    params.alpha_cong_commit_nonprogress = 0.0;
+    params.alpha_cong_block = 0.0;
+    params.alpha_cong_wait_progress = 0.0;
+    params.alpha_cong_wait_nonprogress = 0.0;
+    params.alpha_flow_commit_progress = 1.0;
+    params.alpha_flow_wait_progress = 0.0;
+    params.lambda_cong = 0.0;
+    params.lambda_flow =
+        method == "repair5g_dual_flow_only_025" ? 0.25 : 0.50;
+    set(method == "repair5g_dual_flow_only_025" ? "dcltm_flow_only_025"
+                                                 : "dcltm_flow_only_050",
+        params, "dual_flow_only");
+  } else if (method == "repair5g_dual_block_wait_cong_flow025" ||
+             method == "repair5g_dual_block_wait_cong_flow050") {
+    auto params = repair5g_base_dual_params();
+    params.alpha_cong_commit_nonprogress = 0.0;
+    params.alpha_cong_block = 1.0;
+    params.alpha_cong_wait_progress = 1.0;
+    params.alpha_cong_wait_nonprogress = 1.0;
+    params.alpha_flow_commit_progress = 1.0;
+    params.alpha_flow_wait_progress = 0.0;
+    params.lambda_cong = 1.0;
+    params.lambda_flow =
+        method == "repair5g_dual_block_wait_cong_flow025" ? 0.25 : 0.50;
+    set(method == "repair5g_dual_block_wait_cong_flow025"
+            ? "dcltm_block_wait_cong_flow025"
+            : "dcltm_block_wait_cong_flow050",
+        params, "dual_block_wait_cong_flow");
+  } else if (method == "repair5g_dual_goal_gated_wait_025" ||
+             method == "repair5g_dual_goal_gated_wait_050") {
+    auto params = repair5g_base_dual_params();
+    params.alpha_cong_commit_nonprogress = 0.0;
+    params.alpha_cong_block = 1.0;
+    params.alpha_cong_wait_progress = 0.25;
+    params.alpha_cong_wait_nonprogress = 1.0;
+    params.alpha_flow_commit_progress = 1.0;
+    params.alpha_flow_wait_progress = 0.0;
+    params.lambda_cong = 1.0;
+    params.lambda_flow =
+        method == "repair5g_dual_goal_gated_wait_025" ? 0.25 : 0.50;
+    set(method == "repair5g_dual_goal_gated_wait_025"
+            ? "dcltm_goal_gated_wait_025"
+            : "dcltm_goal_gated_wait_050",
+        params, "dual_goal_gated_wait");
+  } else if (method == "repair5g_dual_balanced_decay") {
+    auto params = repair5g_base_dual_params();
+    params.alpha_cong_commit_nonprogress = 0.0;
+    params.alpha_cong_block = 1.0;
+    params.alpha_cong_wait_progress = 1.0;
+    params.alpha_cong_wait_nonprogress = 1.0;
+    params.alpha_flow_commit_progress = 1.0;
+    params.alpha_flow_wait_progress = 0.0;
+    params.rho_cong_decay = 0.95;
+    params.rho_flow_decay = 0.95;
+    params.lambda_cong = 1.0;
+    params.lambda_flow = 0.25;
+    set("dcltm_balanced_decay", params, "dual_balanced_decay");
+  }
+  return spec;
+}
+
 Args parse_args(int argc, char** argv)
 {
   auto values = std::unordered_map<std::string, std::string>();
@@ -312,6 +453,7 @@ Args parse_args(int argc, char** argv)
   if (values.count("verbose")) args.verbose = std::stoi(values["verbose"]);
 
   const auto requested_method = args.method;
+  const auto repair5g_spec = repair5g_method_spec(requested_method);
   const auto use_repair5f_alias = [&](const std::string& default_model_path) {
     if (args.method_alias.empty()) args.method_alias = requested_method;
     args.method = "lacam_star_lau_ltm";
@@ -350,6 +492,18 @@ Args parse_args(int argc, char** argv)
       throw std::runtime_error("--method " + requested_method +
                                " requires --laur-model-path");
     }
+  } else if (repair5g_spec.recognized) {
+    if (args.method_alias.empty()) args.method_alias = requested_method;
+    args.method = "lacam_star_ltm";
+    args.laur_enable = false;
+    args.laur_disable = true;
+    args.laur_force_additive = false;
+    args.laur_model_path.clear();
+    args.laur_static_rule.clear();
+    args.repair5g_enabled = true;
+    args.repair5g_candidate_id = repair5g_spec.candidate_id;
+    args.repair5g_update_mode = repair5g_spec.update_mode;
+    args.repair5g_update_params = repair5g_spec.params;
   }
 
   if (args.method != "lacam_star" && args.method != "lacam_star_ltm" &&
@@ -415,6 +569,31 @@ struct RunStats {
   uint laur_update_period_restarts = 1;
   bool laur_post_first_solution_only = true;
   std::map<std::string, uint> laur_selected_rules;
+  bool repair5g_enabled = false;
+  bool dual_channel_enabled = false;
+  std::string repair5g_candidate_id;
+  std::string repair5g_update_mode = "disabled";
+  double repair5g_lambda_cong = 1.0;
+  double repair5g_lambda_flow = 0.0;
+  double repair5g_rho_cong_decay = 1.0;
+  double repair5g_rho_flow_decay = 1.0;
+  double repair5g_min_edge_cost = 0.25;
+  double repair5g_max_edge_cost = 11.0;
+  uint repair5g_congestion_update_count = 0;
+  uint repair5g_flow_update_count = 0;
+  double repair5g_congestion_delta_total = 0.0;
+  double repair5g_flow_delta_total = 0.0;
+  uint repair5g_committed_progress_events = 0;
+  uint repair5g_committed_nonprogress_events = 0;
+  uint repair5g_blocked_events = 0;
+  uint repair5g_wait_progress_edges = 0;
+  uint repair5g_wait_nonprogress_edges = 0;
+  uint repair5g_congestion_nonzero_edges = 0;
+  uint repair5g_flow_nonzero_edges = 0;
+  bool repair5g_costs_finite = true;
+  bool repair5g_cost_bounds_respected = true;
+  double repair5g_min_traversal_cost = std::numeric_limits<double>::quiet_NaN();
+  double repair5g_max_traversal_cost = std::numeric_limits<double>::quiet_NaN();
 };
 
 std::string default_traffic_map_run_id(const Args& args)
@@ -484,7 +663,14 @@ void append_traffic_map_jsonl(const Args& args, const Instance& instance,
       out << ",\"warm_start_target_weight\":" << json_number_or_null(weight);
       out << ",\"residual_reference_weight\":" << json_number_or_null(weight);
       out << ",\"residual_delta_target\":0";
-      out << ",\"traversal_cost\":" << json_number_or_null(1.0 + weight);
+      out << ",\"traversal_cost\":"
+          << json_number_or_null(traffic_map.traversal_cost(from->id, to->id));
+      out << ",\"ltm_flow_raw_count\":"
+          << json_number_or_null(traffic_map.flow_raw_count(from->id, to->id));
+      out << ",\"ltm_normalized_flow_weight\":"
+          << json_number_or_null(traffic_map.normalized_flow_weight(from->id, to->id));
+      out << ",\"dual_channel_enabled\":"
+          << (traffic_map.dual_channel_enabled() ? "true" : "false");
       out << ",\"nonzero\":" << (raw_count > 0.0 ? "true" : "false");
       out << ",\"map_vertices\":" << instance.G.size();
       out << "}\n";
@@ -626,6 +812,19 @@ RunStats run_lacam_star_ltm(const Instance& instance, const Args& args)
   stats.laur_static_rule = args.laur_static_rule;
   stats.laur_update_period_restarts = args.laur_every_k_restarts;
   stats.laur_post_first_solution_only = args.laur_post_first_solution_only;
+  stats.repair5g_enabled = args.repair5g_enabled;
+  stats.dual_channel_enabled =
+      args.repair5g_update_params.enable_dual_channel;
+  stats.repair5g_candidate_id = args.repair5g_candidate_id;
+  stats.repair5g_update_mode = args.repair5g_update_mode;
+  stats.repair5g_lambda_cong = args.repair5g_update_params.lambda_cong;
+  stats.repair5g_lambda_flow = args.repair5g_update_params.lambda_flow;
+  stats.repair5g_rho_cong_decay =
+      args.repair5g_update_params.rho_cong_decay;
+  stats.repair5g_rho_flow_decay =
+      args.repair5g_update_params.rho_flow_decay;
+  stats.repair5g_min_edge_cost = args.repair5g_update_params.min_edge_cost;
+  stats.repair5g_max_edge_cost = args.repair5g_update_params.max_edge_cost;
   if (!stats.laur_enabled) {
     stats.laur_update_mode = "disabled";
   } else if (stats.laur_force_additive) {
@@ -645,6 +844,9 @@ RunStats run_lacam_star_ltm(const Instance& instance, const Args& args)
   options.node_budget_factor = 10;
   options.verbose = args.verbose;
   options.seed = args.seed;
+  if (args.repair5g_enabled) {
+    options.update_params = args.repair5g_update_params;
+  }
 
   auto runtime = czr004::ntm::LaurLtmRuntime();
   const auto static_params =
@@ -808,6 +1010,32 @@ RunStats run_lacam_star_ltm(const Instance& instance, const Args& args)
   stats.committed_events = result.trace_summary.committed;
   stats.blocked_events = result.trace_summary.blocked;
   stats.nonzero_ltm_edges = result.traffic_map.nonzero_raw_edges();
+  const auto cost_audit = result.traffic_map.cost_audit();
+  stats.repair5g_congestion_update_count =
+      result.dual_channel_update_stats.congestion_update_count;
+  stats.repair5g_flow_update_count =
+      result.dual_channel_update_stats.flow_update_count;
+  stats.repair5g_congestion_delta_total =
+      result.dual_channel_update_stats.congestion_delta_total;
+  stats.repair5g_flow_delta_total =
+      result.dual_channel_update_stats.flow_delta_total;
+  stats.repair5g_committed_progress_events =
+      result.dual_channel_update_stats.committed_progress_events;
+  stats.repair5g_committed_nonprogress_events =
+      result.dual_channel_update_stats.committed_nonprogress_events;
+  stats.repair5g_blocked_events =
+      result.dual_channel_update_stats.blocked_events;
+  stats.repair5g_wait_progress_edges =
+      result.dual_channel_update_stats.wait_progress_edges;
+  stats.repair5g_wait_nonprogress_edges =
+      result.dual_channel_update_stats.wait_nonprogress_edges;
+  stats.repair5g_congestion_nonzero_edges =
+      result.traffic_map.nonzero_raw_edges();
+  stats.repair5g_flow_nonzero_edges = result.traffic_map.nonzero_flow_edges();
+  stats.repair5g_costs_finite = cost_audit.all_finite;
+  stats.repair5g_cost_bounds_respected = cost_audit.within_configured_bounds;
+  stats.repair5g_min_traversal_cost = cost_audit.min_cost;
+  stats.repair5g_max_traversal_cost = cost_audit.max_cost;
   append_traffic_map_jsonl(args, instance, result.traffic_map);
   return stats;
 }
@@ -892,6 +1120,56 @@ void append_jsonl(const Args& args, const std::filesystem::path& binary_path,
       << (stats.laur_post_first_solution_only ? "true" : "false");
   out << ",\"laur_selected_rules\":";
   append_json_string_uint_map(out, stats.laur_selected_rules);
+  out << ",\"repair5g_enabled\":"
+      << (stats.repair5g_enabled ? "true" : "false");
+  out << ",\"dual_channel_enabled\":"
+      << (stats.dual_channel_enabled ? "true" : "false");
+  out << ",\"repair5g_candidate_id\":"
+      << json_string(stats.repair5g_candidate_id);
+  out << ",\"repair5g_update_mode\":"
+      << json_string(stats.repair5g_update_mode);
+  out << ",\"repair5g_lambda_cong\":"
+      << json_number_or_null(stats.repair5g_lambda_cong);
+  out << ",\"repair5g_lambda_flow\":"
+      << json_number_or_null(stats.repair5g_lambda_flow);
+  out << ",\"repair5g_rho_cong_decay\":"
+      << json_number_or_null(stats.repair5g_rho_cong_decay);
+  out << ",\"repair5g_rho_flow_decay\":"
+      << json_number_or_null(stats.repair5g_rho_flow_decay);
+  out << ",\"repair5g_min_edge_cost\":"
+      << json_number_or_null(stats.repair5g_min_edge_cost);
+  out << ",\"repair5g_max_edge_cost\":"
+      << json_number_or_null(stats.repair5g_max_edge_cost);
+  out << ",\"repair5g_congestion_update_count\":"
+      << stats.repair5g_congestion_update_count;
+  out << ",\"repair5g_flow_update_count\":"
+      << stats.repair5g_flow_update_count;
+  out << ",\"repair5g_congestion_delta_total\":"
+      << json_number_or_null(stats.repair5g_congestion_delta_total);
+  out << ",\"repair5g_flow_delta_total\":"
+      << json_number_or_null(stats.repair5g_flow_delta_total);
+  out << ",\"repair5g_committed_progress_events\":"
+      << stats.repair5g_committed_progress_events;
+  out << ",\"repair5g_committed_nonprogress_events\":"
+      << stats.repair5g_committed_nonprogress_events;
+  out << ",\"repair5g_blocked_events\":"
+      << stats.repair5g_blocked_events;
+  out << ",\"repair5g_wait_progress_edges\":"
+      << stats.repair5g_wait_progress_edges;
+  out << ",\"repair5g_wait_nonprogress_edges\":"
+      << stats.repair5g_wait_nonprogress_edges;
+  out << ",\"repair5g_congestion_nonzero_edges\":"
+      << stats.repair5g_congestion_nonzero_edges;
+  out << ",\"repair5g_flow_nonzero_edges\":"
+      << stats.repair5g_flow_nonzero_edges;
+  out << ",\"repair5g_costs_finite\":"
+      << (stats.repair5g_costs_finite ? "true" : "false");
+  out << ",\"repair5g_cost_bounds_respected\":"
+      << (stats.repair5g_cost_bounds_respected ? "true" : "false");
+  out << ",\"repair5g_min_traversal_cost\":"
+      << json_number_or_null(stats.repair5g_min_traversal_cost);
+  out << ",\"repair5g_max_traversal_cost\":"
+      << json_number_or_null(stats.repair5g_max_traversal_cost);
   out << ",\"git_commit\":" << json_string(args.project_commit);
   out << ",\"external_lacam2_commit\":" << json_string(args.external_commit);
   out << ",\"branch\":" << json_string(args.branch);

@@ -2674,3 +2674,55 @@
   - No PIBT, LaCAM*, candidate generation, pruning, conflict handling, OPEN/EXPLORED, incumbent pruning, rewrite, or restart semantics were changed.
   - No learned restart, action prediction, or richer traffic-map state was introduced.
   - `phase5p5_allowed=false` and `phase6_allowed=false` remain mandatory.
+
+## 2026-06-02 21:12 - Start Repair5G.0 goal-aware dual-channel LTM diagnostic
+
+- Request:
+  - Finish `czr004_repair5g0_goal_aware_dual_channel_ltm_plan.md`.
+- Carry-forward interpretation:
+  - F4-A was a clean static-rule failure, not a parity or freshness failure.
+  - F4.1 showed bounded `UpdateParams` oracle headroom: 67 / 53 / 0 better/equal/worse, mean delta ratio `-0.017388555948699997`, ratio-worse groups 0.
+  - The best observed F4 candidate `c125_b125_w075_d095` is diagnostic-only and cannot be promoted from F4.
+  - Support-to-F4 transfer was poor: Spearman `0.18987049028677153`; locked support rank 1, locked F4 rank 27.
+- Repair5G boundary:
+  - Add only project-owned dual-channel LTM update/cost support.
+  - Do not modify `external/lacam2/lacam2/**`.
+  - Do not change PIBT legality, LaCAM* candidate generation, conflict handling, OPEN/EXPLORED/rewrite, incumbent pruning, or restart semantics.
+  - Do not introduce action prediction, learned restart, learned priorities, learned heuristic logits, or candidate deletion.
+  - Keep `phase5p5_allowed=false` and `phase6_allowed=false`.
+- Files planned / started:
+  - `cpp/ltm/ltm.hpp`
+  - `cpp/ltm/ltm.cpp`
+  - `cpp/tools/phase1a_batch.cpp`
+  - `scripts/create_repair5g_dual_channel_candidates.py`
+  - `scripts/run_repair5g_dual_channel_probe.py`
+  - `scripts/analyze_repair5g_dual_channel_oracle.py`
+  - `tests/test_repair5g_dual_channel_ltm.py`
+  - `outputs/reports/phase5p5_repair5g0_design_memo.md`
+  - `outputs/reports/phase5p5_repair5f_to_repair5g_transition_interpretation.md`
+- Completion:
+  - Added goal-aware dual-channel LTM support to the project-owned traffic map. The new path keeps legacy additive behavior as the default, adds separate congestion and flow channels under `UpdateParams::enable_dual_channel`, and computes bounded traversal costs with `1 + lambda_cong * C_norm - lambda_flow * F_norm`.
+  - Wired Repair5G runtime methods through `phase1a_batch` as direct `UpdateParams` candidates, including additive parity, congestion-only controls, flow-only controls, block/wait congestion plus flow variants, goal-gated wait variants, and balanced decay.
+  - Added Repair5G candidate generation, probe execution, oracle analysis, and tests:
+    - `scripts/create_repair5g_dual_channel_candidates.py`
+    - `scripts/run_repair5g_dual_channel_probe.py`
+    - `scripts/analyze_repair5g_dual_channel_oracle.py`
+    - `tests/test_repair5g_dual_channel_ltm.py`
+  - Generated the Repair5G lattice, smoke probe, development probe, oracle report, decision report, utility tables, and audit summaries under `outputs/reports/`, `outputs/tables/`, and `outputs/logs/phase5p5_repair5g_dual_channel_*`.
+- Probe results:
+  - Smoke probe: 108 / 108 expected rows, missing rows = 0, schema errors = 0, solver crashes = 0.
+  - Development probe: 2280 / 2280 expected rows, missing rows = 0, schema errors = 0, solver crashes = 0.
+  - Parity controls passed exactly: dual additive parity, always-additive defer parity, Repair5F exact additive candidate parity, `laur_disable`, and direct `laur_force_additive_direct`.
+  - Cost safety passed: all dual costs finite and all reported traversal costs within the configured bounds.
+  - Dual-channel oracle did not show useful headroom: 29 / 55 / 36 better/equal/worse, mean delta ratio `+0.001879629688233328`, bootstrap 95% CI `[-0.00205080619791666, +0.006099029348233336]`.
+  - Best individual dual candidate remained worse than baseline on mean delta; the best congestion-only Repair5G candidate had mean delta ratio `+0.007440336798399994`.
+- Decision:
+  - `outputs/reports/phase5p5_repair5g_dual_channel_decision.md` records `dual_channel_no_headroom`.
+  - Stop the broad Repair5G G0 dual-channel lattice. Return to the Repair5F selector protocol or richer features.
+  - `phase5p5_allowed=false` and `phase6_allowed=false` remain mandatory.
+- Validation:
+  - `python -m py_compile scripts/create_repair5g_dual_channel_candidates.py scripts/run_repair5g_dual_channel_probe.py scripts/analyze_repair5g_dual_channel_oracle.py` passed.
+  - `python -m pytest tests/test_repair5f_updateparams.py tests/test_repair5g_dual_channel_ltm.py -q` could not run because pytest is unavailable in the active Python (`No module named pytest`).
+  - Manual fallback harness ran all 15 test functions across `tests/test_repair5f_updateparams.py` and `tests/test_repair5g_dual_channel_ltm.py` with 0 failures.
+  - `powershell -ExecutionPolicy Bypass -File scripts/build_phase1a_batch.ps1` passed.
+  - `git diff --check` passed; only existing CRLF normalization warnings were reported.

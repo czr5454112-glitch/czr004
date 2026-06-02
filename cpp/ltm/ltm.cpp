@@ -7,6 +7,7 @@
 #include <limits>
 #include <queue>
 #include <sstream>
+#include <stdexcept>
 #include <utility>
 
 namespace czr004::ltm {
@@ -78,12 +79,16 @@ DirectedTrafficMap::DirectedTrafficMap(const Graph& graph, double lower_bound,
       lower_bound_(lower_bound),
       upper_bound_(upper_bound),
       raw_counts_(),
-      normalized_weights_()
+      normalized_weights_(),
+      flow_raw_counts_(),
+      normalized_flow_weights_()
 {
   for (const auto* from : graph_.V) {
     for (const auto* to : from->neighbor) {
       raw_counts_[key(from->id, to->id)] = 0.0;
       normalized_weights_[key(from->id, to->id)] = 1.0;
+      flow_raw_counts_[key(from->id, to->id)] = 0.0;
+      normalized_flow_weights_[key(from->id, to->id)] = 0.0;
     }
   }
 }
@@ -91,7 +96,11 @@ DirectedTrafficMap::DirectedTrafficMap(const Graph& graph, double lower_bound,
 void DirectedTrafficMap::reset()
 {
   for (auto& [_, count] : raw_counts_) count = 0.0;
+  for (auto& [_, count] : flow_raw_counts_) count = 0.0;
+  dual_channel_cost_enabled_ = false;
+  last_update_stats_ = DualChannelUpdateStats();
   renormalize();
+  renormalize_flow();
 }
 
 void DirectedTrafficMap::update_from_trace(const std::vector<TraceEvent>& events)
@@ -102,7 +111,36 @@ void DirectedTrafficMap::update_from_trace(const std::vector<TraceEvent>& events
 void DirectedTrafficMap::update_from_trace(const std::vector<TraceEvent>& events,
                                            const UpdateParams& params)
 {
+  update_from_trace(events, params, nullptr);
+}
+
+void DirectedTrafficMap::update_from_trace(const std::vector<TraceEvent>& events,
+                                           const UpdateParams& params,
+                                           const Instance* instance)
+{
   const auto effective = params.force_additive ? UpdateParams::additive() : params;
+  last_update_stats_ = DualChannelUpdateStats();
+  if (effective.enable_dual_channel) {
+    if (instance == nullptr) {
+      throw std::runtime_error(
+          "dual-channel LTM update requires an Instance for goal progress");
+    }
+    dual_channel_cost_enabled_ = true;
+    lambda_cong_ = effective.lambda_cong;
+    lambda_flow_ = effective.lambda_flow;
+    min_edge_cost_ = effective.min_edge_cost;
+    max_edge_cost_ = effective.max_edge_cost;
+    apply_dual_decay(effective);
+    auto distances = DistTable(instance);
+    for (const auto& event : events) {
+      increment_dual_event(event, effective, *instance, distances);
+    }
+    renormalize(effective);
+    renormalize_flow();
+    return;
+  }
+
+  dual_channel_cost_enabled_ = false;
   apply_decay(effective);
   for (const auto& event : events) increment_event(event, effective);
   renormalize(effective);
@@ -125,9 +163,29 @@ double DirectedTrafficMap::normalized_weight(uint from_id, uint to_id) const
   return it == normalized_weights_.end() ? upper_bound_ : it->second;
 }
 
+double DirectedTrafficMap::flow_raw_count(uint from_id, uint to_id) const
+{
+  const auto it = flow_raw_counts_.find(key(from_id, to_id));
+  return it == flow_raw_counts_.end() ? 0.0 : it->second;
+}
+
+double DirectedTrafficMap::normalized_flow_weight(uint from_id, uint to_id) const
+{
+  const auto it = normalized_flow_weights_.find(key(from_id, to_id));
+  return it == normalized_flow_weights_.end() ? 0.0 : it->second;
+}
+
 double DirectedTrafficMap::traversal_cost(uint from_id, uint to_id) const
 {
   if (!has_edge(from_id, to_id)) return WeightedDistanceTable::INF;
+  if (dual_channel_cost_enabled_) {
+    const auto raw_cost = 1.0 + lambda_cong_ * normalized_weight(from_id, to_id) -
+                          lambda_flow_ * normalized_flow_weight(from_id, to_id);
+    if (!std::isfinite(raw_cost)) return WeightedDistanceTable::INF;
+    const auto lo = std::min(min_edge_cost_, max_edge_cost_);
+    const auto hi = std::max(min_edge_cost_, max_edge_cost_);
+    return std::min(std::max(raw_cost, lo), hi);
+  }
   return 1.0 + normalized_weight(from_id, to_id);
 }
 
@@ -135,6 +193,15 @@ uint DirectedTrafficMap::nonzero_raw_edges() const
 {
   uint count = 0;
   for (const auto& [_, raw] : raw_counts_) {
+    if (raw > 0.0) ++count;
+  }
+  return count;
+}
+
+uint DirectedTrafficMap::nonzero_flow_edges() const
+{
+  uint count = 0;
+  for (const auto& [_, raw] : flow_raw_counts_) {
     if (raw > 0.0) ++count;
   }
   return count;
@@ -156,12 +223,59 @@ double DirectedTrafficMap::max_normalized_weight() const
   return value;
 }
 
+double DirectedTrafficMap::max_flow_raw_count() const
+{
+  double value = 0.0;
+  for (const auto& [_, raw] : flow_raw_counts_) value = std::max(value, raw);
+  return value;
+}
+
+double DirectedTrafficMap::max_normalized_flow_weight() const
+{
+  double value = 0.0;
+  for (const auto& [_, weight] : normalized_flow_weights_) {
+    value = std::max(value, weight);
+  }
+  return value;
+}
+
+TrafficCostAudit DirectedTrafficMap::cost_audit() const
+{
+  TrafficCostAudit audit;
+  const auto lo = std::min(min_edge_cost_, max_edge_cost_);
+  const auto hi = std::max(min_edge_cost_, max_edge_cost_);
+  for (const auto* from : graph_.V) {
+    for (const auto* to : from->neighbor) {
+      const auto cost = traversal_cost(from->id, to->id);
+      audit.all_finite = audit.all_finite && std::isfinite(cost);
+      if (std::isfinite(cost)) {
+        audit.min_cost = std::min(audit.min_cost, cost);
+        audit.max_cost = std::max(audit.max_cost, cost);
+      }
+      if (dual_channel_cost_enabled_ &&
+          (cost < lo - 1.0e-12 || cost > hi + 1.0e-12)) {
+        audit.within_configured_bounds = false;
+      }
+    }
+  }
+  if (audit.min_cost == std::numeric_limits<double>::infinity()) {
+    audit.min_cost = std::numeric_limits<double>::quiet_NaN();
+  }
+  if (audit.max_cost == -std::numeric_limits<double>::infinity()) {
+    audit.max_cost = std::numeric_limits<double>::quiet_NaN();
+  }
+  return audit;
+}
+
 TrafficSnapshot DirectedTrafficMap::snapshot(uint topk_edges) const
 {
   TrafficSnapshot out;
   out.nonzero_edges = nonzero_raw_edges();
   out.max_raw = max_raw_count();
   out.max_normalized = max_normalized_weight();
+  out.flow_nonzero_edges = nonzero_flow_edges();
+  out.max_flow_raw = max_flow_raw_count();
+  out.max_normalized_flow = max_normalized_flow_weight();
 
   auto raw_edges = std::vector<TrafficEdgeSnapshot>();
   auto normalized_edges = std::vector<TrafficEdgeSnapshot>();
@@ -215,6 +329,18 @@ void DirectedTrafficMap::apply_decay(const UpdateParams& params)
   for (auto& [_, count] : raw_counts_) count *= decay;
 }
 
+void DirectedTrafficMap::apply_dual_decay(const UpdateParams& params)
+{
+  const auto cong_decay = std::clamp(params.rho_cong_decay, 0.0, 1.0);
+  const auto flow_decay = std::clamp(params.rho_flow_decay, 0.0, 1.0);
+  if (cong_decay < 1.0) {
+    for (auto& [_, count] : raw_counts_) count *= cong_decay;
+  }
+  if (flow_decay < 1.0) {
+    for (auto& [_, count] : flow_raw_counts_) count *= flow_decay;
+  }
+}
+
 void DirectedTrafficMap::increment_event(const TraceEvent& event,
                                          const UpdateParams& params)
 {
@@ -244,11 +370,93 @@ void DirectedTrafficMap::increment_event(const TraceEvent& event,
   }
 }
 
+void DirectedTrafficMap::increment_dual_event(const TraceEvent& event,
+                                              const UpdateParams& params,
+                                              const Instance& instance,
+                                              DistTable& distances)
+{
+  auto progress = 0.0;
+  auto has_progress_info = false;
+  if (event.agent_id < instance.N && event.from_id < graph_.V.size() &&
+      event.to_id < graph_.V.size()) {
+    const auto from_dist = distances.get(event.agent_id, event.from_id);
+    const auto to_dist = distances.get(event.agent_id, event.to_id);
+    if (from_dist < graph_.V.size() && to_dist < graph_.V.size()) {
+      has_progress_info = true;
+      if (from_dist > to_dist) {
+        progress = static_cast<double>(from_dist - to_dist);
+      }
+    }
+  }
+
+  if (event.from_id == event.to_id) {
+    if (event.at_goal) return;
+    const auto* from = graph_.V[event.from_id];
+    for (const auto* to : from->neighbor) {
+      auto edge_progress = 0.0;
+      if (event.agent_id < instance.N) {
+        const auto from_dist = distances.get(event.agent_id, from->id);
+        const auto to_dist = distances.get(event.agent_id, to->id);
+        if (from_dist < graph_.V.size() && to_dist < graph_.V.size() &&
+            from_dist > to_dist) {
+          edge_progress = static_cast<double>(from_dist - to_dist);
+        }
+      }
+      if (edge_progress > 0.0) {
+        ++last_update_stats_.wait_progress_edges;
+        increment_edge(from->id, to->id, params.alpha_cong_wait_progress);
+        increment_flow_edge(from->id, to->id,
+                            params.alpha_flow_wait_progress * edge_progress);
+      } else {
+        ++last_update_stats_.wait_nonprogress_edges;
+        increment_edge(from->id, to->id, params.alpha_cong_wait_nonprogress);
+      }
+    }
+    return;
+  }
+
+  if (event.kind == TraceEventKind::Committed) {
+    if (has_progress_info && progress > 0.0) {
+      ++last_update_stats_.committed_progress_events;
+      increment_flow_edge(event.from_id, event.to_id,
+                          params.alpha_flow_commit_progress * progress);
+    } else {
+      ++last_update_stats_.committed_nonprogress_events;
+      increment_edge(event.from_id, event.to_id,
+                     params.alpha_cong_commit_nonprogress);
+    }
+    return;
+  }
+
+  if (event.kind == TraceEventKind::Blocked) {
+    ++last_update_stats_.blocked_events;
+    increment_edge(event.from_id, event.to_id, params.alpha_cong_block);
+  }
+}
+
 void DirectedTrafficMap::increment_edge(uint from_id, uint to_id, double delta)
 {
+  if (delta <= 0.0) return;
   const auto k = key(from_id, to_id);
   const auto it = raw_counts_.find(k);
-  if (it != raw_counts_.end()) it->second += delta;
+  if (it != raw_counts_.end()) {
+    it->second += delta;
+    ++last_update_stats_.congestion_update_count;
+    last_update_stats_.congestion_delta_total += delta;
+  }
+}
+
+void DirectedTrafficMap::increment_flow_edge(uint from_id, uint to_id,
+                                             double delta)
+{
+  if (delta <= 0.0) return;
+  const auto k = key(from_id, to_id);
+  const auto it = flow_raw_counts_.find(k);
+  if (it != flow_raw_counts_.end()) {
+    it->second += delta;
+    ++last_update_stats_.flow_update_count;
+    last_update_stats_.flow_delta_total += delta;
+  }
 }
 
 void DirectedTrafficMap::renormalize()
@@ -272,6 +480,22 @@ void DirectedTrafficMap::renormalize(const UpdateParams& params)
     const auto scaled = lower_bound_ + (raw / max_count) *
                                            (upper_bound_ - lower_bound_);
     normalized_weights_[edge] =
+        std::min(std::max(scaled, lower_bound_), upper_bound_);
+  }
+}
+
+void DirectedTrafficMap::renormalize_flow()
+{
+  const auto max_count = max_flow_raw_count();
+  if (max_count <= 0.0) {
+    for (auto& [_, weight] : normalized_flow_weights_) weight = 0.0;
+    return;
+  }
+
+  for (const auto& [edge, raw] : flow_raw_counts_) {
+    const auto scaled = lower_bound_ + (raw / max_count) *
+                                           (upper_bound_ - lower_bound_);
+    normalized_flow_weights_[edge] =
         std::min(std::max(scaled, lower_bound_), upper_bound_);
   }
 }
@@ -774,7 +998,7 @@ LtmOneShotProbeResult run_one_shot_update_probe(
     const LtmOneShotProbeOptions& options)
 {
   auto probe_map = traffic_before;
-  probe_map.update_from_trace(trace_events, options.update_params);
+  probe_map.update_from_trace(trace_events, options.update_params, &instance);
 
   auto result = LtmOneShotProbeResult();
   auto deadline = Deadline(options.short_budget_ms);
@@ -913,7 +1137,27 @@ LtmRunResult solve_with_ltm(const Instance& instance, const LtmOptions& options)
       update_params = options.update_policy(context);
     }
 
-    result.traffic_map.update_from_trace(collector.events(), update_params);
+    result.traffic_map.update_from_trace(collector.events(), update_params,
+                                         &instance);
+    const auto& update_stats = result.traffic_map.last_update_stats();
+    result.dual_channel_update_stats.congestion_update_count +=
+        update_stats.congestion_update_count;
+    result.dual_channel_update_stats.flow_update_count +=
+        update_stats.flow_update_count;
+    result.dual_channel_update_stats.congestion_delta_total +=
+        update_stats.congestion_delta_total;
+    result.dual_channel_update_stats.flow_delta_total +=
+        update_stats.flow_delta_total;
+    result.dual_channel_update_stats.committed_progress_events +=
+        update_stats.committed_progress_events;
+    result.dual_channel_update_stats.committed_nonprogress_events +=
+        update_stats.committed_nonprogress_events;
+    result.dual_channel_update_stats.blocked_events +=
+        update_stats.blocked_events;
+    result.dual_channel_update_stats.wait_progress_edges +=
+        update_stats.wait_progress_edges;
+    result.dual_channel_update_stats.wait_nonprogress_edges +=
+        update_stats.wait_nonprogress_edges;
     auto traffic_after_map = std::shared_ptr<const DirectedTrafficMap>();
     if (options.retain_iteration_traffic_maps) {
       traffic_after_map =

@@ -1,0 +1,95 @@
+{
+  "answers": {
+    "do_committed_progress_events_update_only_f_in_g0": true,
+    "do_dual_c_only_alpha_flow_zero_candidates_ignore_committed_progress": true,
+    "does_this_explain_scalar_vs_dual_c_only_mismatch": true,
+    "is_g0_reduced_c_semantics_not_scalar_f4_c_channel": true
+  },
+  "code_audit": {
+    "current_code_has_alpha_cong_commit_progress": true,
+    "g0_code_available": true,
+    "g0_committed_progress_block_mentions_congestion_update": false,
+    "g0_committed_progress_block_mentions_flow_update": true,
+    "g0_committed_progress_updates_only_flow": true,
+    "g0_progress_block_excerpt": "if (has_progress_info && progress > 0.0) {\n      ++last_update_stats_.committed_progress_events;\n      increment_flow_edge(event.from_id, event.to_id,\n                          params.alpha_flow_commit_progress * progress);"
+  },
+  "created_at": "2026-06-03T00:32:30.366453",
+  "g0_commit": "85636b4",
+  "g0_dev_probe": {
+    "cost_bounds_respected": true,
+    "dual_additive_parity_exact": true,
+    "missing_rows": 0,
+    "row_count": 2280,
+    "schema_errors": 0
+  },
+  "inputs": {
+    "f4_ranking_csv": "outputs\\tables\\phase5p5_repair5f4_full_lattice_static_candidate_ranking.csv",
+    "g0_by_map_agent_csv": "outputs\\tables\\phase5p5_repair5g_dual_channel_dev_by_map_agent.csv",
+    "g0_summary_csv": "outputs\\tables\\phase5p5_repair5g_dual_channel_dev_summary.csv",
+    "g0_summary_json": "outputs\\reports\\phase5p5_repair5g_dual_channel_dev_probe_summary.json",
+    "ltm_cpp": "cpp\\ltm\\ltm.cpp",
+    "ltm_hpp": "cpp\\ltm\\ltm.hpp"
+  },
+  "method_comparison": {
+    "best_f4_scalar_vs_dual_mean_gap": 0.00904425968980833,
+    "dual_c_only_best_f4_observed": {
+      "better": "17",
+      "equal": "61",
+      "mean_delta_ratio_vs_ltm": "0.007440336798399994",
+      "method": "repair5g_dual_c_only_best_f4_observed",
+      "rows": "120",
+      "worse": "42"
+    },
+    "dual_c_only_locked_f4": {
+      "better": "15",
+      "equal": "62",
+      "mean_delta_ratio_vs_ltm": "0.007675997201349986",
+      "method": "repair5g_dual_c_only_locked_f4",
+      "rows": "120",
+      "worse": "43"
+    },
+    "f4_full_lattice_best": {
+      "best_group": "warehouse-10-20-10-2-1|a50",
+      "best_group_mean_delta_ratio_vs_ltm": "-0.007206674018499992",
+      "better": "35",
+      "better_minus_worse": "14",
+      "bootstrap_95ci_mean_delta_ratio_vs_ltm": "[-0.005511177568133335, -0.00020073360835833054]",
+      "bootstrap_probability_mean_delta_lt_0": "0.9832",
+      "candidate_id": "c125_b125_w075_d095",
+      "equal": "64",
+      "f4_mean_rank": "1",
+      "is_component_candidate": "False",
+      "is_locked_f4_candidate": "False",
+      "mean_delta_ratio_vs_ltm": "-0.0028050352278249997",
+      "median_delta_ratio_vs_ltm": "0.0",
+      "ratio_worse_than_ltm_groups": "0",
+      "rows": "120",
+      "success_improvements": "0",
+      "success_regressions": "0",
+      "success_worse_than_ltm_groups": "0",
+      "worse": "21",
+      "worst_group": "warehouse-10-20-10-2-1|a100",
+      "worst_group_mean_delta_ratio_vs_ltm": "0.0"
+    },
+    "locked_scalar_vs_dual_mean_gap": 0.007132177553449994,
+    "scalar_best_f4_static": {
+      "better": "33",
+      "equal": "67",
+      "mean_delta_ratio_vs_ltm": "-0.0016039228914083343",
+      "method": "repair5f4_best_static_c125_b125_w075_d095_diagnostic_only",
+      "rows": "120",
+      "worse": "20"
+    },
+    "scalar_locked_c100_b100_w075_d090": {
+      "better": "25",
+      "equal": "68",
+      "mean_delta_ratio_vs_ltm": "0.000543819647899992",
+      "method": "repair5f_static_c100_b100_w075_d090",
+      "rows": "120",
+      "worse": "27"
+    }
+  },
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "schema_version": "phase5p5_repair5g0_c_channel_semantic_gap_v1"
+}

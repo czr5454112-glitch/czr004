@@ -2726,3 +2726,66 @@
   - Manual fallback harness ran all 15 test functions across `tests/test_repair5f_updateparams.py` and `tests/test_repair5g_dual_channel_ltm.py` with 0 failures.
   - `powershell -ExecutionPolicy Bypass -File scripts/build_phase1a_batch.ps1` passed.
   - `git diff --check` passed; only existing CRLF normalization warnings were reported.
+
+## 2026-06-03 00:35 - Start Repair5G.1 agent-aware dual-channel LTM diagnostic
+
+- Request:
+  - Finish `czr004_repair5g1_agent_aware_dual_channel_ltm_overnight_plan.md`, using `deep-research-report.md` and `phase4_6_laur_ltm_codex_execution_plan.md` for project context.
+- Carry-forward interpretation:
+  - Repair5G.0 was a clean negative for a small global-F candidate family, not a rejection of dual-channel LTM in general.
+  - Repair5G.0 parity/build/cost gates passed, but C-only dual candidates did not preserve scalar Repair5F semantics for committed goal-progress moves.
+  - The likely implementation gap is that committed progress events updated only the flow channel in dual mode, so `alpha_flow=0` C-only candidates ignored those edges.
+  - The likely modeling gap is that G0's flow discount was global edge-level and agent-agnostic.
+- Repair5G.1 boundary:
+  - Modify only project-owned C++ under `cpp/ltm/**` and `cpp/tools/phase1a_batch.cpp`, plus diagnostic scripts/reports/tests.
+  - Do not modify `external/lacam2/lacam2/**`.
+  - Do not change PIBT legality, conflict handling, priority inheritance/backtracking, LaCAM* candidate generation, OPEN/EXPLORED/rewrite, incumbent pruning, or restart semantics.
+  - Do not introduce action prediction, learned restart, learned priorities, learned heuristic/action logits, or candidate deletion.
+  - Keep `phase5p5_allowed=false` and `phase6_allowed=false`.
+- Files planned / started:
+  - `cpp/ltm/ltm.hpp`
+  - `cpp/ltm/ltm.cpp`
+  - `cpp/tools/phase1a_batch.cpp`
+  - `scripts/analyze_repair5g0_c_channel_semantic_gap.py`
+  - `scripts/create_repair5g1_agent_aware_dual_channel_candidates.py`
+  - `scripts/run_repair5g1_agent_aware_dual_channel_probe.py`
+  - `scripts/analyze_repair5g1_agent_aware_dual_channel_oracle.py`
+  - `tests/test_repair5g_dual_channel_ltm.py`
+  - `outputs/reports/phase5p5_repair5g0_final_interpretation.md`
+  - `outputs/reports/phase5p5_repair5g1_design_delta.md`
+- Follow-up:
+  - Close C-channel scalar equivalence first; stop before broad probes if parity/cost gates fail.
+
+- Completion:
+  - Added Repair5G.1 C-channel scalar-equivalence support in project-owned LTM code: committed progress events can now update both congestion and flow channels, and scalar-equivalent dual C-only methods use matching congestion progress/non-progress weights.
+  - Added optional agent-aware traversal-cost projection modes:
+    - `none` for legacy global edge-level dual costs.
+    - `agent_progress` for current-agent goal-progress F discounts.
+    - `flow_shield` for current-agent progress-gated congestion shielding without dropping below base cost.
+  - Added Repair5G.1 method wiring in `cpp/tools/phase1a_batch.cpp`, including dual C-equivalent aliases, global small-lambda controls, agent-progress candidates, flow-shield candidates, wait-gated candidates, and a deterministic random diagnostic.
+  - Added diagnostic scripts:
+    - `scripts/analyze_repair5g0_c_channel_semantic_gap.py`
+    - `scripts/create_repair5g1_agent_aware_dual_channel_candidates.py`
+    - `scripts/run_repair5g1_agent_aware_dual_channel_probe.py`
+    - `scripts/analyze_repair5g1_agent_aware_dual_channel_oracle.py`
+    - `scripts/run_repair5g1_dev_probe_chunks.py`
+  - Generated Repair5G.1 G0 interpretation/design delta, semantic-gap reports, candidate lattice, smoke outputs, chunked dev outputs, oracle report, and decision report under `outputs/reports/`, `outputs/tables/`, and `outputs/logs/`.
+- Probe results:
+  - G0 semantic-gap audit confirms the reduced-C issue: committed progress events updated only F in G0, so dual C-only candidates with `alpha_flow=0` ignored committed progress edges; this explains why G0 C-only was not scalar Repair5F C-channel semantics.
+  - Candidate lattice size: 133 candidates.
+  - Smoke probe: 156 / 156 expected rows, missing rows = 0, schema errors = 0, solver crashes = 0.
+  - Smoke gates passed exactly: additive parity, `laur_disable`, direct force-additive, dual additive, dual C-equivalent additive, locked scalar static C-equivalence, and best-F4 scalar static C-equivalence.
+  - Dev probe: 17,040 / 17,040 expected rows after synthetic diagnostics, 16,800 command rows, missing rows = 0, schema errors = 0, solver crashes = 0.
+  - Dev was run in 8 chunks over IDs 26..45 to finish the overnight grid. Broad dev exact parity flags are false on a small number of warehouse wall-clock-limited cases under parallel CPU contention; the sequential smoke probe is the semantic parity gate.
+  - Oracle proxy: 82 / 38 / 0 better/equal/worse, mean delta ratio vs LTM `-0.033505006472296615`, bootstrap 95% CI `[-0.038997441793415265, -0.028073538158008476]`, probability mean < 0 = `1.0`.
+  - Best single candidate family was flow-shield. Top candidate: `repair5g1_shield_c125_b125_w075_d095_beta0p35_max0p75`, 67 / 37 / 16, mean delta ratio `-0.014306860332393171`.
+- Decision:
+  - `outputs/reports/phase5p5_repair5g1_agent_aware_dual_channel_decision.md` records `continue_repair5g_with_agent_aware_selector`.
+  - This remains diagnostic-only. `phase5p5_allowed=false` and `phase6_allowed=false` remain mandatory.
+  - Optional IDs 46..55 development-validation was not run, preserving those IDs for later untouched validation planning.
+- Validation:
+  - `python -m py_compile scripts/analyze_repair5g0_c_channel_semantic_gap.py scripts/create_repair5g1_agent_aware_dual_channel_candidates.py scripts/run_repair5g1_agent_aware_dual_channel_probe.py scripts/analyze_repair5g1_agent_aware_dual_channel_oracle.py scripts/run_repair5g1_dev_probe_chunks.py` passed.
+  - `python -m pytest tests/test_repair5f_updateparams.py tests/test_repair5g_dual_channel_ltm.py -q` could not run because pytest is unavailable in the active Python (`No module named pytest`).
+  - Manual fallback harness ran all 16 test functions across `tests/test_repair5f_updateparams.py` and `tests/test_repair5g_dual_channel_ltm.py` with 0 failures.
+  - `powershell -ExecutionPolicy Bypass -File scripts/build_phase1a_batch.ps1` passed.
+  - `git diff --check` passed; only LF-to-CRLF normalization warnings were reported.

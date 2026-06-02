@@ -9,6 +9,9 @@ sys.path.insert(0, str(ROOT / "scripts"))
 
 from analyze_repair5g_dual_channel_oracle import ORACLE_METHOD, synthesize_oracle_rows  # noqa: E402
 from create_repair5g_dual_channel_candidates import build_candidates  # noqa: E402
+from create_repair5g1_agent_aware_dual_channel_candidates import (  # noqa: E402
+    build_candidates as build_g1_candidates,
+)
 from run_repair5g_dual_channel_probe import synthesize_diagnostics  # noqa: E402
 
 
@@ -38,6 +41,27 @@ def test_repair5g_candidate_lattice_matches_g0_family() -> None:
     ].alpha_cong_wait_nonprogress
     assert by_id["dcltm_balanced_decay"].rho_cong_decay == 0.95
     assert by_id["dcltm_balanced_decay"].rho_flow_decay == 0.95
+
+
+def test_repair5g1_candidate_lattice_closes_c_equiv_and_agent_modes() -> None:
+    candidates = build_g1_candidates()
+    by_method = {candidate.runtime_method: candidate for candidate in candidates}
+
+    assert 60 <= len(candidates) <= 140
+    assert "repair5g_dual_c_equiv_additive" in by_method
+    assert "repair5g_dual_c_equiv_c100_b100_w075_d090" in by_method
+    assert "repair5g_dual_c_equiv_c125_b125_w075_d095" in by_method
+
+    locked = by_method["repair5g_dual_c_equiv_c100_b100_w075_d090"]
+    assert locked.alpha_cong_commit_progress == locked.alpha_cong_commit_nonprogress == 1.0
+    assert locked.alpha_flow_commit_progress == 0.0
+    assert locked.lambda_flow == 0.0
+
+    components = {candidate.component for candidate in candidates}
+    assert {"agent_progress_f", "flow_shield", "wait_gated", "global_f_small_lambda"} <= components
+    assert any(candidate.goal_projection_mode == "agent_progress" for candidate in candidates)
+    assert any(candidate.goal_projection_mode == "flow_shield" for candidate in candidates)
+    assert all(candidate.phase5p5_allowed is False and candidate.phase6_allowed is False for candidate in candidates)
 
 
 def test_repair5g_synthesizes_random_and_shuffled_diagnostics() -> None:

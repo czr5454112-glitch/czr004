@@ -4,6 +4,7 @@
 
 #include <lacam2.hpp>
 
+#include <algorithm>
 #include <chrono>
 #include <cmath>
 #include <filesystem>
@@ -205,6 +206,64 @@ struct Repair5GMethodSpec {
   czr004::ltm::UpdateParams params = czr004::ltm::UpdateParams::additive();
 };
 
+struct ScalarRuleParams {
+  double alpha_commit = 1.0;
+  double alpha_block = 1.0;
+  double alpha_wait = 1.0;
+  double rho_decay = 1.0;
+};
+
+bool parse_scalar_rule_id(const std::string& rule_id, ScalarRuleParams* out)
+{
+  if (rule_id == "additive") {
+    *out = ScalarRuleParams();
+    return true;
+  }
+  const auto parts = split_token(rule_id, '_');
+  if (parts.size() != 4 || parts[0].size() != 4 || parts[1].size() != 4 ||
+      parts[2].size() != 4 || parts[3].size() != 4 ||
+      parts[0][0] != 'c' || parts[1][0] != 'b' || parts[2][0] != 'w' ||
+      parts[3][0] != 'd') {
+    return false;
+  }
+  try {
+    out->alpha_commit = std::stod(parts[0].substr(1)) / 100.0;
+    out->alpha_block = std::stod(parts[1].substr(1)) / 100.0;
+    out->alpha_wait = std::stod(parts[2].substr(1)) / 100.0;
+    out->rho_decay = std::stod(parts[3].substr(1)) / 100.0;
+    return true;
+  } catch (...) {
+    return false;
+  }
+}
+
+bool parse_decimal_token(const std::string& token, double* out)
+{
+  auto value = token;
+  for (auto& ch : value) {
+    if (ch == 'p') ch = '.';
+  }
+  try {
+    *out = std::stod(value);
+    return true;
+  } catch (...) {
+    return false;
+  }
+}
+
+std::string goal_projection_mode_name(czr004::ltm::GoalProjectionMode mode)
+{
+  switch (mode) {
+    case czr004::ltm::GoalProjectionMode::AgentProgress:
+      return "agent_progress";
+    case czr004::ltm::GoalProjectionMode::FlowShield:
+      return "flow_shield";
+    case czr004::ltm::GoalProjectionMode::None:
+    default:
+      return "none";
+  }
+}
+
 czr004::ltm::UpdateParams repair5g_base_dual_params()
 {
   auto params = czr004::ltm::UpdateParams();
@@ -214,6 +273,7 @@ czr004::ltm::UpdateParams repair5g_base_dual_params()
   params.alpha_block = 1.0;
   params.alpha_wait_spillover = 1.0;
   params.rho_decay = 1.0;
+  params.alpha_cong_commit_progress = 0.0;
   params.alpha_cong_commit_nonprogress = 0.0;
   params.alpha_cong_block = 1.0;
   params.alpha_cong_wait_progress = 1.0;
@@ -226,7 +286,149 @@ czr004::ltm::UpdateParams repair5g_base_dual_params()
   params.lambda_flow = 0.25;
   params.min_edge_cost = 0.25;
   params.max_edge_cost = 11.0;
+  params.goal_projection_mode = czr004::ltm::GoalProjectionMode::None;
+  params.flow_shield_beta = 0.0;
+  params.max_flow_shield = 0.0;
   return params;
+}
+
+czr004::ltm::UpdateParams repair5g1_dual_c_equiv_params(
+    const ScalarRuleParams& scalar)
+{
+  auto params = repair5g_base_dual_params();
+  params.alpha_commit = scalar.alpha_commit;
+  params.alpha_block = scalar.alpha_block;
+  params.alpha_wait_spillover = scalar.alpha_wait;
+  params.rho_decay = scalar.rho_decay;
+  params.alpha_cong_commit_progress = scalar.alpha_commit;
+  params.alpha_cong_commit_nonprogress = scalar.alpha_commit;
+  params.alpha_cong_block = scalar.alpha_block;
+  params.alpha_cong_wait_progress = scalar.alpha_wait;
+  params.alpha_cong_wait_nonprogress = scalar.alpha_wait;
+  params.alpha_flow_commit_progress = 0.0;
+  params.alpha_flow_wait_progress = 0.0;
+  params.rho_cong_decay = scalar.rho_decay;
+  params.rho_flow_decay = 1.0;
+  params.lambda_cong = 1.0;
+  params.lambda_flow = 0.0;
+  params.min_edge_cost = 0.25;
+  params.max_edge_cost = 11.0;
+  params.goal_projection_mode = czr004::ltm::GoalProjectionMode::None;
+  params.flow_shield_beta = 0.0;
+  params.max_flow_shield = 0.0;
+  return params;
+}
+
+czr004::ltm::UpdateParams repair5g1_dual_flow_params(
+    const ScalarRuleParams& scalar,
+    czr004::ltm::GoalProjectionMode projection_mode,
+    double lambda_flow, double min_edge_cost)
+{
+  auto params = repair5g1_dual_c_equiv_params(scalar);
+  params.alpha_flow_commit_progress = 1.0;
+  params.lambda_flow = lambda_flow;
+  params.min_edge_cost = min_edge_cost;
+  params.max_edge_cost = 11.0;
+  params.goal_projection_mode = projection_mode;
+  return params;
+}
+
+bool parse_repair5g1_flow_method(const std::string& method,
+                                 const std::string& prefix,
+                                 czr004::ltm::GoalProjectionMode mode,
+                                 Repair5GMethodSpec* spec)
+{
+  if (method.rfind(prefix, 0) != 0) return false;
+  const auto lf_pos = method.find("_lf", prefix.size());
+  if (lf_pos == std::string::npos) return false;
+  const auto min_pos = method.find("_min", lf_pos + 3);
+  if (min_pos == std::string::npos) return false;
+  const auto rule_id = method.substr(prefix.size(), lf_pos - prefix.size());
+  const auto lambda_token = method.substr(lf_pos + 3, min_pos - (lf_pos + 3));
+  const auto min_token = method.substr(min_pos + 4);
+  ScalarRuleParams scalar;
+  double lambda_flow = 0.0;
+  double min_edge_cost = 0.0;
+  if (!parse_scalar_rule_id(rule_id, &scalar) ||
+      !parse_decimal_token(lambda_token, &lambda_flow) ||
+      !parse_decimal_token(min_token, &min_edge_cost)) {
+    return false;
+  }
+  spec->recognized = true;
+  spec->candidate_id = method.substr(std::string("repair5g1_").size());
+  spec->params = repair5g1_dual_flow_params(scalar, mode, lambda_flow,
+                                            min_edge_cost);
+  spec->update_mode =
+      mode == czr004::ltm::GoalProjectionMode::AgentProgress
+          ? "dual_agent_progress"
+          : "dual_global_flow";
+  return true;
+}
+
+bool parse_repair5g1_flow_shield_method(const std::string& method,
+                                        Repair5GMethodSpec* spec)
+{
+  const auto prefix = std::string("repair5g1_shield_");
+  if (method.rfind(prefix, 0) != 0) return false;
+  const auto beta_pos = method.find("_beta", prefix.size());
+  if (beta_pos == std::string::npos) return false;
+  const auto max_pos = method.find("_max", beta_pos + 5);
+  if (max_pos == std::string::npos) return false;
+  const auto rule_id = method.substr(prefix.size(), beta_pos - prefix.size());
+  const auto beta_token = method.substr(beta_pos + 5, max_pos - (beta_pos + 5));
+  const auto max_token = method.substr(max_pos + 4);
+  ScalarRuleParams scalar;
+  double beta = 0.0;
+  double max_shield = 0.0;
+  if (!parse_scalar_rule_id(rule_id, &scalar) ||
+      !parse_decimal_token(beta_token, &beta) ||
+      !parse_decimal_token(max_token, &max_shield)) {
+    return false;
+  }
+  auto params = repair5g1_dual_c_equiv_params(scalar);
+  params.alpha_flow_commit_progress = 1.0;
+  params.min_edge_cost = 1.0;
+  params.max_edge_cost = 11.0;
+  params.goal_projection_mode = czr004::ltm::GoalProjectionMode::FlowShield;
+  params.flow_shield_beta = beta;
+  params.max_flow_shield = max_shield;
+  spec->recognized = true;
+  spec->candidate_id = method.substr(std::string("repair5g1_").size());
+  spec->params = params;
+  spec->update_mode = "dual_flow_shield";
+  return true;
+}
+
+bool parse_repair5g1_wait_method(const std::string& method,
+                                 Repair5GMethodSpec* spec)
+{
+  const auto prefix = std::string("repair5g1_wait_");
+  if (method.rfind(prefix, 0) != 0) return false;
+  const auto wp_pos = method.find("_wp", prefix.size());
+  if (wp_pos == std::string::npos) return false;
+  const auto wn_pos = method.find("_wn", wp_pos + 3);
+  if (wn_pos == std::string::npos) return false;
+  const auto rule_id = method.substr(prefix.size(), wp_pos - prefix.size());
+  const auto wp_token = method.substr(wp_pos + 3, wn_pos - (wp_pos + 3));
+  const auto wn_token = method.substr(wn_pos + 3);
+  ScalarRuleParams scalar;
+  double wait_progress = 0.0;
+  double wait_nonprogress = 0.0;
+  if (!parse_scalar_rule_id(rule_id, &scalar) ||
+      !parse_decimal_token(wp_token, &wait_progress) ||
+      !parse_decimal_token(wn_token, &wait_nonprogress)) {
+    return false;
+  }
+  auto params = repair5g1_dual_c_equiv_params(scalar);
+  params.alpha_cong_wait_progress = wait_progress;
+  params.alpha_cong_wait_nonprogress = wait_nonprogress;
+  params.alpha_flow_commit_progress = 0.0;
+  params.lambda_flow = 0.0;
+  spec->recognized = true;
+  spec->candidate_id = method.substr(std::string("repair5g1_").size());
+  spec->params = params;
+  spec->update_mode = "dual_wait_gated";
+  return true;
 }
 
 Repair5GMethodSpec repair5g_method_spec(const std::string& method)
@@ -244,6 +446,14 @@ Repair5GMethodSpec repair5g_method_spec(const std::string& method)
   if (method == "repair5g_dual_additive_parity") {
     set("dcltm_additive_parity", czr004::ltm::UpdateParams::additive(),
         "additive_parity");
+  } else if (method.rfind("repair5g_dual_c_equiv_", 0) == 0) {
+    const auto rule_id =
+        method.substr(std::string("repair5g_dual_c_equiv_").size());
+    ScalarRuleParams scalar;
+    if (parse_scalar_rule_id(rule_id, &scalar)) {
+      set("dcltm_c_equiv_" + rule_id,
+          repair5g1_dual_c_equiv_params(scalar), "dual_c_equiv");
+    }
   } else if (method == "repair5g_dual_c_only_locked_f4") {
     auto params = repair5g_base_dual_params();
     params.alpha_cong_commit_nonprogress = 1.0;
@@ -330,6 +540,24 @@ Repair5GMethodSpec repair5g_method_spec(const std::string& method)
     params.lambda_cong = 1.0;
     params.lambda_flow = 0.25;
     set("dcltm_balanced_decay", params, "dual_balanced_decay");
+  } else if (method == "repair5g1_random_static_diagnostic") {
+    auto scalar = ScalarRuleParams();
+    scalar.alpha_commit = 0.80;
+    scalar.alpha_block = 1.20;
+    scalar.alpha_wait = 0.60;
+    scalar.rho_decay = 0.95;
+    auto params = repair5g1_dual_flow_params(
+        scalar, czr004::ltm::GoalProjectionMode::AgentProgress, 0.025, 0.75);
+    set("random_static_diagnostic", params, "dual_random_static");
+  } else if (parse_repair5g1_flow_method(
+                 method, "repair5g1_global_",
+                 czr004::ltm::GoalProjectionMode::None, &spec) ||
+             parse_repair5g1_flow_method(
+                 method, "repair5g1_agent_",
+                 czr004::ltm::GoalProjectionMode::AgentProgress, &spec) ||
+             parse_repair5g1_flow_shield_method(method, &spec) ||
+             parse_repair5g1_wait_method(method, &spec)) {
+    return spec;
   }
   return spec;
 }
@@ -579,6 +807,15 @@ struct RunStats {
   double repair5g_rho_flow_decay = 1.0;
   double repair5g_min_edge_cost = 0.25;
   double repair5g_max_edge_cost = 11.0;
+  std::string repair5g_goal_projection_mode = "none";
+  double repair5g_flow_shield_beta = 0.0;
+  double repair5g_max_flow_shield = 0.0;
+  double repair5g_alpha_cong_commit_progress = 0.0;
+  double repair5g_alpha_cong_commit_nonprogress = 0.0;
+  double repair5g_alpha_cong_block = 1.0;
+  double repair5g_alpha_cong_wait_progress = 1.0;
+  double repair5g_alpha_cong_wait_nonprogress = 1.0;
+  double repair5g_alpha_flow_commit_progress = 0.0;
   uint repair5g_congestion_update_count = 0;
   uint repair5g_flow_update_count = 0;
   double repair5g_congestion_delta_total = 0.0;
@@ -825,6 +1062,24 @@ RunStats run_lacam_star_ltm(const Instance& instance, const Args& args)
       args.repair5g_update_params.rho_flow_decay;
   stats.repair5g_min_edge_cost = args.repair5g_update_params.min_edge_cost;
   stats.repair5g_max_edge_cost = args.repair5g_update_params.max_edge_cost;
+  stats.repair5g_goal_projection_mode =
+      goal_projection_mode_name(args.repair5g_update_params.goal_projection_mode);
+  stats.repair5g_flow_shield_beta =
+      args.repair5g_update_params.flow_shield_beta;
+  stats.repair5g_max_flow_shield =
+      args.repair5g_update_params.max_flow_shield;
+  stats.repair5g_alpha_cong_commit_progress =
+      args.repair5g_update_params.alpha_cong_commit_progress;
+  stats.repair5g_alpha_cong_commit_nonprogress =
+      args.repair5g_update_params.alpha_cong_commit_nonprogress;
+  stats.repair5g_alpha_cong_block =
+      args.repair5g_update_params.alpha_cong_block;
+  stats.repair5g_alpha_cong_wait_progress =
+      args.repair5g_update_params.alpha_cong_wait_progress;
+  stats.repair5g_alpha_cong_wait_nonprogress =
+      args.repair5g_update_params.alpha_cong_wait_nonprogress;
+  stats.repair5g_alpha_flow_commit_progress =
+      args.repair5g_update_params.alpha_flow_commit_progress;
   if (!stats.laur_enabled) {
     stats.laur_update_mode = "disabled";
   } else if (stats.laur_force_additive) {
@@ -846,6 +1101,17 @@ RunStats run_lacam_star_ltm(const Instance& instance, const Args& args)
   options.seed = args.seed;
   if (args.repair5g_enabled) {
     options.update_params = args.repair5g_update_params;
+  }
+  if (args.repair5g_enabled &&
+      args.repair5g_update_mode == "dual_c_equiv") {
+    const auto c_equiv_params = args.repair5g_update_params;
+    options.update_policy =
+        [c_equiv_params](const czr004::ltm::LtmUpdateContext& context) {
+          if (!context.stats.has_incumbent_before) {
+            return czr004::ltm::UpdateParams::additive();
+          }
+          return c_equiv_params;
+        };
   }
 
   auto runtime = czr004::ntm::LaurLtmRuntime();
@@ -1010,7 +1276,7 @@ RunStats run_lacam_star_ltm(const Instance& instance, const Args& args)
   stats.committed_events = result.trace_summary.committed;
   stats.blocked_events = result.trace_summary.blocked;
   stats.nonzero_ltm_edges = result.traffic_map.nonzero_raw_edges();
-  const auto cost_audit = result.traffic_map.cost_audit();
+  const auto cost_audit = result.traffic_map.cost_audit(&instance);
   stats.repair5g_congestion_update_count =
       result.dual_channel_update_stats.congestion_update_count;
   stats.repair5g_flow_update_count =
@@ -1140,6 +1406,24 @@ void append_jsonl(const Args& args, const std::filesystem::path& binary_path,
       << json_number_or_null(stats.repair5g_min_edge_cost);
   out << ",\"repair5g_max_edge_cost\":"
       << json_number_or_null(stats.repair5g_max_edge_cost);
+  out << ",\"repair5g_goal_projection_mode\":"
+      << json_string(stats.repair5g_goal_projection_mode);
+  out << ",\"repair5g_flow_shield_beta\":"
+      << json_number_or_null(stats.repair5g_flow_shield_beta);
+  out << ",\"repair5g_max_flow_shield\":"
+      << json_number_or_null(stats.repair5g_max_flow_shield);
+  out << ",\"repair5g_alpha_cong_commit_progress\":"
+      << json_number_or_null(stats.repair5g_alpha_cong_commit_progress);
+  out << ",\"repair5g_alpha_cong_commit_nonprogress\":"
+      << json_number_or_null(stats.repair5g_alpha_cong_commit_nonprogress);
+  out << ",\"repair5g_alpha_cong_block\":"
+      << json_number_or_null(stats.repair5g_alpha_cong_block);
+  out << ",\"repair5g_alpha_cong_wait_progress\":"
+      << json_number_or_null(stats.repair5g_alpha_cong_wait_progress);
+  out << ",\"repair5g_alpha_cong_wait_nonprogress\":"
+      << json_number_or_null(stats.repair5g_alpha_cong_wait_nonprogress);
+  out << ",\"repair5g_alpha_flow_commit_progress\":"
+      << json_number_or_null(stats.repair5g_alpha_flow_commit_progress);
   out << ",\"repair5g_congestion_update_count\":"
       << stats.repair5g_congestion_update_count;
   out << ",\"repair5g_flow_update_count\":"

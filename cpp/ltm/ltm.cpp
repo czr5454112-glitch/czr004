@@ -98,6 +98,9 @@ void DirectedTrafficMap::reset()
   for (auto& [_, count] : raw_counts_) count = 0.0;
   for (auto& [_, count] : flow_raw_counts_) count = 0.0;
   dual_channel_cost_enabled_ = false;
+  goal_projection_mode_ = GoalProjectionMode::None;
+  flow_shield_beta_ = 0.0;
+  max_flow_shield_ = 0.0;
   last_update_stats_ = DualChannelUpdateStats();
   renormalize();
   renormalize_flow();
@@ -130,6 +133,9 @@ void DirectedTrafficMap::update_from_trace(const std::vector<TraceEvent>& events
     lambda_flow_ = effective.lambda_flow;
     min_edge_cost_ = effective.min_edge_cost;
     max_edge_cost_ = effective.max_edge_cost;
+    goal_projection_mode_ = effective.goal_projection_mode;
+    flow_shield_beta_ = effective.flow_shield_beta;
+    max_flow_shield_ = effective.max_flow_shield;
     apply_dual_decay(effective);
     auto distances = DistTable(instance);
     for (const auto& event : events) {
@@ -141,6 +147,9 @@ void DirectedTrafficMap::update_from_trace(const std::vector<TraceEvent>& events
   }
 
   dual_channel_cost_enabled_ = false;
+  goal_projection_mode_ = GoalProjectionMode::None;
+  flow_shield_beta_ = 0.0;
+  max_flow_shield_ = 0.0;
   apply_decay(effective);
   for (const auto& event : events) increment_event(event, effective);
   renormalize(effective);
@@ -177,10 +186,38 @@ double DirectedTrafficMap::normalized_flow_weight(uint from_id, uint to_id) cons
 
 double DirectedTrafficMap::traversal_cost(uint from_id, uint to_id) const
 {
+  return traversal_cost(0, from_id, to_id, nullptr);
+}
+
+double DirectedTrafficMap::traversal_cost(uint agent_id, uint from_id,
+                                          uint to_id,
+                                          DistTable* base_distances) const
+{
   if (!has_edge(from_id, to_id)) return WeightedDistanceTable::INF;
   if (dual_channel_cost_enabled_) {
-    const auto raw_cost = 1.0 + lambda_cong_ * normalized_weight(from_id, to_id) -
-                          lambda_flow_ * normalized_flow_weight(from_id, to_id);
+    const auto congestion = normalized_weight(from_id, to_id);
+    const auto flow = normalized_flow_weight(from_id, to_id);
+    auto progress = 0.0;
+    if ((goal_projection_mode_ == GoalProjectionMode::AgentProgress ||
+         goal_projection_mode_ == GoalProjectionMode::FlowShield) &&
+        base_distances != nullptr) {
+      const auto from_dist = base_distances->get(agent_id, from_id);
+      const auto to_dist = base_distances->get(agent_id, to_id);
+      if (from_dist < base_distances->V_size &&
+          to_dist < base_distances->V_size && from_dist > to_dist) {
+        progress = static_cast<double>(from_dist - to_dist);
+      }
+    }
+
+    auto raw_cost = 1.0 + lambda_cong_ * congestion - lambda_flow_ * flow;
+    if (goal_projection_mode_ == GoalProjectionMode::AgentProgress) {
+      raw_cost = 1.0 + lambda_cong_ * congestion -
+                 lambda_flow_ * flow * progress;
+    } else if (goal_projection_mode_ == GoalProjectionMode::FlowShield) {
+      const auto shield = std::clamp(flow_shield_beta_ * flow * progress, 0.0,
+                                     max_flow_shield_);
+      raw_cost = 1.0 + lambda_cong_ * congestion * (1.0 - shield);
+    }
     if (!std::isfinite(raw_cost)) return WeightedDistanceTable::INF;
     const auto lo = std::min(min_edge_cost_, max_edge_cost_);
     const auto hi = std::max(min_edge_cost_, max_edge_cost_);
@@ -241,20 +278,32 @@ double DirectedTrafficMap::max_normalized_flow_weight() const
 
 TrafficCostAudit DirectedTrafficMap::cost_audit() const
 {
+  return cost_audit(nullptr);
+}
+
+TrafficCostAudit DirectedTrafficMap::cost_audit(const Instance* instance) const
+{
   TrafficCostAudit audit;
   const auto lo = std::min(min_edge_cost_, max_edge_cost_);
   const auto hi = std::max(min_edge_cost_, max_edge_cost_);
-  for (const auto* from : graph_.V) {
-    for (const auto* to : from->neighbor) {
-      const auto cost = traversal_cost(from->id, to->id);
-      audit.all_finite = audit.all_finite && std::isfinite(cost);
-      if (std::isfinite(cost)) {
-        audit.min_cost = std::min(audit.min_cost, cost);
-        audit.max_cost = std::max(audit.max_cost, cost);
-      }
-      if (dual_channel_cost_enabled_ &&
-          (cost < lo - 1.0e-12 || cost > hi + 1.0e-12)) {
-        audit.within_configured_bounds = false;
+  auto base_distances =
+      instance == nullptr ? std::unique_ptr<DistTable>() :
+                            std::make_unique<DistTable>(instance);
+  const auto agent_count = instance == nullptr ? 1 : instance->N;
+  for (uint agent_id = 0; agent_id < agent_count; ++agent_id) {
+    for (const auto* from : graph_.V) {
+      for (const auto* to : from->neighbor) {
+        const auto cost = traversal_cost(agent_id, from->id, to->id,
+                                         base_distances.get());
+        audit.all_finite = audit.all_finite && std::isfinite(cost);
+        if (std::isfinite(cost)) {
+          audit.min_cost = std::min(audit.min_cost, cost);
+          audit.max_cost = std::max(audit.max_cost, cost);
+        }
+        if (dual_channel_cost_enabled_ &&
+            (cost < lo - 1.0e-12 || cost > hi + 1.0e-12)) {
+          audit.within_configured_bounds = false;
+        }
       }
     }
   }
@@ -375,6 +424,15 @@ void DirectedTrafficMap::increment_dual_event(const TraceEvent& event,
                                               const Instance& instance,
                                               DistTable& distances)
 {
+  if (params.alpha_flow_commit_progress <= 0.0 &&
+      params.alpha_flow_wait_progress <= 0.0 &&
+      params.alpha_cong_commit_progress ==
+          params.alpha_cong_commit_nonprogress &&
+      params.alpha_cong_wait_progress == params.alpha_cong_wait_nonprogress) {
+    increment_event(event, params);
+    return;
+  }
+
   auto progress = 0.0;
   auto has_progress_info = false;
   if (event.agent_id < instance.N && event.from_id < graph_.V.size() &&
@@ -418,6 +476,8 @@ void DirectedTrafficMap::increment_dual_event(const TraceEvent& event,
   if (event.kind == TraceEventKind::Committed) {
     if (has_progress_info && progress > 0.0) {
       ++last_update_stats_.committed_progress_events;
+      increment_edge(event.from_id, event.to_id,
+                     params.alpha_cong_commit_progress);
       increment_flow_edge(event.from_id, event.to_id,
                           params.alpha_flow_commit_progress * progress);
     } else {
@@ -504,6 +564,7 @@ WeightedDistanceTable::WeightedDistanceTable(const Instance* instance,
                                              const DirectedTrafficMap* ltm)
     : instance_(instance),
       ltm_(ltm),
+      base_distances_(instance),
       reverse_neighbors_(instance->G.size()),
       table_(instance->N, std::vector<double>(instance->G.size(), INF)),
       solved_(instance->N, false)
@@ -542,7 +603,9 @@ void WeightedDistanceTable::solve_agent(uint agent_id)
     if (dist > table_[agent_id][current_id]) continue;
 
     for (const auto* predecessor : reverse_neighbors_[current_id]) {
-      const auto edge_cost = ltm_->traversal_cost(predecessor->id, current_id);
+      const auto edge_cost =
+          ltm_->traversal_cost(agent_id, predecessor->id, current_id,
+                               &base_distances_);
       const auto candidate = dist + edge_cost;
       if (candidate >= table_[agent_id][predecessor->id]) continue;
       table_[agent_id][predecessor->id] = candidate;

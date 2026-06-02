@@ -14,6 +14,8 @@ namespace czr004::ltm {
 
 enum class TraceEventKind { Committed, Blocked };
 
+enum class GoalProjectionMode { None, AgentProgress, FlowShield };
+
 struct TraceEvent {
   TraceEventKind kind;
   uint agent_id;
@@ -74,6 +76,7 @@ struct UpdateParams {
   bool enable_local_saturation = false;
   bool force_additive = false;
   bool enable_dual_channel = false;
+  double alpha_cong_commit_progress = 0.0;
   double alpha_cong_commit_nonprogress = 1.0;
   double alpha_cong_block = 1.0;
   double alpha_cong_wait_progress = 1.0;
@@ -86,6 +89,9 @@ struct UpdateParams {
   double lambda_flow = 0.0;
   double min_edge_cost = 0.25;
   double max_edge_cost = 11.0;
+  GoalProjectionMode goal_projection_mode = GoalProjectionMode::None;
+  double flow_shield_beta = 0.0;
+  double max_flow_shield = 0.0;
 
   static UpdateParams additive()
   {
@@ -137,6 +143,8 @@ class DirectedTrafficMap {
   double flow_raw_count(uint from_id, uint to_id) const;
   double normalized_flow_weight(uint from_id, uint to_id) const;
   double traversal_cost(uint from_id, uint to_id) const;
+  double traversal_cost(uint agent_id, uint from_id, uint to_id,
+                        DistTable* base_distances) const;
   uint nonzero_raw_edges() const;
   uint nonzero_flow_edges() const;
   double max_raw_count() const;
@@ -149,6 +157,7 @@ class DirectedTrafficMap {
     return last_update_stats_;
   }
   TrafficCostAudit cost_audit() const;
+  TrafficCostAudit cost_audit(const Instance* instance) const;
   TrafficSnapshot snapshot(uint topk_edges) const;
   double lower_bound() const { return lower_bound_; }
   double upper_bound() const { return upper_bound_; }
@@ -169,6 +178,9 @@ class DirectedTrafficMap {
   double lambda_flow_ = 0.0;
   double min_edge_cost_ = 0.25;
   double max_edge_cost_ = 11.0;
+  GoalProjectionMode goal_projection_mode_ = GoalProjectionMode::None;
+  double flow_shield_beta_ = 0.0;
+  double max_flow_shield_ = 0.0;
   DualChannelUpdateStats last_update_stats_;
 
   static std::uint64_t key(uint from_id, uint to_id);
@@ -196,6 +208,7 @@ class WeightedDistanceTable {
  private:
   const Instance* instance_;
   const DirectedTrafficMap* ltm_;
+  DistTable base_distances_;
   std::vector<std::vector<Vertex*> > reverse_neighbors_;
   std::vector<std::vector<double> > table_;
   std::vector<bool> solved_;

@@ -2475,3 +2475,35 @@
   - `phase5p5_allowed=false` and `phase6_allowed=false`.
   - No C++ solver code, PIBT, LaCAM*, candidate generation, pruning, conflict, restart, or search semantics were changed.
   - Follow-up audit refreshed threshold sweep artifacts and the simulation summary so the selected spec, sweep row count, and final holdout summary are internally consistent before push.
+
+## 2026-06-02 13:10 - Repair5F.3 runtime export and static ablation
+
+- Request:
+  - Finish `czr004_repair5f3_runtime_export_static_ablation_plan.md`.
+- Files planned:
+  - `outputs/reports/phase5p5_repair5f2_final_interpretation.md`
+  - `scripts/create_repair5f_updateparam_selector_runtime.py`
+  - `scripts/run_repair5f_runtime_export_eval.py`
+  - `scripts/audit_repair5f_runtime_vs_table.py`
+  - `artifacts/models/laur_ltm/repair5f_bounded_updateparam_selector/`
+  - `artifacts/models/laur_ltm/repair5f_static_c100_b100_w075_d090/`
+  - `outputs/logs/phase5p5_repair5f_runtime_export_eval/`
+  - `outputs/tables/phase5p5_repair5f_runtime_export_eval_*.csv`
+  - `outputs/reports/phase5p5_repair5f_runtime_export_eval_*`
+  - `outputs/reports/phase5p5_repair5f_runtime_vs_table_audit*`
+- Key constraints:
+  - Runtime export remains diagnostic-only.
+  - Preserve exact additive fallback and force-additive parity.
+  - Treat the current selector as a support-trained static bounded UpdateParams rule unless runtime proves otherwise.
+  - Do not modify `external/lacam2/lacam2/**` or change PIBT / LaCAM* semantics.
+- Initial observation:
+  - F2 selected `c100_b100_w075_d090` on all 30 final-holdout table decisions.
+  - The runtime path can already load arbitrary bounded parameters from a one-rule `rules.csv`; F3 needs a provenance-rich artifact plus update-log parameter fields for audit.
+- Follow-up:
+  - Exported diagnostic runtime artifacts for `repair5f_bounded_updateparam_selector` and `repair5f_static_c100_b100_w075_d090`.
+  - Runtime final-holdout eval completed 300 / 300 expected rows with 0 missing rows and 0 schema errors.
+  - Runtime selector selected `c100_b100_w075_d090` on all 30 cases: 6 / 18 / 5, mean delta ratio vs LTM `-0.0028361091041379303`, ratio-worse groups 1, success-worse groups 0.
+  - Static candidate ablation was metric-identical to the selector runtime, so the result remains support-trained static bounded UpdateParams rather than context-adaptive selection.
+  - Runtime-vs-table audit found 0 mismatches; selected candidate, UpdateParams, and deterministic outcomes match the F2 table policy.
+  - Runtime gates did not pass because `force_additive_parity_exact=false` and `exact_additive_candidate_parity_exact=false`; Phase5.5 and Phase6 remain forbidden.
+  - Validation: `py_compile` passed, C++ `phase1a_batch` build passed after stopping stale F2 probe processes holding the exe, `git diff --check` passed, and a manual fallback harness ran all 8 `tests/test_repair5f_updateparams.py` tests with 0 failures because `pytest` is not installed in the active Python and no conda executable is available.

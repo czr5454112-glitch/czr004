@@ -132,6 +132,37 @@ void append_json_number_array(std::ostream& out,
   out << "]";
 }
 
+std::vector<std::string> split_token(const std::string& value, char delimiter)
+{
+  auto out = std::vector<std::string>();
+  auto stream = std::stringstream(value);
+  std::string cell;
+  while (std::getline(stream, cell, delimiter)) out.push_back(cell);
+  return out;
+}
+
+czr004::ltm::UpdateParams update_params_for_logged_rule(
+    const std::string& rule_id)
+{
+  const auto parts = split_token(rule_id, '_');
+  if (parts.size() == 4 && parts[0].size() == 4 && parts[1].size() == 4 &&
+      parts[2].size() == 4 && parts[3].size() == 4 &&
+      parts[0][0] == 'c' && parts[1][0] == 'b' && parts[2][0] == 'w' &&
+      parts[3][0] == 'd') {
+    try {
+      auto params = czr004::ltm::UpdateParams();
+      params.alpha_commit = std::stod(parts[0].substr(1)) / 100.0;
+      params.alpha_block = std::stod(parts[1].substr(1)) / 100.0;
+      params.alpha_wait_spillover = std::stod(parts[2].substr(1)) / 100.0;
+      params.rho_decay = std::stod(parts[3].substr(1)) / 100.0;
+      params.force_additive = false;
+      return params;
+    } catch (...) {
+    }
+  }
+  return czr004::ntm::update_params_for_laur_rule_id(rule_id);
+}
+
 bool parse_uint(const std::string& value, uint* out)
 {
   try {
@@ -150,6 +181,16 @@ bool parse_double(const std::string& value, double* out)
   } catch (...) {
     return false;
   }
+}
+
+std::string repair5f_selector_runtime_path()
+{
+  return "artifacts/models/laur_ltm/repair5f_bounded_updateparam_selector";
+}
+
+std::string repair5f_static_runtime_path()
+{
+  return "artifacts/models/laur_ltm/repair5f_static_c100_b100_w075_d090";
 }
 
 Args parse_args(int argc, char** argv)
@@ -269,6 +310,37 @@ Args parse_args(int argc, char** argv)
                              args.laur_static_rule);
   }
   if (values.count("verbose")) args.verbose = std::stoi(values["verbose"]);
+
+  const auto requested_method = args.method;
+  const auto use_repair5f_alias = [&](const std::string& default_model_path) {
+    if (args.method_alias.empty()) args.method_alias = requested_method;
+    args.method = "lacam_star_lau_ltm";
+    args.laur_enable = true;
+    if (args.laur_model_path.empty()) args.laur_model_path = default_model_path;
+  };
+  if (requested_method == "repair5f_bounded_updateparam_selector_runtime") {
+    use_repair5f_alias(repair5f_selector_runtime_path());
+  } else if (
+      requested_method ==
+      "repair5f_bounded_updateparam_selector_force_additive_parity") {
+    use_repair5f_alias(repair5f_selector_runtime_path());
+    args.laur_force_additive = true;
+  } else if (requested_method == "repair5f_static_c100_b100_w075_d090") {
+    use_repair5f_alias(repair5f_static_runtime_path());
+  } else if (requested_method == "repair5f_candidate_additive_ltm") {
+    use_repair5f_alias("configs/phase5/laur_additive_only");
+  } else if (requested_method == "always_additive_defer") {
+    use_repair5f_alias("configs/phase5/laur_additive_only");
+    args.laur_force_additive = true;
+  } else if (
+      requested_method == "repair5f_runtime_random_candidate_diagnostic" ||
+      requested_method == "repair5f_runtime_shuffled_utility_diagnostic") {
+    use_repair5f_alias("");
+    if (args.laur_model_path.empty()) {
+      throw std::runtime_error("--method " + requested_method +
+                               " requires --laur-model-path");
+    }
+  }
 
   if (args.method != "lacam_star" && args.method != "lacam_star_ltm" &&
       args.method != "lacam_star_lau_ltm") {
@@ -428,7 +500,8 @@ void append_laur_update_log_jsonl(
     const std::string& selected_rule_source = "",
     double predicted_margin_ratio = 0.0,
     uint nearest_support_count = 0,
-    const std::string& guard_reason = "")
+    const std::string& guard_reason = "",
+    const czr004::ltm::UpdateParams* applied_params = nullptr)
 {
   if (args.laur_update_log_jsonl.empty()) return;
 
@@ -442,6 +515,8 @@ void append_laur_update_log_jsonl(
 
   const auto output_method =
       args.method_alias.empty() ? args.method : args.method_alias;
+  const auto fallback_params = update_params_for_logged_rule(applied_rule);
+  const auto& params = applied_params == nullptr ? fallback_params : *applied_params;
   out << "{";
   out << "\"schema_version\":\"phase5p5_repair5e_laur_update_log_v1\"";
   out << ",\"method\":" << json_string(output_method);
@@ -455,6 +530,7 @@ void append_laur_update_log_jsonl(
   out << ",\"returned_solutions_count_so_far\":" << context.stats.returned_solutions_count_so_far;
   out << ",\"predicted_rule\":" << json_string(predicted_rule);
   out << ",\"applied_rule\":" << json_string(applied_rule);
+  out << ",\"selected_candidate_id\":" << json_string(applied_rule);
   out << ",\"selected_rule_before_guard\":"
       << json_string(selected_rule_before_guard.empty() ? predicted_rule
                                                         : selected_rule_before_guard);
@@ -496,6 +572,15 @@ void append_laur_update_log_jsonl(
   out << ",\"laur_force_additive\":" << (args.laur_force_additive ? "true" : "false");
   out << ",\"laur_static_rule\":" << json_string(args.laur_static_rule);
   out << ",\"laur_safety_threshold\":" << json_number_or_null(args.laur_safety_threshold);
+  out << ",\"applied_alpha_commit\":"
+      << json_number_or_null(params.alpha_commit);
+  out << ",\"applied_alpha_block\":"
+      << json_number_or_null(params.alpha_block);
+  out << ",\"applied_alpha_wait_spillover\":"
+      << json_number_or_null(params.alpha_wait_spillover);
+  out << ",\"applied_rho_decay\":" << json_number_or_null(params.rho_decay);
+  out << ",\"applied_force_additive\":"
+      << (params.force_additive ? "true" : "false");
   out << "}\n";
 }
 

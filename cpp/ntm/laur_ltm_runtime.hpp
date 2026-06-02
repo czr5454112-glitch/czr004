@@ -58,6 +58,11 @@ class LaurLtmRuntime {
   struct RuleSpec {
     std::string rule_id = "additive_ltm";
     czr004::ltm::UpdateParams params = czr004::ltm::UpdateParams::additive();
+    double predicted_delta_ratio = 0.0;
+    double predicted_margin_ratio = 0.0;
+    uint nearest_support_count = 0;
+    std::string selected_rule_source = "";
+    std::string guard_reason = "";
   };
 
   struct RecoverySpec {

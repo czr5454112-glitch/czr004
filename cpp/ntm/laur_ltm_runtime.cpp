@@ -365,7 +365,9 @@ LaurPrediction LaurLtmRuntime::predict(const LaurFeatureVector& features) const
     prediction.feature_outside_5sigma_count = outside_5sigma;
     prediction.ood_z_threshold =
         options_.ood_guard_enabled ? options_.ood_z_threshold : 0.0;
-    prediction.guard_reason = guard_reason;
+    if (!guard_reason.empty() || prediction.guard_reason.empty()) {
+      prediction.guard_reason = guard_reason;
+    }
   };
 
   auto hidden = std::vector<double>(hidden_dim_, 0.0);
@@ -387,7 +389,14 @@ LaurPrediction LaurLtmRuntime::predict(const LaurFeatureVector& features) const
   prediction.rule_id = rules_[selected].rule_id;
   prediction.selected_rule_before_guard = rules_[selected].rule_id;
   prediction.selected_rule_after_guard = rules_[selected].rule_id;
-  prediction.selected_rule_source = "runtime_mlp";
+  prediction.selected_rule_source =
+      rules_[selected].selected_rule_source.empty()
+          ? "runtime_mlp"
+          : rules_[selected].selected_rule_source;
+  prediction.predicted_delta_ratio = rules_[selected].predicted_delta_ratio;
+  prediction.predicted_margin_ratio = rules_[selected].predicted_margin_ratio;
+  prediction.nearest_support_count = rules_[selected].nearest_support_count;
+  prediction.guard_reason = rules_[selected].guard_reason;
   prediction.enabled = true;
   if (!safety_head_weight_.empty()) {
     const auto bias = safety_head_bias_.empty() ? 0.0 : safety_head_bias_[0];
@@ -605,6 +614,17 @@ bool LaurLtmRuntime::load_model_directory(const std::string& model_path)
             parse_double_or(cells[6], spec.params.contraflow_penalty);
         spec.params.enable_contraflow_penalty = spec.params.contraflow_penalty > 0.0;
         spec.params.force_additive = parse_bool(cells[7]);
+      }
+      if (cells.size() >= 11) {
+        spec.predicted_delta_ratio = parse_double_or(cells[8], 0.0);
+        spec.predicted_margin_ratio = parse_double_or(cells[9], 0.0);
+        spec.nearest_support_count = parse_uint_or(cells[10], 0);
+      }
+      if (cells.size() >= 12) {
+        spec.selected_rule_source = cells[11];
+      }
+      if (cells.size() >= 13) {
+        spec.guard_reason = cells[12];
       }
       next_rules.push_back(spec);
     }

@@ -2439,3 +2439,38 @@
   - The current `--laur-force-additive` path builds LAUR features before returning additive params, which can consume enough wall-clock budget to change the bounded anytime loop count under a 3s run.
   - The intended fix is to route force-additive through the canonical additive LTM update path directly, avoiding runtime feature work and preserving exact parity semantics.
 - Follow-up:
+
+## 2026-06-02 11:35 - Repair5F.2 support-trained UpdateParams selector diagnostic
+
+- Request:
+  - Finish `czr004_repair5f2_updateparam_selector_plan.md`.
+- Files changed / added:
+  - `czr004_repair5f2_updateparam_selector_plan.md`
+  - `scripts/run_repair5f_updateparam_probe_table.py`
+  - `scripts/repair5f_selector_common.py`
+  - `scripts/merge_repair5f_selector_support_probe_chunks.py`
+  - `scripts/create_repair5f_selector_training_table.py`
+  - `scripts/tune_repair5f_updateparam_selector.py`
+  - `scripts/evaluate_repair5f_updateparam_selector_simulation.py`
+  - `outputs/logs/phase5p5_repair5f_selector_support_probe/phase5p5_repair5f_selector_support_probe*.jsonl`
+  - `outputs/tables/phase5p5_repair5f_selector_support_utility_long.csv`
+  - `outputs/tables/phase5p5_repair5f_selector_support_utility_wide.csv`
+  - `outputs/tables/phase5p5_repair5f_selector_train_contexts.csv`
+  - `outputs/tables/phase5p5_repair5f_selector_holdout_contexts.csv`
+  - `outputs/tables/phase5p5_repair5f_selector_threshold_sweep.csv`
+  - `outputs/tables/phase5p5_repair5f_selector_simulation_decisions.csv`
+  - `outputs/tables/phase5p5_repair5f_selector_simulation_paired.csv`
+  - `outputs/reports/phase5p5_repair5f_selector_*`
+- Key observations:
+  - Support probe IDs 1..20 completed for 3 maps, 2 agent counts, and 47 bounded candidates: 5,640 candidate rows, 0 missing.
+  - Support controls pass: force-additive parity exact, exact additive candidate parity exact, support/final overlap 0.
+  - Selector context tables contain 120 support rows and 30 holdout rows. Holdout outcomes and best-candidate fields are not context features.
+  - Support-only threshold sweep uses 12 conservative deterministic specs across KNN, radius-neighbor abstention, group-balanced utility, and candidate-risk-capped selectors.
+  - Best support selector is `group_balanced_utility`, selecting `c100_b100_w075_d090` on nearly all support cases: 31 / 66 / 23, mean delta ratio vs LTM `-0.0028752109667166794`.
+  - Final holdout table simulation selects `c100_b100_w075_d090` on all 30 holdout cases and passes F2 gates: 6 / 19 / 5, mean delta ratio vs LTM `-0.0027415721339999993`, ratio-worse groups 1, success-worse groups 0.
+  - The selector beats Repair5F random and shuffled-utility diagnostics and improves over E5 real selector under the F2 table metric.
+  - `outputs/reports/phase5p5_repair5f_selector_runtime_export_recommendation.md` recommends a separate scoped runtime-export follow-up because table simulation passed.
+- Boundary:
+  - Runtime export was not created in this pass.
+  - `phase5p5_allowed=false` and `phase6_allowed=false`.
+  - No C++ solver code, PIBT, LaCAM*, candidate generation, pruning, conflict, restart, or search semantics were changed.

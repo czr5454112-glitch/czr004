@@ -37,6 +37,7 @@ DEFAULT_LONG_CSV = "outputs/tables/phase5p5_repair5f_updateparam_utility_long.cs
 DEFAULT_WIDE_CSV = "outputs/tables/phase5p5_repair5f_updateparam_utility_wide.csv"
 DEFAULT_REPORT = "outputs/reports/phase5p5_repair5f_candidate_probe_report.md"
 DEFAULT_SUMMARY = "outputs/reports/phase5p5_repair5f_candidate_probe_summary.json"
+DEFAULT_AUDIT_REPORT = ""
 DEFAULT_ADDITIVE_RUNTIME = "configs/phase5/laur_additive_only"
 DEFAULT_REPAIR5E5_RUNTIME = "artifacts/models/laur_ltm/repair5e5_crossfold_utility_reranker"
 DEFAULT_REPAIR5E5_SHUFFLED_RUNTIME = "artifacts/models/laur_ltm/repair5e5_crossfold_utility_reranker_shuffled_labels_diagnostic"
@@ -162,6 +163,16 @@ def _write_csv(path: Path, rows: list[dict[str, Any]], fields: list[str]) -> Non
         writer.writeheader()
         for row in rows:
             writer.writerow(row)
+
+
+def file_sha256(path: Path) -> str:
+    if not path.exists():
+        return ""
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest().upper()
 
 
 def read_jsonl(path: Path) -> list[dict[str, Any]]:
@@ -1002,6 +1013,90 @@ def write_report(path: Path, summary: dict[str, Any]) -> None:
             )
 
 
+def write_audit_report(path: Path, summary: dict[str, Any]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    stats = summary.get("paired_method_stats", {})
+    gates = summary.get("gates", {})
+    source_paths = [
+        ("Report", summary.get("report")),
+        ("Summary", summary.get("summary_json")),
+        ("Raw probe JSONL", summary.get("raw_jsonl")),
+        ("Command log JSONL", summary.get("command_log_jsonl")),
+        ("LAUR update log JSONL", summary.get("laur_update_log_jsonl")),
+        ("Long CSV", summary.get("long_csv")),
+        ("Wide CSV", summary.get("wide_csv")),
+    ]
+    hash_paths = [
+        Path(str(summary.get("raw_jsonl"))),
+        Path(str(summary.get("command_log_jsonl"))),
+        Path(str(summary.get("laur_update_log_jsonl"))),
+    ]
+    with path.open("w", encoding="utf-8", newline="\n") as handle:
+        handle.write("# Phase5.5 Repair5F Candidate Probe Audit\n\n")
+        handle.write(f"Verification date: {datetime.now().date().isoformat()}\n\n")
+        handle.write("This audit is diagnostic-only and does not permit Phase5.5 or Phase6.\n\n")
+        handle.write("## Source Files\n\n")
+        for label, value in source_paths:
+            handle.write(f"- {label}: `{value}`\n")
+        handle.write("\n## Raw Coverage\n\n")
+        handle.write(f"- Raw rows before dedupe: `{summary.get('raw_rows_before_dedupe')}`\n")
+        handle.write(f"- Raw rows after dedupe: `{summary.get('raw_rows_after_dedupe')}`\n")
+        handle.write(f"- Expected unique rows: `{summary.get('expected_raw_probe_rows')}`\n")
+        handle.write(f"- Missing rows: `{summary.get('missing_raw_probe_rows')}`\n")
+        handle.write(f"- Duplicate raw rows dropped: `{summary.get('duplicate_raw_rows_dropped')}`\n")
+        handle.write(f"- Expected candidate rows: `{summary.get('expected_candidate_probe_rows')}`\n")
+        handle.write(f"- Missing candidate rows: `{summary.get('missing_candidate_probe_rows')}`\n")
+        handle.write(f"- Schema errors: `{len(summary.get('schema_errors') or [])}`\n")
+        handle.write(f"- Long CSV rows: `{summary.get('long_csv_rows')}`\n")
+        handle.write(f"- Wide CSV rows: `{summary.get('wide_csv_rows')}`\n\n")
+        handle.write("## Raw Log Hashes\n\n")
+        for item in hash_paths:
+            handle.write(f"- `{item.name}`: `{file_sha256(item)}`\n")
+        handle.write("\n## Gate Check\n\n")
+        for key in [
+            "force_additive_parity_exact",
+            "exact_additive_candidate_parity_exact",
+            "safety_gates_passed",
+            "support_eval_leakage",
+            "support_final_overlap_count",
+            "full_raw_probe_coverage",
+            "phase5p5_allowed",
+            "phase6_allowed",
+        ]:
+            if key in gates:
+                handle.write(f"- `{key}`: `{gates[key]}`\n")
+        handle.write("\n## Paired Stats\n\n")
+        handle.write("| method | rows | better | equal | worse | mean delta ratio vs LTM |\n")
+        handle.write("|---|---:|---:|---:|---:|---:|\n")
+        for method in [
+            "always_additive_defer",
+            "repair5f_candidate_additive_ltm",
+            "repair5f_candidate_lattice_oracle_static_proxy",
+            "repair5f_bounded_updateparam_selector_random_candidate_diagnostic",
+            "repair5f_bounded_updateparam_selector_shuffled_utility_diagnostic",
+            "repair5e5_crossfold_utility_reranker",
+            "repair5e5_crossfold_utility_reranker_shuffled_labels_diagnostic",
+        ]:
+            row = stats.get(method)
+            if not row:
+                continue
+            handle.write(
+                f"| `{method}` | {row.get('rows')} | {row.get('better')} | {row.get('equal')} | "
+                f"{row.get('worse')} | {row.get('mean_delta_ratio_vs_ltm')} |\n"
+            )
+        handle.write("\n## Conclusion\n\n")
+        if summary.get("missing_candidate_probe_rows") == 0 and not summary.get("schema_errors"):
+            handle.write(
+                "Candidate coverage and schema checks are complete for the requested probe scope. "
+                "This remains selector-training evidence only unless a later leakage-safe selector simulation passes.\n"
+            )
+        else:
+            handle.write(
+                "The probe evidence is incomplete or has schema errors. Downstream selector tuning must treat this "
+                "as not ready until the missing rows or schema failures are resolved.\n"
+            )
+
+
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--binary", type=Path, default=Path(DEFAULT_BINARY))
@@ -1014,6 +1109,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--wide-csv", type=Path, default=Path(DEFAULT_WIDE_CSV))
     parser.add_argument("--report", type=Path, default=Path(DEFAULT_REPORT))
     parser.add_argument("--summary-json", type=Path, default=Path(DEFAULT_SUMMARY))
+    parser.add_argument("--audit-report", type=Path, default=None)
     parser.add_argument("--additive-runtime-dir", type=Path, default=Path(DEFAULT_ADDITIVE_RUNTIME))
     parser.add_argument("--repair5e5-runtime-dir", type=Path, default=Path(DEFAULT_REPAIR5E5_RUNTIME))
     parser.add_argument("--repair5e5-shuffled-runtime-dir", type=Path, default=Path(DEFAULT_REPAIR5E5_SHUFFLED_RUNTIME))
@@ -1045,6 +1141,7 @@ def main(argv: list[str] | None = None) -> int:
     wide_csv = resolve_path(args.wide_csv, root)
     report = resolve_path(args.report, root)
     summary_json = resolve_path(args.summary_json, root)
+    audit_report = resolve_path(args.audit_report, root) if args.audit_report is not None else None
     additive_runtime = resolve_path(args.additive_runtime_dir, root)
     repair5e5_runtime = resolve_path(args.repair5e5_runtime_dir, root)
     repair5e5_shuffled_runtime = resolve_path(args.repair5e5_shuffled_runtime_dir, root)
@@ -1106,8 +1203,16 @@ def main(argv: list[str] | None = None) -> int:
         instance_ids=[int(value) for value in args.instance_ids],
         methods=methods,
     )
+    candidate_methods = [method for method in methods if method.hidden_support]
+    expected_candidate_keys = expected_probe_keys(
+        maps=list(args.maps),
+        agent_counts=[int(value) for value in args.agent_counts],
+        instance_ids=[int(value) for value in args.instance_ids],
+        methods=candidate_methods,
+    )
     observed_keys = completed_probe_keys(raw_rows)
     missing_keys = sorted(expected_keys - observed_keys)
+    missing_candidate_keys = sorted(expected_candidate_keys - observed_keys)
     schema_errors: list[str] = []
     for index, row in enumerate(raw_rows, 1):
         schema_errors.extend(f"row {index}: {error}" for error in validate_run_row(row))
@@ -1123,10 +1228,13 @@ def main(argv: list[str] | None = None) -> int:
         force_additive_parity
         and not bool(set(TRAIN_IDS) & set(FINAL_HOLDOUT_IDS))
     )
+    support_final_overlap_ids = sorted(set(int(value) for value in args.instance_ids) & set(FINAL_HOLDOUT_IDS))
     gates = {
         "force_additive_parity_exact": force_additive_parity,
         "exact_additive_candidate_parity_exact": exact_additive_candidate_parity,
         "support_eval_leakage": bool(set(TRAIN_IDS) & set(FINAL_HOLDOUT_IDS)),
+        "support_final_overlap_count": len(support_final_overlap_ids),
+        "support_final_overlap_ids": support_final_overlap_ids,
         "phase5p5_allowed": False,
         "phase6_allowed": False,
         "solver_semantic_changes": False,
@@ -1188,15 +1296,25 @@ def main(argv: list[str] | None = None) -> int:
         "long_csv": str(long_csv),
         "wide_csv": str(wide_csv),
         "report": str(report),
+        "summary_json": str(summary_json),
+        "audit_report": str(audit_report) if audit_report else "",
         "raw_rows_before_dedupe": len(raw_jsonl_rows),
         "raw_rows_after_dedupe": len(raw_rows),
         "duplicate_raw_rows_dropped": len(raw_jsonl_rows) - len(raw_rows),
         "expected_raw_probe_rows": len(expected_keys),
         "missing_raw_probe_rows": len(missing_keys),
+        "expected_candidate_probe_rows": len(expected_candidate_keys),
+        "missing_candidate_probe_rows": len(missing_candidate_keys),
         "missing_raw_probe_examples": [
             {"map": key[0], "agents": key[1], "seed": key[2], "method": key[3]} for key in missing_keys[:50]
         ],
+        "missing_candidate_probe_examples": [
+            {"map": key[0], "agents": key[1], "seed": key[2], "method": key[3]}
+            for key in missing_candidate_keys[:50]
+        ],
         "schema_errors": schema_errors,
+        "long_csv_rows": len(long_rows),
+        "wide_csv_rows": len(wide_rows),
         "scope": {
             "maps": list(args.maps),
             "agent_counts": [int(value) for value in args.agent_counts],
@@ -1220,6 +1338,8 @@ def main(argv: list[str] | None = None) -> int:
     summary_json.parent.mkdir(parents=True, exist_ok=True)
     summary_json.write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     write_report(report, summary)
+    if audit_report is not None:
+        write_audit_report(audit_report, summary)
     print(json.dumps({"summary_json": rel(summary_json, root), "report": rel(report, root), "long_csv": rel(long_csv, root), "wide_csv": rel(wide_csv, root)}))
     return 0 if not schema_errors else 2
 

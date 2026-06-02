@@ -1,0 +1,12 @@
+method,rows,better,equal,worse,mean_delta_ratio_vs_ltm,ratio_worse_than_ltm_groups,success_worse_than_ltm_groups,selected_nonadditive_cases,additive_fallback_rate,zero_nonadditive_groups,selected_candidate_distribution
+always_additive_defer,30,0,30,0,0.0,0,0,0,1.0,6,{'additive_ltm': 30}
+laur_disable,30,0,30,0,0.0,0,0,0,1.0,6,{'additive_ltm': 30}
+laur_force_additive_direct,30,0,30,0,0.0,0,0,0,1.0,6,{'additive_ltm': 30}
+repair5e5_crossfold_utility_reranker,30,4,22,4,-0.0009245170596666741,2,0,15,0.5,3,"{'additive_ltm': 15, 'block_heavy': 12, 'wait_heavy': 3}"
+repair5e5_crossfold_utility_reranker_shuffled_labels_diagnostic,30,7,20,3,-0.0039024738501666654,1,0,15,0.5,3,"{'additive_ltm': 15, 'decay_095': 2, 'wait_light': 13}"
+repair5f_bounded_updateparam_selector_force_additive_parity,30,0,30,0,0.0,0,0,0,1.0,6,{'additive_ltm': 30}
+repair5f_bounded_updateparam_selector_runtime,30,6,19,5,-0.0027415721339999993,1,0,30,0.0,0,{'c100_b100_w075_d090': 30}
+repair5f_candidate_additive_ltm,30,0,30,0,0.0,0,0,0,1.0,6,{'additive_ltm': 30}
+repair5f_runtime_random_candidate_diagnostic,30,6,18,6,0.001419514395033339,2,0,29,0.03333333333333333,0,"{'additive_ltm': 1, 'c050_b100_w100_d100': 1, 'c075_b075_w100_d100': 1, 'c075_b075_w125_d095': 1, 'c075_b100_w075_d100': 4, 'c075_b100_w100_d100': 2, 'c100_b075_w100_d100': 1, 'c100_b100_w075_d095': 1, 'c100_b100_w075_d100': 1, 'c100_b100_w100_d095': 1, 'c100_b125_w075_d100': 1, 'c100_b125_w100_d095': 1, 'c100_b125_w100_d100': 1, 'c100_b125_w125_d100': 1, 'c125_b075_w100_d090': 3, 'c125_b075_w100_d100': 1, 'c125_b075_w125_d095': 1, 'c125_b100_w100_d090': 1, 'c125_b100_w100_d095': 4, 'c125_b100_w100_d100': 1, 'c125_b100_w125_d100': 1}"
+repair5f_runtime_shuffled_utility_diagnostic,30,4,19,7,0.0009148892173333441,2,0,30,0.0,0,"{'c050_b100_w100_d100': 1, 'c075_b075_w100_d100': 1, 'c075_b100_w075_d100': 1, 'c075_b100_w125_d090': 1, 'c075_b125_w100_d090': 3, 'c075_b125_w100_d100': 2, 'c075_b125_w125_d095': 1, 'c100_b050_w100_d100': 1, 'c100_b075_w075_d100': 1, 'c100_b075_w100_d095': 1, 'c100_b075_w125_d090': 2, 'c100_b100_w075_d090': 1, 'c100_b100_w075_d100': 1, 'c100_b100_w100_d090': 2, 'c100_b100_w125_d090': 1, 'c100_b100_w150_d100': 2, 'c100_b125_w075_d100': 1, 'c100_b125_w100_d095': 1, 'c100_b150_w100_d100': 1, 'c125_b075_w100_d090': 1, 'c125_b075_w125_d095': 1, 'c125_b100_w100_d090': 2, 'c125_b100_w100_d100': 1}"
+repair5f_static_c100_b100_w075_d090,30,6,19,5,-0.0027415721339999993,1,0,30,0.0,0,{'c100_b100_w075_d090': 30}

@@ -1,0 +1,86 @@
+{
+  "all_outcome_parity_exact": true,
+  "annotated_rows": 36,
+  "branch": "phase4f5p5-stable-attention-lau",
+  "cases": [
+    {
+      "agents": 50,
+      "map": "maze-32-32-4",
+      "seed": 21
+    },
+    {
+      "agents": 100,
+      "map": "warehouse-10-20-10-2-1",
+      "seed": 21
+    }
+  ],
+  "command_log_jsonl": "outputs\\logs\\phase5p5_repair5f3_runtime_parity_reproducer\\phase5p5_repair5f3_runtime_parity_reproducer_commands.jsonl",
+  "commit": "f80dd49",
+  "created_at": "2026-06-02T14:44:54.691163",
+  "diagnostic_only": true,
+  "dirty": "tracked-dirty_untracked-present",
+  "laur_update_log_jsonl": "outputs\\logs\\phase5p5_repair5f3_runtime_parity_reproducer\\phase5p5_repair5f3_runtime_parity_reproducer_laur_updates.jsonl",
+  "laur_update_log_rows": 0,
+  "ltm_max_iterations": 4,
+  "methods": [
+    "lacam_star_ltm",
+    "always_additive_defer",
+    "repair5f_candidate_additive_ltm",
+    "repair5f_bounded_updateparam_selector_force_additive_parity",
+    "laur_disable",
+    "laur_force_additive_direct"
+  ],
+  "paired_csv": "outputs\\tables\\phase5p5_repair5f3_runtime_parity_reproducer_paired.csv",
+  "parity_by_method": {
+    "always_additive_defer": {
+      "better": 0,
+      "effort_exact": true,
+      "equal": 6,
+      "outcome_exact": true,
+      "rows": 6,
+      "worse": 0
+    },
+    "laur_disable": {
+      "better": 0,
+      "effort_exact": true,
+      "equal": 6,
+      "outcome_exact": true,
+      "rows": 6,
+      "worse": 0
+    },
+    "laur_force_additive_direct": {
+      "better": 0,
+      "effort_exact": true,
+      "equal": 6,
+      "outcome_exact": true,
+      "rows": 6,
+      "worse": 0
+    },
+    "repair5f_bounded_updateparam_selector_force_additive_parity": {
+      "better": 0,
+      "effort_exact": true,
+      "equal": 6,
+      "outcome_exact": true,
+      "rows": 6,
+      "worse": 0
+    },
+    "repair5f_candidate_additive_ltm": {
+      "better": 0,
+      "effort_exact": true,
+      "equal": 6,
+      "outcome_exact": true,
+      "rows": 6,
+      "worse": 0
+    }
+  },
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "raw_jsonl": "outputs\\logs\\phase5p5_repair5f3_runtime_parity_reproducer\\phase5p5_repair5f3_runtime_parity_reproducer.jsonl",
+  "raw_rows": 36,
+  "repeats": 3,
+  "report": "outputs\\reports\\phase5p5_repair5f3_runtime_parity_reproducer_report.md",
+  "schema_errors": [],
+  "schema_version": "phase5p5_repair5f3_runtime_parity_reproducer_v1",
+  "summary_json": "outputs\\reports\\phase5p5_repair5f3_runtime_parity_reproducer_summary.json",
+  "time_limit_sec": 3.0
+}

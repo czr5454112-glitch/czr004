@@ -65,6 +65,8 @@ DEFAULT_METHOD_ORDER = [
     "repair5f_runtime_shuffled_utility_diagnostic",
     "repair5e5_crossfold_utility_reranker",
     "repair5e5_crossfold_utility_reranker_shuffled_labels_diagnostic",
+    "laur_disable",
+    "laur_force_additive_direct",
 ]
 
 PARITY_FIELDS = ["success", "sum_of_loss", "lower_bound", "sum_of_loss_ratio", "makespan"]
@@ -218,16 +220,15 @@ def build_method_spec(
     if method == "lacam_star_ltm":
         return MethodSpec("lacam_star_ltm", "lacam_star_ltm")
     if method == "always_additive_defer":
-        return MethodSpec("always_additive_defer", method, requires_runtime_log=True)
+        return MethodSpec("always_additive_defer", method)
     if method == "repair5f_candidate_additive_ltm":
-        runtime = candidate_runtime_path(runtime_root, candidates, "additive_ltm")
-        return MethodSpec(method, method, ("--laur-model-path", str(runtime), "--laur-safety-threshold", "1.01"), True)
+        return MethodSpec(method, method)
     if method == "repair5f_static_c100_b100_w075_d090":
         return MethodSpec(method, method, ("--laur-model-path", str(static_runtime), "--laur-safety-threshold", "1.01"), True)
     if method == "repair5f_bounded_updateparam_selector_runtime":
         return MethodSpec(method, method, ("--laur-model-path", str(selector_runtime), "--laur-safety-threshold", "1.01"), True)
     if method == "repair5f_bounded_updateparam_selector_force_additive_parity":
-        return MethodSpec(method, method, ("--laur-model-path", str(selector_runtime)), True)
+        return MethodSpec(method, method)
     if method in {
         "repair5f_runtime_random_candidate_diagnostic",
         "repair5f_runtime_shuffled_utility_diagnostic",
@@ -260,6 +261,10 @@ def build_method_spec(
             ),
             True,
         )
+    if method == "laur_disable":
+        return MethodSpec(method, method)
+    if method == "laur_force_additive_direct":
+        return MethodSpec(method, method)
     raise KeyError(method)
 
 
@@ -383,7 +388,16 @@ def selected_candidate_from_row(row: dict[str, Any]) -> str:
         ranked = sorted(selected.items(), key=lambda item: (-int(item[1]), str(item[0])))
         return str(ranked[0][0])
     method = str(row.get("method", ""))
-    if method in {"lacam_star_ltm", "always_additive_defer", "repair5f_candidate_additive_ltm"}:
+    if method in {
+        "lacam_star_ltm",
+        "always_additive_defer",
+        "repair5f_candidate_additive_ltm",
+        "repair5f_bounded_updateparam_selector_force_additive_parity",
+        "laur_disable",
+        "laur_force_additive_direct",
+    }:
+        return "additive_ltm"
+    if boolish(row.get("laur_force_additive")):
         return "additive_ltm"
     return ""
 
@@ -505,6 +519,8 @@ def runtime_gates(stats: dict[str, dict[str, Any]], raw_rows: list[dict[str, Any
     return {
         "force_additive_parity_exact": parity_exact(raw_rows, "repair5f_bounded_updateparam_selector_force_additive_parity"),
         "exact_additive_candidate_parity_exact": parity_exact(raw_rows, "repair5f_candidate_additive_ltm"),
+        "laur_disable_parity_exact": parity_exact(raw_rows, "laur_disable"),
+        "laur_force_additive_direct_parity_exact": parity_exact(raw_rows, "laur_force_additive_direct"),
         "support_final_leakage_false": True,
         "runtime_selector_better_gt_worse": int(selector.get("better") or 0) > int(selector.get("worse") or 0),
         "runtime_selector_mean_delta_lt_0": selector_mean is not None and float(selector_mean) < 0.0,

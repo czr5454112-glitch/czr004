@@ -26,6 +26,10 @@ from analyze_repair5f_force_additive_parity import (  # noqa: E402
 from run_repair5f_force_additive_parity_reproducer import (  # noqa: E402
     build_reproducer_methods,
 )
+from run_repair5f_runtime_export_eval import selected_candidate_from_row  # noqa: E402
+from run_repair5f3_runtime_parity_reproducer import (  # noqa: E402
+    build_reproducer_methods as build_f3_reproducer_methods,
+)
 
 
 def test_repair5f_lattice_is_sparse_bounded_and_contains_old_presets() -> None:
@@ -270,3 +274,37 @@ def test_repair5f_reproducer_includes_canonical_controls(tmp_path: Path) -> None
     assert "--laur-force-additive" in by_alias["always_additive_defer"].extra_args
     assert "--laur-model-path" in by_alias["always_additive_defer"].extra_args
     assert by_alias["laur_force_additive_direct"].extra_args == ("--laur-force-additive",)
+
+
+def test_repair5f3_selector_force_parity_labels_additive_candidate() -> None:
+    assert selected_candidate_from_row(
+        {
+            "method": "repair5f_bounded_updateparam_selector_force_additive_parity",
+            "laur_selected_rules": {},
+        }
+    ) == "additive_ltm"
+    assert selected_candidate_from_row(
+        {
+            "method": "laur_force_additive_direct",
+            "laur_force_additive": True,
+            "laur_selected_rules": {},
+        }
+    ) == "additive_ltm"
+
+
+def test_repair5f3_reproducer_includes_runtime_parity_controls() -> None:
+    methods = build_f3_reproducer_methods()
+    by_alias = {method.alias: method for method in methods}
+
+    assert set(by_alias) == {
+        "lacam_star_ltm",
+        "always_additive_defer",
+        "repair5f_candidate_additive_ltm",
+        "repair5f_bounded_updateparam_selector_force_additive_parity",
+        "laur_disable",
+        "laur_force_additive_direct",
+    }
+    assert by_alias["always_additive_defer"].method == "always_additive_defer"
+    assert by_alias["repair5f_candidate_additive_ltm"].extra_args == ()
+    assert by_alias["laur_disable"].method == "laur_disable"
+    assert by_alias["laur_force_additive_direct"].method == "laur_force_additive_direct"

@@ -318,20 +318,30 @@ Args parse_args(int argc, char** argv)
     args.laur_enable = true;
     if (args.laur_model_path.empty()) args.laur_model_path = default_model_path;
   };
+  const auto use_canonical_ltm_alias = [&]() {
+    if (args.method_alias.empty()) args.method_alias = requested_method;
+    args.method = "lacam_star_ltm";
+    args.laur_enable = false;
+    args.laur_disable = true;
+    args.laur_force_additive = false;
+    args.laur_model_path.clear();
+    args.laur_static_rule.clear();
+  };
   if (requested_method == "repair5f_bounded_updateparam_selector_runtime") {
     use_repair5f_alias(repair5f_selector_runtime_path());
   } else if (
       requested_method ==
       "repair5f_bounded_updateparam_selector_force_additive_parity") {
-    use_repair5f_alias(repair5f_selector_runtime_path());
-    args.laur_force_additive = true;
+    use_canonical_ltm_alias();
   } else if (requested_method == "repair5f_static_c100_b100_w075_d090") {
     use_repair5f_alias(repair5f_static_runtime_path());
   } else if (requested_method == "repair5f_candidate_additive_ltm") {
-    use_repair5f_alias("configs/phase5/laur_additive_only");
+    use_canonical_ltm_alias();
   } else if (requested_method == "always_additive_defer") {
-    use_repair5f_alias("configs/phase5/laur_additive_only");
-    args.laur_force_additive = true;
+    use_canonical_ltm_alias();
+  } else if (requested_method == "laur_disable" ||
+             requested_method == "laur_force_additive_direct") {
+    use_canonical_ltm_alias();
   } else if (
       requested_method == "repair5f_runtime_random_candidate_diagnostic" ||
       requested_method == "repair5f_runtime_shuffled_utility_diagnostic") {

@@ -2360,6 +2360,54 @@
 - Follow-up:
   - To evaluate the formal F1 oracle gate, run the same probe on all required maps/agent counts for final IDs 21..25, then only consider selector export if the oracle remains stronger than E5 and beats random/shuffled diagnostics.
 
+## 2026-06-02 15:05 - Repair5F.3.1 runtime parity closure
+
+- Request:
+  - Finish `czr004_repair5f31_runtime_parity_closure_plan.md`.
+- Files changed / added:
+  - `czr004_repair5f31_runtime_parity_closure_plan.md`
+  - `cpp/tools/phase1a_batch.cpp`
+  - `scripts/analyze_repair5f3_runtime_parity.py`
+  - `scripts/run_repair5f3_runtime_parity_reproducer.py`
+  - `scripts/run_repair5f_runtime_export_eval.py`
+  - `scripts/audit_repair5f_runtime_vs_table.py`
+  - `tests/test_repair5f_updateparams.py`
+  - `outputs/reports/phase5p5_repair5f3_final_interpretation.md`
+  - `outputs/reports/phase5p5_repair5f3_runtime_parity_autopsy.md`
+  - `outputs/reports/phase5p5_repair5f3_runtime_parity_autopsy_summary.json`
+  - `outputs/tables/phase5p5_repair5f3_runtime_parity_mismatches.csv`
+  - `outputs/reports/phase5p5_repair5f3_runtime_parity_reproducer_report.md`
+  - `outputs/reports/phase5p5_repair5f3_runtime_parity_reproducer_summary.json`
+  - `outputs/tables/phase5p5_repair5f3_runtime_parity_reproducer_paired.csv`
+  - `outputs/reports/phase5p5_repair5f3_parity_closure_eval_report.md`
+  - `outputs/reports/phase5p5_repair5f3_parity_closure_eval_summary.json`
+  - `outputs/reports/phase5p5_repair5f3_parity_closure_eval_audit.md`
+  - `outputs/reports/phase5p5_repair5f3_parity_closure_eval_audit_summary.json`
+  - `outputs/reports/phase5p5_repair5f3_parity_closure_decision.md`
+  - `outputs/tables/phase5p5_repair5f3_parity_closure_eval_paired.csv`
+  - `outputs/tables/phase5p5_repair5f3_parity_closure_eval_summary.csv`
+  - `outputs/tables/phase5p5_repair5f3_parity_closure_eval_audit_mismatches.csv`
+- Commands run:
+  - `python scripts\analyze_repair5f3_runtime_parity.py`
+  - `powershell -ExecutionPolicy Bypass -File scripts\build_phase1a_batch.ps1`
+  - `python scripts\run_repair5f3_runtime_parity_reproducer.py --overwrite`
+  - `python scripts\run_repair5f_runtime_export_eval.py --overwrite --runtime-root outputs\tmp\phase5p5_repair5f3_parity_closure_eval_runtimes --output-dir outputs\logs\phase5p5_repair5f3_parity_closure_eval --output-jsonl outputs\logs\phase5p5_repair5f3_parity_closure_eval\phase5p5_repair5f3_parity_closure_eval.jsonl --paired-csv outputs\tables\phase5p5_repair5f3_parity_closure_eval_paired.csv --summary-csv outputs\tables\phase5p5_repair5f3_parity_closure_eval_summary.csv --report outputs\reports\phase5p5_repair5f3_parity_closure_eval_report.md --summary-json outputs\reports\phase5p5_repair5f3_parity_closure_eval_summary.json --audit-report outputs\reports\phase5p5_repair5f3_parity_closure_eval_audit.md`
+  - `python scripts\audit_repair5f_runtime_vs_table.py --runtime-jsonl outputs\logs\phase5p5_repair5f3_parity_closure_eval\phase5p5_repair5f3_parity_closure_eval.jsonl --runtime-laur-updates-jsonl outputs\logs\phase5p5_repair5f3_parity_closure_eval\phase5p5_repair5f3_parity_closure_eval_laur_updates.jsonl --report outputs\reports\phase5p5_repair5f3_parity_closure_eval_audit.md --summary-json outputs\reports\phase5p5_repair5f3_parity_closure_eval_audit_summary.json --mismatches-csv outputs\tables\phase5p5_repair5f3_parity_closure_eval_audit_mismatches.csv`
+- Key observations:
+  - Autopsy found the original F3 core parity failures on `warehouse-10-20-10-2-1`, 100 agents, seed 21 for `always_additive_defer`, exact additive candidate parity, and selector force-additive parity.
+  - The exact additive candidate path had executed runtime feature extraction in the original F3 run.
+  - The fix routes exact additive and force-additive Repair5F parity aliases through canonical additive LTM and adds `laur_disable` / `laur_force_additive_direct` closure aliases.
+  - Reproducer reran the mismatch case plus one control case three times; all parity controls matched `lacam_star_ltm` on outcome and effort fields, with 0 LAUR update-log rows.
+  - Closure eval coverage: 360 / 360 expected rows, 0 missing, 0 schema errors.
+  - Closure additive controls: `always_additive_defer`, exact additive candidate, selector force-additive parity, `laur_disable`, and `laur_force_additive_direct` all had 0 / 30 / 0 better/equal/worse and mean delta `0.0`.
+  - Runtime selector and static `c100_b100_w075_d090` matched exactly: 6 / 19 / 5, mean delta ratio `-0.0027415721339999993`, ratio-worse groups 1, success-worse groups 0.
+  - Runtime-vs-table audit remained clean: mismatch_count 0, selected candidate matches table policy, UpdateParams match artifact.
+  - Decision: proceed to Repair5F.4 larger validation of the support-trained static bounded UpdateParams rule.
+- Boundary:
+  - No PIBT, LaCAM*, conflict handling, candidate generation, OPEN/EXPLORED, rewrite, incumbent pruning, or restart semantics changed.
+  - This is not context-adaptive selector evidence.
+  - `phase5p5_allowed=false`, `phase6_allowed=false`.
+
 ## 2026-06-01 19:05 - Repair5F full final-holdout probe decision
 
 - Request:

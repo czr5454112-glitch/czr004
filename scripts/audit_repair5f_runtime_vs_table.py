@@ -31,6 +31,8 @@ STATIC_METHOD = "repair5f_static_c100_b100_w075_d090"
 BASE_METHOD = "lacam_star_ltm"
 FORCE_METHOD = "repair5f_bounded_updateparam_selector_force_additive_parity"
 ADDITIVE_METHOD = "repair5f_candidate_additive_ltm"
+LAUR_DISABLE_METHOD = "laur_disable"
+LAUR_FORCE_DIRECT_METHOD = "laur_force_additive_direct"
 PARITY_FIELDS = ["success", "sum_of_loss", "lower_bound", "sum_of_loss_ratio", "makespan"]
 
 
@@ -259,6 +261,8 @@ def write_report(path: Path, summary: dict[str, Any]) -> None:
             "runtime_updateparams_match_artifact",
             "force_additive_parity_exact",
             "exact_additive_candidate_parity_exact",
+            "laur_disable_parity_exact",
+            "laur_force_additive_direct_parity_exact",
             "phase5p5_allowed",
             "phase6_allowed",
         ]:
@@ -360,6 +364,8 @@ def main(argv: list[str] | None = None) -> int:
         "runtime_outcomes_match_table_when_deterministic": not outcome_mismatches,
         "force_additive_parity_exact": strict_parity(raw, FORCE_METHOD),
         "exact_additive_candidate_parity_exact": strict_parity(raw, ADDITIVE_METHOD),
+        "laur_disable_parity_exact": strict_parity(raw, LAUR_DISABLE_METHOD),
+        "laur_force_additive_direct_parity_exact": strict_parity(raw, LAUR_FORCE_DIRECT_METHOD),
         "mismatch_count": len(mismatches),
         "policy_mismatch_count": len(policy_mismatches),
         "outcome_mismatch_count": len(outcome_mismatches),

@@ -1,0 +1,109 @@
+{
+  "branch": "phase4f5p5-stable-attention-lau",
+  "commit": "19663c6",
+  "created_at": "2026-06-03T13:40:02.594093",
+  "dev_rows": 6120,
+  "development_gates": {
+    "development_gates_passed": true,
+    "phase5p5_allowed": false,
+    "phase6_allowed": false,
+    "selector_beats_random_diagnostic": true,
+    "selector_beats_shuffled_diagnostic": true,
+    "selector_better_gt_worse": true,
+    "selector_bootstrap_probability_mean_delta_lt_0_ge_0p95": true,
+    "selector_mean_delta_ratio_vs_ltm_lt_neg_0p003": true,
+    "selector_ratio_worse_than_ltm_groups_le_1": true,
+    "selector_success_worse_than_ltm_groups_eq_0": true,
+    "selector_uses_no_forbidden_features": true
+  },
+  "diagnostic_only": true,
+  "dirty": "tracked-dirty_untracked-present",
+  "frozen_selector_spec_json": "outputs\\reports\\phase5p5_repair5g2_frozen_selector_spec.json",
+  "interpretation": "Development gates passed. The frozen selector spec was written before any final IDs were evaluated.",
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "random_diagnostic_metrics": {
+    "better": 29,
+    "bootstrap": {
+      "ci_high": 0.0049366804643333284,
+      "ci_low": -0.0036579794906500106,
+      "mean": 0.0004510143411833284,
+      "prob_mean_lt_0": 0.4305,
+      "samples": 2000
+    },
+    "equal": 62,
+    "mean_delta_ratio_vs_ltm": 0.0004510143411833284,
+    "median_delta_ratio_vs_ltm": 0.0,
+    "ratio_worse_than_ltm_groups": 3,
+    "rows": 120,
+    "selected_candidate_distribution": {
+      "repair5g_random_dual_candidate_diagnostic": 120
+    },
+    "success_worse_than_ltm_groups": 0,
+    "worse": 29
+  },
+  "schema_version": "phase5p5_repair5g2_selector_sweep_summary_v1",
+  "selected_dev_metrics": {
+    "better": 65,
+    "bootstrap": {
+      "ci_high": -0.008207305995033325,
+      "ci_low": -0.019766175396675002,
+      "mean": -0.014155347174674999,
+      "prob_mean_lt_0": 1.0,
+      "samples": 2000
+    },
+    "equal": 45,
+    "mean_delta_ratio_vs_ltm": -0.014155347174674999,
+    "median_delta_ratio_vs_ltm": -0.005279456539499905,
+    "ratio_worse_than_ltm_groups": 1,
+    "rows": 120,
+    "selected_candidate_distribution": {
+      "repair5g1_shield_c100_b125_w075_d100_beta0p35_max0p75": 20,
+      "repair5g1_shield_c125_b125_w075_d095_beta0p2_max0p5": 20,
+      "repair5g1_shield_c125_b125_w075_d095_beta0p35_max0p75": 40,
+      "repair5g_dual_c_equiv_additive": 20,
+      "repair5g_dual_c_equiv_c100_b100_w075_d095": 20
+    },
+    "success_worse_than_ltm_groups": 0,
+    "worse": 10
+  },
+  "selected_dev_row": {
+    "better": 65,
+    "bootstrap_ci_high": -0.008207305995033325,
+    "bootstrap_ci_low": -0.019766175396675002,
+    "bootstrap_probability_mean_delta_lt_0": 1.0,
+    "equal": 45,
+    "fold": "train_1_25_validate_26_45",
+    "mean_delta_ratio_vs_ltm": -0.014155347174674999,
+    "median_delta_ratio_vs_ltm": -0.005279456539499905,
+    "ratio_worse_than_ltm_groups": 1,
+    "rows": 120,
+    "selected_candidate_distribution": "{\"repair5g1_shield_c100_b125_w075_d100_beta0p35_max0p75\": 20, \"repair5g1_shield_c125_b125_w075_d095_beta0p2_max0p5\": 20, \"repair5g1_shield_c125_b125_w075_d095_beta0p35_max0p75\": 40, \"repair5g_dual_c_equiv_additive\": 20, \"repair5g_dual_c_equiv_c100_b100_w075_d095\": 20}",
+    "selector_spec": "{\"group_rules\": {\"*|a0\": \"repair5g1_shield_c125_b125_w075_d095_beta0p35_max0p75\", \"maze-32-32-4|a100\": \"repair5g1_shield_c125_b125_w075_d095_beta0p2_max0p5\", \"maze-32-32-4|a50\": \"repair5g1_shield_c125_b125_w075_d095_beta0p35_max0p75\", \"random-32-32-20|a100\": \"repair5g1_shield_c100_b125_w075_d100_beta0p35_max0p75\", \"random-32-32-20|a50\": \"repair5g1_shield_c125_b125_w075_d095_beta0p35_max0p75\", \"warehouse-10-20-10-2-1|a100\": \"repair5g_dual_c_equiv_additive\", \"warehouse-10-20-10-2-1|a50\": \"repair5g_dual_c_equiv_c100_b100_w075_d095\"}}",
+    "selector_type": "map_agent_group_static_selector",
+    "success_worse_than_ltm_groups": 0,
+    "worse": 10
+  },
+  "shuffled_diagnostic_metrics": {
+    "better": 49,
+    "bootstrap": {
+      "ci_high": -0.004511336415908341,
+      "ci_low": -0.014253123298108327,
+      "mean": -0.009432185142358336,
+      "prob_mean_lt_0": 0.9995,
+      "samples": 2000
+    },
+    "equal": 51,
+    "mean_delta_ratio_vs_ltm": -0.009432185142358336,
+    "median_delta_ratio_vs_ltm": 0.0,
+    "ratio_worse_than_ltm_groups": 1,
+    "rows": 120,
+    "selected_candidate_distribution": {
+      "repair5g_shuffled_goal_progress_diagnostic": 120
+    },
+    "success_worse_than_ltm_groups": 0,
+    "worse": 20
+  },
+  "support_rows": 7800,
+  "sweep_rows": 18
+}

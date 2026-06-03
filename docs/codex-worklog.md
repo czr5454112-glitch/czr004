@@ -2789,3 +2789,28 @@
   - Manual fallback harness ran all 16 test functions across `tests/test_repair5f_updateparams.py` and `tests/test_repair5g_dual_channel_ltm.py` with 0 failures.
   - `powershell -ExecutionPolicy Bypass -File scripts/build_phase1a_batch.ps1` passed.
   - `git diff --check` passed; only LF-to-CRLF normalization warnings were reported.
+
+## 2026-06-03 15:36 - Complete Repair5G.2 flow-shield selector fresh validation
+
+- Request:
+  - Finish `czr004_repair5g2_flow_shield_selector_fresh_validation_plan.md`, using `deep-research-report.md` and `phase4_6_laur_ltm_codex_execution_plan.md` for project context.
+- Carry-forward interpretation:
+  - G0 global flow bonus failed and did not create oracle headroom.
+  - G1 flow-shield produced the first strong Repair5G development signal, but its top candidates were diagnostic-only because IDs 26..45 were observed.
+  - G2 therefore froze a non-leaky static/group selector before looking at final IDs 46..65.
+- Completion:
+  - Added the G1 parity/determinism audit, G2 candidate subset builder, support/fresh protocol runner, selector training table builder, deterministic selector tuner, and final decision analyzer.
+  - Built a 60-row G2 candidate subset: controls, C-equivalent baselines, 36 flow-shield candidates, agent-progress diagnostics, and synthetic diagnostics.
+  - Ran the support probe on IDs 1..25: 9000 / 9000 rows, missing rows 0, schema errors 0, solver crashes 0.
+  - Support strict parity had 85 mismatches, all classified as `time_budget_sensitivity`; true semantic parity mismatches were 0.
+  - Built 270 selector contexts with no final-ID rows.
+  - Froze `map_agent_group_static_selector` after development gates passed.
+  - Ran fresh final IDs 46..65: 2520 / 2520 rows, missing rows 0, schema errors 0, solver crashes 0, required final protocol gates passed.
+- Results:
+  - Development selected selector: 65 / 45 / 10 better/equal/worse, mean delta ratio `-0.014155347174674999`, bootstrap probability mean < 0 = `1.0`.
+  - Fresh final selected selector: 62 / 44 / 14 better/equal/worse, mean delta ratio `-0.020112979571774988`, bootstrap probability mean < 0 = `1.0`.
+  - Fresh final selected selector beat random and shuffled diagnostics under the frozen gate logic; ratio-worse groups = 0 and success-worse groups = 0.
+- Decision:
+  - `outputs/reports/phase5p5_repair5g2_decision.md` records `continue_repair5g3_broader_validation`.
+  - This remains diagnostic-only: `phase5p5_allowed=false` and `phase6_allowed=false`.
+  - No learned actions, learned restart, or LaCAM*/PIBT semantic change was introduced.

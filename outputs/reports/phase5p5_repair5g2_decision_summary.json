@@ -1,0 +1,121 @@
+{
+  "aaai_style_story": "G2 strengthens the story that goal-aware flow-shielded UpdateLTM dynamics can improve closed-loop guidance without action or restart learning.",
+  "branch": "phase4f5p5-stable-attention-lau",
+  "commit": "19663c6",
+  "created_at": "2026-06-03T15:36:08.271774",
+  "decision": "continue_repair5g3_broader_validation",
+  "diagnostic_metrics": {
+    "repair5g2_random_candidate_diagnostic": {
+      "better": 52,
+      "bootstrap": {
+        "ci_high": -0.00872424414427499,
+        "ci_low": -0.018187609826883323,
+        "mean": -0.01329058551464166,
+        "prob_mean_lt_0": 1.0,
+        "samples": 2000
+      },
+      "equal": 55,
+      "mean_delta_ratio_vs_ltm": -0.01329058551464166,
+      "median_delta_ratio_vs_ltm": 0.0,
+      "ratio_worse_than_ltm_groups": 1,
+      "rows": 120,
+      "selected_candidate_distribution": {
+        "repair5g2_random_candidate_diagnostic": 120
+      },
+      "success_worse_than_ltm_groups": 0,
+      "worse": 13
+    },
+    "repair5g2_shuffled_flow_shield_diagnostic": {
+      "better": 63,
+      "bootstrap": {
+        "ci_high": -0.014293910611708314,
+        "ci_low": -0.025572633011758314,
+        "mean": -0.019850973894158318,
+        "prob_mean_lt_0": 1.0,
+        "samples": 2000
+      },
+      "equal": 43,
+      "mean_delta_ratio_vs_ltm": -0.019850973894158318,
+      "median_delta_ratio_vs_ltm": -0.0031559879099999355,
+      "ratio_worse_than_ltm_groups": 1,
+      "rows": 120,
+      "selected_candidate_distribution": {
+        "repair5g2_shuffled_flow_shield_diagnostic": 120
+      },
+      "success_worse_than_ltm_groups": 0,
+      "worse": 14
+    },
+    "repair5g2_shuffled_goal_progress_diagnostic": {
+      "better": 60,
+      "bootstrap": {
+        "ci_high": -0.012293272377441648,
+        "ci_low": -0.023258657566658313,
+        "mean": -0.01761917499324165,
+        "prob_mean_lt_0": 1.0,
+        "samples": 2000
+      },
+      "equal": 44,
+      "mean_delta_ratio_vs_ltm": -0.01761917499324165,
+      "median_delta_ratio_vs_ltm": -0.0007496251849999913,
+      "ratio_worse_than_ltm_groups": 1,
+      "rows": 120,
+      "selected_candidate_distribution": {
+        "repair5g2_shuffled_goal_progress_diagnostic": 120
+      },
+      "success_worse_than_ltm_groups": 0,
+      "worse": 16
+    }
+  },
+  "dirty": "tracked-dirty_untracked-present",
+  "final_gates": {
+    "additive_parity_exact": true,
+    "cost_bounds_respected": true,
+    "dual_additive_parity_exact": true,
+    "final_ids_not_used_in_tuning": true,
+    "full_expected_rows": true,
+    "laur_disable_parity_exact": true,
+    "laur_force_additive_direct_parity_exact": true,
+    "missing_rows_zero": true,
+    "phase5p5_allowed": false,
+    "phase6_allowed": false,
+    "schema_errors_zero": true,
+    "selected_method_beats_random_diagnostic": true,
+    "selected_method_beats_shuffled_diagnostic": true,
+    "selected_method_better_gt_worse": true,
+    "selected_method_bootstrap_probability_mean_delta_lt_0_ge_0p95": true,
+    "selected_method_mean_delta_ratio_vs_ltm_lt_0": true,
+    "selected_method_ratio_worse_than_ltm_groups_le_1": true,
+    "selected_method_success_worse_than_ltm_groups_eq_0": true
+  },
+  "final_gates_passed": true,
+  "final_summary_json": "outputs\\reports\\phase5p5_repair5g2_fresh_final_eval_summary.json",
+  "frozen_selector_spec_json": "outputs\\reports\\phase5p5_repair5g2_frozen_selector_spec.json",
+  "interpretation": "Fresh final IDs support the frozen flow-shield selector. Continue with broader G3 validation on new IDs/time budgets.",
+  "no_lacam_pibt_semantic_change": true,
+  "no_learned_actions": true,
+  "no_learned_restart": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "schema_version": "phase5p5_repair5g2_decision_summary_v1",
+  "selected_final_metrics": {
+    "better": 62,
+    "bootstrap": {
+      "ci_high": -0.014490510663533322,
+      "ci_low": -0.02552586735488332,
+      "mean": -0.020112979571774988,
+      "prob_mean_lt_0": 1.0,
+      "samples": 2000
+    },
+    "equal": 44,
+    "mean_delta_ratio_vs_ltm": -0.020112979571774988,
+    "median_delta_ratio_vs_ltm": -0.009189291290000012,
+    "ratio_worse_than_ltm_groups": 0,
+    "rows": 120,
+    "selected_candidate_distribution": {
+      "repair5g2_frozen_static_or_selector": 120
+    },
+    "success_worse_than_ltm_groups": 0,
+    "worse": 14
+  },
+  "selector_summary_json": "outputs\\reports\\phase5p5_repair5g2_selector_sweep_summary.json"
+}

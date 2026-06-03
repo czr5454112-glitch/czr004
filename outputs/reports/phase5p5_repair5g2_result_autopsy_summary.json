@@ -1,0 +1,97 @@
+{
+  "answer": "G2 is mainly a representation win with selector value still unclear. Flow-shielded dual-channel UpdateLTM is much stronger than scalar/C-equivalent baselines, while the frozen selector is effectively tied with the best static flow-shield candidate.",
+  "branch": "phase4f5p5-stable-attention-lau",
+  "commit": "004168f",
+  "created_at": "2026-06-03T16:41:44.930275",
+  "diagnostic_metrics": {
+    "repair5g2_random_candidate_diagnostic": {
+      "better": 52,
+      "bootstrap": {
+        "ci_high": -0.00872424414427499,
+        "ci_low": -0.018187609826883323,
+        "mean": -0.01329058551464166,
+        "prob_mean_lt_0": 1.0,
+        "samples": 2000
+      },
+      "equal": 55,
+      "mean_delta_ratio_vs_ltm": -0.01329058551464166,
+      "median_delta_ratio_vs_ltm": 0.0,
+      "method": "repair5g2_random_candidate_diagnostic",
+      "ratio_worse_than_ltm_groups": 1,
+      "rows": 120,
+      "success_worse_than_ltm_groups": 0,
+      "worse": 13
+    },
+    "repair5g2_shuffled_flow_shield_diagnostic": {
+      "better": 63,
+      "bootstrap": {
+        "ci_high": -0.014293910611708314,
+        "ci_low": -0.025572633011758314,
+        "mean": -0.019850973894158318,
+        "prob_mean_lt_0": 1.0,
+        "samples": 2000
+      },
+      "equal": 43,
+      "mean_delta_ratio_vs_ltm": -0.019850973894158318,
+      "median_delta_ratio_vs_ltm": -0.0031559879099999355,
+      "method": "repair5g2_shuffled_flow_shield_diagnostic",
+      "ratio_worse_than_ltm_groups": 1,
+      "rows": 120,
+      "success_worse_than_ltm_groups": 0,
+      "worse": 14
+    },
+    "repair5g2_shuffled_goal_progress_diagnostic": {
+      "better": 60,
+      "bootstrap": {
+        "ci_high": -0.012293272377441648,
+        "ci_low": -0.023258657566658313,
+        "mean": -0.01761917499324165,
+        "prob_mean_lt_0": 1.0,
+        "samples": 2000
+      },
+      "equal": 44,
+      "mean_delta_ratio_vs_ltm": -0.01761917499324165,
+      "median_delta_ratio_vs_ltm": -0.0007496251849999913,
+      "method": "repair5g2_shuffled_goal_progress_diagnostic",
+      "ratio_worse_than_ltm_groups": 1,
+      "rows": 120,
+      "success_worse_than_ltm_groups": 0,
+      "worse": 16
+    }
+  },
+  "diagnostic_only": true,
+  "frozen_selector_type": "map_agent_group_static_selector",
+  "oracle_regret_rows": 2400,
+  "outputs": {
+    "oracle_regret_csv": "outputs\\tables\\phase5p5_repair5g2_final_oracle_regret.csv",
+    "representation_dominance_csv": "outputs\\tables\\phase5p5_repair5g2_representation_dominance_by_group.csv",
+    "selector_cases_csv": "outputs\\tables\\phase5p5_repair5g2_selector_vs_static_cases.csv",
+    "worst_cases_csv": "outputs\\tables\\phase5p5_repair5g2_worst_cases.csv"
+  },
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "representation_evidence": {
+    "best_c_equiv_or_scalar_mean_delta_ratio_vs_ltm": -0.0022770787914083196,
+    "best_c_equiv_or_scalar_method": "repair5g2_c_equiv_best_frozen_baseline",
+    "best_flow_shield_mean_delta_ratio_vs_ltm": -0.020112979571774988,
+    "best_flow_shield_method": "repair5g2_frozen_static_or_selector",
+    "flow_minus_c_gap": 0.01783590078036667
+  },
+  "risk_notes": [
+    "Warehouse is mostly no-op/fallback, so random and maze carry most G2 benefit.",
+    "Shuffled flow-shield diagnostic is close to the selector, so selector intelligence should not be overclaimed.",
+    "IDs 46..65 are observed and can be used only as later training data, not untouched final evidence."
+  ],
+  "schema_version": "phase5p5_repair5g2_result_autopsy_v1",
+  "selector_vs_static": {
+    "classification": "tied_within_0p001",
+    "selector_avoids_harm_cases": 3,
+    "selector_mean_delta_ratio_vs_ltm": -0.020112979571774988,
+    "selector_minus_static_mean": -6.904022002500107e-05,
+    "selector_missed_gain_cases": 20,
+    "selector_wins_cases": 18,
+    "static_mean_delta_ratio_vs_ltm": -0.020043939351749987,
+    "static_wins_cases": 23,
+    "ties_cases": 79
+  }
+}

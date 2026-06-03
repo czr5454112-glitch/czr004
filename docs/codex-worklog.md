@@ -2814,3 +2814,53 @@
   - `outputs/reports/phase5p5_repair5g2_decision.md` records `continue_repair5g3_broader_validation`.
   - This remains diagnostic-only: `phase5p5_allowed=false` and `phase6_allowed=false`.
   - No learned actions, learned restart, or LaCAM*/PIBT semantic change was introduced.
+
+## 2026-06-03 18:08 - Start Repair5G.3 broader validation and learning bridge
+
+- Request:
+  - Finish `czr004_repair5g3_broader_validation_learning_bridge_plan.md`, using `deep-research-report.md` and `phase4_6_laur_ltm_codex_execution_plan.md` for project context.
+- Carry-forward interpretation:
+  - Repair5G.2 is a strong positive fresh-holdout result for goal-aware flow-shielded dual-channel `UpdateLTM`.
+  - The strongest evidence is representation-level: flow-shield beats scalar/C-equivalent bounded UpdateParams much more clearly than the map-agent selector beats the best static flow-shield rule.
+  - IDs 1..65 are observed; IDs 46..65 are not untouched final evidence after G2.
+- Files planned:
+  - `scripts/analyze_repair5g2_artifact_integrity.py`
+  - `scripts/analyze_repair5g2_result_autopsy.py`
+  - `scripts/run_repair5g3_determinism_repeat.py`
+  - `scripts/run_repair5g3_broader_validation.py`
+  - `scripts/run_repair5g3_time_iteration_stress.py`
+  - `scripts/run_repair5g3_map_expansion_probe.py`
+  - `scripts/create_repair5g3_learning_bridge_dataset.py`
+  - `scripts/tune_repair5g3_contextual_flow_shield_selector.py`
+  - `outputs/reports/phase5p5_repair5g2_final_interpretation.md`
+  - `outputs/reports/phase5p5_repair5g3_protocol_overview.md`
+- Key constraints:
+  - Do not modify `external/lacam2/lacam2/**`.
+  - Do not change PIBT, LaCAM*, candidate generation, pruning, restart, or search semantics.
+  - Keep all G3 work diagnostic-only with `phase5p5_allowed=false` and `phase6_allowed=false`.
+  - Evaluate frozen G2 methods on IDs 66..105 before any G3 tuning on those IDs.
+- Completion:
+  - Added Repair5G.2 final interpretation and Repair5G.3 protocol overview records.
+  - Implemented G2 artifact integrity and result-autopsy scripts.
+  - Implemented Repair5G.3 deterministic repeat, broader validation, time/iteration stress, map-expansion, learning-bridge dataset, and contextual selector tuning scripts.
+  - Ran the G2 artifact integrity audit: raw logs were available and integrity passed.
+  - Ran the G2 result autopsy: flow-shield representation won clearly, while the frozen map-agent selector remained tied with the best static flow-shield rule within `0.001`.
+  - Ran Repair5G.3 determinism repeat over IDs 66..75 with 3 deterministic method-order repeats.
+  - Ran Repair5G.3 broader validation over maps `random-32-32-20`, `maze-32-32-4`, and `warehouse-10-20-10-2-1`, agents 50/100, IDs 66..105, time limit 3.0, and `ltm_max_iterations=4`.
+- Results:
+  - Determinism repeat produced 3240 / 3240 rows, missing rows 0, schema errors 0, solver crashes 0, true semantic parity mismatches 0, and passed repeat gates.
+  - Broader validation produced 6240 / 6240 rows, missing rows 0, schema errors 0, solver crashes 0, and true semantic parity mismatches 0.
+  - Broader validation selected flow-shield remained directionally positive: `repair5g2_frozen_static_or_selector` was 132 / 60 / 31 better/equal/worse with mean delta ratio `-0.019665489611971558`.
+  - Best static flow-shield was `repair5g1_shield_c125_b125_w075_d095_beta0p35_max0p75`, 127 / 62 / 34 with mean delta ratio `-0.02004726679608962`.
+  - Selector vs static remained `tied_within_0p001`; representation gates passed, but strict protocol gates failed because exact parity flags were false under broad wall-clock-sensitive validation.
+- Decision:
+  - `outputs/reports/phase5p5_repair5g3_decision.md` records `protocol_failed`.
+  - Time/iteration stress, optional map expansion, and learning-bridge tuning were not run because P4 protocol did not pass.
+  - IDs 66..105 are now observed through the failed/blocked G3 protocol and should not be reused as untouched final evidence.
+  - This remains diagnostic-only: `phase5p5_allowed=false` and `phase6_allowed=false`.
+- Validation:
+  - `python -m py_compile scripts/repair5g3_common.py scripts/analyze_repair5g2_artifact_integrity.py scripts/analyze_repair5g2_result_autopsy.py scripts/run_repair5g3_determinism_repeat.py scripts/run_repair5g3_broader_validation.py scripts/run_repair5g3_time_iteration_stress.py scripts/run_repair5g3_map_expansion_probe.py scripts/create_repair5g3_learning_bridge_dataset.py scripts/tune_repair5g3_contextual_flow_shield_selector.py` passed.
+  - `python -m pytest tests/test_repair5f_updateparams.py tests/test_repair5g_dual_channel_ltm.py -q` could not run because pytest is unavailable in the active Python (`No module named pytest`).
+  - Manual fallback harness ran all 16 relevant test functions with 0 failures.
+  - No C++ files were changed, so the C++ build script was not required for G3.
+  - `git diff --check` passed; only LF-to-CRLF normalization warnings were reported.

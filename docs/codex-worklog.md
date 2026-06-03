@@ -2864,3 +2864,46 @@
   - Manual fallback harness ran all 16 relevant test functions with 0 failures.
   - No C++ files were changed, so the C++ build script was not required for G3.
   - `git diff --check` passed; only LF-to-CRLF normalization warnings were reported.
+
+## 2026-06-03 18:34 - Start Repair5G.3.1 protocol closure and G4 clean validation
+
+- Request:
+  - Finish `czr004_repair5g31_protocol_closure_g4_clean_validation_plan.md`, using `deep-research-report.md` and `phase4_6_laur_ltm_codex_execution_plan.md` for project context.
+- Carry-forward interpretation:
+  - G3 is `protocol_failed`, not representation failed.
+  - P3 determinism repeat passed and P4 broader validation completed 6240 / 6240 rows.
+  - Selected and representation gates were directionally positive, but strict exact control parity flags failed.
+  - True semantic parity mismatch count was 0.
+  - IDs 1..105 are observed; IDs 66..105 cannot be reused as untouched final evidence.
+- Files planned:
+  - `scripts/analyze_repair5g3_protocol_failure.py`
+  - `scripts/run_repair5g31_control_parity_reproducer.py`
+  - `scripts/run_repair5g4_clean_frozen_validation.py`
+  - `scripts/run_repair5g4_time_iteration_stress.py`
+  - `scripts/create_repair5g4_learning_bridge_dataset.py`
+  - `scripts/tune_repair5g4_contextual_flow_shield_selector.py`
+  - `tests/test_repair5g31_protocol_gates.py`
+  - `outputs/reports/phase5p5_repair5g3_final_interpretation.md`
+  - `outputs/reports/phase5p5_repair5g31_protocol_closure_overview.md`
+  - `outputs/reports/phase5p5_repair5g31_parity_policy.md`
+  - `outputs/reports/phase5p5_repair5g31_g4_decision.md`
+- Key constraints:
+  - Do not modify `external/lacam2/lacam2/**`.
+  - Do not change PIBT, LaCAM*, candidate generation, conflict handling, pruning, OPEN/EXPLORED, rewrite, incumbent, or restart semantics.
+  - Do not silently replace exact parity with semantic parity.
+  - Keep `phase5p5_allowed=false` and `phase6_allowed=false`.
+  - Run G4 only after the protocol autopsy, reproducer, parity policy, and gate tests close the G3 protocol issue.
+- Follow-up:
+  - First classify G3 strict mismatches and reproduce them sequentially under longer budgets.
+- Completion:
+  - Added Repair5G.3.1 protocol helpers, parity gate tests, G3 protocol autopsy, control parity reproducer, conservative parity policy, G4 clean frozen validation, time/iteration stress, offline learning-bridge dataset, contextual selector tuning, and final G4 decision scripts/reports.
+  - Classified all G3 strict parity mismatches as return-code-2 no-solution equivalence or time-budget sensitivity; true semantic parity mismatches remained 0.
+  - Ran the control parity reproducer over 1050 commands / 900 control pairs; true semantic parity mismatches were 0, solver crashes were 0, and all strict mismatches were policy-classified.
+  - Ran G4 clean frozen validation on IDs 126..165; protocol and representation gates passed, true semantic parity mismatches were 0, and the selected flow-shield mean delta ratio vs LTM was `-0.01862021635864017`.
+  - Ran time/iteration stress over 17,280 solver commands and aggregated 25,920 final rows; stress protocol passed, schema errors were 0, solver crashes were 0, selected 3s/5s/10s signs did not reverse, and 8-iteration stress did not introduce broad harm.
+  - Built the offline learning bridge dataset and contextual selector spec; offline dev gates passed, but runtime learned-selector integration remains a recorded gap.
+- Decision:
+  - `outputs/reports/phase5p5_repair5g31_g4_decision.md` records `continue_learning_bridge_offline`.
+  - Flow-shield representation is valid under clean G4 validation; selector value remains useful but should not be overclaimed as Phase5.5/Phase6 evidence.
+  - IDs 126..165 are now observed through G4; IDs 166..205 or the next untouched range remain reserved for learned-selector fresh runtime evaluation if a runtime selector is frozen.
+  - This remains diagnostic-only: `phase5p5_allowed=false` and `phase6_allowed=false`.

@@ -1,59 +1,57 @@
 {
   "aaai_ready": false,
-  "created_at": "2026-06-04T11:00:03.542992",
-  "decision": "runtime_integration_gap_blocks_learning_claim",
+  "advanced_neural_network_stage": "blocked_until_safe_runtime_selector_or_counterfactual_labels",
+  "decision": "runtime_hook_bug_blocks_learning",
+  "learned_runtime_fresh_holdout": "blocked_not_run",
+  "learned_runtime_selector_performance": "failed",
   "phase5p5_allowed": false,
   "phase6_allowed": false,
   "requirements": [
     {
-      "evidence_artifacts": "outputs/reports/phase5p5_repair5g4_clean_frozen_validation_summary.json",
+      "evidence_artifacts": "outputs/reports/phase5p5_repair5g5_runtime_smoke_summary.json",
       "remaining_work": "",
-      "requirement": "G4 flow-shield representation validation",
-      "requirement_id": "flow_shield_representation",
+      "requirement": "G5 runtime selector integration",
+      "requirement_id": "runtime_selector_integration",
       "status": "passed"
     },
     {
-      "evidence_artifacts": "outputs/reports/phase5p5_repair5g31_g4_decision.md",
-      "remaining_work": "Stronger paper policy should continue to report strict parity classifications.",
-      "requirement": "semantic parity plus time-budget equivalence policy",
-      "requirement_id": "protocol_policy",
-      "status": "passed_for_diagnostics"
+      "evidence_artifacts": "outputs/reports/phase5p5_repair5g5_runtime_smoke_summary.json",
+      "remaining_work": "Use G5.1 safe bridge; do not run fresh learned-runtime IDs from failed selector.",
+      "requirement": "G5 learned runtime selector observed-ID smoke",
+      "requirement_id": "runtime_selector_smoke",
+      "status": "failed"
     },
     {
-      "evidence_artifacts": "outputs/reports/phase5p5_repair5g4_clean_frozen_validation_summary.json",
-      "remaining_work": "Not a learned runtime selector.",
-      "requirement": "static/map-agent flow-shield runtime candidate",
-      "requirement_id": "static_runtime_candidate",
-      "status": "partial"
+      "evidence_artifacts": "outputs/reports/phase5p5_repair5g5_runtime_selector_failure_autopsy.md",
+      "remaining_work": "Counterfactual iteration labels needed before new learned selector.",
+      "requirement": "learned runtime selector performance",
+      "requirement_id": "learned_runtime_selector_performance",
+      "status": "failed"
     },
     {
-      "evidence_artifacts": "artifacts/models/laur_ltm/repair5g5_contextual_flow_shield_selector/selector_spec.json",
-      "remaining_work": "",
-      "requirement": "learned runtime selector exported and integrated",
-      "requirement_id": "learned_runtime_selector",
-      "status": "passed"
-    },
-    {
-      "evidence_artifacts": "outputs/reports/phase5p5_repair5g5_learned_runtime_fresh_eval_summary.json",
-      "remaining_work": "Keep IDs 166..205 untouched until frozen runtime selector passes smoke.",
-      "requirement": "clean learned-runtime heldout validation",
+      "evidence_artifacts": "",
+      "remaining_work": "IDs 166..205 remain reserved until a corrected selector is frozen.",
+      "requirement": "learned runtime fresh holdout",
       "requirement_id": "learned_runtime_fresh_holdout",
-      "status": "missing"
+      "status": "blocked_not_run"
     },
     {
-      "evidence_artifacts": "outputs/reports/phase5p5_repair5g5_aaai_broader_validation_summary.json",
-      "remaining_work": "Run only after fresh learned runtime nearly passes or passes.",
-      "requirement": "AAAI broader map expansion",
-      "requirement_id": "map_expansion",
-      "status": "partial"
+      "evidence_artifacts": "outputs/reports/phase5p5_repair5g4_clean_frozen_validation_summary.json",
+      "remaining_work": "Do not present as learned-runtime AAAI claim.",
+      "requirement": "static/map-agent flow-shield",
+      "requirement_id": "static_flow_shield",
+      "status": "strong_baseline_not_learned_claim"
     },
     {
-      "evidence_artifacts": "outputs/tables/phase5p5_repair5g_claim_ledger.csv",
-      "remaining_work": "Upgrade claim statuses after fresh learned runtime validation.",
-      "requirement": "claim ledger mapping claims to artifacts",
-      "requirement_id": "paper_claim_ledger",
-      "status": "partial"
+      "evidence_artifacts": "outputs/reports/phase5p5_repair5g51_counterfactual_label_quality_summary.json",
+      "remaining_work": "Export replayable checkpoints and collect labels.",
+      "requirement": "advanced neural network stage",
+      "requirement_id": "advanced_neural_network_stage",
+      "status": "blocked_until_safe_runtime_selector_or_counterfactual_labels"
     }
   ],
-  "schema_version": "phase5p5_repair5g_aaai_readiness_summary_v1"
+  "runtime_selector_integration": "passed",
+  "runtime_selector_smoke": "failed",
+  "schema_version": "phase5p5_repair5g_aaai_readiness_summary_v2",
+  "static_flow_shield": "strong_baseline_not_learned_claim"
 }

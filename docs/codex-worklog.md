@@ -2942,3 +2942,19 @@
   - `powershell -ExecutionPolicy Bypass -File scripts/build_phase1a_batch.ps1` passed after the runtime selector integration and ablation fixes.
   - `python -m pytest ...` could not run because pytest is unavailable in the active Python (`No module named pytest`).
   - Manual fallback harness ran the new G5 tests plus the relevant G3.1/G dual-channel tests with 0 failures.
+
+## 2026-06-04 - Repair5G.5.1 runtime selector failure and safe bridge
+
+- Request:
+  - Finish `czr004_repair5g51_runtime_selector_failure_safe_bridge_plan.md`, using `deep-research-report.md` and `phase4_6_laur_ltm_codex_execution_plan.md` for project context.
+- Completion:
+  - Added G5.1 autopsy, sanity selector export, runtime hook sanity, policy-control analysis/reproducer, safe-abstention tuning/export, blocked safe smoke, counterfactual context/probe/quality, small-MLP guard, and final decision scripts/reports.
+  - Autopsy classified the G5 failure as `offline_to_runtime_selector_transfer_failure`; the failed stump overused the early C-equiv branch selected by `ltm_iterations <= 2.5`.
+  - Runtime hook sanity on IDs 136..145 completed 780 analyzed rows with missing rows 0, schema errors 0, solver crashes 0, selector logs present, and feature policy passing, but failed because always-static/map-agent runtime-hook selectors did not reproduce their safe baselines.
+  - Policy-control reproducer completed 540 analyzed rows; disable was compliant, but force-additive selector-path sensitivity remained, so the policy-control gate failed.
+  - Safe selector tuning/export completed, but safe runtime smoke was blocked because P2/P3 did not pass.
+  - Counterfactual context extraction produced 1,496 observed update contexts and 3,500 probe label rows, but true counterfactual labels were unavailable without replayable pre-update traffic snapshots.
+- Decision:
+  - `outputs/reports/phase5p5_repair5g51_decision.md` records `runtime_hook_bug_blocks_learning`.
+  - No fresh learned-runtime validation was run; IDs 166..205 remain reserved.
+  - `phase5p5_allowed=false`, `phase6_allowed=false`, and `aaai_ready=false` remain closed.

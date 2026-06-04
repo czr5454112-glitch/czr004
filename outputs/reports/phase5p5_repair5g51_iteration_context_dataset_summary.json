@@ -1,0 +1,15 @@
+{
+  "aaai_ready": false,
+  "context_count": 1496,
+  "counterfactual_replay_ready": false,
+  "observed_ids_only": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "schema_version": "phase5p5_repair5g51_iteration_context_dataset_summary_v1",
+  "source_counts": {
+    "outputs/logs/phase5p5_repair5g51_runtime_hook_sanity/phase5p5_repair5g51_runtime_hook_sanity_ltm_updates.jsonl": 754,
+    "outputs/logs/phase5p5_repair5g51_safe_selector_runtime_smoke/phase5p5_repair5g51_safe_selector_runtime_smoke_ltm_updates.jsonl": 0,
+    "outputs/logs/phase5p5_repair5g5_runtime_smoke/phase5p5_repair5g5_runtime_smoke_ltm_updates.jsonl": 742
+  },
+  "traffic_snapshots_available": false
+}

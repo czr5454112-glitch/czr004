@@ -1,0 +1,13 @@
+better,bootstrap,equal,mean_delta_ratio_vs_ltm,median_delta_ratio_vs_ltm,method,ratio_worse_than_ltm_groups,rows,success_worse_than_ltm_groups,worse
+1,"{'mean': 0.0, 'ci_low': 0.0, 'ci_high': 0.0, 'prob_mean_lt_0': 0.0, 'samples': 2000}",54,0.0,0.0,always_additive_defer,0,60,0,0
+1,"{'mean': 0.0, 'ci_low': 0.0, 'ci_high': 0.0, 'prob_mean_lt_0': 0.0, 'samples': 2000}",51,0.0,0.0,laur_disable,0,60,0,3
+1,"{'mean': 0.0, 'ci_low': 0.0, 'ci_high': 0.0, 'prob_mean_lt_0': 0.0, 'samples': 2000}",51,0.0,0.0,laur_force_additive_direct,0,60,0,3
+1,"{'mean': 0.0, 'ci_low': 0.0, 'ci_high': 0.0, 'prob_mean_lt_0': 0.0, 'samples': 2000}",53,0.0,0.0,repair5f_candidate_additive_ltm,0,60,0,1
+30,"{'mean': -0.015455739176862769, 'ci_low': -0.024732209493803954, 'ci_high': -0.006350025212607864, 'prob_mean_lt_0': 0.9995, 'samples': 2000}",12,-0.015455739176862769,-0.008958566629999831,repair5g2_best_frozen_static_candidate,1,60,0,14
+30,"{'mean': -0.015290301806923094, 'ci_low': -0.024882889975769266, 'ci_high': -0.006035392995115407, 'prob_mean_lt_0': 1.0, 'samples': 2000}",13,-0.015290301806923094,-0.004788913785000015,repair5g2_frozen_static_or_selector,1,60,0,14
+3,"{'mean': 0.0008985943775999994, 'ci_low': 0.0, 'ci_high': 0.002695783132799998, 'prob_mean_lt_0': 0.0, 'samples': 2000}",49,0.0008985943775999994,0.0,repair5g51_runtime_always_additive_selector,1,60,0,5
+28,"{'mean': -0.006100098907200024, 'ci_low': -0.017464902647980025, 'ci_high': 0.005883738467539963, 'prob_mean_lt_0': 0.849, 'samples': 2000}",11,-0.006100098907200024,-0.000877963124999992,repair5g51_runtime_always_map_agent_selector,1,60,0,18
+27,"{'mean': -0.006495710798846173, 'ci_low': -0.016783749071519243, 'ci_high': 0.00525401319653845, 'prob_mean_lt_0': 0.862, 'samples': 2000}",13,-0.006495710798846173,-0.000877963124999992,repair5g51_runtime_always_static_flow_shield,1,60,0,15
+10,"{'mean': 0.00703853401067308, 'ci_low': 0.0018714768945192366, 'ci_high': 0.012541674879134605, 'prob_mean_lt_0': 0.003, 'samples': 2000}",25,0.00703853401067308,0.0,repair5g51_runtime_bad_g5_stump,3,60,0,23
+1,"{'mean': 0.0, 'ci_low': 0.0, 'ci_high': 0.0, 'prob_mean_lt_0': 0.0, 'samples': 2000}",50,0.0,0.0,repair5g_dual_additive_parity,0,60,0,4
+3,"{'mean': 0.0, 'ci_low': 0.0, 'ci_high': 0.0, 'prob_mean_lt_0': 0.0, 'samples': 2000}",52,0.0,0.0,repair5g_dual_c_equiv_additive,0,60,0,2

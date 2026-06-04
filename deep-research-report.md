@@ -827,3 +827,21 @@ Do not:
 - claim Phase5.5/Phase6 from diagnostic Repair5G runs
 - use final IDs for tuning
 - hide negative controls
+
+## 2026-06 Repair5G.5.1 runtime selector failure update
+
+G5.1 diagnosed the failed G5 learned runtime selector as an offline-to-runtime transfer failure, not a flow-shield representation failure. The bad G5 stump used `ltm_iterations <= 2.5` to choose an early C-equiv branch at runtime, which suppressed the flow-shield updates that had made G2/G4 strong.
+
+Observed G5.1 status:
+
+- `runtime_selector_integration = passed`
+- `runtime_selector_smoke = failed`
+- `learned_runtime_selector_performance = failed`
+- `learned_runtime_fresh_holdout = blocked_not_run`
+- `static_flow_shield = strong_baseline_not_learned_claim`
+- `advanced_neural_network_stage = blocked_until_safe_runtime_selector_or_counterfactual_labels`
+- `aaai_ready = false`
+
+Runtime hook sanity on observed IDs 136..145 did not reproduce always-static/map-agent safe policies through the selector hook under the required smoke gate, and the policy-control reproducer still showed force-additive selector-path sensitivity. Therefore G5.1 final decision is `runtime_hook_bug_blocks_learning`. Safe selector smoke on IDs 146..165 was blocked and not run; IDs 166..205 remain reserved.
+
+Counterfactual UpdateLTM context extraction produced observed pre-update feature rows, but true counterfactual labels were unavailable because replayable `traffic_before` / trace-event checkpoints are not exported. The next AAAI-relevant step is minimal C++ checkpoint export for causal iteration-level UpdateLTM labels before any MLP/GNN/Transformer selector work.

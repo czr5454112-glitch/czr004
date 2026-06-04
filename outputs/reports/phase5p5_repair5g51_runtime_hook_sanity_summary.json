@@ -1,0 +1,296 @@
+{
+  "aaai_ready": false,
+  "agent_counts": [
+    50,
+    100
+  ],
+  "branch": "phase4f5p5-stable-attention-lau",
+  "commit": "0f6566a",
+  "decision": "runtime_hook_bug_blocks_learning",
+  "diagnostic_only": true,
+  "gates": {
+    "aaai_ready": false,
+    "all_costs_finite": true,
+    "allowed_feature_policy_passed": true,
+    "always_additive_matches_additive_under_parity_policy": true,
+    "always_map_agent_matches_or_policy_equivalent": false,
+    "always_map_agent_max_regret_vs_map_agent": 0.15150784077000012,
+    "always_static_matches_or_policy_equivalent": false,
+    "always_static_max_regret_vs_static": 0.16188178529000008,
+    "bad_g5_stump_classified_failed_or_weak": true,
+    "cost_bounds_respected": true,
+    "disable_policy_compliant": true,
+    "expected_rows_full": true,
+    "forbidden_feature_policy_passed": true,
+    "forbidden_runtime_features": [],
+    "force_additive_policy_compliant": false,
+    "missing_rows": 0,
+    "phase5p5_allowed": false,
+    "phase6_allowed": false,
+    "runtime_hook_sanity_passed": false,
+    "runtime_rows_full": true,
+    "schema_errors": 0,
+    "selector_logs_present": true,
+    "selector_update_log_rows": 754,
+    "semantic_parity_mismatch_count": 0,
+    "solver_crash_count": 0,
+    "unexpected_runtime_features": []
+  },
+  "instance_ids": [
+    136,
+    137,
+    138,
+    139,
+    140,
+    141,
+    142,
+    143,
+    144,
+    145
+  ],
+  "ltm_max_iterations": 4,
+  "maps": [
+    "random-32-32-20",
+    "maze-32-32-4",
+    "warehouse-10-20-10-2-1"
+  ],
+  "method_stats": {
+    "always_additive_defer": {
+      "better": 1,
+      "bootstrap": {
+        "ci_high": 0.0,
+        "ci_low": 0.0,
+        "mean": 0.0,
+        "prob_mean_lt_0": 0.0,
+        "samples": 2000
+      },
+      "equal": 54,
+      "mean_delta_ratio_vs_ltm": 0.0,
+      "median_delta_ratio_vs_ltm": 0.0,
+      "method": "always_additive_defer",
+      "ratio_worse_than_ltm_groups": 0,
+      "rows": 60,
+      "success_worse_than_ltm_groups": 0,
+      "worse": 0
+    },
+    "laur_disable": {
+      "better": 1,
+      "bootstrap": {
+        "ci_high": 0.0,
+        "ci_low": 0.0,
+        "mean": 0.0,
+        "prob_mean_lt_0": 0.0,
+        "samples": 2000
+      },
+      "equal": 51,
+      "mean_delta_ratio_vs_ltm": 0.0,
+      "median_delta_ratio_vs_ltm": 0.0,
+      "method": "laur_disable",
+      "ratio_worse_than_ltm_groups": 0,
+      "rows": 60,
+      "success_worse_than_ltm_groups": 0,
+      "worse": 3
+    },
+    "laur_force_additive_direct": {
+      "better": 1,
+      "bootstrap": {
+        "ci_high": 0.0,
+        "ci_low": 0.0,
+        "mean": 0.0,
+        "prob_mean_lt_0": 0.0,
+        "samples": 2000
+      },
+      "equal": 51,
+      "mean_delta_ratio_vs_ltm": 0.0,
+      "median_delta_ratio_vs_ltm": 0.0,
+      "method": "laur_force_additive_direct",
+      "ratio_worse_than_ltm_groups": 0,
+      "rows": 60,
+      "success_worse_than_ltm_groups": 0,
+      "worse": 3
+    },
+    "repair5f_candidate_additive_ltm": {
+      "better": 1,
+      "bootstrap": {
+        "ci_high": 0.0,
+        "ci_low": 0.0,
+        "mean": 0.0,
+        "prob_mean_lt_0": 0.0,
+        "samples": 2000
+      },
+      "equal": 53,
+      "mean_delta_ratio_vs_ltm": 0.0,
+      "median_delta_ratio_vs_ltm": 0.0,
+      "method": "repair5f_candidate_additive_ltm",
+      "ratio_worse_than_ltm_groups": 0,
+      "rows": 60,
+      "success_worse_than_ltm_groups": 0,
+      "worse": 1
+    },
+    "repair5g2_best_frozen_static_candidate": {
+      "better": 30,
+      "bootstrap": {
+        "ci_high": -0.006350025212607864,
+        "ci_low": -0.024732209493803954,
+        "mean": -0.015455739176862769,
+        "prob_mean_lt_0": 0.9995,
+        "samples": 2000
+      },
+      "equal": 12,
+      "mean_delta_ratio_vs_ltm": -0.015455739176862769,
+      "median_delta_ratio_vs_ltm": -0.008958566629999831,
+      "method": "repair5g2_best_frozen_static_candidate",
+      "ratio_worse_than_ltm_groups": 1,
+      "rows": 60,
+      "success_worse_than_ltm_groups": 0,
+      "worse": 14
+    },
+    "repair5g2_frozen_static_or_selector": {
+      "better": 30,
+      "bootstrap": {
+        "ci_high": -0.006035392995115407,
+        "ci_low": -0.024882889975769266,
+        "mean": -0.015290301806923094,
+        "prob_mean_lt_0": 1.0,
+        "samples": 2000
+      },
+      "equal": 13,
+      "mean_delta_ratio_vs_ltm": -0.015290301806923094,
+      "median_delta_ratio_vs_ltm": -0.004788913785000015,
+      "method": "repair5g2_frozen_static_or_selector",
+      "ratio_worse_than_ltm_groups": 1,
+      "rows": 60,
+      "success_worse_than_ltm_groups": 0,
+      "worse": 14
+    },
+    "repair5g51_runtime_always_additive_selector": {
+      "better": 3,
+      "bootstrap": {
+        "ci_high": 0.002695783132799998,
+        "ci_low": 0.0,
+        "mean": 0.0008985943775999994,
+        "prob_mean_lt_0": 0.0,
+        "samples": 2000
+      },
+      "equal": 49,
+      "mean_delta_ratio_vs_ltm": 0.0008985943775999994,
+      "median_delta_ratio_vs_ltm": 0.0,
+      "method": "repair5g51_runtime_always_additive_selector",
+      "ratio_worse_than_ltm_groups": 1,
+      "rows": 60,
+      "success_worse_than_ltm_groups": 0,
+      "worse": 5
+    },
+    "repair5g51_runtime_always_map_agent_selector": {
+      "better": 28,
+      "bootstrap": {
+        "ci_high": 0.005883738467539963,
+        "ci_low": -0.017464902647980025,
+        "mean": -0.006100098907200024,
+        "prob_mean_lt_0": 0.849,
+        "samples": 2000
+      },
+      "equal": 11,
+      "mean_delta_ratio_vs_ltm": -0.006100098907200024,
+      "median_delta_ratio_vs_ltm": -0.000877963124999992,
+      "method": "repair5g51_runtime_always_map_agent_selector",
+      "ratio_worse_than_ltm_groups": 1,
+      "rows": 60,
+      "success_worse_than_ltm_groups": 0,
+      "worse": 18
+    },
+    "repair5g51_runtime_always_static_flow_shield": {
+      "better": 27,
+      "bootstrap": {
+        "ci_high": 0.00525401319653845,
+        "ci_low": -0.016783749071519243,
+        "mean": -0.006495710798846173,
+        "prob_mean_lt_0": 0.862,
+        "samples": 2000
+      },
+      "equal": 13,
+      "mean_delta_ratio_vs_ltm": -0.006495710798846173,
+      "median_delta_ratio_vs_ltm": -0.000877963124999992,
+      "method": "repair5g51_runtime_always_static_flow_shield",
+      "ratio_worse_than_ltm_groups": 1,
+      "rows": 60,
+      "success_worse_than_ltm_groups": 0,
+      "worse": 15
+    },
+    "repair5g51_runtime_bad_g5_stump": {
+      "better": 10,
+      "bootstrap": {
+        "ci_high": 0.012541674879134605,
+        "ci_low": 0.0018714768945192366,
+        "mean": 0.00703853401067308,
+        "prob_mean_lt_0": 0.003,
+        "samples": 2000
+      },
+      "equal": 25,
+      "mean_delta_ratio_vs_ltm": 0.00703853401067308,
+      "median_delta_ratio_vs_ltm": 0.0,
+      "method": "repair5g51_runtime_bad_g5_stump",
+      "ratio_worse_than_ltm_groups": 3,
+      "rows": 60,
+      "success_worse_than_ltm_groups": 0,
+      "worse": 23
+    },
+    "repair5g_dual_additive_parity": {
+      "better": 1,
+      "bootstrap": {
+        "ci_high": 0.0,
+        "ci_low": 0.0,
+        "mean": 0.0,
+        "prob_mean_lt_0": 0.0,
+        "samples": 2000
+      },
+      "equal": 50,
+      "mean_delta_ratio_vs_ltm": 0.0,
+      "median_delta_ratio_vs_ltm": 0.0,
+      "method": "repair5g_dual_additive_parity",
+      "ratio_worse_than_ltm_groups": 0,
+      "rows": 60,
+      "success_worse_than_ltm_groups": 0,
+      "worse": 4
+    },
+    "repair5g_dual_c_equiv_additive": {
+      "better": 3,
+      "bootstrap": {
+        "ci_high": 0.0,
+        "ci_low": 0.0,
+        "mean": 0.0,
+        "prob_mean_lt_0": 0.0,
+        "samples": 2000
+      },
+      "equal": 52,
+      "mean_delta_ratio_vs_ltm": 0.0,
+      "median_delta_ratio_vs_ltm": 0.0,
+      "method": "repair5g_dual_c_equiv_additive",
+      "ratio_worse_than_ltm_groups": 0,
+      "rows": 60,
+      "success_worse_than_ltm_groups": 0,
+      "worse": 2
+    }
+  },
+  "methods": [
+    "lacam_star_ltm",
+    "repair5g2_best_frozen_static_candidate",
+    "repair5g2_frozen_static_or_selector",
+    "repair5g51_runtime_always_static_flow_shield",
+    "repair5g51_runtime_always_map_agent_selector",
+    "repair5g51_runtime_always_additive_selector",
+    "repair5g51_runtime_bad_g5_stump",
+    "always_additive_defer",
+    "repair5f_candidate_additive_ltm",
+    "laur_disable",
+    "laur_force_additive_direct",
+    "repair5g_dual_additive_parity",
+    "repair5g_dual_c_equiv_additive"
+  ],
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "row_count": 780,
+  "schema_version": "phase5p5_repair5g51_runtime_hook_sanity_summary_v1",
+  "time_limit_sec": 3.0,
+  "update_log_rows": 754
+}

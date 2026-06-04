@@ -1,0 +1,16 @@
+{
+  "aaai_ready": false,
+  "diagnostic_only": true,
+  "export_manifest": "artifacts\\models\\laur_ltm\\repair5g51_safe_abstention_selector\\export_manifest.json",
+  "export_manifest_hash": "a40c253fc939ddc3832ca78a1cbcd49b59d56b9b9b6b5c38a67c88fbfc4ff73c",
+  "forbidden_early_ltm_iteration_c_equiv_branch": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "safe_selector_default_is_validated_flow_shield": true,
+  "safe_selector_uses_no_forbidden_features": true,
+  "schema_version": "phase5p5_repair5g51_safe_abstention_selector_summary_v1",
+  "selected_selector": "safe_map_agent_default",
+  "selected_source_method": "repair5g2_frozen_static_or_selector",
+  "selector_spec": "artifacts\\models\\laur_ltm\\repair5g51_safe_abstention_selector\\selector_spec.json",
+  "selector_spec_hash": "fbd909fc63c1b8b1b2e99dca59c024d2ff8dbd8c92ebf783b91d45b39cae02fd"
+}

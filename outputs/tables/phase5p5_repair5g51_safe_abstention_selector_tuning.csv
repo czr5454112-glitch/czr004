@@ -1,0 +1,9 @@
+better,default_policy,equal,mean_delta_ratio_vs_ltm,offline_gates_passed,ratio_worse_than_ltm_groups,safe_selector_beats_bad_g5_stump,safe_selector_default_is_validated_flow_shield,safe_selector_mean_delta_ratio_vs_ltm_lt_neg_0p010,safe_selector_not_worse_than_static_by_more_than_0p001,safe_selector_ratio_worse_than_ltm_groups_eq_0,safe_selector_success_worse_than_ltm_groups_eq_0,safe_selector_uses_no_forbidden_features,selector_name,source_method,success_worse_than_ltm_groups,uses_forbidden_features,worse
+35,validated_flow_shield,14,-0.02232529495036001,True,0,True,True,True,True,True,True,True,safe_static_default,repair5g2_best_frozen_static_candidate,0,False,8
+35,validated_flow_shield,14,-0.026533959629559997,True,0,True,True,True,True,True,True,True,safe_map_agent_default,repair5g2_frozen_static_or_selector,0,False,9
+35,validated_flow_shield,14,-0.026533959629559997,True,0,True,True,True,True,True,True,True,safe_warehouse_abstention,repair5g2_frozen_static_or_selector,0,False,9
+35,validated_flow_shield,14,-0.026533959629559997,True,0,True,True,True,True,True,True,True,safe_risk_abstention_tree,repair5g2_frozen_static_or_selector,0,False,9
+35,validated_flow_shield,14,-0.026533959629559997,True,0,True,True,True,True,True,True,True,safe_margin_abstention_tree,repair5g2_frozen_static_or_selector,0,False,9
+8,validated_flow_shield,27,0.00350549546894118,False,2,False,True,False,False,False,True,True,bad_g5_stump_negative_control,repair5g5_contextual_flow_shield_selector_runtime,0,False,23
+34,validated_flow_shield,14,-0.020724342164560004,False,0,True,True,True,False,True,True,True,random_feature_safe_abstention_diagnostic,repair5g5_contextual_flow_shield_selector_random_feature_diagnostic,0,False,10
+34,validated_flow_shield,14,-0.020724342164560004,False,0,True,True,True,False,True,True,True,shuffled_label_safe_abstention_diagnostic,repair5g5_contextual_flow_shield_selector_shuffled_label_diagnostic,0,False,10

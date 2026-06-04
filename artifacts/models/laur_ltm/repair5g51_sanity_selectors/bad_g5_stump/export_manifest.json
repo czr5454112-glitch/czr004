@@ -1,0 +1,10 @@
+{
+  "aaai_ready": false,
+  "negative_control": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "schema_version": "phase5p5_repair5g51_selector_manifest_v1",
+  "selector_spec": "artifacts\\models\\laur_ltm\\repair5g51_sanity_selectors\\bad_g5_stump\\selector_spec.json",
+  "selector_spec_hash": "fa8c5a5be30d2c9be79ca0c32a4f9be1acdcae0cb24d5e74e36ea601efe7a82a",
+  "source": "outputs\\reports\\phase5p5_repair5g5_runtime_contextual_selector_spec.json"
+}

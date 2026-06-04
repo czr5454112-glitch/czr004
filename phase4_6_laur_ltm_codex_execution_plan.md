@@ -6204,3 +6204,23 @@ Current status after G4:
 - Level E = closed
 
 Repair5G / learned UpdateLTM paper gates now require a learned runtime selector, clean heldout validation, static/map-agent/learned baselines, shuffled/random diagnostics, feature and channel ablations, time/iteration stress, multi-map/multi-agent analysis, reproducibility manifests, and a claim ledger. `aaai_ready=false` remains mandatory until all paper-grade gates pass.
+
+## 2026-06 Repair5G.5.1 status correction
+
+After G5 and G5.1:
+
+- Level A = passed under G2/G4 interpretation
+- Level B = strong static/map-agent baseline, not a learned claim
+- Level C = blocked by runtime hook sanity failure
+- Level D = not ready
+- Level E = closed
+
+Required AAAI correction:
+
+- `runtime_selector_integration = passed`
+- `runtime_selector_smoke = failed`
+- `learned_runtime_selector_performance = failed`
+- `learned_runtime_fresh_holdout = blocked_not_run`
+- `aaai_ready = false`
+
+Do not run IDs 166..205 until the runtime hook reproduces always-static/map-agent safe policies, policy controls pass or are formally classified, and a corrected selector passes observed-ID smoke before being frozen. G5.1 stopped at `runtime_hook_bug_blocks_learning`; safe selector smoke was blocked, counterfactual labels were unavailable without replayable UpdateLTM checkpoints, and small neural selector training stayed blocked.

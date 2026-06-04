@@ -1,0 +1,18 @@
+{
+  "aaai_ready": false,
+  "counterfactual_label_quality_passed": false,
+  "decision": "blocked_until_safe_runtime_selector_and_counterfactual_labels",
+  "forbidden_architectures": [
+    "GNN",
+    "Transformer",
+    "action decoder",
+    "restart head",
+    "priority head",
+    "h-value head"
+  ],
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "safe_selector_runtime_smoke_passed": false,
+  "schema_version": "phase5p5_repair5g51_small_mlp_selector_summary_v1",
+  "training_started": false
+}

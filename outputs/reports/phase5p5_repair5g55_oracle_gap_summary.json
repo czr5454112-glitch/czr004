@@ -1,0 +1,21 @@
+{
+  "aaai_ready": false,
+  "candidate_win_rates_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase5p5_repair5g55_candidate_win_rates.csv",
+  "context_count": 60,
+  "counterfactual_labels_passed": true,
+  "decision": "scaled_labels_passed_adaptive_gap_strong_continue_g6_design",
+  "g6_training_allowed": false,
+  "label_rows": 420,
+  "learned_runtime_fresh_holdout": "blocked_not_run",
+  "mean_oracle_gap_over_static": -0.014675222527750003,
+  "median_oracle_gap_over_static": -0.005475440400000031,
+  "oracle_beats_additive_contexts": 39,
+  "oracle_beats_additive_fraction": 0.65,
+  "oracle_beats_static_contexts": 25,
+  "oracle_beats_static_fraction": 0.4166666666666667,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "schema_version": "phase5p5_repair5g55_oracle_gap_summary_v1",
+  "static_dominates_all_contexts": false,
+  "static_failure_contexts_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase5p5_repair5g55_static_failure_contexts.csv"
+}

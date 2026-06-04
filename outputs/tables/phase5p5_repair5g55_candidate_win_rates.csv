@@ -1,0 +1,8 @@
+candidate_id,mean_probe_sum_of_loss_ratio,median_delta_vs_static_in_same_context,oracle_win_contexts,oracle_win_rate
+additive_ltm,1.3508699977246157,0.100699300699,0,0.0
+repair5g1_shield_c100_b125_w075_d100_beta0p35_max0p75,1.2434199561127501,-0.00547544039739,21,0.35
+repair5g1_shield_c125_b125_w075_d095_beta0p2_max0p5,1.2942422280352497,0.0462378830519,0,0.0
+repair5g1_shield_c125_b125_w075_d095_beta0p35_max0p75,1.2512274118335,0.0,0,0.0
+repair5g2_best_frozen_static_candidate,1.2512274118335,0.0,15,0.25
+repair5g2_c_equiv_best_frozen_baseline,1.3508699977246157,0.100699300699,0,0.0
+repair5g2_frozen_static_or_selector,1.2644123091545003,0.0,4,0.06666666666666667

@@ -1,0 +1,14 @@
+{
+  "aaai_ready": false,
+  "base_candidate_count": 7,
+  "candidate_rows": 22,
+  "candidate_set_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase5p5_repair5g55_candidate_set.csv",
+  "default_scaled_label_candidate_count": 7,
+  "diagnostic_only": true,
+  "local_lattice_candidate_count": 18,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_registry_supports_local_lattice": true,
+  "schema_version": "phase5p5_repair5g55_candidate_set_summary_v1",
+  "unsupported_candidates": []
+}

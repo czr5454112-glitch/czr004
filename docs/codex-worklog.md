@@ -1,5 +1,41 @@
 # Codex Worklog
 
+## 2026-06-04 20:05 - Repair5G.5.5 scaled counterfactual labels and G6 design
+
+- Request:
+  Finish `czr004_repair5g55_scaled_counterfactual_g6_design_plan.md`: scale same-context counterfactual UpdateLTM labels on observed IDs, audit candidate/probe/feature quality, measure oracle adaptivity, and write G6 safe mixture/residual design without training.
+- Files planned:
+  - `scripts/repair5g55_common.py`
+  - `scripts/create_repair5g55_candidate_set.py`
+  - `scripts/analyze_repair5g55_candidate_set.py`
+  - `scripts/run_repair5g55_scaled_counterfactual_labels.py`
+  - `scripts/analyze_repair5g55_scaled_counterfactual_labels.py`
+  - `scripts/analyze_repair5g55_oracle_gap.py`
+  - `scripts/run_repair5g55_probe_budget_stability.py`
+  - `scripts/analyze_repair5g55_probe_budget_stability.py`
+  - `scripts/create_repair5g55_g6_feature_table.py`
+  - `scripts/analyze_repair5g55_feature_leakage_and_availability.py`
+  - focused G5.5 tests and G5.5 reports/tables under `outputs/`
+- Key constraints:
+  Do not touch `external/lacam2/lacam2/**`, do not run IDs 166..205, do not use final full-run outcomes as update labels, do not train G6, and keep `phase5p5_allowed=false`, `phase6_allowed=false`, `aaai_ready=false`.
+- Follow-up:
+  Reuse G5.4 semantic replay/probe machinery, run a stratified observed-ID smoke if the full 146..165 grid is compute-heavy, record missing target coverage explicitly, and stop at G6 design unless scaled-label/probe/feature gates justify a later plan.
+- Completion:
+  Implemented the G5.5 candidate-set audit, scaled same-context counterfactual runner/analyzers, oracle-gap analysis, probe-budget stability diagnostics, G6 feature table/audit, safe-mixture policy spec, and final decision writer.
+  Ran a stratified observed-ID smoke over maps `random-32-32-20`, `maze-32-32-4`, `warehouse-10-20-10-2-1`, agents `50/100`, and IDs `146..155`.
+  The scaled label smoke produced 60 contexts and 420 labels with complete seven-candidate coverage, clean same-context checks, feature leakage audit passing, runtime feature availability passing, and checkpoint replayability still passing.
+  Oracle analysis found static did not dominate: oracle beat static on 25/60 contexts, with mean oracle gap over static `-0.014675222527750003`.
+  Probe-budget stability was measured on a 6-context sentinel over `250/500/1000 ms`; the optional `2000 ms` sentinel was not run in this smoke.
+- Decision:
+  `outputs/reports/phase5p5_repair5g55_decision.md` records `scaled_labels_passed_adaptive_gap_strong_continue_g6_design`.
+  The 120-context target remains incomplete because this was the minimum stratified smoke, so G6 training remains blocked.
+  `phase5p5_allowed=false`, `phase6_allowed=false`, `aaai_ready=false`, `g6_training_allowed=false`, and `learned_runtime_fresh_holdout=blocked_not_run`.
+- Validation:
+  `python -m py_compile` passed for all new G5.5 scripts.
+  `python -m pytest tests/test_repair5g55_scaled_counterfactual.py` could not run because pytest is unavailable in the active Python (`No module named pytest`).
+  Manual fallback harness passed for reserved-ID rejection, JSON summary parsing, scaled-label smoke gates, feature audit, budget stability, and mandatory blocked status fields.
+  `git diff --check` passed.
+
 ## 2026-06-04 18:45 - Repair5G.5.4 semantic replay and counterfactual labels
 
 - Request:

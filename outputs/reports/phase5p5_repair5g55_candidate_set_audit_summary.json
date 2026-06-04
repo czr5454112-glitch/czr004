@@ -1,0 +1,26 @@
+{
+  "aaai_ready": false,
+  "candidate_rows": 22,
+  "component_counts": {
+    "c_equiv_alias": 1,
+    "control": 1,
+    "flow_shield": 18,
+    "frozen_static_alias": 1,
+    "map_agent_group_selector_alias": 1
+  },
+  "decision": "candidate_set_supported",
+  "gates": {
+    "base_candidates_present": true,
+    "candidate_set_audit_passed": true,
+    "candidate_set_rows_gt_0": true,
+    "candidate_space_not_exploded": true,
+    "default_candidate_count": 7,
+    "local_lattice_supported": true,
+    "unsupported_candidate_count": 0
+  },
+  "missing_base_candidates": [],
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "schema_version": "phase5p5_repair5g55_candidate_set_audit_summary_v1",
+  "unsupported_candidates": []
+}

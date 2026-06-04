@@ -1,0 +1,8 @@
+blocked_per_committed_bucket,contexts,mean_oracle_gap_over_static,oracle_beats_static_contexts,oracle_beats_static_fraction,trace_density_bucket,wait_event_ratio_bucket
+low,1,,0,0.0,high,mid
+mid,19,-0.022026200820000015,5,0.2631578947368421,high,mid
+low,1,-0.017206477730000058,1,1.0,low,low
+mid,20,-0.013148337459000004,14,0.7,low,mid
+low,6,,0,0.0,mid,low
+low,2,,0,0.0,mid,mid
+mid,11,-0.01085998668199999,5,0.45454545454545453,mid,mid

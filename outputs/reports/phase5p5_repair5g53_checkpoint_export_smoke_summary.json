@@ -1,0 +1,10 @@
+{
+  "aaai_ready": false,
+  "blocked_reason": "minimal_hook_equivalence_failed",
+  "checkpoint_export_passed": false,
+  "checkpoint_rows": 0,
+  "diagnostic_only": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "schema_version": "phase5p5_repair5g53_checkpoint_export_smoke_summary_v1"
+}

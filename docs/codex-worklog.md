@@ -2999,3 +2999,21 @@
   - Selector work remains a safety bridge/fallback layer, not the final top-venue method.
   - Preferred route is safe learned abstention/mixture over validated UpdateLTM experts, then bounded residual parameters only after counterfactual labels and runtime bridge gates pass.
   - `phase5p5_allowed=false`, `phase6_allowed=false`, and `aaai_ready=false` remain closed.
+
+## 2026-06-04 - Repair5G.5.3 overhead-neutral runtime hook audit
+
+- Request:
+  - Finish `czr004_repair5g53_overhead_neutral_runtime_hook_plan.md`.
+  - Preserve the project boundaries from `deep-research-report.md` and `phase4_6_laur_ltm_codex_execution_plan.md`.
+- Completion:
+  - Added G5.3 transform-equivalence audit support, overhead-neutral minimal hook methods, overhead ladder instrumentation, performance/audit feature split, guarded checkpoint export/replayability scripts, counterfactual-label blocked reporting, and final G5.3 decision/readiness artifacts.
+  - Ran the full observed transform matrix on IDs 146..155 across 3 maps and 2 agent counts at 3s / 4 LTM iterations: 870 audit rows, 0 params-hash mismatches, 0 traffic-after hash mismatches, and 0 C/F update-stat mismatches.
+  - Ran the full observed 3s overhead ladder: 1500 analyzed rows, 0 true semantic mismatches, 10 minimal-hook mismatches, all classified as `time_budget_sensitivity` on `warehouse-10-20-10-2-1` with 100 agents.
+  - Ran targeted warehouse/100 budget sensitivity at 5s and 10s: both passed minimal-hook equivalence with 0 mismatches.
+  - Classified the dominant audit-path overhead component as `repair5g53_cost_audit_ms`.
+  - Recorded checkpoint export as blocked by `minimal_hook_equivalence_failed`; replayability and counterfactual labels remain blocked/unavailable.
+- Decision:
+  - `outputs/reports/phase5p5_repair5g53_decision.md` records `minimal_hook_semantic_bug` with refined failure class `minimal_hook_time_budget_sensitivity`.
+  - G5.3 proves the UpdateLTM transform is not corrupt, but the primary 3s runtime hook is still not deadline-neutral.
+  - No G6 learning/training is allowed. IDs 166..205 remain untouched.
+  - This remains diagnostic-only: `phase5p5_allowed=false`, `phase6_allowed=false`, and `aaai_ready=false`.

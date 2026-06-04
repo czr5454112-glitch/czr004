@@ -1,0 +1,22 @@
+{
+  "aaai_ready": false,
+  "available_label_rows": 0,
+  "candidate_count": 7,
+  "checkpoint_rows_used": 0,
+  "decision": "counterfactual_labels_unavailable",
+  "gap": "checkpoint replayability blocked by minimal_hook_equivalence_failed",
+  "gates": {
+    "available_label_rows_gt_0": false,
+    "candidate_coverage_complete": false,
+    "counterfactual_labels_passed": false,
+    "feature_leakage_audit_passes": false,
+    "label_rows_gt_0": false,
+    "labels_are_contextual_not_run_level": false,
+    "oracle_gap_over_static_measured": false,
+    "runtime_feature_availability_audit_passes": false
+  },
+  "label_rows": 0,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "schema_version": "phase5p5_repair5g53_counterfactual_label_summary_v1"
+}

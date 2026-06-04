@@ -1,0 +1,24 @@
+{
+  "aaai_ready": false,
+  "blocked_reason": "minimal_hook_equivalence_failed",
+  "checkpoint_jsonl": "C:\\PROGRAMING\\czr004\\outputs\\logs\\phase5p5_repair5g53_checkpoint_export\\phase5p5_repair5g53_update_checkpoints.jsonl",
+  "checkpoint_rows": 0,
+  "decision": "checkpoint_export_blocked",
+  "estimated_size_bytes": 0,
+  "gates": {
+    "blocked_by_checkpoint_export": true,
+    "checkpoint_replayability_passed": false,
+    "checkpoint_rows_gt_0": false,
+    "estimated_size_acceptable": true,
+    "feature_vector_present": false,
+    "forbidden_features": [],
+    "no_forbidden_features": true,
+    "trace_events_present": false,
+    "traffic_before_hash_present": false,
+    "traffic_before_present": false
+  },
+  "manifest_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase5p5_repair5g53_checkpoint_manifest.csv",
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "schema_version": "phase5p5_repair5g53_checkpoint_replayability_summary_v1"
+}

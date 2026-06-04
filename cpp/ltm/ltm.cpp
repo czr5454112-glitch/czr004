@@ -1201,11 +1201,27 @@ LtmRunResult solve_with_ltm(const Instance& instance, const LtmOptions& options)
       context.traffic_before = &result.traffic_map;
       context.trace_events = &collector.events();
       context.stats = stats;
+      const auto policy_started = std::chrono::steady_clock::now();
       update_params = options.update_policy(context);
+      const auto policy_ended = std::chrono::steady_clock::now();
+      result.additional_info +=
+          "ltm_update_policy_total_ms=" +
+          std::to_string(std::chrono::duration<double, std::milli>(
+                             policy_ended - policy_started)
+                             .count()) +
+          "\n";
     }
 
+    const auto update_apply_started = std::chrono::steady_clock::now();
     result.traffic_map.update_from_trace(collector.events(), update_params,
                                          &instance);
+    const auto update_apply_ended = std::chrono::steady_clock::now();
+    result.additional_info +=
+        "ltm_update_apply_ms=" +
+        std::to_string(std::chrono::duration<double, std::milli>(
+                           update_apply_ended - update_apply_started)
+                           .count()) +
+        "\n";
     const auto& update_stats = result.traffic_map.last_update_stats();
     result.dual_channel_update_stats.congestion_update_count +=
         update_stats.congestion_update_count;

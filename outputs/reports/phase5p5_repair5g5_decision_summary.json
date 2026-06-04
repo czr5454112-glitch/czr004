@@ -1,0 +1,21 @@
+{
+  "aaai_ready": false,
+  "answers": {
+    "aaai_evidence_matrix_updated": true,
+    "aaai_plausible_claims": "representation/static-flow-shield diagnostic claims only until fresh learned runtime passes",
+    "forbidden_claims": "AAAI-ready, Phase5.5, Phase6, learned fresh validation passed",
+    "learned_runtime_beats_static_or_map_agent": false,
+    "learned_runtime_fresh_validation_passed": false,
+    "next_clean_split": "166..205 unless touched; otherwise 206..245",
+    "project_wide_aaai_policy_added": true,
+    "runtime_learned_update_ltm_selector_integrated": true,
+    "runtime_smoke_passed": false,
+    "selector_frozen_before_final": false
+  },
+  "created_at": "2026-06-04T11:00:03.542992",
+  "decision": "runtime_integration_gap_blocks_learning_claim",
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "schema_version": "phase5p5_repair5g5_decision_summary_v1",
+  "selector_hash": "fa8c5a5be30d2c9be79ca0c32a4f9be1acdcae0cb24d5e74e36ea601efe7a82a"
+}

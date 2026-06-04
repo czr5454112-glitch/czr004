@@ -1,0 +1,4 @@
+allowed_status,claim_id,claim_text,paper_section,required_missing_artifacts,risk,supporting_artifacts
+safe,C1,Flow-shielded goal-aware dual-channel UpdateLTM is protocol-clean under the G4 parity policy.,Results,,diagnostic parity policy still must be explained,phase5p5_repair5g4_clean_frozen_validation_summary.json
+safe_diagnostic,C2,Static/map-agent flow-shield improves over additive LTM and scalar/C-equiv controls on G4.,Results,,not a learned runtime claim,phase5p5_repair5g4_clean_frozen_validation_summary.json
+forbidden_until_fresh_validation,C3,Learned contextual UpdateLTM selector improves closed-loop MAPF performance on fresh heldout IDs.,Method/Results,fresh learned runtime validation,selector may only match static flow-shield,

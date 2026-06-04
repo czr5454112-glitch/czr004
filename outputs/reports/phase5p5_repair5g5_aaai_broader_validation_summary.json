@@ -1,0 +1,16 @@
+{
+  "aaai_ready": false,
+  "available_maps": [],
+  "blocked_reason": "fresh learned runtime validation did not pass",
+  "broader_validation_run": false,
+  "missing_maps": [
+    "random-64-64-20",
+    "maze-32-32-2",
+    "maze-64-64-2",
+    "room-64-64-16",
+    "warehouse-20-40-10-2-1"
+  ],
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "schema_version": "phase5p5_repair5g5_aaai_broader_validation_summary_v1"
+}

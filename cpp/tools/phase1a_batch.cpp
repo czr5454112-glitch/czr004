@@ -5,6 +5,7 @@
 #include <lacam2.hpp>
 
 #include <algorithm>
+#include <cctype>
 #include <chrono>
 #include <cmath>
 #include <filesystem>
@@ -41,6 +42,17 @@ struct Args {
   std::string laur_static_rule;
   std::string laur_update_log_jsonl;
   std::string method_alias;
+  std::string repair5g5_selector_spec_path;
+  std::string repair5g5_selector_mode = "disabled";
+  std::string repair5g5_selector_name = "disabled";
+  std::string repair5g5_stump_feature;
+  std::string repair5g5_stump_left_method;
+  std::string repair5g5_stump_right_method;
+  std::string repair5g5_stump_fallback_method;
+  std::string repair5g5_static_candidate =
+      "repair5g1_shield_c125_b125_w075_d095_beta0p35_max0p75";
+  std::string repair5g5_c_equiv_candidate =
+      "repair5g_dual_c_equiv_c100_b100_w075_d100";
   std::string repair5g_candidate_id;
   std::string repair5g_update_mode = "disabled";
   czr004::ltm::UpdateParams repair5g_update_params =
@@ -56,9 +68,12 @@ struct Args {
   bool laur_post_first_solution_only = true;
   bool laur_ood_guard_enabled = false;
   bool repair5g_enabled = false;
+  bool repair5g5_selector_enabled = false;
+  bool repair5g5_force_additive = false;
   uint laur_every_k_restarts = 1;
   double laur_safety_threshold = 0.30;
   double laur_ood_z_threshold = 5.0;
+  double repair5g5_stump_threshold = 0.0;
   int verbose = 0;
 };
 
@@ -186,6 +201,65 @@ bool parse_double(const std::string& value, double* out)
     return true;
   } catch (...) {
     return false;
+  }
+}
+
+std::string read_text_file(const std::string& path)
+{
+  auto input = std::ifstream(path);
+  if (!input) return "";
+  auto buffer = std::ostringstream();
+  buffer << input.rdbuf();
+  return buffer.str();
+}
+
+std::string json_string_field(const std::string& text,
+                              const std::string& key,
+                              const std::string& fallback = "")
+{
+  const auto needle = "\"" + key + "\"";
+  auto pos = text.find(needle);
+  if (pos == std::string::npos) return fallback;
+  pos = text.find(':', pos + needle.size());
+  if (pos == std::string::npos) return fallback;
+  pos = text.find('"', pos + 1);
+  if (pos == std::string::npos) return fallback;
+  auto end = pos + 1;
+  while (end < text.size()) {
+    if (text[end] == '"' && text[end - 1] != '\\') break;
+    ++end;
+  }
+  if (end >= text.size()) return fallback;
+  return text.substr(pos + 1, end - pos - 1);
+}
+
+double json_number_field(const std::string& text, const std::string& key,
+                         double fallback = 0.0)
+{
+  const auto needle = "\"" + key + "\"";
+  auto pos = text.find(needle);
+  if (pos == std::string::npos) return fallback;
+  pos = text.find(':', pos + needle.size());
+  if (pos == std::string::npos) return fallback;
+  ++pos;
+  while (pos < text.size() &&
+         std::isspace(static_cast<unsigned char>(text[pos]))) {
+    ++pos;
+  }
+  auto end = pos;
+  while (end < text.size()) {
+    const auto ch = text[end];
+    if (!(std::isdigit(static_cast<unsigned char>(ch)) || ch == '-' ||
+          ch == '+' || ch == '.' || ch == 'e' || ch == 'E')) {
+      break;
+    }
+    ++end;
+  }
+  if (end <= pos) return fallback;
+  try {
+    return std::stod(text.substr(pos, end - pos));
+  } catch (...) {
+    return fallback;
   }
 }
 
@@ -562,6 +636,289 @@ Repair5GMethodSpec repair5g_method_spec(const std::string& method)
   return spec;
 }
 
+std::string repair5g5_selector_default_path()
+{
+  return "artifacts/models/laur_ltm/repair5g5_contextual_flow_shield_selector/selector_spec.json";
+}
+
+std::string repair5g5_group_selector_candidate(const Args& args)
+{
+  if (args.map_name == "maze-32-32-4" && args.agents == 100) {
+    return "repair5g1_shield_c125_b125_w075_d095_beta0p2_max0p5";
+  }
+  if (args.map_name == "random-32-32-20" && args.agents == 100) {
+    return "repair5g1_shield_c100_b125_w075_d100_beta0p35_max0p75";
+  }
+  if (args.map_name == "warehouse-10-20-10-2-1" && args.agents == 50) {
+    return "repair5g_dual_c_equiv_c100_b100_w075_d095";
+  }
+  if (args.map_name == "warehouse-10-20-10-2-1" && args.agents == 100) {
+    return "repair5g_dual_c_equiv_additive";
+  }
+  return args.repair5g5_static_candidate;
+}
+
+std::string repair5g5_resolve_candidate_alias(const std::string& candidate,
+                                              const Args& args)
+{
+  if (candidate == "repair5g2_best_frozen_static_candidate" ||
+      candidate == "repair5g2_g1_top_diagnostic_candidate") {
+    return args.repair5g5_static_candidate;
+  }
+  if (candidate == "repair5g2_c_equiv_best_frozen_baseline") {
+    return args.repair5g5_c_equiv_candidate;
+  }
+  if (candidate == "repair5g2_frozen_static_or_selector") {
+    return repair5g5_group_selector_candidate(args);
+  }
+  return candidate;
+}
+
+void load_repair5g5_selector_spec(Args* args)
+{
+  if (!args->repair5g5_selector_enabled) return;
+  if (args->repair5g5_selector_spec_path.empty()) {
+    args->repair5g5_selector_spec_path = repair5g5_selector_default_path();
+  }
+  const auto text = read_text_file(args->repair5g5_selector_spec_path);
+  if (text.empty()) {
+    if (args->repair5g5_selector_mode == "runtime") {
+      throw std::runtime_error("cannot read --repair5g5-selector-spec " +
+                               args->repair5g5_selector_spec_path);
+    }
+    return;
+  }
+  args->repair5g5_selector_name =
+      json_string_field(text, "selector_name", "decision_stump_selector");
+  args->repair5g5_stump_feature =
+      json_string_field(text, "feature", "ltm_iterations");
+  args->repair5g5_stump_threshold =
+      json_number_field(text, "threshold", 2.5);
+  args->repair5g5_stump_left_method =
+      json_string_field(text, "left_method",
+                        "repair5g_dual_c_equiv_c100_b100_w100_d090");
+  args->repair5g5_stump_right_method =
+      json_string_field(text, "right_method",
+                        "repair5g2_best_frozen_static_candidate");
+  args->repair5g5_stump_fallback_method =
+      json_string_field(text, "fallback_static",
+                        "repair5g2_best_frozen_static_candidate");
+  args->repair5g5_static_candidate =
+      json_string_field(text, "repair5g2_best_frozen_static_candidate",
+                        args->repair5g5_static_candidate);
+  args->repair5g5_c_equiv_candidate =
+      json_string_field(text, "repair5g2_c_equiv_best_frozen_baseline",
+                        args->repair5g5_c_equiv_candidate);
+}
+
+double safe_ratio(double numerator, double denominator)
+{
+  return denominator == 0.0 ? 0.0 : numerator / denominator;
+}
+
+czr004::ntm::LaurFeatureVector repair5g5_build_features(
+    const Instance& instance,
+    const czr004::ltm::DirectedTrafficMap& traffic_map,
+    const std::vector<czr004::ltm::TraceEvent>& trace_events,
+    const czr004::ltm::LtmIterationStats& stats)
+{
+  uint committed = 0;
+  uint blocked = 0;
+  uint wait = 0;
+  uint progress = 0;
+  uint nonprogress = 0;
+  for (const auto& event : trace_events) {
+    if (event.kind == czr004::ltm::TraceEventKind::Committed) {
+      ++committed;
+      if (event.from_id != event.to_id && !event.at_goal) {
+        ++progress;
+      } else {
+        ++nonprogress;
+      }
+    } else {
+      ++blocked;
+    }
+    if (event.from_id == event.to_id && !event.at_goal) ++wait;
+  }
+  const auto free_cells = static_cast<double>(instance.G.size());
+  const auto total_cells =
+      static_cast<double>(std::max(1u, instance.G.width * instance.G.height));
+  const auto obstacle_cells = std::max(0.0, total_cells - free_cells);
+  const auto agents = static_cast<double>(instance.N);
+  const auto cost_audit = traffic_map.cost_audit(&instance);
+  const auto c_updates = static_cast<double>(traffic_map.nonzero_raw_edges());
+  const auto f_updates = static_cast<double>(traffic_map.nonzero_flow_edges());
+
+  auto out = czr004::ntm::LaurFeatureVector();
+  out.names = {
+      "agents",
+      "map_width",
+      "map_height",
+      "obstacle_ratio",
+      "free_cells",
+      "density",
+      "ltm_iterations",
+      "returned_solutions_count_so_far",
+      "has_incumbent_before",
+      "best_ratio_before",
+      "improved_last_iteration",
+      "committed_count",
+      "blocked_count",
+      "wait_event_count",
+      "progress_committed_count",
+      "nonprogress_committed_count",
+      "blocked_per_committed",
+      "wait_per_committed",
+      "blocked_per_agent",
+      "committed_per_agent",
+      "progress_ratio",
+      "c_update_count",
+      "f_update_count",
+      "c_nonzero_edges",
+      "f_nonzero_edges",
+      "c_flow_update_ratio",
+      "cost_min",
+      "cost_max",
+      "cost_span",
+      "cost_bounds_respected",
+  };
+  out.values = {
+      agents,
+      static_cast<double>(instance.G.width),
+      static_cast<double>(instance.G.height),
+      safe_ratio(obstacle_cells, total_cells),
+      free_cells,
+      safe_ratio(agents, free_cells),
+      static_cast<double>(stats.iteration),
+      static_cast<double>(stats.returned_solutions_count_so_far),
+      stats.has_incumbent_before ? 1.0 : 0.0,
+      stats.best_ratio_before,
+      stats.improved_incumbent ? 1.0 : 0.0,
+      static_cast<double>(committed),
+      static_cast<double>(blocked),
+      static_cast<double>(wait),
+      static_cast<double>(progress),
+      static_cast<double>(nonprogress),
+      safe_ratio(static_cast<double>(blocked), static_cast<double>(committed)),
+      safe_ratio(static_cast<double>(wait), static_cast<double>(committed)),
+      safe_ratio(static_cast<double>(blocked), agents),
+      safe_ratio(static_cast<double>(committed), agents),
+      safe_ratio(static_cast<double>(progress),
+                 static_cast<double>(progress + nonprogress)),
+      c_updates,
+      f_updates,
+      static_cast<double>(traffic_map.nonzero_raw_edges()),
+      static_cast<double>(traffic_map.nonzero_flow_edges()),
+      safe_ratio(c_updates, f_updates),
+      cost_audit.all_finite ? cost_audit.min_cost : 0.0,
+      cost_audit.all_finite ? cost_audit.max_cost : 0.0,
+      cost_audit.all_finite ? cost_audit.max_cost - cost_audit.min_cost : 0.0,
+      cost_audit.within_configured_bounds ? 1.0 : 0.0,
+  };
+  return out;
+}
+
+void repair5g5_zero_features(czr004::ntm::LaurFeatureVector* features,
+                             const std::unordered_set<std::string>& names)
+{
+  if (features == nullptr) return;
+  for (std::size_t index = 0;
+       index < features->names.size() && index < features->values.size();
+       ++index) {
+    if (names.count(features->names[index]) > 0) {
+      features->values[index] = 0.0;
+    }
+  }
+}
+
+void repair5g5_apply_feature_ablation(
+    const Args& args, czr004::ntm::LaurFeatureVector* features)
+{
+  if (args.repair5g5_selector_mode == "no_trace_ablation") {
+    repair5g5_zero_features(
+        features,
+        {
+            "committed_count",
+            "blocked_count",
+            "wait_event_count",
+            "progress_committed_count",
+            "nonprogress_committed_count",
+            "blocked_per_committed",
+            "wait_per_committed",
+            "blocked_per_agent",
+            "committed_per_agent",
+            "progress_ratio",
+        });
+  } else if (args.repair5g5_selector_mode == "no_map_features_ablation") {
+    repair5g5_zero_features(features,
+                            {
+                                "map_width",
+                                "map_height",
+                                "obstacle_ratio",
+                                "free_cells",
+                                "density",
+                            });
+  } else if (args.repair5g5_selector_mode == "no_runtime_state_ablation") {
+    repair5g5_zero_features(
+        features,
+        {
+            "ltm_iterations",
+            "returned_solutions_count_so_far",
+            "has_incumbent_before",
+            "best_ratio_before",
+            "improved_last_iteration",
+            "c_update_count",
+            "f_update_count",
+            "c_nonzero_edges",
+            "f_nonzero_edges",
+            "c_flow_update_ratio",
+            "cost_min",
+            "cost_max",
+            "cost_span",
+            "cost_bounds_respected",
+        });
+  }
+}
+
+double repair5g5_feature_value(const czr004::ntm::LaurFeatureVector& features,
+                               const std::string& name,
+                               double fallback = 0.0)
+{
+  for (std::size_t index = 0;
+       index < features.names.size() && index < features.values.size();
+       ++index) {
+    if (features.names[index] == name) return features.values[index];
+  }
+  return fallback;
+}
+
+std::string repair5g5_select_candidate(
+    const Args& args, const czr004::ntm::LaurFeatureVector& features)
+{
+  if (args.repair5g5_force_additive) return "additive_ltm";
+  if (args.repair5g5_selector_mode == "static_fallback") {
+    return args.repair5g5_stump_fallback_method.empty()
+               ? args.repair5g5_static_candidate
+               : args.repair5g5_stump_fallback_method;
+  }
+  const auto feature_name =
+      args.repair5g5_stump_feature.empty() ? "ltm_iterations"
+                                           : args.repair5g5_stump_feature;
+  const auto feature_value = repair5g5_feature_value(features, feature_name);
+  auto left = args.repair5g5_stump_left_method.empty()
+                  ? "repair5g_dual_c_equiv_c100_b100_w100_d090"
+                  : args.repair5g5_stump_left_method;
+  auto right = args.repair5g5_stump_right_method.empty()
+                   ? "repair5g2_best_frozen_static_candidate"
+                   : args.repair5g5_stump_right_method;
+  if (args.repair5g5_selector_mode == "shuffled_label_diagnostic") {
+    std::swap(left, right);
+  } else if (args.repair5g5_selector_mode == "random_feature_diagnostic") {
+    return args.agents % 2 == 0 ? right : left;
+  }
+  return feature_value <= args.repair5g5_stump_threshold ? left : right;
+}
+
 Args parse_args(int argc, char** argv)
 {
   auto values = std::unordered_map<std::string, std::string>();
@@ -624,6 +981,10 @@ Args parse_args(int argc, char** argv)
       values.count("laur-update-log-jsonl") ? values["laur-update-log-jsonl"] : "";
   args.method_alias =
       values.count("method-alias") ? values["method-alias"] : "";
+  args.repair5g5_selector_spec_path =
+      values.count("repair5g5-selector-spec")
+          ? values["repair5g5-selector-spec"]
+          : "";
   args.laur_enable = values.count("laur-enable") > 0;
   args.laur_disable = values.count("laur-disable") > 0;
   args.laur_force_additive = values.count("laur-force-additive") > 0;
@@ -720,6 +1081,70 @@ Args parse_args(int argc, char** argv)
       throw std::runtime_error("--method " + requested_method +
                                " requires --laur-model-path");
     }
+  } else if (
+      requested_method == "repair5g5_contextual_flow_shield_selector_runtime" ||
+      requested_method ==
+          "repair5g5_contextual_flow_shield_selector_force_additive_parity" ||
+      requested_method == "repair5g5_contextual_flow_shield_selector_disable" ||
+      requested_method ==
+          "repair5g5_contextual_flow_shield_selector_static_fallback" ||
+      requested_method ==
+          "repair5g5_contextual_flow_shield_selector_shuffled_label_diagnostic" ||
+      requested_method ==
+          "repair5g5_contextual_flow_shield_selector_random_feature_diagnostic" ||
+      requested_method ==
+          "repair5g5_contextual_flow_shield_selector_no_trace_ablation" ||
+      requested_method ==
+          "repair5g5_contextual_flow_shield_selector_no_map_features_ablation" ||
+      requested_method ==
+          "repair5g5_contextual_flow_shield_selector_no_runtime_state_ablation") {
+    if (args.method_alias.empty()) args.method_alias = requested_method;
+    args.method = "lacam_star_ltm";
+    args.laur_enable = false;
+    args.laur_disable = true;
+    args.laur_force_additive = false;
+    args.laur_model_path.clear();
+    args.laur_static_rule.clear();
+    args.repair5g_enabled = true;
+    args.repair5g5_selector_enabled =
+        requested_method != "repair5g5_contextual_flow_shield_selector_disable";
+    args.repair5g5_force_additive =
+        requested_method ==
+        "repair5g5_contextual_flow_shield_selector_force_additive_parity";
+    if (requested_method ==
+        "repair5g5_contextual_flow_shield_selector_static_fallback") {
+      args.repair5g5_selector_mode = "static_fallback";
+    } else if (
+        requested_method ==
+        "repair5g5_contextual_flow_shield_selector_shuffled_label_diagnostic") {
+      args.repair5g5_selector_mode = "shuffled_label_diagnostic";
+    } else if (
+        requested_method ==
+        "repair5g5_contextual_flow_shield_selector_random_feature_diagnostic") {
+      args.repair5g5_selector_mode = "random_feature_diagnostic";
+    } else if (
+        requested_method ==
+        "repair5g5_contextual_flow_shield_selector_no_trace_ablation") {
+      args.repair5g5_selector_mode = "no_trace_ablation";
+    } else if (
+        requested_method ==
+        "repair5g5_contextual_flow_shield_selector_no_map_features_ablation") {
+      args.repair5g5_selector_mode = "no_map_features_ablation";
+    } else if (
+        requested_method ==
+        "repair5g5_contextual_flow_shield_selector_no_runtime_state_ablation") {
+      args.repair5g5_selector_mode = "no_runtime_state_ablation";
+    } else if (args.repair5g5_force_additive) {
+      args.repair5g5_selector_mode = "force_additive";
+    } else if (!args.repair5g5_selector_enabled) {
+      args.repair5g5_selector_mode = "disable";
+      args.repair5g_enabled = false;
+    } else {
+      args.repair5g5_selector_mode = "runtime";
+    }
+    args.repair5g_candidate_id = "repair5g5_contextual_selector";
+    args.repair5g_update_mode = args.repair5g5_selector_mode;
+    load_repair5g5_selector_spec(&args);
   } else if (repair5g_spec.recognized) {
     if (args.method_alias.empty()) args.method_alias = requested_method;
     args.method = "lacam_star_ltm";
@@ -799,6 +1224,13 @@ struct RunStats {
   std::map<std::string, uint> laur_selected_rules;
   bool repair5g_enabled = false;
   bool dual_channel_enabled = false;
+  bool repair5g5_selector_enabled = false;
+  std::string repair5g5_selector_mode = "disabled";
+  std::string repair5g5_selector_name = "disabled";
+  std::string repair5g5_selector_spec_path;
+  uint repair5g5_selector_inference_count = 0;
+  uint repair5g5_selector_fallback_count = 0;
+  std::map<std::string, uint> repair5g5_selected_candidates;
   std::string repair5g_candidate_id;
   std::string repair5g_update_mode = "disabled";
   double repair5g_lambda_cong = 1.0;
@@ -1014,6 +1446,22 @@ void append_laur_update_log_jsonl(
   out << ",\"applied_rho_decay\":" << json_number_or_null(params.rho_decay);
   out << ",\"applied_force_additive\":"
       << (params.force_additive ? "true" : "false");
+  out << ",\"applied_enable_dual_channel\":"
+      << (params.enable_dual_channel ? "true" : "false");
+  out << ",\"applied_lambda_cong\":"
+      << json_number_or_null(params.lambda_cong);
+  out << ",\"applied_lambda_flow\":"
+      << json_number_or_null(params.lambda_flow);
+  out << ",\"applied_goal_projection_mode\":"
+      << json_string(goal_projection_mode_name(params.goal_projection_mode));
+  out << ",\"applied_flow_shield_beta\":"
+      << json_number_or_null(params.flow_shield_beta);
+  out << ",\"applied_max_flow_shield\":"
+      << json_number_or_null(params.max_flow_shield);
+  out << ",\"applied_min_edge_cost\":"
+      << json_number_or_null(params.min_edge_cost);
+  out << ",\"applied_max_edge_cost\":"
+      << json_number_or_null(params.max_edge_cost);
   out << "}\n";
 }
 
@@ -1052,6 +1500,10 @@ RunStats run_lacam_star_ltm(const Instance& instance, const Args& args)
   stats.repair5g_enabled = args.repair5g_enabled;
   stats.dual_channel_enabled =
       args.repair5g_update_params.enable_dual_channel;
+  stats.repair5g5_selector_enabled = args.repair5g5_selector_enabled;
+  stats.repair5g5_selector_mode = args.repair5g5_selector_mode;
+  stats.repair5g5_selector_name = args.repair5g5_selector_name;
+  stats.repair5g5_selector_spec_path = args.repair5g5_selector_spec_path;
   stats.repair5g_candidate_id = args.repair5g_candidate_id;
   stats.repair5g_update_mode = args.repair5g_update_mode;
   stats.repair5g_lambda_cong = args.repair5g_update_params.lambda_cong;
@@ -1111,6 +1563,58 @@ RunStats run_lacam_star_ltm(const Instance& instance, const Args& args)
             return czr004::ltm::UpdateParams::additive();
           }
           return c_equiv_params;
+        };
+  }
+  if (args.repair5g_enabled && args.repair5g5_selector_enabled) {
+    stats.dual_channel_enabled = true;
+    options.update_policy =
+        [&](const czr004::ltm::LtmUpdateContext& context) {
+          const auto additive = czr004::ltm::UpdateParams::additive();
+          if (context.instance == nullptr || context.traffic_before == nullptr ||
+              context.trace_events == nullptr) {
+            ++stats.repair5g5_selector_fallback_count;
+            append_laur_update_log_jsonl(
+                args, context, "additive_ltm", "additive_ltm", 0.0, 0.0, 0.0,
+                "fallback_additive", "missing_update_context", false);
+            return additive;
+          }
+          auto features = repair5g5_build_features(
+              *context.instance, *context.traffic_before,
+              *context.trace_events, context.stats);
+          repair5g5_apply_feature_ablation(args, &features);
+          ++stats.repair5g5_selector_inference_count;
+          auto selected = repair5g5_select_candidate(args, features);
+          auto resolved = repair5g5_resolve_candidate_alias(selected, args);
+          if (resolved == "additive_ltm" || resolved == "neutral_additive") {
+            ++stats.repair5g5_selected_candidates["additive_ltm"];
+            append_laur_update_log_jsonl(
+                args, context, selected, "additive_ltm", 0.0, 0.0, 0.0,
+                args.repair5g5_force_additive ? "force_additive" : "applied",
+                args.repair5g5_force_additive ? "force_additive" : "",
+                true, &features, 0.0, 0.0, 0, 0, false, 0.0, selected,
+                "additive_ltm", args.repair5g5_selector_mode, 0.0, 0, "",
+                &additive);
+            return additive;
+          }
+          const auto spec = repair5g_method_spec(resolved);
+          if (!spec.recognized) {
+            ++stats.repair5g5_selector_fallback_count;
+            ++stats.repair5g5_selected_candidates["additive_ltm"];
+            append_laur_update_log_jsonl(
+                args, context, selected, "additive_ltm", 0.0, 0.0, 0.0,
+                "fallback_additive", "unsupported_candidate:" + resolved,
+                true, &features, 0.0, 0.0, 0, 0, false, 0.0, selected,
+                "additive_ltm", "unsupported_candidate", 0.0, 0, resolved,
+                &additive);
+            return additive;
+          }
+          ++stats.repair5g5_selected_candidates[resolved];
+          append_laur_update_log_jsonl(
+              args, context, selected, resolved, 0.0, 0.0, 0.0, "applied",
+              selected == resolved ? "" : "alias_resolved", true, &features,
+              0.0, 0.0, 0, 0, false, 0.0, selected, resolved,
+              args.repair5g5_selector_mode, 0.0, 0, "", &spec.params);
+          return spec.params;
         };
   }
 
@@ -1390,6 +1894,20 @@ void append_jsonl(const Args& args, const std::filesystem::path& binary_path,
       << (stats.repair5g_enabled ? "true" : "false");
   out << ",\"dual_channel_enabled\":"
       << (stats.dual_channel_enabled ? "true" : "false");
+  out << ",\"repair5g5_selector_enabled\":"
+      << (stats.repair5g5_selector_enabled ? "true" : "false");
+  out << ",\"repair5g5_selector_mode\":"
+      << json_string(stats.repair5g5_selector_mode);
+  out << ",\"repair5g5_selector_name\":"
+      << json_string(stats.repair5g5_selector_name);
+  out << ",\"repair5g5_selector_spec_path\":"
+      << json_string(stats.repair5g5_selector_spec_path);
+  out << ",\"repair5g5_selector_inference_count\":"
+      << stats.repair5g5_selector_inference_count;
+  out << ",\"repair5g5_selector_fallback_count\":"
+      << stats.repair5g5_selector_fallback_count;
+  out << ",\"repair5g5_selected_candidates\":";
+  append_json_string_uint_map(out, stats.repair5g5_selected_candidates);
   out << ",\"repair5g_candidate_id\":"
       << json_string(stats.repair5g_candidate_id);
   out << ",\"repair5g_update_mode\":"

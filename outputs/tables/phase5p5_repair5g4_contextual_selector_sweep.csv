@@ -1,0 +1,6 @@
+best_selector,better,bootstrap_prob_mean_lt_0,diagnostic_only,equal,mean_delta_ratio_vs_ltm,median_delta_ratio_vs_ltm,phase5p5_allowed,phase6_allowed,ratio_worse_than_ltm_groups,rows,selector_name,success_worse_than_ltm_groups,worse
+True,67,1.0,True,6,-0.025178461936543203,-0.02222222221999992,False,False,0,120,decision_stump_selector,0,8
+False,0,,True,0,,,False,False,0,120,random_feature_diagnostic_selector,0,0
+False,67,1.0,True,30,-0.019423384922476184,-0.013780431790000103,False,False,0,120,risk_capped_static_selector,0,8
+False,0,,True,0,,,False,False,0,120,shuffled_label_diagnostic_selector,0,0
+False,67,1.0,True,30,-0.019423384922476184,-0.013780431790000103,False,False,0,120,static_top_flow_shield,0,8

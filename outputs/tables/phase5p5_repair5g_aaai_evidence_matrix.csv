@@ -1,0 +1,8 @@
+evidence_artifacts,remaining_work,requirement,requirement_id,status
+outputs/reports/phase5p5_repair5g4_clean_frozen_validation_summary.json,,G4 flow-shield representation validation,flow_shield_representation,passed
+outputs/reports/phase5p5_repair5g31_g4_decision.md,Stronger paper policy should continue to report strict parity classifications.,semantic parity plus time-budget equivalence policy,protocol_policy,passed_for_diagnostics
+outputs/reports/phase5p5_repair5g4_clean_frozen_validation_summary.json,Not a learned runtime selector.,static/map-agent flow-shield runtime candidate,static_runtime_candidate,partial
+artifacts/models/laur_ltm/repair5g5_contextual_flow_shield_selector/selector_spec.json,,learned runtime selector exported and integrated,learned_runtime_selector,passed
+outputs/reports/phase5p5_repair5g5_learned_runtime_fresh_eval_summary.json,Keep IDs 166..205 untouched until frozen runtime selector passes smoke.,clean learned-runtime heldout validation,learned_runtime_fresh_holdout,missing
+outputs/reports/phase5p5_repair5g5_aaai_broader_validation_summary.json,Run only after fresh learned runtime nearly passes or passes.,AAAI broader map expansion,map_expansion,partial
+outputs/tables/phase5p5_repair5g_claim_ledger.csv,Upgrade claim statuses after fresh learned runtime validation.,claim ledger mapping claims to artifacts,paper_claim_ledger,partial

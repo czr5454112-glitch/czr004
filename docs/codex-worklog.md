@@ -2907,3 +2907,38 @@
   - Flow-shield representation is valid under clean G4 validation; selector value remains useful but should not be overclaimed as Phase5.5/Phase6 evidence.
   - IDs 126..165 are now observed through G4; IDs 166..205 or the next untouched range remain reserved for learned-selector fresh runtime evaluation if a runtime selector is frozen.
   - This remains diagnostic-only: `phase5p5_allowed=false` and `phase6_allowed=false`.
+
+## 2026-06-04 - Start Repair5G.5 learned flow-shield runtime bridge
+
+- Request:
+  - Finish `czr004_repair5g5_aaai_learned_flow_shield_runtime_plan.md`.
+  - Use `deep-research-report.md` and `phase4_6_laur_ltm_codex_execution_plan.md` for project-level boundaries.
+- Carry-forward interpretation:
+  - G4 validates flow-shield representation and static/map-agent runtime candidates under the accepted parity policy.
+  - The G4 offline `decision_stump_selector` is promising but was not integrated at runtime.
+  - AAAI-ready learning claims require a learned runtime UpdateLTM selector, clean heldout validation, negative controls, ablations, stress, reproducibility, and a claim ledger.
+- Planned scope:
+  - Add AAAI policy/readiness artifacts.
+  - Export a frozen runtime-readable Repair5G.5 contextual selector spec.
+  - Integrate the selector only through project-owned `phase1a_batch` / LTM update-policy hooks.
+  - Run observed-ID runtime smoke before any learned-runtime fresh holdout.
+- Constraints:
+  - Do not modify `external/lacam2/lacam2/**`.
+  - Do not change LaCAM*/PIBT semantics, candidate generation, conflict handling, pruning, OPEN/EXPLORED, rewrite, incumbent, or restart behavior.
+  - Do not use IDs 166..205 for tuning.
+  - Keep `phase5p5_allowed=false`, `phase6_allowed=false`, and `aaai_ready=false` until paper-grade gates pass.
+- Completion:
+  - Added AAAI quality/readiness policy artifacts, G4 paper-grade autopsy tables, a runtime-readable Repair5G.5 selector export, runtime selector integration in `phase1a_batch`, smoke/fresh/broader validation runners, paper skeleton artifacts, and G5 policy tests.
+  - Observed-ID runtime smoke on IDs 126..135 completed 1020 solver tasks and produced 840 analyzed rows with missing rows 0, schema errors 0, solver crashes 0, selector logs present, and allowed/forbidden feature policy passing.
+  - The learned runtime selector failed the observed-ID smoke improvement gate: mean delta ratio vs LTM was `0.00350549546894118`, with 8 / 27 / 23 better/equal/worse and 2 map-agent groups worse than LTM.
+  - Because smoke failed, no frozen learned runtime selector was produced and IDs 166..205 remain untouched/blocked for fresh validation.
+  - Broader validation was blocked because fresh learned-runtime validation did not pass.
+- Decision:
+  - `outputs/reports/phase5p5_repair5g5_decision.md` records `runtime_integration_gap_blocks_learning_claim`.
+  - Repair5G.5 is integrated enough to diagnose, but not validated enough to claim AAAI-ready learning or proceed to Phase5.5/Phase6.
+  - This remains diagnostic-only: `phase5p5_allowed=false`, `phase6_allowed=false`, and `aaai_ready=false`.
+- Validation:
+  - `python -m py_compile scripts/analyze_repair5g4_paper_grade_autopsy.py scripts/export_repair5g5_contextual_selector.py scripts/run_repair5g5_runtime_smoke.py scripts/run_repair5g5_learned_runtime_fresh_eval.py scripts/run_repair5g5_aaai_broader_validation.py scripts/repair5g5_common.py scripts/write_repair5g5_aaai_readiness.py` passed.
+  - `powershell -ExecutionPolicy Bypass -File scripts/build_phase1a_batch.ps1` passed after the runtime selector integration and ablation fixes.
+  - `python -m pytest ...` could not run because pytest is unavailable in the active Python (`No module named pytest`).
+  - Manual fallback harness ran the new G5 tests plus the relevant G3.1/G dual-channel tests with 0 failures.

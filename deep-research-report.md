@@ -801,3 +801,29 @@ Gate：若 `LaCAM*+NTM` 与 `LaCAM*+LTM` 平均打平，但 dense/bottleneck 更
 9. 用 LTM 产生 teacher 数据后，再进入 NTM。
 
 这个项目的核心品味应该是：底座单一、日志细、指标同口径、gate 不虚高、NTM 慢慢加。
+## 2026-06 Repair5G AAAI-quality research policy
+
+Core policy:
+The project may target an AAAI-level paper only if the method is a learned `UpdateLTM` contribution, not merely a hand-tuned static flow-shield rule.
+
+AAAI-level gates:
+
+1. learned runtime selector exported and frozen
+2. no LaCAM*/PIBT semantic change
+3. clean learned-runtime heldout validation
+4. comparison against additive LTM, scalar/C-equiv baselines, static flow-shield, and map-agent selector
+5. shuffled-label and random-feature controls
+6. ablations for C-channel, F-channel, flow-shield, fallback, and context features
+7. time/iteration stress
+8. multi-map/multi-agent analysis
+9. paired bootstrap/statistical evidence
+10. raw logs/manifests/hash reproducibility package
+11. claim ledger mapping every paper claim to artifacts
+12. limitation section covering static-vs-learned ambiguity, warehouse/no-op behavior, and parity policy
+
+Do not:
+
+- call static flow-shield alone an AAAI-ready learned method
+- claim Phase5.5/Phase6 from diagnostic Repair5G runs
+- use final IDs for tuning
+- hide negative controls

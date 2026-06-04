@@ -1,0 +1,59 @@
+{
+  "aaai_ready": false,
+  "created_at": "2026-06-04T11:00:03.542992",
+  "decision": "runtime_integration_gap_blocks_learning_claim",
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "requirements": [
+    {
+      "evidence_artifacts": "outputs/reports/phase5p5_repair5g4_clean_frozen_validation_summary.json",
+      "remaining_work": "",
+      "requirement": "G4 flow-shield representation validation",
+      "requirement_id": "flow_shield_representation",
+      "status": "passed"
+    },
+    {
+      "evidence_artifacts": "outputs/reports/phase5p5_repair5g31_g4_decision.md",
+      "remaining_work": "Stronger paper policy should continue to report strict parity classifications.",
+      "requirement": "semantic parity plus time-budget equivalence policy",
+      "requirement_id": "protocol_policy",
+      "status": "passed_for_diagnostics"
+    },
+    {
+      "evidence_artifacts": "outputs/reports/phase5p5_repair5g4_clean_frozen_validation_summary.json",
+      "remaining_work": "Not a learned runtime selector.",
+      "requirement": "static/map-agent flow-shield runtime candidate",
+      "requirement_id": "static_runtime_candidate",
+      "status": "partial"
+    },
+    {
+      "evidence_artifacts": "artifacts/models/laur_ltm/repair5g5_contextual_flow_shield_selector/selector_spec.json",
+      "remaining_work": "",
+      "requirement": "learned runtime selector exported and integrated",
+      "requirement_id": "learned_runtime_selector",
+      "status": "passed"
+    },
+    {
+      "evidence_artifacts": "outputs/reports/phase5p5_repair5g5_learned_runtime_fresh_eval_summary.json",
+      "remaining_work": "Keep IDs 166..205 untouched until frozen runtime selector passes smoke.",
+      "requirement": "clean learned-runtime heldout validation",
+      "requirement_id": "learned_runtime_fresh_holdout",
+      "status": "missing"
+    },
+    {
+      "evidence_artifacts": "outputs/reports/phase5p5_repair5g5_aaai_broader_validation_summary.json",
+      "remaining_work": "Run only after fresh learned runtime nearly passes or passes.",
+      "requirement": "AAAI broader map expansion",
+      "requirement_id": "map_expansion",
+      "status": "partial"
+    },
+    {
+      "evidence_artifacts": "outputs/tables/phase5p5_repair5g_claim_ledger.csv",
+      "remaining_work": "Upgrade claim statuses after fresh learned runtime validation.",
+      "requirement": "claim ledger mapping claims to artifacts",
+      "requirement_id": "paper_claim_ledger",
+      "status": "partial"
+    }
+  ],
+  "schema_version": "phase5p5_repair5g_aaai_readiness_summary_v1"
+}

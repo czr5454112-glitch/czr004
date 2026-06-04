@@ -6185,3 +6185,22 @@ Do not lower Phase5.5 safety, anti-escape, parity, export, or multi-seed gates.
 Do not claim Phase6 without closed-loop learned-benefit evidence.
 ```
 
+## 2026-06 Repair5G AAAI evidence ladder
+
+AAAI evidence ladder:
+
+- Level A: representation validated
+- Level B: static/map-agent runtime candidate validated
+- Level C: learned runtime UpdateLTM selector validated
+- Level D: AAAI paper package ready
+- Level E: Phase5.5/Phase6 engineering promotion considered separately
+
+Current status after G4:
+
+- Level A = passed directionally and cleanly under parity policy
+- Level B = partly passed
+- Level C = not yet runtime-integrated
+- Level D = not ready
+- Level E = closed
+
+Repair5G / learned UpdateLTM paper gates now require a learned runtime selector, clean heldout validation, static/map-agent/learned baselines, shuffled/random diagnostics, feature and channel ablations, time/iteration stress, multi-map/multi-agent analysis, reproducibility manifests, and a claim ledger. `aaai_ready=false` remains mandatory until all paper-grade gates pass.

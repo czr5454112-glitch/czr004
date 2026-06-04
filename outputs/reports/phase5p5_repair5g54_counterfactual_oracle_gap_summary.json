@@ -1,0 +1,16 @@
+{
+  "aaai_ready": false,
+  "adaptive_gap_found": true,
+  "context_count": 2,
+  "counterfactual_labels_passed": true,
+  "decision": "counterfactual_labels_available_adaptive_gap_found",
+  "label_rows": 14,
+  "mean_oracle_gap_over_static": -0.01075268817199998,
+  "oracle_beats_static_contexts": 1,
+  "oracle_beats_static_fraction": 0.5,
+  "oracle_gap_over_static_measured": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "schema_version": "phase5p5_repair5g54_counterfactual_oracle_gap_summary_v1",
+  "static_dominates_all_contexts": false
+}

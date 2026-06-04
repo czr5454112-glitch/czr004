@@ -1,0 +1,32 @@
+{
+  "aaai_ready": false,
+  "branch": "phase4f5p5-stable-attention-lau",
+  "checkpoint_labels": "diagnostic_reopened_observed_only",
+  "commit": "60acc92",
+  "dominant_overhead_component": "repair5g53_cost_audit_ms",
+  "g6_training_allowed": false,
+  "gates": {
+    "budget_stress_10s_targeted": true,
+    "budget_stress_3s_exact_minimal_hook": false,
+    "budget_stress_5s_targeted": true,
+    "budget_stress_failure_classified": true,
+    "hard_semantic_cf_update_stat_equivalence": true,
+    "hard_semantic_force_additive_disable_controls": true,
+    "hard_semantic_traffic_after_hash_equivalence": true,
+    "hard_semantic_update_transform_equivalence": true,
+    "hard_semantic_updateparams_hash_equivalence": true,
+    "ids_166_205_reserved": true,
+    "learning_label_leakage_audit_required": true,
+    "learning_label_replayable_context_gate": true,
+    "learning_label_same_context_candidate_probe_gate": true,
+    "observed_id_diagnostic_labels_reopened": true,
+    "semantic_vs_budget_policy_passed": true
+  },
+  "learned_runtime_fresh_holdout": "blocked_not_run",
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "policy": "do_not_let_classified_3s_deadline_sensitivity_block_observed_id_diagnostic_labels_once_semantic_replay_passes",
+  "runtime_hook_3s_exact_equivalence": "failed_time_budget_sensitivity",
+  "schema_version": "phase5p5_repair5g54_semantic_vs_budget_gate_policy_summary_v1",
+  "update_transform_equivalence": "passed"
+}

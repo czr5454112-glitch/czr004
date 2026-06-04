@@ -1,0 +1,29 @@
+{
+  "aaai_ready": false,
+  "candidate_count": 7,
+  "context_count": 2,
+  "decision": "counterfactual_labels_available",
+  "forbidden_fields_seen": [],
+  "gates": {
+    "adaptive_or_static_dominance_reported": true,
+    "candidate_coverage_complete": true,
+    "counterfactual_context_count_gt_0": true,
+    "counterfactual_labels_passed": true,
+    "ids_166_205_untouched": true,
+    "label_rows_gt_0": true,
+    "no_final_full_run_label_leakage": true,
+    "observed_ids_only": true,
+    "oracle_gap_over_static_measured": true,
+    "runtime_feature_availability_audit_passes": true,
+    "same_context_labels_exist_for_all_candidates": true
+  },
+  "label_rows": 14,
+  "labels_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase5p5_repair5g54_counterfactual_update_labels.csv",
+  "non_static_oracle_win_contexts": 1,
+  "oracle_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase5p5_repair5g54_counterfactual_oracle_by_context.csv",
+  "oracle_rows": 2,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "schema_version": "phase5p5_repair5g54_counterfactual_label_summary_v1",
+  "static_dominates_all_contexts": false
+}

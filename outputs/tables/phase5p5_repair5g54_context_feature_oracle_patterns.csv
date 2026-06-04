@@ -1,0 +1,3 @@
+contexts,mean_probe_runtime_ms,mean_trace_event_count,oracle_candidate_id
+1,241.7255428571428,2462.0,repair5g1_shield_c100_b125_w075_d100_beta0p35_max0p75
+1,215.99757142857143,2676.0,repair5g2_best_frozen_static_candidate

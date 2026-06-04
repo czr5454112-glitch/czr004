@@ -1,0 +1,24 @@
+{
+  "aaai_ready": false,
+  "checkpoint_export_passed": true,
+  "checkpoint_replayability_passed": true,
+  "counterfactual_labels_available": true,
+  "decision": "counterfactual_labels_available_adaptive_gap_found",
+  "evidence_artifacts": {
+    "budget_protocol": "outputs/reports/phase5p5_repair5g54_budget_robust_runtime_summary.json",
+    "checkpoint_replayability": "outputs/reports/phase5p5_repair5g54_checkpoint_replayability_summary.json",
+    "counterfactual_labels": "outputs/reports/phase5p5_repair5g54_counterfactual_label_summary.json",
+    "oracle_gap": "outputs/reports/phase5p5_repair5g54_counterfactual_oracle_gap_summary.json",
+    "policy": "outputs/reports/phase5p5_repair5g54_semantic_vs_budget_gate_policy_summary.json"
+  },
+  "g6_design_allowed": true,
+  "g6_training_allowed": false,
+  "ids_166_205_untouched": true,
+  "oracle_gap_over_static_measured": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "recommended_next_step": "continue_g6_safe_mixture_design",
+  "runtime_3s_minimal_hook_status": "failed_time_budget_sensitivity_g53",
+  "schema_version": "phase5p5_repair5g54_decision_summary_v1",
+  "update_transform_equivalence_prior": "passed_g53"
+}

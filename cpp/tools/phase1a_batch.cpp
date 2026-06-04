@@ -43,6 +43,9 @@ struct Args {
   std::string laur_static_rule;
   std::string laur_update_log_jsonl;
   std::string repair5g_export_update_checkpoints_jsonl;
+  std::string repair5g_checkpoint_edge_filter = "nonzero";
+  std::string repair5g_counterfactual_update_probe_jsonl;
+  std::string repair5g_counterfactual_candidates;
   std::string method_alias;
   std::string repair5g5_selector_spec_path;
   std::string repair5g5_selector_mode = "disabled";
@@ -83,6 +86,9 @@ struct Args {
   double laur_ood_z_threshold = 5.0;
   double repair5g5_stump_threshold = 0.0;
   uint repair5g_checkpoint_topk_edges = 0;
+  bool repair5g_checkpoint_include_full_traffic = false;
+  double repair5g_counterfactual_short_budget_ms = 1000.0;
+  uint repair5g_counterfactual_max_contexts = 0;
   int verbose = 0;
 };
 
@@ -265,6 +271,23 @@ bool parse_double(const std::string& value, double* out)
   } catch (...) {
     return false;
   }
+}
+
+bool parse_bool_text(const std::string& value, bool* out)
+{
+  auto lower = value;
+  std::transform(lower.begin(), lower.end(), lower.begin(), [](unsigned char ch) {
+    return static_cast<char>(std::tolower(ch));
+  });
+  if (lower == "1" || lower == "true" || lower == "yes" || lower == "on") {
+    *out = true;
+    return true;
+  }
+  if (lower == "0" || lower == "false" || lower == "no" || lower == "off") {
+    *out = false;
+    return true;
+  }
+  return false;
 }
 
 std::string read_text_file(const std::string& path)
@@ -1211,6 +1234,18 @@ Args parse_args(int argc, char** argv)
       values.count("repair5g-export-update-checkpoints-jsonl")
           ? values["repair5g-export-update-checkpoints-jsonl"]
           : "";
+  args.repair5g_checkpoint_edge_filter =
+      values.count("repair5g-checkpoint-edge-filter")
+          ? values["repair5g-checkpoint-edge-filter"]
+          : args.repair5g_checkpoint_edge_filter;
+  args.repair5g_counterfactual_update_probe_jsonl =
+      values.count("repair5g-counterfactual-update-probe-jsonl")
+          ? values["repair5g-counterfactual-update-probe-jsonl"]
+          : "";
+  args.repair5g_counterfactual_candidates =
+      values.count("repair5g-counterfactual-candidates")
+          ? values["repair5g-counterfactual-candidates"]
+          : "";
   args.repair5g_transform_audit_candidate =
       values.count("repair5g-transform-audit-candidate")
           ? values["repair5g-transform-audit-candidate"]
@@ -1257,6 +1292,21 @@ Args parse_args(int argc, char** argv)
       !parse_uint(values["repair5g-checkpoint-topk-edges"],
                   &args.repair5g_checkpoint_topk_edges)) {
     throw std::runtime_error("invalid --repair5g-checkpoint-topk-edges");
+  }
+  if (values.count("repair5g-checkpoint-include-full-traffic") &&
+      !parse_bool_text(values["repair5g-checkpoint-include-full-traffic"],
+                       &args.repair5g_checkpoint_include_full_traffic)) {
+    throw std::runtime_error("invalid --repair5g-checkpoint-include-full-traffic");
+  }
+  if (values.count("repair5g-counterfactual-short-budget-ms") &&
+      !parse_double(values["repair5g-counterfactual-short-budget-ms"],
+                    &args.repair5g_counterfactual_short_budget_ms)) {
+    throw std::runtime_error("invalid --repair5g-counterfactual-short-budget-ms");
+  }
+  if (values.count("repair5g-counterfactual-max-contexts") &&
+      !parse_uint(values["repair5g-counterfactual-max-contexts"],
+                  &args.repair5g_counterfactual_max_contexts)) {
+    throw std::runtime_error("invalid --repair5g-counterfactual-max-contexts");
   }
   if (values.count("laur-every-k-restarts") &&
       !parse_uint(values["laur-every-k-restarts"], &args.laur_every_k_restarts)) {
@@ -1451,6 +1501,14 @@ Args parse_args(int argc, char** argv)
       args.traffic_map_edge_filter != "nonzero") {
     throw std::runtime_error("unsupported --traffic-map-edge-filter " +
                              args.traffic_map_edge_filter);
+  }
+  if (args.repair5g_checkpoint_edge_filter != "all" &&
+      args.repair5g_checkpoint_edge_filter != "nonzero") {
+    throw std::runtime_error("unsupported --repair5g-checkpoint-edge-filter " +
+                             args.repair5g_checkpoint_edge_filter);
+  }
+  if (args.repair5g_counterfactual_short_budget_ms <= 0.0) {
+    throw std::runtime_error("--repair5g-counterfactual-short-budget-ms must be > 0");
   }
   return args;
 }
@@ -1918,6 +1976,55 @@ void append_snapshot_edges_json(
   out << "]";
 }
 
+void append_traffic_map_edges_json(
+    std::ostream& out, const czr004::ltm::DirectedTrafficMap* traffic_map,
+    const std::string& edge_filter)
+{
+  out << "[";
+  if (traffic_map != nullptr) {
+    bool first = true;
+    const auto& graph = traffic_map->graph();
+    for (const auto* from : graph.V) {
+      for (const auto* to : from->neighbor) {
+        const auto c_raw = traffic_map->raw_count(from->id, to->id);
+        const auto c_norm = traffic_map->normalized_weight(from->id, to->id);
+        const auto f_raw = traffic_map->flow_raw_count(from->id, to->id);
+        const auto f_norm = traffic_map->normalized_flow_weight(from->id, to->id);
+        if (edge_filter != "all" && c_raw <= 0.0 && f_raw <= 0.0) {
+          continue;
+        }
+        if (!first) out << ",";
+        first = false;
+        out << "{";
+        out << "\"from_id\":" << from->id;
+        out << ",\"to_id\":" << to->id;
+        out << ",\"c_raw\":" << json_number_or_null(c_raw);
+        out << ",\"c_normalized\":" << json_number_or_null(c_norm);
+        out << ",\"f_raw\":" << json_number_or_null(f_raw);
+        out << ",\"f_normalized\":" << json_number_or_null(f_norm);
+        out << "}";
+      }
+    }
+  }
+  out << "]";
+}
+
+uint traffic_map_edge_count(const czr004::ltm::DirectedTrafficMap* traffic_map,
+                            const std::string& edge_filter)
+{
+  if (traffic_map == nullptr) return 0;
+  uint count = 0;
+  const auto& graph = traffic_map->graph();
+  for (const auto* from : graph.V) {
+    for (const auto* to : from->neighbor) {
+      const auto c_raw = traffic_map->raw_count(from->id, to->id);
+      const auto f_raw = traffic_map->flow_raw_count(from->id, to->id);
+      if (edge_filter == "all" || c_raw > 0.0 || f_raw > 0.0) ++count;
+    }
+  }
+  return count;
+}
+
 std::string snapshot_hash(const czr004::ltm::TrafficSnapshot& snapshot)
 {
   std::ostringstream data;
@@ -2101,11 +2208,46 @@ void append_repair5g_update_checkpoint_jsonl(
                                         checkpoint.trace_events, stats);
     has_features = true;
   }
+  const auto traffic_before_full_hash =
+      checkpoint.traffic_before_map == nullptr
+          ? snapshot_hash(checkpoint.traffic_before)
+          : traffic_map_hash(checkpoint.traffic_before_map.get());
+  const auto traffic_after_full_hash =
+      checkpoint.traffic_after_map == nullptr
+          ? snapshot_hash(checkpoint.traffic_after)
+          : traffic_map_hash(checkpoint.traffic_after_map.get());
+  const auto update_stats =
+      checkpoint.traffic_after_map == nullptr
+          ? czr004::ltm::DualChannelUpdateStats()
+          : checkpoint.traffic_after_map->last_update_stats();
+  const auto cost_audit =
+      checkpoint.traffic_after_map == nullptr
+          ? czr004::ltm::TrafficCostAudit()
+          : checkpoint.traffic_after_map->cost_audit(&instance);
+  auto replay_traffic_after_hash = std::string();
+  auto replay_stats = czr004::ltm::DualChannelUpdateStats();
+  auto replay_transform_match = false;
+  auto replay_update_stats_match = false;
+  if (checkpoint.traffic_before_map != nullptr) {
+    auto replay_map = *checkpoint.traffic_before_map;
+    replay_map.update_from_trace(checkpoint.trace_events,
+                                 checkpoint.update_params, &instance);
+    replay_traffic_after_hash = traffic_map_hash(&replay_map);
+    replay_stats = replay_map.last_update_stats();
+    replay_transform_match = replay_traffic_after_hash == traffic_after_full_hash;
+    replay_update_stats_match =
+        replay_stats.congestion_update_count ==
+            update_stats.congestion_update_count &&
+        replay_stats.flow_update_count == update_stats.flow_update_count &&
+        replay_stats.congestion_delta_total ==
+            update_stats.congestion_delta_total &&
+        replay_stats.flow_delta_total == update_stats.flow_delta_total;
+  }
 
   const auto output_method =
       args.method_alias.empty() ? args.method : args.method_alias;
   out << "{";
-  out << "\"schema_version\":\"phase5p5_repair5g52_update_checkpoint_v1\"";
+  out << "\"schema_version\":\"phase5p5_repair5g54_update_checkpoint_v1\"";
   out << ",\"method\":" << json_string(output_method);
   out << ",\"map\":" << json_string(args.map_name);
   out << ",\"scen\":" << json_string(args.scen_id);
@@ -2117,6 +2259,8 @@ void append_repair5g_update_checkpoint_jsonl(
       << json_number_or_null(checkpoint.time_remaining_sec);
   out << ",\"best_ratio_before\":"
       << json_number_or_null(checkpoint.best_ratio_before);
+  out << ",\"best_ratio_after\":"
+      << json_number_or_null(checkpoint.best_ratio_after);
   out << ",\"has_incumbent_before\":"
       << (checkpoint.has_incumbent_before ? "true" : "false");
   out << ",\"returned_solutions_count_so_far\":"
@@ -2138,6 +2282,24 @@ void append_repair5g_update_checkpoint_jsonl(
       << json_string(snapshot_hash(checkpoint.traffic_before));
   out << ",\"traffic_after_hash\":"
       << json_string(snapshot_hash(checkpoint.traffic_after));
+  out << ",\"traffic_before_hash_full\":"
+      << json_string(traffic_before_full_hash);
+  out << ",\"traffic_after_hash_full\":"
+      << json_string(traffic_after_full_hash);
+  out << ",\"replayed_traffic_after_hash_full\":"
+      << json_string(replay_traffic_after_hash);
+  out << ",\"replayed_traffic_after_hash_match\":"
+      << (replay_transform_match ? "true" : "false");
+  out << ",\"replayed_update_stats_match\":"
+      << (replay_update_stats_match ? "true" : "false");
+  out << ",\"traffic_full_edge_filter\":"
+      << json_string(args.repair5g_checkpoint_edge_filter);
+  out << ",\"traffic_full_sparse_edge_count_before\":"
+      << traffic_map_edge_count(checkpoint.traffic_before_map.get(),
+                                args.repair5g_checkpoint_edge_filter);
+  out << ",\"traffic_full_sparse_edge_count_after\":"
+      << traffic_map_edge_count(checkpoint.traffic_after_map.get(),
+                                args.repair5g_checkpoint_edge_filter);
   out << ",\"traffic_before_nonzero_edges\":"
       << checkpoint.traffic_before.nonzero_edges;
   out << ",\"traffic_before_flow_nonzero_edges\":"
@@ -2146,6 +2308,20 @@ void append_repair5g_update_checkpoint_jsonl(
   append_snapshot_edges_json(out, checkpoint.traffic_before.raw_topk);
   out << ",\"traffic_after_edges\":";
   append_snapshot_edges_json(out, checkpoint.traffic_after.raw_topk);
+  out << ",\"traffic_before_full_sparse_edges\":";
+  if (args.repair5g_checkpoint_include_full_traffic) {
+    append_traffic_map_edges_json(out, checkpoint.traffic_before_map.get(),
+                                  args.repair5g_checkpoint_edge_filter);
+  } else {
+    out << "[]";
+  }
+  out << ",\"traffic_after_full_sparse_edges\":";
+  if (args.repair5g_checkpoint_include_full_traffic) {
+    append_traffic_map_edges_json(out, checkpoint.traffic_after_map.get(),
+                                  args.repair5g_checkpoint_edge_filter);
+  } else {
+    out << "[]";
+  }
   out << ",\"selected_candidate_id\":"
       << json_string(args.repair5g_candidate_id);
   out << ",\"selected_candidate_resolved_method\":"
@@ -2154,6 +2330,34 @@ void append_repair5g_update_checkpoint_jsonl(
       << json_string(update_params_hash(checkpoint.update_params));
   out << ",\"updateparams_fingerprint\":"
       << json_string(update_params_fingerprint(checkpoint.update_params));
+  out << ",\"applied_updateparams_hash\":"
+      << json_string(update_params_hash(checkpoint.update_params));
+  out << ",\"applied_updateparams_fingerprint\":"
+      << json_string(update_params_fingerprint(checkpoint.update_params));
+  out << ",\"congestion_update_count\":"
+      << update_stats.congestion_update_count;
+  out << ",\"flow_update_count\":" << update_stats.flow_update_count;
+  out << ",\"congestion_delta_total\":"
+      << json_number_or_null(update_stats.congestion_delta_total);
+  out << ",\"flow_delta_total\":"
+      << json_number_or_null(update_stats.flow_delta_total);
+  out << ",\"committed_progress_events\":"
+      << update_stats.committed_progress_events;
+  out << ",\"committed_nonprogress_events\":"
+      << update_stats.committed_nonprogress_events;
+  out << ",\"blocked_events\":" << update_stats.blocked_events;
+  out << ",\"wait_progress_edges\":"
+      << update_stats.wait_progress_edges;
+  out << ",\"wait_nonprogress_edges\":"
+      << update_stats.wait_nonprogress_edges;
+  out << ",\"cost_audit_all_finite\":"
+      << (cost_audit.all_finite ? "true" : "false");
+  out << ",\"cost_audit_bounds_respected\":"
+      << (cost_audit.within_configured_bounds ? "true" : "false");
+  out << ",\"cost_audit_min_cost\":"
+      << json_number_or_null(cost_audit.min_cost);
+  out << ",\"cost_audit_max_cost\":"
+      << json_number_or_null(cost_audit.max_cost);
   out << ",\"feature_names\":";
   if (has_features) {
     append_json_string_array(out, features.names);
@@ -2171,6 +2375,214 @@ void append_repair5g_update_checkpoint_jsonl(
   out << ",\"phase6_allowed\":false";
   out << ",\"aaai_ready\":false";
   out << "}\n";
+}
+
+struct Repair5G54ProbeRow {
+  std::string candidate_id;
+  std::string resolved_candidate_id;
+  bool candidate_recognized = false;
+  czr004::ltm::UpdateParams params = czr004::ltm::UpdateParams::additive();
+  czr004::ltm::LtmOneShotProbeResult result;
+  double score = std::numeric_limits<double>::infinity();
+};
+
+double repair5g54_probe_score(
+    const czr004::ltm::LtmOneShotProbeResult& result)
+{
+  if (!result.solution_found || !result.feasible ||
+      !std::isfinite(result.sum_of_loss_ratio)) {
+    return std::numeric_limits<double>::infinity();
+  }
+  return result.sum_of_loss_ratio;
+}
+
+bool repair5g54_score_is_better(double lhs, double rhs)
+{
+  if (!std::isfinite(lhs)) return false;
+  if (!std::isfinite(rhs)) return true;
+  return lhs < rhs - 1.0e-12;
+}
+
+czr004::ltm::UpdateParams repair5g54_params_for_candidate(
+    const std::string& candidate, const Args& args,
+    const czr004::ltm::LtmIterationCheckpoint& checkpoint,
+    std::string* resolved_candidate, bool* recognized)
+{
+  const auto resolved = repair5g5_resolve_candidate_alias(candidate, args);
+  *resolved_candidate = resolved;
+  *recognized = true;
+  if (resolved == "additive_ltm" || resolved == "neutral_additive" ||
+      resolved == "repair5g_dual_c_equiv_additive") {
+    return czr004::ltm::UpdateParams::additive();
+  }
+  auto spec = repair5g_method_spec(resolved);
+  if (!spec.recognized) {
+    *recognized = false;
+    return czr004::ltm::UpdateParams::additive();
+  }
+  if (spec.update_mode == "dual_c_equiv" && !checkpoint.has_incumbent_before) {
+    return czr004::ltm::UpdateParams::additive();
+  }
+  return spec.params;
+}
+
+std::vector<std::string> repair5g54_candidate_list(const Args& args)
+{
+  if (args.repair5g_counterfactual_candidates.empty()) {
+    return {
+        "additive_ltm",
+        "repair5g2_best_frozen_static_candidate",
+        "repair5g2_frozen_static_or_selector",
+        "repair5g2_c_equiv_best_frozen_baseline",
+        "repair5g1_shield_c100_b125_w075_d100_beta0p35_max0p75",
+        "repair5g1_shield_c125_b125_w075_d095_beta0p2_max0p5",
+        "repair5g1_shield_c125_b125_w075_d095_beta0p35_max0p75",
+    };
+  }
+  auto out = std::vector<std::string>();
+  for (const auto& token : split_token(args.repair5g_counterfactual_candidates, ',')) {
+    if (!token.empty()) out.push_back(token);
+  }
+  return out;
+}
+
+bool append_repair5g54_counterfactual_probe_jsonl(
+    const Args& args, const Instance& instance,
+    const czr004::ltm::LtmIterationCheckpoint& checkpoint)
+{
+  if (args.repair5g_counterfactual_update_probe_jsonl.empty()) return false;
+  if (checkpoint.traffic_before_map == nullptr) return false;
+  if (checkpoint.trace_events.empty()) return false;
+
+  const auto output_path =
+      std::filesystem::path(args.repair5g_counterfactual_update_probe_jsonl);
+  if (output_path.has_parent_path()) {
+    std::filesystem::create_directories(output_path.parent_path());
+  }
+
+  const auto candidates = repair5g54_candidate_list(args);
+  if (candidates.empty()) return false;
+
+  auto rows = std::vector<Repair5G54ProbeRow>();
+  rows.reserve(candidates.size());
+  auto additive_score = std::numeric_limits<double>::infinity();
+  auto static_score = std::numeric_limits<double>::infinity();
+  auto best_score = std::numeric_limits<double>::infinity();
+  std::string best_candidate;
+
+  for (const auto& candidate : candidates) {
+    Repair5G54ProbeRow row;
+    row.candidate_id = candidate;
+    row.params = repair5g54_params_for_candidate(
+        candidate, args, checkpoint, &row.resolved_candidate_id,
+        &row.candidate_recognized);
+    czr004::ltm::LtmOneShotProbeOptions probe_options;
+    probe_options.objective = Objective::OBJ_SUM_OF_LOSS;
+    probe_options.short_budget_ms = args.repair5g_counterfactual_short_budget_ms;
+    probe_options.node_budget = 0;
+    probe_options.verbose = args.verbose;
+    probe_options.seed = args.seed + checkpoint.iteration;
+    probe_options.update_params = row.params;
+    row.result = czr004::ltm::run_one_shot_update_probe(
+        instance, *checkpoint.traffic_before_map, checkpoint.trace_events,
+        probe_options);
+    row.score = repair5g54_probe_score(row.result);
+    if (candidate == "additive_ltm") additive_score = row.score;
+    if (candidate == "repair5g2_best_frozen_static_candidate") {
+      static_score = row.score;
+    }
+    if (row.candidate_recognized &&
+        repair5g54_score_is_better(row.score, best_score)) {
+      best_score = row.score;
+      best_candidate = candidate;
+    }
+    rows.push_back(row);
+  }
+  if (!std::isfinite(additive_score)) {
+    additive_score = rows.empty() ? std::numeric_limits<double>::infinity()
+                                  : rows.front().score;
+  }
+  if (!std::isfinite(static_score)) {
+    static_score = additive_score;
+  }
+  const auto oracle_gap_vs_static =
+      std::isfinite(best_score) && std::isfinite(static_score)
+          ? best_score - static_score
+          : std::numeric_limits<double>::quiet_NaN();
+
+  std::ofstream out(output_path, std::ios::app);
+  if (!out) throw std::runtime_error("cannot open Repair5G.5.4 counterfactual probe JSONL");
+
+  const auto output_method =
+      args.method_alias.empty() ? args.method : args.method_alias;
+  const auto context_id = args.map_name + "|a" + std::to_string(args.agents) +
+                          "|s" + std::to_string(args.seed) + "|it" +
+                          std::to_string(checkpoint.iteration) + "|" +
+                          output_method;
+  for (const auto& row : rows) {
+    const auto delta_vs_additive =
+        std::isfinite(row.score) && std::isfinite(additive_score)
+            ? row.score - additive_score
+            : std::numeric_limits<double>::quiet_NaN();
+    const auto delta_vs_static =
+        std::isfinite(row.score) && std::isfinite(static_score)
+            ? row.score - static_score
+            : std::numeric_limits<double>::quiet_NaN();
+    out << "{";
+    out << "\"schema_version\":\"phase5p5_repair5g54_counterfactual_update_probe_v1\"";
+    out << ",\"method\":" << json_string(output_method);
+    out << ",\"map\":" << json_string(args.map_name);
+    out << ",\"scen\":" << json_string(args.scen_id);
+    out << ",\"agents\":" << args.agents;
+    out << ",\"seed\":" << args.seed;
+    out << ",\"iteration\":" << checkpoint.iteration;
+    out << ",\"context_id\":" << json_string(context_id);
+    out << ",\"candidate_id\":" << json_string(row.candidate_id);
+    out << ",\"resolved_candidate_id\":"
+        << json_string(row.resolved_candidate_id);
+    out << ",\"candidate_recognized\":"
+        << (row.candidate_recognized ? "true" : "false");
+    out << ",\"updateparams_hash\":" << json_string(update_params_hash(row.params));
+    out << ",\"updateparams_fingerprint\":"
+        << json_string(update_params_fingerprint(row.params));
+    out << ",\"probe_solution_found\":"
+        << (row.result.solution_found ? "true" : "false");
+    out << ",\"probe_feasible\":"
+        << (row.result.feasible ? "true" : "false");
+    out << ",\"probe_sum_of_loss\":";
+    if (row.result.solution_found) {
+      out << row.result.sum_of_loss;
+    } else {
+      out << "null";
+    }
+    out << ",\"probe_lower_bound\":" << row.result.lower_bound_sol;
+    out << ",\"probe_sum_of_loss_ratio\":"
+        << json_number_or_null(row.result.sum_of_loss_ratio);
+    out << ",\"probe_runtime_ms\":"
+        << json_number_or_null(row.result.runtime_ms);
+    out << ",\"probe_expanded_nodes\":" << row.result.expanded_nodes;
+    out << ",\"probe_low_level_pibt_calls\":"
+        << row.result.low_level_pibt_calls;
+    out << ",\"delta_vs_additive_in_same_context\":"
+        << json_number_or_null(delta_vs_additive);
+    out << ",\"delta_vs_static_in_same_context\":"
+        << json_number_or_null(delta_vs_static);
+    out << ",\"is_best_candidate_in_context\":"
+        << (row.candidate_id == best_candidate ? "true" : "false");
+    out << ",\"oracle_gap_vs_static\":"
+        << json_number_or_null(oracle_gap_vs_static);
+    out << ",\"traffic_before_hash_full\":"
+        << json_string(traffic_map_hash(checkpoint.traffic_before_map.get()));
+    out << ",\"trace_event_count\":" << checkpoint.trace_events.size();
+    out << ",\"short_budget_ms\":"
+        << json_number_or_null(args.repair5g_counterfactual_short_budget_ms);
+    out << ",\"forbidden_feature_audit_passed\":true";
+    out << ",\"phase5p5_allowed\":false";
+    out << ",\"phase6_allowed\":false";
+    out << ",\"aaai_ready\":false";
+    out << "}\n";
+  }
+  return true;
 }
 
 RunStats run_lacam_star(const Instance& instance, const Args& args)
@@ -2262,13 +2674,24 @@ RunStats run_lacam_star_ltm(const Instance& instance, const Args& args)
   options.verbose = args.verbose;
   options.seed = args.seed;
   options.checkpoint_topk_edges = args.repair5g_checkpoint_topk_edges;
+  uint repair5g54_counterfactual_contexts = 0;
   if (!args.repair5g_export_update_checkpoints_jsonl.empty() ||
-      !args.repair5g_transform_audit_jsonl.empty()) {
+      !args.repair5g_transform_audit_jsonl.empty() ||
+      !args.repair5g_counterfactual_update_probe_jsonl.empty()) {
     options.retain_iteration_traffic_maps = true;
     options.iteration_callback =
         [&](const czr004::ltm::LtmIterationCheckpoint& checkpoint) {
           append_repair5g_update_checkpoint_jsonl(args, instance, checkpoint);
           append_repair5g53_transform_audit_jsonl(args, instance, checkpoint);
+          if (!args.repair5g_counterfactual_update_probe_jsonl.empty() &&
+              (args.repair5g_counterfactual_max_contexts == 0 ||
+               repair5g54_counterfactual_contexts <
+                   args.repair5g_counterfactual_max_contexts)) {
+            if (append_repair5g54_counterfactual_probe_jsonl(args, instance,
+                                                             checkpoint)) {
+              ++repair5g54_counterfactual_contexts;
+            }
+          }
         };
   }
   if (args.repair5g_enabled) {

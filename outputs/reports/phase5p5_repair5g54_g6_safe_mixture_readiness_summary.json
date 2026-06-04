@@ -1,0 +1,25 @@
+{
+  "aaai_ready": false,
+  "budget_protocol_summary": "budget_protocol_defined_observed_only",
+  "candidate_experts": "G5.4 candidate set",
+  "confidence_abstention_policy": "required before any learned runtime claim",
+  "fallback_policy": "static flow-shield fallback with abstention",
+  "forbidden_features": [
+    "actions",
+    "restart nodes",
+    "priority overrides",
+    "h_i(v)",
+    "candidate deletion",
+    "final full-run outcomes"
+  ],
+  "fresh_ids_reserved": "166..205 untouched",
+  "g6_design_allowed": true,
+  "g6_training_allowed": false,
+  "input_features_allowed_at_runtime": "G5 runtime feature allowlist only",
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_performance_protocol": "performance mode only for runtime claims; audit mode diagnostic",
+  "schema_version": "phase5p5_repair5g54_g6_safe_mixture_readiness_summary_v1",
+  "train_dev_observed_id_split": "observed IDs <=165 only; no IDs 166..205",
+  "training_labels": "same-context counterfactual UpdateLTM probe labels"
+}

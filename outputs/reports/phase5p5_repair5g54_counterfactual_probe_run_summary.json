@@ -1,0 +1,15 @@
+{
+  "aaai_ready": false,
+  "candidate_count": 7,
+  "candidate_coverage_complete": true,
+  "context_count": 2,
+  "counterfactual_probe_run_passed": true,
+  "ids_166_205_untouched": true,
+  "labels_available": true,
+  "observed_ids_only": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "probe_jsonl": "C:\\PROGRAMING\\czr004\\outputs\\logs\\phase5p5_repair5g54_counterfactual_probe\\phase5p5_repair5g54_counterfactual_update_probes.jsonl",
+  "probe_rows": 14,
+  "schema_version": "phase5p5_repair5g54_counterfactual_probe_run_summary_v1"
+}

@@ -1,0 +1,8 @@
+candidate_id,oracle_win_contexts,oracle_win_rate
+additive_ltm,0,0.0
+repair5g1_shield_c100_b125_w075_d100_beta0p35_max0p75,1,0.5
+repair5g1_shield_c125_b125_w075_d095_beta0p2_max0p5,0,0.0
+repair5g1_shield_c125_b125_w075_d095_beta0p35_max0p75,0,0.0
+repair5g2_best_frozen_static_candidate,1,0.5
+repair5g2_c_equiv_best_frozen_baseline,0,0.0
+repair5g2_frozen_static_or_selector,0,0.0

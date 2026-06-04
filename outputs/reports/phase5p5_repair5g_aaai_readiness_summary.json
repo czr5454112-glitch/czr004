@@ -1,60 +1,38 @@
 {
   "aaai_ready": false,
-  "advanced_neural_network_stage": "blocked_until_runtime_equivalence_and_counterfactual_labels",
-  "counterfactual_labels": "blocked",
-  "decision": "minimal_hook_time_budget_sensitivity_blocks_checkpoint_export",
+  "advanced_neural_network_stage": "g6_design_only_training_blocked",
+  "checkpoint_labels": "diagnostic_reopened_observed_only",
+  "counterfactual_labels": "available_observed_diagnostic",
+  "decision": "counterfactual_labels_available_adaptive_gap_found",
   "learned_runtime_fresh_holdout": "blocked_not_run",
   "learned_runtime_selector": "blocked_not_run",
-  "learned_runtime_selector_performance": "blocked_not_run",
   "phase5p5_allowed": false,
   "phase6_allowed": false,
   "policy_controls": "passed",
   "requirements": [
     {
       "evidence_artifacts": "outputs/reports/phase5p5_repair5g53_update_transform_equivalence_summary.json",
-      "remaining_work": "Keep transform audit in the regression path for future runtime selector work.",
-      "requirement": "UpdateLTM transform equivalence",
       "requirement_id": "update_ltm_transform_equivalence",
       "status": "passed"
     },
     {
-      "evidence_artifacts": "outputs/reports/phase5p5_repair5g53_update_transform_equivalence_summary.json",
-      "remaining_work": "No immediate hash-equivalence blocker remains in G5.3.",
-      "requirement": "candidate registry and UpdateParams hash equivalence",
-      "requirement_id": "updateparams_hash_equivalence",
-      "status": "passed"
-    },
-    {
       "evidence_artifacts": "outputs/reports/phase5p5_repair5g53_hook_overhead_ablation_summary.json",
-      "remaining_work": "The primary 3s minimal hook still flips borderline warehouse/100 outcomes; runtime hook must be made deadline-neutral or the evaluation protocol must explicitly separate hook overhead from solver time before learning resumes.",
-      "requirement": "runtime UpdatePolicy hook equivalence",
       "requirement_id": "runtime_hook_equivalence",
-      "status": "failed_overhead_or_budget_sensitivity"
+      "status": "failed_time_budget_sensitivity"
     },
     {
-      "evidence_artifacts": "outputs/reports/phase5p5_repair5g52_policy_closure_summary.json",
-      "remaining_work": "Keep policy-control checks in the next runtime gate.",
-      "requirement": "force-additive and disable policy controls",
-      "requirement_id": "policy_controls",
-      "status": "passed"
-    },
-    {
-      "evidence_artifacts": "outputs/reports/phase5p5_repair5g53_checkpoint_replayability_summary.json",
-      "remaining_work": "Reopen only after primary minimal-hook equivalence passes.",
-      "requirement": "true contextual counterfactual UpdateLTM labels",
+      "evidence_artifacts": "outputs/reports/phase5p5_repair5g54_counterfactual_label_summary.json",
       "requirement_id": "counterfactual_labels",
-      "status": "blocked"
+      "status": "available_observed_diagnostic"
     },
     {
       "evidence_artifacts": "",
-      "remaining_work": "IDs 166..205 remain reserved until runtime hook and label gates pass.",
-      "requirement": "learned runtime fresh holdout",
       "requirement_id": "learned_runtime_fresh_holdout",
       "status": "blocked_not_run"
     }
   ],
-  "runtime_hook_equivalence": "failed_overhead_or_budget_sensitivity",
-  "runtime_selector_integration": "blocked",
-  "schema_version": "phase5p5_repair5g_aaai_readiness_summary_v4",
+  "runtime_hook_3s_exact_equivalence": "failed_time_budget_sensitivity",
+  "schema_version": "phase5p5_repair5g_aaai_readiness_summary_v5",
+  "update_transform_equivalence": "passed",
   "updateparams_hash_equivalence": "passed"
 }

@@ -1,0 +1,3 @@
+agents,candidate_count,candidate_coverage_complete,context_id,iteration,map,oracle_candidate_id,oracle_gap_over_static,oracle_resolved_candidate_id,oracle_score,seed,static_dominates_context,static_score
+50,7,True,random-32-32-20|a50|s146|it0|repair5g54_counterfactual_static_context,0,random-32-32-20,repair5g2_best_frozen_static_candidate,0.0,repair5g1_shield_c125_b125_w075_d095_beta0p35_max0p75,0.64247311828,146,True,0.64247311828
+50,7,True,random-32-32-20|a50|s146|it1|repair5g54_counterfactual_static_context,1,random-32-32-20,repair5g1_shield_c100_b125_w075_d100_beta0p35_max0p75,-0.02150537634399996,repair5g1_shield_c100_b125_w075_d100_beta0p35_max0p75,0.64623655914,146,False,0.667741935484

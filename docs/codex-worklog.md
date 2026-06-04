@@ -1,5 +1,27 @@
 # Codex Worklog
 
+## 2026-06-04 18:45 - Repair5G.5.4 semantic replay and counterfactual labels
+
+- Request:
+  Finish `czr004_repair5g54_semantic_replay_counterfactual_labels_plan.md`: split semantic replay from 3s budget sensitivity, reopen observed-ID diagnostic checkpoint/probe labels after G5.3 transform equivalence passed, and keep IDs 166..205 untouched.
+- Files planned:
+  - `cpp/tools/phase1a_batch.cpp`
+  - `scripts/repair5g54_common.py`
+  - `scripts/write_repair5g54_semantic_vs_budget_gate_policy.py`
+  - `scripts/run_repair5g54_checkpoint_export_observed.py`
+  - `scripts/analyze_repair5g54_checkpoint_replayability.py`
+  - `scripts/run_repair5g54_counterfactual_update_probe_observed.py`
+  - `scripts/analyze_repair5g54_counterfactual_labels.py`
+  - `scripts/analyze_repair5g54_counterfactual_oracle_gap.py`
+  - `scripts/run_repair5g54_budget_robust_runtime_protocol.py`
+  - `scripts/analyze_repair5g54_budget_robust_runtime_protocol.py`
+  - `scripts/write_repair5g54_decision.py`
+  - focused G5.4 tests and G5.4 reports/tables under `outputs/`
+- Key constraints:
+  Do not touch `external/lacam2/lacam2/**`, do not run IDs 166..205, do not train G6, and keep `phase5p5_allowed=false`, `phase6_allowed=false`, `aaai_ready=false`.
+- Follow-up:
+  Build `phase1a_batch`, run the observed-ID checkpoint/probe pipeline, analyze oracle gap, define budget protocol, and write final decision/readiness artifacts honestly from the gates.
+
 ## 2026-06-04 13:20 - Start Repair5G.5.2 runtime UpdatePolicy equivalence
 
 - Request:

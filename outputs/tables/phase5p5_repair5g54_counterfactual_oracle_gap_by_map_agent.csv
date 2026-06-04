@@ -1,0 +1,2 @@
+agents,contexts,map,max_oracle_gap_over_static,mean_oracle_gap_over_static,min_oracle_gap_over_static,oracle_beats_static_contexts,oracle_beats_static_fraction
+50,2,random-32-32-20,0.0,-0.01075268817199998,-0.02150537634399996,1,0.5

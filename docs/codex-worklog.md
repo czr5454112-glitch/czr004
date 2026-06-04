@@ -1,5 +1,33 @@
 # Codex Worklog
 
+## 2026-06-04 13:20 - Start Repair5G.5.2 runtime UpdatePolicy equivalence
+
+- Request:
+  Finish `czr004_repair5g52_runtime_updatepolicy_equivalence_counterfactual_labels_plan.md`: audit runtime UpdatePolicy equivalence, close force-additive/disable controls, add replayable checkpoint infrastructure, and keep IDs 166..205 untouched.
+- Files planned:
+  - `scripts/repair5g_candidate_registry.py`
+  - `scripts/analyze_repair5g52_updateparams_equivalence.py`
+  - `scripts/run_repair5g52_updatepolicy_equivalence_reproducer.py`
+  - `scripts/run_repair5g52_policy_closure.py`
+  - `scripts/run_repair5g52_checkpoint_export_smoke.py`
+  - `scripts/analyze_repair5g52_checkpoint_replayability.py`
+  - `scripts/run_repair5g52_counterfactual_update_probe.py`
+  - `scripts/analyze_repair5g52_counterfactual_labels.py`
+  - `cpp/tools/phase1a_batch.cpp`
+  - `cpp/ltm/ltm.hpp`
+  - `cpp/ltm/ltm.cpp`
+  - G5.2 reports/tables under `outputs/`
+- Key constraints:
+  Do not touch `external/lacam2/lacam2/**`, do not run IDs 166..205, do not train a neural selector, and keep `phase5p5_allowed=false`, `phase6_allowed=false`, `aaai_ready=false`.
+- Follow-up:
+  Build and run the smallest observed-ID G5.2 gates; stop learning work if runtime equivalence or policy controls remain failed.
+- Result:
+  Implemented G5.2 registry, UpdateParams equivalence audit, runtime exact/shadow selector instrumentation, checkpoint export wiring, replayability/label analyzers, and final decision artifacts. Full observed-ID UpdatePolicy equivalence sweep over IDs 146..155 produced 1080 rows and failed exact/shadow runtime reproduction under the 3s budget (`runtime_updatepolicy_equivalence_failed`), while selected UpdateParams hashes were consistent and `semantic_parity_mismatch_count=0`.
+- Full observed-ID gates:
+  `policy_closure_passed=true` on 660 rows, `force_additive_policy_compliant=true`, `disable_policy_compliant=true`, but checkpoint export and counterfactual labels remain blocked by the failed UpdatePolicy equivalence gate.
+- Final state:
+  IDs 166..205 remain untouched; `phase5p5_allowed=false`, `phase6_allowed=false`, `aaai_ready=false`; no learned selector/neural training was run.
+
 ## 2026-05-25 - complete Phase3 teacher data gate
 
 - Request: Complete Phase3, keep records, and maintain git.

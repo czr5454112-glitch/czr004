@@ -1,57 +1,52 @@
 {
   "aaai_ready": false,
-  "advanced_neural_network_stage": "blocked_until_safe_runtime_selector_or_counterfactual_labels",
-  "decision": "runtime_hook_bug_blocks_learning",
+  "advanced_neural_network_stage": "blocked_until_runtime_equivalence_and_counterfactual_labels",
+  "counterfactual_labels": "missing",
+  "decision": "runtime_updatepolicy_equivalence_required",
   "learned_runtime_fresh_holdout": "blocked_not_run",
+  "learned_runtime_selector": "failed",
   "learned_runtime_selector_performance": "failed",
   "phase5p5_allowed": false,
   "phase6_allowed": false,
+  "policy_controls": "failed_force_additive",
   "requirements": [
     {
-      "evidence_artifacts": "outputs/reports/phase5p5_repair5g5_runtime_smoke_summary.json",
-      "remaining_work": "",
-      "requirement": "G5 runtime selector integration",
-      "requirement_id": "runtime_selector_integration",
-      "status": "passed"
+      "evidence_artifacts": "outputs/reports/phase5p5_repair5g52_updateparams_equivalence_summary.json",
+      "remaining_work": "Prove candidate alias and UpdateParams hash equivalence before solver smoke.",
+      "requirement": "G5.2 candidate registry and UpdateParams equivalence",
+      "requirement_id": "updateparams_equivalence",
+      "status": "pending"
     },
     {
-      "evidence_artifacts": "outputs/reports/phase5p5_repair5g5_runtime_smoke_summary.json",
-      "remaining_work": "Use G5.1 safe bridge; do not run fresh learned-runtime IDs from failed selector.",
-      "requirement": "G5 learned runtime selector observed-ID smoke",
-      "requirement_id": "runtime_selector_smoke",
+      "evidence_artifacts": "outputs/reports/phase5p5_repair5g51_runtime_hook_sanity_summary.json",
+      "remaining_work": "G5.2 must prove runtime always-static and always-map-agent match their baselines.",
+      "requirement": "runtime UpdatePolicy hook equivalence",
+      "requirement_id": "runtime_hook_equivalence",
       "status": "failed"
     },
     {
-      "evidence_artifacts": "outputs/reports/phase5p5_repair5g5_runtime_selector_failure_autopsy.md",
-      "remaining_work": "Counterfactual iteration labels needed before new learned selector.",
-      "requirement": "learned runtime selector performance",
-      "requirement_id": "learned_runtime_selector_performance",
-      "status": "failed"
-    },
-    {
-      "evidence_artifacts": "",
-      "remaining_work": "IDs 166..205 remain reserved until a corrected selector is frozen.",
-      "requirement": "learned runtime fresh holdout",
-      "requirement_id": "learned_runtime_fresh_holdout",
-      "status": "blocked_not_run"
-    },
-    {
-      "evidence_artifacts": "outputs/reports/phase5p5_repair5g4_clean_frozen_validation_summary.json",
-      "remaining_work": "Do not present as learned-runtime AAAI claim.",
-      "requirement": "static/map-agent flow-shield",
-      "requirement_id": "static_flow_shield",
-      "status": "strong_baseline_not_learned_claim"
+      "evidence_artifacts": "outputs/reports/phase5p5_repair5g51_policy_control_reproducer_summary.json",
+      "remaining_work": "Force-additive exact policy closure is required.",
+      "requirement": "force-additive and disable policy controls",
+      "requirement_id": "policy_controls",
+      "status": "failed_force_additive"
     },
     {
       "evidence_artifacts": "outputs/reports/phase5p5_repair5g51_counterfactual_label_quality_summary.json",
-      "remaining_work": "Export replayable checkpoints and collect labels.",
-      "requirement": "advanced neural network stage",
-      "requirement_id": "advanced_neural_network_stage",
-      "status": "blocked_until_safe_runtime_selector_or_counterfactual_labels"
+      "remaining_work": "Export replayable traffic_before and trace checkpoints, then run short counterfactual probes.",
+      "requirement": "true contextual counterfactual UpdateLTM labels",
+      "requirement_id": "counterfactual_labels",
+      "status": "missing"
+    },
+    {
+      "evidence_artifacts": "",
+      "remaining_work": "IDs 166..205 remain reserved until selector/runtime gates pass.",
+      "requirement": "learned runtime fresh holdout",
+      "requirement_id": "learned_runtime_fresh_holdout",
+      "status": "blocked_not_run"
     }
   ],
-  "runtime_selector_integration": "passed",
-  "runtime_selector_smoke": "failed",
-  "schema_version": "phase5p5_repair5g_aaai_readiness_summary_v2",
-  "static_flow_shield": "strong_baseline_not_learned_claim"
+  "runtime_hook_equivalence": "failed",
+  "runtime_selector_integration": "partial",
+  "schema_version": "phase5p5_repair5g_aaai_readiness_summary_v3"
 }

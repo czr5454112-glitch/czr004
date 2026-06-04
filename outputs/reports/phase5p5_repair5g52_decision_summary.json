@@ -1,0 +1,49 @@
+{
+  "aaai_ready": false,
+  "agent_counts": [
+    50,
+    100
+  ],
+  "checkpoint_export_passed": false,
+  "counterfactual_labels_available": false,
+  "decision": "runtime_updatepolicy_equivalence_failed",
+  "decision_reason": "Full observed-ID G5.2 UpdatePolicy equivalence sweep failed exact/shadow runtime reproduction under the 3s closed-loop budget despite consistent UpdateParams hashes and zero semantic parity mismatches.",
+  "force_additive_policy_fixed": true,
+  "g6_learned_mixture_or_residual_policy_justified": false,
+  "ids_166_205_untouched": true,
+  "instance_ids": [
+    146,
+    147,
+    148,
+    149,
+    150,
+    151,
+    152,
+    153,
+    154,
+    155
+  ],
+  "maps": [
+    "random-32-32-20",
+    "maze-32-32-4",
+    "warehouse-10-20-10-2-1"
+  ],
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "policy_closure_passed": true,
+  "replayable_checkpoints_available": false,
+  "runtime_always_map_agent_exact_matches_map_agent": false,
+  "runtime_always_map_agent_max_regret_vs_map_agent": 0.06535141799999988,
+  "runtime_always_static_exact_matches_static": false,
+  "runtime_always_static_max_regret_vs_static": 0.08146453089000016,
+  "schema_version": "phase5p5_repair5g52_decision_summary_v1",
+  "selected_params_hash_matches_expected": true,
+  "selector_shadow_static_matches_static": false,
+  "semantic_parity_mismatch_count": 0,
+  "time_limit_sec": 3.0,
+  "true_counterfactual_labels_available": false,
+  "update_log_rows": 1058,
+  "updateparams_hashes_consistent": true,
+  "updatepolicy_equivalence_passed": false,
+  "updatepolicy_row_count": 1080
+}

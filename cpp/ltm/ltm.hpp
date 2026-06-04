@@ -34,6 +34,8 @@ struct TrafficEdgeSnapshot {
   uint to_id = 0;
   double raw = 0.0;
   double weight = 0.0;
+  double flow_raw = 0.0;
+  double flow_weight = 0.0;
 };
 
 struct TrafficSnapshot {
@@ -241,6 +243,14 @@ struct LtmIterationCheckpoint {
   uint expanded_nodes_this_iteration = 0;
   uint high_level_expansions_this_iteration = 0;
   uint low_level_pibt_calls_this_iteration = 0;
+  bool has_incumbent_before = false;
+  bool improved_incumbent = false;
+  double best_ratio_before = 0.0;
+  double best_ratio_after = 0.0;
+  uint returned_solutions_count_so_far = 0;
+  double elapsed_ms = 0.0;
+  double time_remaining_sec = 0.0;
+  UpdateParams update_params = UpdateParams::additive();
   std::vector<TraceEvent> trace_events;
   TrafficSnapshot traffic_before;
   TrafficSnapshot traffic_after;

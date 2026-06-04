@@ -1,0 +1,10 @@
+{
+  "aaai_ready": false,
+  "alias_rows": 4,
+  "candidate_rows": 53,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "registry_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase5p5_repair5g_candidate_registry.csv",
+  "schema_version": "phase5p5_repair5g_candidate_registry_summary_v1",
+  "unsupported_alias_targets": []
+}

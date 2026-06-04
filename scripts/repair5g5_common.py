@@ -202,7 +202,9 @@ def run_one_solver_task(
     task_jsonl.unlink(missing_ok=True)
     task_update.unlink(missing_ok=True)
     extra_args = list(spec.extra_args)
-    if spec.method.startswith("repair5g5_contextual_flow_shield_selector_"):
+    if spec.method.startswith("repair5g5_contextual_flow_shield_selector_") or spec.method.startswith(
+        "repair5g52_runtime_"
+    ):
         extra_args.extend(["--laur-update-log-jsonl", str(task_update)])
     command = [
         str(binary),

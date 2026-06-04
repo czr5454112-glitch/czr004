@@ -2,8 +2,11 @@
 
 Decision state: `runtime_hook_bug_blocks_learning`.
 
-- runtime_selector_integration: `passed`
+- runtime_selector_integration: `partial`
 - runtime_selector_smoke: `failed`
+- runtime_hook_equivalence: `failed`
+- policy_controls: `failed_force_additive`
+- counterfactual_labels: `missing`
 - learned_runtime_selector_performance: `failed`
 - learned_runtime_fresh_holdout: `blocked_not_run`
 - aaai_ready: `false`

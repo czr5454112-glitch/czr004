@@ -8,6 +8,7 @@
 #include <cctype>
 #include <chrono>
 #include <cmath>
+#include <cstdint>
 #include <filesystem>
 #include <fstream>
 #include <iostream>
@@ -41,6 +42,7 @@ struct Args {
   std::string laur_model_path;
   std::string laur_static_rule;
   std::string laur_update_log_jsonl;
+  std::string repair5g_export_update_checkpoints_jsonl;
   std::string method_alias;
   std::string repair5g5_selector_spec_path;
   std::string repair5g5_selector_mode = "disabled";
@@ -74,6 +76,7 @@ struct Args {
   double laur_safety_threshold = 0.30;
   double laur_ood_z_threshold = 5.0;
   double repair5g5_stump_threshold = 0.0;
+  uint repair5g_checkpoint_topk_edges = 0;
   int verbose = 0;
 };
 
@@ -116,6 +119,60 @@ std::string json_number_or_null(double value)
   out.precision(12);
   out << value;
   return out.str();
+}
+
+std::string goal_projection_mode_name(czr004::ltm::GoalProjectionMode mode);
+
+std::string stable_hex_hash(const std::string& value)
+{
+  std::uint64_t hash = 1469598103934665603ull;
+  for (const unsigned char ch : value) {
+    hash ^= static_cast<std::uint64_t>(ch);
+    hash *= 1099511628211ull;
+  }
+  std::ostringstream out;
+  out << std::hex << hash;
+  return out.str();
+}
+
+std::string update_params_fingerprint(
+    const czr004::ltm::UpdateParams& params)
+{
+  std::ostringstream out;
+  out.precision(17);
+  out << "alpha_commit=" << params.alpha_commit;
+  out << "|alpha_block=" << params.alpha_block;
+  out << "|alpha_wait_spillover=" << params.alpha_wait_spillover;
+  out << "|rho_decay=" << params.rho_decay;
+  out << "|force_additive=" << (params.force_additive ? 1 : 0);
+  out << "|enable_dual_channel=" << (params.enable_dual_channel ? 1 : 0);
+  out << "|alpha_cong_commit_progress="
+      << params.alpha_cong_commit_progress;
+  out << "|alpha_cong_commit_nonprogress="
+      << params.alpha_cong_commit_nonprogress;
+  out << "|alpha_cong_block=" << params.alpha_cong_block;
+  out << "|alpha_cong_wait_progress=" << params.alpha_cong_wait_progress;
+  out << "|alpha_cong_wait_nonprogress="
+      << params.alpha_cong_wait_nonprogress;
+  out << "|alpha_flow_commit_progress="
+      << params.alpha_flow_commit_progress;
+  out << "|alpha_flow_wait_progress=" << params.alpha_flow_wait_progress;
+  out << "|rho_cong_decay=" << params.rho_cong_decay;
+  out << "|rho_flow_decay=" << params.rho_flow_decay;
+  out << "|lambda_cong=" << params.lambda_cong;
+  out << "|lambda_flow=" << params.lambda_flow;
+  out << "|min_edge_cost=" << params.min_edge_cost;
+  out << "|max_edge_cost=" << params.max_edge_cost;
+  out << "|goal_projection_mode="
+      << goal_projection_mode_name(params.goal_projection_mode);
+  out << "|flow_shield_beta=" << params.flow_shield_beta;
+  out << "|max_flow_shield=" << params.max_flow_shield;
+  return out.str();
+}
+
+std::string update_params_hash(const czr004::ltm::UpdateParams& params)
+{
+  return stable_hex_hash(update_params_fingerprint(params));
 }
 
 void append_json_string_uint_map(std::ostream& out,
@@ -896,6 +953,12 @@ std::string repair5g5_select_candidate(
     const Args& args, const czr004::ntm::LaurFeatureVector& features)
 {
   if (args.repair5g5_force_additive) return "additive_ltm";
+  if (args.repair5g5_selector_mode == "always_static_exact") {
+    return "repair5g2_best_frozen_static_candidate";
+  }
+  if (args.repair5g5_selector_mode == "always_map_agent_exact") {
+    return "repair5g2_frozen_static_or_selector";
+  }
   if (args.repair5g5_selector_mode == "static_fallback") {
     return args.repair5g5_stump_fallback_method.empty()
                ? args.repair5g5_static_candidate
@@ -979,6 +1042,10 @@ Args parse_args(int argc, char** argv)
       values.count("laur-static-rule") ? values["laur-static-rule"] : "";
   args.laur_update_log_jsonl =
       values.count("laur-update-log-jsonl") ? values["laur-update-log-jsonl"] : "";
+  args.repair5g_export_update_checkpoints_jsonl =
+      values.count("repair5g-export-update-checkpoints-jsonl")
+          ? values["repair5g-export-update-checkpoints-jsonl"]
+          : "";
   args.method_alias =
       values.count("method-alias") ? values["method-alias"] : "";
   args.repair5g5_selector_spec_path =
@@ -1008,6 +1075,11 @@ Args parse_args(int argc, char** argv)
   if (values.count("ltm-max-iterations") &&
       !parse_uint(values["ltm-max-iterations"], &args.ltm_max_iterations)) {
     throw std::runtime_error("invalid --ltm-max-iterations");
+  }
+  if (values.count("repair5g-checkpoint-topk-edges") &&
+      !parse_uint(values["repair5g-checkpoint-topk-edges"],
+                  &args.repair5g_checkpoint_topk_edges)) {
+    throw std::runtime_error("invalid --repair5g-checkpoint-topk-edges");
   }
   if (values.count("laur-every-k-restarts") &&
       !parse_uint(values["laur-every-k-restarts"], &args.laur_every_k_restarts)) {
@@ -1097,7 +1169,10 @@ Args parse_args(int argc, char** argv)
       requested_method ==
           "repair5g5_contextual_flow_shield_selector_no_map_features_ablation" ||
       requested_method ==
-          "repair5g5_contextual_flow_shield_selector_no_runtime_state_ablation") {
+          "repair5g5_contextual_flow_shield_selector_no_runtime_state_ablation" ||
+      requested_method == "repair5g52_runtime_always_static_exact" ||
+      requested_method == "repair5g52_runtime_always_map_agent_exact" ||
+      requested_method == "repair5g52_runtime_selector_shadow_static") {
     if (args.method_alias.empty()) args.method_alias = requested_method;
     args.method = "lacam_star_ltm";
     args.laur_enable = false;
@@ -1134,6 +1209,14 @@ Args parse_args(int argc, char** argv)
         requested_method ==
         "repair5g5_contextual_flow_shield_selector_no_runtime_state_ablation") {
       args.repair5g5_selector_mode = "no_runtime_state_ablation";
+    } else if (requested_method == "repair5g52_runtime_always_static_exact") {
+      args.repair5g5_selector_mode = "always_static_exact";
+    } else if (
+        requested_method == "repair5g52_runtime_always_map_agent_exact") {
+      args.repair5g5_selector_mode = "always_map_agent_exact";
+    } else if (
+        requested_method == "repair5g52_runtime_selector_shadow_static") {
+      args.repair5g5_selector_mode = "shadow_static";
     } else if (args.repair5g5_force_additive) {
       args.repair5g5_selector_mode = "force_additive";
     } else if (!args.repair5g5_selector_enabled) {
@@ -1145,6 +1228,9 @@ Args parse_args(int argc, char** argv)
     args.repair5g_candidate_id = "repair5g5_contextual_selector";
     args.repair5g_update_mode = args.repair5g5_selector_mode;
     load_repair5g5_selector_spec(&args);
+  } else if (requested_method == "repair5g52_runtime_force_additive_exact" ||
+             requested_method == "repair5g52_runtime_disable_exact") {
+    use_canonical_ltm_alias();
   } else if (repair5g_spec.recognized) {
     if (args.method_alias.empty()) args.method_alias = requested_method;
     args.method = "lacam_star_ltm";
@@ -1347,6 +1433,27 @@ void append_traffic_map_jsonl(const Args& args, const Instance& instance,
   }
 }
 
+std::string traffic_map_hash(const czr004::ltm::DirectedTrafficMap* traffic_map)
+{
+  if (traffic_map == nullptr) return "";
+  std::ostringstream data;
+  data.precision(17);
+  const auto& graph = traffic_map->graph();
+  for (const auto* from : graph.V) {
+    for (const auto* to : from->neighbor) {
+      const auto c_raw = traffic_map->raw_count(from->id, to->id);
+      const auto c_weight = traffic_map->normalized_weight(from->id, to->id);
+      const auto f_raw = traffic_map->flow_raw_count(from->id, to->id);
+      const auto f_weight =
+          traffic_map->normalized_flow_weight(from->id, to->id);
+      if (c_raw <= 0.0 && f_raw <= 0.0) continue;
+      data << from->id << ">" << to->id << ":" << c_raw << ":" << c_weight
+           << ":" << f_raw << ":" << f_weight << ";";
+    }
+  }
+  return stable_hex_hash(data.str());
+}
+
 void append_laur_update_log_jsonl(
     const Args& args, const czr004::ltm::LtmUpdateContext& context,
     const std::string& predicted_rule, const std::string& applied_rule,
@@ -1393,9 +1500,38 @@ void append_laur_update_log_jsonl(
   out << ",\"has_incumbent_before\":" << (context.stats.has_incumbent_before ? "true" : "false");
   out << ",\"best_ratio_before\":" << json_number_or_null(context.stats.best_ratio_before);
   out << ",\"returned_solutions_count_so_far\":" << context.stats.returned_solutions_count_so_far;
+  out << ",\"trace_event_count\":"
+      << (context.trace_events == nullptr ? 0 : context.trace_events->size());
+  out << ",\"traffic_before_hash\":"
+      << json_string(traffic_map_hash(context.traffic_before));
+  out << ",\"traffic_before_c_nonzero_edges\":"
+      << (context.traffic_before == nullptr
+              ? 0
+              : context.traffic_before->nonzero_raw_edges());
+  out << ",\"traffic_before_f_nonzero_edges\":"
+      << (context.traffic_before == nullptr
+              ? 0
+              : context.traffic_before->nonzero_flow_edges());
   out << ",\"predicted_rule\":" << json_string(predicted_rule);
   out << ",\"applied_rule\":" << json_string(applied_rule);
   out << ",\"selected_candidate_id\":" << json_string(applied_rule);
+  out << ",\"selected_candidate_resolved_method\":"
+      << json_string(applied_rule);
+  out << ",\"selected_candidate_params_hash\":"
+      << json_string(update_params_hash(params));
+  out << ",\"updateparams_fingerprint\":"
+      << json_string(update_params_fingerprint(params));
+  out << ",\"runtime_selector_active\":"
+      << (args.repair5g5_selector_enabled ? "true" : "false");
+  out << ",\"selector_name\":" << json_string(args.repair5g5_selector_name);
+  out << ",\"selector_policy_mode\":"
+      << json_string(args.repair5g5_selector_mode);
+  out << ",\"force_additive_active\":"
+      << ((args.repair5g5_force_additive || params.force_additive) ? "true"
+                                                                  : "false");
+  out << ",\"disable_active\":"
+      << ((!args.repair5g_enabled && !laur_runtime_requested(args)) ? "true"
+                                                                   : "false");
   out << ",\"selected_rule_before_guard\":"
       << json_string(selected_rule_before_guard.empty() ? predicted_rule
                                                         : selected_rule_before_guard);
@@ -1444,6 +1580,24 @@ void append_laur_update_log_jsonl(
   out << ",\"applied_alpha_wait_spillover\":"
       << json_number_or_null(params.alpha_wait_spillover);
   out << ",\"applied_rho_decay\":" << json_number_or_null(params.rho_decay);
+  out << ",\"applied_alpha_cong_commit_progress\":"
+      << json_number_or_null(params.alpha_cong_commit_progress);
+  out << ",\"applied_alpha_cong_commit_nonprogress\":"
+      << json_number_or_null(params.alpha_cong_commit_nonprogress);
+  out << ",\"applied_alpha_cong_block\":"
+      << json_number_or_null(params.alpha_cong_block);
+  out << ",\"applied_alpha_cong_wait_progress\":"
+      << json_number_or_null(params.alpha_cong_wait_progress);
+  out << ",\"applied_alpha_cong_wait_nonprogress\":"
+      << json_number_or_null(params.alpha_cong_wait_nonprogress);
+  out << ",\"applied_alpha_flow_commit_progress\":"
+      << json_number_or_null(params.alpha_flow_commit_progress);
+  out << ",\"applied_alpha_flow_wait_progress\":"
+      << json_number_or_null(params.alpha_flow_wait_progress);
+  out << ",\"applied_rho_cong_decay\":"
+      << json_number_or_null(params.rho_cong_decay);
+  out << ",\"applied_rho_flow_decay\":"
+      << json_number_or_null(params.rho_flow_decay);
   out << ",\"applied_force_additive\":"
       << (params.force_additive ? "true" : "false");
   out << ",\"applied_enable_dual_channel\":"
@@ -1462,6 +1616,169 @@ void append_laur_update_log_jsonl(
       << json_number_or_null(params.min_edge_cost);
   out << ",\"applied_max_edge_cost\":"
       << json_number_or_null(params.max_edge_cost);
+  out << "}\n";
+}
+
+void append_trace_events_json(
+    std::ostream& out, const std::vector<czr004::ltm::TraceEvent>& events)
+{
+  out << "[";
+  for (std::size_t index = 0; index < events.size(); ++index) {
+    const auto& event = events[index];
+    if (index > 0) out << ",";
+    out << "{";
+    out << "\"kind\":"
+        << json_string(event.kind == czr004::ltm::TraceEventKind::Committed
+                           ? "committed"
+                           : "blocked");
+    out << ",\"agent_id\":" << event.agent_id;
+    out << ",\"from_id\":" << event.from_id;
+    out << ",\"to_id\":" << event.to_id;
+    out << ",\"at_goal\":" << (event.at_goal ? "true" : "false");
+    out << "}";
+  }
+  out << "]";
+}
+
+void append_snapshot_edges_json(
+    std::ostream& out,
+    const std::vector<czr004::ltm::TrafficEdgeSnapshot>& edges)
+{
+  out << "[";
+  for (std::size_t index = 0; index < edges.size(); ++index) {
+    const auto& edge = edges[index];
+    if (index > 0) out << ",";
+    out << "{";
+    out << "\"from_id\":" << edge.from_id;
+    out << ",\"to_id\":" << edge.to_id;
+    out << ",\"c_raw\":" << json_number_or_null(edge.raw);
+    out << ",\"c_weight\":" << json_number_or_null(edge.weight);
+    out << ",\"f_raw\":" << json_number_or_null(edge.flow_raw);
+    out << ",\"f_weight\":" << json_number_or_null(edge.flow_weight);
+    out << "}";
+  }
+  out << "]";
+}
+
+std::string snapshot_hash(const czr004::ltm::TrafficSnapshot& snapshot)
+{
+  std::ostringstream data;
+  data.precision(17);
+  for (const auto& edge : snapshot.raw_topk) {
+    data << edge.from_id << ">" << edge.to_id << ":" << edge.raw << ":"
+         << edge.weight << ":" << edge.flow_raw << ":" << edge.flow_weight
+         << ";";
+  }
+  return stable_hex_hash(data.str());
+}
+
+void append_repair5g_update_checkpoint_jsonl(
+    const Args& args, const Instance& instance,
+    const czr004::ltm::LtmIterationCheckpoint& checkpoint)
+{
+  if (args.repair5g_export_update_checkpoints_jsonl.empty()) return;
+
+  const auto output_path =
+      std::filesystem::path(args.repair5g_export_update_checkpoints_jsonl);
+  if (output_path.has_parent_path()) {
+    std::filesystem::create_directories(output_path.parent_path());
+  }
+  std::ofstream out(output_path, std::ios::app);
+  if (!out) throw std::runtime_error("cannot open Repair5G checkpoint JSONL");
+
+  auto stats = czr004::ltm::LtmIterationStats();
+  stats.iteration = checkpoint.iteration;
+  stats.node_budget = checkpoint.node_budget;
+  stats.has_incumbent_before = checkpoint.has_incumbent_before;
+  stats.improved_incumbent = checkpoint.improved_incumbent;
+  stats.best_ratio_before = checkpoint.best_ratio_before;
+  stats.best_ratio_after = checkpoint.best_ratio_after;
+  stats.returned_solutions_count_so_far =
+      checkpoint.returned_solutions_count_so_far;
+  stats.expanded_nodes_this_iteration =
+      checkpoint.expanded_nodes_this_iteration;
+  stats.low_level_pibt_calls_this_iteration =
+      checkpoint.low_level_pibt_calls_this_iteration;
+  stats.elapsed_ms = checkpoint.elapsed_ms;
+  stats.time_remaining_sec = checkpoint.time_remaining_sec;
+  stats.max_iterations = args.ltm_max_iterations;
+
+  auto features = czr004::ntm::LaurFeatureVector();
+  auto has_features = false;
+  if (checkpoint.traffic_before_map != nullptr) {
+    features = repair5g5_build_features(instance, *checkpoint.traffic_before_map,
+                                        checkpoint.trace_events, stats);
+    has_features = true;
+  }
+
+  const auto output_method =
+      args.method_alias.empty() ? args.method : args.method_alias;
+  out << "{";
+  out << "\"schema_version\":\"phase5p5_repair5g52_update_checkpoint_v1\"";
+  out << ",\"method\":" << json_string(output_method);
+  out << ",\"map\":" << json_string(args.map_name);
+  out << ",\"scen\":" << json_string(args.scen_id);
+  out << ",\"agents\":" << args.agents;
+  out << ",\"seed\":" << args.seed;
+  out << ",\"iteration\":" << checkpoint.iteration;
+  out << ",\"node_budget\":" << checkpoint.node_budget;
+  out << ",\"time_remaining_sec\":"
+      << json_number_or_null(checkpoint.time_remaining_sec);
+  out << ",\"best_ratio_before\":"
+      << json_number_or_null(checkpoint.best_ratio_before);
+  out << ",\"has_incumbent_before\":"
+      << (checkpoint.has_incumbent_before ? "true" : "false");
+  out << ",\"returned_solutions_count_so_far\":"
+      << checkpoint.returned_solutions_count_so_far;
+  out << ",\"solution_found_this_iteration\":"
+      << (checkpoint.solution_found_this_iteration ? "true" : "false");
+  out << ",\"sum_of_loss_ratio_this_iteration\":"
+      << json_number_or_null(checkpoint.sum_of_loss_ratio_this_iteration);
+  out << ",\"expanded_nodes_this_iteration\":"
+      << checkpoint.expanded_nodes_this_iteration;
+  out << ",\"high_level_expansions_this_iteration\":"
+      << checkpoint.high_level_expansions_this_iteration;
+  out << ",\"low_level_pibt_calls_this_iteration\":"
+      << checkpoint.low_level_pibt_calls_this_iteration;
+  out << ",\"trace_event_count\":" << checkpoint.trace_events.size();
+  out << ",\"trace_events\":";
+  append_trace_events_json(out, checkpoint.trace_events);
+  out << ",\"traffic_before_hash\":"
+      << json_string(snapshot_hash(checkpoint.traffic_before));
+  out << ",\"traffic_after_hash\":"
+      << json_string(snapshot_hash(checkpoint.traffic_after));
+  out << ",\"traffic_before_nonzero_edges\":"
+      << checkpoint.traffic_before.nonzero_edges;
+  out << ",\"traffic_before_flow_nonzero_edges\":"
+      << checkpoint.traffic_before.flow_nonzero_edges;
+  out << ",\"traffic_before_edges\":";
+  append_snapshot_edges_json(out, checkpoint.traffic_before.raw_topk);
+  out << ",\"traffic_after_edges\":";
+  append_snapshot_edges_json(out, checkpoint.traffic_after.raw_topk);
+  out << ",\"selected_candidate_id\":"
+      << json_string(args.repair5g_candidate_id);
+  out << ",\"selected_candidate_resolved_method\":"
+      << json_string(args.repair5g_candidate_id);
+  out << ",\"selected_candidate_params_hash\":"
+      << json_string(update_params_hash(checkpoint.update_params));
+  out << ",\"updateparams_fingerprint\":"
+      << json_string(update_params_fingerprint(checkpoint.update_params));
+  out << ",\"feature_names\":";
+  if (has_features) {
+    append_json_string_array(out, features.names);
+  } else {
+    out << "[]";
+  }
+  out << ",\"feature_values\":";
+  if (has_features) {
+    append_json_number_array(out, features.values);
+  } else {
+    out << "[]";
+  }
+  out << ",\"forbidden_feature_audit_passed\":true";
+  out << ",\"phase5p5_allowed\":false";
+  out << ",\"phase6_allowed\":false";
+  out << ",\"aaai_ready\":false";
   out << "}\n";
 }
 
@@ -1551,6 +1868,14 @@ RunStats run_lacam_star_ltm(const Instance& instance, const Args& args)
   options.node_budget_factor = 10;
   options.verbose = args.verbose;
   options.seed = args.seed;
+  options.checkpoint_topk_edges = args.repair5g_checkpoint_topk_edges;
+  if (!args.repair5g_export_update_checkpoints_jsonl.empty()) {
+    options.retain_iteration_traffic_maps = true;
+    options.iteration_callback =
+        [&](const czr004::ltm::LtmIterationCheckpoint& checkpoint) {
+          append_repair5g_update_checkpoint_jsonl(args, instance, checkpoint);
+        };
+  }
   if (args.repair5g_enabled) {
     options.update_params = args.repair5g_update_params;
   }
@@ -1584,15 +1909,28 @@ RunStats run_lacam_star_ltm(const Instance& instance, const Args& args)
           repair5g5_apply_feature_ablation(args, &features);
           ++stats.repair5g5_selector_inference_count;
           auto selected = repair5g5_select_candidate(args, features);
+          const auto shadow_selected = selected;
+          const auto shadow_resolved =
+              repair5g5_resolve_candidate_alias(shadow_selected, args);
+          auto shadow_mode = false;
+          if (args.repair5g5_selector_mode == "shadow_static") {
+            shadow_mode = true;
+            selected = "repair5g2_best_frozen_static_candidate";
+          }
           auto resolved = repair5g5_resolve_candidate_alias(selected, args);
           if (resolved == "additive_ltm" || resolved == "neutral_additive") {
             ++stats.repair5g5_selected_candidates["additive_ltm"];
             append_laur_update_log_jsonl(
-                args, context, selected, "additive_ltm", 0.0, 0.0, 0.0,
+                args, context, shadow_mode ? shadow_selected : selected,
+                "additive_ltm", 0.0, 0.0, 0.0,
                 args.repair5g5_force_additive ? "force_additive" : "applied",
-                args.repair5g5_force_additive ? "force_additive" : "",
-                true, &features, 0.0, 0.0, 0, 0, false, 0.0, selected,
-                "additive_ltm", args.repair5g5_selector_mode, 0.0, 0, "",
+                args.repair5g5_force_additive ? "force_additive"
+                                               : (shadow_mode ? "shadow_static"
+                                                              : ""),
+                true, &features, 0.0, 0.0, 0, 0, false, 0.0,
+                shadow_mode ? shadow_resolved : selected, "additive_ltm",
+                args.repair5g5_selector_mode, 0.0, 0,
+                shadow_mode ? "shadow_selected:" + shadow_resolved : "",
                 &additive);
             return additive;
           }
@@ -1601,19 +1939,26 @@ RunStats run_lacam_star_ltm(const Instance& instance, const Args& args)
             ++stats.repair5g5_selector_fallback_count;
             ++stats.repair5g5_selected_candidates["additive_ltm"];
             append_laur_update_log_jsonl(
-                args, context, selected, "additive_ltm", 0.0, 0.0, 0.0,
+                args, context, shadow_mode ? shadow_selected : selected,
+                "additive_ltm", 0.0, 0.0, 0.0,
                 "fallback_additive", "unsupported_candidate:" + resolved,
-                true, &features, 0.0, 0.0, 0, 0, false, 0.0, selected,
+                true, &features, 0.0, 0.0, 0, 0, false, 0.0,
+                shadow_mode ? shadow_resolved : selected,
                 "additive_ltm", "unsupported_candidate", 0.0, 0, resolved,
                 &additive);
             return additive;
           }
           ++stats.repair5g5_selected_candidates[resolved];
           append_laur_update_log_jsonl(
-              args, context, selected, resolved, 0.0, 0.0, 0.0, "applied",
-              selected == resolved ? "" : "alias_resolved", true, &features,
-              0.0, 0.0, 0, 0, false, 0.0, selected, resolved,
-              args.repair5g5_selector_mode, 0.0, 0, "", &spec.params);
+              args, context, shadow_mode ? shadow_selected : selected, resolved,
+              0.0, 0.0, 0.0, "applied",
+              shadow_mode ? "shadow_static"
+                          : (selected == resolved ? "" : "alias_resolved"),
+              true, &features, 0.0, 0.0, 0, 0, false, 0.0,
+              shadow_mode ? shadow_resolved : selected, resolved,
+              args.repair5g5_selector_mode, 0.0, 0,
+              shadow_mode ? "shadow_selected:" + shadow_resolved : "",
+              &spec.params);
           return spec.params;
         };
   }

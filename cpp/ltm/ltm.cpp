@@ -332,10 +332,14 @@ TrafficSnapshot DirectedTrafficMap::snapshot(uint topk_edges) const
     for (const auto* to : from->neighbor) {
       const auto raw = raw_count(from->id, to->id);
       const auto weight = normalized_weight(from->id, to->id);
-      if (raw > 0.0) {
-        raw_edges.push_back(TrafficEdgeSnapshot{from->id, to->id, raw, weight});
+      const auto flow_raw = flow_raw_count(from->id, to->id);
+      const auto flow_weight = normalized_flow_weight(from->id, to->id);
+      if (raw > 0.0 || flow_raw > 0.0) {
+        raw_edges.push_back(TrafficEdgeSnapshot{from->id, to->id, raw, weight,
+                                                flow_raw, flow_weight});
         normalized_edges.push_back(
-            TrafficEdgeSnapshot{from->id, to->id, raw, weight});
+            TrafficEdgeSnapshot{from->id, to->id, raw, weight, flow_raw,
+                                flow_weight});
       }
     }
   }
@@ -1243,6 +1247,16 @@ LtmRunResult solve_with_ltm(const Instance& instance, const LtmOptions& options)
           info_uint_value(iteration_info, "ltm_one_shot_loop_cnt");
       checkpoint.low_level_pibt_calls_this_iteration =
           info_uint_value(iteration_info, "ltm_one_shot_low_level_pibt_calls");
+      checkpoint.has_incumbent_before = has_incumbent_before;
+      checkpoint.improved_incumbent = improved_incumbent;
+      checkpoint.best_ratio_before = best_ratio_before;
+      checkpoint.best_ratio_after = best_ratio_after;
+      checkpoint.returned_solutions_count_so_far =
+          result.best_solution.empty() ? 0 : 1;
+      checkpoint.elapsed_ms = deadline.elapsed_ms();
+      checkpoint.time_remaining_sec =
+          std::max(0.0, options.time_limit_ms - checkpoint.elapsed_ms) / 1000.0;
+      checkpoint.update_params = update_params;
       checkpoint.trace_events = collector.events();
       checkpoint.traffic_before = traffic_before;
       checkpoint.traffic_after = traffic_after;

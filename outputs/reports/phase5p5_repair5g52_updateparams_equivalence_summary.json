@@ -1,0 +1,24 @@
+{
+  "aaai_ready": false,
+  "alias_audit_rows": 9,
+  "decision": "continue_updatepolicy_reproducer",
+  "gates": {
+    "aaai_ready": false,
+    "c_equiv_alias_consistent": true,
+    "fallback_reason_logged_for_all_fallbacks": true,
+    "g1_alias_consistent": true,
+    "map_agent_group_targets_supported": true,
+    "phase5p5_allowed": false,
+    "phase6_allowed": false,
+    "selected_params_hash_matches_expected": true,
+    "static_alias_consistent": true,
+    "unsupported_candidates": [],
+    "unsupported_candidates_without_logged_fallback": false
+  },
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "policy_controls_prior_status": "failed_force_additive",
+  "registry_rows": 53,
+  "runtime_hook_equivalence_prior_status": "failed_g51",
+  "schema_version": "phase5p5_repair5g52_updateparams_equivalence_summary_v1"
+}

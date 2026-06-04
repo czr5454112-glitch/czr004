@@ -2958,3 +2958,16 @@
   - `outputs/reports/phase5p5_repair5g51_decision.md` records `runtime_hook_bug_blocks_learning`.
   - No fresh learned-runtime validation was run; IDs 166..205 remain reserved.
   - `phase5p5_allowed=false`, `phase6_allowed=false`, and `aaai_ready=false` remain closed.
+
+## 2026-06-04 - Repair5G learning insertion strategy grand-plan addendum
+
+- Request:
+  - Insert `czr004_learning_insertion_strategy_grand_plan_addendum.md` verbatim into the project grand-plan documents and create supporting strategy artifacts.
+- Completion:
+  - Inserted the verbatim addendum section into `deep-research-report.md`, `phase4_6_laur_ltm_codex_execution_plan.md`, and `docs/aaai_quality_requirements.md`.
+  - Wrote the Repair5G learning-insertion strategy report, required summary JSON, route-comparison CSV, and stage-ladder CSV.
+  - Preserved the boundary that learning is inserted into bounded `UpdateLTM` dynamics, not MAPF action policy, PIBT priorities, restart, pruning, or solver semantics.
+- Decision:
+  - Selector work remains a safety bridge/fallback layer, not the final top-venue method.
+  - Preferred route is safe learned abstention/mixture over validated UpdateLTM experts, then bounded residual parameters only after counterfactual labels and runtime bridge gates pass.
+  - `phase5p5_allowed=false`, `phase6_allowed=false`, and `aaai_ready=false` remain closed.

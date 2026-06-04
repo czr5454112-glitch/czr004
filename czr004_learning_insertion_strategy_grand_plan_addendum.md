@@ -1,15 +1,71 @@
-# Repair5G AAAI Quality Requirements
+# czr004 Grand-Plan Addendum: Learning Insertion Strategy for Goal-Aware Dual-Channel LTM
 
-AAAI-ready learning claims require a learned runtime UpdateLTM selector, clean heldout validation, negative controls, ablations, stress, reproducibility manifests, and a claim ledger.
+**Purpose:** This document is a project-governance addendum. It commands Codex to insert the core content below **verbatim** into the project grand plan, so future Repair5G work does not drift into either weak hand-tuned engineering or unsafe MAPF action-learning.
+**Target branch:** `phase4f5p5-stable-attention-lau`
+**Current context:** Repair5G has validated the goal-aware flow-shielded dual-channel LTM representation, but G5 showed that a naive learned runtime selector can fail badly.
+**Main project objective:** use learning-enhanced `UpdateLTM` to replace the coarse additive update in the LTM paper and beat `LaCAM*+plain additive LTM` under closed-loop solver metrics, without changing LaCAM*/PIBT semantics.
+**AAAI/ICLR/ICML/NeurIPS/ICRA target status:** possible, but only if the learned component becomes a real, validated UpdateLTM policy rather than a post-hoc selector over hand-tuned rules.
 
-- runtime_selector_integration: `passed`
-- runtime_selector_smoke: `failed`
-- learned_runtime_selector_performance: `failed`
-- learned_runtime_fresh_holdout: `blocked_not_run`
-- static_flow_shield: `strong_baseline_not_learned_claim`
-- advanced_neural_network_stage: `blocked_until_safe_runtime_selector_or_counterfactual_labels`
-- aaai_ready: `false`
-- Phase5.5 and Phase6 remain closed until paper-grade gates pass.
+---
+
+# Codex Task: Insert This Addendum Into the Project Grand Plan
+
+Codex must add the section titled:
+
+```text
+## 2026-06 Repair5G learning-insertion strategy for top-tier AI / MAPF venues
+```
+
+to:
+
+```text
+deep-research-report.md
+phase4_6_laur_ltm_codex_execution_plan.md
+docs/aaai_quality_requirements.md
+```
+
+The text between:
+
+```text
+BEGIN VERBATIM GRAND-PLAN ADDENDUM
+```
+
+and:
+
+```text
+END VERBATIM GRAND-PLAN ADDENDUM
+```
+
+must be copied **verbatim** into the project grand plan. Do not paraphrase it. Do not soften the gates. Do not turn the route into generic neural MAPF action prediction.
+
+After insertion, Codex must update:
+
+```text
+docs/codex-worklog.md
+outputs/reports/phase5p5_repair5g_learning_insertion_strategy.md
+outputs/reports/phase5p5_repair5g_learning_insertion_strategy_summary.json
+outputs/tables/phase5p5_repair5g_learning_route_comparison.csv
+outputs/tables/phase5p5_repair5g_learning_stage_ladder.csv
+```
+
+The summary JSON must include:
+
+```json
+{
+  "grand_plan_addendum_inserted": true,
+  "learning_insertion_point": "UpdateLTM dynamics, not action policy",
+  "preferred_top_venue_route": "safe learned bounded dual-channel parameter/residual policy",
+  "selector_role": "safety bridge and fallback layer, not final paper method",
+  "advanced_neural_stage": "only after counterfactual UpdateLTM labels and safe runtime bridge",
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "aaai_ready": false
+}
+```
+
+---
+
+## BEGIN VERBATIM GRAND-PLAN ADDENDUM
 
 ## 2026-06 Repair5G learning-insertion strategy for top-tier AI / MAPF venues
 
@@ -557,3 +613,124 @@ MAPF reviewer taste:
 ML top-venue taste:
   real learned update dynamics, not static hand-tuning
 ```
+
+## END VERBATIM GRAND-PLAN ADDENDUM
+
+---
+
+# Codex Prompt
+
+Continue czr004 on branch `phase4f5p5-stable-attention-lau` while the active Repair5G.5.1 runtime-selector failure work is ongoing or immediately after it completes.
+
+Goal:
+Insert the attached learning-insertion strategy into the project grand plan verbatim and create the supporting route-comparison artifacts. This is a governance/documentation task, not a solver-run task. Do not modify solver semantics.
+
+Main project objective:
+Use learning-enhanced `UpdateLTM` to replace the coarse additive update in the LTM paper and eventually beat `LaCAM*+plain additive LTM` under closed-loop solver metrics, without changing LaCAM*/PIBT semantics.
+
+Read first:
+
+```text
+deep-research-report.md
+phase4_6_laur_ltm_codex_execution_plan.md
+docs/aaai_quality_requirements.md
+czr004_repair5g5_aaai_learned_flow_shield_runtime_plan.md
+czr004_repair5g51_runtime_selector_failure_safe_bridge_plan.md
+outputs/reports/phase5p5_repair5g5_decision.md
+outputs/reports/phase5p5_repair5g5_runtime_smoke_summary.json
+outputs/reports/phase5p5_repair5g5_runtime_contextual_selector_spec.json
+outputs/reports/phase5p5_repair5g_aaai_readiness_summary.json
+```
+
+Tasks:
+
+1. Add this file to repo root:
+
+```text
+czr004_learning_insertion_strategy_grand_plan_addendum.md
+```
+
+2. Insert the content between:
+
+```text
+BEGIN VERBATIM GRAND-PLAN ADDENDUM
+```
+
+and:
+
+```text
+END VERBATIM GRAND-PLAN ADDENDUM
+```
+
+verbatim into:
+
+```text
+deep-research-report.md
+phase4_6_laur_ltm_codex_execution_plan.md
+docs/aaai_quality_requirements.md
+```
+
+Do not paraphrase. Do not remove warnings. Do not turn this into action-policy learning.
+
+3. Update:
+
+```text
+docs/codex-worklog.md
+```
+
+4. Write:
+
+```text
+outputs/reports/phase5p5_repair5g_learning_insertion_strategy.md
+outputs/reports/phase5p5_repair5g_learning_insertion_strategy_summary.json
+outputs/tables/phase5p5_repair5g_learning_route_comparison.csv
+outputs/tables/phase5p5_repair5g_learning_stage_ladder.csv
+```
+
+The route comparison CSV must include at least:
+
+```text
+route
+description
+top_venue_attractiveness
+current_readiness
+main_risk
+project_decision
+```
+
+The stage ladder CSV must include at least:
+
+```text
+stage
+goal
+allowed_model_class
+required_inputs
+required_gates
+blocked_until
+```
+
+5. Add a brief consistency check script if useful:
+
+```text
+scripts/check_repair5g_learning_strategy_docs.py
+```
+
+It should confirm that the exact addendum marker or core section title appears in all target documents.
+
+6. Validation:
+
+```text
+python -m py_compile scripts/check_repair5g_learning_strategy_docs.py
+python scripts/check_repair5g_learning_strategy_docs.py
+git diff --check
+```
+
+If no script is added, explain why in the final report.
+
+7. Commit only documentation/strategy artifacts:
+
+```text
+repair5g: add learning insertion strategy to grand plan
+```
+
+Do not stage unrelated dirty/untracked files. Do not run fresh IDs. Do not claim Phase5.5, Phase6, or AAAI-ready.

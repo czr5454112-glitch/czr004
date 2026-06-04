@@ -1,0 +1,29 @@
+{
+  "aaai_ready": false,
+  "advanced_neural_stage": "only after counterfactual UpdateLTM labels and safe runtime bridge",
+  "forbidden_outputs": [
+    "agent actions",
+    "PIBT priorities",
+    "restart nodes",
+    "heuristic h_i(v)",
+    "candidate deletions",
+    "collision outcomes",
+    "OPEN/EXPLORED/rewrite decisions",
+    "incumbent pruning decisions"
+  ],
+  "grand_plan_addendum_inserted": true,
+  "learning_insertion_point": "UpdateLTM dynamics, not action policy",
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "preferred_top_venue_route": "safe learned bounded dual-channel parameter/residual policy",
+  "route_table": "outputs/tables/phase5p5_repair5g_learning_route_comparison.csv",
+  "schema_version": "phase5p5_repair5g_learning_insertion_strategy_summary_v1",
+  "selector_role": "safety bridge and fallback layer, not final paper method",
+  "stage_ladder_table": "outputs/tables/phase5p5_repair5g_learning_stage_ladder.csv",
+  "strategy_report": "outputs/reports/phase5p5_repair5g_learning_insertion_strategy.md",
+  "target_documents": [
+    "deep-research-report.md",
+    "phase4_6_laur_ltm_codex_execution_plan.md",
+    "docs/aaai_quality_requirements.md"
+  ]
+}

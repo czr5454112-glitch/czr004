@@ -1,5 +1,40 @@
 # Codex Worklog
 
+## 2026-06-04 21:20 - Repair5G.5.6 budget-stable G6 offline design
+
+- Request:
+  Finish `czr004_repair5g56_budget_stable_g6_offline_design_plan.md`: turn the G5.5 adaptive oracle signal into a gated G5.6 package for label completion, warehouse classification, budget stability, perf-safe feature allowlisting, safe-mixture target construction, optional offline G6 training, and final decision.
+- Files planned:
+  - `scripts/repair5g56_common.py`
+  - `scripts/run_repair5g56_counterfactual_label_completion.py`
+  - `scripts/analyze_repair5g56_counterfactual_label_completion.py`
+  - `scripts/run_repair5g56_warehouse_probe_budget_sentinel.py`
+  - `scripts/analyze_repair5g56_warehouse_probe_failures.py`
+  - `scripts/run_repair5g56_probe_budget_stability_expanded.py`
+  - `scripts/analyze_repair5g56_probe_budget_stability_expanded.py`
+  - `scripts/create_repair5g56_g6_perf_feature_table.py`
+  - `scripts/analyze_repair5g56_perf_feature_allowlist.py`
+  - `scripts/create_repair5g56_g6_safe_mixture_targets.py`
+  - `scripts/train_repair5g56_offline_safe_mixture.py`
+  - `scripts/eval_repair5g56_offline_safe_mixture.py`
+  - `scripts/write_repair5g56_decision.py`
+  - focused G5.6 tests and G5.6 reports/tables under `outputs/`
+- Key constraints:
+  Do not touch `external/lacam2/lacam2/**`, do not run IDs `166..205`, do not use final full-run outcomes as update labels, keep cost-audit features out of the perf-safe runtime set, and keep `phase5p5_allowed=false`, `phase6_allowed=false`, `aaai_ready=false`.
+- Current evidence:
+  The G5.6 observed-ID label-extension run over IDs `156..165` completed `60 / 60` solver tasks and, together with G5.5 logs, yields `140` contexts and `980` labels with complete map/agent and candidate coverage.
+  Later-iteration labels are now present (`20` contexts with iteration > 0), so P1 passes.
+  The expanded budget-stability run over the required `250/500/1000/2000 ms` grid completed `840` probe rows across `30` measured contexts.
+  Warehouse contexts are classified and the perf-safe feature allowlist passes, but only `4` contexts are budget-stable training-eligible, below the required `30`.
+  Safe-mixture target construction produces `140` diagnostic target rows but only `4` training-eligible contexts, so optional offline G6 training is blocked and correctly skipped.
+- Decision:
+  `outputs/reports/phase5p5_repair5g56_decision.md` records `probe_budget_instability_blocks_training`.
+  `phase5p5_allowed=false`, `phase6_allowed=false`, `aaai_ready=false`, `g6_training_allowed=false`, `runtime_claim_allowed=false`, and `ids_166_205_untouched=true`.
+- Validation:
+  `python -m py_compile` passed for all new G5.6 scripts and focused G5.6 tests.
+  `python -m pytest tests/test_repair5g56_budget_stable_labels.py tests/test_repair5g56_feature_allowlist.py tests/test_repair5g56_safe_mixture_targets.py` could not run because pytest is unavailable in the active Python (`No module named pytest`).
+  Manual fallback harness passed for reserved-ID rejection, 120-context/later-iteration label gates, perf-safe feature separation, and safe-mixture target readiness.
+
 ## 2026-06-04 20:05 - Repair5G.5.5 scaled counterfactual labels and G6 design
 
 - Request:

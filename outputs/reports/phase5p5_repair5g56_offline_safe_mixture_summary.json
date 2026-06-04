@@ -1,0 +1,16 @@
+{
+  "aaai_ready": false,
+  "decision": "blocked_gates_failed_do_not_train",
+  "model_dir": "C:\\PROGRAMING\\czr004\\artifacts\\models\\laur_ltm\\repair5g56_offline_safe_mixture",
+  "observed_gates": {
+    "counterfactual_label_completion_passed": true,
+    "g6_targets_ready": false,
+    "perf_feature_allowlist_passed": true,
+    "probe_budget_stability_expanded_passed": false,
+    "warehouse_probe_failure_analysis_passed": true
+  },
+  "offline_training_run": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "schema_version": "phase5p5_repair5g56_offline_safe_mixture_summary_v1"
+}

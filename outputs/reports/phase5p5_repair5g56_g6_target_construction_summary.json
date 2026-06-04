@@ -1,0 +1,22 @@
+{
+  "aaai_ready": false,
+  "decision": "g6_targets_not_training_ready",
+  "gates": {
+    "g6_targets_ready": false,
+    "harmful_candidate_labels_available": true,
+    "ids_166_205_untouched": true,
+    "nonstatic_training_eligible_contexts_gt_0": true,
+    "observed_ids_only": true,
+    "static_fallback_contexts_gt_0": true,
+    "training_eligible_contexts_ge_30": false
+  },
+  "harmful_label_contexts": 97,
+  "nonstatic_training_eligible_contexts": 4,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "schema_version": "phase5p5_repair5g56_g6_target_construction_summary_v1",
+  "static_fallback_contexts": 86,
+  "target_rows": 140,
+  "targets_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase5p5_repair5g56_g6_safe_mixture_targets.csv",
+  "training_eligible_contexts": 4
+}

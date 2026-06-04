@@ -1,0 +1,8 @@
+{
+  "aaai_ready": false,
+  "decision": "blocked_no_trained_model",
+  "offline_eval_run": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "schema_version": "phase5p5_repair5g56_offline_safe_mixture_eval_summary_v1"
+}

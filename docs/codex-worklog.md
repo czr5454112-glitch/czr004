@@ -3368,3 +3368,57 @@
   - `git diff --check` passed with line-ending warnings only from the mixed worktree.
 - Follow-up:
   Keep runtime/Phase5.5/Phase6/AAAI claims closed until a later static/abstention/no-solution/budget-sensitive/OOD safety package validates learned runtime behavior.
+## 2026-06-07 21:15 - Repair5G.5.13 hard-control ranker and safety preflight
+
+- Request:
+  Finish `czr004_g513_after_g512_ranker_review_and_prompt.md` completely, then push the completed work to GitHub.
+- Files planned:
+  - `czr004_repair5g513_hard_controlled_ranker_and_safety_preflight_plan.md`
+  - `scripts/repair5g513_common.py`
+  - `scripts/analyze_repair5g513_g512_selection_audit.py`
+  - `scripts/eval_repair5g513_hard_controls.py`
+  - `scripts/analyze_repair5g513_bootstrap_uncertainty.py`
+  - `scripts/create_repair5g513_rich_context_feature_matrix.py`
+  - `scripts/analyze_repair5g513_rich_feature_signal.py`
+  - `scripts/analyze_repair5g513_static_abstention_safety_preflight.py`
+  - `scripts/write_repair5g513_decision.py`
+  - `outputs/reports/phase5p5_repair5g513_*`
+  - `outputs/tables/phase5p5_repair5g513_*`
+- Key constraints:
+  Reproduce G5.12 first, do not modify solver semantics or `external/lacam2/lacam2/**`, do not touch IDs `166..205`, report hard-control failures plainly, and keep runtime/Phase5.5/Phase6/AAAI claims closed.
+- Commands run:
+  - `python -m py_compile scripts\repair5g513_common.py ... scripts\write_repair5g513_decision.py`
+  - `python scripts\verify_repair5g512_g511_artifacts.py`
+  - `python scripts\create_repair5g512_candidate_regret_targets.py`
+  - `python scripts\analyze_repair5g512_candidate_regret_targets.py`
+  - `python scripts\analyze_repair5g512_context_vs_candidate_target_gap.py`
+  - `python scripts\create_repair5g512_candidate_feature_matrix_v3.py`
+  - `python scripts\analyze_repair5g512_candidate_feature_signal_v3.py`
+  - `python scripts\train_repair5g512_candidate_regret_ranker.py`
+  - `python scripts\eval_repair5g512_candidate_regret_ranker.py`
+  - `python scripts\write_repair5g512_decision.py`
+  - `python scripts\analyze_repair5g513_g512_selection_audit.py`
+  - `python scripts\eval_repair5g513_hard_controls.py`
+  - `python scripts\analyze_repair5g513_bootstrap_uncertainty.py`
+  - `python scripts\create_repair5g513_rich_context_feature_matrix.py`
+  - `python scripts\analyze_repair5g513_rich_feature_signal.py`
+  - `python scripts\analyze_repair5g513_static_abstention_safety_preflight.py`
+  - `python scripts\write_repair5g513_decision.py`
+  - JSON parse / CSV row-count / leakage / grouped-context sanity checks
+  - reserved-ID guard check with sentinel `166`
+  - `git diff --check`
+- Key observations:
+  - G5.12 reproduced cleanly: final decision stayed `candidate_ranker_passed_continue_static_abstention_safety_package`.
+  - Selection audit showed G5.12 selected nonstatic in `6/30` dev contexts, all `repair5g59_slow_decay_high_shield`; `24/30` fell back to static.
+  - Oracle capture was `5/30` (`0.16666666666666666`), mean regret to oracle was `0.027511037073000004`, missed helpful fallback contexts were `20`, and harmful selected contexts were `1`.
+  - Hard controls reduced the result: `safe_train_only_map_agent_gate` had lower mean delta (`-0.013730627973333331`) than G5.12 (`-0.010423295036333333`), but with much worse dev harmful rate (`0.23333333333333334` vs `0.03333333333333333`).
+  - G5.12 still beat `safe_slow_decay_train_gate`, candidate-param-only, candidate-only prior, random-feature, and shuffled-label controls.
+  - Bootstrap over dev contexts reported G5.12 mean-delta interval `[-0.021546915625858334, -0.001935500437]`; difference versus safe map-agent gate was uncertain and centered worse for G5.12 (`0.003307332936999998`).
+  - Existing tracked artifacts do not contain the allowed rich pre-choice wait/block/progress fields, so rich feature status is `rich_context_features_missing_requires_local_feature_probe`.
+  - Static/abstention preflight found `4` static-near-oracle contexts, `1` harmful false positive, `16` high-uncertainty contexts, `0` budget-sensitive contexts, and no observed-bank map-agent or map-family holdout contexts.
+- Decision:
+  - Final G5.13 decision: `candidate_ranker_signal_reduced_to_simple_prior_continue_rich_features`.
+  - This is not a direction failure; it means the current ranker is not yet stronger than simple train-only priors and needs richer runtime-safe trace features plus broader safety data.
+  - `phase5p5_allowed=false`, `phase6_allowed=false`, `runtime_claim_allowed=false`, `learned_runtime_policy_validated=false`, and `aaai_ready=false` remain closed.
+- Follow-up:
+  Implement an observed-ID rich pre-choice trace-feature probe with `--max-workers 1` only if it can be done without solver semantic changes, then rerun hard controls and safety preflight before any runtime promotion discussion.

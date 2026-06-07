@@ -1,0 +1,20 @@
+{
+  "aaai_ready": false,
+  "bootstrap_decision": "bootstrap_uncertainty_reported",
+  "decision": "candidate_ranker_signal_reduced_to_simple_prior_continue_rich_features",
+  "g512_reproduction_decision": "candidate_ranker_passed_continue_static_abstention_safety_package",
+  "hard_control_decision": "candidate_ranker_signal_reduced_to_simple_prior_continue_rich_features",
+  "interpretation": "Hard controls show the G5.12 ranker is not yet stronger than simple train-only safe priors; continue with richer runtime-safe trace features and safety data.",
+  "learned_runtime_policy_validated": false,
+  "local_pc_sufficient_for_current_60_context_14_candidate_analysis": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "rich_feature_decision": "rich_context_features_missing_requires_local_feature_probe",
+  "rich_signal_decision": "rich_context_features_missing_requires_local_feature_probe",
+  "runtime_claim_allowed": false,
+  "runtime_phase5p5_still_requires_static_abstention_no_solution_budget_ood_safety_package": true,
+  "safety_preflight_decision": "static_abstention_safety_package_incomplete_continue_local",
+  "schema_version": "phase5p5_repair5g513_decision_summary_v1",
+  "selection_audit_decision": "g512_selection_audit_completed",
+  "server_required_only_for_expanded_lattice_or_more_contexts": true
+}

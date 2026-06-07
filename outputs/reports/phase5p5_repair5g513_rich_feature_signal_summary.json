@@ -1,0 +1,20 @@
+{
+  "aaai_ready": false,
+  "decision": "rich_context_features_missing_requires_local_feature_probe",
+  "feature_count": 0,
+  "forbidden_feature_count": 0,
+  "forbidden_features": [],
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "rich_feature_count": 0,
+  "rich_features": [],
+  "rich_vs_g512_ranker_rerun": "not_run_missing_rich_features",
+  "rows": 1,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g513_rich_feature_signal_summary_v1",
+  "signal_ready": false,
+  "split_counts": {
+    "": 1
+  }
+}

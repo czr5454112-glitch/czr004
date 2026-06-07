@@ -1,0 +1,42 @@
+{
+  "aaai_ready": false,
+  "broad_multi_candidate_selector": false,
+  "decision": "g512_selection_audit_completed",
+  "dev_contexts": 30,
+  "dominant_nonstatic_selection_share": 1.0,
+  "harmful_selected_contexts": 1,
+  "ids_166_205_untouched": true,
+  "interpretation": "mostly_safe_gated_slow_decay_high_shield",
+  "learned_runtime_policy_validated": false,
+  "missed_helpful_contexts": 20,
+  "mostly_safe_gated_slow_decay_high_shield": true,
+  "nonstatic_selection_count": 6,
+  "observed_ids_only": true,
+  "oracle_capture_count": 5,
+  "oracle_capture_rate": 0.16666666666666666,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "regret_to_oracle_mean": 0.027511037073000004,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g513_g512_selection_audit_summary_v1",
+  "selected_candidate_distribution": {
+    "repair5g59_slow_decay_high_shield": 6,
+    "repair5g59_static_flow_shield": 24
+  },
+  "selected_contexts_by_map_agent": {
+    "maze-32-32-4|a100": 5,
+    "maze-32-32-4|a50": 5,
+    "random-32-32-20|a100": 5,
+    "random-32-32-20|a50": 5,
+    "warehouse-10-20-10-2-1|a100": 5,
+    "warehouse-10-20-10-2-1|a50": 5
+  },
+  "selected_contexts_by_map_family": {
+    "maze": 10,
+    "random": 10,
+    "warehouse": 10
+  },
+  "selected_nonstatic_candidate_distribution": {
+    "repair5g59_slow_decay_high_shield": 6
+  }
+}

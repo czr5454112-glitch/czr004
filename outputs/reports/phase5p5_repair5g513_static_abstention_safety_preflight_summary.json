@@ -1,0 +1,28 @@
+{
+  "aaai_ready": false,
+  "budget_sensitive_contexts": 0,
+  "decision": "static_abstention_safety_package_incomplete_continue_local",
+  "dev_contexts": 30,
+  "high_predicted_uncertainty_contexts": 16,
+  "ids_166_205_untouched": true,
+  "learned_runtime_policy_validated": false,
+  "mean_static_regret_to_oracle": 0.03793433210933332,
+  "no_solution_or_infeasible_contexts": 0,
+  "observed_ids_only": true,
+  "ood_like_map_agent_holdout_contexts": 0,
+  "ood_like_map_family_holdout_contexts": 0,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "ranker_harmful_false_positive_contexts": 1,
+  "reason": "Existing observed-ID artifacts support a boundary preflight, but no-solution, budget-abstain, and OOD coverage are not sufficient for runtime promotion.",
+  "runtime_claim_allowed": false,
+  "safety_package_complete": false,
+  "schema_version": "phase5p5_repair5g513_static_abstention_safety_preflight_summary_v1",
+  "selected_contexts_by_map_family": {
+    "maze": 10,
+    "random": 10,
+    "warehouse": 10
+  },
+  "static_near_oracle_contexts": 4,
+  "static_wins_contexts": 0
+}

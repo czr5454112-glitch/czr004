@@ -1,0 +1,49 @@
+{
+  "aaai_ready": false,
+  "artifact_pull_back_list": [
+    "outputs/tables/phase5p5_repair5g510_lattice_counterfactual_results.csv",
+    "outputs/tables/phase5p5_repair5g510_lattice_oracle_by_context.csv",
+    "outputs/tables/phase5p5_repair5g510_feature_matrix_v2.csv",
+    "outputs/tables/phase5p5_repair5g510_confidence_targets_v4.csv",
+    "outputs/reports/phase5p5_repair5g510_*.json",
+    "outputs/reports/phase5p5_repair5g510_*.md",
+    "outputs/logs/phase5p5_repair5g510_lattice_counterfactuals/*.jsonl"
+  ],
+  "bonus_budget_ms": 500,
+  "commands": [
+    "powershell -ExecutionPolicy Bypass -File scripts\\build_phase1a_batch.ps1",
+    "python scripts/run_repair5g510_executable_lattice_smoke.py --overwrite --max-workers 1",
+    "python scripts/analyze_repair5g510_lattice_adapter_parity.py",
+    "python scripts/run_repair5g510_goal_aware_dual_channel_lattice_counterfactuals.py --overwrite --instance-ids 146..155 --budgets-ms 250 500 1000 2000 --max-contexts-per-group 1 --max-workers 4 --checkpoint-topk-edges 256 --include-full-traffic",
+    "python scripts/analyze_repair5g510_lattice_counterfactual_oracle_gap.py",
+    "python scripts/create_repair5g510_feature_matrix_v2.py",
+    "python scripts/analyze_repair5g510_feature_signal_v2.py",
+    "python scripts/create_repair5g510_confidence_targets_v4.py",
+    "python scripts/analyze_repair5g510_confidence_targets_v4.py",
+    "python scripts/train_repair5g510_abstention_parameter_policy.py",
+    "python scripts/eval_repair5g510_abstention_parameter_policy.py",
+    "python scripts/write_repair5g510_decision.py"
+  ],
+  "expected_candidates": 14,
+  "expected_contexts": 60,
+  "expected_full_rows_with_250_500_1000_2000": 3360,
+  "expected_primary_rows": 1680,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "primary_budgets_ms": [
+    1000,
+    2000
+  ],
+  "resume_command": "python scripts/run_repair5g510_goal_aware_dual_channel_lattice_counterfactuals.py --instance-ids 146..155 --budgets-ms 250 500 1000 2000 --max-contexts-per-group 1 --max-workers 4 --checkpoint-topk-edges 256 --include-full-traffic",
+  "runtime_claim_allowed": false,
+  "sanity_checks": [
+    "JSON summaries parse with python -m json.tool",
+    "CSV result rows >= 3360 for full 250/500/1000/2000 run",
+    "candidate_id count is 14 for lattice results",
+    "no seed in 166..205",
+    "adapter parity summary decision is lattice_adapter_parity_passed"
+  ],
+  "schema_version": "phase5p5_repair5g510_server_command_plan_summary_v1",
+  "setup_command": "powershell -ExecutionPolicy Bypass -File scripts\\build_phase1a_batch.ps1",
+  "stress_budget_ms": 250
+}

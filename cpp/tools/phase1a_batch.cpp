@@ -602,10 +602,81 @@ Repair5GMethodSpec repair5g_method_spec(const std::string& method)
     spec.params = params;
     spec.update_mode = update_mode;
   };
+  auto set_g510_lattice =
+      [&](double alpha_cong_committed, double alpha_cong_blocked,
+          double alpha_flow_progress, double alpha_wait_or_nonprogress,
+          double rho_cong, double rho_flow, double flow_shield_beta,
+          double max_flow_shield, bool c_only, const std::string& mode) {
+        auto scalar = ScalarRuleParams();
+        scalar.alpha_commit = alpha_cong_committed;
+        scalar.alpha_block = alpha_cong_blocked;
+        scalar.alpha_wait = alpha_wait_or_nonprogress;
+        scalar.rho_decay = rho_cong;
+        auto params = repair5g1_dual_c_equiv_params(scalar);
+        params.rho_flow_decay = rho_flow;
+        if (c_only) {
+          params.alpha_flow_commit_progress = 0.0;
+          params.alpha_flow_wait_progress = 0.0;
+          params.goal_projection_mode = czr004::ltm::GoalProjectionMode::None;
+          params.flow_shield_beta = 0.0;
+          params.max_flow_shield = 0.0;
+          params.min_edge_cost = 0.25;
+        } else {
+          params.alpha_flow_commit_progress = alpha_flow_progress;
+          params.alpha_flow_wait_progress = 0.0;
+          params.goal_projection_mode =
+              czr004::ltm::GoalProjectionMode::FlowShield;
+          params.flow_shield_beta = flow_shield_beta;
+          params.max_flow_shield = max_flow_shield;
+          params.min_edge_cost = 1.0;
+        }
+        params.max_edge_cost = 11.0;
+        set(method, params, mode);
+      };
 
   if (method == "repair5g_dual_additive_parity") {
     set("dcltm_additive_parity", czr004::ltm::UpdateParams::additive(),
         "additive_parity");
+  } else if (method == "repair5g59_additive_fallback") {
+    set(method, czr004::ltm::UpdateParams::additive(),
+        "g510_lattice_additive_fallback");
+  } else if (method == "repair5g59_static_flow_shield" ||
+             method == "repair5g59_static_abstain_candidate") {
+    set_g510_lattice(1.25, 1.25, 1.0, 0.75, 0.95, 1.0, 0.35, 0.75,
+                     false, "g510_lattice_static_flow_shield");
+  } else if (method == "repair5g59_c_only_f_disabled") {
+    set_g510_lattice(1.25, 1.25, 0.0, 0.75, 0.95, 1.0, 0.0, 0.0,
+                     true, "g510_lattice_c_only");
+  } else if (method == "repair5g59_light_cong_light_flow") {
+    set_g510_lattice(1.0, 1.0, 0.75, 0.75, 0.98, 1.0, 0.25, 0.50,
+                     false, "g510_lattice_flow_shield");
+  } else if (method == "repair5g59_block_heavy_flow_guard") {
+    set_g510_lattice(1.0, 1.5, 1.0, 0.50, 0.95, 1.0, 0.35, 0.75,
+                     false, "g510_lattice_flow_shield");
+  } else if (method == "repair5g59_commit_heavy_flow_guard") {
+    set_g510_lattice(1.5, 1.0, 1.0, 0.75, 0.95, 1.0, 0.35, 0.75,
+                     false, "g510_lattice_flow_shield");
+  } else if (method == "repair5g59_slow_decay_high_shield") {
+    set_g510_lattice(1.25, 1.25, 1.0, 0.75, 0.98, 1.0, 0.50, 1.00,
+                     false, "g510_lattice_flow_shield");
+  } else if (method == "repair5g59_fast_decay_low_shield") {
+    set_g510_lattice(1.25, 1.25, 1.0, 0.75, 0.90, 1.0, 0.20, 0.50,
+                     false, "g510_lattice_flow_shield");
+  } else if (method == "repair5g59_wait_conservative") {
+    set_g510_lattice(1.25, 1.25, 1.0, 0.50, 0.95, 1.0, 0.35, 0.75,
+                     false, "g510_lattice_flow_shield");
+  } else if (method == "repair5g59_wait_aggressive") {
+    set_g510_lattice(1.25, 1.25, 1.0, 1.00, 0.95, 1.0, 0.35, 0.75,
+                     false, "g510_lattice_flow_shield");
+  } else if (method == "repair5g59_flow_decay") {
+    set_g510_lattice(1.25, 1.25, 1.0, 0.75, 0.95, 0.95, 0.35, 0.75,
+                     false, "g510_lattice_flow_shield");
+  } else if (method == "repair5g59_high_beta_cap_safe") {
+    set_g510_lattice(1.25, 1.25, 1.0, 0.75, 0.95, 1.0, 0.60, 0.75,
+                     false, "g510_lattice_flow_shield");
+  } else if (method == "repair5g59_low_beta_high_cap") {
+    set_g510_lattice(1.25, 1.25, 1.0, 0.75, 0.95, 1.0, 0.20, 1.25,
+                     false, "g510_lattice_flow_shield");
   } else if (method.rfind("repair5g_dual_c_equiv_", 0) == 0) {
     const auto rule_id =
         method.substr(std::string("repair5g_dual_c_equiv_").size());
@@ -2487,8 +2558,13 @@ bool append_repair5g54_counterfactual_probe_jsonl(
         instance, *checkpoint.traffic_before_map, checkpoint.trace_events,
         probe_options);
     row.score = repair5g54_probe_score(row.result);
-    if (candidate == "additive_ltm") additive_score = row.score;
-    if (candidate == "repair5g2_best_frozen_static_candidate") {
+    if (candidate == "additive_ltm" ||
+        candidate == "repair5g59_additive_fallback") {
+      additive_score = row.score;
+    }
+    if (candidate == "repair5g2_best_frozen_static_candidate" ||
+        candidate == "repair5g59_static_flow_shield" ||
+        candidate == "repair5g59_static_abstain_candidate") {
       static_score = row.score;
     }
     if (row.candidate_recognized &&

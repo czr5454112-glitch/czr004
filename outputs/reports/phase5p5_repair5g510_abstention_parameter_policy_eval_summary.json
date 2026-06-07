@@ -1,0 +1,11 @@
+{
+  "aaai_ready": false,
+  "decision": "abstention_parameter_policy_failed_continue_features_or_lattice",
+  "eval_skipped": true,
+  "pass_gates": {},
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g510_abstention_parameter_policy_eval_summary_v1",
+  "skip_reason": "abstention_parameter_policy_training_skipped_gate_failed"
+}

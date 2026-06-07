@@ -1,0 +1,22 @@
+{
+  "aaai_ready": false,
+  "adapter_decision": "lattice_adapter_parity_passed",
+  "analysis_decision": "lattice_adapter_smoke_passed_server_required_for_full_run",
+  "candidate_count": 14,
+  "candidate_space_improves_g58": true,
+  "candidate_space_oracle_gap_vs_g58": -0.015080627924999979,
+  "confidence_targets_decision": "confidence_targets_v4_training_gate_failed",
+  "counterfactuals_run": true,
+  "decision": "lattice_adapter_smoke_passed_server_required_for_full_run",
+  "feature_signal_decision": "feature_signal_v2_failed_continue_feature_design",
+  "ids_166_205_untouched": true,
+  "measured_contexts": 2,
+  "missing_g59_artifacts": [],
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "policy_decision": "abstention_parameter_policy_failed_continue_features_or_lattice",
+  "required_next_step": "run full server package and re-ingest artifacts",
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g510_decision_summary_v1",
+  "server_plan_available": true
+}

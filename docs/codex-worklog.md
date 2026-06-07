@@ -3234,3 +3234,58 @@
   - Reserved-ID guard rejected `166`.
   - `git diff --check` exited 0; it reported only pre-existing LF/CRLF warnings on unrelated dirty files.
   - Focused `pytest` could not run because the active Python has no `pytest` module.
+## 2026-06-07 15:28 - Repair5G.5.10 executable lattice adapter and local slice
+
+- Request:
+  Implement Repair5G.5.10 after `0487e7a`: make the G5.9 goal-aware dual-channel parameter lattice executable, run observed-ID-only counterfactuals, gate feature/target/policy work, and preserve all Phase5.5/Phase6/runtime-claim closures.
+- Files changed:
+  - `cpp/tools/phase1a_batch.cpp`
+  - `scripts/repair5g510_common.py`
+  - `scripts/run_repair5g510_executable_lattice_smoke.py`
+  - `scripts/run_repair5g510_goal_aware_dual_channel_lattice_counterfactuals.py`
+  - `scripts/analyze_repair5g510_lattice_adapter_parity.py`
+  - `scripts/analyze_repair5g510_lattice_counterfactual_oracle_gap.py`
+  - `scripts/create_repair5g510_feature_matrix_v2.py`
+  - `scripts/analyze_repair5g510_feature_signal_v2.py`
+  - `scripts/create_repair5g510_confidence_targets_v4.py`
+  - `scripts/analyze_repair5g510_confidence_targets_v4.py`
+  - `scripts/train_repair5g510_abstention_parameter_policy.py`
+  - `scripts/eval_repair5g510_abstention_parameter_policy.py`
+  - `scripts/write_repair5g510_server_command_plan.py`
+  - `scripts/write_repair5g510_decision.py`
+  - `czr004_repair5g510_executable_goal_aware_dual_channel_lattice_plan.md`
+  - `outputs/reports/phase5p5_repair5g510_*`
+  - `outputs/tables/phase5p5_repair5g510_*`
+- Commands run:
+  - `python -m py_compile ...repair5g510...`
+  - `powershell -ExecutionPolicy Bypass -File scripts\build_phase1a_batch.ps1`
+  - `python scripts\run_repair5g510_executable_lattice_smoke.py --overwrite --max-workers 1`
+  - `python scripts\analyze_repair5g510_lattice_adapter_parity.py`
+  - `python scripts\run_repair5g510_goal_aware_dual_channel_lattice_counterfactuals.py --overwrite --maps random-32-32-20 --agent-counts 50 100 --instance-ids 146 --budgets-ms 250 500 1000 2000 --max-contexts-per-group 1 --max-workers 1 --checkpoint-topk-edges 64`
+  - `python scripts\analyze_repair5g510_lattice_counterfactual_oracle_gap.py`
+  - `python scripts\create_repair5g510_feature_matrix_v2.py`
+  - `python scripts\analyze_repair5g510_feature_signal_v2.py`
+  - `python scripts\create_repair5g510_confidence_targets_v4.py`
+  - `python scripts\analyze_repair5g510_confidence_targets_v4.py`
+  - `python scripts\train_repair5g510_abstention_parameter_policy.py`
+  - `python scripts\eval_repair5g510_abstention_parameter_policy.py`
+  - `python scripts\write_repair5g510_server_command_plan.py`
+  - `python scripts\write_repair5g510_decision.py`
+  - reserved-ID guard check with `--instance-ids 166 --skip-solver`
+  - JSON parse / CSV row sanity check
+  - `git diff --check`
+- Key observations:
+  - The C++ adapter recognizes all 14 G5.9 lattice candidates.
+  - Smoke parity passed: G5.9 static flow-shield matches prior static flow-shield, G5.9 additive matches additive LTM, and C-only/F-disabled runs as an ablation.
+  - Local main slice produced 112 lattice rows over 2 observed contexts and budgets 250/500/1000/2000.
+  - Partial `candidate_space_oracle_gap_vs_g58 = -0.015080627924999979`, but only 2 contexts were measured, so the full 60-context gate remains open.
+  - Feature v2 and confidence v4 artifacts were generated, but confidence and feature gates failed; policy training was skipped.
+- Tests / validation:
+  - Python compile passed for all new G5.10 scripts.
+  - Project-owned C++ runner rebuilt successfully.
+  - Reserved-ID guard rejects 166 before solver execution.
+  - G5.10 JSON summaries parse.
+  - CSV sanity counts: main local slice 112 rows, smoke 64 rows, feature matrix 60 rows, confidence targets 2 rows.
+  - `git diff --check` passed with line-ending warnings only.
+- Follow-up:
+  Run the server command plan for the full 60-context x 14-candidate x 250/500/1000/2000 experiment, then re-run oracle, feature, target, and policy gates before any learned-method claim.

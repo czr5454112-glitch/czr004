@@ -1,0 +1,24 @@
+{
+  "aaai_ready": false,
+  "classes": [
+    "repair5g1_shield_c100_b125_w075_d100_beta0p35_max0p75",
+    "repair5g2_best_frozen_static_candidate"
+  ],
+  "decision": "offline_model_trained_requires_eval",
+  "dev_rows": 20,
+  "feature_count": 25,
+  "model_path": "C:\\PROGRAMING\\czr004\\artifacts\\models\\laur_ltm\\repair5g58_offline_safe_mixture\\model_spec.json",
+  "observed_gates": {
+    "confidence_training_gate_passed": true,
+    "perf_safe_feature_matrix_passed": true,
+    "primary_pair_confidence_expansion_passed": true,
+    "warehouse_abstention_policy_passed": true
+  },
+  "offline_training_run": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g58_offline_safe_mixture_train_summary_v1",
+  "train_rows": 20,
+  "training_rows": 40
+}

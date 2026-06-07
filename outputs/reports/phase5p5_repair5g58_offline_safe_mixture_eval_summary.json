@@ -1,0 +1,47 @@
+{
+  "aaai_ready": false,
+  "abstention_rate": 0.0,
+  "calibration_bins": {
+    "0p50_0p75": {
+      "accuracy": 0.5,
+      "count": 2
+    },
+    "ge_0p75": {
+      "accuracy": 0.4444444444444444,
+      "count": 18
+    }
+  },
+  "decision": "offline_g6_safe_mixture_failed_continue_labels_or_candidate_space",
+  "eval_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase5p5_repair5g58_offline_safe_mixture_eval.csv",
+  "eval_rows": 20,
+  "gates": {
+    "beats_majority_expert": false,
+    "beats_random_features": false,
+    "beats_shuffled_labels": false,
+    "calibration_reported": true,
+    "harmful_vs_static_rate_bounded": false,
+    "observed_dev_only": true,
+    "offline_eval_rows_gt_0": true,
+    "offline_g6_mean_delta_vs_static_lt_0": true,
+    "offline_g6_safe_mixture_eval_passed": false,
+    "static_fallback_available": true
+  },
+  "harmful_vs_static_rate": 0.15,
+  "mean_additive_score": 1.3794258228775,
+  "mean_delta_vs_additive": -0.11875287566100012,
+  "mean_delta_vs_static": -0.010778176605500178,
+  "mean_majority_score": 1.2581121034769998,
+  "mean_oracle_score": 1.2519910848995,
+  "mean_random_control_score": 1.2565677593865,
+  "mean_selected_score": 1.2606729472165,
+  "mean_shuffled_control_score": 1.260300123338,
+  "mean_static_score": 1.271451123822,
+  "nonstatic_selection_rate": 0.55,
+  "offline_eval_run": true,
+  "offline_training_run": true,
+  "oracle_regret": 0.008681862316999966,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g58_offline_safe_mixture_eval_summary_v1"
+}

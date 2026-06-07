@@ -1,0 +1,37 @@
+{
+  "aaai_ready": false,
+  "by_context_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase5p5_repair5g58_primary_pair_confidence_by_context.csv",
+  "by_map_agent_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase5p5_repair5g58_primary_pair_confidence_by_map_agent.csv",
+  "context_count": 60,
+  "decision": "primary_pair_confidence_expansion_passed",
+  "default_margin_threshold": 0.005,
+  "gates": {
+    "ids_166_205_untouched": true,
+    "measured_confidence_contexts_ge_60": true,
+    "no_solution_or_budget_abstain_count_gt_0": true,
+    "observed_ids_only": true,
+    "primary_1000_2000_stable_contexts_ge_30": true,
+    "primary_pair_confidence_expansion_passed": true,
+    "stable_high_confidence_nonstatic_count_ge_10": true,
+    "stable_static_or_abstain_count_ge_10": true,
+    "training_eligible_contexts_ge_30": true
+  },
+  "measured_confidence_contexts": 60,
+  "no_solution_or_budget_abstain_count": 20,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "primary_1000_2000_stable_contexts": 40,
+  "probe_jsonl": [
+    "C:\\PROGRAMING\\czr004\\outputs\\logs\\phase5p5_repair5g56_probe_budget_stability\\phase5p5_repair5g56_probe_budget_update_probes.jsonl",
+    "C:\\PROGRAMING\\czr004\\outputs\\logs\\phase5p5_repair5g58_primary_pair_confidence_expansion\\phase5p5_repair5g58_primary_pair_update_probes.jsonl"
+  ],
+  "probe_rows": 1260,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g58_primary_pair_confidence_expansion_summary_v1",
+  "stable_high_confidence_nonstatic_count": 21,
+  "stable_static_or_abstain_count": 19,
+  "stress_250_compared_contexts": 30,
+  "stress_250_disagreement_contexts": 17,
+  "stress_250_disagreement_rate": 0.5666666666666667,
+  "training_eligible_contexts": 40
+}

@@ -1,0 +1,7 @@
+agents,context_count,map,measured_confidence_contexts,no_solution_or_budget_abstain_count,primary_1000_2000_stable_contexts,stable_high_confidence_nonstatic_count,stable_static_or_abstain_count,stress_250_disagreements,training_eligible_contexts
+100,10,maze-32-32-4,10,0,10,7,3,5,10
+50,10,maze-32-32-4,10,0,10,4,6,5,10
+100,10,random-32-32-20,10,0,10,2,8,5,10
+50,10,random-32-32-20,10,0,10,8,2,2,10
+100,10,warehouse-10-20-10-2-1,10,10,0,0,0,0,0
+50,10,warehouse-10-20-10-2-1,10,10,0,0,0,0,0

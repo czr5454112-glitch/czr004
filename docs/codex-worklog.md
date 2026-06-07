@@ -3150,3 +3150,45 @@
   - CSV row-count sanity checks passed for the generated G5.7 tables.
   - `git diff --check` exited 0; it reported only existing CRLF conversion warnings.
   - `python -m pytest --version` failed because pytest is unavailable in the active Python (`No module named pytest`).
+
+## 2026-06-07 - Start Repair5G.5.8 targeted confidence expansion
+
+- Request:
+  - Finish `czr004_repair5g58_targeted_confidence_expansion_offline_g6_plan_verified.md` and push the completed work to GitHub.
+  - Preserve the project boundaries from `deep-research-report.md` and `phase4_6_laur_ltm_codex_execution_plan.md`.
+- Carry-forward interpretation:
+  - G5.7 is a close-but-insufficient confidence-label result, not a direction failure.
+  - The hard training-confidence pair remains `1000/2000 ms`; `250 ms` remains stress-only.
+  - Offline G6 may run only if the expanded confidence labels, warehouse policy, and perf-safe feature matrix gates pass.
+- Planned scope:
+  - Add the G5.8 plan copy, G5.7 final interpretation, and G5.8 protocol overview.
+  - Add targeted primary-pair expansion, confidence-target v2, warehouse-abstention v2, feature-matrix v2, optional offline safe-mixture train/eval, and final decision scripts.
+  - Run observed-ID expansion over IDs `151..155` and merge with the existing G5.7 `146..150` evidence.
+- Constraints:
+  - Do not modify `external/lacam2/lacam2/**`.
+  - Do not change LaCAM*/PIBT semantics, candidate generation, conflict handling, pruning, OPEN/EXPLORED, rewrite, incumbent, restart behavior, or runtime learned policy integration.
+  - Do not use IDs `166..205`.
+  - Keep `phase5p5_allowed=false`, `phase6_allowed=false`, `aaai_ready=false`, and `runtime_claim_allowed=false`.
+- Follow-up:
+  - Run the new G5.8 scripts and commit only the G5.8-related files/reports/tables.
+- Completion:
+  - Added the G5.8 plan copy, G5.7 final interpretation, G5.8 protocol overview, targeted primary-pair expansion, confidence-target v2, warehouse-abstention v2, feature-matrix v2, optional offline safe-mixture train/eval, and final decision scripts.
+  - Verified required G5.7 artifacts were present before new runs.
+  - Ran targeted observed-ID expansion on IDs `151..155` with primary budgets `1000/2000 ms`; the first parallel attempt produced an interleaved JSONL write, so the same slice was rerun serially with `--overwrite`.
+  - Merged the new slice with the existing G5.7 evidence: 60 measured confidence contexts, 40 primary-pair stable contexts, 40 training-eligible contexts, 21 stable high-confidence nonstatic contexts, 19 stable static-or-abstain contexts, and 20 no-solution/longer-budget abstention examples.
+  - Selected margin threshold `0.005` before offline training; all swept thresholds `0.0025`, `0.005`, and `0.010` passed the label-balance gate.
+  - Classified 40 warehouse contexts explicitly: 30 `no_solution_abstain` and 10 `longer_budget_needed`.
+  - Built 60-row `perf_safe_only` and 60-row diagnostic `audit_plus_perf` feature matrices with forbidden feature count 0.
+  - Trained the optional observed-ID offline safe-mixture model after gates passed, then evaluated it on the observed dev split.
+- Decision:
+  - `outputs/reports/phase5p5_repair5g58_decision.md` records `offline_g6_safe_mixture_failed_continue_labels_or_candidate_space`.
+  - Offline G6 improved mean selected-vs-static score but failed the pass gate because harmful-vs-static rate was 0.15 and it did not beat random, shuffled, or majority controls.
+  - IDs `166..205` remain untouched.
+  - `phase5p5_allowed=false`, `phase6_allowed=false`, `aaai_ready=false`, and `runtime_claim_allowed=false` remain closed.
+- Validation:
+  - `python -m py_compile` passed for all new G5.8 Python scripts.
+  - Reserved-ID guard rejected `166`.
+  - All generated G5.8 JSON summaries parsed successfully.
+  - CSV row-count sanity checks passed for the generated G5.8 tables.
+  - `git diff --check` exited 0; it reported only LF/CRLF warnings.
+  - Focused `pytest` could not run because the active Python has no `pytest` module.

@@ -1,0 +1,25 @@
+{
+  "aaai_ready": false,
+  "decision": "warehouse_abstention_policy_passed",
+  "gates": {
+    "ids_166_205_untouched": true,
+    "observed_ids_only": true,
+    "warehouse_abstention_policy_passed": true,
+    "warehouse_contexts_classified": true,
+    "warehouse_contexts_used_or_explained": true,
+    "warehouse_no_solution_not_silently_dropped": true
+  },
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "policy_counts": {
+    "longer_budget_needed": 10,
+    "no_solution_abstain": 30
+  },
+  "policy_rows": 40,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g58_warehouse_abstention_policy_summary_v1",
+  "source_cases_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase5p5_repair5g56_warehouse_probe_failure_cases.csv",
+  "source_summary_json": "C:\\PROGRAMING\\czr004\\outputs\\reports\\phase5p5_repair5g56_warehouse_probe_failure_summary.json",
+  "warehouse_abstention_policy_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase5p5_repair5g58_warehouse_abstention_policy.csv",
+  "warehouse_contexts": 40
+}

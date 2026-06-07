@@ -1,0 +1,93 @@
+{
+  "aaai_ready": false,
+  "offline_training_allowed": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g58_training_label_threshold_decision_summary_v1",
+  "selected_margin_threshold": 0.005,
+  "selection_reason": "preferred_threshold_passed",
+  "thresholds": {
+    "0.0025": {
+      "class_counts": {
+        "abstain_to_static": 0,
+        "budget_sensitive_exclude": 0,
+        "exclude_from_training": 0,
+        "longer_budget_needed": 10,
+        "no_solution_abstain": 10,
+        "stable_high_confidence_nonstatic": 23,
+        "stable_static": 17
+      },
+      "contexts": 60,
+      "gates": {
+        "budget_sensitive_excluded_or_downweighted": true,
+        "confidence_labels_v2_created": true,
+        "confidence_training_gate_passed": true,
+        "ids_166_205_untouched": true,
+        "no_solution_abstain_present": true,
+        "observed_ids_only": true,
+        "stable_high_confidence_nonstatic_count_ge_10": true,
+        "stable_static_or_abstain_count_ge_10": true,
+        "training_eligible_contexts_ge_30": true
+      },
+      "no_solution_or_budget_abstain_count": 20,
+      "stable_high_confidence_nonstatic_count": 23,
+      "stable_static_or_abstain_count": 17,
+      "training_eligible_contexts": 40
+    },
+    "0.005": {
+      "class_counts": {
+        "abstain_to_static": 0,
+        "budget_sensitive_exclude": 0,
+        "exclude_from_training": 0,
+        "longer_budget_needed": 10,
+        "no_solution_abstain": 10,
+        "stable_high_confidence_nonstatic": 21,
+        "stable_static": 19
+      },
+      "contexts": 60,
+      "gates": {
+        "budget_sensitive_excluded_or_downweighted": true,
+        "confidence_labels_v2_created": true,
+        "confidence_training_gate_passed": true,
+        "ids_166_205_untouched": true,
+        "no_solution_abstain_present": true,
+        "observed_ids_only": true,
+        "stable_high_confidence_nonstatic_count_ge_10": true,
+        "stable_static_or_abstain_count_ge_10": true,
+        "training_eligible_contexts_ge_30": true
+      },
+      "no_solution_or_budget_abstain_count": 20,
+      "stable_high_confidence_nonstatic_count": 21,
+      "stable_static_or_abstain_count": 19,
+      "training_eligible_contexts": 40
+    },
+    "0.01": {
+      "class_counts": {
+        "abstain_to_static": 0,
+        "budget_sensitive_exclude": 0,
+        "exclude_from_training": 0,
+        "longer_budget_needed": 10,
+        "no_solution_abstain": 10,
+        "stable_high_confidence_nonstatic": 15,
+        "stable_static": 25
+      },
+      "contexts": 60,
+      "gates": {
+        "budget_sensitive_excluded_or_downweighted": true,
+        "confidence_labels_v2_created": true,
+        "confidence_training_gate_passed": true,
+        "ids_166_205_untouched": true,
+        "no_solution_abstain_present": true,
+        "observed_ids_only": true,
+        "stable_high_confidence_nonstatic_count_ge_10": true,
+        "stable_static_or_abstain_count_ge_10": true,
+        "training_eligible_contexts_ge_30": true
+      },
+      "no_solution_or_budget_abstain_count": 20,
+      "stable_high_confidence_nonstatic_count": 15,
+      "stable_static_or_abstain_count": 25,
+      "training_eligible_contexts": 40
+    }
+  }
+}

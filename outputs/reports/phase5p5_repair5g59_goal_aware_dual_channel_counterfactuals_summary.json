@@ -1,0 +1,28 @@
+{
+  "aaai_ready": false,
+  "candidate_space_oracle_gap_vs_g58": null,
+  "counterfactuals_run": false,
+  "decision": "server_required_for_candidate_lattice_or_later_iteration_expansion",
+  "gates": {
+    "candidate_space_oracle_gap_vs_g58_reported": false,
+    "ids_166_205_untouched": true,
+    "later_iteration_measured_contexts_ge_20": false,
+    "mean_oracle_gap_over_static_reported": false,
+    "measured_contexts_ge_60": false,
+    "no_solution_longer_budget_classified": false,
+    "observed_ids_only": true,
+    "oracle_beats_static_fraction_reported": false,
+    "primary_1000_2000_stable_contexts_ge_40": false
+  },
+  "later_iteration_measured_contexts": 0,
+  "local_compute_cannot_finish": true,
+  "local_compute_reason": "The local Python layer can design the expanded lattice, but the current C++/probe harness does not expose these new G5.9 lattice candidates as executable UpdateLTM runtime candidates without a dedicated server run.",
+  "mean_oracle_gap_over_static": null,
+  "measured_contexts": 0,
+  "oracle_beats_static_fraction": null,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "primary_1000_2000_stable_contexts": 0,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g59_goal_aware_dual_channel_counterfactuals_summary_v1"
+}

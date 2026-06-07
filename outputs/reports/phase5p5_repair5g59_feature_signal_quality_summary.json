@@ -1,0 +1,80 @@
+{
+  "aaai_ready": false,
+  "best_ablation_dev_accuracy": 0.5,
+  "constant_feature_count": 10,
+  "constant_features": [
+    "best_ratio_before",
+    "c_flow_update_ratio",
+    "c_nonzero_edges",
+    "c_update_count",
+    "f_nonzero_edges",
+    "f_update_count",
+    "has_incumbent_before",
+    "improved_last_iteration",
+    "ltm_iterations",
+    "returned_solutions_count_so_far"
+  ],
+  "current_features_too_weak_to_distinguish_static_vs_nonstatic_safely": true,
+  "decision": "feature_signal_insufficient_continue_feature_design",
+  "feature_ablation_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase5p5_repair5g59_feature_ablation_quality.csv",
+  "feature_ablation_results": [
+    {
+      "ablation": "all_perf_safe",
+      "dev_accuracy": 0.45,
+      "dev_rows": 20,
+      "feature_count": 25,
+      "mean_confidence": 0.9626287389625621
+    },
+    {
+      "ablation": "no_map_dimensions",
+      "dev_accuracy": 0.45,
+      "dev_rows": 20,
+      "feature_count": 20,
+      "mean_confidence": 0.9128088892647689
+    },
+    {
+      "ablation": "no_density_free_cell_features",
+      "dev_accuracy": 0.45,
+      "dev_rows": 20,
+      "feature_count": 22,
+      "mean_confidence": 0.9128088892647689
+    },
+    {
+      "ablation": "no_incumbent_history_features",
+      "dev_accuracy": 0.45,
+      "dev_rows": 20,
+      "feature_count": 20,
+      "mean_confidence": 0.9626287389625621
+    },
+    {
+      "ablation": "only_trace_event_features",
+      "dev_accuracy": 0.45,
+      "dev_rows": 20,
+      "feature_count": 10,
+      "mean_confidence": 0.9128088892647689
+    },
+    {
+      "ablation": "only_cf_traffic_map_summary_features",
+      "dev_accuracy": 0.5,
+      "dev_rows": 20,
+      "feature_count": 5,
+      "mean_confidence": 0.7059157193187319
+    }
+  ],
+  "feature_count": 25,
+  "feature_quality_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase5p5_repair5g59_feature_signal_quality.csv",
+  "high_train_dev_shift_features": [],
+  "map_agent_leakage_risk_features": [
+    "density",
+    "free_cells",
+    "map_height",
+    "map_width",
+    "obstacle_ratio"
+  ],
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "rows": 60,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g59_feature_signal_quality_summary_v1",
+  "training_eligible_rows": 40
+}

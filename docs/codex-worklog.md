@@ -3192,3 +3192,45 @@
   - CSV row-count sanity checks passed for the generated G5.8 tables.
   - `git diff --check` exited 0; it reported only LF/CRLF warnings.
   - Focused `pytest` could not run because the active Python has no `pytest` module.
+
+## 2026-06-07 - Repair5G.5.9 offline G6 autopsy and goal-aware update expansion
+
+- Request:
+  - Finish `czr004_repair5g59_codex_prompt_and_analysis.md` and push the completed work to GitHub.
+  - Use `deep-research-report.md` and `phase4_6_laur_ltm_codex_execution_plan.md` for project boundaries.
+- Carry-forward interpretation:
+  - G5.8 is not a direction failure. It moved the blocker from insufficient labels to trained-but-not-safe learned controls.
+  - The next step is not runtime integration. It is G5.8 autopsy, corrected controls, feature-signal audit, abstention-aware policy design, and bounded goal-aware dual-channel UpdateLTM candidate expansion.
+- Planned scope:
+  - Add the G5.9 plan, G5.8 final interpretation, and G5.9 protocol overview.
+  - Add G5.8 offline eval autopsy, corrected-control train/eval, feature-signal audit, candidate lattice, counterfactual probe plan, confidence-target v3, abstention-aware policy train/eval, bounded policy design, and decision scripts.
+  - Run all G5.9 scripts from tracked G5.8 artifacts and keep all claims offline-only.
+- Constraints:
+  - Do not modify `external/lacam2/lacam2/**`.
+  - Do not change LaCAM*/PIBT semantics, candidate generation, conflict handling, pruning, OPEN/EXPLORED, rewrite, incumbent, restart behavior, or runtime integration.
+  - Do not use IDs `166..205`.
+  - Keep `phase5p5_allowed=false`, `phase6_allowed=false`, `aaai_ready=false`, and `runtime_claim_allowed=false`.
+- Completion:
+  - Verified required G5.8 artifacts were present.
+  - Wrote `outputs/reports/phase5p5_repair5g58_final_interpretation.md` and `outputs/reports/phase5p5_repair5g59_protocol_overview.md`.
+  - Autopsied the G5.8 offline eval: 20 eval rows, 3 harmful rows, 5 helpful rows, confusion/calibration/coverage-risk tables, and failure attribution to calibration, weak feature signal, narrow candidate space, control naming mismatch, and insufficient train/dev rows.
+  - Trained corrected G5.9 controls with train-only normalization: real-label, true random-feature, and true shuffled-label multinomial logistic models.
+  - Evaluated corrected controls on 20 dev contexts and 220 method rows. The old G5.8 selected policy did not beat the true random-feature model or train-only majority/map-agent priors; the random-candidate baseline is now named separately.
+  - Audited the feature signal: 60 rows, 25 perf-safe features, 10 constant features, best ablation dev accuracy 0.50, and feature signal classified as insufficient for safe static-vs-nonstatic learning.
+  - Created and analyzed a 14-candidate bounded UpdateLTM-only goal-aware dual-channel lattice with static, additive, and C-only/F-disabled fallbacks.
+  - Planned 2,520 expanded-lattice counterfactual rows. Local execution did not produce lattice outcomes because the current local harness does not expose the new G5.9 candidate lattice; the counterfactual decision is server-required.
+  - Created confidence targets v3 with feasibility/abstention Head A and expert-selection Head B; no-solution and longer-budget rows are not used as expert-selection positives.
+  - Trained and evaluated a two-head abstention-aware offline policy. It failed the gate: harmful-vs-static rate remained 0.15 and it did not beat train-only majority, map-agent prior, or true random-feature control.
+  - Wrote the learned bounded dual-channel UpdateLTM policy design as offline-only.
+- Decision:
+  - `outputs/reports/phase5p5_repair5g59_decision.md` records `server_required_for_candidate_lattice_or_later_iteration_expansion`.
+  - G5.9 fixed the G5.8 control semantics and produced the offline autopsy package, but expanded-lattice oracle-gap evidence requires a server run.
+  - IDs `166..205` remain untouched.
+  - `phase5p5_allowed=false`, `phase6_allowed=false`, `aaai_ready=false`, and `runtime_claim_allowed=false` remain closed.
+- Validation:
+  - `python -m py_compile` passed for all new G5.9 Python scripts.
+  - All 14 generated G5.9 JSON summaries parsed successfully.
+  - CSV row-count sanity checks passed for the generated G5.9 tables.
+  - Reserved-ID guard rejected `166`.
+  - `git diff --check` exited 0; it reported only pre-existing LF/CRLF warnings on unrelated dirty files.
+  - Focused `pytest` could not run because the active Python has no `pytest` module.

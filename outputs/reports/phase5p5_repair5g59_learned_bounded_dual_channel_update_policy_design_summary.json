@@ -1,0 +1,47 @@
+{
+  "aaai_ready": false,
+  "decision": "learned_bounded_update_policy_design_ready_offline_only",
+  "forbidden_outputs": [
+    "agent actions",
+    "PIBT priorities",
+    "restart nodes",
+    "h_i(v) heuristic values",
+    "candidate deletion",
+    "collision decisions",
+    "OPEN/EXPLORED/rewrite/incumbent decisions"
+  ],
+  "future_runtime_preflight_requirements": [
+    "force-additive/defer parity",
+    "deterministic export",
+    "runtime hook sanity with always-static and map-agent policies",
+    "fresh observed-ID smoke before reserved IDs",
+    "no IDs 166..205 until gates reopen"
+  ],
+  "input_state": "pre-update context / trace / C-F traffic-map summary",
+  "method_name": "Learned Bounded Dual-Channel UpdateLTM Policy",
+  "offline_only_stage_gate": true,
+  "output_path": "context -> bounded alpha/rho/beta/max_flow_shield policy -> UpdateLTM -> DirectedTrafficMap -> WeightedDistanceTable",
+  "permitted_outputs": [
+    "bounded alpha_cong_committed",
+    "bounded alpha_cong_blocked",
+    "bounded alpha_flow_progress",
+    "bounded alpha_flow_wait_or_nonprogress",
+    "bounded rho_cong",
+    "bounded rho_flow",
+    "bounded flow_shield_beta",
+    "bounded max_flow_shield",
+    "safe expert mixture weights",
+    "abstention/static/additive fallback probabilities"
+  ],
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "safety_projection": "clip outputs to bounded candidate-safe ranges and fall back to static/additive when confidence or OOD risk is poor",
+  "schema_version": "phase5p5_repair5g59_learned_bounded_dual_channel_update_policy_design_summary_v1",
+  "training_labels_needed": [
+    "same-context counterfactual UpdateLTM candidate outcomes",
+    "feasibility/abstention labels",
+    "static-near-oracle boundary labels",
+    "calibrated harmful-vs-static labels"
+  ]
+}

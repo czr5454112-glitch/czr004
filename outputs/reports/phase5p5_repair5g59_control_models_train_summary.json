@@ -1,0 +1,23 @@
+{
+  "aaai_ready": false,
+  "classes": [
+    "repair5g1_shield_c100_b125_w075_d100_beta0p35_max0p75",
+    "repair5g2_best_frozen_static_candidate"
+  ],
+  "decision": "g59_corrected_control_models_trained",
+  "dev_rows": 20,
+  "feature_count": 25,
+  "model_json": "C:\\PROGRAMING\\czr004\\artifacts\\models\\laur_ltm\\repair5g59_control_models\\control_models.json",
+  "normalization": "train_rows_only",
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "previous_g58_naming_mismatch_recorded": true,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g59_control_models_train_summary_v1",
+  "train_rows": 20,
+  "trained_controls": [
+    "real_label_model",
+    "true_random_feature_model",
+    "true_shuffled_label_model"
+  ]
+}

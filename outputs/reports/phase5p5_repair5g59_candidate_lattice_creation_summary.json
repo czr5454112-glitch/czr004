@@ -1,0 +1,19 @@
+{
+  "aaai_ready": false,
+  "candidate_count": 14,
+  "candidate_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase5p5_repair5g59_candidate_lattice.csv",
+  "candidate_json": "C:\\PROGRAMING\\czr004\\outputs\\reports\\phase5p5_repair5g59_candidate_lattice_candidates.json",
+  "decision": "candidate_lattice_created_local_smoke_size",
+  "gates": {
+    "additive_fallback_included": true,
+    "c_only_f_disabled_ablation_included": true,
+    "candidate_count_le_16": true,
+    "no_forbidden_outputs": true,
+    "static_fallback_included": true,
+    "update_ltm_only": true
+  },
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g59_candidate_lattice_creation_summary_v1"
+}

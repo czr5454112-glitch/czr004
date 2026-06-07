@@ -1,0 +1,5 @@
+correct_rows,harmful_rows,helpful_rows,map_agent,mean_selected_delta_vs_static,rows,selected_candidate_id,target_candidate_id
+5,0,5,|a0,-0.05486214991200002,5,repair5g1_shield_c100_b125_w075_d100_beta0p35_max0p75,repair5g1_shield_c100_b125_w075_d100_beta0p35_max0p75
+0,0,0,|a0,0.0,5,repair5g2_best_frozen_static_candidate,repair5g1_shield_c100_b125_w075_d100_beta0p35_max0p75
+0,3,0,|a0,0.009791202908333315,6,repair5g1_shield_c100_b125_w075_d100_beta0p35_max0p75,repair5g2_best_frozen_static_candidate
+4,0,0,|a0,0.0,4,repair5g2_best_frozen_static_candidate,repair5g2_best_frozen_static_candidate

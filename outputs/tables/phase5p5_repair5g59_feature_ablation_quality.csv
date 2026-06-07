@@ -1,0 +1,7 @@
+ablation,dev_accuracy,dev_rows,feature_count,mean_confidence
+all_perf_safe,0.45,20,25,0.9626287389625621
+no_map_dimensions,0.45,20,20,0.9128088892647689
+no_density_free_cell_features,0.45,20,22,0.9128088892647689
+no_incumbent_history_features,0.45,20,20,0.9626287389625621
+only_trace_event_features,0.45,20,10,0.9128088892647689
+only_cf_traffic_map_summary_features,0.5,20,5,0.7059157193187319

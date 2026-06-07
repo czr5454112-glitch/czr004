@@ -1,0 +1,22 @@
+{
+  "aaai_ready": false,
+  "decision": "abstention_aware_policy_trained_requires_eval",
+  "feature_count": 25,
+  "head_a_classes": [
+    "longer_budget_needed",
+    "no_solution_abstain",
+    "static_fallback",
+    "trainable_expert_selection"
+  ],
+  "head_b_classes": [
+    "repair5g1_shield_c100_b125_w075_d100_beta0p35_max0p75",
+    "repair5g2_best_frozen_static_candidate"
+  ],
+  "head_b_train_rows": 20,
+  "model_json": "C:\\PROGRAMING\\czr004\\artifacts\\models\\laur_ltm\\repair5g59_abstention_aware_policy\\policy.json",
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g59_abstention_aware_offline_policy_train_summary_v1",
+  "train_rows": 30
+}

@@ -1,0 +1,27 @@
+{
+  "aaai_ready": false,
+  "abstain_to_static_count": 0,
+  "class_counts_default_threshold": {
+    "longer_budget_needed": 10,
+    "no_solution_abstain": 10,
+    "stable_high_confidence_nonstatic": 21,
+    "stable_static": 19
+  },
+  "decision": "confidence_targets_v3_created",
+  "default_threshold": 0.005,
+  "default_threshold_rows": 60,
+  "head_a_class_counts_default_threshold": {
+    "longer_budget_needed": 10,
+    "no_solution_abstain": 10,
+    "static_fallback": 19,
+    "trainable_expert_selection": 21
+  },
+  "near_boundary_static_fallback_diagnostic": "abstain_to_static remains 0; current primary-pair protocol did not expose oracle-disagreement static-near-oracle rows.",
+  "no_solution_longer_budget_training_policy": "train Head A feasibility/abstention only; never use as expert-selection positives",
+  "output_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase5p5_repair5g59_confidence_targets_v3.csv",
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g59_confidence_targets_v3_creation_summary_v1",
+  "target_rows": 180
+}

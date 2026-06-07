@@ -1,0 +1,111 @@
+{
+  "aaai_ready": false,
+  "coverage_risk_curve": [
+    {
+      "coverage": 0.55,
+      "eval_rows": 20,
+      "harmful_vs_static_rate": 0.15,
+      "mean_delta_vs_static": -0.010778176605500178,
+      "threshold": 0.5
+    },
+    {
+      "coverage": 0.55,
+      "eval_rows": 20,
+      "harmful_vs_static_rate": 0.15,
+      "mean_delta_vs_static": -0.010778176605500178,
+      "threshold": 0.55
+    },
+    {
+      "coverage": 0.55,
+      "eval_rows": 20,
+      "harmful_vs_static_rate": 0.15,
+      "mean_delta_vs_static": -0.010778176605500178,
+      "threshold": 0.6
+    },
+    {
+      "coverage": 0.5,
+      "eval_rows": 20,
+      "harmful_vs_static_rate": 0.15,
+      "mean_delta_vs_static": -0.009934171949000259,
+      "threshold": 0.65
+    },
+    {
+      "coverage": 0.5,
+      "eval_rows": 20,
+      "harmful_vs_static_rate": 0.15,
+      "mean_delta_vs_static": -0.009934171949000259,
+      "threshold": 0.7
+    },
+    {
+      "coverage": 0.5,
+      "eval_rows": 20,
+      "harmful_vs_static_rate": 0.15,
+      "mean_delta_vs_static": -0.009934171949000259,
+      "threshold": 0.75
+    },
+    {
+      "coverage": 0.45,
+      "eval_rows": 20,
+      "harmful_vs_static_rate": 0.15,
+      "mean_delta_vs_static": -0.010113567131000423,
+      "threshold": 0.8
+    },
+    {
+      "coverage": 0.35,
+      "eval_rows": 20,
+      "harmful_vs_static_rate": 0.1,
+      "mean_delta_vs_static": -0.011614792557500087,
+      "threshold": 0.85
+    },
+    {
+      "coverage": 0.3,
+      "eval_rows": 20,
+      "harmful_vs_static_rate": 0.1,
+      "mean_delta_vs_static": -0.011771042557500166,
+      "threshold": 0.9
+    }
+  ],
+  "decision": "abstention_aware_policy_failed_continue_labels_or_features",
+  "eval_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase5p5_repair5g59_abstention_aware_offline_policy_eval.csv",
+  "eval_rows": 20,
+  "gates": {
+    "beats_train_only_majority": false,
+    "beats_train_only_map_agent_prior": false,
+    "beats_true_random_feature_model": false,
+    "beats_true_shuffled_label_model": true,
+    "calibration_reported": true,
+    "coverage_risk_reported": true,
+    "eval_rows_gt_0": true,
+    "harmful_vs_static_rate_le_0p10": false,
+    "mean_delta_vs_additive_lt_0": true,
+    "mean_delta_vs_static_lt_0": true,
+    "no_forbidden_features": true,
+    "no_ids_166_205": true,
+    "observed_dev_only": true,
+    "static_fallback_available": true
+  },
+  "mean_delta_vs_map_agent_prior": 0.0035694785769999626,
+  "mean_delta_vs_random_feature_model": 0.004129215048500168,
+  "mean_delta_vs_shuffled_label_model": -0.001391865081500132,
+  "mean_delta_vs_train_only_majority": 0.003404848396000082,
+  "overall_metrics": {
+    "harmful_vs_static_count": 3,
+    "harmful_vs_static_rate": 0.15,
+    "helpful_vs_static_count": 4,
+    "helpful_vs_static_rate": 0.2,
+    "mean_additive_score": 1.3794258228775,
+    "mean_delta_vs_additive": -0.1179088710045002,
+    "mean_delta_vs_static": -0.009934171949000259,
+    "mean_oracle_score": 1.251658809167,
+    "mean_selected_score": 1.2615169518729998,
+    "mean_static_score": 1.271451123822,
+    "nonstatic_selection_rate": 0.5,
+    "oracle_regret": 0.009858142705999828,
+    "rows": 20
+  },
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g59_abstention_aware_offline_policy_eval_summary_v1",
+  "selected_threshold": 0.75
+}

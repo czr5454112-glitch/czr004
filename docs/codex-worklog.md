@@ -3474,3 +3474,67 @@
   - `git diff --check` passed; warnings were limited to pre-existing mixed line-ending notices.
 - Follow-up:
   Final G5.14 decision is `rich_trace_features_insufficient_continue_probe_or_lattice`. Continue feature design/probe or lattice work, but keep `phase5p5_allowed=false`, `phase6_allowed=false`, `runtime_claim_allowed=false`, `learned_runtime_policy_validated=false`, and `aaai_ready=false`.
+## 2026-06-07 23:20 - Repair5G.5.15 rich candidate interaction ranker diagnostics
+
+- Request:
+  Finish `czr004_g515_after_g514_rich_trace_review_and_prompt.md` completely, then push the completed work to GitHub.
+- Files planned:
+  - `czr004_repair5g515_rich_candidate_interaction_ranker_plan.md`
+  - `scripts/repair5g515_common.py`
+  - `scripts/verify_repair5g515_g514_artifacts.py`
+  - `scripts/analyze_repair5g515_v4_context_only_feature_blocker.py`
+  - `scripts/create_repair5g515_candidate_feature_matrix_v5_interactions.py`
+  - `scripts/train_repair5g515_two_stage_safety_ranker.py`
+  - `scripts/train_repair5g515_pairwise_context_ranker.py`
+  - `scripts/eval_repair5g515_calibrated_interaction_rankers.py`
+  - `scripts/analyze_repair5g515_false_positive_autopsy.py`
+  - `scripts/analyze_repair5g515_static_abstention_safety_update.py`
+  - `scripts/write_repair5g515_decision.py`
+  - `outputs/reports/phase5p5_repair5g514_final_interpretation.md`
+  - `outputs/reports/phase5p5_repair5g515_*`
+  - `outputs/tables/phase5p5_repair5g515_*`
+- Key constraints:
+  Start from existing G5.14 v4 tables, do not run solver, do not modify C++ or solver semantics, do not touch IDs `166..205`, and keep runtime/Phase5.5/Phase6/AAAI claims closed.
+- Commands planned:
+  - `python scripts\verify_repair5g515_g514_artifacts.py`
+  - `python scripts\analyze_repair5g515_v4_context_only_feature_blocker.py`
+  - `python scripts\create_repair5g515_candidate_feature_matrix_v5_interactions.py`
+  - `python scripts\train_repair5g515_two_stage_safety_ranker.py`
+  - `python scripts\train_repair5g515_pairwise_context_ranker.py`
+  - `python scripts\eval_repair5g515_calibrated_interaction_rankers.py`
+  - `python scripts\analyze_repair5g515_false_positive_autopsy.py`
+  - `python scripts\analyze_repair5g515_static_abstention_safety_update.py`
+  - `python scripts\write_repair5g515_decision.py`
+- Follow-up:
+  Report the exact offline blocker if the interaction rankers do not pass strict harmful/risk-adjusted gates; do not claim runtime validation.
+- Commands run:
+  - `python -m py_compile scripts\repair5g515_common.py ... scripts\write_repair5g515_decision.py`
+  - `python scripts\verify_repair5g515_g514_artifacts.py`
+  - `python scripts\analyze_repair5g515_v4_context_only_feature_blocker.py`
+  - `python scripts\create_repair5g515_candidate_feature_matrix_v5_interactions.py`
+  - `python scripts\train_repair5g515_two_stage_safety_ranker.py`
+  - `python scripts\train_repair5g515_pairwise_context_ranker.py`
+  - `python scripts\eval_repair5g515_calibrated_interaction_rankers.py`
+  - `python scripts\analyze_repair5g515_false_positive_autopsy.py`
+  - `python scripts\analyze_repair5g515_static_abstention_safety_update.py`
+  - `python scripts\write_repair5g515_decision.py`
+  - JSON parse / CSV row-count / grouped-context sanity checks
+  - reserved-ID guard check with `python scripts\verify_repair5g515_g514_artifacts.py --ids 166`
+  - `git diff --check`
+- Key observations:
+  - G5.14 artifacts verified cleanly: `840` v4 rows, `60` contexts, `14` candidates, `19` rich features, forbidden feature count `0`, and IDs `166..205` untouched.
+  - V4 blocker confirmed: all `19` `feature_rich_*` columns are context-only within each 14-candidate group, so they can influence gate/fallback behavior but not candidate ordering in a linear ranker.
+  - V5 matrix passed gates with `840` rows, `60` contexts, `14` candidates, `134` features, `13` required rich interaction features, `13` within-context centered features, `30` train-only z-score features, and forbidden feature count `0`.
+  - Two-stage and pairwise ranker training both passed.
+  - Leave-one-seed-out OOF over seeds `146..155` selected `pairwise_context_ranker` as the best interaction policy: mean_delta_vs_static `-0.009366233488`, harmful rate `0.03333333333333333`, coverage `0.23333333333333334`, RAU lambda 0.10 `-0.006032900154666666`.
+  - The interaction ranker improved over v3 at lambda `0.05` and `0.10`, beat safe slow-decay, safe map-agent, and shuffled interaction controls, but did not improve over reproduced v4 at lambda `0.10`.
+  - False-positive autopsy confirmed the two G5.14 harmful selections; the G5.15 static/abstention safety package remains incomplete with no no-solution/infeasible, budget-sensitive, or OOD-like holdout coverage.
+- Tests / validation:
+  - `py_compile` passed for all G5.15 scripts.
+  - JSON summaries parsed and CSV sanity passed: v5 rows `840`, contexts `60`, and exactly `14` candidate rows per context.
+  - Leakage checks passed with `forbidden_feature_count=0`.
+  - Reserved-ID guard correctly rejected `166`.
+  - `git diff --check` passed with only existing LF/CRLF warnings.
+- Decision:
+  - Final G5.15 decision: `interaction_ranker_no_better_than_v4_continue_feature_design`.
+  - `phase5p5_allowed=false`, `phase6_allowed=false`, `runtime_claim_allowed=false`, `learned_runtime_policy_validated=false`, and `aaai_ready=false` remain closed.

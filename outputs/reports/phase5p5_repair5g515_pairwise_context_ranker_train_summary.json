@@ -1,0 +1,46 @@
+{
+  "aaai_ready": false,
+  "decision": "pairwise_context_ranker_training_passed_continue_eval",
+  "dev_contexts": 30,
+  "dev_rows": 420,
+  "feature_count": 69,
+  "forbidden_feature_count": 0,
+  "forbidden_features": [],
+  "gates": {
+    "dev_rows_gt_0": true,
+    "feature_count_gt_0": true,
+    "forbidden_feature_count_eq_0": true,
+    "pairwise_training_rows_gt_0": true,
+    "train_rows_gt_0": true
+  },
+  "learned_runtime_policy_validated": false,
+  "model_json": "C:\\PROGRAMING\\czr004\\outputs\\reports\\phase5p5_repair5g515_pairwise_context_ranker_model.json",
+  "pairwise_training_rows": 2730,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g515_pairwise_context_ranker_train_summary_v1",
+  "thresholds": {
+    "confidence_margin_threshold": 0.0,
+    "harmful_risk_threshold": 0.05,
+    "predicted_delta_threshold": -0.005
+  },
+  "train_contexts": 30,
+  "train_policy_metrics": {
+    "contexts": 30,
+    "coverage": 0.23333333333333334,
+    "fallback_rate": 0.7666666666666666,
+    "harmful_vs_static_rate": 0.0,
+    "mean_delta_vs_additive": -0.09641926590333333,
+    "mean_delta_vs_static": -0.010282068693333334,
+    "policy": "pairwise_context_ranker",
+    "regret_to_oracle": 0.02197847035033333,
+    "risk_adjusted_utility_lambda_0p05": -0.010282068693333334,
+    "risk_adjusted_utility_lambda_0p1": -0.010282068693333334,
+    "risk_adjusted_utility_lambda_0p10": -0.010282068693333334,
+    "risk_adjusted_utility_lambda_0p2": -0.010282068693333334,
+    "risk_adjusted_utility_lambda_0p20": -0.010282068693333334,
+    "row_type": "policy_summary"
+  },
+  "train_rows": 420
+}

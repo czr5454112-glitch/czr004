@@ -1,0 +1,92 @@
+{
+  "aaai_ready": false,
+  "candidates": 14,
+  "contexts": 60,
+  "decision": "feature_v3_passed_continue_candidate_ranker",
+  "feature_count": 42,
+  "feature_signal_limited": true,
+  "feature_signal_limited_reason": "Available perf-safe context signal is metadata plus trace_event_count; rich wait/block/progress aggregates are absent from the tracked G5.11 table.",
+  "forbidden_feature_count": 0,
+  "forbidden_features": [],
+  "gates": {
+    "candidate_param_features_present": true,
+    "forbidden_feature_count_eq_0": true,
+    "grouped_context_ids_preserved": true,
+    "interaction_features_present": true,
+    "perf_safe_candidate_rows_ge_840": true,
+    "train_dev_split_seed_based": true
+  },
+  "missing_runtime_context_features_reported": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "rows": 840,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g512_candidate_feature_signal_v3_summary_v1",
+  "split_counts": {
+    "dev": 420,
+    "train": 420
+  },
+  "target_mean_delta_vs_static_mean": 0.017902503942047617,
+  "top_abs_correlations": [
+    {
+      "abs_corr": 0.5305006838141163,
+      "corr_with_mean_delta_vs_static": -0.5305006838141163,
+      "feature": "feature_candidate_alpha_flow_progress"
+    },
+    {
+      "abs_corr": 0.5138178499363589,
+      "corr_with_mean_delta_vs_static": -0.5138178499363589,
+      "feature": "feature_candidate_is_goal_aware_dual_channel"
+    },
+    {
+      "abs_corr": 0.5050843260406352,
+      "corr_with_mean_delta_vs_static": -0.5050843260406352,
+      "feature": "feature_candidate_max_flow_shield"
+    },
+    {
+      "abs_corr": 0.4767199129823184,
+      "corr_with_mean_delta_vs_static": -0.4767199129823184,
+      "feature": "feature_candidate_flow_shield_beta"
+    },
+    {
+      "abs_corr": 0.3839573284908467,
+      "corr_with_mean_delta_vs_static": -0.3839573284908467,
+      "feature": "feature_interaction_agents_x_max_flow_shield"
+    },
+    {
+      "abs_corr": 0.3827170443501566,
+      "corr_with_mean_delta_vs_static": -0.3827170443501566,
+      "feature": "feature_interaction_agents_x_alpha_flow_progress"
+    },
+    {
+      "abs_corr": 0.3751020675720239,
+      "corr_with_mean_delta_vs_static": 0.3751020675720239,
+      "feature": "feature_candidate_is_c_only_f_disabled"
+    },
+    {
+      "abs_corr": 0.3688099010908766,
+      "corr_with_mean_delta_vs_static": -0.3688099010908766,
+      "feature": "feature_interaction_agents_x_flow_shield_beta"
+    },
+    {
+      "abs_corr": 0.3561473944281918,
+      "corr_with_mean_delta_vs_static": -0.3561473944281918,
+      "feature": "feature_interaction_trace_per_agent_x_max_flow_shield"
+    },
+    {
+      "abs_corr": 0.3405691401553514,
+      "corr_with_mean_delta_vs_static": -0.3405691401553514,
+      "feature": "feature_interaction_trace_per_agent_x_flow_shield_beta"
+    },
+    {
+      "abs_corr": 0.3230389138877701,
+      "corr_with_mean_delta_vs_static": 0.3230389138877701,
+      "feature": "feature_candidate_is_additive_fallback"
+    },
+    {
+      "abs_corr": 0.29631376684037836,
+      "corr_with_mean_delta_vs_static": -0.29631376684037836,
+      "feature": "feature_interaction_trace_events_x_max_flow_shield"
+    }
+  ]
+}

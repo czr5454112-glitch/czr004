@@ -3319,3 +3319,52 @@
   - `outputs/reports/phase5p5_repair5g511_decision.md` records `confidence_targets_v5_failed_continue_label_design`.
   - Feature v3 and policy training were not allowed.
   - `phase5p5_allowed=false`, `phase6_allowed=false`, `aaai_ready=false`, and `runtime_claim_allowed=false` remain closed.
+## 2026-06-07 19:22 - Repair5G.5.12 candidate regret ranking execution
+
+- Request:
+  Finish `czr004_g512_exec_review_and_codex_prompt.md` as an execution round, not another prompt-only handoff, then push the completed G5.12 work to GitHub.
+- Files planned:
+  - `czr004_repair5g512_lattice_regret_ranking_execution_plan.md`
+  - `scripts/repair5g512_common.py`
+  - `scripts/verify_repair5g512_g511_artifacts.py`
+  - `scripts/create_repair5g512_candidate_regret_targets.py`
+  - `scripts/analyze_repair5g512_candidate_regret_targets.py`
+  - `scripts/analyze_repair5g512_context_vs_candidate_target_gap.py`
+  - `scripts/create_repair5g512_candidate_feature_matrix_v3.py`
+  - `scripts/analyze_repair5g512_candidate_feature_signal_v3.py`
+  - `scripts/train_repair5g512_candidate_regret_ranker.py`
+  - `scripts/eval_repair5g512_candidate_regret_ranker.py`
+  - `scripts/write_repair5g512_decision.py`
+  - `outputs/reports/phase5p5_repair5g512_*`
+  - `outputs/tables/phase5p5_repair5g512_*`
+- Key constraints:
+  Use existing G5.11 artifacts locally, do not modify solver semantics, do not touch `external/lacam2/lacam2/**`, do not inspect IDs `166..205`, and keep runtime/Phase5.5/Phase6/AAAI claims closed.
+- Commands run:
+  - `python -m py_compile scripts\repair5g512_common.py ... scripts\run_repair5g512_static_boundary_probe_local.py`
+  - `python scripts\verify_repair5g512_g511_artifacts.py`
+  - `python scripts\create_repair5g512_candidate_regret_targets.py`
+  - `python scripts\analyze_repair5g512_candidate_regret_targets.py`
+  - `python scripts\analyze_repair5g512_context_vs_candidate_target_gap.py`
+  - `python scripts\create_repair5g512_candidate_feature_matrix_v3.py`
+  - `python scripts\analyze_repair5g512_candidate_feature_signal_v3.py`
+  - `python scripts\train_repair5g512_candidate_regret_ranker.py`
+  - `python scripts\eval_repair5g512_candidate_regret_ranker.py`
+  - `python scripts\write_repair5g512_decision.py`
+  - JSON parse and CSV row-count sanity check
+  - reserved-ID guard check with `python scripts\run_repair5g512_static_boundary_probe_local.py --instance-ids 166`
+  - leakage scanner summary check
+  - `git diff --check`
+- Key observations:
+  G5.11 artifacts expose enough tracked data to build candidate-level targets. Rich pre-choice runtime trace aggregates are limited, so feature v3 must report `feature_signal_limited=true` instead of inventing unavailable context features.
+- Tests / validation:
+  - G5.11 verification passed: `results_rows=3360`, `contexts=60`, `candidate_count=14`, IDs `166..205` untouched.
+  - Candidate regret targets passed: `840` rows, `60` contexts, label counts `193` helpful, `266` harmful, `141` neutral, `120` static, `60` additive-bad, `60` C-only.
+  - Feature v3 passed with `840` rows, `42` feature columns, `forbidden_feature_count=0`, and `feature_signal_limited=true`.
+  - Ranker train passed with `420` train rows and `420` dev rows.
+  - Grouped dev eval passed offline diagnostic gates: `mean_delta_vs_static=-0.010423295036333333`, `mean_delta_vs_additive=-0.09984319068166667`, `harmful_vs_static_rate=0.03333333333333333`, `coverage=0.2`, and it beat slow-decay, best-single, map-agent prior, random-feature, and shuffled-label controls.
+  - Final G5.12 decision: `candidate_ranker_passed_continue_static_abstention_safety_package`.
+  - Reserved-ID guard correctly rejected ID `166`.
+  - JSON summaries parsed and CSV counts matched: targets `840`, feature matrix `840`, context decisions `30`.
+  - `git diff --check` passed with line-ending warnings only from the mixed worktree.
+- Follow-up:
+  Keep runtime/Phase5.5/Phase6/AAAI claims closed until a later static/abstention/no-solution/budget-sensitive/OOD safety package validates learned runtime behavior.

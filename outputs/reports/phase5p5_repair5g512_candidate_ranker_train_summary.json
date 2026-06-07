@@ -1,0 +1,40 @@
+{
+  "aaai_ready": false,
+  "best_single_train_candidate": "repair5g59_slow_decay_high_shield",
+  "decision": "candidate_ranker_training_passed_continue_eval",
+  "delta_train_mse": 0.002963890069205765,
+  "dev_contexts": 30,
+  "dev_rows": 420,
+  "feature_count": 42,
+  "forbidden_feature_count": 0,
+  "gates": {
+    "dev_rows_gt_0": true,
+    "feature_count_gt_0": true,
+    "finite_delta_targets_gt_0": true,
+    "forbidden_feature_count_eq_0": true,
+    "seed_based_split": true,
+    "train_rows_gt_0": true
+  },
+  "model_json": "C:\\PROGRAMING\\czr004\\outputs\\reports\\phase5p5_repair5g512_candidate_ranker_model.json",
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "risk_train_mse": 0.11980567548328895,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g512_candidate_ranker_train_summary_v1",
+  "thresholds": {
+    "confidence_margin_threshold": 0.0,
+    "harmful_risk_threshold": 0.075,
+    "predicted_delta_threshold": -0.01
+  },
+  "train_contexts": 30,
+  "train_only_majority_candidate": "repair5g59_slow_decay_high_shield",
+  "train_policy_metrics": {
+    "contexts": 30.0,
+    "coverage": 0.3,
+    "fallback_rate": 0.7,
+    "harmful_vs_static_rate": 0.03333333333333333,
+    "mean_delta_vs_additive": -0.09677244113233333,
+    "mean_delta_vs_static": -0.010635243922333334
+  },
+  "train_rows": 420
+}

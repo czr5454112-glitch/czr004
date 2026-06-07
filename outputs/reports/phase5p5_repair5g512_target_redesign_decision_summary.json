@@ -1,0 +1,13 @@
+{
+  "aaai_ready": false,
+  "decision": "target_redesign_passed_candidate_level_regret_ranking",
+  "g511_failure_mode": "context_level_oracle_class_labels_too_coarse_for_parameter_lattice",
+  "next_target": "candidate_level_regret_ranking_harmful_risk",
+  "no_solution_or_budget_abstain_blocks_offline_candidate_ranking": false,
+  "no_solution_or_budget_abstain_blocks_runtime_phase5p5": true,
+  "no_solution_or_budget_abstain_count": 0,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g512_target_redesign_decision_summary_v1"
+}

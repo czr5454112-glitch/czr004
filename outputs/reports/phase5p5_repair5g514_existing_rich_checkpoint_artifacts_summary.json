@@ -1,0 +1,33 @@
+{
+  "aaai_ready": false,
+  "artifact_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase5p5_repair5g514_existing_rich_checkpoint_artifacts.csv",
+  "decision": "existing_rich_checkpoint_artifacts_found_parse_without_solver",
+  "jsonl_files_scanned": 387,
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g514_existing_rich_checkpoint_artifacts_summary_v1",
+  "usable_checkpoint_paths": [
+    "outputs\\logs\\phase5p5_repair5g510_lattice_counterfactuals\\phase5p5_repair5g510_update_checkpoints.jsonl",
+    "outputs\\logs\\phase5p5_repair5g510_lattice_smoke\\phase5p5_repair5g510_lattice_smoke_checkpoints.jsonl",
+    "outputs\\logs\\phase5p5_repair5g54_checkpoint_export\\phase5p5_repair5g54_update_checkpoints.jsonl",
+    "outputs\\logs\\phase5p5_repair5g55_scaled_counterfactual_labels\\phase5p5_repair5g55_update_checkpoints.jsonl",
+    "outputs\\logs\\phase5p5_repair5g55_scaled_counterfactual_labels_checkpoint_repair\\checkpoints.jsonl",
+    "outputs\\logs\\phase5p5_repair5g55_scaled_counterfactual_labels_repair\\case01\\checkpoints.jsonl",
+    "outputs\\logs\\phase5p5_repair5g55_scaled_counterfactual_labels_repair\\case02\\checkpoints.jsonl",
+    "outputs\\logs\\phase5p5_repair5g55_scaled_counterfactual_labels_repair\\case03\\checkpoints.jsonl",
+    "outputs\\logs\\phase5p5_repair5g55_scaled_counterfactual_labels_repair\\case04\\checkpoints.jsonl",
+    "outputs\\logs\\phase5p5_repair5g55_scaled_counterfactual_labels_repair\\case05\\checkpoints.jsonl",
+    "outputs\\logs\\phase5p5_repair5g55_scaled_counterfactual_labels_repair\\case06\\checkpoints.jsonl",
+    "outputs\\logs\\phase5p5_repair5g55_scaled_counterfactual_labels_repair\\case07\\checkpoints.jsonl",
+    "outputs\\logs\\phase5p5_repair5g55_scaled_counterfactual_labels_repair\\case08\\checkpoints.jsonl",
+    "outputs\\logs\\phase5p5_repair5g55_scaled_counterfactual_labels_repair\\case09\\checkpoints.jsonl",
+    "outputs\\logs\\phase5p5_repair5g55_scaled_counterfactual_labels_repair\\case10\\checkpoints.jsonl",
+    "outputs\\logs\\phase5p5_repair5g56_counterfactual_label_completion\\phase5p5_repair5g56_update_checkpoints.jsonl",
+    "outputs\\server\\phase5p5_repair5g511_remote\\outputs\\logs\\phase5p5_repair5g510_lattice_counterfactuals\\phase5p5_repair5g510_update_checkpoints.jsonl"
+  ],
+  "usable_contexts_sum_across_files": 37,
+  "usable_files": 17,
+  "usable_records": 43
+}

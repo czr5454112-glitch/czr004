@@ -3422,3 +3422,55 @@
   - `phase5p5_allowed=false`, `phase6_allowed=false`, `runtime_claim_allowed=false`, `learned_runtime_policy_validated=false`, and `aaai_ready=false` remain closed.
 - Follow-up:
   Implement an observed-ID rich pre-choice trace-feature probe with `--max-workers 1` only if it can be done without solver semantic changes, then rerun hard controls and safety preflight before any runtime promotion discussion.
+## 2026-06-07 22:10 - Repair5G.5.14 rich trace feature probe and v4 ranker
+
+- Request:
+  Finish `czr004_g514_after_g513_hard_controls_review_and_prompt.md` completely, then push the completed work to GitHub.
+- Files planned:
+  - `czr004_repair5g514_rich_trace_feature_probe_and_v4_ranker_plan.md`
+  - `scripts/repair5g514_common.py`
+  - `scripts/verify_repair5g514_g513_artifacts.py`
+  - `scripts/find_repair5g514_existing_rich_checkpoint_artifacts.py`
+  - `scripts/create_repair5g514_rich_context_features_from_checkpoints.py`
+  - `scripts/run_repair5g514_rich_feature_probe_local.py`
+  - `scripts/create_repair5g514_candidate_feature_matrix_v4.py`
+  - `scripts/analyze_repair5g514_rich_feature_signal.py`
+  - `scripts/train_repair5g514_candidate_regret_ranker_v4.py`
+  - `scripts/eval_repair5g514_candidate_regret_ranker_v4.py`
+  - `scripts/analyze_repair5g514_static_abstention_boundary_targets.py`
+  - `scripts/write_repair5g514_decision.py`
+  - `outputs/reports/phase5p5_repair5g514_*`
+  - `outputs/tables/phase5p5_repair5g514_*`
+- Key constraints:
+  Parse existing checkpoint JSONL artifacts before running any solver, do not modify C++ or solver semantics, do not touch IDs `166..205`, use `--max-workers 1` for any future local probe, and keep runtime/Phase5.5/Phase6/AAAI claims closed.
+- Commands run:
+  - `python -m py_compile scripts\repair5g514_common.py ... scripts\write_repair5g514_decision.py`
+  - `python scripts\verify_repair5g514_g513_artifacts.py`
+  - `python scripts\find_repair5g514_existing_rich_checkpoint_artifacts.py --max-lines-per-file 5`
+  - `python scripts\create_repair5g514_rich_context_features_from_checkpoints.py`
+  - `python scripts\create_repair5g514_candidate_feature_matrix_v4.py`
+  - `python scripts\run_repair5g514_rich_feature_probe_local.py`
+  - `python scripts\analyze_repair5g514_rich_feature_signal.py`
+  - `python scripts\train_repair5g514_candidate_regret_ranker_v4.py`
+  - `python scripts\eval_repair5g514_candidate_regret_ranker_v4.py`
+  - `python scripts\analyze_repair5g514_static_abstention_boundary_targets.py`
+  - `python scripts\write_repair5g514_decision.py`
+  - JSON parse / CSV row-count / grouped-context sanity checks
+  - reserved-ID guard check with `python scripts\run_repair5g514_rich_feature_probe_local.py --ids 166 --summary-json outputs\reports\phase5p5_repair5g514_reserved_id_guard_summary.json --report outputs\reports\phase5p5_repair5g514_reserved_id_guard.md`
+  - `git diff --check`
+- Key observations:
+  - G5.13 artifacts verified cleanly; no required G5.12/G5.13 summaries or tables were missing.
+  - Existing checkpoint discovery found usable rich checkpoint JSONL artifacts, so no solver probe was run.
+  - Rich feature extraction recovered all `60/60` G5.12 contexts from existing checkpoint rows and expanded the `19` allowed pre-choice rich fields.
+  - Candidate feature matrix v4 passed gates with `840` candidate rows, `60` contexts, `14` candidates, `60` rich contexts, and `forbidden_feature_count=0`.
+  - V4 training passed with `420` train rows, `420` dev rows, and `19` rich features.
+  - V4 grouped dev eval improved raw mean delta slightly versus G5.12 (`-0.010721312411` vs `-0.010423295036333333`) and beat safe train-only hard controls on risk-adjusted utility, but it did not pass the strict success gate because `harmful_vs_static_rate=0.06666666666666667` exceeded `0.05` and risk-adjusted utility did not improve over the reproduced G5.12 ranker.
+  - Static/abstention boundary preflight remains incomplete: `18` missed helpful contexts, `2` harmful false positives, no no-solution/infeasible coverage, and no OOD-like holdout coverage.
+- Tests / validation:
+  - `py_compile` passed for all G5.14 scripts.
+  - JSON summaries parsed and CSV sanity passed: v4 rows `840`, contexts `60`, dev contexts `30`, and `14` candidates per dev context.
+  - Leakage checks passed with `forbidden_feature_count=0` for v4 matrix and v4 eval.
+  - Reserved-ID guard correctly rejected ID `166`.
+  - `git diff --check` passed; warnings were limited to pre-existing mixed line-ending notices.
+- Follow-up:
+  Final G5.14 decision is `rich_trace_features_insufficient_continue_probe_or_lattice`. Continue feature design/probe or lattice work, but keep `phase5p5_allowed=false`, `phase6_allowed=false`, `runtime_claim_allowed=false`, `learned_runtime_policy_validated=false`, and `aaai_ready=false`.

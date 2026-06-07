@@ -1,0 +1,68 @@
+{
+  "aaai_ready": false,
+  "candidate_rows": 840,
+  "contexts": 60,
+  "decision": "rich_feature_signal_analyzed_continue_v4_ranker",
+  "forbidden_feature_count": 0,
+  "forbidden_features": [],
+  "learned_runtime_policy_validated": false,
+  "map_agent_leakage_suspicion": {
+    "groups_with_one_rich_signature": 0,
+    "map_agent_groups": 6,
+    "note": "A single signature per map-agent would be suspicious; multiple signatures per group indicate the recovered rich fields vary by context."
+  },
+  "missing_rich_contexts": 0,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "rich_feature_count": 19,
+  "rich_only_model_sanity": {
+    "note": "The eval script trains a rich-only grouped ranker control and reports it beside v4.",
+    "status": "reported_by_eval_script"
+  },
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g514_rich_feature_signal_summary_v1",
+  "top_abs_delta_correlations": [
+    {
+      "feature_name": "feature_rich_blocked_per_committed",
+      "mean_value": 0.08677592748365005,
+      "pearson_corr_delta_vs_static": 0.20299540237445346,
+      "pearson_corr_harmful": 0.11363096532433452,
+      "row_type": "rich_feature_correlation",
+      "unique_values": 60
+    },
+    {
+      "feature_name": "feature_rich_wait_per_committed",
+      "mean_value": 0.04023027745985001,
+      "pearson_corr_delta_vs_static": 0.19832197802606422,
+      "pearson_corr_harmful": 0.11675346499403909,
+      "row_type": "rich_feature_correlation",
+      "unique_values": 59
+    },
+    {
+      "feature_name": "feature_rich_committed_per_agent",
+      "mean_value": 120.35,
+      "pearson_corr_delta_vs_static": -0.12556697117920046,
+      "pearson_corr_harmful": -0.06994613026239788,
+      "row_type": "rich_feature_correlation",
+      "unique_values": 46
+    },
+    {
+      "feature_name": "feature_rich_nonprogress_committed_count",
+      "mean_value": 4948.833333333333,
+      "pearson_corr_delta_vs_static": -0.09059855623005102,
+      "pearson_corr_harmful": -0.07276326626464438,
+      "row_type": "rich_feature_correlation",
+      "unique_values": 60
+    },
+    {
+      "feature_name": "feature_rich_blocked_count",
+      "mean_value": 784.7333333333333,
+      "pearson_corr_delta_vs_static": 0.08651064337040082,
+      "pearson_corr_harmful": 0.0333430788099179,
+      "row_type": "rich_feature_correlation",
+      "unique_values": 58
+    }
+  ],
+  "v3_feature_count": 42,
+  "v4_feature_count": 61
+}

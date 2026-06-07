@@ -1,0 +1,32 @@
+{
+  "aaai_ready": false,
+  "candidate_rows": 840,
+  "candidates": 14,
+  "contexts": 60,
+  "decision": "candidate_feature_matrix_v4_created_continue_ranker",
+  "feature_count": 61,
+  "forbidden_feature_count": 0,
+  "forbidden_features": [],
+  "gates": {
+    "candidate_rows_ge_840": true,
+    "candidates_eq_14": true,
+    "contexts_eq_60": true,
+    "forbidden_feature_count_eq_0": true,
+    "ids_166_205_untouched": true,
+    "observed_ids_only": true,
+    "rich_contexts_ge_60_if_source_complete": true,
+    "rich_feature_count_gt_0": true
+  },
+  "ids_166_205_untouched": true,
+  "learned_runtime_policy_validated": false,
+  "observed_ids_only": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "rich_contexts": 60,
+  "rich_feature_count": 19,
+  "rich_feature_source_distribution": {
+    "existing_checkpoint": 840
+  },
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g514_candidate_feature_matrix_v4_summary_v1"
+}

@@ -1,0 +1,51 @@
+{
+  "aaai_ready": false,
+  "agents": [
+    50,
+    100
+  ],
+  "budgets": [
+    1000,
+    2000
+  ],
+  "checkpoint_export_enabled": true,
+  "decision": "local_probe_plan_recorded_not_run",
+  "ids": [
+    146,
+    147,
+    148,
+    149,
+    150,
+    151,
+    152,
+    153,
+    154,
+    155
+  ],
+  "ids_166_205_untouched": true,
+  "learned_runtime_policy_validated": false,
+  "maps": [
+    "random-32-32-20",
+    "maze-32-32-4",
+    "warehouse-10-20-10-2-1"
+  ],
+  "max_contexts_per_group": 1,
+  "max_workers": 1,
+  "note": "Existing rich checkpoints should be parsed first. This guarded wrapper intentionally does not execute solver work unless implementation is extended after artifact absence is confirmed.",
+  "observed_ids_only": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "planned_command": [
+    "python",
+    "scripts/run_phase1a_batch.py",
+    "--max-workers",
+    "1",
+    "--repair5g-export-update-checkpoints-jsonl",
+    "outputs/logs/phase5p5_repair5g514_local_rich_feature_probe/checkpoints.jsonl",
+    "--repair5g-checkpoint-topk-edges",
+    "64"
+  ],
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g514_local_probe_guard_summary_v1",
+  "shared_concurrent_jsonl_append_allowed": false
+}

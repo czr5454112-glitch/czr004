@@ -1,0 +1,13 @@
+{
+  "aaai_ready": false,
+  "decision": "reserved_id_guard_rejected_probe",
+  "error": "G5.14 local rich feature probe ids include reserved IDs 166..205: [166]",
+  "ids": [
+    166
+  ],
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g514_local_probe_guard_summary_v1"
+}

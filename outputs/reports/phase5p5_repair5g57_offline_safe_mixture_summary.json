@@ -1,0 +1,11 @@
+{
+  "aaai_ready": false,
+  "decision": "blocked_no_trained_model",
+  "eval_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase5p5_repair5g57_offline_safe_mixture_eval.csv",
+  "offline_eval_run": false,
+  "offline_training_run": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g57_offline_safe_mixture_summary_v1"
+}

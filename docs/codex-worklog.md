@@ -3110,3 +3110,43 @@
   - G5.3 proves the UpdateLTM transform is not corrupt, but the primary 3s runtime hook is still not deadline-neutral.
   - No G6 learning/training is allowed. IDs 166..205 remain untouched.
   - This remains diagnostic-only: `phase5p5_allowed=false`, `phase6_allowed=false`, and `aaai_ready=false`.
+
+## 2026-06-04 - Start Repair5G.5.7 budget-aware label confidence and offline G6 gate
+
+- Request:
+  - Finish `czr004_repair5g57_budget_aware_label_confidence_offline_g6_plan.md`.
+  - Use `deep-research-report.md` and `phase4_6_laur_ltm_codex_execution_plan.md` for project boundaries.
+- Carry-forward interpretation:
+  - G5.6 passed counterfactual label completion and the performance-safe feature allowlist.
+  - G5.6 correctly blocked offline G6 training because only 4 contexts were stable across the full 250/500/1000/2000 ms budget grid.
+  - The next diagnostic should treat 250 ms as stress-only, analyze 1000/2000 primary stability, classify no-solution warehouse cases, and train only if confidence-weighted labels pass explicit thresholds.
+- Planned scope:
+  - Add G5.7 budget-tier stability analysis.
+  - Build confidence-weighted label classes and training gates.
+  - Classify warehouse/no-solution policy.
+  - Build performance-safe and diagnostic feature matrices.
+  - Run offline G6 training/eval only if the gates pass; otherwise write the blocked decision cleanly.
+- Constraints:
+  - Do not modify `external/lacam2/lacam2/**`.
+  - Do not change LaCAM*/PIBT semantics, candidate generation, conflict handling, pruning, OPEN/EXPLORED, rewrite, incumbent, restart behavior, or runtime learned policy integration.
+  - Do not use IDs 166..205.
+  - Keep `phase5p5_allowed=false`, `phase6_allowed=false`, `aaai_ready=false`, and `runtime_claim_allowed=false`.
+- Follow-up:
+  - Start from existing G5.6 CSV/JSON artifacts and keep G5.7 as an observed-ID diagnostic layer.
+- Completion:
+  - Added G5.7 budget-tier stability analysis, confidence-weighted label construction/analysis, warehouse no-solution policy classification, G6 feature matrix creation/audit, optional offline safe-mixture train/eval gating, and final decision scripts.
+  - Wrote the required G5.6 final interpretation and G5.7 protocol overview reports.
+  - Ran G5.7 analysis from existing G5.6 artifacts: 30 budget-tier contexts, 20 primary 1000/2000 stable contexts, 16 / 30 stress-tier disagreements at 250 ms, and 40 warehouse contexts explicitly classified.
+  - Built 90 confidence-label rows over thresholds 0.0025 / 0.005 / 0.01. At the default 0.005 threshold: 20 training-eligible contexts, 11 stable high-confidence nonstatic contexts, 9 stable static-or-abstain contexts, 5 no-solution abstain contexts, and 5 budget-sensitive contexts.
+  - Feature matrices passed the perf-safe/audit split: 30 perf-safe rows and 30 audit-plus-perf diagnostic rows, with forbidden feature count 0.
+  - Offline G6 training was correctly blocked because `training_eligible_contexts >= 30` and `stable_static_or_abstain_count >= 10` did not pass.
+- Decision:
+  - `outputs/reports/phase5p5_repair5g57_decision.md` records `confidence_labels_insufficient_continue_probe_design`.
+  - IDs 166..205 remain untouched.
+  - `phase5p5_allowed=false`, `phase6_allowed=false`, `aaai_ready=false`, and `runtime_claim_allowed=false` remain closed.
+- Validation:
+  - `python -m py_compile` passed for all new G5.7 Python scripts.
+  - All generated G5.7 JSON summaries parsed successfully.
+  - CSV row-count sanity checks passed for the generated G5.7 tables.
+  - `git diff --check` exited 0; it reported only existing CRLF conversion warnings.
+  - `python -m pytest --version` failed because pytest is unavailable in the active Python (`No module named pytest`).

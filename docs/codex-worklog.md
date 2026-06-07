@@ -3289,3 +3289,33 @@
   - `git diff --check` passed with line-ending warnings only.
 - Follow-up:
   Run the server command plan for the full 60-context x 14-candidate x 250/500/1000/2000 experiment, then re-run oracle, feature, target, and policy gates before any learned-method claim.
+## 2026-06-07 17:35 - Repair5G.5.11 full server lattice re-ingest
+
+- Request:
+  Finish G5.11 by running the full server lattice task from `czr004_repair5g511_server_lattice_fullrun_prompt_and_analysis.md`, pull useful artifacts back locally, write G5.11 reports, and push to GitHub.
+- Server execution:
+  - Used Paratera instance `ackcs-00gjh3x3` (`2xRTX4090`, `22vCPU`, `120GB`, Ubuntu 24.04).
+  - Installed `tmux` on the server.
+  - GitHub clone from the server failed due outbound HTTPS/TLS access, so a clean local source bundle from commit `44035e6` was uploaded.
+  - Added a project-owned Linux build compatibility flag for LaCAM2 `DistTable::get` linkage via `cpp/ltm/CMakeLists.txt`; `external/lacam2/lacam2/**` was not modified.
+  - First `--max-workers 4` full run completed solver tasks but corrupted shared JSONL appends; accepted run used `--max-workers 1`.
+- Outputs:
+  - `outputs/reports/phase5p5_repair5g511_full_lattice_integrity_summary.json`
+  - `outputs/reports/phase5p5_repair5g511_lattice_oracle_gap_full_summary.json`
+  - `outputs/reports/phase5p5_repair5g511_confidence_targets_v5_summary.json`
+  - `outputs/reports/phase5p5_repair5g511_decision_summary.json`
+  - `outputs/tables/phase5p5_repair5g511_full_lattice_counterfactual_results.csv`
+  - `outputs/tables/phase5p5_repair5g511_lattice_oracle_by_context.csv`
+  - `outputs/tables/phase5p5_repair5g511_lattice_candidate_distribution.csv`
+  - `outputs/tables/phase5p5_repair5g511_lattice_by_map_agent.csv`
+  - `outputs/tables/phase5p5_repair5g511_confidence_targets_v5.csv`
+- Key results:
+  - Full run completed `240/240` solver tasks and produced `3360` clean lattice probe rows.
+  - Integrity gate passed: `candidate_count=14`, `measured_contexts=60`, `primary_1000_2000_contexts=60`, no duplicate context/candidate/budget rows, IDs `166..205` untouched.
+  - Candidate-space gate passed: `candidate_space_oracle_gap_vs_g58=-0.028445334327249994`, `mean_oracle_gap_over_static=-0.035097435576500004`, `mean_oracle_gap_over_additive=-0.12287598200416668`, `oracle_beats_static_fraction=0.8666666666666667`, `oracle_beats_additive_fraction=1.0`.
+  - Best single candidate by mean score was `repair5g59_slow_decay_high_shield`; `repair5g59_low_beta_high_cap` did not dominate the full run.
+  - Confidence v5 gate failed: labels were `52` stable high-confidence parameter candidates and `8` stable static contexts, with `0` no-solution/longer-budget/abstain coverage.
+- Decision:
+  - `outputs/reports/phase5p5_repair5g511_decision.md` records `confidence_targets_v5_failed_continue_label_design`.
+  - Feature v3 and policy training were not allowed.
+  - `phase5p5_allowed=false`, `phase6_allowed=false`, `aaai_ready=false`, and `runtime_claim_allowed=false` remain closed.

@@ -1,0 +1,22 @@
+{
+  "schema_version": "phase5p5_repair5g511_server_launch_plan_summary_v1",
+  "decision": "server_full_lattice_clean_run_completed",
+  "instance_id": "ackcs-00gjh3x3",
+  "server_resource": "2xRTX4090_22vCPU_120GB",
+  "tmux_session": "repair5g511_clean",
+  "source_bundle_commit": "44035e6",
+  "github_clone_on_server": "failed_outbound_https",
+  "accepted_run_max_workers": 1,
+  "discarded_run_max_workers": 4,
+  "discarded_run_reason": "concurrent shared JSONL appends corrupted probe JSONL",
+  "completed_tasks": 240,
+  "expected_tasks": 240,
+  "expected_rows": 3360,
+  "actual_rows": 3360,
+  "started_at_cst": "2026-06-07 17:27:29",
+  "finished_at_cst": "2026-06-07 17:33:48",
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "aaai_ready": false,
+  "runtime_claim_allowed": false
+}

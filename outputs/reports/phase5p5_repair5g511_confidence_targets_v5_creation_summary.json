@@ -1,0 +1,14 @@
+{
+  "aaai_ready": false,
+  "label_counts": {
+    "stable_high_confidence_parameter_candidate": 52,
+    "stable_static": 8
+  },
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "rows": 60,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g511_confidence_targets_v5_creation_summary_v1",
+  "targets_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase5p5_repair5g511_confidence_targets_v5.csv",
+  "training_rows": 60
+}

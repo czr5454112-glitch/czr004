@@ -1,0 +1,32 @@
+{
+  "aaai_ready": false,
+  "candidate_count": 14,
+  "decision": "full_lattice_integrity_passed",
+  "duplicate_context_candidate_budget_rows": 0,
+  "gates": {
+    "candidate_count_eq_14": true,
+    "duplicate_context_candidate_budget_rows_eq_0": true,
+    "full_lattice_rows_ge_3360": true,
+    "ids_166_205_untouched": true,
+    "json_csv_parse_clean": true,
+    "measured_contexts_ge_60": true,
+    "observed_ids_only": true,
+    "plan_rows_ge_3360": true,
+    "primary_1000_2000_contexts_ge_60": true,
+    "probe_jsonl_rows_eq_results_rows": true,
+    "run_jsonl_rows_eq_240": true,
+    "server_tasks_completed_240": true
+  },
+  "max_seed": 155,
+  "measured_contexts": 60,
+  "min_seed": 146,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "plan_rows": 3360,
+  "primary_1000_2000_contexts": 60,
+  "probe_jsonl_rows": 3360,
+  "results_rows": 3360,
+  "run_jsonl_rows": 240,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g511_full_lattice_integrity_summary_v1"
+}

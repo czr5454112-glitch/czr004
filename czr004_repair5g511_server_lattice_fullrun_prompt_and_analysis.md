@@ -827,3 +827,87 @@ learned bounded goal-aware dual-channel UpdateLTM parameter policy
 ```
 
 而不是继续停在 selector 诊断阶段。
+
+---
+
+## 10. G5.11 服务器实跑回填
+
+本轮已经完成 G5.11 full server lattice run，并把有效数据回灌为 `phase5p5_repair5g511_*` artifacts。
+
+执行事实：
+
+```text
+server = ackcs-00gjh3x3
+tmux = repair5g511_clean
+accepted_run = max_workers=1
+completed_tasks = 240 / 240
+results_rows = 3360
+candidate_count = 14
+measured_contexts = 60
+primary_1000_2000_contexts = 60
+duplicate_context_candidate_budget_rows = 0
+ids_166_205_untouched = true
+```
+
+注意事项：
+
+```text
+server outbound GitHub HTTPS failed, so used uploaded local source bundle from commit 44035e6.
+first max_workers=4 run completed solver tasks but corrupted shared JSONL append output.
+accepted clean run used max_workers=1.
+Linux build required a project-owned CMake compatibility flag for LaCAM2 DistTable inline linkage.
+external/lacam2/lacam2/** remained unchanged.
+```
+
+Candidate-space gate 通过：
+
+```text
+decision = full_lattice_candidate_space_passed_continue_targets
+candidate_space_oracle_gap_vs_g58 = -0.028445334327249994
+candidate_space_oracle_gap_vs_g510_smoke = -0.013364706402250015
+mean_oracle_gap_over_static = -0.035097435576500004
+mean_oracle_gap_over_additive = -0.12287598200416668
+oracle_beats_static_fraction = 0.8666666666666667
+oracle_beats_additive_fraction = 1.0
+primary_1000_2000_stable_contexts = 60
+stress_250_disagreement_rate = 0.0
+bonus_500_agreement_rate = 1.0
+best_single_candidate = repair5g59_slow_decay_high_shield
+```
+
+这说明完整 observed-ID bank 上，14-candidate bounded UpdateLTM parameter lattice 的 oracle upper bound 确实优于 G5.8 和 G5.10 smoke。
+
+但 confidence-target gate 没过：
+
+```text
+decision = confidence_targets_v5_failed_continue_label_design
+stable_high_confidence_parameter_candidate = 52
+stable_static = 8
+stable_static_or_abstain = 8 < 10
+no_solution_or_budget_abstain_count = 0
+head_b_training_rows = 60
+```
+
+因此 G5.11 的最终结论是：
+
+```text
+candidate-space direction passed;
+safe confidence/abstention label coverage failed;
+do not build feature_matrix_v3;
+do not train abstention-aware parameter policy;
+do not claim Phase5.5 / Phase6 / runtime learned policy / AAAI-ready.
+```
+
+最终 artifacts：
+
+```text
+outputs/reports/phase5p5_repair5g511_full_lattice_integrity_summary.json
+outputs/reports/phase5p5_repair5g511_lattice_oracle_gap_full_summary.json
+outputs/reports/phase5p5_repair5g511_confidence_targets_v5_summary.json
+outputs/reports/phase5p5_repair5g511_decision_summary.json
+outputs/tables/phase5p5_repair5g511_full_lattice_counterfactual_results.csv
+outputs/tables/phase5p5_repair5g511_lattice_oracle_by_context.csv
+outputs/tables/phase5p5_repair5g511_lattice_candidate_distribution.csv
+outputs/tables/phase5p5_repair5g511_lattice_by_map_agent.csv
+outputs/tables/phase5p5_repair5g511_confidence_targets_v5.csv
+```

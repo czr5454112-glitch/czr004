@@ -17,6 +17,7 @@ __pycache__/
 .env
 
 outputs/logs/
+outputs/server/
 outputs/traces/
 outputs/labels/
 outputs/checkpoints/
@@ -41,3 +42,6 @@ artifacts/checkpoints/
 third_party/**/build/
 external/**/build/
 external/**/build*/
+
+repair5g511_*.tar
+repair5g511_*.tar.gz

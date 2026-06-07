@@ -6,6 +6,13 @@ set(COMPAT_HEADER "${CMAKE_CURRENT_LIST_DIR}/../compat/lacam2_windows_compat.hpp
 
 add_subdirectory("${LACAM2_ROOT}/lacam2" lacam2_build)
 
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+  # LaCAM2 declares DistTable::get(uint,uint) inline in the header but defines it
+  # out-of-line in dist_table.cpp. MSVC links this, while GCC/Clang may discard
+  # the symbol from the static library unless inline functions are retained.
+  target_compile_options(lacam2 PRIVATE -fkeep-inline-functions)
+endif()
+
 add_library(czr004_ltm ltm.cpp ltm.hpp)
 target_compile_features(czr004_ltm PUBLIC cxx_std_17)
 target_include_directories(czr004_ltm PUBLIC "${CMAKE_CURRENT_LIST_DIR}")

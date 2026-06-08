@@ -3707,3 +3707,59 @@
   - Final G5.18 decision: `g518_full_primary_candidate_space_improved_continue_ranker`.
   - Ranker work is now the next allowed step, but no runtime policy is validated yet.
   - `phase5p5_allowed=false`, `phase6_allowed=false`, `runtime_claim_allowed=false`, `learned_runtime_policy_validated=false`, and `aaai_ready=false` remain closed.
+## 2026-06-08 - Repair5G.5.19 full-primary new-lattice ranker diagnostics
+
+- Request:
+  Finish `czr004_g519_after_g518_full_primary_review_and_prompt.md` completely, then push the completed work to GitHub.
+- Planned files:
+  - `czr004_repair5g519_full_primary_new_lattice_ranker_plan.md`
+  - `scripts/repair5g519_common.py`
+  - `scripts/verify_repair5g519_g518_artifacts.py`
+  - `scripts/create_repair5g519_full_primary_candidate_targets.py`
+  - `scripts/analyze_repair5g519_full_primary_candidate_space.py`
+  - `scripts/create_repair5g519_candidate_feature_matrix_v8.py`
+  - `scripts/analyze_repair5g519_feature_signal_v8.py`
+  - `scripts/train_repair5g519_full_primary_ranker_suite.py`
+  - `scripts/eval_repair5g519_full_primary_ranker_suite.py`
+  - `scripts/analyze_repair5g519_ranker_failure_autopsy.py`
+  - `scripts/write_repair5g519_decision.py`
+  - `outputs/reports/phase5p5_repair5g519_*`
+  - `outputs/tables/phase5p5_repair5g519_*`
+- Constraints:
+  Offline diagnostics only, local PC execution, observed IDs only, no IDs `166..205`, no solver run, no `external/lacam2/lacam2/**` edits, no action/priority/restart/h-value/candidate-deletion learning, and no runtime/Phase5.5/Phase6/AAAI claim.
+- Commands run:
+  - `python -m py_compile scripts\repair5g519_common.py ... scripts\write_repair5g519_decision.py`
+  - `python scripts\verify_repair5g519_g518_artifacts.py`
+  - `python scripts\create_repair5g519_full_primary_candidate_targets.py`
+  - `python scripts\analyze_repair5g519_full_primary_candidate_space.py`
+  - `python scripts\create_repair5g519_candidate_feature_matrix_v8.py`
+  - `python scripts\analyze_repair5g519_feature_signal_v8.py`
+  - `python scripts\train_repair5g519_full_primary_ranker_suite.py`
+  - `python scripts\eval_repair5g519_full_primary_ranker_suite.py --bootstrap-samples 300`
+  - `python scripts\analyze_repair5g519_ranker_failure_autopsy.py`
+  - `python scripts\write_repair5g519_decision.py`
+  - JSON parse / CSV row-count sanity checks
+  - reserved-ID guard rejection check for `166`
+  - `git diff --check`
+  - `git status --short -- external/lacam2/lacam2`
+- Key observations:
+  - G5.18 prerequisites verified cleanly: decision `g518_full_primary_candidate_space_improved_continue_ranker`, `2640` full-primary probe rows, `60` contexts, `22` candidates, `14` old controls, `8` G5.18-new candidates, budgets `1000/2000`, observed IDs only, and no IDs `166..205`.
+  - Candidate target reconstruction produced exactly `1320` candidate rows and `2640` candidate-budget audit rows. After finite-oracle handling for all-infeasible warehouse contexts, the new-candidate winning budget-pair count matches G5.18 at `32`.
+  - Candidate-space analysis confirmed the positive oracle evidence survived reconstruction, but it remains candidate-space evidence only.
+  - Feature matrix v8 produced `1320` rows, `88` `feature_*` columns, `480` new-candidate rows, `840` old-candidate rows, rich context features, candidate parameters, rich-by-candidate interactions, and within-context centered features. Forbidden performance feature count was `0`; surrogate metadata stayed audit-only.
+  - Ranker suite evaluation covered `40` seed-OOF policies plus fixed split, leave-one-map-agent-group-out, leave-one-map-family-out, calibration, bootstrap, and group/per-candidate summaries.
+  - Best seed-OOF policy was `no_new_candidate_ablation`, with mean delta vs static `-0.0004625121715`, harmful rate `0.3333333333`, and `0` new-candidate selections. Therefore the hard G5.19 ranker gate did not pass.
+  - Failure autopsy found `16` new-candidate win contexts and `32` winning budget pairs, but the learned/safe policies still ignored new candidates under OOF selection pressure.
+- Validation:
+  - Python compile passed for all G5.19 scripts.
+  - JSON summaries parsed.
+  - Candidate targets row count = `1320`.
+  - Feature matrix row count = `1320`.
+  - Seed-OOF context decisions include `60` contexts for each of `40` policies.
+  - `forbidden_feature_count=0`.
+  - Reserved-ID guard rejects `166`.
+  - `git diff --check` passed with line-ending warnings only.
+  - `external/lacam2/lacam2/**` unchanged.
+- Decision:
+  - Final G5.19 decision: `ranker_ignores_new_candidates_continue_candidate_policy_design`.
+  - `phase5p5_allowed=false`, `phase6_allowed=false`, `runtime_claim_allowed=false`, `learned_runtime_policy_validated=false`, and `aaai_ready=false` remain closed.

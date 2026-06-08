@@ -1,0 +1,120 @@
+{
+  "aaai_ready": false,
+  "best_policy": "no_new_candidate_ablation",
+  "best_policy_summary": {
+    "contexts": 60,
+    "coverage": 0.016666666666666666,
+    "eval_scope": "seed_oof",
+    "fallback_rate": 0.9833333333333333,
+    "false_positive_count": 20,
+    "harmful_vs_static_rate": 0.3333333333333333,
+    "helpful_vs_static_rate": 0.016666666666666666,
+    "mean_delta_vs_additive": -0.10092465769282054,
+    "mean_delta_vs_static": -0.00046251217149999996,
+    "missed_helpful_context_count": 57,
+    "new_candidate_harmful_selection_count": 0,
+    "new_candidate_helpful_selection_count": 0,
+    "new_candidate_selection_count": 0,
+    "new_candidate_selection_harmful_rate": 0.0,
+    "new_candidate_selection_rate": 0.0,
+    "oracle_capture_rate_new22": 0.0,
+    "oracle_capture_rate_old14": 0.0,
+    "policy": "no_new_candidate_ablation",
+    "regret_to_new22_oracle": 0.044244289430999985,
+    "regret_to_old14_oracle": 0.041868748724749986,
+    "risk_adjusted_utility_lambda_0p05": 0.016204154495166666,
+    "risk_adjusted_utility_lambda_0p10": 0.03287082116183333,
+    "risk_adjusted_utility_lambda_0p20": 0.06620415449516667,
+    "row_type": "policy_summary",
+    "static_near_oracle_nonstatic_selected": 0
+  },
+  "best_reproduced_rau_0p05": 0.016666666666666666,
+  "best_reproduced_rau_0p10": 0.03333333333333333,
+  "bootstrap_rows": 320,
+  "calibration_rows": 200,
+  "context_decision_rows": 8400,
+  "decision": "ranker_ignores_new_candidates_continue_candidate_policy_design",
+  "forbidden_feature_count": 0,
+  "forbidden_features": [],
+  "hard_gates": {
+    "beats_best_single_train_candidate_0p10_or_reports_fixed_better": true,
+    "beats_no_new_candidate_ablation_0p10": false,
+    "beats_old14_only_ranker_0p10": false,
+    "beats_train_only_map_agent_prior_0p10": true,
+    "false_positive_count_le_static_baseline": true,
+    "harmful_vs_static_rate_le_0p05": false,
+    "harmful_vs_static_rate_prefer_le_0p0333333333": false,
+    "mean_delta_vs_additive_lt_0": true,
+    "mean_delta_vs_static_lt_0": true,
+    "new_candidate_selection_harmful_rate_le_0p05": true,
+    "new_candidate_selection_helpful_count_gt_0": false,
+    "oracle_new22_regret_lt_old14_only_regret": false,
+    "rau_0p05_improves_over_reproduced": true,
+    "rau_0p10_improves_over_reproduced": true,
+    "selects_at_least_one_new_candidate_oof": false
+  },
+  "learned_runtime_policy_validated": false,
+  "optional_models": {
+    "gradient_boosted_stumps_if_available_without_new_dependency": "not_available_without_new_dependency",
+    "tiny_mlp_ranker_max_64_hidden": "not_available_without_new_dependency"
+  },
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "policy_count_seed_oof": 40,
+  "reproduced_baseline_status": {
+    "g512_ranker_reproduced_if_applicable": "applied_to_22_candidate_space_with_v8_compatible_features",
+    "g514_v4_ranker_reproduced_if_applicable": "applied_to_22_candidate_space_with_v8_compatible_features",
+    "g515_pairwise_ranker_reproduced_if_applicable": "applied_to_22_candidate_space_with_v8_compatible_features"
+  },
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g519_ranker_suite_eval_summary_v1",
+  "splits": {
+    "fixed_dev_seeds": [
+      151,
+      152,
+      153,
+      154,
+      155
+    ],
+    "fixed_train_seeds": [
+      146,
+      147,
+      148,
+      149,
+      150
+    ],
+    "leave_one_map_agent_groups": [
+      "maze-32-32-4|a100",
+      "maze-32-32-4|a50",
+      "random-32-32-20|a100",
+      "random-32-32-20|a50",
+      "warehouse-10-20-10-2-1|a100",
+      "warehouse-10-20-10-2-1|a50"
+    ],
+    "leave_one_map_family_out": [
+      "maze",
+      "random",
+      "warehouse"
+    ],
+    "seed_oof": [
+      146,
+      147,
+      148,
+      149,
+      150,
+      151,
+      152,
+      153,
+      154,
+      155
+    ]
+  },
+  "validation_gates": {
+    "bootstrap_rows_gt_0": true,
+    "calibration_rows_gt_0": true,
+    "context_decisions_grouped": true,
+    "forbidden_feature_count_eq_0": true,
+    "rows_eq_1320": true,
+    "seed_oof_contexts_eq_60": true
+  }
+}

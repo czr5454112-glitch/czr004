@@ -411,6 +411,43 @@ bool parse_decimal_token(const std::string& token, double* out)
   }
 }
 
+bool parse_g518_decimal_token(const std::string& token, double* out)
+{
+  if (token.empty()) return false;
+  auto decimal_points = 0;
+  auto digits = 0;
+  auto value = token;
+  for (auto& ch : value) {
+    if (std::isdigit(static_cast<unsigned char>(ch))) {
+      ++digits;
+      continue;
+    }
+    if (ch == 'p') {
+      ch = '.';
+      ++decimal_points;
+      if (decimal_points > 1) return false;
+      continue;
+    }
+    return false;
+  }
+  if (digits == 0) return false;
+  try {
+    std::size_t consumed = 0;
+    const auto parsed = std::stod(value, &consumed);
+    if (consumed != value.size() || !std::isfinite(parsed)) return false;
+    *out = parsed;
+    return true;
+  } catch (...) {
+    return false;
+  }
+}
+
+bool g518_in_range(double value, double lower, double upper)
+{
+  constexpr double kEps = 1.0e-12;
+  return value >= lower - kEps && value <= upper + kEps;
+}
+
 std::string goal_projection_mode_name(czr004::ltm::GoalProjectionMode mode)
 {
   switch (mode) {
@@ -633,10 +670,54 @@ Repair5GMethodSpec repair5g_method_spec(const std::string& method)
         params.max_edge_cost = 11.0;
         set(method, params, mode);
       };
+  auto parse_g518_grid_lattice = [&]() -> bool {
+    const auto prefix = std::string("repair5g518_grid_");
+    if (method.rfind(prefix, 0) != 0) return false;
+    const auto parts = split_token(method.substr(prefix.size()), '_');
+    if (parts.size() != 9) return false;
+    auto read_field = [&](const std::string& token, const std::string& label,
+                          double lower, double upper, double* out) {
+      if (token.rfind(label, 0) != 0) return false;
+      const auto encoded = token.substr(label.size());
+      if (!parse_g518_decimal_token(encoded, out)) return false;
+      return g518_in_range(*out, lower, upper);
+    };
+    double alpha_cong_committed = 0.0;
+    double alpha_cong_blocked = 0.0;
+    double alpha_flow_progress = 0.0;
+    double alpha_wait_or_nonprogress = 0.0;
+    double rho_cong = 0.0;
+    double rho_flow = 0.0;
+    double flow_shield_beta = 0.0;
+    double max_flow_shield = 0.0;
+    if (!read_field(parts[0], "c", 0.0, 2.0, &alpha_cong_committed) ||
+        !read_field(parts[1], "b", 0.0, 2.0, &alpha_cong_blocked) ||
+        !read_field(parts[2], "f", 0.0, 2.0, &alpha_flow_progress) ||
+        !read_field(parts[3], "w", 0.0, 2.0, &alpha_wait_or_nonprogress) ||
+        !read_field(parts[4], "dc", 0.80, 1.02, &rho_cong) ||
+        !read_field(parts[5], "df", 0.80, 1.02, &rho_flow) ||
+        !read_field(parts[6], "beta", 0.0, 0.80, &flow_shield_beta) ||
+        !read_field(parts[7], "max", 0.0, 1.50, &max_flow_shield)) {
+      return false;
+    }
+    if (parts[8] != "c0" && parts[8] != "c1") return false;
+    const auto c_only = parts[8] == "c1";
+    // Repair5G.5.18 generic adapter recognition only: parse bounded
+    // candidate names into existing UpdateParams without changing solver
+    // search, candidate generation, PIBT, LaCAM*, pruning, rewrite,
+    // incumbent, or restart semantics.
+    set_g510_lattice(
+        alpha_cong_committed, alpha_cong_blocked, alpha_flow_progress,
+        alpha_wait_or_nonprogress, rho_cong, rho_flow, flow_shield_beta,
+        max_flow_shield, c_only,
+        c_only ? "g518_grid_bounded_c_only" : "g518_grid_bounded_flow_shield");
+    return true;
+  };
 
   if (method == "repair5g_dual_additive_parity") {
     set("dcltm_additive_parity", czr004::ltm::UpdateParams::additive(),
         "additive_parity");
+  } else if (parse_g518_grid_lattice()) {
   } else if (method == "repair5g59_additive_fallback") {
     set(method, czr004::ltm::UpdateParams::additive(),
         "g510_lattice_additive_fallback");

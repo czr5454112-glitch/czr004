@@ -1,0 +1,159 @@
+{
+  "aaai_ready": false,
+  "checkpoint_rows": 1,
+  "context": {
+    "agents": 50,
+    "map": "maze-32-32-4",
+    "seed": 151
+  },
+  "decision": "adapter_grammar_passed_continue_probe_batches",
+  "external_lacam2_solver_status": [],
+  "gates": {
+    "all_selected_g518_candidates_recognized": true,
+    "checkpoint_rows_gt_0": true,
+    "external_lacam2_solver_untouched": true,
+    "invalid_names_rejected": true,
+    "max_workers_eq_1": true,
+    "old_known_equivalent_fingerprints_exact": true,
+    "selected_candidates_static_parse": true,
+    "smoke_probe_ran": true,
+    "source_contains_g518_parser": true
+  },
+  "invalid_candidates": [
+    "repair5g518_grid_c2p50_b1p00_f1p00_w0p75_dc0p95_df1p00_beta0p35_max0p75_c0",
+    "repair5g518_grid_c1x25_b1p00_f1p00_w0p75_dc0p95_df1p00_beta0p35_max0p75_c0",
+    "repair5g518_grid_c1p25_b1p00_f1p00_w0p75_dc0p95_df1p00_beta0p35_max0p75_c2"
+  ],
+  "invalid_not_rejected": [],
+  "learned_runtime_policy_validated": false,
+  "old_equivalence_mismatches": [],
+  "old_equivalence_records": [
+    {
+      "g518_candidate_id": "repair5g518_grid_c1p00_b1p50_f1p00_w0p50_dc0p95_df1p00_beta0p35_max0p75_c0",
+      "g518_recognized": true,
+      "g518_updateparams_hash": "bb2a55cecde4524d",
+      "old_candidate_id": "repair5g59_block_heavy_flow_guard",
+      "old_recognized": true,
+      "old_updateparams_hash": "bb2a55cecde4524d",
+      "updateparams_fingerprint_exact": true
+    },
+    {
+      "g518_candidate_id": "repair5g518_grid_c1p25_b1p25_f0p00_w0p75_dc0p95_df1p00_beta0p00_max0p00_c1",
+      "g518_recognized": true,
+      "g518_updateparams_hash": "6cf6b157bee71acd",
+      "old_candidate_id": "repair5g59_c_only_f_disabled",
+      "old_recognized": true,
+      "old_updateparams_hash": "6cf6b157bee71acd",
+      "updateparams_fingerprint_exact": true
+    },
+    {
+      "g518_candidate_id": "repair5g518_grid_c1p50_b1p00_f1p00_w0p75_dc0p95_df1p00_beta0p35_max0p75_c0",
+      "g518_recognized": true,
+      "g518_updateparams_hash": "3cd172c18b79c21",
+      "old_candidate_id": "repair5g59_commit_heavy_flow_guard",
+      "old_recognized": true,
+      "old_updateparams_hash": "3cd172c18b79c21",
+      "updateparams_fingerprint_exact": true
+    },
+    {
+      "g518_candidate_id": "repair5g518_grid_c1p25_b1p25_f1p00_w0p75_dc0p90_df1p00_beta0p20_max0p50_c0",
+      "g518_recognized": true,
+      "g518_updateparams_hash": "3f2416d2709cdc46",
+      "old_candidate_id": "repair5g59_fast_decay_low_shield",
+      "old_recognized": true,
+      "old_updateparams_hash": "3f2416d2709cdc46",
+      "updateparams_fingerprint_exact": true
+    },
+    {
+      "g518_candidate_id": "repair5g518_grid_c1p25_b1p25_f1p00_w0p75_dc0p95_df0p95_beta0p35_max0p75_c0",
+      "g518_recognized": true,
+      "g518_updateparams_hash": "f091bb5344ed5c8f",
+      "old_candidate_id": "repair5g59_flow_decay",
+      "old_recognized": true,
+      "old_updateparams_hash": "f091bb5344ed5c8f",
+      "updateparams_fingerprint_exact": true
+    },
+    {
+      "g518_candidate_id": "repair5g518_grid_c1p25_b1p25_f1p00_w0p75_dc0p95_df1p00_beta0p60_max0p75_c0",
+      "g518_recognized": true,
+      "g518_updateparams_hash": "fbcf27bf34de68c",
+      "old_candidate_id": "repair5g59_high_beta_cap_safe",
+      "old_recognized": true,
+      "old_updateparams_hash": "fbcf27bf34de68c",
+      "updateparams_fingerprint_exact": true
+    },
+    {
+      "g518_candidate_id": "repair5g518_grid_c1p00_b1p00_f0p75_w0p75_dc0p98_df1p00_beta0p25_max0p50_c0",
+      "g518_recognized": true,
+      "g518_updateparams_hash": "15be9d4820cb1154",
+      "old_candidate_id": "repair5g59_light_cong_light_flow",
+      "old_recognized": true,
+      "old_updateparams_hash": "15be9d4820cb1154",
+      "updateparams_fingerprint_exact": true
+    },
+    {
+      "g518_candidate_id": "repair5g518_grid_c1p25_b1p25_f1p00_w0p75_dc0p95_df1p00_beta0p20_max1p25_c0",
+      "g518_recognized": true,
+      "g518_updateparams_hash": "5b1c2a7ba7dd48cb",
+      "old_candidate_id": "repair5g59_low_beta_high_cap",
+      "old_recognized": true,
+      "old_updateparams_hash": "5b1c2a7ba7dd48cb",
+      "updateparams_fingerprint_exact": true
+    },
+    {
+      "g518_candidate_id": "repair5g518_grid_c1p25_b1p25_f1p00_w0p75_dc0p98_df1p00_beta0p50_max1p00_c0",
+      "g518_recognized": true,
+      "g518_updateparams_hash": "15da3e1ec294f75e",
+      "old_candidate_id": "repair5g59_slow_decay_high_shield",
+      "old_recognized": true,
+      "old_updateparams_hash": "15da3e1ec294f75e",
+      "updateparams_fingerprint_exact": true
+    },
+    {
+      "g518_candidate_id": "repair5g518_grid_c1p25_b1p25_f1p00_w0p75_dc0p95_df1p00_beta0p35_max0p75_c0",
+      "g518_recognized": true,
+      "g518_updateparams_hash": "29737bed70c56f0d",
+      "old_candidate_id": "repair5g59_static_abstain_candidate",
+      "old_recognized": true,
+      "old_updateparams_hash": "29737bed70c56f0d",
+      "updateparams_fingerprint_exact": true
+    },
+    {
+      "g518_candidate_id": "repair5g518_grid_c1p25_b1p25_f1p00_w0p75_dc0p95_df1p00_beta0p35_max0p75_c0",
+      "g518_recognized": true,
+      "g518_updateparams_hash": "29737bed70c56f0d",
+      "old_candidate_id": "repair5g59_static_flow_shield",
+      "old_recognized": true,
+      "old_updateparams_hash": "29737bed70c56f0d",
+      "updateparams_fingerprint_exact": true
+    },
+    {
+      "g518_candidate_id": "repair5g518_grid_c1p25_b1p25_f1p00_w1p00_dc0p95_df1p00_beta0p35_max0p75_c0",
+      "g518_recognized": true,
+      "g518_updateparams_hash": "1adae8b415a845e4",
+      "old_candidate_id": "repair5g59_wait_aggressive",
+      "old_recognized": true,
+      "old_updateparams_hash": "1adae8b415a845e4",
+      "updateparams_fingerprint_exact": true
+    },
+    {
+      "g518_candidate_id": "repair5g518_grid_c1p25_b1p25_f1p00_w0p50_dc0p95_df1p00_beta0p35_max0p75_c0",
+      "g518_recognized": true,
+      "g518_updateparams_hash": "421aa7c6efea31b2",
+      "old_candidate_id": "repair5g59_wait_conservative",
+      "old_recognized": true,
+      "old_updateparams_hash": "421aa7c6efea31b2",
+      "updateparams_fingerprint_exact": true
+    }
+  ],
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "probe_rows": 57,
+  "results_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase5p5_repair5g518_adapter_smoke_results.csv",
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g518_adapter_grammar_summary_v1",
+  "selected_g518_candidate_count": 30,
+  "selected_unrecognized": [],
+  "smoke_candidate_count": 57,
+  "static_parse_failures": []
+}

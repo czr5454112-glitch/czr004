@@ -1,0 +1,51 @@
+{
+  "aaai_ready": false,
+  "batch": "B",
+  "budgets": [
+    1000,
+    2000
+  ],
+  "candidate_count": 24,
+  "checkpoint_rows": 12,
+  "decision": "g518_probe_batch_integrity_passed_continue_oracle",
+  "duplicate_context_candidate_budget_rows": 0,
+  "expected_rows": 288,
+  "external_lacam2_solver_status": [],
+  "gates": {
+    "budgets_eq_1000_2000": true,
+    "candidate_count_eq_planned": true,
+    "candidate_recognized_all": true,
+    "contexts_eq_planned": true,
+    "duplicate_context_candidate_budget_rows_eq_0": true,
+    "external_lacam2_solver_untouched": true,
+    "ids_166_205_untouched": true,
+    "max_workers_eq_1": true,
+    "new_candidates_lte_48": true,
+    "observed_ids_only": true,
+    "old14_controls_eq_14": true,
+    "probe_ran": true,
+    "rows_eq_expected": true,
+    "target_contexts_lte_24": true
+  },
+  "ids_166_205_untouched": true,
+  "learned_runtime_policy_validated": false,
+  "new_candidate_count": 10,
+  "observed_ids_only": true,
+  "old14_control_count": 14,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "probe_plan_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase5p5_repair5g518_batch_B_probe_plan.csv",
+  "probe_ran": true,
+  "probe_rows": 288,
+  "recognition": {
+    "candidate_recognized_all": true,
+    "fingerprint_rows": 288,
+    "recognized_rows": 288,
+    "rows": 288,
+    "updateparams_fingerprint_all": true
+  },
+  "results_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase5p5_repair5g518_batch_B_probe_results.csv",
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g518_batch_integrity_summary_v1",
+  "target_contexts": 6
+}

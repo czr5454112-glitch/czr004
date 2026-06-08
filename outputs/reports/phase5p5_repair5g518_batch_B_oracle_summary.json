@@ -1,0 +1,49 @@
+{
+  "aaai_ready": false,
+  "additive_weak_context_budget_rows": 8,
+  "batch": "B",
+  "candidate_distribution_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase5p5_repair5g518_batch_B_candidate_distribution.csv",
+  "candidate_recognized_all": true,
+  "context_budget_pairs": 12,
+  "context_oracle_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase5p5_repair5g518_batch_B_oracle_by_context.csv",
+  "decision": "g518_batch_candidate_space_improved_continue_full_primary",
+  "gate_reasons": {
+    "harmful_false_positive_target_contexts_improved_ge_1": true,
+    "mean_new_oracle_gap_vs_old_oracle_le_neg_0p002": true,
+    "missed_helpful_oracle_gap_reduced_ge_3": false,
+    "new_candidate_win_count_ge_2": true
+  },
+  "harmful_false_positive_improved_context_keys": [
+    "maze-32-32-4|a50|s151|it0|14650fb0739d0383"
+  ],
+  "harmful_false_positive_target_contexts_improved": 1,
+  "ids_166_205_untouched": true,
+  "integrity_decision": "g518_probe_batch_integrity_passed_continue_oracle",
+  "learned_runtime_policy_validated": false,
+  "mean_new_oracle_gap_vs_old_oracle": -0.002255253715999972,
+  "missed_helpful_improved_context_keys": [
+    "maze-32-32-4|a50|s151|it0|14650fb0739d0383"
+  ],
+  "missed_helpful_oracle_gap_reduced_contexts": 1,
+  "new_candidate_count": 10,
+  "new_candidate_win_context_budget_keys": [
+    "maze-32-32-4|a50|s151|it0|14650fb0739d0383|1000",
+    "maze-32-32-4|a50|s151|it0|14650fb0739d0383|2000"
+  ],
+  "new_candidate_win_count": 2,
+  "observed_ids_only": true,
+  "old_candidate_count": 14,
+  "pass_candidate_space_gate": true,
+  "per_family_oracle_wins": {
+    "block_heavy": 4,
+    "flow_decay": 2,
+    "high_beta": 2,
+    "wait_conservative": 2
+  },
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g518_batch_oracle_summary_v1",
+  "static_boundary_context_budget_rows_no_worse": 0,
+  "static_boundary_contexts": 0
+}

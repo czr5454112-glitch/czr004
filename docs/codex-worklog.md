@@ -3663,3 +3663,47 @@
 - Decision:
   - Final G5.17 decision: `targeted_repair_lattice_no_oracle_gain_continue_lattice_design`.
   - `phase5p5_allowed=false`, `phase6_allowed=false`, `runtime_claim_allowed=false`, `learned_runtime_policy_validated=false`, and `aaai_ready=false` remain closed.
+## 2026-06-08 - Repair5G.5.18 surrogate-guided executable lattice search
+
+- Request:
+  Finish `czr004_g518_after_g517_no_oracle_gain_deep_prompt.md` completely, then push the completed G5.18 work to GitHub.
+- Planned files:
+  - `czr004_repair5g518_surrogate_executable_lattice_search_plan.md`
+  - `cpp/tools/phase1a_batch.cpp`
+  - `scripts/repair5g518_common.py`
+  - `scripts/analyze_repair5g518_g517_lattice_autopsy.py`
+  - `scripts/propose_repair5g518_surrogate_lattice.py`
+  - `scripts/verify_repair5g518_adapter_grammar.py`
+  - `scripts/run_repair5g518_probe_batches.py`
+  - `scripts/analyze_repair5g518_probe_batches.py`
+  - `scripts/run_repair5g518_full_primary_probe.py`
+  - `scripts/write_repair5g518_decision.py`
+  - `outputs/reports/phase5p5_repair5g518_*`
+  - `outputs/tables/phase5p5_repair5g518_*`
+  - `outputs/logs/phase5p5_repair5g518_*`
+- Constraints:
+  Local PC execution, `max_workers=1`, observed IDs only, no IDs `166..205`, no `external/lacam2/lacam2/**` edits, and no runtime/Phase5.5/Phase6/AAAI claim.
+- Commands run:
+  - `python -m py_compile scripts\repair5g518_common.py ... scripts\write_repair5g518_decision.py`
+  - `python scripts\analyze_repair5g518_g517_lattice_autopsy.py`
+  - `python scripts\propose_repair5g518_surrogate_lattice.py`
+  - `powershell -ExecutionPolicy Bypass -File scripts\build_phase1a_batch.ps1`
+  - `python scripts\verify_repair5g518_adapter_grammar.py --overwrite`
+  - `python scripts\run_repair5g518_probe_batches.py --overwrite --max-workers 1 --max-contexts 6`
+  - `python scripts\analyze_repair5g518_probe_batches.py`
+  - `python scripts\run_repair5g518_full_primary_probe.py --overwrite --max-workers 1`
+  - `python scripts\write_repair5g518_decision.py`
+- Key observations:
+  - G5.17 prerequisite artifacts verified cleanly: adapter recognition passed, adapter smoke passed, targeted probe integrity passed, targeted oracle decision remained no-gain, and the G5.17 targeted probe had `960` rows over `20` contexts, `24` candidates, and budgets `1000/2000`.
+  - G5.17 autopsy confirmed the G5.16 repair candidates had `0` oracle wins; old winners remained concentrated in block-heavy, wait, high-beta, low-beta-high-cap, and flow-decay neighborhoods.
+  - Generic G5.18 adapter grammar was added for bounded names such as `repair5g518_grid_c1p25_b1p50_f1p00_w0p50_dc0p95_df1p00_beta0p35_max0p75_c0`.
+  - Surrogate proposal generated a `300`-candidate pool and selected `30` executable local candidates across batches A/B/C.
+  - Adapter grammar smoke passed with `57` rows: all selected G5.18 candidates recognized, invalid names rejected, and old known equivalent fingerprints exact.
+  - Local batch probes ran with old14 controls, budgets `1000/2000`, `max_workers=1`, and no reserved IDs: A `312` rows, B `288` rows, C `264` rows.
+  - Batch oracle gates passed for all three batches. Batch B mean gap was `-0.002255253716`; B and C each improved the harmful false-positive target context.
+  - Full-primary confirmation ran `60` contexts with old14 + top `8` new candidates, produced exactly `2640` rows, and passed integrity.
+  - Full-primary candidate-space oracle improved: `new_candidate_win_count=32`, `mean_new_oracle_gap_vs_old_oracle=-0.002209805308139531`, best new single candidate `repair5g518_grid_c1p20_b1p35_f1p00_w0p70_dc0p95_df1p00_beta0p60_max0p75_c0`.
+- Decision:
+  - Final G5.18 decision: `g518_full_primary_candidate_space_improved_continue_ranker`.
+  - Ranker work is now the next allowed step, but no runtime policy is validated yet.
+  - `phase5p5_allowed=false`, `phase6_allowed=false`, `runtime_claim_allowed=false`, `learned_runtime_policy_validated=false`, and `aaai_ready=false` remain closed.

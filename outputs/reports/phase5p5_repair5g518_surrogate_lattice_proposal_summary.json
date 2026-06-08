@@ -1,0 +1,55 @@
+{
+  "aaai_ready": false,
+  "batch_family_counts": {
+    "A": {
+      "block_heavy": 3,
+      "flow_decay": 3,
+      "high_beta": 1,
+      "static_boundary": 2,
+      "wait_conservative": 3
+    },
+    "B": {
+      "block_heavy": 3,
+      "flow_decay": 3,
+      "high_beta": 1,
+      "wait_conservative": 3
+    },
+    "C": {
+      "high_beta": 3,
+      "low_beta_high_cap": 2,
+      "static_boundary": 3
+    }
+  },
+  "batch_new_candidate_counts": {
+    "A": 12,
+    "B": 10,
+    "C": 8
+  },
+  "batch_total_candidate_counts": {
+    "A": 26,
+    "B": 24,
+    "C": 22
+  },
+  "candidate_pool_count": 300,
+  "decision": "surrogate_candidate_batches_selected_continue_adapter_verification",
+  "learned_runtime_policy_validated": false,
+  "old14_control_count": 14,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "pool_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase5p5_repair5g518_surrogate_candidate_pool.csv",
+  "raw_training_example_count": 6457,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g518_surrogate_lattice_proposal_summary_v1",
+  "selected_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase5p5_repair5g518_selected_candidate_batches.csv",
+  "selected_new_candidate_count": 30,
+  "surrogate_model": "evidence_weighted_param_context_knn",
+  "target_context_budget_pairs": 37,
+  "training_example_count": 399,
+  "training_sources": {
+    "g511_full_lattice": 78,
+    "g514_v4_matrix": 84,
+    "g515_v5_matrix": 84,
+    "g516_v6_matrix": 84,
+    "g517_targeted": 69
+  }
+}

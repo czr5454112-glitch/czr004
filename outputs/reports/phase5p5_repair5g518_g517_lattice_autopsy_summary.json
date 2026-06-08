@@ -1,0 +1,105 @@
+{
+  "aaai_ready": false,
+  "artifact_check": {
+    "budgets": [
+      1000,
+      2000
+    ],
+    "candidates": 24,
+    "contexts": 20,
+    "gates": {
+      "adapter_recognition_passed": true,
+      "adapter_smoke_passed": true,
+      "budgets_eq_1000_2000": true,
+      "candidates_eq_24": true,
+      "contexts_eq_20": true,
+      "ids_166_205_untouched": true,
+      "observed_ids_only": true,
+      "repair_candidates_eq_10": true,
+      "rows_eq_960": true,
+      "targeted_oracle_no_gain": true,
+      "targeted_probe_integrity_passed": true
+    },
+    "ids_166_205_untouched": true,
+    "observed_ids_only": true,
+    "passed": true,
+    "repair_candidates": 10,
+    "rows": 960
+  },
+  "candidate_dominance_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase5p5_repair5g518_g517_candidate_dominance.csv",
+  "context_budget_pairs": 40,
+  "context_family_winners_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase5p5_repair5g518_context_family_winners.csv",
+  "decision": "g517_lattice_autopsy_passed_continue_surrogate_proposal",
+  "direction_autopsy": [
+    {
+      "candidate_count": 10,
+      "direction": "lower_beta",
+      "harmful_vs_static_count": 320,
+      "helpful_vs_static_count": 38,
+      "interpretation": "falsified_or_weak",
+      "mean_delta_vs_static": 0.04444650730035671,
+      "oracle_win_count": 0
+    },
+    {
+      "candidate_count": 10,
+      "direction": "lower_cap",
+      "harmful_vs_static_count": 320,
+      "helpful_vs_static_count": 38,
+      "interpretation": "falsified_or_weak",
+      "mean_delta_vs_static": 0.04444650730035671,
+      "oracle_win_count": 0
+    },
+    {
+      "candidate_count": 4,
+      "direction": "faster_congestion_decay",
+      "harmful_vs_static_count": 123,
+      "helpful_vs_static_count": 18,
+      "interpretation": "falsified_or_weak",
+      "mean_delta_vs_static": 0.03658922110764366,
+      "oracle_win_count": 0
+    },
+    {
+      "candidate_count": 2,
+      "direction": "faster_flow_decay",
+      "harmful_vs_static_count": 64,
+      "helpful_vs_static_count": 8,
+      "interpretation": "falsified_or_weak",
+      "mean_delta_vs_static": 0.044338765531383925,
+      "oracle_win_count": 0
+    },
+    {
+      "candidate_count": 2,
+      "direction": "static_boundary_or_c_only",
+      "harmful_vs_static_count": 70,
+      "helpful_vs_static_count": 4,
+      "interpretation": "falsified_or_weak",
+      "mean_delta_vs_static": 0.06513454945063486,
+      "oracle_win_count": 0
+    }
+  ],
+  "learned_runtime_policy_validated": false,
+  "map_family_distribution": {
+    "maze": 36,
+    "random": 2,
+    "warehouse": 2
+  },
+  "old_candidate_count": 14,
+  "old_mean_delta_vs_static": 0.013656096025954382,
+  "old_winner_family_distribution": {
+    "block_heavy": 8,
+    "commit_heavy": 2,
+    "flow_decay": 8,
+    "low_beta_high_cap": 6,
+    "unknown": 2,
+    "wait_aggressive": 6,
+    "wait_conservative": 8
+  },
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "repair_candidate_count": 10,
+  "repair_candidate_oracle_win_count": 0,
+  "repair_candidates_dominated_by_nearest_old": 3,
+  "repair_mean_delta_vs_static": 0.04444650730035671,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g518_g517_lattice_autopsy_summary_v1"
+}

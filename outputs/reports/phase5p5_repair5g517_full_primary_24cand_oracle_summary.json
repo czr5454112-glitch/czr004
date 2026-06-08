@@ -1,0 +1,12 @@
+{
+  "aaai_ready": false,
+  "decision": "full_primary_not_run_targeted_oracle_gate_not_passed",
+  "learned_runtime_policy_validated": false,
+  "no_run_reason": "targeted oracle gate did not pass; full-primary expansion is intentionally skipped",
+  "oracle_analyzed": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g517_full_primary_24cand_oracle_summary_v1",
+  "targeted_oracle_decision": "targeted_repair_lattice_no_oracle_gain_continue_lattice_design"
+}

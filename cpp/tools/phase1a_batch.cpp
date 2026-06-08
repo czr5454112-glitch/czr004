@@ -677,6 +677,40 @@ Repair5GMethodSpec repair5g_method_spec(const std::string& method)
   } else if (method == "repair5g59_low_beta_high_cap") {
     set_g510_lattice(1.25, 1.25, 1.0, 0.75, 0.95, 1.0, 0.20, 1.25,
                      false, "g510_lattice_flow_shield");
+  } else if (method == "repair5g516_slow_decay_safer_beta025_cap050") {
+    // Repair5G.5.17 targeted update-parameter adapter recognition only.
+    // These names map the G5.16 repair lattice into existing project-owned
+    // UpdateParams; solver search, candidate generation, PIBT, LaCAM*, pruning,
+    // rewrite, incumbent, and restart semantics are unchanged.
+    set_g510_lattice(1.25, 1.25, 1.00, 0.75, 0.92, 1.00, 0.25, 0.50,
+                     false, "g517_targeted_repair_lattice_flow_shield");
+  } else if (method == "repair5g516_slow_decay_safer_beta020_cap045") {
+    set_g510_lattice(1.20, 1.20, 1.00, 0.75, 0.90, 1.00, 0.20, 0.45,
+                     false, "g517_targeted_repair_lattice_flow_shield");
+  } else if (method == "repair5g516_slow_decay_safer_beta015_cap040") {
+    set_g510_lattice(1.15, 1.15, 1.00, 0.75, 0.88, 1.00, 0.15, 0.40,
+                     false, "g517_targeted_repair_lattice_flow_shield");
+  } else if (method == "repair5g516_wait_aggressive_low_cap") {
+    set_g510_lattice(1.00, 1.00, 1.05, 1.25, 0.95, 0.95, 0.20, 0.50,
+                     false, "g517_targeted_repair_lattice_flow_shield");
+  } else if (method == "repair5g516_wait_conservative_mid_cap") {
+    set_g510_lattice(1.00, 1.00, 1.00, 1.05, 0.95, 0.98, 0.18, 0.45,
+                     false, "g517_targeted_repair_lattice_flow_shield");
+  } else if (method == "repair5g516_wait_aggressive_fast_flow_decay") {
+    set_g510_lattice(1.00, 1.00, 1.10, 1.30, 0.95, 0.90, 0.18, 0.45,
+                     false, "g517_targeted_repair_lattice_flow_shield");
+  } else if (method == "repair5g516_commit_heavy_low_beta") {
+    set_g510_lattice(1.45, 0.90, 1.10, 0.80, 0.95, 1.00, 0.18, 0.45,
+                     false, "g517_targeted_repair_lattice_flow_shield");
+  } else if (method == "repair5g516_commit_heavy_static_guard") {
+    set_g510_lattice(1.35, 0.90, 1.05, 0.75, 0.92, 0.98, 0.15, 0.35,
+                     false, "g517_targeted_repair_lattice_flow_shield");
+  } else if (method == "repair5g516_static_boundary_light_flow") {
+    set_g510_lattice(1.00, 1.00, 1.00, 0.90, 0.95, 1.00, 0.10, 0.25,
+                     false, "g517_targeted_repair_lattice_flow_shield");
+  } else if (method == "repair5g516_static_boundary_c_only") {
+    set_g510_lattice(1.05, 1.05, 1.00, 0.75, 0.95, 1.00, 0.00, 0.00,
+                     true, "g517_targeted_repair_lattice_c_only");
   } else if (method.rfind("repair5g_dual_c_equiv_", 0) == 0) {
     const auto rule_id =
         method.substr(std::string("repair5g_dual_c_equiv_").size());

@@ -3615,3 +3615,51 @@
 - Decision:
   - Final G5.16 decision: `targeted_repair_lattice_requires_adapter_followup`.
   - `phase5p5_allowed=false`, `phase6_allowed=false`, `runtime_claim_allowed=false`, `learned_runtime_policy_validated=false`, and `aaai_ready=false` remain closed.
+## 2026-06-08 - Repair5G.5.17 adapter-recognized targeted lattice probe
+
+- Request:
+  Finish `czr004_g517_after_g516_adapter_followup_review_and_prompt.md` completely, then push the completed work to GitHub.
+- Planned files:
+  - `czr004_repair5g517_adapter_recognized_targeted_lattice_probe_plan.md`
+  - `outputs/reports/phase5p5_repair5g516_final_interpretation.md`
+  - `cpp/tools/phase1a_batch.cpp`
+  - `scripts/repair5g517_common.py`
+  - `scripts/verify_repair5g517_adapter_recognition.py`
+  - `scripts/run_repair5g517_adapter_smoke.py`
+  - `scripts/run_repair5g517_targeted_probe.py`
+  - `scripts/analyze_repair5g517_targeted_lattice_oracle.py`
+  - `scripts/run_repair5g517_full_primary_probe.py`
+  - `scripts/write_repair5g517_safety_update.py`
+  - `scripts/write_repair5g517_decision.py`
+  - `outputs/reports/phase5p5_repair5g517_*`
+  - `outputs/tables/phase5p5_repair5g517_*`
+  - `outputs/logs/phase5p5_repair5g517_*`
+- Constraints:
+  Local PC execution, `max_workers=1`, observed IDs only, no IDs `166..205`, no `external/lacam2/lacam2/**` edits, and no runtime/Phase5.5/Phase6/AAAI claim.
+- Gates:
+  Adapter recognition must pass before build/smoke, smoke must pass before targeted probe, targeted probe integrity must pass before oracle analysis, and full-primary/ranker/safety work continues only if the targeted candidate-space oracle improves.
+- Commands run:
+  - `python -m py_compile scripts\repair5g517_common.py ... scripts\write_repair5g517_decision.py`
+  - `python scripts\verify_repair5g517_adapter_recognition.py`
+  - `powershell -ExecutionPolicy Bypass -File scripts\build_phase1a_batch.ps1`
+  - `python scripts\run_repair5g517_adapter_smoke.py --overwrite`
+  - `python scripts\run_repair5g517_targeted_probe.py --overwrite --max-workers 1`
+  - `python scripts\analyze_repair5g517_targeted_lattice_oracle.py`
+  - `python scripts\run_repair5g517_full_primary_probe.py --overwrite --max-workers 1`
+  - `python scripts\write_repair5g517_safety_update.py`
+  - `python scripts\write_repair5g517_decision.py`
+  - JSON parse / CSV row-count sanity checks
+  - reserved-ID guard rejection check for `166`
+  - `git diff --check`
+- Key observations:
+  - Adapter recognition passed for all `10` `repair5g516_*` candidates with exact G5.16 lattice parameter tuples.
+  - `phase1a_batch` rebuilt successfully after the project-owned adapter change.
+  - Adapter smoke passed on one observed context with `10` repair-candidate probe rows, all recognized, with update-parameter fingerprints.
+  - Targeted local probe ran `20` observed contexts, `24` candidates, budgets `1000` and `2000`, `max_workers=1`, and produced exactly `960` rows.
+  - Targeted integrity passed: all candidates recognized, no duplicate context/candidate/budget rows, observed IDs only, and no IDs `166..205`.
+  - Candidate-space oracle reassessment found no repair-candidate gain: `new_repair_candidate_win_count=0` and `mean_new_oracle_gap_vs_old_oracle=0.0`.
+  - Full-primary expansion and ranker refit were intentionally not run because the targeted oracle gate failed.
+  - Safety package remains incomplete; runtime, Phase5.5, Phase6, learned runtime policy, and AAAI-ready claims remain closed.
+- Decision:
+  - Final G5.17 decision: `targeted_repair_lattice_no_oracle_gain_continue_lattice_design`.
+  - `phase5p5_allowed=false`, `phase6_allowed=false`, `runtime_claim_allowed=false`, `learned_runtime_policy_validated=false`, and `aaai_ready=false` remain closed.

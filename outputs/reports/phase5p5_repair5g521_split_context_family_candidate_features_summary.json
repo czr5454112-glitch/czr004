@@ -1,0 +1,27 @@
+{
+  "aaai_ready": false,
+  "candidate_feature_count": 78,
+  "candidate_rows": 798,
+  "context_feature_count": 33,
+  "context_rows": 21,
+  "decision": "split_features_v10_passed_continue_selector_eval",
+  "family_feature_count": 58,
+  "family_rows": 189,
+  "forbidden_feature_count": 0,
+  "forbidden_features": [],
+  "gates": {
+    "candidate_feature_columns_present": true,
+    "candidate_rows_gt_0": true,
+    "context_feature_columns_present": true,
+    "context_rows_gt_0": true,
+    "family_feature_columns_present": true,
+    "family_rows_gt_0": true,
+    "forbidden_feature_count_eq_0": true,
+    "nearest_old_features_present": true
+  },
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g521_split_context_family_candidate_features_summary_v1"
+}

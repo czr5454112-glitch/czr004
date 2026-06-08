@@ -1,0 +1,30 @@
+{
+  "aaai_ready": false,
+  "conservative_selected_count": 6,
+  "decision": "second_wave_candidate_pool_passed_continue_adapter_grammar",
+  "gates": {
+    "at_least_3_per_block": true,
+    "conservative_candidates_ge_2": true,
+    "no_g521_solver_outcome_used": true,
+    "raw_pool_count_ge_48": true,
+    "risky_candidates_ge_2": true,
+    "selected_count_eq_16": true,
+    "selected_count_le_16": true,
+    "target_contexts_eq_16": true
+  },
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "raw_pool_count": 165,
+  "risky_selected_count": 9,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g521_second_wave_candidate_pool_summary_v1",
+  "selected_block_counts": {
+    "block_A_block_heavy": 4,
+    "block_B_high_beta": 4,
+    "block_C_wait_conservative": 4,
+    "block_D_decay_shield_ablation": 4
+  },
+  "selected_candidate_count": 16,
+  "target_context_count": 16
+}

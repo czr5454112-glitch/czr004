@@ -1,0 +1,23 @@
+{
+  "aaai_ready": false,
+  "candidate_rows": 798,
+  "candidate_safe_policy_positive_rows": 20,
+  "context_has_new_beats_old14_opportunity": 6,
+  "context_rows": 21,
+  "decision": "targets_v10_passed_continue_split_features",
+  "family_rows": 189,
+  "full_primary_compatible": false,
+  "gates": {
+    "candidate_rows_gt_0": true,
+    "candidate_table_has_static": true,
+    "context_rows_gt_0": true,
+    "context_table_one_row_per_context": true,
+    "family_rows_gt_0": true
+  },
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g521_targets_v10_summary_v1",
+  "source_label": "targeted_only"
+}

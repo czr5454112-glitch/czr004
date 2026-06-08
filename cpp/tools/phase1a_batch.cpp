@@ -671,8 +671,13 @@ Repair5GMethodSpec repair5g_method_spec(const std::string& method)
         set(method, params, mode);
       };
   auto parse_g518_grid_lattice = [&]() -> bool {
-    const auto prefix = std::string("repair5g518_grid_");
-    if (method.rfind(prefix, 0) != 0) return false;
+    auto prefix = std::string("repair5g518_grid_");
+    auto grammar_label = std::string("g518_grid");
+    if (method.rfind(prefix, 0) != 0) {
+      prefix = std::string("repair5g521_grid_");
+      grammar_label = "g521_grid";
+      if (method.rfind(prefix, 0) != 0) return false;
+    }
     const auto parts = split_token(method.substr(prefix.size()), '_');
     if (parts.size() != 9) return false;
     auto read_field = [&](const std::string& token, const std::string& label,
@@ -702,7 +707,7 @@ Repair5GMethodSpec repair5g_method_spec(const std::string& method)
     }
     if (parts[8] != "c0" && parts[8] != "c1") return false;
     const auto c_only = parts[8] == "c1";
-    // Repair5G.5.18 generic adapter recognition only: parse bounded
+    // Repair5G.5.18/G5.21 generic adapter recognition only: parse bounded
     // candidate names into existing UpdateParams without changing solver
     // search, candidate generation, PIBT, LaCAM*, pruning, rewrite,
     // incumbent, or restart semantics.
@@ -710,7 +715,8 @@ Repair5GMethodSpec repair5g_method_spec(const std::string& method)
         alpha_cong_committed, alpha_cong_blocked, alpha_flow_progress,
         alpha_wait_or_nonprogress, rho_cong, rho_flow, flow_shield_beta,
         max_flow_shield, c_only,
-        c_only ? "g518_grid_bounded_c_only" : "g518_grid_bounded_flow_shield");
+        c_only ? grammar_label + "_bounded_c_only"
+               : grammar_label + "_bounded_flow_shield");
     return true;
   };
 

@@ -1,0 +1,259 @@
+{
+  "aaai_ready": false,
+  "budget_rows": 2640,
+  "budget_sensitive_candidate_failure_rows": 45,
+  "candidate_induced_no_solution_primary_rows": 28,
+  "candidate_recovers_static_no_solution_primary_rows": 58,
+  "contexts": 60,
+  "decision": "avoidable_failure_semantics_passed_continue_second_wave_pool",
+  "gates": {
+    "budget_rows_eq_2640": true,
+    "candidate_rows_per_context_eq_22": true,
+    "primary_pair_rows_eq_1320": true,
+    "static_candidate_induced_no_solution_count_eq_0": true,
+    "static_solution_quality_harmful_count_eq_0": true,
+    "target_contexts_eq_60": true
+  },
+  "group_counts": [
+    {
+      "budget_sensitive_candidate_failure": 32,
+      "candidate_induced_no_solution_primary": 22,
+      "candidate_recovers_static_no_solution_primary": 51,
+      "group_key": "maze",
+      "group_type": "map_family",
+      "rows": 440,
+      "solution_quality_harmful_vs_static_finite_pair": 181,
+      "unavoidable_context_failure_primary": 0
+    },
+    {
+      "budget_sensitive_candidate_failure": 6,
+      "candidate_induced_no_solution_primary": 6,
+      "candidate_recovers_static_no_solution_primary": 0,
+      "group_key": "random",
+      "group_type": "map_family",
+      "rows": 440,
+      "solution_quality_harmful_vs_static_finite_pair": 178,
+      "unavoidable_context_failure_primary": 0
+    },
+    {
+      "budget_sensitive_candidate_failure": 7,
+      "candidate_induced_no_solution_primary": 0,
+      "candidate_recovers_static_no_solution_primary": 7,
+      "group_key": "warehouse",
+      "group_type": "map_family",
+      "rows": 440,
+      "solution_quality_harmful_vs_static_finite_pair": 0,
+      "unavoidable_context_failure_primary": 308
+    },
+    {
+      "budget_sensitive_candidate_failure": 32,
+      "candidate_induced_no_solution_primary": 22,
+      "candidate_recovers_static_no_solution_primary": 51,
+      "group_key": "maze-32-32-4|a100",
+      "group_type": "map_agent_group",
+      "rows": 220,
+      "solution_quality_harmful_vs_static_finite_pair": 102,
+      "unavoidable_context_failure_primary": 0
+    },
+    {
+      "budget_sensitive_candidate_failure": 0,
+      "candidate_induced_no_solution_primary": 0,
+      "candidate_recovers_static_no_solution_primary": 0,
+      "group_key": "maze-32-32-4|a50",
+      "group_type": "map_agent_group",
+      "rows": 220,
+      "solution_quality_harmful_vs_static_finite_pair": 79,
+      "unavoidable_context_failure_primary": 0
+    },
+    {
+      "budget_sensitive_candidate_failure": 6,
+      "candidate_induced_no_solution_primary": 6,
+      "candidate_recovers_static_no_solution_primary": 0,
+      "group_key": "random-32-32-20|a100",
+      "group_type": "map_agent_group",
+      "rows": 220,
+      "solution_quality_harmful_vs_static_finite_pair": 96,
+      "unavoidable_context_failure_primary": 0
+    },
+    {
+      "budget_sensitive_candidate_failure": 0,
+      "candidate_induced_no_solution_primary": 0,
+      "candidate_recovers_static_no_solution_primary": 0,
+      "group_key": "random-32-32-20|a50",
+      "group_type": "map_agent_group",
+      "rows": 220,
+      "solution_quality_harmful_vs_static_finite_pair": 82,
+      "unavoidable_context_failure_primary": 0
+    },
+    {
+      "budget_sensitive_candidate_failure": 0,
+      "candidate_induced_no_solution_primary": 0,
+      "candidate_recovers_static_no_solution_primary": 0,
+      "group_key": "warehouse-10-20-10-2-1|a100",
+      "group_type": "map_agent_group",
+      "rows": 220,
+      "solution_quality_harmful_vs_static_finite_pair": 0,
+      "unavoidable_context_failure_primary": 220
+    },
+    {
+      "budget_sensitive_candidate_failure": 7,
+      "candidate_induced_no_solution_primary": 0,
+      "candidate_recovers_static_no_solution_primary": 7,
+      "group_key": "warehouse-10-20-10-2-1|a50",
+      "group_type": "map_agent_group",
+      "rows": 220,
+      "solution_quality_harmful_vs_static_finite_pair": 0,
+      "unavoidable_context_failure_primary": 88
+    },
+    {
+      "budget_sensitive_candidate_failure": 6,
+      "candidate_induced_no_solution_primary": 1,
+      "candidate_recovers_static_no_solution_primary": 9,
+      "group_key": "additive",
+      "group_type": "candidate_family",
+      "rows": 60,
+      "solution_quality_harmful_vs_static_finite_pair": 37,
+      "unavoidable_context_failure_primary": 14
+    },
+    {
+      "budget_sensitive_candidate_failure": 3,
+      "candidate_induced_no_solution_primary": 3,
+      "candidate_recovers_static_no_solution_primary": 10,
+      "group_key": "block_heavy",
+      "group_type": "candidate_family",
+      "rows": 240,
+      "solution_quality_harmful_vs_static_finite_pair": 50,
+      "unavoidable_context_failure_primary": 56
+    },
+    {
+      "budget_sensitive_candidate_failure": 0,
+      "candidate_induced_no_solution_primary": 0,
+      "candidate_recovers_static_no_solution_primary": 3,
+      "group_key": "commit_heavy",
+      "group_type": "candidate_family",
+      "rows": 60,
+      "solution_quality_harmful_vs_static_finite_pair": 16,
+      "unavoidable_context_failure_primary": 14
+    },
+    {
+      "budget_sensitive_candidate_failure": 8,
+      "candidate_induced_no_solution_primary": 7,
+      "candidate_recovers_static_no_solution_primary": 8,
+      "group_key": "flow_decay",
+      "group_type": "candidate_family",
+      "rows": 180,
+      "solution_quality_harmful_vs_static_finite_pair": 53,
+      "unavoidable_context_failure_primary": 42
+    },
+    {
+      "budget_sensitive_candidate_failure": 8,
+      "candidate_induced_no_solution_primary": 7,
+      "candidate_recovers_static_no_solution_primary": 10,
+      "group_key": "high_beta",
+      "group_type": "candidate_family",
+      "rows": 240,
+      "solution_quality_harmful_vs_static_finite_pair": 55,
+      "unavoidable_context_failure_primary": 56
+    },
+    {
+      "budget_sensitive_candidate_failure": 4,
+      "candidate_induced_no_solution_primary": 3,
+      "candidate_recovers_static_no_solution_primary": 2,
+      "group_key": "low_beta_high_cap",
+      "group_type": "candidate_family",
+      "rows": 60,
+      "solution_quality_harmful_vs_static_finite_pair": 22,
+      "unavoidable_context_failure_primary": 14
+    },
+    {
+      "budget_sensitive_candidate_failure": 8,
+      "candidate_induced_no_solution_primary": 2,
+      "candidate_recovers_static_no_solution_primary": 0,
+      "group_key": "static",
+      "group_type": "candidate_family",
+      "rows": 120,
+      "solution_quality_harmful_vs_static_finite_pair": 0,
+      "unavoidable_context_failure_primary": 28
+    },
+    {
+      "budget_sensitive_candidate_failure": 3,
+      "candidate_induced_no_solution_primary": 2,
+      "candidate_recovers_static_no_solution_primary": 7,
+      "group_key": "static_boundary",
+      "group_type": "candidate_family",
+      "rows": 120,
+      "solution_quality_harmful_vs_static_finite_pair": 70,
+      "unavoidable_context_failure_primary": 28
+    },
+    {
+      "budget_sensitive_candidate_failure": 1,
+      "candidate_induced_no_solution_primary": 1,
+      "candidate_recovers_static_no_solution_primary": 2,
+      "group_key": "wait_aggressive",
+      "group_type": "candidate_family",
+      "rows": 60,
+      "solution_quality_harmful_vs_static_finite_pair": 14,
+      "unavoidable_context_failure_primary": 14
+    },
+    {
+      "budget_sensitive_candidate_failure": 4,
+      "candidate_induced_no_solution_primary": 2,
+      "candidate_recovers_static_no_solution_primary": 7,
+      "group_key": "wait_conservative",
+      "group_type": "candidate_family",
+      "rows": 180,
+      "solution_quality_harmful_vs_static_finite_pair": 42,
+      "unavoidable_context_failure_primary": 42
+    },
+    {
+      "budget_sensitive_candidate_failure": 12,
+      "candidate_induced_no_solution_primary": 9,
+      "candidate_recovers_static_no_solution_primary": 19,
+      "group_key": "g518_new",
+      "group_type": "candidate_source",
+      "rows": 480,
+      "solution_quality_harmful_vs_static_finite_pair": 110,
+      "unavoidable_context_failure_primary": 112
+    },
+    {
+      "budget_sensitive_candidate_failure": 33,
+      "candidate_induced_no_solution_primary": 19,
+      "candidate_recovers_static_no_solution_primary": 39,
+      "group_key": "old14",
+      "group_type": "candidate_source",
+      "rows": 840,
+      "solution_quality_harmful_vs_static_finite_pair": 249,
+      "unavoidable_context_failure_primary": 196
+    },
+    {
+      "budget_sensitive_candidate_failure": 40,
+      "candidate_induced_no_solution_primary": 23,
+      "candidate_recovers_static_no_solution_primary": 58,
+      "group_key": "False",
+      "group_type": "opportunity_context",
+      "rows": 968,
+      "solution_quality_harmful_vs_static_finite_pair": 182,
+      "unavoidable_context_failure_primary": 308
+    },
+    {
+      "budget_sensitive_candidate_failure": 5,
+      "candidate_induced_no_solution_primary": 5,
+      "candidate_recovers_static_no_solution_primary": 0,
+      "group_key": "True",
+      "group_type": "opportunity_context",
+      "rows": 352,
+      "solution_quality_harmful_vs_static_finite_pair": 177,
+      "unavoidable_context_failure_primary": 0
+    }
+  ],
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "primary_pair_rows": 1320,
+  "rows": 3960,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g521_avoidable_failure_semantics_summary_v1",
+  "static_candidate_induced_no_solution_count": 0,
+  "static_solution_quality_harmful_count": 0,
+  "unavoidable_context_failure_primary_rows": 308
+}

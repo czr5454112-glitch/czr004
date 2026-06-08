@@ -1,5 +1,56 @@
 # Codex Worklog
 
+## 2026-06-08 - Repair5G.5.21 second-wave lattice and split selector
+
+- Request:
+  Finish `czr004_g521_after_g520_second_wave_and_selector_deep_prompt.md` completely, then push the completed work to GitHub.
+- Planned files:
+  - `czr004_repair5g521_second_wave_lattice_and_split_selector_plan.md`
+  - `scripts/repair5g521_common.py`
+  - `scripts/verify_repair5g521_g520_artifacts.py`
+  - `scripts/analyze_repair5g521_avoidable_failure_semantics.py`
+  - `scripts/create_repair5g521_second_wave_candidate_pool.py`
+  - `scripts/verify_repair5g521_second_wave_adapter_grammar.py`
+  - `scripts/run_repair5g521_targeted_second_wave_probe.py`
+  - `scripts/analyze_repair5g521_targeted_second_wave_oracle.py`
+  - `scripts/run_repair5g521_full_primary_confirmation_if_needed.py`
+  - `scripts/create_repair5g521_targets_v10.py`
+  - `scripts/create_repair5g521_split_context_family_candidate_features.py`
+  - `scripts/train_eval_repair5g521_split_opportunity_selector.py`
+  - `scripts/analyze_repair5g521_oracle_to_policy_gap.py`
+  - `scripts/write_repair5g521_decision.py`
+  - `outputs/reports/phase5p5_repair5g521_*`
+  - `outputs/tables/phase5p5_repair5g521_*`
+  - `outputs/logs/phase5p5_repair5g521_*`
+- Key constraints:
+  Use local observed-ID data only, `max_workers=1` for solver probes, do not inspect or run IDs `166..205`, do not modify `external/lacam2/lacam2/**`, and keep `phase5p5_allowed=false`, `phase6_allowed=false`, `runtime_claim_allowed=false`, `learned_runtime_policy_validated=false`, and `aaai_ready=false`.
+- Commands planned:
+  - `python -m py_compile scripts\repair5g521_common.py ... scripts\write_repair5g521_decision.py`
+  - `python scripts\verify_repair5g521_g520_artifacts.py`
+  - `python scripts\analyze_repair5g521_avoidable_failure_semantics.py`
+  - `python scripts\create_repair5g521_second_wave_candidate_pool.py`
+  - `python scripts\verify_repair5g521_second_wave_adapter_grammar.py`
+  - `python scripts\run_repair5g521_targeted_second_wave_probe.py --overwrite --max-workers 1`
+  - `python scripts\analyze_repair5g521_targeted_second_wave_oracle.py`
+  - `python scripts\run_repair5g521_full_primary_confirmation_if_needed.py --overwrite --max-workers 1`
+  - `python scripts\create_repair5g521_targets_v10.py`
+  - `python scripts\create_repair5g521_split_context_family_candidate_features.py`
+  - `python scripts\train_eval_repair5g521_split_opportunity_selector.py --bootstrap-samples 300`
+  - `python scripts\analyze_repair5g521_oracle_to_policy_gap.py`
+  - `python scripts\write_repair5g521_decision.py`
+  - JSON parse / CSV row-count sanity checks
+  - reserved-ID guard rejection check for `166`
+  - `git diff --check`
+  - `git status --short -- external/lacam2/lacam2`
+- Results:
+  - Implemented the G5.21 package, including G5.20 artifact verification, avoidable-failure semantics, deterministic second-wave pool selection, G5.21 adapter grammar smoke, targeted second-wave probe/oracle analysis, full-primary skip handling, v10 split targets/features, split selector evaluation, oracle-to-policy gap autopsy, and final decision writer.
+  - Extended only the project-owned Phase1A batch adapter to recognize `repair5g521_grid_*` aliases through the same bounded parser used by the G5.18 grid. No `external/lacam2/lacam2/**` changes.
+  - Targeted probe integrity passed with `21` contexts, `38` candidates, budgets `[1000, 2000]`, `1596` probe rows, zero duplicate context/candidate/budget rows, all selected candidates recognized, and IDs `166..205` untouched.
+  - Targeted oracle gate failed (`safe_second_wave_win_contexts=1`), so full-primary confirmation was skipped by design. Final decision is `g521_second_wave_no_candidate_space_gain_continue_lattice_autopsy`.
+  - Selector evaluation completed on targeted-only diagnostic data. Best policy was `conformal_abstention_selector`, `policy_promising=false`, with `6` missed oracle opportunities and `0` harmful policy selections in the gap autopsy.
+  - Validation passed: full `py_compile`, G5.20 artifact check, avoidable semantics, candidate pool, adapter grammar, targeted oracle, full-primary skip, v10 targets/features, selector eval with `samples=300`, gap autopsy, decision writer, JSON parse sanity, G5.21 CSV row-count sanity, reserved-ID rejection for `166` with exit code `2`, `git diff --check`, and clean `git status --short -- external/lacam2/lacam2`.
+  - Closed claims remained closed in generated summaries: `phase5p5_allowed=false`, `phase6_allowed=false`, `runtime_claim_allowed=false`, `learned_runtime_policy_validated=false`, and `aaai_ready=false`.
+
 ## 2026-06-08 - Repair5G.5.20 target semantics and opportunity-gated new-candidate policy
 
 - Request:

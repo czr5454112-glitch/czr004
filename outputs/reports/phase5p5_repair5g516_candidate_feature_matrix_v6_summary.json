@@ -1,0 +1,32 @@
+{
+  "aaai_ready": false,
+  "candidate_rows_per_context_max": 14,
+  "candidate_rows_per_context_min": 14,
+  "contexts": 60,
+  "decision": "v6_error_bank_feature_matrix_passed_continue_ranker",
+  "error_bank_feature_columns": [
+    "feature_error_bank_harmful_fp_context",
+    "feature_error_bank_missed_helpful_context",
+    "feature_error_bank_static_boundary_context",
+    "feature_error_bank_high_uncertainty_context"
+  ],
+  "feature_count": 138,
+  "forbidden_feature_count": 0,
+  "forbidden_features": [],
+  "gates": {
+    "context_grouping_sane": true,
+    "forbidden_feature_count_eq_0": true,
+    "ids_166_205_untouched": true,
+    "observed_ids_only": true,
+    "rows_ge_840": true
+  },
+  "ids_166_205_untouched": true,
+  "learned_runtime_policy_validated": false,
+  "observed_ids_only": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "rows": 840,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g516_candidate_feature_matrix_v6_summary_v1",
+  "static_near_oracle_metadata_note": "The prompt's static-near-oracle source is retained as non-feature metadata; the feature column is named feature_error_bank_static_boundary_context to keep forbidden oracle tokens out of feature_* columns."
+}

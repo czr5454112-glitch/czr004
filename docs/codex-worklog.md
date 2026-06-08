@@ -3538,3 +3538,80 @@
 - Decision:
   - Final G5.15 decision: `interaction_ranker_no_better_than_v4_continue_feature_design`.
   - `phase5p5_allowed=false`, `phase6_allowed=false`, `runtime_claim_allowed=false`, `learned_runtime_policy_validated=false`, and `aaai_ready=false` remain closed.
+## 2026-06-08 08:20 - Repair5G.5.16 error-driven safety-bound and lattice repair diagnostics
+
+- Request:
+  Finish `czr004_g516_after_g515_interaction_review_and_prompt.md` completely, then push the completed work to GitHub.
+- Files planned:
+  - `czr004_repair5g516_error_driven_safety_bound_and_lattice_repair_plan.md`
+  - `scripts/repair5g516_common.py`
+  - `scripts/verify_repair5g516_g515_artifacts.py`
+  - `scripts/write_repair5g516_g515_final_interpretation.py`
+  - `scripts/create_repair5g516_error_bank.py`
+  - `scripts/create_repair5g516_targeted_repair_lattice.py`
+  - `scripts/plan_repair5g516_local_targeted_probe.py`
+  - `scripts/run_repair5g516_local_targeted_probe.py`
+  - `scripts/create_repair5g516_augmented_candidate_targets.py`
+  - `scripts/create_repair5g516_augmented_feature_matrix_v6.py`
+  - `scripts/train_repair5g516_pessimistic_safety_bound_ranker.py`
+  - `scripts/eval_repair5g516_pessimistic_rankers.py`
+  - `scripts/analyze_repair5g516_error_autopsy.py`
+  - `scripts/analyze_repair5g516_safety_package_update.py`
+  - `scripts/write_repair5g516_decision.py`
+  - `outputs/reports/phase5p5_repair5g516_*`
+  - `outputs/tables/phase5p5_repair5g516_*`
+- Key constraints:
+  Use only observed IDs, reject `166..205`, do not modify `external/lacam2/lacam2/**`, do not change solver semantics, use `max_workers=1` for any local probe, and keep runtime/Phase5.5/Phase6/AAAI claims closed.
+- Commands planned:
+  - `python -m py_compile` for all new G5.16 scripts
+  - `python scripts\verify_repair5g516_g515_artifacts.py`
+  - `python scripts\write_repair5g516_g515_final_interpretation.py`
+  - `python scripts\create_repair5g516_error_bank.py`
+  - `python scripts\create_repair5g516_targeted_repair_lattice.py`
+  - `python scripts\plan_repair5g516_local_targeted_probe.py`
+  - `python scripts\run_repair5g516_local_targeted_probe.py`
+  - `python scripts\create_repair5g516_augmented_candidate_targets.py`
+  - `python scripts\create_repair5g516_augmented_feature_matrix_v6.py`
+  - `python scripts\train_repair5g516_pessimistic_safety_bound_ranker.py`
+  - `python scripts\eval_repair5g516_pessimistic_rankers.py`
+  - `python scripts\analyze_repair5g516_error_autopsy.py`
+  - `python scripts\analyze_repair5g516_safety_package_update.py`
+  - `python scripts\write_repair5g516_decision.py`
+- Follow-up:
+  If the targeted `repair5g516_*` lattice names are not executable by the current adapter, stop before solver and produce the skipped-probe report while continuing table-only diagnostics.
+- Commands run:
+  - `python -m py_compile scripts\repair5g516_common.py ... scripts\write_repair5g516_decision.py`
+  - `python scripts\verify_repair5g516_g515_artifacts.py`
+  - `python scripts\write_repair5g516_g515_final_interpretation.py`
+  - `python scripts\create_repair5g516_error_bank.py`
+  - `python scripts\create_repair5g516_targeted_repair_lattice.py`
+  - `python scripts\plan_repair5g516_local_targeted_probe.py`
+  - `python scripts\run_repair5g516_local_targeted_probe.py`
+  - `python scripts\create_repair5g516_augmented_candidate_targets.py`
+  - `python scripts\create_repair5g516_augmented_feature_matrix_v6.py`
+  - `python scripts\train_repair5g516_pessimistic_safety_bound_ranker.py`
+  - `python scripts\eval_repair5g516_pessimistic_rankers.py`
+  - `python scripts\analyze_repair5g516_error_autopsy.py`
+  - `python scripts\analyze_repair5g516_safety_package_update.py`
+  - `python scripts\write_repair5g516_decision.py`
+  - JSON parse / CSV row-count / grouped-context sanity checks
+  - `python scripts\verify_repair5g516_g515_artifacts.py --ids 166`
+  - `git diff --check`
+- Key observations:
+  - G5.15 artifacts verified cleanly: final decision `interaction_ranker_no_better_than_v4_continue_feature_design`, v5 rows `840`, contexts `60`, and `14` candidates per context.
+  - Error bank passed gates with `128` rows: `3` harmful false-positive rows, `39` missed helpful fallbacks, `8` static-near-oracle rows, `37` high-uncertainty rows, `20` high oracle-gap rows, and `21` candidate-disagreement rows.
+  - Targeted repair lattice produced `10` update-only `repair5g516_*` candidates, but `0` are recognized by the current C++ adapter, so the solver probe stopped before execution.
+  - Local probe plan contains `20` target contexts, `24` candidates, budgets `1000` and `2000`, `max_workers=1`, and `960` planned rows; run script wrote the skipped-probe report.
+  - V6 table-only matrix passed with `840` rows, `60` contexts, `14` candidates per context, `138` features, and `forbidden_feature_count=0`.
+  - Pessimistic ranker training passed. Seed-OOF/deeper eval selected `balanced_bound` as primary with harmful false positives `0`, but final eval decision was `pessimistic_ranker_too_conservative_continue_lattice_or_data`.
+  - Error autopsy confirmed G5.16 fixed G5.15 harmful false positives but missed `52` helpful contexts, so it cannot pass by hiding opportunity behind fallback.
+  - Safety package remains incomplete: no no-solution/infeasible, budget-sensitive, or OOD-like holdout coverage exists.
+- Tests / validation:
+  - `py_compile` passed for all new G5.16 scripts.
+  - JSON summaries parsed and CSV sanity passed: error bank rows `128`, v6 rows `840`, contexts `60`, `14` candidates/context, and probe plan rows `960`.
+  - Leakage scanner passed with `forbidden_feature_count=0` for v6.
+  - Reserved-ID guard correctly rejected `166`.
+  - `git diff --check` passed with only pre-existing LF/CRLF warnings.
+- Decision:
+  - Final G5.16 decision: `targeted_repair_lattice_requires_adapter_followup`.
+  - `phase5p5_allowed=false`, `phase6_allowed=false`, `runtime_claim_allowed=false`, `learned_runtime_policy_validated=false`, and `aaai_ready=false` remain closed.

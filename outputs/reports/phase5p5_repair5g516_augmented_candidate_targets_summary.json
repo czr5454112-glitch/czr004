@@ -1,0 +1,12 @@
+{
+  "aaai_ready": false,
+  "decision": "augmented_targets_table_only_from_existing_v5",
+  "learned_runtime_policy_validated": false,
+  "no_targeted_probe_reason": "targeted_repair_lattice_requires_adapter_followup: repair5g516_* names are not recognized by the current C++ adapter",
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "rows": 840,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g516_augmented_candidate_targets_summary_v1",
+  "targeted_probe_available": false
+}

@@ -1,0 +1,91 @@
+{
+  "aaai_ready": false,
+  "contexts_fixed_by_g516": [
+    "random-32-32-20|a50|s151|it0|14650fb0739d0383",
+    "warehouse-10-20-10-2-1|a100|s154|it0|14650fb0739d0383"
+  ],
+  "contexts_newly_harmed_by_g516": [],
+  "decision": "error_autopsy_too_conservative_continue_lattice_or_data",
+  "falls_back_everywhere_or_hides_opportunity": true,
+  "g514_false_positive_contexts": [
+    "maze-32-32-4|a50|s151|it0|14650fb0739d0383",
+    "random-32-32-20|a50|s151|it0|14650fb0739d0383"
+  ],
+  "g514_false_positive_count": 2,
+  "g515_false_positive_contexts": [
+    "random-32-32-20|a50|s151|it0|14650fb0739d0383",
+    "warehouse-10-20-10-2-1|a100|s154|it0|14650fb0739d0383"
+  ],
+  "g515_false_positive_count": 2,
+  "g516_false_positive_contexts": [],
+  "g516_false_positive_count": 0,
+  "g516_missed_helpful_count": 52,
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "primary_policy_name": "balanced_bound",
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g516_error_autopsy_summary_v1",
+  "top_missed_helpful_contexts": [
+    {
+      "normalized_context_key": "warehouse-10-20-10-2-1|a100|s152|it0|14650fb0739d0383",
+      "oracle_candidate_for_context": "repair5g59_slow_decay_high_shield",
+      "oracle_delta_vs_static": -0.12910254664,
+      "static_oracle_regret_primary": 0.12910254664
+    },
+    {
+      "normalized_context_key": "warehouse-10-20-10-2-1|a100|s154|it0|14650fb0739d0383",
+      "oracle_candidate_for_context": "repair5g59_slow_decay_high_shield",
+      "oracle_delta_vs_static": -0.10430839002,
+      "static_oracle_regret_primary": 0.10430839002
+    },
+    {
+      "normalized_context_key": "random-32-32-20|a50|s150|it0|14650fb0739d0383",
+      "oracle_candidate_for_context": "repair5g59_high_beta_cap_safe",
+      "oracle_delta_vs_static": -0.09882747069,
+      "static_oracle_regret_primary": 0.09882747069
+    },
+    {
+      "normalized_context_key": "random-32-32-20|a50|s153|it0|14650fb0739d0383",
+      "oracle_candidate_for_context": "repair5g59_slow_decay_high_shield",
+      "oracle_delta_vs_static": -0.09622302159,
+      "static_oracle_regret_primary": 0.09622302159
+    },
+    {
+      "normalized_context_key": "random-32-32-20|a50|s154|it0|14650fb0739d0383",
+      "oracle_candidate_for_context": "repair5g59_slow_decay_high_shield",
+      "oracle_delta_vs_static": -0.08805668017,
+      "static_oracle_regret_primary": 0.08805668017
+    },
+    {
+      "normalized_context_key": "warehouse-10-20-10-2-1|a50|s154|it0|14650fb0739d0383",
+      "oracle_candidate_for_context": "repair5g59_low_beta_high_cap",
+      "oracle_delta_vs_static": -0.08027586207,
+      "static_oracle_regret_primary": 0.08027586207
+    },
+    {
+      "normalized_context_key": "warehouse-10-20-10-2-1|a50|s152|it0|14650fb0739d0383",
+      "oracle_candidate_for_context": "repair5g59_slow_decay_high_shield",
+      "oracle_delta_vs_static": -0.07377805103,
+      "static_oracle_regret_primary": 0.07377805103
+    },
+    {
+      "normalized_context_key": "random-32-32-20|a50|s148|it0|14650fb0739d0383",
+      "oracle_candidate_for_context": "repair5g59_slow_decay_high_shield",
+      "oracle_delta_vs_static": -0.07194244605,
+      "static_oracle_regret_primary": 0.07194244605
+    },
+    {
+      "normalized_context_key": "warehouse-10-20-10-2-1|a100|s146|it0|14650fb0739d0383",
+      "oracle_candidate_for_context": "repair5g59_low_beta_high_cap",
+      "oracle_delta_vs_static": -0.06954382827,
+      "static_oracle_regret_primary": 0.06954382827
+    },
+    {
+      "normalized_context_key": "maze-32-32-4|a100|s153|it0|14650fb0739d0383",
+      "oracle_candidate_for_context": "repair5g59_wait_conservative",
+      "oracle_delta_vs_static": -0.06339181287,
+      "static_oracle_regret_primary": 0.06339181287
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "aaai_ready": false,
+  "base_candidate_count": 14,
+  "budgets": [
+    1000,
+    2000
+  ],
+  "candidate_count": 24,
+  "decision": "local_targeted_probe_planned_but_not_runnable",
+  "estimated_rows": 960,
+  "gates": {
+    "all_ids_observed": true,
+    "budgets_eq_1000_2000": true,
+    "candidate_count_le_26": true,
+    "candidate_methods_executable": false,
+    "estimated_row_count_local_safe": true,
+    "ids_166_205_untouched": true,
+    "max_workers_eq_1": true,
+    "target_contexts_le_20": true
+  },
+  "ids_166_205_untouched": true,
+  "learned_runtime_policy_validated": false,
+  "max_workers": 1,
+  "no_run_reason": "targeted_repair_lattice_requires_adapter_followup: repair5g516_* names are not recognized by the current C++ adapter",
+  "observed_ids_only": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "repair_candidate_count": 10,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g516_local_targeted_probe_plan_summary_v1",
+  "target_contexts": 20
+}

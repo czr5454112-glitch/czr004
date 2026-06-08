@@ -1,0 +1,28 @@
+{
+  "aaai_ready": false,
+  "candidate_rows_per_context_max": 22,
+  "candidate_rows_per_context_min": 22,
+  "candidate_space_gain_too_sparse_for_current_policy": false,
+  "contexts": 60,
+  "decision": "corrected_targets_v9_passed_continue_opportunity_features",
+  "gates": {
+    "candidates_per_context_eq_22": true,
+    "contexts_eq_60": true,
+    "new_opportunity_candidate_rows_gt_0": true,
+    "new_opportunity_contexts_gt_0": true,
+    "rows_eq_1320": true,
+    "safe_new_candidate_positive_rows_gt_0": true,
+    "static_self_neutrality_present": true
+  },
+  "learned_runtime_policy_validated": false,
+  "new_opportunity_candidate_rows": 16,
+  "new_opportunity_contexts": 16,
+  "no_solution_or_nonfinite_rows": 483,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "safe_new_candidate_positive_rows": 160,
+  "schema_version": "phase5p5_repair5g520_corrected_candidate_targets_v9_summary_v1",
+  "solution_quality_harmful_rows": 340,
+  "target_rows": 1320
+}

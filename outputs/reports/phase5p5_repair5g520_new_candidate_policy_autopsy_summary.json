@@ -1,0 +1,30 @@
+{
+  "aaai_ready": false,
+  "best_policy": "no_new_candidate_ablation",
+  "contexts_where_new_best_but_policy_picks_old_or_static": 15,
+  "contexts_where_new_selected_but_old_static_safer": 0,
+  "decision": "new_candidate_policy_autopsy_completed",
+  "false_positives_involving_new_candidates": 0,
+  "learned_runtime_policy_validated": false,
+  "missed_new_opportunities": 16,
+  "new_candidate_harmful_selection_count": 0,
+  "new_candidate_helpful_selection_count": 0,
+  "new_candidate_opportunity_capture_rate": 0.0,
+  "new_candidate_selection_count": 0,
+  "new_candidate_win_contexts": 16,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g520_new_candidate_policy_autopsy_summary_v1",
+  "top_16_rows_written": 16,
+  "top_recurrent_new_winners": {
+    "repair5g518_grid_c0p90_b1p40_f1p00_w0p45_dc0p95_df1p00_beta0p35_max0p75_c0": 1,
+    "repair5g518_grid_c0p90_b1p50_f1p00_w0p45_dc0p95_df1p00_beta0p45_max0p75_c0": 3,
+    "repair5g518_grid_c0p90_b1p65_f1p00_w0p45_dc0p95_df1p00_beta0p35_max0p75_c0": 1,
+    "repair5g518_grid_c1p20_b1p15_f1p00_w0p70_dc0p95_df1p00_beta0p55_max0p75_c0": 1,
+    "repair5g518_grid_c1p20_b1p15_f1p00_w0p70_dc0p95_df1p00_beta0p60_max0p75_c0": 1,
+    "repair5g518_grid_c1p20_b1p35_f1p00_w0p70_dc0p95_df1p00_beta0p60_max0p75_c0": 3,
+    "repair5g518_grid_c1p25_b1p25_f1p00_w0p35_dc0p95_df1p00_beta0p30_max0p75_c0": 2,
+    "repair5g518_grid_c1p25_b1p25_f1p00_w0p50_dc0p95_df1p00_beta0p35_max0p75_c0": 4
+  }
+}

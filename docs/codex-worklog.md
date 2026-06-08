@@ -1,5 +1,39 @@
 # Codex Worklog
 
+## 2026-06-08 - Repair5G.5.20 target semantics and opportunity-gated new-candidate policy
+
+- Request:
+  Finish `czr004_g520_after_g519_ranker_ignores_new_candidates_review_and_prompt.md` completely, then push the completed work to GitHub.
+- Planned files:
+  - `czr004_repair5g520_opportunity_gated_new_candidate_policy_plan.md`
+  - `scripts/repair5g520_common.py`
+  - `scripts/verify_repair5g520_g519_artifacts.py`
+  - `scripts/analyze_repair5g520_target_metric_semantics.py`
+  - `scripts/create_repair5g520_corrected_candidate_targets_v9.py`
+  - `scripts/create_repair5g520_opportunity_feature_matrix_v9.py`
+  - `scripts/train_eval_repair5g520_opportunity_gated_policies.py`
+  - `scripts/analyze_repair5g520_new_candidate_policy_autopsy.py`
+  - `scripts/plan_repair5g520_second_wave_lattice_if_needed.py`
+  - `scripts/write_repair5g520_decision.py`
+  - `outputs/reports/phase5p5_repair5g520_*`
+  - `outputs/tables/phase5p5_repair5g520_*`
+- Key constraints:
+  G5.18 candidate-space positive remains valid; G5.19 failed because the learned ranker ignored new candidates. G5.20 is local/offline diagnostic only, no solver run by default, no IDs `166..205`, no `external/lacam2/lacam2/**` edits, and no runtime/Phase5.5/Phase6/AAAI claim.
+- Commands planned:
+  - `python -m py_compile scripts\repair5g520_common.py ... scripts\write_repair5g520_decision.py`
+  - `python scripts\verify_repair5g520_g519_artifacts.py`
+  - `python scripts\analyze_repair5g520_target_metric_semantics.py`
+  - `python scripts\create_repair5g520_corrected_candidate_targets_v9.py`
+  - `python scripts\create_repair5g520_opportunity_feature_matrix_v9.py`
+  - `python scripts\train_eval_repair5g520_opportunity_gated_policies.py`
+  - `python scripts\analyze_repair5g520_new_candidate_policy_autopsy.py`
+  - `python scripts\plan_repair5g520_second_wave_lattice_if_needed.py`
+  - `python scripts\write_repair5g520_decision.py`
+  - JSON parse / CSV row-count sanity checks
+  - reserved-ID guard rejection check for `166`
+  - `git diff --check`
+  - `git status --short -- external/lacam2/lacam2`
+
 ## 2026-06-04 21:20 - Repair5G.5.6 budget-stable G6 offline design
 
 - Request:

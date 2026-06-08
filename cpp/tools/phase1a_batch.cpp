@@ -676,7 +676,11 @@ Repair5GMethodSpec repair5g_method_spec(const std::string& method)
     if (method.rfind(prefix, 0) != 0) {
       prefix = std::string("repair5g521_grid_");
       grammar_label = "g521_grid";
-      if (method.rfind(prefix, 0) != 0) return false;
+      if (method.rfind(prefix, 0) != 0) {
+        prefix = std::string("repair5g522_grid_");
+        grammar_label = "g522_grid";
+        if (method.rfind(prefix, 0) != 0) return false;
+      }
     }
     const auto parts = split_token(method.substr(prefix.size()), '_');
     if (parts.size() != 9) return false;
@@ -707,7 +711,7 @@ Repair5GMethodSpec repair5g_method_spec(const std::string& method)
     }
     if (parts[8] != "c0" && parts[8] != "c1") return false;
     const auto c_only = parts[8] == "c1";
-    // Repair5G.5.18/G5.21 generic adapter recognition only: parse bounded
+    // Repair5G.5.18/G5.21/G5.22 generic adapter recognition only: parse bounded
     // candidate names into existing UpdateParams without changing solver
     // search, candidate generation, PIBT, LaCAM*, pruning, rewrite,
     // incumbent, or restart semantics.

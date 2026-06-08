@@ -1,0 +1,10 @@
+parameter,global_linear_corr_neg_mean_score,global_rank_corr_oracle_wins,interpretation,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+alpha_cong_committed,0.244301589521,0.575119409466,higher signal,False,False,False,False,False
+alpha_cong_blocked,0.178465542161,0.322514112028,higher signal,False,False,False,False,False
+alpha_flow_progress,0.544320123224,0.562092922275,higher signal,False,False,False,False,False
+alpha_flow_wait_or_nonprogress,0.276633622803,0.551671732523,higher signal,False,False,False,False,False
+rho_cong,-0.131571958861,0.028658271819,weak/noisy,False,False,False,False,False
+rho_flow,0.26192472508,-0.044941380808,weak/noisy,False,False,False,False,False
+flow_shield_beta,0.303425429943,0.283760312636,higher signal,False,False,False,False,False
+max_flow_shield,0.772368453873,0.483608336952,higher signal,False,False,False,False,False
+c_only,,0.575119409466,higher signal,False,False,False,False,False

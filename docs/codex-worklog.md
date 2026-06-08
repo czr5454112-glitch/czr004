@@ -3848,3 +3848,61 @@
 - Decision:
   - Final G5.19 decision: `ranker_ignores_new_candidates_continue_candidate_policy_design`.
   - `phase5p5_allowed=false`, `phase6_allowed=false`, `runtime_claim_allowed=false`, `learned_runtime_policy_validated=false`, and `aaai_ready=false` remain closed.
+## 2026-06-08 - Repair5G.5.22 response-surface teacher dataset
+
+- Request:
+  Finish `czr004_g522_after_g521_response_surface_teacher_dataset_prompt.md` completely, using the deep research and Phase4-6 LAUR/LTM context documents as needed, then push to GitHub.
+- Planned files:
+  - `czr004_repair5g522_response_surface_teacher_dataset_plan.md`
+  - `scripts/repair5g522_common.py`
+  - `scripts/verify_repair5g522_g521_artifacts.py`
+  - `scripts/analyze_repair5g522_g521_lattice_failure_autopsy.py`
+  - `scripts/create_repair5g522_context_panel.py`
+  - `scripts/create_repair5g522_param_response_design.py`
+  - `scripts/verify_repair5g522_response_design_adapter.py`
+  - `scripts/run_repair5g522_response_surface_probe.py`
+  - `scripts/analyze_repair5g522_response_surface_oracle.py`
+  - `scripts/create_repair5g522_neural_teacher_dataset.py`
+  - `scripts/train_eval_repair5g522_neural_ready_surrogates.py`
+  - `scripts/analyze_repair5g522_signal_and_generalization.py`
+  - `scripts/write_repair5g522_decision.py`
+  - `outputs/reports/phase5p5_repair5g522_*`
+  - `outputs/tables/phase5p5_repair5g522_*`
+  - `outputs/logs/phase5p5_repair5g522_*`
+- Constraints:
+  Local PC execution only, `max_workers=1` for solver probes, observed IDs only, no IDs `166..205`, no server resources, no `external/lacam2/lacam2/**` edits, no LaCAM*/PIBT/search/rewrite/pruning/restart/candidate-deletion/h-value/action/priority semantic changes, and no runtime/Phase5.5/Phase6/AAAI claim.
+- Pre-probe worklog:
+  This entry is written before any G5.22 solver probe. The response-surface probe will only run after G5.21 artifact verification, context-panel generation, parameter design, adapter grammar verification, and the closed-claim gates are recorded.
+- Commands completed:
+  - `python scripts\verify_repair5g522_g521_artifacts.py`
+  - `python scripts\analyze_repair5g522_g521_lattice_failure_autopsy.py`
+  - `python scripts\create_repair5g522_context_panel.py`
+  - `python scripts\create_repair5g522_param_response_design.py`
+  - `powershell -ExecutionPolicy Bypass -File scripts\build_phase1a_batch.ps1`
+  - `python scripts\verify_repair5g522_response_design_adapter.py --overwrite`
+  - `python scripts\run_repair5g522_response_surface_probe.py --overwrite --max-workers 1`
+  - `python scripts\analyze_repair5g522_response_surface_oracle.py`
+  - `python scripts\create_repair5g522_neural_teacher_dataset.py`
+  - `python scripts\train_eval_repair5g522_neural_ready_surrogates.py --bootstrap-samples 300`
+  - `python scripts\analyze_repair5g522_signal_and_generalization.py`
+  - `python scripts\write_repair5g522_decision.py`
+- Observations:
+  - G5.21 artifact verification passed: targeted probe rows `1596`, G5.21 full-primary was correctly skipped, and all closed claims stayed false.
+  - G5.21 lattice autopsy found `16` near-duplicate second-wave candidates; this supported using G5.22 as a response-surface/teacher-data probe, not as a runtime claim.
+  - Context panel used `21` observed contexts only: `16` new-opportunity, `3` candidate-induced-risk, and `2` static-near-oracle/no-new-safe contexts.
+  - Parameter response design generated `529` raw candidates and selected `48` G5.22 candidates. The response probe compared old14, retained G5.18, and G5.22 candidates without reusing G5.21 as runtime candidates.
+  - Adapter grammar smoke passed with `99` rows and `0` unrecognized G5.22 candidates. The only C++ edit was bounded recognition for `repair5g522_grid_*` adapter names in `cpp/tools/phase1a_batch.cpp`.
+  - Response-surface probe completed with `2940` rows over `21` contexts, `70` candidates, and budgets `1000,2000`. Raw command/run/checkpoint/update-probe logs were recorded under `outputs/logs/phase5p5_repair5g522_*`.
+  - Oracle analysis found candidate-space signal (`safe_g522_win_contexts=19`) but no static-failure recovery rows.
+  - Teacher dataset was created with `1470` candidate rows, `1071` pairwise rows, `21` context rows, and `2688` edge-update rows/proxy blockers.
+  - Neural-ready surrogate evaluation selected `old14_plus_g518_no_new_baseline` as the best model; `promising_surrogate=false`.
+- Validation:
+  - G5.22 script `py_compile` passed.
+  - All `outputs/reports/phase5p5_repair5g522_*summary.json` files parse as JSON.
+  - Reserved-ID negative guard rejects `166` with `returncode=2` and `reserved_id_guard_rejected`.
+  - CSV row counts were checked for every `outputs/tables/phase5p5_repair5g522_*.csv`.
+  - `git diff --check` passed with line-ending warnings only.
+  - `external/lacam2/lacam2/**` unchanged.
+- Decision:
+  - Final G5.22 decision: `g522_no_learnable_signal_return_to_feature_or_trace_design`.
+  - `phase5p5_allowed=false`, `phase6_allowed=false`, `runtime_claim_allowed=false`, `learned_runtime_policy_validated=false`, and `aaai_ready=false` remain closed.

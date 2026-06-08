@@ -1,0 +1,24 @@
+{
+  "aaai_ready": false,
+  "at_least_3_context_buckets_present": true,
+  "bucket_counts": {
+    "candidate_induced_risk_contexts": 3,
+    "new_opportunity_contexts": 16,
+    "static_near_oracle_or_no_new_safe_contexts": 2
+  },
+  "context_count": 21,
+  "decision": "context_panel_passed_continue_response_design",
+  "gates": {
+    "at_least_3_context_buckets_present": true,
+    "context_count_le_36": true,
+    "ids_166_205_untouched": true,
+    "observed_ids_only": true
+  },
+  "ids_166_205_untouched": true,
+  "learned_runtime_policy_validated": false,
+  "observed_ids_only": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g522_context_panel_summary_v1"
+}

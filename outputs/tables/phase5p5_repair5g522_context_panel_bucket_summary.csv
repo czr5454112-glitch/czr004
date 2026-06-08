@@ -1,0 +1,6 @@
+context_bucket,target_cap,selected_contexts,source_available_or_added_before_cap,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+new_opportunity_contexts,16,16,16,False,False,False,False,False
+static_recovery_contexts,6,0,0,False,False,False,False,False
+candidate_induced_risk_contexts,6,3,3,False,False,False,False,False
+static_near_oracle_or_no_new_safe_contexts,4,2,2,False,False,False,False,False
+unavoidable_failure_controls,4,0,0,False,False,False,False,False

@@ -1,0 +1,43 @@
+{
+  "aaai_ready": false,
+  "candidate_induced_failure_rows": 34,
+  "candidate_rows": 1470,
+  "context_rows": 21,
+  "decision": "neural_teacher_dataset_created",
+  "edge_update_rows_or_blocker": 2688,
+  "forbidden_feature_count": 8,
+  "forbidden_features": [
+    "feature_context_old14_plus_g518_score",
+    "feature_context_old14_score",
+    "feature_context_response_surface_score",
+    "feature_context_static_score",
+    "feature_g518_oracle_score",
+    "feature_old14_oracle_score",
+    "feature_response_surface_oracle_score",
+    "feature_static_score"
+  ],
+  "learned_runtime_policy_validated": false,
+  "oracle_incremental_gap": -0.020237024125000037,
+  "pairwise_rows": 1071,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "response_surface_rows_gt_g521_targeted": true,
+  "runtime_claim_allowed": false,
+  "safe_positive_candidate_rows": 129,
+  "schema_version": "phase5p5_repair5g522_neural_teacher_dataset_summary_v1",
+  "source_label": "targeted_response_surface_only",
+  "source_oracle_by_context": "outputs/tables/phase5p5_repair5g522_response_surface_oracle_by_context.csv",
+  "source_probe_results": "outputs/tables/phase5p5_repair5g522_response_surface_probe_results.csv",
+  "source_probe_rows": 2940,
+  "static_recovery_rows": 0,
+  "tables": {
+    "candidate_teacher_table": "outputs\\tables\\phase5p5_repair5g522_neural_teacher_candidates.csv",
+    "context_teacher_table": "outputs\\tables\\phase5p5_repair5g522_neural_teacher_contexts.csv",
+    "edge_update_teacher_table": "outputs\\tables\\phase5p5_repair5g522_neural_teacher_edge_updates.csv",
+    "pairwise_preference_table": "outputs\\tables\\phase5p5_repair5g522_neural_teacher_pairwise_preferences.csv"
+  },
+  "train_dev_split_metadata": {
+    "source": "targeted_response_surface_only",
+    "split": "seed_oof_plus_fixed_seed_order"
+  }
+}

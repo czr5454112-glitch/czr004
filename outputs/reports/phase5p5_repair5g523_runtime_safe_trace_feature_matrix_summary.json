@@ -1,0 +1,28 @@
+{
+  "aaai_ready": false,
+  "candidate_rows": 2640,
+  "context_rows": 60,
+  "decision": "runtime_safe_trace_feature_matrix_created",
+  "feature_count": 24,
+  "feature_groups": {
+    "feature_agent": 1,
+    "feature_candidate_geometry": 2,
+    "feature_candidate_param": 9,
+    "feature_context_bucket_prior": 1,
+    "feature_interaction_runtime": 1,
+    "feature_iteration": 1,
+    "feature_map": 2,
+    "feature_nearest_g518": 1,
+    "feature_nearest_old14": 1,
+    "feature_region_prior": 1,
+    "feature_rich": 2,
+    "feature_trace": 2
+  },
+  "forbidden_feature_count": 0,
+  "forbidden_features": [],
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g523_runtime_safe_trace_feature_matrix_summary_v1"
+}

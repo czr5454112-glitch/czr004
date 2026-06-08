@@ -1,0 +1,52 @@
+{
+  "aaai_ready": false,
+  "decision": "full_primary_candidate_set_created",
+  "expected_rows": 5280,
+  "g518_retained_candidate_count": 8,
+  "g522_full_primary_selected_count": 22,
+  "gates": {
+    "expected_rows_in_range": true,
+    "g522_full_primary_selected_count_le_24": true,
+    "no_exact_duplicate_fingerprints": true,
+    "old14_controls_eq_14": true,
+    "retained_g518_eq_8": true,
+    "total_candidate_count_le_46": true
+  },
+  "learned_runtime_policy_validated": false,
+  "old14_candidate_count": 14,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "region_counts": {
+    "A_g518_winner_neighborhood": 3,
+    "B_static_recovery_feasibility": 7,
+    "C_risk_boundary": 3,
+    "D_fractional_coverage": 9
+  },
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g523_full_primary_candidate_set_summary_v1",
+  "selected_g522_candidates": [
+    "repair5g522_grid_c1p22_b1p29_f0p78_w0p75_dc0p94_df0p94_beta0p25_max0p92_c0",
+    "repair5g522_grid_c0p87_b1p57_f1p13_w0p79_dc0p91_df0p95_beta0p54_max0p89_c0",
+    "repair5g522_grid_c1p00_b1p35_f1p00_w0p40_dc0p92_df0p98_beta0p35_max0p80_c0",
+    "repair5g522_grid_c1p14_b1p46_f0p83_w0p73_dc0p90_df1p00_beta0p34_max0p94_c0",
+    "repair5g522_grid_c1p20_b1p55_f1p05_w0p90_dc0p90_df0p95_beta0p55_max0p90_c0",
+    "repair5g522_grid_c1p29_b1p74_f1p18_w0p77_dc0p99_df1p01_beta0p62_max0p91_c0",
+    "repair5g522_grid_c0p83_b1p50_f1p04_w0p64_dc0p97_df1p00_beta0p68_max1p00_c0",
+    "repair5g522_grid_c1p00_b1p35_f1p00_w0p40_dc0p92_df0p98_beta0p35_max0p65_c0",
+    "repair5g522_grid_c1p20_b1p55_f1p05_w0p75_dc0p90_df0p95_beta0p55_max0p90_c0",
+    "repair5g522_grid_c0p85_b1p24_f0p87_w0p48_dc0p95_df0p98_beta0p65_max0p99_c0",
+    "repair5g522_grid_c0p90_b1p30_f1p00_w0p40_dc0p95_df1p00_beta0p30_max0p75_c0",
+    "repair5g522_grid_c0p90_b1p40_f1p00_w0p40_dc0p95_df1p00_beta0p40_max0p75_c0",
+    "repair5g522_grid_c1p25_b1p66_f1p09_w0p62_dc0p93_df0p94_beta0p31_max0p51_c0",
+    "repair5g522_grid_c1p26_b1p68_f1p11_w0p66_dc0p95_df0p96_beta0p39_max0p61_c0",
+    "repair5g522_grid_c0p80_b1p15_f0p75_w0p30_dc0p88_df0p90_beta0p25_max0p50_c0",
+    "repair5g522_grid_c1p00_b1p45_f1p00_w0p40_dc0p92_df0p98_beta0p30_max0p80_c0",
+    "repair5g522_grid_c1p20_b1p55_f1p05_w0p75_dc0p90_df0p95_beta0p65_max0p90_c0",
+    "repair5g522_grid_c0p90_b1p55_f1p00_w0p55_dc0p95_df1p00_beta0p45_max0p75_c0",
+    "repair5g522_grid_c1p00_b1p35_f1p00_w0p50_dc0p92_df0p98_beta0p35_max0p65_c0",
+    "repair5g522_grid_c1p00_b1p35_f1p00_w0p50_dc0p92_df0p98_beta0p35_max0p80_c0",
+    "repair5g522_grid_c1p00_b1p45_f1p00_w0p40_dc0p92_df0p98_beta0p35_max0p65_c0",
+    "repair5g522_grid_c1p00_b1p45_f1p00_w0p50_dc0p92_df0p98_beta0p30_max0p80_c0"
+  ],
+  "total_candidate_count": 44
+}

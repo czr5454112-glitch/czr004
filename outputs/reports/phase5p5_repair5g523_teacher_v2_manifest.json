@@ -1,0 +1,27 @@
+{
+  "aaai_ready": false,
+  "candidate_induced_failure_rows": 42,
+  "candidate_rows": 2640,
+  "context_rows": 60,
+  "decision": "leakage_free_teacher_dataset_v2_created",
+  "edge_update_rows_or_blocker": 19200,
+  "forbidden_feature_count": 0,
+  "forbidden_features": [],
+  "full_primary_compatible": true,
+  "learned_runtime_policy_validated": false,
+  "pairwise_rows": 3060,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "runtime_safe_feature_count": 28,
+  "safe_positive_candidate_rows": 155,
+  "schema_version": "phase5p5_repair5g523_leakage_free_teacher_dataset_summary_v1",
+  "source_label": "g523_full_primary_plus_g522_targeted",
+  "static_recovery_rows": 95,
+  "tables": {
+    "candidate_teacher_v2": "outputs/tables/phase5p5_repair5g523_candidate_teacher_v2.csv",
+    "context_teacher_v2": "outputs/tables/phase5p5_repair5g523_context_teacher_v2.csv",
+    "edge_update_teacher_v2": "outputs/tables/phase5p5_repair5g523_edge_update_teacher_v2.csv",
+    "pairwise_teacher_v2": "outputs/tables/phase5p5_repair5g523_pairwise_teacher_v2.csv"
+  }
+}

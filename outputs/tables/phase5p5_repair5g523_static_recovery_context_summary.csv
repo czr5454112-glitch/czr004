@@ -1,0 +1,5 @@
+group,contexts,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+all_candidate_level_recovery_contexts,9,False,False,False,False,False
+reliable_context_level_recovery_contexts,3,False,False,False,False,False
+reliable_not_measured_by_g522,0,False,False,False,False,False
+selected_for_probe_if_needed,0,False,False,False,False,False

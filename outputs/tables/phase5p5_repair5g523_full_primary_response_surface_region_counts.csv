@@ -1,0 +1,4 @@
+candidate_region,safe_win_budget_pairs,failure_rows,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+B_static_recovery_feasibility,12,6,False,False,False,False,False
+C_risk_boundary,16,1,False,False,False,False,False
+D_fractional_coverage,46,11,False,False,False,False,False

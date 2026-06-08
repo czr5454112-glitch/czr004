@@ -3906,3 +3906,66 @@
 - Decision:
   - Final G5.22 decision: `g522_no_learnable_signal_return_to_feature_or_trace_design`.
   - `phase5p5_allowed=false`, `phase6_allowed=false`, `runtime_claim_allowed=false`, `learned_runtime_policy_validated=false`, and `aaai_ready=false` remain closed.
+## 2026-06-08 - Repair5G.5.23 full-primary teacher repair
+
+- Request:
+  Finish `czr004_g523_after_g522_full_primary_teacher_repair_prompt.md` completely, use the project context docs as needed, then push to GitHub.
+- Planned files:
+  - `czr004_repair5g523_full_primary_teacher_repair_plan.md`
+  - `scripts/repair5g523_common.py`
+  - `scripts/verify_repair5g523_g522_artifacts.py`
+  - `scripts/analyze_repair5g523_g522_signal_contradiction.py`
+  - `scripts/create_repair5g523_full_primary_candidate_set.py`
+  - `scripts/run_repair5g523_full_primary_response_surface_probe.py`
+  - `scripts/analyze_repair5g523_full_primary_response_surface_oracle.py`
+  - `scripts/mine_repair5g523_static_recovery_contexts.py`
+  - `scripts/run_repair5g523_static_recovery_probe_if_needed.py`
+  - `scripts/create_repair5g523_leakage_free_teacher_dataset.py`
+  - `scripts/create_repair5g523_runtime_safe_trace_feature_matrix.py`
+  - `scripts/train_eval_repair5g523_leakage_free_surrogates.py`
+  - `scripts/analyze_repair5g523_feature_signal_and_failure_modes.py`
+  - `scripts/write_repair5g523_decision.py`
+  - `outputs/reports/phase5p5_repair5g523_*`
+  - `outputs/tables/phase5p5_repair5g523_*`
+  - `outputs/logs/phase5p5_repair5g523_*`
+- Constraints:
+  Local PC execution only, `max_workers=1` for solver probes, observed IDs only, no IDs `166..205`, no `external/lacam2/lacam2/**` edits, no LaCAM*/PIBT/search/rewrite/pruning/restart/candidate-deletion/h-value/action/priority semantic changes, and no runtime/Phase5.5/Phase6/AAAI claim.
+- Pre-probe worklog:
+  This entry is written before any G5.23 solver probe. Full-primary probing will only run after G5.22 artifact verification, contradiction analysis, candidate-set selection, and the closed-claim gates are recorded.
+- Commands completed:
+  - `python -m py_compile scripts\repair5g523_common.py ... scripts\write_repair5g523_decision.py`
+  - `python scripts\verify_repair5g523_g522_artifacts.py`
+  - `python scripts\analyze_repair5g523_g522_signal_contradiction.py`
+  - `python scripts\create_repair5g523_full_primary_candidate_set.py`
+  - `python scripts\run_repair5g523_full_primary_response_surface_probe.py --overwrite --max-workers 1` (started the full-primary run; tool timeout interrupted after partial JSONL progress)
+  - `python scripts\run_repair5g523_full_primary_response_surface_probe.py --max-workers 1` (deterministic JSONL resume; repeated until all 60 contexts completed)
+  - `python scripts\analyze_repair5g523_full_primary_response_surface_oracle.py`
+  - `python scripts\mine_repair5g523_static_recovery_contexts.py`
+  - `python scripts\run_repair5g523_static_recovery_probe_if_needed.py --overwrite --max-workers 1`
+  - `python scripts\create_repair5g523_leakage_free_teacher_dataset.py`
+  - `python scripts\create_repair5g523_runtime_safe_trace_feature_matrix.py`
+  - `python scripts\train_eval_repair5g523_leakage_free_surrogates.py --bootstrap-samples 300`
+  - `python scripts\analyze_repair5g523_feature_signal_and_failure_modes.py`
+  - `python scripts\write_repair5g523_decision.py`
+- Observations:
+  - G5.22 verification passed: decision `g522_no_learnable_signal_return_to_feature_or_trace_design`, response-surface rows `2940`, contexts `21`, candidates `70`, selected G5.22 candidates `48`, and teacher leakage detected as a blocker.
+  - G5.22 contradiction analysis confirmed candidate-space oracle gain but non-promotable learning artifacts: forbidden outcome/oracle `feature_*` columns were used by the old performance model.
+  - Full-primary candidate set used `14` old14 controls, `8` retained G5.18 controls, and `22` selected G5.22 candidates for `44` total candidates and expected rows `5280`.
+  - Full-primary response-surface probe completed over `60` contexts and budgets `1000/2000`; final deduped table has `5280` rows, all selected candidates recognized, no duplicate context/candidate/budget rows, observed IDs only, and no IDs `166..205`.
+  - Full-primary oracle gate passed: incremental oracle gap vs old14+G5.18 is `-0.018164321965930263`, safe G5.22 win contexts `39`, safe G5.22 win budget pairs `74`, and budget stability `0.85`.
+  - Static-recovery mining found candidate-level recovery evidence but no need for a separate recovery probe under the G5.23 context-level reliability rule; the recovery probe script skipped cleanly.
+  - Leakage-free teacher v2 was created with `60` context rows, `2640` candidate rows, `3060` pairwise rows, and `19200` edge/update proxy rows.
+  - Runtime-safe trace matrix has `24` clean feature columns.
+  - Leakage-free surrogate suite selected `region_prior_baseline`; `promising_surrogate=false` because top3 safe oracle capture was `0.13333333333333333`, below the `0.25` gate.
+- Validation:
+  - G5.23 script `py_compile` passed.
+  - All `outputs/reports/phase5p5_repair5g523_*summary.json` files parse as JSON.
+  - Reserved-ID negative guard rejects `166` with `reserved_id_guard_rejected`.
+  - CSV row counts were checked for every `outputs/tables/phase5p5_repair5g523_*.csv`.
+  - `git diff --check` passed with line-ending warnings only.
+  - `git status --short -- external/lacam2/lacam2` returned clean.
+- Publication note:
+  - Raw full-primary probe logs remain recorded under ignored `outputs/logs/phase5p5_repair5g523_full_primary_response_surface_probe/`; the checkpoint JSONL is `287204116` bytes, above GitHub's normal file limit, so `outputs/reports/phase5p5_repair5g523_raw_log_manifest.json` records paths, byte sizes, and SHA-256 hashes for the local raw logs.
+- Decision:
+  - Final G5.23 decision: `g523_candidate_space_positive_but_learning_blocked_continue_trace_features`.
+  - `phase5p5_allowed=false`, `phase6_allowed=false`, `runtime_claim_allowed=false`, `learned_runtime_policy_validated=false`, and `aaai_ready=false` remain closed.

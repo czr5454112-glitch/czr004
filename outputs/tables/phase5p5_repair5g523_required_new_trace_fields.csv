@@ -1,0 +1,5 @@
+trace_field,why_needed,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+pre_update_edge_c_and_f_channels,causal edge/update residual labels instead of final-run proxies,False,False,False,False,False
+per_agent_goal_progress_edge_events,distinguish useful flow from congestion on the same edge,False,False,False,False,False
+blocked_reason_and_competing_neighbor_rank,predict candidate-induced failures before applying parameters,False,False,False,False,False
+same_checkpoint_counterfactual_short_probe_manifest,continuous residual labels need replayable traffic_before and trace_events,False,False,False,False,False

@@ -1,0 +1,11 @@
+{
+  "aaai_ready": false,
+  "decision": "static_recovery_probe_skipped_not_needed",
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "probe_ran": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g523_static_recovery_probe_summary_v1",
+  "skip_reason": "G5.21 recovery rows were candidate-level or already covered, not enough reliable context-level positives outside G5.22."
+}

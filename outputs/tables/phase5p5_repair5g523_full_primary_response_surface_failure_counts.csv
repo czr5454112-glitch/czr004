@@ -1,0 +1,4 @@
+failure_kind,count,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+candidate_induced_no_solution,20,False,False,False,False,False
+static_failure_candidate_recovers,49,False,False,False,False,False
+budget_sensitive_candidate_failure,45,False,False,False,False,False

@@ -1,0 +1,7 @@
+model,top3_safe_oracle_capture_rate,safe_policy_sim_utility,candidate_induced_no_solution_count,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+candidate_utility_ridge_runtime_safe,0.11666666666666667,0.0194314899155,1,False,False,False,False,False
+param_only_ablation,0.18333333333333332,0.015437920486749999,0,False,False,False,False,False
+context_only_ablation,0.11666666666666665,0.03996869087285,2,False,False,False,False,False
+no_rich_trace_ablation,0.13333333333333333,0.016696094374,1,False,False,False,False,False
+source_blind_ablation,0.13333333333333333,0.015466530688749999,1,False,False,False,False,False
+random_feature_control,0.03333333333333333,0.044600496959,0,False,False,False,False,False

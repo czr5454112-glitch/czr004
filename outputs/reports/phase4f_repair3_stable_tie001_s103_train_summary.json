@@ -1,0 +1,123 @@
+{
+  "drop_features": [
+    "blocked_count",
+    "blocked_per_agent",
+    "density",
+    "free_cells",
+    "local_degree_mean_topk",
+    "map_height",
+    "map_width",
+    "mean_topk_raw_before",
+    "new_nonzero_edges_count",
+    "nonzero_edges_before",
+    "obstacle_ratio",
+    "topk_blocked_edge_concentration"
+  ],
+  "epochs": 600,
+  "feature_count": 24,
+  "feature_stats_path": "C:\\PROGRAMING\\czr004\\artifacts\\models\\laur_ltm\\full_repair3_stable_tie001_mlp_s103\\laur_mlp_v1_feature_stats.json",
+  "final_loss": 1.8898310661315918,
+  "gate": {
+    "model_export_file_exists": true,
+    "passed": true,
+    "phase4f_smoke_passed": true,
+    "schema_validation_passes": true,
+    "train_script_runs_end_to_end": true,
+    "validation_metrics_computed": true
+  },
+  "hidden_dim": 64,
+  "loss_components": {
+    "additive_deviation_penalty": 0.9019178748130798,
+    "delta_regression": 0.013186045922338963,
+    "rule_ce": 1.5896867513656616,
+    "safety_bce": 0.5576189160346985
+  },
+  "rules": [
+    "additive_ltm",
+    "commit_heavy",
+    "block_heavy",
+    "block_light",
+    "wait_light",
+    "wait_heavy",
+    "decay_095",
+    "decay_090",
+    "neutral_additive"
+  ],
+  "rules_path": "C:\\PROGRAMING\\czr004\\artifacts\\models\\laur_ltm\\full_repair3_stable_tie001_mlp_s103\\laur_mlp_v1_rules.json",
+  "sample_count": 2985,
+  "schema_version": "phase4_laur_train_summary_v1",
+  "soft_label_hard_mix": 0.7,
+  "soft_label_neutral_threshold": 0.005,
+  "soft_label_temperature": 0.005,
+  "test_metrics": null,
+  "test_sample_count": 0,
+  "train_metrics": {
+    "delta_pred_smooth_l1_proxy": 0.07382549523944247,
+    "harmful_update_f1": 0.7118509710661911,
+    "harmful_update_precision": 0.7076438140267928,
+    "harmful_update_recall": 0.7161084529505582,
+    "label_distribution": {
+      "block_heavy": 433,
+      "block_light": 109,
+      "commit_heavy": 562,
+      "decay_090": 58,
+      "decay_095": 69,
+      "neutral_additive": 835,
+      "wait_heavy": 101,
+      "wait_light": 359
+    },
+    "neutral_additive_rate": 0.4089469517022961,
+    "non_neutral_rule_top1_accuracy": 0.43169722057953874,
+    "predicted_best_rule_mean_delta_ratio_proxy": 0.03264571973364503,
+    "predicted_rule_distribution": {
+      "block_heavy": 325,
+      "block_light": 67,
+      "commit_heavy": 626,
+      "decay_090": 16,
+      "decay_095": 16,
+      "neutral_additive": 1033,
+      "wait_heavy": 15,
+      "wait_light": 428
+    },
+    "rule_top1_accuracy": 0.5087094220110847,
+    "rule_top3_accuracy": 0.8463974663499604,
+    "safety_auroc": 0.7823938240398022,
+    "sample_count": 2526
+  },
+  "train_sample_count": 2526,
+  "validation_metrics": {
+    "delta_pred_smooth_l1_proxy": 0.09263595838951215,
+    "harmful_update_f1": 0.5764705882352941,
+    "harmful_update_precision": 0.5868263473053892,
+    "harmful_update_recall": 0.5664739884393064,
+    "label_distribution": {
+      "block_heavy": 86,
+      "block_light": 12,
+      "commit_heavy": 109,
+      "decay_090": 7,
+      "decay_095": 13,
+      "neutral_additive": 166,
+      "wait_heavy": 19,
+      "wait_light": 47
+    },
+    "neutral_additive_rate": 0.49673202614379086,
+    "non_neutral_rule_top1_accuracy": 0.27986348122866894,
+    "predicted_best_rule_mean_delta_ratio_proxy": 0.009243162839598388,
+    "predicted_rule_distribution": {
+      "block_heavy": 82,
+      "commit_heavy": 112,
+      "decay_090": 3,
+      "decay_095": 1,
+      "neutral_additive": 228,
+      "wait_heavy": 3,
+      "wait_light": 30
+    },
+    "rule_top1_accuracy": 0.39433551198257083,
+    "rule_top3_accuracy": 0.7538126361655774,
+    "safety_auroc": 0.7345082663001739,
+    "sample_count": 459
+  },
+  "validation_sample_count": 459,
+  "validation_source": "validation",
+  "weights_path": "C:\\PROGRAMING\\czr004\\artifacts\\models\\laur_ltm\\full_repair3_stable_tie001_mlp_s103\\laur_mlp_v1_weights.json"
+}

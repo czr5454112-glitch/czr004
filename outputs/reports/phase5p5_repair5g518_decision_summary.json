@@ -1,0 +1,26 @@
+{
+  "aaai_ready": false,
+  "adapter_decision": "adapter_grammar_passed_continue_probe_batches",
+  "autopsy_decision": "g517_lattice_autopsy_passed_continue_surrogate_proposal",
+  "candidate_pool_count": 300,
+  "candidate_space_gate_passed_batches": [
+    "A",
+    "B",
+    "C"
+  ],
+  "decision": "g518_full_primary_candidate_space_improved_continue_ranker",
+  "full_primary_integrity_decision": "g518_full_primary_integrity_passed_continue_oracle",
+  "full_primary_oracle_decision": "g518_full_primary_candidate_space_improved_continue_ranker",
+  "full_primary_required": true,
+  "learned_runtime_policy_validated": false,
+  "next_step": "continue according to decision",
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "probe_batches_decision": "g518_candidate_space_improved_continue_full_primary",
+  "proposal_decision": "surrogate_candidate_batches_selected_continue_adapter_verification",
+  "ranker_decision": "ranker_allowed_next_round",
+  "rationale": "Full-primary candidate-space oracle improved.",
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g518_decision_summary_v1",
+  "selected_new_candidate_count": 30
+}

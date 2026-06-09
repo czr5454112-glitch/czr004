@@ -1,0 +1,58 @@
+{
+  "aaai_ready": false,
+  "budgets": [
+    1000,
+    2000
+  ],
+  "candidate_count": 24,
+  "checkpoint_rows": 40,
+  "decision": "targeted_probe_integrity_passed_continue_oracle",
+  "duplicate_context_candidate_budget_rows": 0,
+  "expected_rows": 960,
+  "external_lacam2_solver_status": [],
+  "gates": {
+    "budgets_eq_1000_2000": true,
+    "candidate_recognized_all": true,
+    "candidates_eq_24": true,
+    "contexts_eq_target_count": true,
+    "duplicate_context_candidate_budget_rows_eq_0": true,
+    "external_lacam2_solver_untouched": true,
+    "ids_166_205_untouched": true,
+    "max_workers_eq_1": true,
+    "observed_ids_only": true,
+    "probe_ran": true,
+    "repair_candidate_recognized_all": true,
+    "repair_candidates_eq_10": true,
+    "rows_eq_960": true
+  },
+  "ids_166_205_untouched": true,
+  "learned_runtime_policy_validated": false,
+  "max_workers": 1,
+  "measured_contexts": 20,
+  "observed_ids_only": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "planned_rows": 960,
+  "probe_jsonl": "C:\\PROGRAMING\\czr004\\outputs\\logs\\phase5p5_repair5g517_targeted_probe\\phase5p5_repair5g517_targeted_probe_update_probes.jsonl",
+  "probe_ran": true,
+  "probe_rows": 960,
+  "recognition": {
+    "candidate_recognized_all": true,
+    "fingerprint_rows": 960,
+    "recognized_rows": 960,
+    "rows": 960,
+    "updateparams_fingerprint_all": true
+  },
+  "repair_candidate_count": 10,
+  "repair_recognition": {
+    "candidate_recognized_all": true,
+    "fingerprint_rows": 400,
+    "recognized_rows": 400,
+    "rows": 400,
+    "updateparams_fingerprint_all": true
+  },
+  "results_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase5p5_repair5g517_targeted_probe_results.csv",
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g517_targeted_probe_integrity_summary_v1",
+  "target_contexts": 20
+}

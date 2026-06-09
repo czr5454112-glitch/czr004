@@ -1,0 +1,149 @@
+{
+  "ablation_checks": {
+    "disabled_stats": {
+      "better": 0,
+      "equal": 60,
+      "mean_delta_ratio_vs_ltm": 0.0,
+      "rows": 60,
+      "worse": 0
+    },
+    "guarded_stats": {
+      "better": 7,
+      "equal": 41,
+      "mean_delta_ratio_vs_ltm": 0.001572602467666669,
+      "rows": 60,
+      "worse": 12
+    },
+    "recovery_disabled_parity_exact": true,
+    "shuffled_stats": {
+      "better": 0,
+      "equal": 60,
+      "mean_delta_ratio_vs_ltm": 0.0,
+      "rows": 60,
+      "worse": 0
+    },
+    "shuffled_support_not_better_than_guarded": false
+  },
+  "ablation_summary_json": "outputs\\reports\\phase5p5_repair5e3_leakage_ablation_preflight_summary.json",
+  "created_at": "2026-05-31T22:14:56.235195",
+  "diagnostic_only": true,
+  "eval_log_paths": [
+    "outputs\\logs\\phase5p5_repair5e3_frozen_e2_validation\\phase5p5_repair5e3_frozen_e2_validation.jsonl",
+    "outputs\\logs\\phase5p5_repair5e3_frozen_e2_validation\\phase5p5_repair5e3_frozen_e2_validation_laur_updates.jsonl",
+    "outputs\\logs\\phase5p5_repair5e3_frozen_e2_validation\\phase5p5_repair5e3_frozen_e2_validation_commands.jsonl",
+    "outputs\\logs\\phase5p5_repair5e3_leakage_ablation\\phase5p5_repair5e3_leakage_ablation.jsonl",
+    "outputs\\logs\\phase5p5_repair5e3_leakage_ablation\\phase5p5_repair5e3_leakage_ablation_laur_updates.jsonl",
+    "outputs\\logs\\phase5p5_repair5e3_leakage_ablation\\phase5p5_repair5e3_leakage_ablation_commands.jsonl",
+    "outputs\\logs\\phase5p5_repair5e3_preflight\\phase5p5_repair5e3_preflight.jsonl",
+    "outputs\\logs\\phase5p5_repair5e3_preflight\\phase5p5_repair5e3_preflight_laur_updates.jsonl",
+    "outputs\\logs\\phase5p5_repair5e3_preflight\\phase5p5_repair5e3_preflight_commands.jsonl"
+  ],
+  "eval_raw_jsonl_paths_appear_in_train_support_metadata": false,
+  "exact_map_agent_recovery_table_used": true,
+  "groups_depending_on_exact_map_agent_matches": [
+    {
+      "agents": 100,
+      "map": "maze-32-32-4",
+      "rows": 1,
+      "rule_id": "block_light"
+    },
+    {
+      "agents": 50,
+      "map": "random-32-32-20",
+      "rows": 1,
+      "rule_id": "block_light"
+    },
+    {
+      "agents": 100,
+      "map": "random-32-32-20",
+      "rows": 1,
+      "rule_id": "decay_095"
+    },
+    {
+      "agents": 50,
+      "map": "warehouse-10-20-10-2-1",
+      "rows": 1,
+      "rule_id": "block_light"
+    },
+    {
+      "agents": 100,
+      "map": "warehouse-10-20-10-2-1",
+      "rows": 1,
+      "rule_id": "block_light"
+    }
+  ],
+  "leakage_detected": false,
+  "no_support_eval_leakage_detected": true,
+  "path_overlaps": [],
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "rule_support_by_context": [
+    {
+      "agents": 100.0,
+      "map": "maze-32-32-4",
+      "map_height": 32.0,
+      "map_width": 32.0,
+      "rule_id": "block_light",
+      "source": "repair5e_caseb_oracle_static_support",
+      "support_better": 3,
+      "support_equal": 0,
+      "support_rows": 3,
+      "support_worse": 0
+    },
+    {
+      "agents": 50.0,
+      "map": "random-32-32-20",
+      "map_height": 32.0,
+      "map_width": 32.0,
+      "rule_id": "block_light",
+      "source": "repair5e_caseb_oracle_static_support",
+      "support_better": 0,
+      "support_equal": 3,
+      "support_rows": 3,
+      "support_worse": 0
+    },
+    {
+      "agents": 100.0,
+      "map": "random-32-32-20",
+      "map_height": 32.0,
+      "map_width": 32.0,
+      "rule_id": "decay_095",
+      "source": "repair5e_caseb_oracle_static_support",
+      "support_better": 3,
+      "support_equal": 0,
+      "support_rows": 3,
+      "support_worse": 0
+    },
+    {
+      "agents": 50.0,
+      "map": "warehouse-10-20-10-2-1",
+      "map_height": 63.0,
+      "map_width": 161.0,
+      "rule_id": "block_light",
+      "source": "repair5e_caseb_oracle_static_support",
+      "support_better": 0,
+      "support_equal": 3,
+      "support_rows": 3,
+      "support_worse": 0
+    },
+    {
+      "agents": 100.0,
+      "map": "warehouse-10-20-10-2-1",
+      "map_height": 63.0,
+      "map_width": 161.0,
+      "rule_id": "block_light",
+      "source": "repair5e_caseb_oracle_static_support",
+      "support_better": 0,
+      "support_equal": 3,
+      "support_rows": 3,
+      "support_worse": 0
+    }
+  ],
+  "runtime_dir": "artifacts\\models\\laur_ltm\\repair5e3_split_guarded_selector",
+  "runtime_manifest": "artifacts\\models\\laur_ltm\\repair5e3_split_guarded_selector\\repair5e3_split_guarded_selector_manifest.json",
+  "schema_version": "phase5p5_repair5e3_oracle_support_leakage_audit_v1",
+  "support_csv": "artifacts\\models\\laur_ltm\\repair5e3_split_guarded_selector\\repair5e2_recovery_rules.csv",
+  "support_eval_instance_overlap": [],
+  "support_eval_instance_overlap_count": 0,
+  "support_generated_after_eval_logs": false
+}

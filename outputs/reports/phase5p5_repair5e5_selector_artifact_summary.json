@@ -1,0 +1,733 @@
+{
+  "bounded_delta_updateparams": false,
+  "candidate_name": "repair5e5_crossfold_utility_reranker",
+  "created_at": "2026-06-01T15:41:09.984487",
+  "diagnostic_only": true,
+  "feature_stats_hash": "f5522e30ef0b105020544b73984943e7b8957deef630ca394f4edfbe74cc551a",
+  "fold_definitions": {
+    "fold_0_eval": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "fold_1_eval": [
+      6,
+      7,
+      8,
+      9,
+      10
+    ],
+    "fold_2_eval": [
+      11,
+      12,
+      13,
+      14,
+      15
+    ],
+    "fold_3_eval": [
+      16,
+      17,
+      18,
+      19,
+      20
+    ],
+    "fold_4_eval": [
+      21,
+      22,
+      23,
+      24,
+      25
+    ]
+  },
+  "fold_manifests": {
+    "fold_0": {
+      "created_at": "2026-06-01T15:41:09.746937",
+      "diagnostic_only": true,
+      "fold_id": 0,
+      "phase5p5_allowed": false,
+      "phase6_allowed": false,
+      "runtime_dir": "C:\\PROGRAMING\\czr004\\artifacts\\models\\laur_ltm\\repair5e5_crossfold_utility_reranker\\fold_0",
+      "schema_version": "phase5p5_repair5e5_runtime_variant_v1",
+      "selected_rule_distribution": {
+        "block_heavy": 44,
+        "block_light": 28,
+        "decay_090": 24,
+        "wait_heavy": 28
+      },
+      "selector_csv_sha256": "4d235bafbb03895db932a4b165915358525cd1f0193996b974b349325e206a23",
+      "selector_rows": 124,
+      "thresholds": {
+        "allow_commit_heavy": false,
+        "max_neighbor_distance": 1000000000.0,
+        "max_rule_risk": 0.25,
+        "min_fold_agreement": 1,
+        "min_predicted_margin": 0.001,
+        "min_support_count": 4,
+        "non_additive_budget": 3,
+        "rule_risk_caps": {
+          "commit_heavy": 0.0
+        }
+      }
+    },
+    "fold_1": {
+      "created_at": "2026-06-01T15:41:09.808934",
+      "diagnostic_only": true,
+      "fold_id": 1,
+      "phase5p5_allowed": false,
+      "phase6_allowed": false,
+      "runtime_dir": "C:\\PROGRAMING\\czr004\\artifacts\\models\\laur_ltm\\repair5e5_crossfold_utility_reranker\\fold_1",
+      "schema_version": "phase5p5_repair5e5_runtime_variant_v1",
+      "selected_rule_distribution": {
+        "block_heavy": 44,
+        "block_light": 8,
+        "decay_090": 8,
+        "decay_095": 12,
+        "wait_heavy": 8,
+        "wait_light": 24
+      },
+      "selector_csv_sha256": "e8eab9e423486675ff807b494c03766a084f700896aa9881d37917a0f03dc98d",
+      "selector_rows": 104,
+      "thresholds": {
+        "allow_commit_heavy": false,
+        "max_neighbor_distance": 1000000000.0,
+        "max_rule_risk": 0.25,
+        "min_fold_agreement": 1,
+        "min_predicted_margin": 0.001,
+        "min_support_count": 4,
+        "non_additive_budget": 3,
+        "rule_risk_caps": {
+          "commit_heavy": 0.0
+        }
+      }
+    },
+    "fold_2": {
+      "created_at": "2026-06-01T15:41:09.866906",
+      "diagnostic_only": true,
+      "fold_id": 2,
+      "phase5p5_allowed": false,
+      "phase6_allowed": false,
+      "runtime_dir": "C:\\PROGRAMING\\czr004\\artifacts\\models\\laur_ltm\\repair5e5_crossfold_utility_reranker\\fold_2",
+      "schema_version": "phase5p5_repair5e5_runtime_variant_v1",
+      "selected_rule_distribution": {
+        "block_heavy": 64,
+        "block_light": 20,
+        "decay_095": 4,
+        "wait_heavy": 12,
+        "wait_light": 8
+      },
+      "selector_csv_sha256": "3863b27b7cb225749702faf594677f68bbdf6526fbd59cd3ce2ea49b4a65b961",
+      "selector_rows": 108,
+      "thresholds": {
+        "allow_commit_heavy": false,
+        "max_neighbor_distance": 1000000000.0,
+        "max_rule_risk": 0.25,
+        "min_fold_agreement": 1,
+        "min_predicted_margin": 0.001,
+        "min_support_count": 4,
+        "non_additive_budget": 3,
+        "rule_risk_caps": {
+          "commit_heavy": 0.0
+        }
+      }
+    },
+    "fold_3": {
+      "created_at": "2026-06-01T15:41:09.921598",
+      "diagnostic_only": true,
+      "fold_id": 3,
+      "phase5p5_allowed": false,
+      "phase6_allowed": false,
+      "runtime_dir": "C:\\PROGRAMING\\czr004\\artifacts\\models\\laur_ltm\\repair5e5_crossfold_utility_reranker\\fold_3",
+      "schema_version": "phase5p5_repair5e5_runtime_variant_v1",
+      "selected_rule_distribution": {
+        "block_heavy": 44,
+        "wait_heavy": 20
+      },
+      "selector_csv_sha256": "a1ad7bfb79e894426c6bb20dec7329d09f3ca9bae0dde26f61e3487b8f7414e4",
+      "selector_rows": 64,
+      "thresholds": {
+        "allow_commit_heavy": false,
+        "max_neighbor_distance": 1000000000.0,
+        "max_rule_risk": 0.25,
+        "min_fold_agreement": 1,
+        "min_predicted_margin": 0.001,
+        "min_support_count": 4,
+        "non_additive_budget": 3,
+        "rule_risk_caps": {
+          "commit_heavy": 0.0
+        }
+      }
+    },
+    "fold_4": {
+      "created_at": "2026-06-01T15:41:09.981289",
+      "diagnostic_only": true,
+      "fold_id": 4,
+      "phase5p5_allowed": false,
+      "phase6_allowed": false,
+      "runtime_dir": "C:\\PROGRAMING\\czr004\\artifacts\\models\\laur_ltm\\repair5e5_crossfold_utility_reranker\\fold_4",
+      "schema_version": "phase5p5_repair5e5_runtime_variant_v1",
+      "selected_rule_distribution": {
+        "block_heavy": 80,
+        "wait_heavy": 4
+      },
+      "selector_csv_sha256": "581af17a0c74ef17d00e45b122d9ac5d6b3cb673602006a7e589c4c6feabf48f",
+      "selector_rows": 84,
+      "thresholds": {
+        "allow_commit_heavy": false,
+        "max_neighbor_distance": 1000000000.0,
+        "max_rule_risk": 0.25,
+        "min_fold_agreement": 1,
+        "min_predicted_margin": 0.001,
+        "min_support_count": 4,
+        "non_additive_budget": 3,
+        "rule_risk_caps": {
+          "commit_heavy": 0.0
+        }
+      }
+    }
+  },
+  "forbidden_eval_logs": [],
+  "git_branch": "phase4f5p5-stable-attention-lau",
+  "git_head_sha": "db0f494509f1f19035f1e9d2e177f3126a9c2c10",
+  "loose_threshold_diagnostic_manifest": {
+    "created_at": "2026-06-01T15:41:09.636397",
+    "diagnostic_only": true,
+    "fold_id": 4,
+    "phase5p5_allowed": false,
+    "phase6_allowed": false,
+    "runtime_dir": "C:\\PROGRAMING\\czr004\\artifacts\\models\\laur_ltm\\repair5e5_crossfold_utility_reranker_loose_threshold_diagnostic",
+    "schema_version": "phase5p5_repair5e5_runtime_variant_v1",
+    "selected_rule_distribution": {
+      "block_heavy": 80,
+      "wait_heavy": 4
+    },
+    "selector_csv_sha256": "d3711f962083f62f51eaa7cb30005b70bd84b0fe2212ce722df592acb553564b",
+    "selector_rows": 84,
+    "thresholds": {
+      "allow_commit_heavy": false,
+      "max_neighbor_distance": 1000000000.0,
+      "max_rule_risk": 0.25,
+      "min_fold_agreement": 1,
+      "min_predicted_margin": 0.0005,
+      "min_support_count": 2,
+      "non_additive_budget": 99,
+      "rule_risk_caps": {
+        "commit_heavy": 0.0
+      }
+    }
+  },
+  "main_fold_id": 4,
+  "main_manifest": {
+    "created_at": "2026-06-01T15:41:09.518131",
+    "diagnostic_only": true,
+    "fold_id": 4,
+    "phase5p5_allowed": false,
+    "phase6_allowed": false,
+    "runtime_dir": "C:\\PROGRAMING\\czr004\\artifacts\\models\\laur_ltm\\repair5e5_crossfold_utility_reranker",
+    "schema_version": "phase5p5_repair5e5_runtime_variant_v1",
+    "selected_rule_distribution": {
+      "block_heavy": 80,
+      "wait_heavy": 4
+    },
+    "selector_csv_sha256": "581af17a0c74ef17d00e45b122d9ac5d6b3cb673602006a7e589c4c6feabf48f",
+    "selector_rows": 84,
+    "thresholds": {
+      "allow_commit_heavy": false,
+      "max_neighbor_distance": 1000000000.0,
+      "max_rule_risk": 0.25,
+      "min_fold_agreement": 1,
+      "min_predicted_margin": 0.001,
+      "min_support_count": 4,
+      "non_additive_budget": 3,
+      "rule_risk_caps": {
+        "commit_heavy": 0.0
+      }
+    }
+  },
+  "notes": [
+    "Deterministic cross-fold KNN/radius-neighbor utility reranker over calibrated runtime features.",
+    "Unsupported, low-margin, high-risk, or low-support contexts defer to additive_ltm.",
+    "Runtime CSV uses the existing repair5e4_utility_selector.csv bridge filename for C++ compatibility."
+  ],
+  "output_space": "existing_8_rules_plus_additive_defer",
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "richer_ltm_representation": false,
+  "runtime_dir": "artifacts\\models\\laur_ltm\\repair5e5_crossfold_utility_reranker",
+  "schema_version": "phase5p5_repair5e5_crossfold_utility_reranker_runtime_v1",
+  "script_hashes": {
+    "scripts/create_repair5e5_crossfold_support.py": "418cdd0046b1f7d22e2681c64dab5a9a1ff3abba26e040033e13f2e85d9a12c9",
+    "scripts/create_repair5e5_crossfold_utility_reranker_runtime.py": "85ee16bd9fdcb3f9e3bdf4bc872ab06119d98fa1cde1da217cd1c1326c9adc6a",
+    "scripts/create_repair5e5_crossfold_utility_tables.py": "b76071690a520913a832a10b87e34a54d3c20b6fd9f756cada2d4e5f70b79276",
+    "scripts/run_phase5p5_laur_diagnostic_preflight_exec.py": "3cf1dd3b991419b79220ca0c608b2b0e80c5066bc47df21c539e55c46b3fc11a",
+    "scripts/tune_repair5e5_utility_thresholds.py": "356bc01b5a87f93c825aa4592e72576930919e612d9ee17928172360634e750a"
+  },
+  "selected_thresholds": {
+    "allow_commit_heavy": false,
+    "max_neighbor_distance": 1000000000.0,
+    "max_rule_risk": 0.25,
+    "min_fold_agreement": 1,
+    "min_predicted_margin": 0.001,
+    "min_support_count": 4,
+    "non_additive_budget": 3,
+    "rule_risk_caps": {
+      "commit_heavy": 0.0
+    }
+  },
+  "shuffled_labels_diagnostic_manifest": {
+    "created_at": "2026-06-01T15:41:09.577045",
+    "diagnostic_only": true,
+    "fold_id": 4,
+    "phase5p5_allowed": false,
+    "phase6_allowed": false,
+    "runtime_dir": "C:\\PROGRAMING\\czr004\\artifacts\\models\\laur_ltm\\repair5e5_crossfold_utility_reranker_shuffled_labels_diagnostic",
+    "schema_version": "phase5p5_repair5e5_runtime_variant_v1",
+    "selected_rule_distribution": {
+      "decay_095": 4,
+      "wait_light": 80
+    },
+    "selector_csv_sha256": "f616314f8fa528169d808a709ca47009f6ba51d0c697287a1c427288e9b9b8a7",
+    "selector_rows": 84,
+    "thresholds": {
+      "allow_commit_heavy": false,
+      "max_neighbor_distance": 1000000000.0,
+      "max_rule_risk": 0.25,
+      "min_fold_agreement": 1,
+      "min_predicted_margin": 0.001,
+      "min_support_count": 4,
+      "non_additive_budget": 3,
+      "rule_risk_caps": {
+        "commit_heavy": 0.0
+      }
+    }
+  },
+  "solver_semantic_changes": false,
+  "source_runtime_dir": "artifacts\\models\\laur_ltm\\repair5d_composite_distilled",
+  "source_runtime_hashes": {
+    "delta_head_bias.csv": "a45e57a35a76b4667a47c63b1a1fac603e5fc8082c0dc0a486bee314267e4ec5",
+    "delta_head_weight.csv": "a71a59f52837df57966741048da45e77960ffde6aeb786fc52188791b7dd26b0",
+    "features.txt": "181c4972215083db02a83fd8a931748faf20f30ab2b6a5421adffa937972f160",
+    "laur_mlp_v1_feature_stats.json": "ad8f4b8b3c8cf758738fe5bc7235986ef100640ef752f6b16923017d4b417555",
+    "laur_mlp_v1_rules.json": "4669c3913561294583db6fa1fa9155e2f13f57574ba5398b72877113fa6327ae",
+    "laur_mlp_v1_weights.json": "3a3be5f70e76c9fbdda46873b0df1b97d44a3f1db6d3cccdaf45f747d2e287ce",
+    "layer0_bias.csv": "36acf727f51097270f1c300fc14a66691a3850997996c980b528de24550b891c",
+    "layer0_weight.csv": "51681319e83f464d5f5cb3c7306444a60b976eac0fecb5de9b9c1ed6914fe280",
+    "mean.csv": "e759c75c219dff6276c91d1538c4b076027bdd92785ecd341f0644afefbca4a0",
+    "rule_head_bias.csv": "0b77a956ac47d383bd358f6fb6b8b8f6e97250f63586ccc0e11ac922c04de837",
+    "rule_head_weight.csv": "28b5f9e7b0752264c023923a5faae67b120d96d405ecbb93070bbaaf9201489e",
+    "rules.csv": "8a76595c41924b253829a567e87269ed14b03bf2d6035fce2ed7b89bb08f445a",
+    "safety_head_bias.csv": "5849727b60d6b0fb741d2829a9796d103c9705c33f0047851654f3b55f209658",
+    "safety_head_weight.csv": "79c8b60f98386d21a93e2eff98c9aedac86ab754863ba4641eecd1dc13a43fd7",
+    "std.csv": "e983b30985b874b011a371efd54a9be44b4e29c13a3ddcf264a55e15e5da0392"
+  },
+  "stats_runtime_dir": "artifacts\\models\\laur_ltm\\repair5e4_closed_loop_utility_selector",
+  "strict_threshold_diagnostic_manifest": {
+    "created_at": "2026-06-01T15:41:09.684639",
+    "diagnostic_only": true,
+    "fold_id": 4,
+    "phase5p5_allowed": false,
+    "phase6_allowed": false,
+    "runtime_dir": "C:\\PROGRAMING\\czr004\\artifacts\\models\\laur_ltm\\repair5e5_crossfold_utility_reranker_strict_threshold_diagnostic",
+    "schema_version": "phase5p5_repair5e5_runtime_variant_v1",
+    "selected_rule_distribution": {
+      "block_heavy": 2,
+      "wait_heavy": 2
+    },
+    "selector_csv_sha256": "f9e2f78a1e7de923fbe3ed634a0918e40d223321a7de04895e7cd201c4e40ef6",
+    "selector_rows": 4,
+    "thresholds": {
+      "allow_commit_heavy": false,
+      "max_neighbor_distance": 1000000000.0,
+      "max_rule_risk": 0.1,
+      "min_fold_agreement": 2,
+      "min_predicted_margin": 0.002,
+      "min_support_count": 8,
+      "non_additive_budget": 1,
+      "rule_risk_caps": {
+        "commit_heavy": 0.0
+      }
+    }
+  },
+  "threshold_sweep_hash": "328cd954402606c8a294313b50b024738fab47b33b4cff2b1934e2eb78030753",
+  "threshold_sweep_summary": "outputs\\reports\\phase5p5_repair5e5_threshold_sweep_summary.json",
+  "train_support_logs": {
+    "fold_0": {
+      "eval_instance_ids": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "method_counts": {
+        "always_additive_defer": 120,
+        "lacam_star_ltm": 120,
+        "oracle_probe_static_block_heavy": 120,
+        "oracle_probe_static_block_light": 120,
+        "oracle_probe_static_commit_heavy": 120,
+        "oracle_probe_static_decay_090": 120,
+        "oracle_probe_static_decay_095": 120,
+        "oracle_probe_static_wait_heavy": 120,
+        "oracle_probe_static_wait_light": 120
+      },
+      "raw_jsonl": "outputs\\logs\\phase5p5_repair5e5_crossfold_support\\fold_0\\phase5p5_repair5e5_crossfold_support_fold_0.jsonl",
+      "raw_jsonl_sha256": "147224815c9c67559e191acd9ccf45f01bdbab94bd3b8733248cff86eaf66a96",
+      "raw_rows": 1080,
+      "support_eval_overlap": [],
+      "train_support_instance_ids": [
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25
+      ],
+      "update_jsonl": "outputs\\logs\\phase5p5_repair5e5_crossfold_support\\fold_0\\phase5p5_repair5e5_crossfold_support_fold_0_laur_updates.jsonl",
+      "update_jsonl_sha256": "48ef270cb681443cc1f0be7d1bd11ac594bd5460fcee87bb70ddf00c3d2f1993",
+      "update_rows": 3344
+    },
+    "fold_1": {
+      "eval_instance_ids": [
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "method_counts": {
+        "always_additive_defer": 120,
+        "lacam_star_ltm": 120,
+        "oracle_probe_static_block_heavy": 120,
+        "oracle_probe_static_block_light": 120,
+        "oracle_probe_static_commit_heavy": 120,
+        "oracle_probe_static_decay_090": 120,
+        "oracle_probe_static_decay_095": 120,
+        "oracle_probe_static_wait_heavy": 120,
+        "oracle_probe_static_wait_light": 120
+      },
+      "raw_jsonl": "outputs\\logs\\phase5p5_repair5e5_crossfold_support\\fold_1\\phase5p5_repair5e5_crossfold_support_fold_1.jsonl",
+      "raw_jsonl_sha256": "f272694d49b1ee2e1810b3c5f8f286ba76e5ef7a07e8fb67839500150eb5bb6d",
+      "raw_rows": 1080,
+      "support_eval_overlap": [],
+      "train_support_instance_ids": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25
+      ],
+      "update_jsonl": "outputs\\logs\\phase5p5_repair5e5_crossfold_support\\fold_1\\phase5p5_repair5e5_crossfold_support_fold_1_laur_updates.jsonl",
+      "update_jsonl_sha256": "2aed16616dd773416740f4e8c4c791ff3f36a4f8387b17e84ea307b50c05886c",
+      "update_rows": 3342
+    },
+    "fold_2": {
+      "eval_instance_ids": [
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "method_counts": {
+        "always_additive_defer": 120,
+        "lacam_star_ltm": 120,
+        "oracle_probe_static_block_heavy": 120,
+        "oracle_probe_static_block_light": 120,
+        "oracle_probe_static_commit_heavy": 120,
+        "oracle_probe_static_decay_090": 120,
+        "oracle_probe_static_decay_095": 120,
+        "oracle_probe_static_wait_heavy": 120,
+        "oracle_probe_static_wait_light": 120
+      },
+      "raw_jsonl": "outputs\\logs\\phase5p5_repair5e5_crossfold_support\\fold_2\\phase5p5_repair5e5_crossfold_support_fold_2.jsonl",
+      "raw_jsonl_sha256": "ffd9c8bd071142ff220448e9e2aaecfa32bd2563b50e07b04d4339fa892a4c9b",
+      "raw_rows": 1080,
+      "support_eval_overlap": [],
+      "train_support_instance_ids": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25
+      ],
+      "update_jsonl": "outputs\\logs\\phase5p5_repair5e5_crossfold_support\\fold_2\\phase5p5_repair5e5_crossfold_support_fold_2_laur_updates.jsonl",
+      "update_jsonl_sha256": "fdaf57874f76d2c1a92ccd8870a1de266bf1a9b77ba02db6befcc34f9cb65655",
+      "update_rows": 3337
+    },
+    "fold_3": {
+      "eval_instance_ids": [
+        16,
+        17,
+        18,
+        19,
+        20
+      ],
+      "method_counts": {
+        "always_additive_defer": 120,
+        "lacam_star_ltm": 120,
+        "oracle_probe_static_block_heavy": 120,
+        "oracle_probe_static_block_light": 120,
+        "oracle_probe_static_commit_heavy": 120,
+        "oracle_probe_static_decay_090": 120,
+        "oracle_probe_static_decay_095": 120,
+        "oracle_probe_static_wait_heavy": 120,
+        "oracle_probe_static_wait_light": 120
+      },
+      "raw_jsonl": "outputs\\logs\\phase5p5_repair5e5_crossfold_support\\fold_3\\phase5p5_repair5e5_crossfold_support_fold_3.jsonl",
+      "raw_jsonl_sha256": "6ec8e5892cbce40446f85b5878cdb04fc77c060f29cf7c878b84e28fd65de310",
+      "raw_rows": 1080,
+      "support_eval_overlap": [],
+      "train_support_instance_ids": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        21,
+        22,
+        23,
+        24,
+        25
+      ],
+      "update_jsonl": "outputs\\logs\\phase5p5_repair5e5_crossfold_support\\fold_3\\phase5p5_repair5e5_crossfold_support_fold_3_laur_updates.jsonl",
+      "update_jsonl_sha256": "f673b252f99c37bc0144a6418163cdc467d2af7d14ca81a9e33077cf7846a833",
+      "update_rows": 3333
+    },
+    "fold_4": {
+      "eval_instance_ids": [
+        21,
+        22,
+        23,
+        24,
+        25
+      ],
+      "method_counts": {
+        "always_additive_defer": 120,
+        "lacam_star_ltm": 120,
+        "oracle_probe_static_block_heavy": 120,
+        "oracle_probe_static_block_light": 120,
+        "oracle_probe_static_commit_heavy": 120,
+        "oracle_probe_static_decay_090": 120,
+        "oracle_probe_static_decay_095": 120,
+        "oracle_probe_static_wait_heavy": 120,
+        "oracle_probe_static_wait_light": 120
+      },
+      "raw_jsonl": "outputs\\logs\\phase5p5_repair5e5_crossfold_support\\fold_4\\phase5p5_repair5e5_crossfold_support_fold_4.jsonl",
+      "raw_jsonl_sha256": "2ba572ae4840bc3354cabda088da7f0179ec0ac76f4beb42dd1d1638c9942073",
+      "raw_rows": 1080,
+      "support_eval_overlap": [],
+      "train_support_instance_ids": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20
+      ],
+      "update_jsonl": "outputs\\logs\\phase5p5_repair5e5_crossfold_support\\fold_4\\phase5p5_repair5e5_crossfold_support_fold_4_laur_updates.jsonl",
+      "update_jsonl_sha256": "19dcec308e485af96c3a2a13015bed4626997f00a9cb687342b343be1a6d3eae",
+      "update_rows": 3336
+    }
+  },
+  "utility_summary": {
+    "beats_additive_by_more_than_epsilon_by_rule": {
+      "block_heavy": 608,
+      "block_light": 480,
+      "commit_heavy": 512,
+      "decay_090": 464,
+      "decay_095": 512,
+      "wait_heavy": 480,
+      "wait_light": 496
+    },
+    "created_at": "2026-06-01T12:49:05.942383",
+    "diagnostic_only": true,
+    "epsilon_ratio": 0.001,
+    "false_positive_risk_by_rule": {
+      "block_heavy": 0.42095238095238097,
+      "block_light": 0.45904761904761904,
+      "commit_heavy": 0.5276190476190477,
+      "decay_090": 0.49714285714285716,
+      "decay_095": 0.5047619047619047,
+      "wait_heavy": 0.3580952380952381,
+      "wait_light": 0.4895238095238095
+    },
+    "inputs": {
+      "feature_runtime_dir": "artifacts\\models\\laur_ltm\\repair5d_composite_distilled",
+      "support_summary_json": "outputs\\reports\\phase5p5_repair5e5_crossfold_support_summary.json",
+      "support_summary_sha256": "e37a7110fd421f82e735c75062f4d1cd0c6d69706c72fe4304ba25311d45192b"
+    },
+    "long_rows": 16800,
+    "max_harmful_share": 0.25,
+    "maze_warehouse_weak_non_ratio_benefits": {
+      "maze-32-32-4:100:block_heavy": 32,
+      "maze-32-32-4:100:block_light": 32,
+      "maze-32-32-4:100:decay_090": 16,
+      "maze-32-32-4:100:wait_heavy": 32,
+      "maze-32-32-4:100:wait_light": 32,
+      "maze-32-32-4:50:block_heavy": 48,
+      "maze-32-32-4:50:block_light": 64,
+      "maze-32-32-4:50:commit_heavy": 32,
+      "maze-32-32-4:50:decay_090": 32,
+      "maze-32-32-4:50:decay_095": 32,
+      "maze-32-32-4:50:wait_heavy": 80,
+      "random-32-32-20:100:block_heavy": 144,
+      "random-32-32-20:100:block_light": 64,
+      "random-32-32-20:100:commit_heavy": 64,
+      "random-32-32-20:100:decay_090": 80,
+      "random-32-32-20:100:decay_095": 80,
+      "random-32-32-20:100:wait_heavy": 112,
+      "random-32-32-20:100:wait_light": 96,
+      "random-32-32-20:50:block_heavy": 176,
+      "random-32-32-20:50:block_light": 176,
+      "random-32-32-20:50:commit_heavy": 208,
+      "random-32-32-20:50:decay_090": 208,
+      "random-32-32-20:50:decay_095": 176,
+      "random-32-32-20:50:wait_heavy": 224,
+      "random-32-32-20:50:wait_light": 192,
+      "warehouse-10-20-10-2-1:100:decay_090": 8,
+      "warehouse-10-20-10-2-1:50:block_heavy": 12,
+      "warehouse-10-20-10-2-1:50:block_light": 24,
+      "warehouse-10-20-10-2-1:50:commit_heavy": 12,
+      "warehouse-10-20-10-2-1:50:decay_090": 60,
+      "warehouse-10-20-10-2-1:50:decay_095": 36,
+      "warehouse-10-20-10-2-1:50:wait_heavy": 36,
+      "warehouse-10-20-10-2-1:50:wait_light": 60
+    },
+    "min_positive_instances": 4,
+    "outputs": {
+      "long_csv": "outputs\\tables\\phase5p5_repair5e5_crossfold_utility_long.csv",
+      "long_csv_sha256": "6ed40725be87558eb182fdd91cc88c689901402bf8556d9a9eadb389c923a388",
+      "wide_csv": "outputs\\tables\\phase5p5_repair5e5_crossfold_utility_wide.csv",
+      "wide_csv_sha256": "165d8c1288eaf8aa6b42d0ec4fa5ff3cbf451a877b5e33c719e4e5b9de2250c8"
+    },
+    "phase5p5_allowed": false,
+    "phase6_allowed": false,
+    "positive_context_count_by_map_agents_rule_fold": {
+      "maze-32-32-4:50:block_heavy:fold_0": 24,
+      "maze-32-32-4:50:block_heavy:fold_1": 40,
+      "maze-32-32-4:50:block_heavy:fold_2": 48,
+      "maze-32-32-4:50:block_heavy:fold_3": 44,
+      "maze-32-32-4:50:block_heavy:fold_4": 48,
+      "maze-32-32-4:50:block_light:fold_0": 4,
+      "maze-32-32-4:50:decay_090:fold_0": 24,
+      "maze-32-32-4:50:wait_heavy:fold_0": 12,
+      "maze-32-32-4:50:wait_heavy:fold_3": 12,
+      "random-32-32-20:100:block_heavy:fold_0": 16,
+      "random-32-32-20:100:block_heavy:fold_2": 16,
+      "random-32-32-20:100:block_heavy:fold_4": 28,
+      "random-32-32-20:100:block_light:fold_0": 24,
+      "random-32-32-20:100:block_light:fold_1": 8,
+      "random-32-32-20:100:block_light:fold_2": 20,
+      "random-32-32-20:100:decay_090:fold_1": 8,
+      "random-32-32-20:100:decay_095:fold_1": 12,
+      "random-32-32-20:100:decay_095:fold_2": 4,
+      "random-32-32-20:100:wait_heavy:fold_0": 8,
+      "random-32-32-20:100:wait_heavy:fold_2": 12,
+      "random-32-32-20:100:wait_light:fold_1": 24,
+      "random-32-32-20:100:wait_light:fold_2": 8,
+      "random-32-32-20:50:block_heavy:fold_0": 4,
+      "random-32-32-20:50:block_heavy:fold_1": 4,
+      "random-32-32-20:50:block_heavy:fold_4": 4,
+      "random-32-32-20:50:wait_heavy:fold_0": 8,
+      "random-32-32-20:50:wait_heavy:fold_1": 8,
+      "random-32-32-20:50:wait_heavy:fold_3": 8,
+      "random-32-32-20:50:wait_heavy:fold_4": 4
+    },
+    "positive_label_maps": [
+      "maze-32-32-4",
+      "random-32-32-20"
+    ],
+    "positive_labels_only_random_map": false,
+    "schema_version": "phase5p5_repair5e5_crossfold_utility_v1",
+    "stable_positive_count_by_rule": {
+      "block_heavy": 960,
+      "block_light": 320,
+      "decay_090": 160,
+      "decay_095": 160,
+      "wait_heavy": 640,
+      "wait_light": 160
+    },
+    "support_leakage_detected": false,
+    "support_summary": "phase5p5_repair5e5_crossfold_support_v1",
+    "utility_margin_histogram": {
+      "(0,0.001]": 0,
+      "(0.001,0.002]": 0,
+      "(0.002,0.005]": 40,
+      "0": 1616,
+      ">0.005": 444
+    },
+    "wide_rows": 2100
+  },
+  "utility_summary_hash": "484e854f481b365bf858c689df03ed06a222e76544e80a1cee0e4bf89d2180ef",
+  "utility_table": "outputs\\tables\\phase5p5_repair5e5_crossfold_utility_wide.csv",
+  "utility_table_hash": "165d8c1288eaf8aa6b42d0ec4fa5ff3cbf451a877b5e33c719e4e5b9de2250c8"
+}

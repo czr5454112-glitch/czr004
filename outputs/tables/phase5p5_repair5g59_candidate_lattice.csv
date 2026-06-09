@@ -1,0 +1,15 @@
+additive_fallback,alpha_cong_blocked,alpha_cong_committed,alpha_flow_progress,alpha_flow_wait_or_nonprogress,c_only_f_disabled,candidate_id,candidate_index,flow_shield_beta,forbidden_outputs,max_flow_shield,note,rho_cong,rho_flow,static_fallback,update_ltm_only
+False,1.25,1.25,1.0,0.75,False,repair5g59_static_flow_shield,0,0.35,,0.75,static baseline,0.95,1.0,True,True
+True,1.0,1.0,0.0,1.0,False,repair5g59_additive_fallback,1,0.0,,0.0,additive fallback,1.0,1.0,False,True
+False,1.25,1.25,0.0,0.75,True,repair5g59_c_only_f_disabled,2,0.0,,0.0,C-only / F-disabled ablation,0.95,1.0,False,True
+False,1.0,1.0,0.75,0.75,False,repair5g59_light_cong_light_flow,3,0.25,,0.5,lighter congestion with modest flow shield,0.98,1.0,False,True
+False,1.5,1.0,1.0,0.5,False,repair5g59_block_heavy_flow_guard,4,0.35,,0.75,blocked-edge emphasis,0.95,1.0,False,True
+False,1.0,1.5,1.0,0.75,False,repair5g59_commit_heavy_flow_guard,5,0.35,,0.75,committed-edge emphasis,0.95,1.0,False,True
+False,1.25,1.25,1.0,0.75,False,repair5g59_slow_decay_high_shield,6,0.5,,1.0,slow decay with larger shield,0.98,1.0,False,True
+False,1.25,1.25,1.0,0.75,False,repair5g59_fast_decay_low_shield,7,0.2,,0.5,fast decay conservative shield,0.9,1.0,False,True
+False,1.25,1.25,1.0,0.5,False,repair5g59_wait_conservative,8,0.35,,0.75,lower wait/nonprogress spread,0.95,1.0,False,True
+False,1.25,1.25,1.0,1.0,False,repair5g59_wait_aggressive,9,0.35,,0.75,higher wait/nonprogress spread,0.95,1.0,False,True
+False,1.25,1.25,1.0,0.75,False,repair5g59_flow_decay,10,0.35,,0.75,decay both C and F channels,0.95,0.95,False,True
+False,1.25,1.25,1.0,0.75,False,repair5g59_high_beta_cap_safe,11,0.6,,0.75,higher beta but capped shield,0.95,1.0,False,True
+False,1.25,1.25,1.0,0.75,False,repair5g59_low_beta_high_cap,12,0.2,,1.25,lower beta with wider cap,0.95,1.0,False,True
+False,1.25,1.25,1.0,0.75,False,repair5g59_static_abstain_candidate,13,0.35,,0.75,static-abstain alias,0.95,1.0,True,True

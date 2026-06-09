@@ -1,0 +1,12 @@
+{
+  "created_at": "2026-06-01T12:52:23.538079",
+  "full_teacher_force_hook_executed": false,
+  "oracle_rows": 0,
+  "oracle_scope": "static_rule_proxy",
+  "paired_stats": {},
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "schema_version": "phase5p5_oracle_update_preflight_v1",
+  "static_proxy_executed": false,
+  "support_rows": 0
+}

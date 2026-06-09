@@ -1,0 +1,23 @@
+# Repair5G.5.26 Neural Rank-Effect Models
+
+- schema_version: `phase5p5_repair5g526_neural_rank_effect_models_summary_v1`
+- decision: `neural_rank_effect_models_evaluated`
+- required_models: `['mlp_rank_effect_utility_head', 'mlp_rank_effect_risk_head', 'mlp_two_head_utility_risk', 'mlp_pairwise_ranker', 'mlp_region_then_candidate', 'mlp_topk_reranker', 'mlp_conformal_risk_head', 'ridge_two_head_baseline', 'small_tree_or_stump_ensemble_baseline', 'shuffled_label_control', 'random_feature_control']`
+- models_present: `['mlp_conformal_risk_head', 'mlp_pairwise_ranker', 'mlp_rank_effect_risk_head', 'mlp_rank_effect_utility_head', 'mlp_region_then_candidate', 'mlp_topk_reranker', 'mlp_two_head_utility_risk', 'random_feature_control', 'ridge_two_head_baseline', 'shuffled_label_control', 'small_tree_or_stump_ensemble_baseline']`
+- implementation_backend: `deterministic_numpy_rank_effect_surrogate`
+- torch_status: `not_required_for_this_offline_diagnostic`
+- candidate_budget_rows: `5280`
+- eval_rows: `154`
+- context_budget_decision_rows: `1320`
+- bootstrap_rows: `3300`
+- calibration_rows: `44`
+- best_model: `mlp_region_then_candidate`
+- best_model_summary: `{'row_type': 'model_aggregate', 'model': 'mlp_region_then_candidate', 'policy': 'mlp_region_then_candidate', 'eval_scope': 'seed_oof', 'fold_id': 'all', 'context_budget_pairs': 120, 'top1_safe_oracle_capture_rate': 0.0, 'top3_safe_oracle_capture_rate': 0.0, 'top5_safe_oracle_capture_rate': 0.05, 'region_top1_capture_rate': 0.0, 'region_top2_capture_rate': 0.1, 'selected_policy_utility': 0.036406463637500004, 'safe_policy_sim_utility': 0.036406463637500004, 'candidate_induced_no_solution_count': 6, 'budget_sensitive_failure_count': 6, 'static_recovery_capture_count': 3, 'fallback_rate': 0.0, 'safe_positive_selected_count': 5, 'avoidable_risk_ece': 0.013806886487239711, 'phase5p5_allowed': False, 'phase6_allowed': False, 'runtime_claim_allowed': False, 'learned_runtime_policy_validated': False, 'aaai_ready': False}`
+- train_dev_gap_selected_policy_utility: `0.0015287228405228837`
+- neural_readiness_gates: `{'oof_top3_ge_0p30': False, 'selected_utility_beats_g525_best': False, 'candidate_induced_failure_le_g525': True, 'no_large_train_dev_overfit': True}`
+- positive_neural_readiness: `False`
+- phase5p5_allowed: `False`
+- phase6_allowed: `False`
+- runtime_claim_allowed: `False`
+- learned_runtime_policy_validated: `False`
+- aaai_ready: `False`

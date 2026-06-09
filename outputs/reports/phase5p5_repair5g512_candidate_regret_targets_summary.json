@@ -1,0 +1,94 @@
+{
+  "aaai_ready": false,
+  "additive_bad_count": 60,
+  "additive_rows": 60,
+  "candidate_level_rows": 840,
+  "candidates": 14,
+  "contexts": 60,
+  "decision": "candidate_regret_targets_passed_continue_feature_v3",
+  "gates": {
+    "additive_bad_count_gt_0": true,
+    "candidate_level_rows_ge_840": true,
+    "candidates_eq_14": true,
+    "contexts_eq_60": true,
+    "harmful_count_gt_0": true,
+    "helpful_count_gt_0": true,
+    "ids_166_205_untouched": true,
+    "neutral_or_static_count_gt_0": true,
+    "observed_ids_only": true,
+    "static_alias_duplicate_contexts_reported": true
+  },
+  "harmful_count": 266,
+  "helpful_count": 193,
+  "label_counts": {
+    "additive_bad_baseline": 60,
+    "c_only_ablation_candidate": 60,
+    "harmful_parameter_candidate": 266,
+    "helpful_parameter_candidate": 193,
+    "neutral_parameter_candidate": 141,
+    "static_fallback_candidate": 120
+  },
+  "neutral_or_static_count": 261,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g512_candidate_regret_targets_summary_v1",
+  "split_counts": {
+    "dev": 420,
+    "train": 420
+  },
+  "static_alias_duplicate_contexts": 60,
+  "static_alias_target_weight_policy": "split_static_alias_weight_0p5_each",
+  "top_mean_delta_candidates": [
+    {
+      "candidate_id": "repair5g59_slow_decay_high_shield",
+      "harmful": 22,
+      "helpful": 34,
+      "mean_delta_vs_static_primary": -0.008625776351833333,
+      "mean_oracle_regret_primary": 0.026471659224666662,
+      "mean_rank_primary": 5.016666666666667,
+      "oracle_wins": 23,
+      "rows": 60
+    },
+    {
+      "candidate_id": "repair5g59_wait_conservative",
+      "harmful": 20,
+      "helpful": 26,
+      "mean_delta_vs_static_primary": -0.0042426416241666655,
+      "mean_oracle_regret_primary": 0.030854793952333332,
+      "mean_rank_primary": 5.65,
+      "oracle_wins": 7,
+      "rows": 60
+    },
+    {
+      "candidate_id": "repair5g59_block_heavy_flow_guard",
+      "harmful": 20,
+      "helpful": 31,
+      "mean_delta_vs_static_primary": -0.002689207427333333,
+      "mean_oracle_regret_primary": 0.03240822814916667,
+      "mean_rank_primary": 5.216666666666667,
+      "oracle_wins": 6,
+      "rows": 60
+    },
+    {
+      "candidate_id": "repair5g59_high_beta_cap_safe",
+      "harmful": 22,
+      "helpful": 22,
+      "mean_delta_vs_static_primary": -0.0003527407571666678,
+      "mean_oracle_regret_primary": 0.03474469481933333,
+      "mean_rank_primary": 5.683333333333334,
+      "oracle_wins": 5,
+      "rows": 60
+    },
+    {
+      "candidate_id": "repair5g59_flow_decay",
+      "harmful": 0,
+      "helpful": 0,
+      "mean_delta_vs_static_primary": 0.0,
+      "mean_oracle_regret_primary": 0.035097435576500004,
+      "mean_rank_primary": 4.9,
+      "oracle_wins": 5,
+      "rows": 60
+    }
+  ]
+}

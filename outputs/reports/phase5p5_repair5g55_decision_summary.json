@@ -1,0 +1,26 @@
+{
+  "aaai_ready": false,
+  "candidate_set_audit_passed": true,
+  "context_count": 60,
+  "decision": "scaled_labels_passed_adaptive_gap_strong_continue_g6_design",
+  "evidence_artifacts": {
+    "candidate_set": "C:\\PROGRAMING\\czr004\\outputs\\reports\\phase5p5_repair5g55_candidate_set_audit_summary.json",
+    "feature_audit": "C:\\PROGRAMING\\czr004\\outputs\\reports\\phase5p5_repair5g55_feature_audit_summary.json",
+    "g6_policy_spec": "C:\\PROGRAMING\\czr004\\outputs\\reports\\phase5p5_repair5g55_g6_safe_mixture_policy_spec.json",
+    "label_quality": "C:\\PROGRAMING\\czr004\\outputs\\reports\\phase5p5_repair5g55_counterfactual_label_quality_summary.json",
+    "oracle_gap": "C:\\PROGRAMING\\czr004\\outputs\\reports\\phase5p5_repair5g55_oracle_gap_summary.json",
+    "probe_budget_stability": "C:\\PROGRAMING\\czr004\\outputs\\reports\\phase5p5_repair5g55_probe_budget_stability_summary.json"
+  },
+  "feature_audit_passed": true,
+  "g6_training_allowed": false,
+  "ids_166_205_untouched": true,
+  "label_rows": 420,
+  "learned_runtime_fresh_holdout": "blocked_not_run",
+  "oracle_beats_static_fraction": 0.4166666666666667,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "probe_budget_stability_measured": true,
+  "scaled_label_smoke_passed": true,
+  "scaled_label_target_passed": false,
+  "schema_version": "phase5p5_repair5g55_decision_summary_v1"
+}

@@ -1,0 +1,5 @@
+model,neural_model_rows,action_class_accuracy_in_sample,train_dev_gap,heldout_family_behavior,beats_sklearn_tree_ridge_baseline,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+deepsets_failure_event_encoder,120,0.975,0.0,diagnostic_only_same_panel,True,False,False,False,False,False
+topology_trace_mlp,120,0.975,0.0,diagnostic_only_same_panel,True,False,False,False,False,False
+candidate_param_cross_attention_proxy,120,0.975,0.0,diagnostic_only_same_panel,True,False,False,False,False,False
+hierarchical_two_head_mlp,120,0.975,0.0,diagnostic_only_same_panel,True,False,False,False,False,False

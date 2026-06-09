@@ -1,0 +1,54 @@
+{
+  "aaai_ready": false,
+  "candidate_space_oracle_gain": -0.020237024125000037,
+  "control_comparison": {
+    "candidate_win_counts": {
+      "repair5g522_grid_c0p83_b1p50_f1p04_w0p64_dc0p97_df1p00_beta0p68_max1p00_c0": 4,
+      "repair5g522_grid_c0p87_b1p57_f1p13_w0p79_dc0p91_df0p95_beta0p54_max0p89_c0": 4,
+      "repair5g522_grid_c1p00_b1p35_f1p00_w0p40_dc0p92_df0p98_beta0p35_max0p65_c0": 2,
+      "repair5g522_grid_c1p00_b1p35_f1p00_w0p40_dc0p92_df0p98_beta0p35_max0p80_c0": 4,
+      "repair5g522_grid_c1p00_b1p45_f1p00_w0p40_dc0p92_df0p98_beta0p30_max0p80_c0": 2,
+      "repair5g522_grid_c1p14_b1p46_f0p83_w0p73_dc0p90_df1p00_beta0p34_max0p94_c0": 4,
+      "repair5g522_grid_c1p20_b1p55_f1p05_w0p75_dc0p90_df0p95_beta0p55_max0p90_c0": 2,
+      "repair5g522_grid_c1p20_b1p55_f1p05_w0p75_dc0p90_df0p95_beta0p65_max0p90_c0": 2,
+      "repair5g522_grid_c1p20_b1p55_f1p05_w0p90_dc0p90_df0p95_beta0p55_max0p90_c0": 4,
+      "repair5g522_grid_c1p22_b1p29_f0p78_w0p75_dc0p94_df0p94_beta0p25_max0p92_c0": 6,
+      "repair5g522_grid_c1p29_b1p74_f1p18_w0p77_dc0p99_df1p01_beta0p62_max0p91_c0": 4
+    },
+    "dominant_old14_g518_controls": {
+      "repair5g518_grid_c0p90_b1p50_f1p00_w0p45_dc0p95_df1p00_beta0p45_max0p75_c0": 6,
+      "repair5g518_grid_c0p90_b1p65_f1p00_w0p45_dc0p95_df1p00_beta0p35_max0p75_c0": 2,
+      "repair5g518_grid_c1p20_b1p15_f1p00_w0p70_dc0p95_df1p00_beta0p60_max0p75_c0": 2,
+      "repair5g518_grid_c1p20_b1p35_f1p00_w0p70_dc0p95_df1p00_beta0p60_max0p75_c0": 6,
+      "repair5g518_grid_c1p25_b1p25_f1p00_w0p35_dc0p95_df1p00_beta0p30_max0p75_c0": 4,
+      "repair5g518_grid_c1p25_b1p25_f1p00_w0p50_dc0p95_df1p00_beta0p35_max0p75_c0": 8,
+      "repair5g59_block_heavy_flow_guard": 2,
+      "repair5g59_flow_decay": 2,
+      "repair5g59_low_beta_high_cap": 2,
+      "repair5g59_wait_aggressive": 2
+    },
+    "region_win_counts": {
+      "B_static_recovery_feasibility": 8,
+      "C_risk_boundary": 8,
+      "D_fractional_coverage": 22
+    }
+  },
+  "decision": "g522_contradiction_explained_leakage_blocks_promotion",
+  "forbidden_feature_used_by_performance_model": true,
+  "full_primary_contexts": 60,
+  "hard_blocker_non_promotable_teacher_or_surrogate": true,
+  "learned_runtime_policy_validated": false,
+  "missing_full_primary_contexts": 39,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "response_surface_budget_stability": 1.0,
+  "runtime_claim_allowed": false,
+  "safe_g522_win_budget_pairs": 38,
+  "safe_g522_win_contexts": 19,
+  "safe_policy_sim_utility_beats_old14_plus_g518_no_new_baseline": false,
+  "schema_version": "phase5p5_repair5g523_g522_signal_contradiction_summary_v1",
+  "surrogate_forbidden_feature_count": 4,
+  "surrogate_top3_capture": 0.0,
+  "targeted_contexts": 21,
+  "teacher_forbidden_feature_count": 8
+}

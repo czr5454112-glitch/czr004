@@ -1,0 +1,48 @@
+{
+  "aaai_ready": false,
+  "candidate_count": 14,
+  "candidate_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase5p5_repair5g59_candidate_lattice.csv",
+  "candidate_ids": [
+    "repair5g59_static_flow_shield",
+    "repair5g59_additive_fallback",
+    "repair5g59_c_only_f_disabled",
+    "repair5g59_light_cong_light_flow",
+    "repair5g59_block_heavy_flow_guard",
+    "repair5g59_commit_heavy_flow_guard",
+    "repair5g59_slow_decay_high_shield",
+    "repair5g59_fast_decay_low_shield",
+    "repair5g59_wait_conservative",
+    "repair5g59_wait_aggressive",
+    "repair5g59_flow_decay",
+    "repair5g59_high_beta_cap_safe",
+    "repair5g59_low_beta_high_cap",
+    "repair5g59_static_abstain_candidate"
+  ],
+  "decision": "candidate_lattice_ready_for_counterfactual_probe_design",
+  "gates": {
+    "additive_fallback_available": true,
+    "c_only_f_disabled_ablation_available": true,
+    "candidate_count_gt_0": true,
+    "candidate_count_le_16": true,
+    "no_forbidden_outputs": true,
+    "static_fallback_available": true,
+    "update_ltm_only": true
+  },
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g59_candidate_lattice_summary_v1",
+  "varied_parameters": [
+    "alpha_cong_committed",
+    "alpha_cong_blocked",
+    "alpha_flow_progress",
+    "alpha_flow_wait_or_nonprogress",
+    "rho_cong",
+    "rho_flow",
+    "flow_shield_beta",
+    "max_flow_shield",
+    "static_fallback",
+    "additive_fallback",
+    "c_only_f_disabled"
+  ]
+}

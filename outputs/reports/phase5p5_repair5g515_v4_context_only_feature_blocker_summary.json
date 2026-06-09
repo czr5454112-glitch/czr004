@@ -1,0 +1,133 @@
+{
+  "aaai_ready": false,
+  "candidate_varying_feature_count": 30,
+  "candidate_varying_interaction_feature_count": 18,
+  "candidate_varying_rich_interaction_feature_count": 0,
+  "context_only_rich_feature_count": 19,
+  "contexts": 60,
+  "decision": "v4_context_only_rich_feature_blocker_confirmed_continue_interactions",
+  "feature_count": 61,
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "ranking_signal_blocker_confirmed": true,
+  "rich_feature_count": 19,
+  "rich_feature_inventory": [
+    {
+      "constant_contexts": 60,
+      "constant_within_all_contexts": true,
+      "contexts": 60,
+      "feature": "feature_rich_committed_count"
+    },
+    {
+      "constant_contexts": 60,
+      "constant_within_all_contexts": true,
+      "contexts": 60,
+      "feature": "feature_rich_blocked_count"
+    },
+    {
+      "constant_contexts": 60,
+      "constant_within_all_contexts": true,
+      "contexts": 60,
+      "feature": "feature_rich_wait_event_count"
+    },
+    {
+      "constant_contexts": 60,
+      "constant_within_all_contexts": true,
+      "contexts": 60,
+      "feature": "feature_rich_progress_committed_count"
+    },
+    {
+      "constant_contexts": 60,
+      "constant_within_all_contexts": true,
+      "contexts": 60,
+      "feature": "feature_rich_nonprogress_committed_count"
+    },
+    {
+      "constant_contexts": 60,
+      "constant_within_all_contexts": true,
+      "contexts": 60,
+      "feature": "feature_rich_blocked_per_committed"
+    },
+    {
+      "constant_contexts": 60,
+      "constant_within_all_contexts": true,
+      "contexts": 60,
+      "feature": "feature_rich_wait_per_committed"
+    },
+    {
+      "constant_contexts": 60,
+      "constant_within_all_contexts": true,
+      "contexts": 60,
+      "feature": "feature_rich_blocked_per_agent"
+    },
+    {
+      "constant_contexts": 60,
+      "constant_within_all_contexts": true,
+      "contexts": 60,
+      "feature": "feature_rich_committed_per_agent"
+    },
+    {
+      "constant_contexts": 60,
+      "constant_within_all_contexts": true,
+      "contexts": 60,
+      "feature": "feature_rich_progress_ratio"
+    },
+    {
+      "constant_contexts": 60,
+      "constant_within_all_contexts": true,
+      "contexts": 60,
+      "feature": "feature_rich_c_update_count"
+    },
+    {
+      "constant_contexts": 60,
+      "constant_within_all_contexts": true,
+      "contexts": 60,
+      "feature": "feature_rich_f_update_count"
+    },
+    {
+      "constant_contexts": 60,
+      "constant_within_all_contexts": true,
+      "contexts": 60,
+      "feature": "feature_rich_c_nonzero_edges"
+    },
+    {
+      "constant_contexts": 60,
+      "constant_within_all_contexts": true,
+      "contexts": 60,
+      "feature": "feature_rich_f_nonzero_edges"
+    },
+    {
+      "constant_contexts": 60,
+      "constant_within_all_contexts": true,
+      "contexts": 60,
+      "feature": "feature_rich_c_flow_update_ratio"
+    },
+    {
+      "constant_contexts": 60,
+      "constant_within_all_contexts": true,
+      "contexts": 60,
+      "feature": "feature_rich_cost_min"
+    },
+    {
+      "constant_contexts": 60,
+      "constant_within_all_contexts": true,
+      "contexts": 60,
+      "feature": "feature_rich_cost_max"
+    },
+    {
+      "constant_contexts": 60,
+      "constant_within_all_contexts": true,
+      "contexts": 60,
+      "feature": "feature_rich_cost_span"
+    },
+    {
+      "constant_contexts": 60,
+      "constant_within_all_contexts": true,
+      "contexts": 60,
+      "feature": "feature_rich_cost_bounds_respected"
+    }
+  ],
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g515_v4_context_only_feature_blocker_summary_v1"
+}

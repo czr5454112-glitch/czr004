@@ -1,0 +1,249 @@
+{
+  "advanced_promotion_gate": {
+    "condition_a_positive_delta_two_of_three": {
+      "passed": true,
+      "threshold": ">= 2",
+      "value": 1
+    },
+    "condition_b_average_delta_positive": {
+      "passed": true,
+      "threshold": "> 0.0",
+      "value": 0.005733711873736213
+    },
+    "condition_c_top3_not_worse_than_repair3_minus_002": {
+      "passed": true,
+      "threshold": 0.7490631808278867,
+      "value": 0.7494553376906318
+    },
+    "condition_d_recall_every_seed": {
+      "passed": false,
+      "threshold": ">= 0.80",
+      "value": 0.782608695652174
+    },
+    "passed": true,
+    "promotion_rule": "at_least_one_advanced_condition"
+  },
+  "branch": "phase4-laur-ltm",
+  "commit": "43633e7",
+  "confidence_margin": 0.002,
+  "dataset": "/root/shared-nvme/czr004_phase4_repair1_43633e7/artifacts/teacher/laur/full_repair4_stable_attention/update_labels/phase4_laur_stable_attention_dataset.jsonl",
+  "device": "cuda",
+  "dirty": "tracked-dirty_untracked-present",
+  "metrics_by_split": {
+    "train": {
+      "fallback_rate": 0.671021377672209,
+      "fallback_reason_distribution": {
+        "low_confidence": 1318,
+        "selected": 831,
+        "unsafe": 377
+      },
+      "harmful_update_f1": 0.47107848000793734,
+      "harmful_update_precision": 0.33977386575067986,
+      "harmful_update_recall": 0.7677878395860285,
+      "low_confidence_fallback_rate": 0.5217735550277118,
+      "original_target_top1_accuracy": 0.27315914489311166,
+      "original_target_top3_accuracy": 0.6357878068091845,
+      "pairwise_ranking_accuracy": 0.5748655672420827,
+      "predicted_rule_validation_mean_delta_ratio": 0.005347072467064782,
+      "rule_top1_accuracy": 0.37252573238321457,
+      "rule_top3_accuracy": 0.7731591448931117,
+      "sample_count": 2526,
+      "selected_rule_distribution": {
+        "additive_ltm": 1695,
+        "block_heavy": 223,
+        "commit_heavy": 489,
+        "wait_light": 119
+      },
+      "selected_vs_additive_delta_mean": 0.005347072467064782,
+      "spearman_q_delta_mean": 0.18823474658767014,
+      "stable_target_top1_accuracy": 0.37252573238321457,
+      "stable_target_top3_accuracy": 0.7731591448931117,
+      "unsafe_fallback_rate": 0.14924782264449724
+    },
+    "validation": {
+      "fallback_rate": 0.5751633986928104,
+      "fallback_reason_distribution": {
+        "low_confidence": 199,
+        "selected": 195,
+        "unsafe": 65
+      },
+      "harmful_update_f1": 0.4201474201474202,
+      "harmful_update_precision": 0.2871536523929471,
+      "harmful_update_recall": 0.782608695652174,
+      "low_confidence_fallback_rate": 0.4335511982570806,
+      "original_target_top1_accuracy": 0.289760348583878,
+      "original_target_top3_accuracy": 0.5816993464052288,
+      "pairwise_ranking_accuracy": 0.5622920592857472,
+      "predicted_rule_validation_mean_delta_ratio": 0.005733711873736213,
+      "rule_top1_accuracy": 0.4008714596949891,
+      "rule_top3_accuracy": 0.7494553376906318,
+      "sample_count": 459,
+      "selected_rule_distribution": {
+        "additive_ltm": 264,
+        "block_heavy": 40,
+        "commit_heavy": 154,
+        "wait_light": 1
+      },
+      "selected_vs_additive_delta_mean": 0.005733711873736213,
+      "spearman_q_delta_mean": 0.1519784151475033,
+      "stable_target_top1_accuracy": 0.4008714596949891,
+      "stable_target_top3_accuracy": 0.7494553376906318,
+      "unsafe_fallback_rate": 0.14161220043572983
+    }
+  },
+  "model": "/root/shared-nvme/czr004_phase4_repair1_43633e7/artifacts/models/laur_ltm/full_repair4_stable_edge_trace_gate_select_seed61/laur_stable_attention_v1.pt",
+  "model_args": {
+    "d_model": 96,
+    "dropout": 0.1,
+    "edge_dim": 27,
+    "global_dim": 22,
+    "n_heads": 4,
+    "n_layers": 2,
+    "num_families": 5,
+    "num_rules": 8,
+    "rule_dim": 12,
+    "trace_dim": 9
+  },
+  "model_name": "LAU-EdgeTraceTransformer-v3",
+  "parameter_count": 381992,
+  "phase4f_gate": {
+    "harmful_precision": {
+      "passed": false,
+      "threshold": 0.3,
+      "value": 0.2871536523929471
+    },
+    "harmful_recall": {
+      "passed": false,
+      "threshold": 0.8,
+      "value": 0.782608695652174
+    },
+    "mean_selected_delta": {
+      "passed": true,
+      "threshold": "> 0.0",
+      "value": 0.005733711873736213
+    },
+    "passed": false,
+    "validation_non_neutral": {
+      "passed": true,
+      "threshold": 50,
+      "value": 293
+    },
+    "validation_top1": {
+      "passed": true,
+      "threshold": 0.35,
+      "value": 0.4008714596949891
+    },
+    "validation_top3": {
+      "passed": true,
+      "threshold": 0.7,
+      "value": 0.7494553376906318
+    }
+  },
+  "phase5p5_runtime_allowed": false,
+  "repair3_baseline_summary_json": "/root/shared-nvme/czr004_phase4_repair1_43633e7/outputs/reports/phase4f_repair3_stable_tie001_eval_h010_summary.json",
+  "safety_penalty": 0.02,
+  "safety_threshold": 0.5,
+  "schema_version": "phase4f_repair4_stable_attention_eval_summary_v1",
+  "seed": 61,
+  "threshold_sweep": [
+    {
+      "fallback_rate": 0.6775599128540305,
+      "harmful_precision": 0.21788871554862194,
+      "harmful_recall": 0.9588100686498856,
+      "low_confidence_fallback_rate": 0.3289760348583878,
+      "mean_selected_delta": 0.003256466287066279,
+      "safety_threshold": 0.1,
+      "top1": 0.39433551198257083,
+      "top3": 0.7494553376906318,
+      "unsafe_fallback_rate": 0.3485838779956427
+    },
+    {
+      "fallback_rate": 0.6623093681917211,
+      "harmful_precision": 0.22665210267613325,
+      "harmful_recall": 0.9496567505720824,
+      "low_confidence_fallback_rate": 0.31808278867102396,
+      "mean_selected_delta": 0.0033290919569302878,
+      "safety_threshold": 0.2,
+      "top1": 0.39651416122004357,
+      "top3": 0.7494553376906318,
+      "unsafe_fallback_rate": 0.3442265795206972
+    },
+    {
+      "fallback_rate": 0.6557734204793029,
+      "harmful_precision": 0.2389018691588785,
+      "harmful_recall": 0.9359267734553776,
+      "low_confidence_fallback_rate": 0.3289760348583878,
+      "mean_selected_delta": 0.0033212403627410937,
+      "safety_threshold": 0.3,
+      "top1": 0.39215686274509803,
+      "top3": 0.7494553376906318,
+      "unsafe_fallback_rate": 0.32679738562091504
+    },
+    {
+      "fallback_rate": 0.6427015250544662,
+      "harmful_precision": 0.25903614457831325,
+      "harmful_recall": 0.88558352402746,
+      "low_confidence_fallback_rate": 0.4117647058823529,
+      "mean_selected_delta": 0.0034414288220563226,
+      "safety_threshold": 0.4,
+      "top1": 0.39433551198257083,
+      "top3": 0.7494553376906318,
+      "unsafe_fallback_rate": 0.23093681917211328
+    },
+    {
+      "fallback_rate": 0.616557734204793,
+      "harmful_precision": 0.2744951383694839,
+      "harmful_recall": 0.8398169336384439,
+      "low_confidence_fallback_rate": 0.4466230936819172,
+      "mean_selected_delta": 0.003917339042815734,
+      "safety_threshold": 0.45,
+      "top1": 0.40305010893246185,
+      "top3": 0.7494553376906318,
+      "unsafe_fallback_rate": 0.16993464052287582
+    },
+    {
+      "fallback_rate": 0.5751633986928104,
+      "harmful_precision": 0.2871536523929471,
+      "harmful_recall": 0.782608695652174,
+      "low_confidence_fallback_rate": 0.4335511982570806,
+      "mean_selected_delta": 0.005733711873736213,
+      "safety_threshold": 0.5,
+      "top1": 0.4008714596949891,
+      "top3": 0.7494553376906318,
+      "unsafe_fallback_rate": 0.14161220043572983
+    },
+    {
+      "fallback_rate": 0.5098039215686274,
+      "harmful_precision": 0.30678466076696165,
+      "harmful_recall": 0.7139588100686499,
+      "low_confidence_fallback_rate": 0.3899782135076253,
+      "mean_selected_delta": 0.0074400032709357805,
+      "safety_threshold": 0.55,
+      "top1": 0.40305010893246185,
+      "top3": 0.7494553376906318,
+      "unsafe_fallback_rate": 0.11982570806100218
+    },
+    {
+      "fallback_rate": 0.4139433551198257,
+      "harmful_precision": 0.3216867469879518,
+      "harmful_recall": 0.6109839816933639,
+      "low_confidence_fallback_rate": 0.3572984749455338,
+      "mean_selected_delta": 0.00993590599097345,
+      "safety_threshold": 0.6,
+      "top1": 0.39433551198257083,
+      "top3": 0.7494553376906318,
+      "unsafe_fallback_rate": 0.05664488017429194
+    },
+    {
+      "fallback_rate": 0.2440087145969499,
+      "harmful_precision": 0.3086053412462908,
+      "harmful_recall": 0.2379862700228833,
+      "low_confidence_fallback_rate": 0.2440087145969499,
+      "mean_selected_delta": 0.009360571479169081,
+      "safety_threshold": 0.7,
+      "top1": 0.3812636165577342,
+      "top3": 0.7494553376906318,
+      "unsafe_fallback_rate": 0.0
+    }
+  ]
+}

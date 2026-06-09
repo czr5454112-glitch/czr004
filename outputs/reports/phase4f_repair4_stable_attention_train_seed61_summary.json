@@ -1,0 +1,128 @@
+{
+  "batch_size": 128,
+  "best_selection_score": 0.8031418022718643,
+  "branch": "phase4-laur-ltm",
+  "commit": "43633e7",
+  "confidence_margin": 0.002,
+  "dataset": "/root/shared-nvme/czr004_phase4_repair1_43633e7/artifacts/teacher/laur/full_repair4_stable_attention/update_labels/phase4_laur_stable_attention_dataset.jsonl",
+  "device": "cuda",
+  "dirty": "tracked-dirty_untracked-present",
+  "epochs": 220,
+  "final_loss": 1.502400290966034,
+  "harmful_pos_weight": 5.535575679172057,
+  "metrics_by_split": {
+    "train": {
+      "fallback_rate": 0.8705463182897862,
+      "fallback_reason_distribution": {
+        "low_confidence": 1037,
+        "selected": 327,
+        "unsafe": 1162
+      },
+      "harmful_update_f1": 0.38683595477228216,
+      "harmful_update_precision": 0.24036423581128816,
+      "harmful_update_recall": 0.9902975420439845,
+      "low_confidence_fallback_rate": 0.4105304829770388,
+      "original_target_top1_accuracy": 0.2529691211401425,
+      "original_target_top3_accuracy": 0.6377672209026128,
+      "pairwise_ranking_accuracy": 0.5665937092973203,
+      "predicted_rule_validation_mean_delta_ratio": 0.0028209486938939893,
+      "rule_top1_accuracy": 0.3618368962787015,
+      "rule_top3_accuracy": 0.7695961995249406,
+      "sample_count": 2526,
+      "selected_rule_distribution": {
+        "additive_ltm": 2199,
+        "block_heavy": 112,
+        "commit_heavy": 212,
+        "decay_095": 3
+      },
+      "selected_vs_additive_delta_mean": 0.0028209486938939893,
+      "spearman_q_delta_mean": 0.16958070571497857,
+      "stable_target_top1_accuracy": 0.3618368962787015,
+      "stable_target_top3_accuracy": 0.7695961995249406,
+      "unsafe_fallback_rate": 0.4600158353127474
+    },
+    "validation": {
+      "fallback_rate": 0.7625272331154684,
+      "fallback_reason_distribution": {
+        "low_confidence": 189,
+        "selected": 109,
+        "unsafe": 161
+      },
+      "harmful_update_f1": 0.34446254071661236,
+      "harmful_update_precision": 0.20950965824665677,
+      "harmful_update_recall": 0.9679633867276888,
+      "low_confidence_fallback_rate": 0.4117647058823529,
+      "original_target_top1_accuracy": 0.27450980392156865,
+      "original_target_top3_accuracy": 0.579520697167756,
+      "pairwise_ranking_accuracy": 0.553995759041156,
+      "predicted_rule_validation_mean_delta_ratio": 0.002594354261971723,
+      "rule_top1_accuracy": 0.38344226579520696,
+      "rule_top3_accuracy": 0.7211328976034859,
+      "sample_count": 459,
+      "selected_rule_distribution": {
+        "additive_ltm": 350,
+        "block_heavy": 24,
+        "commit_heavy": 85
+      },
+      "selected_vs_additive_delta_mean": 0.002594354261971723,
+      "spearman_q_delta_mean": 0.1367973033991735,
+      "stable_target_top1_accuracy": 0.38344226579520696,
+      "stable_target_top3_accuracy": 0.7211328976034859,
+      "unsafe_fallback_rate": 0.35076252723311546
+    }
+  },
+  "model_args": {
+    "d_model": 64,
+    "dropout": 0.1,
+    "edge_dim": 27,
+    "global_dim": 22,
+    "n_heads": 2,
+    "n_layers": 2,
+    "num_families": 5,
+    "num_rules": 8,
+    "rule_dim": 12,
+    "trace_dim": 9
+  },
+  "model_name": "LAU-SetRuleTransformer-v1",
+  "model_path": "/root/shared-nvme/czr004_phase4_repair1_43633e7/artifacts/models/laur_ltm/full_repair4_stable_attention_seed61/laur_stable_attention_v1.pt",
+  "output_dir": "/root/shared-nvme/czr004_phase4_repair1_43633e7/artifacts/models/laur_ltm/full_repair4_stable_attention_seed61",
+  "parameter_count": 171912,
+  "phase4f_gate": {
+    "harmful_precision": {
+      "passed": false,
+      "threshold": 0.3,
+      "value": 0.20950965824665677
+    },
+    "harmful_recall": {
+      "passed": true,
+      "threshold": 0.8,
+      "value": 0.9679633867276888
+    },
+    "mean_selected_delta": {
+      "passed": true,
+      "threshold": "> 0.0",
+      "value": 0.002594354261971723
+    },
+    "passed": false,
+    "validation_non_neutral": {
+      "passed": true,
+      "threshold": 50,
+      "value": 293
+    },
+    "validation_top1": {
+      "passed": true,
+      "threshold": 0.35,
+      "value": 0.38344226579520696
+    },
+    "validation_top3": {
+      "passed": true,
+      "threshold": 0.7,
+      "value": 0.7211328976034859
+    }
+  },
+  "safety_penalty": 0.02,
+  "safety_threshold": 0.1,
+  "schema_version": "phase4f_repair4_stable_attention_train_summary_v1",
+  "seed": 61,
+  "training_time_sec": 714.5885341381654
+}

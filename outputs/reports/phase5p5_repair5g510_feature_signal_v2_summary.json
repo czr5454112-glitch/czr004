@@ -1,0 +1,168 @@
+{
+  "aaai_ready": false,
+  "ablation_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase5p5_repair5g510_feature_signal_v2_ablations.csv",
+  "ablations": [
+    {
+      "ablation": "all_v2",
+      "dev_accuracy": null,
+      "dev_rows": 0,
+      "feature_count": 64,
+      "train_rows": 2
+    },
+    {
+      "ablation": "no_map_agent_identity",
+      "dev_accuracy": null,
+      "dev_rows": 0,
+      "feature_count": 57,
+      "train_rows": 2
+    },
+    {
+      "ablation": "traffic_only",
+      "dev_accuracy": null,
+      "dev_rows": 0,
+      "feature_count": 22,
+      "train_rows": 2
+    },
+    {
+      "ablation": "event_only",
+      "dev_accuracy": null,
+      "dev_rows": 0,
+      "feature_count": 21,
+      "train_rows": 2
+    },
+    {
+      "ablation": "runtime_state_only",
+      "dev_accuracy": null,
+      "dev_rows": 0,
+      "feature_count": 6,
+      "train_rows": 2
+    },
+    {
+      "ablation": "without_static_boundary_proxy",
+      "dev_accuracy": null,
+      "dev_rows": 0,
+      "feature_count": 63,
+      "train_rows": 2
+    }
+  ],
+  "best_ablation": {
+    "ablation": "all_v2",
+    "dev_accuracy": null,
+    "dev_rows": 0,
+    "feature_count": 64,
+    "train_rows": 2
+  },
+  "best_ablation_dev_accuracy": null,
+  "constant_feature_count": 33,
+  "constant_features": [
+    "best_ratio_before",
+    "c_flow_update_ratio",
+    "c_nonzero_edges",
+    "c_nonzero_per_agent",
+    "c_nonzero_per_area",
+    "c_traffic_before_entropy",
+    "c_traffic_before_max",
+    "c_traffic_before_mean",
+    "c_traffic_before_median",
+    "c_traffic_before_nonzero_count",
+    "c_traffic_before_p25",
+    "c_traffic_before_p75",
+    "c_update_count",
+    "cf_imbalance",
+    "cf_ratio",
+    "cost_span",
+    "f_nonzero_edges",
+    "f_nonzero_per_agent",
+    "f_nonzero_per_area",
+    "f_traffic_before_entropy",
+    "f_traffic_before_max",
+    "f_traffic_before_mean",
+    "f_traffic_before_median",
+    "f_traffic_before_nonzero_count",
+    "f_traffic_before_p25",
+    "f_traffic_before_p75",
+    "f_update_count",
+    "has_incumbent_before",
+    "improved_last_iteration",
+    "incumbent_progress_context",
+    "later_iteration",
+    "ltm_iterations",
+    "returned_solutions_count_so_far"
+  ],
+  "feature_count": 64,
+  "features_strong_enough_to_distinguish_static_vs_nonstatic_safely": false,
+  "forbidden_outcome_features_excluded": true,
+  "label_counts": {
+    "": 58,
+    "nonstatic": 2
+  },
+  "labeled_rows": 2,
+  "map_agent_leakage_risk": "medium",
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "rows": 60,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g510_feature_signal_v2_summary_v1",
+  "train_dev_shift_top10": [
+    {
+      "abs_shift": 418.3666666666668,
+      "dev_mean": 10014.9,
+      "feature": "event_total",
+      "train_mean": 10433.266666666666
+    },
+    {
+      "abs_shift": 386.66666666666606,
+      "dev_mean": 8863.333333333334,
+      "feature": "committed_count",
+      "train_mean": 9250.0
+    },
+    {
+      "abs_shift": 278.1999999999998,
+      "dev_mean": 4137.866666666667,
+      "feature": "progress_committed_count",
+      "train_mean": 4416.066666666667
+    },
+    {
+      "abs_shift": 108.46666666666715,
+      "dev_mean": 4725.466666666666,
+      "feature": "nonprogress_committed_count",
+      "train_mean": 4833.933333333333
+    },
+    {
+      "abs_shift": 23.23333333333335,
+      "dev_mean": 781.5,
+      "feature": "blocked_count",
+      "train_mean": 804.7333333333333
+    },
+    {
+      "abs_shift": 8.466666666666697,
+      "dev_mean": 370.06666666666666,
+      "feature": "wait_event_count",
+      "train_mean": 378.53333333333336
+    },
+    {
+      "abs_shift": 4.853666666666669,
+      "dev_mean": 130.2533333333333,
+      "feature": "event_total_per_agent",
+      "train_mean": 135.10699999999997
+    },
+    {
+      "abs_shift": 4.733333333333334,
+      "dev_mean": 116.33333333333333,
+      "feature": "committed_per_agent",
+      "train_mean": 121.06666666666666
+    },
+    {
+      "abs_shift": 0.4243061685347458,
+      "dev_mean": 5.11234804213805,
+      "feature": "event_total_per_area",
+      "train_mean": 5.536654210672796
+    },
+    {
+      "abs_shift": 0.4024800496134455,
+      "dev_mean": 4.357924357469438,
+      "feature": "committed_per_area",
+      "train_mean": 4.760404407082883
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+map,agents,method,runs,successes,success_rate,sum_of_loss_ratio_mean,expanded_nodes_mean,time_to_first_solution_ms_mean,returned_solutions_count_mean,low_level_pibt_calls_mean,laur_overhead_ms_mean,laur_inference_count_mean,laur_additive_fallback_count_mean,laur_safety_disabled_count_mean,fallback_defer_rate,non_additive_update_rate,selected_harmful_update_rate,selected_rules,ratio_delta_vs_ltm,expanded_delta_vs_ltm,ttfs_delta_vs_ltm
+random-32-32-20,50,lacam_star_ltm,1,1,1.0,1.1421686747,308.0,163.0,1.0,30012.0,0.0,0.0,0.0,0.0,,,,{},,,
+random-32-32-20,50,repair5e5_crossfold_utility_reranker,1,1,1.0,1.1421686747,323.0,164.0,1.0,29911.0,0.4329,3.0,1.0,0.0,0.25,0.75,,"{""block_heavy"": 2, ""wait_heavy"": 1}",0.0,15.0,1.0
+random-32-32-20,50,repair5e5_crossfold_utility_reranker_force_additive_parity,1,1,1.0,1.1421686747,308.0,168.0,1.0,30012.0,0.0,0.0,1.0,0.0,0.25,0.0,,"{""additive_ltm"": 3}",0.0,0.0,5.0
+random-32-32-20,50,repair5e5_crossfold_utility_reranker_loose_threshold_diagnostic,1,1,1.0,1.1421686747,323.0,166.0,1.0,29911.0,0.3981,3.0,1.0,0.0,0.25,0.75,,"{""block_heavy"": 2, ""wait_heavy"": 1}",0.0,15.0,3.0
+random-32-32-20,50,repair5e5_crossfold_utility_reranker_no_ood_guard_diagnostic,1,1,1.0,1.1421686747,323.0,161.0,1.0,29911.0,0.4027,3.0,1.0,0.0,0.25,0.75,,"{""block_heavy"": 2, ""wait_heavy"": 1}",0.0,15.0,-2.0
+random-32-32-20,50,repair5e5_crossfold_utility_reranker_recovery_disabled_parity,1,1,1.0,1.1421686747,308.0,165.0,1.0,30012.0,0.0,0.0,1.0,0.0,0.25,0.0,,"{""additive_ltm"": 3}",0.0,0.0,2.0
+random-32-32-20,50,repair5e5_crossfold_utility_reranker_shuffled_labels_diagnostic,1,1,1.0,1.1421686747,323.0,163.0,1.0,29911.0,0.5145,3.0,1.0,0.0,0.25,0.75,,"{""block_heavy"": 2, ""wait_heavy"": 1}",0.0,15.0,0.0
+random-32-32-20,50,repair5e5_crossfold_utility_reranker_strict_threshold_diagnostic,1,1,1.0,1.1421686747,300.0,164.0,1.0,28418.0,0.4158,3.0,1.0,0.0,0.25,0.75,,"{""block_heavy"": 1, ""wait_heavy"": 2}",0.0,-8.0,1.0

@@ -1,0 +1,130 @@
+schema_version: phase4_laur_attention_native_config_v1
+mode: phase4-full-repair5b-hier-hightoken-rank-first
+
+attention_native:
+  model_family: LAU-AttentionNative-v1
+  dataset_jsonl: artifacts/teacher/laur/full_repair5_attention_native_expand5000_rawtrace_hightoken/update_labels/phase4_laur_attention_native_expand5000_rawtrace_hightoken_dataset.jsonl.zst
+
+  model:
+    name: LAU-HierEdgeTraceTransformer-v5
+    d_model: 96
+    n_heads: 4
+    n_layers: 2
+    dropout: 0.1
+    head_hidden_dim: 64
+    head_dropout: 0.1
+
+  loss:
+    lambda_listwise: 1.0
+    lambda_pairwise: 2.0
+    lambda_delta: 0.5
+    lambda_harmful: 8.0
+    lambda_opportunity: 1.0
+    lambda_defer: 0.5
+    lambda_anti_escape: 2.0
+    lambda_family: 0.1
+    lambda_harmful_pairwise: 2.0
+    lambda_high_margin_harmful: 1.0
+    lambda_anti_candidate_safety: 1.0
+    lambda_rule_ce: 1.0
+    lambda_rule_margin: 1.0
+    harmful_pairwise_margin: 0.04
+    harmful_negative_weight: 2.0
+    rule_margin: 0.05
+    rule_ce_high_margin_weight: 4.0
+    rule_margin_high_margin_weight: 4.0
+    anti_escape_score_margin: 0.005
+
+  curriculum:
+    stages:
+      - name: rank_first
+        from_epoch: 1
+        until_epoch: 60
+        loss:
+          lambda_pairwise: 3.0
+          lambda_rule_ce: 2.0
+          lambda_rule_margin: 2.0
+          lambda_harmful: 4.0
+          lambda_anti_escape: 1.0
+      - name: safety_calibration
+        from_epoch: 61
+        until_epoch: 120
+        loss:
+          lambda_pairwise: 2.0
+          lambda_rule_ce: 1.5
+          lambda_rule_margin: 1.5
+          lambda_harmful: 8.0
+          lambda_harmful_pairwise: 3.0
+          lambda_high_margin_harmful: 2.0
+          lambda_anti_candidate_safety: 2.0
+      - name: anti_escape_balance
+        from_epoch: 121
+        until_epoch: 180
+        loss:
+          lambda_pairwise: 2.0
+          lambda_rule_ce: 1.5
+          lambda_rule_margin: 2.0
+          lambda_harmful: 8.0
+          lambda_anti_escape: 4.0
+          lambda_high_margin_harmful: 2.0
+
+  training:
+    model_output_dir: artifacts/models/laur_ltm/full_repair5b_hier_hightoken_rank_first_seed{seed}
+    model_path: artifacts/models/laur_ltm/full_repair5b_hier_hightoken_rank_first_seed{seed}/laur_attention_native_hier_v5.pt
+    train_report_md: outputs/reports/phase4f_repair5b_hier_hightoken_rank_first_train_seed{seed}.md
+    train_summary_json: outputs/reports/phase4f_repair5b_hier_hightoken_rank_first_train_seed{seed}_summary.json
+    train_summary_csv: outputs/tables/phase4f_repair5b_hier_hightoken_rank_first_train_seed{seed}.csv
+    seed: 61
+    batch_size: 64
+    epochs: 180
+    eval_interval: 20
+    learning_rate: 0.001
+    weight_decay: 0.0005
+    model_selection_calibrate_safety: true
+    sampler: stratified
+    high_margin_weight: 3.0
+    harmful_positive_weight: 2.0
+    rare_rule_weight: 2.0
+    defer_reason_balance: true
+    hardcase_index_jsonl: artifacts/teacher/laur/repair5_hardcase_index.jsonl
+    hardcase_replay_weight: 4.0
+    device: auto
+
+  eval:
+    model_path: artifacts/models/laur_ltm/full_repair5b_hier_hightoken_rank_first_seed{seed}/laur_attention_native_hier_v5.pt
+    eval_report_md: outputs/reports/phase4f_repair5b_hier_hightoken_rank_first_eval_seed{seed}.md
+    eval_summary_json: outputs/reports/phase4f_repair5b_hier_hightoken_rank_first_eval_seed{seed}_summary.json
+    eval_summary_csv: outputs/tables/phase4f_repair5b_hier_hightoken_rank_first_eval_seed{seed}.csv
+    per_map_csv: outputs/tables/phase4f_repair5b_hier_hightoken_rank_first_per_map_seed{seed}.csv
+    confusion_csv: outputs/tables/phase4f_repair5b_hier_hightoken_rank_first_confusion_seed{seed}.csv
+    promotion_seeds: [61, 103, 107]
+    batch_size: 64
+    safety_threshold: 0.10
+    safety_penalty: 0.02
+    opportunity_threshold: 0.50
+    defer_threshold: 0.50
+    confidence_margin: 0.002
+    calibrate_safety_thresholds: true
+    safety_calibration_mode: per_rule
+    safety_calibration_thresholds: [0.05, 0.07, 0.09, 0.10, 0.12, 0.15, 0.17, 0.20, 0.25, 0.30, 0.40, 0.50, 0.60, 0.70, 0.80]
+    device: auto
+
+gate:
+  validation_top1_min: 0.35
+  validation_top3_min: 0.70
+  harmful_recall_min: 0.80
+  harmful_precision_min: 0.30
+  predicted_rule_mean_delta_min_exclusive: 0.0
+  validation_non_neutral_min: 50
+
+anti_escape:
+  min_validation_high_margin_opportunity_count: 50
+  high_margin_nonadditive_capture_rate_min: 0.40
+  avoidable_additive_or_defer_rate_max: 0.60
+  anti_escape_mean_selected_vs_additive_delta_min: 0.005
+  opportunity_nonadditive_selection_rate_min: 0.35
+  global_additive_or_defer_rate_max: 0.70
+
+runtime:
+  phase5p5_allowed_only_if_final_gate_passes: true
+  phase6_allowed_from_repair5_offline_only: false

@@ -17,13 +17,31 @@ __pycache__/
 .env
 
 outputs/logs/
+outputs/server/
 outputs/traces/
 outputs/labels/
 outputs/checkpoints/
 outputs/tmp/
 outputs/**/*.tmp
-artifacts/teacher/
+artifacts/teacher/edge_labels/
+artifacts/teacher/laur/checkpoints/
+artifacts/teacher/laur/probes/
+artifacts/teacher/laur/traces/
+artifacts/teacher/laur/update_labels/
+artifacts/teacher/laur/pilot/
+artifacts/teacher/laur/full/
+artifacts/teacher/laur/full_repair1/traces/*.zst
+artifacts/teacher/laur/full_repair5_expand5000/traces/*.zst
+artifacts/teacher/laur/full_repair5_attention_native_expand5000_rawtrace/update_labels/*.jsonl
+artifacts/teacher/laur/full_repair5_attention_native_expand5000_rawtrace_hightoken/update_labels/*.jsonl
+artifacts/teacher/traces/
+artifacts/teacher/tmp/
+artifacts/teacher/*.tmp
 artifacts/checkpoints/
 
 third_party/**/build/
 external/**/build/
+external/**/build*/
+
+repair5g511_*.tar
+repair5g511_*.tar.gz

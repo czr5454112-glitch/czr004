@@ -1,0 +1,81 @@
+{
+  "aaai_ready": false,
+  "allowed_feature_names": [
+    "agents",
+    "best_ratio_before",
+    "blocked_count",
+    "blocked_per_agent",
+    "blocked_per_committed",
+    "c_flow_update_ratio",
+    "c_nonzero_edges",
+    "c_update_count",
+    "committed_count",
+    "committed_per_agent",
+    "cost_bounds_respected",
+    "cost_max",
+    "cost_min",
+    "cost_span",
+    "density",
+    "f_nonzero_edges",
+    "f_update_count",
+    "free_cells",
+    "has_incumbent_before",
+    "improved_last_iteration",
+    "ltm_iterations",
+    "map_height",
+    "map_width",
+    "nonprogress_committed_count",
+    "obstacle_ratio",
+    "progress_committed_count",
+    "progress_ratio",
+    "returned_solutions_count_so_far",
+    "wait_event_count",
+    "wait_per_committed"
+  ],
+  "allowed_outputs": [
+    "mixture_weights_over_safe_updateparams_experts",
+    "abstention_probability",
+    "optional_bounded_residuals_after_future_gate_only"
+  ],
+  "candidate_experts": [
+    "additive_ltm",
+    "repair5g2_best_frozen_static_candidate",
+    "repair5g2_frozen_static_or_selector",
+    "repair5g2_c_equiv_best_frozen_baseline",
+    "repair5g1_shield_c100_b125_w075_d100_beta0p35_max0p75",
+    "repair5g1_shield_c125_b125_w075_d095_beta0p2_max0p5",
+    "repair5g1_shield_c125_b125_w075_d095_beta0p35_max0p75"
+  ],
+  "fallback": {
+    "abstention_required": true,
+    "confidence_threshold_required": true,
+    "default": "repair5g2_best_frozen_static_candidate",
+    "high_risk": "additive_ltm_or_c_equiv_baseline"
+  },
+  "forbidden_outputs": [
+    "actions",
+    "restart nodes",
+    "PIBT priorities",
+    "h_i(v)",
+    "action logits",
+    "candidate deletion",
+    "collision decisions"
+  ],
+  "g6_training_allowed": false,
+  "gates_snapshot": {
+    "candidate_set_audit_passed": true,
+    "feature_audit_passed": true,
+    "oracle_decision": "scaled_labels_passed_adaptive_gap_strong_continue_g6_design",
+    "probe_budget_stability_measured": true,
+    "scaled_label_smoke_passed": true,
+    "scaled_label_target_passed": false
+  },
+  "ids_166_205_untouched": true,
+  "learned_runtime_fresh_holdout": "blocked_not_run",
+  "method_family": "safe_learned_mixture_over_validated_UpdateLTM_experts",
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g55_g6_safe_mixture_policy_spec_v1",
+  "training_allowed": false
+}

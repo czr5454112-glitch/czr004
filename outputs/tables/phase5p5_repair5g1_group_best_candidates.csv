@@ -1,0 +1,7 @@
+map,agents,candidate_method,component,rows,better,worse,mean_delta_ratio_vs_ltm
+maze-32-32-4,50,repair5g1_shield_c125_b125_w075_d095_beta0p35_max0p75,flow_shield,20,18,1,-0.02766347191734999
+maze-32-32-4,100,repair5g1_shield_c100_b125_w075_d100_beta0p35_max0p5,flow_shield,20,14,6,-0.017065433748499982
+random-32-32-20,50,repair5g1_shield_c100_b125_w075_d100_beta0p35_max0p75,flow_shield,20,14,0,-0.020282077917149956
+random-32-32-20,100,repair5g1_shield_c100_b100_w075_d095_beta0p2_max0p75,flow_shield,20,19,0,-0.04263875971365
+warehouse-10-20-10-2-1,50,repair5g_dual_c_equiv_additive,c_equiv,20,1,0,-0.0024885728799999953
+warehouse-10-20-10-2-1,100,repair5g1_agent_c100_b100_w075_d095_lf0p05_min0p5,agent_progress_f,20,2,0,0.0

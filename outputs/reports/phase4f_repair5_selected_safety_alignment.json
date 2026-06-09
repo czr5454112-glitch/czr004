@@ -1,0 +1,260 @@
+{
+  "branch": "phase4f5p5-stable-attention-lau",
+  "calibration_json": "C:\\PROGRAMING\\czr004\\outputs\\reports\\phase4f_repair5_per_rule_safety_calibration.json",
+  "commit": "387003a",
+  "created_at": "2026-05-31T13:23:15.712452",
+  "dirty": "tracked-dirty_untracked-present",
+  "input_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase4f_repair5c_composite_inference.csv",
+  "metrics_by_mode": {
+    "anti_decision_top3_per_rule_safety": {
+      "all_rule_safety": {
+        "fn": 162,
+        "fp": 1440,
+        "precision": 0.289590527873705,
+        "recall": 0.7837116154873164,
+        "tn": 3907,
+        "tp": 587
+      },
+      "sample_count": 762,
+      "selected_harmful_false_negative_by_family": {
+        "block": 1,
+        "commit": 5,
+        "decay": 1,
+        "wait": 10
+      },
+      "selected_harmful_false_negative_by_map": {
+        "empty-48-48": 5,
+        "maze-32-32-4": 12
+      },
+      "selected_harmful_false_negative_by_rule": {
+        "block_light": 1,
+        "commit_heavy": 5,
+        "decay_095": 1,
+        "wait_light": 10
+      },
+      "selected_harmful_rate": 0.02230971128608924,
+      "selected_rule_safety": {
+        "fn": 17,
+        "fp": 1,
+        "precision": 0.0,
+        "recall": 0.0,
+        "tn": 744,
+        "tp": 0
+      },
+      "selected_safe_but_masked_rate": 0.0013123359580052493,
+      "selected_safe_false_positive_by_family": {
+        "additive": 1
+      },
+      "selected_safe_false_positive_by_map": {
+        "maze-32-32-4": 1
+      },
+      "selected_safe_false_positive_by_rule": {
+        "additive_ltm": 1
+      },
+      "selected_threshold_usage": {
+        "additive_ltm:0.01": 504,
+        "block_heavy:0.35": 1,
+        "block_light:0.35": 6,
+        "commit_heavy:0.4": 154,
+        "decay_095:0.35": 6,
+        "wait_light:0.35": 91
+      }
+    },
+    "learned_decision_oracle_safety": {
+      "all_rule_safety": {
+        "fn": 0,
+        "fp": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "tn": 5347,
+        "tp": 749
+      },
+      "sample_count": 762,
+      "selected_harmful_false_negative_by_family": {},
+      "selected_harmful_false_negative_by_map": {},
+      "selected_harmful_false_negative_by_rule": {},
+      "selected_harmful_rate": 0.0,
+      "selected_rule_safety": {
+        "fn": 0,
+        "fp": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "tn": 762,
+        "tp": 0
+      },
+      "selected_safe_but_masked_rate": 0.0,
+      "selected_safe_false_positive_by_family": {},
+      "selected_safe_false_positive_by_map": {},
+      "selected_safe_false_positive_by_rule": {},
+      "selected_threshold_usage": {
+        "additive_ltm:oracle": 278,
+        "block_heavy:oracle": 56,
+        "block_light:oracle": 3,
+        "commit_heavy:oracle": 284,
+        "decay_090:oracle": 12,
+        "decay_095:oracle": 41,
+        "wait_heavy:oracle": 3,
+        "wait_light:oracle": 85
+      }
+    },
+    "oracle_decision_learned_rerank": {
+      "all_rule_safety": {
+        "fn": 162,
+        "fp": 1440,
+        "precision": 0.289590527873705,
+        "recall": 0.7837116154873164,
+        "tn": 3907,
+        "tp": 587
+      },
+      "sample_count": 762,
+      "selected_harmful_false_negative_by_family": {
+        "commit": 1,
+        "wait": 4
+      },
+      "selected_harmful_false_negative_by_map": {
+        "empty-48-48": 1,
+        "maze-32-32-4": 4
+      },
+      "selected_harmful_false_negative_by_rule": {
+        "commit_heavy": 1,
+        "wait_light": 4
+      },
+      "selected_harmful_rate": 0.006561679790026247,
+      "selected_rule_safety": {
+        "fn": 5,
+        "fp": 1,
+        "precision": 0.0,
+        "recall": 0.0,
+        "tn": 756,
+        "tp": 0
+      },
+      "selected_safe_but_masked_rate": 0.0013123359580052493,
+      "selected_safe_false_positive_by_family": {
+        "additive": 1
+      },
+      "selected_safe_false_positive_by_map": {
+        "maze-32-32-4": 1
+      },
+      "selected_safe_false_positive_by_rule": {
+        "additive_ltm": 1
+      },
+      "selected_threshold_usage": {
+        "additive_ltm:0.01": 473,
+        "block_heavy:0.35": 95,
+        "block_light:0.35": 4,
+        "commit_heavy:0.4": 112,
+        "decay_095:0.35": 5,
+        "wait_heavy:0.45": 2,
+        "wait_light:0.35": 71
+      }
+    },
+    "top3_anti_margin_per_family_safety": {
+      "all_rule_safety": {
+        "fn": 152,
+        "fp": 1468,
+        "precision": 0.2891041162227603,
+        "recall": 0.7970627503337784,
+        "tn": 3879,
+        "tp": 597
+      },
+      "sample_count": 762,
+      "selected_harmful_false_negative_by_family": {
+        "block": 1,
+        "commit": 6,
+        "decay": 1,
+        "wait": 10
+      },
+      "selected_harmful_false_negative_by_map": {
+        "empty-48-48": 6,
+        "maze-32-32-4": 12
+      },
+      "selected_harmful_false_negative_by_rule": {
+        "block_light": 1,
+        "commit_heavy": 6,
+        "decay_095": 1,
+        "wait_light": 10
+      },
+      "selected_harmful_rate": 0.023622047244094488,
+      "selected_rule_safety": {
+        "fn": 18,
+        "fp": 1,
+        "precision": 0.0,
+        "recall": 0.0,
+        "tn": 743,
+        "tp": 0
+      },
+      "selected_safe_but_masked_rate": 0.0013123359580052493,
+      "selected_safe_false_positive_by_family": {
+        "additive": 1
+      },
+      "selected_safe_false_positive_by_map": {
+        "maze-32-32-4": 1
+      },
+      "selected_safe_false_positive_by_rule": {
+        "additive_ltm": 1
+      },
+      "selected_threshold_usage": {
+        "additive_ltm:0.01": 447,
+        "block_heavy:0.35": 38,
+        "block_light:0.35": 6,
+        "commit_heavy:0.4": 174,
+        "decay_095:0.35": 6,
+        "wait_light:0.35": 91
+      }
+    },
+    "top3_per_rule_safety_utility": {
+      "all_rule_safety": {
+        "fn": 162,
+        "fp": 1440,
+        "precision": 0.289590527873705,
+        "recall": 0.7837116154873164,
+        "tn": 3907,
+        "tp": 587
+      },
+      "sample_count": 762,
+      "selected_harmful_false_negative_by_family": {
+        "decay": 3,
+        "wait": 3
+      },
+      "selected_harmful_false_negative_by_map": {
+        "maze-32-32-4": 6
+      },
+      "selected_harmful_false_negative_by_rule": {
+        "decay_095": 3,
+        "wait_light": 3
+      },
+      "selected_harmful_rate": 0.007874015748031496,
+      "selected_rule_safety": {
+        "fn": 6,
+        "fp": 1,
+        "precision": 0.0,
+        "recall": 0.0,
+        "tn": 755,
+        "tp": 0
+      },
+      "selected_safe_but_masked_rate": 0.0013123359580052493,
+      "selected_safe_false_positive_by_family": {
+        "additive": 1
+      },
+      "selected_safe_false_positive_by_map": {
+        "maze-32-32-4": 1
+      },
+      "selected_safe_false_positive_by_rule": {
+        "additive_ltm": 1
+      },
+      "selected_threshold_usage": {
+        "additive_ltm:0.01": 255,
+        "block_heavy:0.35": 156,
+        "block_light:0.35": 30,
+        "commit_heavy:0.4": 98,
+        "decay_090:0.35": 10,
+        "decay_095:0.35": 28,
+        "wait_heavy:0.45": 78,
+        "wait_light:0.35": 107
+      }
+    }
+  },
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "schema_version": "phase4f_repair5_selected_safety_alignment_v1"
+}

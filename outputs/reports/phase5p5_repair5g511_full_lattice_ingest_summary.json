@@ -1,0 +1,37 @@
+{
+  "aaai_ready": false,
+  "checkpoint_jsonl_bytes": 1452356904,
+  "checkpoint_jsonl_not_copied_to_g511_outputs_reason": "1.45GB raw audit file; keep locally under outputs/server and do not push to GitHub.",
+  "checkpoint_jsonl_pulled_local_path": "C:\\PROGRAMING\\czr004\\outputs\\server\\phase5p5_repair5g511_remote\\outputs\\logs\\phase5p5_repair5g510_lattice_counterfactuals\\phase5p5_repair5g510_update_checkpoints.jsonl",
+  "copied_bytes": {
+    "commands_jsonl": 601200,
+    "plan_csv": 679572,
+    "probe_jsonl": 5535982,
+    "results_csv": 3482994,
+    "runs_jsonl": 895044,
+    "status_json": 292
+  },
+  "decision": "full_lattice_artifacts_ingested",
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "plan_rows": 3360,
+  "probe_rows": 3360,
+  "raw_root": "C:\\PROGRAMING\\czr004\\outputs\\server\\phase5p5_repair5g511_remote",
+  "results_rows": 3360,
+  "run_rows": 240,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g511_full_lattice_ingest_summary_v1",
+  "status": {
+    "completed_tasks": 240,
+    "last_task": {
+      "agents": 100,
+      "map": "warehouse-10-20-10-2-1",
+      "method": "repair5g510_budget_2000ms_static_context",
+      "returncode": 0,
+      "seed": 155
+    },
+    "output_rows_this_invocation": 240,
+    "phase": "solver_complete",
+    "total_tasks": 240
+  }
+}

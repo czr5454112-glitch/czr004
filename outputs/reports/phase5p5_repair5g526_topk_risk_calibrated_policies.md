@@ -1,0 +1,22 @@
+# Repair5G.5.26 Top-K Risk-Calibrated Policies
+
+- schema_version: `phase5p5_repair5g526_topk_risk_calibrated_policies_summary_v1`
+- decision: `topk_risk_calibrated_policies_evaluated`
+- required_policies: `['g525_trace_plus_rank_effect_reproduced', 'g525_candidate_specific_rank_effect_reproduced', 'top3_then_min_predicted_risk', 'top3_then_max_predicted_utility_under_risk', 'top5_then_calibrated_risk_utility', 'topk_conformal_abstention', 'topk_static_fallback_if_uncertain', 'topk_old14_g518_fallback_if_uncertain', 'topk_region_calibrated_selector', 'topk_budget_specific_selector', 'topk_map_family_calibrated_selector', 'topk_candidate_induced_failure_guard', 'topk_static_recovery_specialist', 'utility_only_ranker', 'risk_only_ranker', 'region_prior_baseline', 'agent_density_specialist_baseline', 'random_feature_control', 'label_shuffled_utility_control', 'label_shuffled_risk_control', 'blocked_reason_shuffled_control', 'oracle_topk_upper_bound_diagnostic_not_for_promotion']`
+- policies_present: `['agent_density_specialist_baseline', 'blocked_reason_shuffled_control', 'g525_candidate_specific_rank_effect_reproduced', 'g525_trace_plus_rank_effect_reproduced', 'label_shuffled_risk_control', 'label_shuffled_utility_control', 'oracle_topk_upper_bound_diagnostic_not_for_promotion', 'random_feature_control', 'region_prior_baseline', 'risk_only_ranker', 'top3_then_max_predicted_utility_under_risk', 'top3_then_min_predicted_risk', 'top5_then_calibrated_risk_utility', 'topk_budget_specific_selector', 'topk_candidate_induced_failure_guard', 'topk_conformal_abstention', 'topk_map_family_calibrated_selector', 'topk_old14_g518_fallback_if_uncertain', 'topk_region_calibrated_selector', 'topk_static_fallback_if_uncertain', 'topk_static_recovery_specialist', 'utility_only_ranker']`
+- candidate_budget_rows: `5280`
+- eval_rows: `308`
+- context_budget_decision_rows: `2640`
+- bootstrap_rows: `6600`
+- calibration_rows: `88`
+- best_policy: `agent_density_specialist_baseline`
+- best_policy_summary: `{'row_type': 'model_aggregate', 'model': 'agent_density_specialist_baseline', 'policy': 'agent_density_specialist_baseline', 'eval_scope': 'seed_oof', 'fold_id': 'all', 'context_budget_pairs': 120, 'top1_safe_oracle_capture_rate': 0.0, 'top3_safe_oracle_capture_rate': 0.0, 'top5_safe_oracle_capture_rate': 0.05, 'region_top1_capture_rate': 0.0, 'region_top2_capture_rate': 0.1, 'selected_policy_utility': 0.036406463637500004, 'safe_policy_sim_utility': 0.036406463637500004, 'candidate_induced_no_solution_count': 6, 'budget_sensitive_failure_count': 6, 'static_recovery_capture_count': 3, 'fallback_rate': 0.0, 'safe_positive_selected_count': 5, 'avoidable_risk_ece': 0.013806886487239711, 'phase5p5_allowed': False, 'phase6_allowed': False, 'runtime_claim_allowed': False, 'learned_runtime_policy_validated': False, 'aaai_ready': False}`
+- best_control_summary: `{'row_type': 'model_aggregate', 'model': 'blocked_reason_shuffled_control', 'policy': 'blocked_reason_shuffled_control', 'eval_scope': 'seed_oof', 'fold_id': 'all', 'context_budget_pairs': 120, 'top1_safe_oracle_capture_rate': 0.016666666666666666, 'top3_safe_oracle_capture_rate': 0.016666666666666666, 'top5_safe_oracle_capture_rate': 0.016666666666666666, 'region_top1_capture_rate': 0.31666666666666665, 'region_top2_capture_rate': 0.4166666666666667, 'selected_policy_utility': 0.0337677935875, 'safe_policy_sim_utility': 0.0337677935875, 'candidate_induced_no_solution_count': 6, 'budget_sensitive_failure_count': 4, 'static_recovery_capture_count': 2, 'fallback_rate': 0.0, 'safe_positive_selected_count': 8, 'avoidable_risk_ece': 0.01409841498310705, 'phase5p5_allowed': False, 'phase6_allowed': False, 'runtime_claim_allowed': False, 'learned_runtime_policy_validated': False, 'aaai_ready': False}`
+- main_target_gates: `{'top3_safe_oracle_capture_rate_ge_0p25': False, 'selected_policy_utility_beats_g525_best': False, 'candidate_induced_no_solution_count_le_g525': True, 'avoidable_risk_ece_le_g525': True, 'region_top2_capture_rate_ge_0p50': False, 'controls_do_not_match': False, 'leave_one_map_family_does_not_collapse': False, 'forbidden_feature_count_eq_0': True}`
+- ranker_good_selector_blocked: `False`
+- fallback_dominated_best_policy: `False`
+- phase5p5_allowed: `False`
+- phase6_allowed: `False`
+- runtime_claim_allowed: `False`
+- learned_runtime_policy_validated: `False`
+- aaai_ready: `False`

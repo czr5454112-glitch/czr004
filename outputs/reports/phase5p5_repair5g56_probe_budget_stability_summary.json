@@ -1,0 +1,38 @@
+{
+  "aaai_ready": false,
+  "budget_values_ms": [
+    250.0,
+    500.0,
+    1000.0,
+    2000.0
+  ],
+  "decision": "probe_budget_instability_blocks_training",
+  "g6_training_allowed": false,
+  "gates": {
+    "budget_stability_measured_contexts_ge_30": true,
+    "candidate_rank_stability_reported": true,
+    "covers_agents_50_and_100": true,
+    "covers_all_maps": true,
+    "covers_no_solution_warehouse_cases_if_present": true,
+    "covers_static_and_nonstatic_win_contexts": true,
+    "ids_166_205_untouched": true,
+    "observed_ids_only": true,
+    "oracle_static_sign_stability_reported": true,
+    "probe_budget_stability_expanded_passed": false,
+    "training_eligible_stable_contexts_ge_30": false,
+    "unstable_labels_separated": true
+  },
+  "measured_contexts": 30,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "probe_jsonl": [
+    "C:\\PROGRAMING\\czr004\\outputs\\logs\\phase5p5_repair5g56_probe_budget_stability\\phase5p5_repair5g56_probe_budget_update_probes.jsonl",
+    "C:\\PROGRAMING\\czr004\\outputs\\logs\\phase5p5_repair5g55_probe_budget_stability\\phase5p5_repair5g55_probe_budget_update_probes.jsonl"
+  ],
+  "probe_rows": 966,
+  "rank_stability_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase5p5_repair5g56_probe_budget_rank_stability.csv",
+  "schema_version": "phase5p5_repair5g56_probe_budget_stability_summary_v1",
+  "training_eligible_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase5p5_repair5g56_training_eligible_stable_contexts.csv",
+  "training_eligible_stable_contexts": 4,
+  "unstable_contexts": 26
+}

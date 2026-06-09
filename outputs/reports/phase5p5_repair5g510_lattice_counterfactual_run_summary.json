@@ -1,0 +1,70 @@
+{
+  "aaai_ready": false,
+  "agent_counts": [
+    50,
+    100
+  ],
+  "all_lattice_rows_recognized": true,
+  "bonus_budget_ms": 500,
+  "budgets_ms": [
+    250.0,
+    500.0,
+    1000.0,
+    2000.0
+  ],
+  "candidate_count": 14,
+  "candidate_ids": [
+    "repair5g59_additive_fallback",
+    "repair5g59_block_heavy_flow_guard",
+    "repair5g59_c_only_f_disabled",
+    "repair5g59_commit_heavy_flow_guard",
+    "repair5g59_fast_decay_low_shield",
+    "repair5g59_flow_decay",
+    "repair5g59_high_beta_cap_safe",
+    "repair5g59_light_cong_light_flow",
+    "repair5g59_low_beta_high_cap",
+    "repair5g59_slow_decay_high_shield",
+    "repair5g59_static_abstain_candidate",
+    "repair5g59_static_flow_shield",
+    "repair5g59_wait_aggressive",
+    "repair5g59_wait_conservative"
+  ],
+  "checkpoint_jsonl": "C:\\PROGRAMING\\czr004\\outputs\\logs\\phase5p5_repair5g510_lattice_counterfactuals\\phase5p5_repair5g510_update_checkpoints.jsonl",
+  "checkpoint_rows": 9,
+  "complete_context_budget_pairs": 8,
+  "counterfactuals_run": true,
+  "decision": "lattice_counterfactuals_executed",
+  "ids_166_205_untouched": true,
+  "includes_parity_reference_candidates": false,
+  "instance_ids": [
+    146
+  ],
+  "lattice_probe_rows": 112,
+  "maps": [
+    "random-32-32-20"
+  ],
+  "measured_budgets_ms": [
+    250.0,
+    500.0,
+    1000.0,
+    2000.0
+  ],
+  "measured_contexts": 2,
+  "observed_ids_only": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "plan_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase5p5_repair5g510_lattice_counterfactual_plan.csv",
+  "planned_rows": 112,
+  "primary_budgets_ms": [
+    1000,
+    2000
+  ],
+  "probe_jsonl": "C:\\PROGRAMING\\czr004\\outputs\\logs\\phase5p5_repair5g510_lattice_counterfactuals\\phase5p5_repair5g510_lattice_update_probes.jsonl",
+  "probe_rows_total": 112,
+  "recognized_lattice_rows": 112,
+  "results_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase5p5_repair5g510_lattice_counterfactual_results.csv",
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g510_lattice_counterfactual_run_summary_v1",
+  "static_candidate_rows": 8,
+  "stress_budget_ms": 250
+}

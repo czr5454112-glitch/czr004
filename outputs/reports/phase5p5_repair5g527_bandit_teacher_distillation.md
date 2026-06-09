@@ -1,0 +1,23 @@
+# Repair5G.5.27 Bandit Teacher Distillation
+
+- schema_version: `phase5p5_repair5g527_bandit_teacher_distillation_summary_v1`
+- decision: `bandit_teacher_distillation_evaluated`
+- implementation_backend: `deterministic_runtime_safe_feature_surrogates`
+- models_present: `['bandit_teacher_region_classifier', 'bandit_teacher_action_class_classifier', 'bandit_teacher_candidate_ranker', 'bandit_teacher_pairwise_candidate_ranker', 'bandit_teacher_two_head_utility_risk', 'bandit_teacher_topk_reranker', 'bandit_teacher_fallback_classifier', 'bandit_teacher_static_recovery_specialist', 'bandit_teacher_induced_failure_guard', 'region_prior_baseline', 'agent_density_baseline', 'g525_trace_plus_rank_effect_reproduced', 'g526_topk_baseline', 'param_only_control', 'trace_only_control', 'source_blind_control', 'bandit_label_shuffled_control', 'random_feature_control', 'oracle_teacher_upper_bound_diagnostic_not_for_promotion']`
+- candidate_budget_rows: `5280`
+- context_budget_decision_rows: `2280`
+- eval_rows: `247`
+- bootstrap_rows: `5700`
+- calibration_rows: `95`
+- bootstrap_samples_requested: `300`
+- best_model: `bandit_teacher_candidate_ranker`
+- best_model_summary: `{'row_type': 'model_aggregate', 'policy': 'bandit_teacher_candidate_ranker', 'model': 'bandit_teacher_candidate_ranker', 'eval_scope': 'seed_oof', 'fold_id': 'all', 'context_budget_pairs': 120, 'selected_policy_utility': 0.039188132663, 'safe_policy_sim_utility': 0.039188132663, 'candidate_induced_no_solution_count': 8, 'budget_sensitive_failure_count': 4, 'safe_positive_selected_count': 6, 'static_recovery_capture_count': 0, 'fallback_rate': 0.0, 'top1_safe_oracle_capture_rate': 0.0, 'top3_safe_oracle_capture_rate': 0.1, 'top5_safe_oracle_capture_rate': 0.15, 'region_top1_capture_rate': 0.0, 'region_top2_capture_rate': 0.366666666667, 'action_class_accuracy': 0.391666666667, 'selected_candidate_match_rate': 0.075, 'region_match_rate': 0.091666666667, 'avoidable_risk_ece': 0.510938499601, 'phase5p5_allowed': False, 'phase6_allowed': False, 'runtime_claim_allowed': False, 'learned_runtime_policy_validated': False, 'aaai_ready': False}`
+- primary_gates: `{'selected_policy_utility_lt_g525_best': False, 'candidate_induced_no_solution_count_le_teacher': False, 'safe_positive_selected_count_ge_25': False, 'action_class_accuracy_ge_0p40': False, 'region_match_rate_ge_0p50': False, 'controls_do_not_match': False, 'leave_one_map_family_does_not_collapse': False, 'forbidden_feature_count_eq_0': True}`
+- imitates_teacher_but_bad_actual_outcome: `False`
+- imperfect_imitation_but_good_actual_policy: `False`
+- positive_distillation: `False`
+- phase5p5_allowed: `False`
+- phase6_allowed: `False`
+- runtime_claim_allowed: `False`
+- learned_runtime_policy_validated: `False`
+- aaai_ready: `False`

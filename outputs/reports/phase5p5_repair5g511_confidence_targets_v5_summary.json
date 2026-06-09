@@ -1,0 +1,31 @@
+{
+  "aaai_ready": false,
+  "abstain_to_static_count": 0,
+  "abstain_to_static_reason": "Searched via primary-budget disagreement plus static near-oracle margin.",
+  "decision": "confidence_targets_v5_failed_continue_label_design",
+  "gates": {
+    "abstain_to_static_searched_and_reported": true,
+    "head_b_training_rows_ge_40": true,
+    "ids_166_205_untouched": true,
+    "measured_confidence_contexts_ge_60": true,
+    "no_solution_or_budget_abstain_count_gt_0": false,
+    "observed_ids_only": true,
+    "primary_1000_2000_stable_contexts_ge_40": true,
+    "stable_high_confidence_parameter_candidate_ge_10": true,
+    "stable_static_or_abstain_ge_10": false
+  },
+  "head_b_training_rows": 60,
+  "label_counts": {
+    "stable_high_confidence_parameter_candidate": 52,
+    "stable_static": 8
+  },
+  "measured_confidence_contexts": 60,
+  "no_solution_or_budget_abstain_count": 0,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "primary_1000_2000_stable_contexts": 60,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g511_confidence_targets_v5_summary_v1",
+  "stable_high_confidence_parameter_candidate": 52,
+  "stable_static_or_abstain": 8
+}

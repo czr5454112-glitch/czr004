@@ -1,0 +1,28 @@
+{
+  "aaai_ready": false,
+  "abstention_policy_decision": "abstention_aware_policy_failed_continue_labels_or_features",
+  "candidate_lattice_decision": "candidate_lattice_ready_for_counterfactual_probe_design",
+  "confidence_targets_v3_decision": "confidence_targets_v3_ready_for_abstention_policy_training",
+  "corrected_controls_decision": "g58_eval_control_bug_fixed_continue",
+  "counterfactual_decision": "server_required_for_candidate_lattice_or_later_iteration_expansion",
+  "decision": "server_required_for_candidate_lattice_or_later_iteration_expansion",
+  "evidence_artifacts": {
+    "abstention_policy": "C:\\PROGRAMING\\czr004\\outputs\\reports\\phase5p5_repair5g59_abstention_aware_offline_policy_eval_summary.json",
+    "autopsy": "C:\\PROGRAMING\\czr004\\outputs\\reports\\phase5p5_repair5g59_g58_offline_eval_autopsy_summary.json",
+    "controls": "C:\\PROGRAMING\\czr004\\outputs\\reports\\phase5p5_repair5g59_corrected_controls_eval_summary.json",
+    "counterfactuals": "C:\\PROGRAMING\\czr004\\outputs\\reports\\phase5p5_repair5g59_goal_aware_dual_channel_counterfactuals_summary.json",
+    "features": "C:\\PROGRAMING\\czr004\\outputs\\reports\\phase5p5_repair5g59_feature_signal_quality_summary.json",
+    "lattice": "C:\\PROGRAMING\\czr004\\outputs\\reports\\phase5p5_repair5g59_candidate_lattice_summary.json",
+    "learned_bounded_policy_design": "C:\\PROGRAMING\\czr004\\outputs\\reports\\phase5p5_repair5g59_learned_bounded_dual_channel_update_policy_design_summary.json",
+    "targets_v3": "C:\\PROGRAMING\\czr004\\outputs\\reports\\phase5p5_repair5g59_confidence_targets_v3_summary.json"
+  },
+  "feature_signal_decision": "feature_signal_insufficient_continue_feature_design",
+  "g58_autopsy_decision": "g58_eval_autopsy_completed_continue_corrected_controls",
+  "ids_166_205_untouched": true,
+  "learned_bounded_policy_design_decision": "learned_bounded_update_policy_design_ready_offline_only",
+  "missing_g58_artifacts": [],
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g59_decision_summary_v1"
+}

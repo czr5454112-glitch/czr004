@@ -1,0 +1,31 @@
+{
+  "aaai_ready": false,
+  "decision": "ranker_suite_training_passed_continue_eval",
+  "dev_rows": 660,
+  "gates": {
+    "dev_rows_gt_0": true,
+    "forbidden_feature_count_eq_0": true,
+    "model_count_ge_7": true,
+    "train_rows_gt_0": true
+  },
+  "learned_runtime_policy_validated": false,
+  "optional_models": {
+    "gradient_boosted_stumps_if_available_without_new_dependency": "not_available_without_new_dependency",
+    "tiny_mlp_ranker_max_64_hidden": "not_available_without_new_dependency"
+  },
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g519_full_primary_ranker_suite_train_summary_v1",
+  "train_rows": 660,
+  "trained_model_count": 7,
+  "trained_policies": [
+    "candidate_params_only_ranker",
+    "context_only_ranker",
+    "no_rich_feature_ablation",
+    "no_rich_x_candidate_interaction_ablation",
+    "ridge_delta_risk_ranker_v8",
+    "ridge_listwise_regret_ranker_v8",
+    "ridge_pairwise_context_ranker_v8"
+  ]
+}

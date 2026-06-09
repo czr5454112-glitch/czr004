@@ -1,0 +1,6 @@
+target_oracle_region,rows,competing_neighbor_count_mean,blocked_local_position_mean,rank_margin_blocked_vs_committed_mean,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+B_static_recovery_feasibility,180,4.1550784256866695,1.4718397467000008,-2.5585712951200064,False,False,False,False,False
+C_risk_boundary,240,4.217749300050003,1.4741383776900048,-2.215801040569992,False,False,False,False,False
+D_fractional_coverage,1020,4.272915039330902,1.4679320208117563,-2.3504201138873393,False,False,False,False,False
+g518_retained,510,2.9433984000653015,1.1357041595747066,-2.1661686473958746,False,False,False,False,False
+old14,210,4.0668334093914345,1.4947220889700013,-2.5612525199885674,False,False,False,False,False

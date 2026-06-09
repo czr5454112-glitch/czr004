@@ -1,0 +1,40 @@
+{
+  "aaai_ready": false,
+  "allowed_output_space": "bounded UpdateParams candidate id only",
+  "candidate_aliases": {
+    "repair5g2_best_frozen_static_candidate": "repair5g1_shield_c125_b125_w075_d095_beta0p35_max0p75",
+    "repair5g2_c_equiv_best_frozen_baseline": "repair5g_dual_c_equiv_c100_b100_w075_d100",
+    "repair5g2_frozen_static_or_selector": "map-agent frozen selector from G2/G4"
+  },
+  "created_at": "2026-06-04T12:29:57.851279",
+  "diagnostic_only": true,
+  "fallback_static": "repair5g2_best_frozen_static_candidate",
+  "feature": "ltm_iterations",
+  "feature_extraction_time": "pre_update_before_UpdateLTM",
+  "forbidden_outputs": [
+    "actions",
+    "restart",
+    "priority overrides",
+    "h_i(v)",
+    "candidate deletion"
+  ],
+  "left_method": "repair5g2_best_frozen_static_candidate",
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "policy_note": "Always execute the validated G2/G4 static flow-shield candidate.",
+  "repair5g2_best_frozen_static_candidate": "repair5g1_shield_c125_b125_w075_d095_beta0p35_max0p75",
+  "repair5g2_c_equiv_best_frozen_baseline": "repair5g_dual_c_equiv_c100_b100_w075_d100",
+  "right_method": "repair5g2_best_frozen_static_candidate",
+  "schema_version": "phase5p5_repair5g51_selector_spec_v1",
+  "selector_name": "repair5g51_always_static_flow_shield",
+  "selector_rule": {
+    "fallback_static": "repair5g2_best_frozen_static_candidate",
+    "feature": "ltm_iterations",
+    "left_method": "repair5g2_best_frozen_static_candidate",
+    "right_method": "repair5g2_best_frozen_static_candidate",
+    "threshold": 2.5,
+    "type": "decision_stump"
+  },
+  "selector_type": "decision_stump",
+  "threshold": 2.5
+}

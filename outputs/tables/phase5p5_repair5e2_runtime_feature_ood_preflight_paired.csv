@@ -1,0 +1,8 @@
+map,agents,seed,scen,baseline_method,contender_method,baseline_success,contender_success,baseline_ratio,contender_ratio,delta_ratio,contender_better
+random-32-32-20,50,1,random-32-32-20-random-1.scen,lacam_star_ltm,always_additive_defer,True,True,1.13415710503,1.13415710503,0.0,False
+random-32-32-20,50,1,random-32-32-20-random-1.scen,lacam_star_ltm,lacam_star,True,True,1.13415710503,1.15269196823,0.018534863200000196,False
+random-32-32-20,50,1,random-32-32-20-random-1.scen,lacam_star_ltm,repair3_safe_runtime,True,True,1.13415710503,1.13415710503,0.0,False
+random-32-32-20,50,1,random-32-32-20-random-1.scen,lacam_star_ltm,repair5d_composite_diagnostic_distilled,True,True,1.13415710503,1.13415710503,0.0,False
+random-32-32-20,50,1,random-32-32-20-random-1.scen,lacam_star_ltm,repair5d_force_additive_defer_parity,True,True,1.13415710503,1.13415710503,0.0,False
+random-32-32-20,50,1,random-32-32-20-random-1.scen,lacam_star_ltm,repair5e_caseb_ood_guard_distilled,True,True,1.13415710503,1.13415710503,0.0,False
+random-32-32-20,50,1,random-32-32-20-random-1.scen,lacam_star_ltm,repair5e_caseb_ood_guard_force_additive_parity,True,True,1.13415710503,1.13415710503,0.0,False

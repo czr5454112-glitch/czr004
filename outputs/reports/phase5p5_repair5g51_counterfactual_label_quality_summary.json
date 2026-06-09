@@ -1,0 +1,19 @@
+{
+  "aaai_ready": false,
+  "available_label_rows": 0,
+  "context_count": 1496,
+  "decision": "continue_counterfactual_label_collection",
+  "gap_report": "true counterfactual labels are unavailable without replayable pre-update traffic snapshots",
+  "gates": {
+    "candidate_label_coverage_sufficient_for_smoke_training": false,
+    "counterfactual_context_count_gt_0": true,
+    "counterfactual_label_quality_passed": false,
+    "label_leakage_audit_passes": true,
+    "oracle_gap_over_static_measured": false,
+    "runtime_feature_availability_audit_passes": true
+  },
+  "label_rows": 3500,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "schema_version": "phase5p5_repair5g51_counterfactual_label_quality_summary_v1"
+}

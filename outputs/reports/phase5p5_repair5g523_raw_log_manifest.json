@@ -1,0 +1,31 @@
+{
+  "phase": "phase5p5_repair5g523",
+  "purpose": "Manifest for local raw full-primary response-surface probe logs.",
+  "commit_policy": "Raw logs are recorded under outputs/logs, which is ignored by the repository. The checkpoint JSONL is 287204116 bytes, above GitHub's 100 MB normal file limit, so the push includes this manifest plus derived integrity reports/tables instead of force-adding the ignored raw log files.",
+  "logs": [
+    {
+      "path": "outputs/logs/phase5p5_repair5g523_full_primary_response_surface_probe/phase5p5_repair5g523_full_primary_response_surface_checkpoints.jsonl",
+      "bytes": 287204116,
+      "sha256": "17845d7e653e9fc9c5901516aa8341c7c5ec5d109f3057f5f1de3dfdd9f5d67d"
+    },
+    {
+      "path": "outputs/logs/phase5p5_repair5g523_full_primary_response_surface_probe/phase5p5_repair5g523_full_primary_response_surface_commands.jsonl",
+      "bytes": 1527588,
+      "sha256": "afabb92c99ae2c6c1eee90a64bba24602d440c879755f1f70ac324273847faed"
+    },
+    {
+      "path": "outputs/logs/phase5p5_repair5g523_full_primary_response_surface_probe/phase5p5_repair5g523_full_primary_response_surface_runs.jsonl",
+      "bytes": 1190305,
+      "sha256": "1cbb3ce928e7ec96acc31735ef0824490c31af4a235717eb26123d9509baa765"
+    },
+    {
+      "path": "outputs/logs/phase5p5_repair5g523_full_primary_response_surface_probe/phase5p5_repair5g523_full_primary_response_surface_update_probes.jsonl",
+      "bytes": 24701499,
+      "sha256": "c9a002a2a11abb99705e943e6fb75bf441848b17902afd11324f9dcfc69ecdd5"
+    }
+  ],
+  "derived_evidence": [
+    "outputs/reports/phase5p5_repair5g523_full_primary_response_surface_probe_integrity_summary.json",
+    "outputs/tables/phase5p5_repair5g523_full_primary_response_surface_probe_results.csv"
+  ]
+}

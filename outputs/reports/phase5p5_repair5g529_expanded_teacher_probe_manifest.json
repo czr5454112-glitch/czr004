@@ -1,0 +1,10 @@
+{
+  "candidate_budget_rows": 5280,
+  "candidate_count": 44,
+  "context_budget_pairs": 120,
+  "raw_log": "outputs/logs/phase5p5_repair5g529_expanded_teacher_probe/expanded_exact_failure_audit.jsonl",
+  "raw_log_bytes": 5983114,
+  "raw_log_line_count": 5280,
+  "raw_log_sha256": "88be12ddc960054841e2052f46243d97aa9fc48c4014d2f991f2f3ad2a7d6592",
+  "schema_version": "phase5p5_repair5g529_expanded_teacher_probe_manifest_v1"
+}

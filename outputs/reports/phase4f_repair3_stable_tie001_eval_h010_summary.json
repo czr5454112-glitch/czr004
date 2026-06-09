@@ -1,0 +1,113 @@
+{
+  "dataset": "C:\\PROGRAMING\\czr004\\artifacts\\teacher\\laur\\full_repair3_stable_targets\\update_labels\\phase4_laur_update_dataset_full_repair3_stable_tie001.jsonl",
+  "gate": {
+    "eval_script_runs_end_to_end": true,
+    "model_export_file_exists": true,
+    "passed": true,
+    "schema_validation_passes": true,
+    "summary_csv_written": true,
+    "validation_metrics_computed": true
+  },
+  "metrics_by_split": {
+    "all": {
+      "harmful_update_f1": 0.6720532319391633,
+      "harmful_update_precision": 0.5084501977705861,
+      "harmful_update_recall": 0.9908899789768746,
+      "label_distribution": {
+        "block_heavy": 519,
+        "block_light": 121,
+        "commit_heavy": 671,
+        "decay_090": 65,
+        "decay_095": 82,
+        "neutral_additive": 1001,
+        "wait_heavy": 120,
+        "wait_light": 406
+      },
+      "neutral_additive_rate": 0.42546063651591287,
+      "non_neutral_rule_top1_accuracy": 0.38961693548387094,
+      "predicted_rule_distribution": {
+        "block_heavy": 430,
+        "block_light": 74,
+        "commit_heavy": 683,
+        "decay_090": 21,
+        "decay_095": 14,
+        "neutral_additive": 1270,
+        "wait_heavy": 12,
+        "wait_light": 481
+      },
+      "predicted_rule_validation_mean_delta_ratio": 0.02464643390567516,
+      "rule_top1_accuracy": 0.47738693467336685,
+      "rule_top3_accuracy": 0.8321608040201005,
+      "safety_auroc": 0.7809843716406404,
+      "sample_count": 2985
+    },
+    "train": {
+      "harmful_update_f1": 0.6915422885572139,
+      "harmful_update_precision": 0.5291878172588832,
+      "harmful_update_recall": 0.9976076555023924,
+      "label_distribution": {
+        "block_heavy": 433,
+        "block_light": 109,
+        "commit_heavy": 562,
+        "decay_090": 58,
+        "decay_095": 69,
+        "neutral_additive": 835,
+        "wait_heavy": 101,
+        "wait_light": 359
+      },
+      "neutral_additive_rate": 0.41963578780680916,
+      "non_neutral_rule_top1_accuracy": 0.407451212300414,
+      "predicted_rule_distribution": {
+        "block_heavy": 338,
+        "block_light": 72,
+        "commit_heavy": 588,
+        "decay_090": 20,
+        "decay_095": 11,
+        "neutral_additive": 1060,
+        "wait_heavy": 7,
+        "wait_light": 430
+      },
+      "predicted_rule_validation_mean_delta_ratio": 0.02764748543357856,
+      "rule_top1_accuracy": 0.4932699920823436,
+      "rule_top3_accuracy": 0.8436262866191607,
+      "safety_auroc": 0.7865484537530217,
+      "sample_count": 2526
+    },
+    "validation": {
+      "harmful_update_f1": 0.5525423728813559,
+      "harmful_update_precision": 0.3908872901678657,
+      "harmful_update_recall": 0.9421965317919075,
+      "label_distribution": {
+        "block_heavy": 86,
+        "block_light": 12,
+        "commit_heavy": 109,
+        "decay_090": 7,
+        "decay_095": 13,
+        "neutral_additive": 166,
+        "wait_heavy": 19,
+        "wait_light": 47
+      },
+      "neutral_additive_rate": 0.45751633986928103,
+      "non_neutral_rule_top1_accuracy": 0.28668941979522183,
+      "predicted_rule_distribution": {
+        "block_heavy": 92,
+        "block_light": 2,
+        "commit_heavy": 95,
+        "decay_090": 1,
+        "decay_095": 3,
+        "neutral_additive": 210,
+        "wait_heavy": 5,
+        "wait_light": 51
+      },
+      "predicted_rule_validation_mean_delta_ratio": 0.008130843144272305,
+      "rule_top1_accuracy": 0.3899782135076253,
+      "rule_top3_accuracy": 0.7690631808278867,
+      "safety_auroc": 0.7252920489914709,
+      "sample_count": 459
+    }
+  },
+  "model": "C:\\PROGRAMING\\czr004\\artifacts\\models\\laur_ltm\\full_repair3_stable_tie001_mlp\\laur_mlp_v1_weights.json",
+  "probe_jsonl": "C:\\PROGRAMING\\czr004\\artifacts\\teacher\\laur\\full_repair1\\probes\\phase4_laur_probe_full_repair1.jsonl",
+  "schema_version": "phase4_laur_offline_eval_summary_v1",
+  "summary_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase4f_repair3_stable_tie001_eval_h010.csv"
+}

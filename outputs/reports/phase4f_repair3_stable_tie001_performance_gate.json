@@ -1,0 +1,38 @@
+{
+  "checks": {
+    "harmful_precision": {
+      "passed": true,
+      "threshold": 0.3,
+      "value": 0.3908872901678657
+    },
+    "harmful_recall": {
+      "passed": true,
+      "threshold": 0.8,
+      "value": 0.9421965317919075
+    },
+    "predicted_mean_delta": {
+      "passed": true,
+      "threshold": 0.0,
+      "value": 0.008130843144272305
+    },
+    "validation_non_neutral": {
+      "passed": true,
+      "threshold": 50,
+      "value": 293
+    },
+    "validation_top1": {
+      "passed": true,
+      "threshold": 0.35,
+      "value": 0.3899782135076253
+    },
+    "validation_top3": {
+      "passed": true,
+      "threshold": 0.7,
+      "value": 0.7690631808278867
+    }
+  },
+  "eval_summary": "outputs\\reports\\phase4f_repair3_stable_tie001_eval_h010_summary.json",
+  "passed": true,
+  "schema_version": "phase4f_repair3_performance_gate_v1",
+  "validation_non_neutral_checkpoints": 293
+}

@@ -1,0 +1,9 @@
+target_rule,predicted_rule,selected_decision,count
+None,additive_ltm,defer_ltm,16
+block_heavy,additive_ltm,defer_ltm,104
+block_light,additive_ltm,defer_ltm,38
+commit_heavy,additive_ltm,defer_ltm,101
+decay_090,additive_ltm,defer_ltm,19
+decay_095,additive_ltm,defer_ltm,41
+wait_heavy,additive_ltm,defer_ltm,64
+wait_light,additive_ltm,defer_ltm,76

@@ -1,0 +1,31 @@
+{
+  "aaai_ready": false,
+  "best_block_level_candidate_family": "wait_conservative",
+  "best_fixed_second_wave_candidate": "repair5g521_grid_c0p90_b1p50_f1p00_w0p45_dc0p90_df1p00_beta0p45_max0p75_c0",
+  "block_win_counts": {
+    "wait_conservative": 1
+  },
+  "budget_stability_1000_2000": 0.9047619047619048,
+  "candidate_induced_no_solution_count": 12,
+  "candidate_win_counts": {
+    "repair5g521_grid_c1p25_b1p25_f1p00_w0p50_dc0p90_df1p00_beta0p35_max0p75_c0": 1
+  },
+  "context_budget_pairs": 42,
+  "contexts": 21,
+  "decision": "targeted_second_wave_gate_failed_lattice_autopsy",
+  "finite_pairwise_solution_quality_gain": -0.030695078639999984,
+  "learned_runtime_policy_validated": false,
+  "mean_oracle_gap_vs_g518_retained8": -0.003881696073249996,
+  "mean_oracle_gap_vs_old14": -0.004985733872999993,
+  "new_second_wave_win_budget_pairs": 1,
+  "new_second_wave_win_contexts": 1,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "safe_second_wave_win_budget_pairs": 1,
+  "safe_second_wave_win_contexts": 1,
+  "schema_version": "phase5p5_repair5g521_targeted_second_wave_oracle_summary_v1",
+  "second_wave_oracle_gap_vs_g518_retained8": -0.0002346524605000011,
+  "static_failure_candidate_recovers_count": 0,
+  "targeted_gate_passed": false
+}

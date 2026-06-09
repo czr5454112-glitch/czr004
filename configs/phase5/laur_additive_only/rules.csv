@@ -1,0 +1,2 @@
+rule_id,alpha_commit,alpha_block,alpha_wait,rho_decay,saturation_scale,contraflow_penalty,force_additive
+additive_ltm,1.0,1.0,1.0,1.0,1.0,0.0,true

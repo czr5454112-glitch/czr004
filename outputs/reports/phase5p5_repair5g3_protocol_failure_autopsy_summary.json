@@ -1,0 +1,50 @@
+{
+  "all_strict_mismatches_non_semantic": true,
+  "bool_as_int_gate_type_violations": 0,
+  "broad_mismatch_count": 76,
+  "broad_recomputed_protocol_gates": {
+    "additive_parity_exact": false,
+    "all_costs_finite": true,
+    "always_additive_defer_parity_exact": false,
+    "cost_bounds_respected": true,
+    "dual_additive_parity_exact": false,
+    "dual_c_equiv_additive_parity_exact": false,
+    "laur_disable_parity_exact": false,
+    "laur_force_additive_direct_parity_exact": false
+  },
+  "created_at": "2026-06-03T18:27:46.301875",
+  "determinism_mismatch_count": 38,
+  "diagnostic_only": true,
+  "input_artifacts": {
+    "broader_audit_md": "outputs\\reports\\phase5p5_repair5g3_broader_validation_audit.md",
+    "broader_command_log": "outputs\\logs\\phase5p5_repair5g3_broader_validation\\phase5p5_repair5g3_broader_validation_commands.jsonl",
+    "broader_jsonl": "outputs\\logs\\phase5p5_repair5g3_broader_validation\\phase5p5_repair5g3_broader_validation.jsonl",
+    "broader_summary_json": "outputs\\reports\\phase5p5_repair5g3_broader_validation_summary.json",
+    "determinism_command_log": "outputs\\logs\\phase5p5_repair5g3_determinism_repeat\\phase5p5_repair5g3_determinism_repeat_commands.jsonl",
+    "determinism_jsonl": "outputs\\logs\\phase5p5_repair5g3_determinism_repeat\\phase5p5_repair5g3_determinism_repeat.jsonl",
+    "determinism_summary_json": "outputs\\reports\\phase5p5_repair5g3_determinism_repeat_summary.json"
+  },
+  "interpretation": "The committed G3 artifacts show strict exact parity failures, but this autopsy classifies them as non-semantic boundary effects; no true semantic parity mismatch was found in the raw rows.",
+  "mismatch_classification_counts": {
+    "returncode2_no_solution_equivalent": 106,
+    "time_budget_sensitivity": 8
+  },
+  "mismatch_count": 114,
+  "next_step": "Run the sequential control-only reproducer and then write a formal parity policy before any G4 clean validation.",
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "raw_solver_duplicate_keys": 0,
+  "ready_for_control_parity_reproducer": true,
+  "returncode2_case_count": 704,
+  "schema_error_count": 0,
+  "schema_version": "phase5p5_repair5g3_protocol_failure_autopsy_summary_v1",
+  "solver_crash_count": 0,
+  "stop_for_semantic_parity_bug": false,
+  "synthetic_rows_counted_as_raw_solver_rows": 0,
+  "table_counts": {
+    "broad_by_map_agent_rows": 150,
+    "broad_paired_rows": 6000,
+    "broad_summary_rows": 25
+  },
+  "true_semantic_parity_mismatch_count": 0
+}

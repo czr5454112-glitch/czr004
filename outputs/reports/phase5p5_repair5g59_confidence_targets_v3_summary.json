@@ -1,0 +1,72 @@
+{
+  "aaai_ready": false,
+  "by_margin_threshold": {
+    "0.0025": {
+      "abstain_to_static_count": 0,
+      "class_counts": {
+        "longer_budget_needed": 10,
+        "no_solution_abstain": 10,
+        "stable_high_confidence_nonstatic": 23,
+        "stable_static": 17
+      },
+      "head_a_class_counts": {
+        "longer_budget_needed": 10,
+        "no_solution_abstain": 10,
+        "static_fallback": 17,
+        "trainable_expert_selection": 23
+      },
+      "head_b_training_rows": 40,
+      "rows": 60
+    },
+    "0.005": {
+      "abstain_to_static_count": 0,
+      "class_counts": {
+        "longer_budget_needed": 10,
+        "no_solution_abstain": 10,
+        "stable_high_confidence_nonstatic": 21,
+        "stable_static": 19
+      },
+      "head_a_class_counts": {
+        "longer_budget_needed": 10,
+        "no_solution_abstain": 10,
+        "static_fallback": 19,
+        "trainable_expert_selection": 21
+      },
+      "head_b_training_rows": 40,
+      "rows": 60
+    },
+    "0.01": {
+      "abstain_to_static_count": 0,
+      "class_counts": {
+        "longer_budget_needed": 10,
+        "no_solution_abstain": 10,
+        "stable_high_confidence_nonstatic": 15,
+        "stable_static": 25
+      },
+      "head_a_class_counts": {
+        "longer_budget_needed": 10,
+        "no_solution_abstain": 10,
+        "static_fallback": 25,
+        "trainable_expert_selection": 15
+      },
+      "head_b_training_rows": 40,
+      "rows": 60
+    }
+  },
+  "decision": "confidence_targets_v3_ready_for_abstention_policy_training",
+  "gates": {
+    "abstain_to_static_searched": true,
+    "confidence_targets_v3_created": true,
+    "default_threshold_rows_gt_0": true,
+    "head_a_has_abstention_classes": true,
+    "head_b_training_rows_gt_0": true,
+    "threshold_decision_before_training": true
+  },
+  "near_boundary_static_fallback_diagnostic": "abstain_to_static remains 0 at all thresholds; active search should be expanded around oracle-disagreement static-near-oracle contexts.",
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g59_confidence_targets_v3_summary_v1",
+  "selected_margin_threshold": 0.005,
+  "threshold_selection_reason": "preferred_threshold_passed_before_training"
+}

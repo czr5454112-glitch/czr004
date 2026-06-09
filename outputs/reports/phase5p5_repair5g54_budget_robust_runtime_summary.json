@@ -1,0 +1,25 @@
+{
+  "aaai_ready": false,
+  "budget_count": 3,
+  "budgets_sec": [
+    "3",
+    "5",
+    "10"
+  ],
+  "by_method_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase5p5_repair5g54_budget_robust_runtime_by_method.csv",
+  "decision": "budget_protocol_defined_observed_only",
+  "diagnostic_only": true,
+  "gates": {
+    "budget_protocol_passed": true,
+    "observed_ids_only": true,
+    "performance_and_audit_modes_separated": true,
+    "primary_3s_stress_reported": true,
+    "runtime_rows_gt_0": true,
+    "targeted_5s_or_10s_reported": true
+  },
+  "performance_claim_allowed": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "row_count": 18,
+  "schema_version": "phase5p5_repair5g54_budget_robust_runtime_summary_v1"
+}

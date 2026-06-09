@@ -1,0 +1,143 @@
+{
+  "architecture": "LAU-SetTransformer-v2",
+  "best_selection_score": 0.6307065834060236,
+  "dataset": "C:\\PROGRAMING\\czr004\\artifacts\\teacher\\laur\\full_repair2\\update_labels\\phase4_laur_update_dataset_full_repair2_v2_t005_hard07.jsonl",
+  "device": "cuda",
+  "epochs": 350,
+  "final_loss": 1.0494543313980103,
+  "harmful_threshold": 0.1,
+  "metrics_by_split": {
+    "train": {
+      "executable_rule_top1_accuracy": 0.34560570071258906,
+      "executable_rule_top3_accuracy": 0.5186064924782264,
+      "family_top1_accuracy": 0.35471100554235946,
+      "harmful_update_f1": 0.702624747620421,
+      "harmful_update_precision": 0.5503840939900587,
+      "harmful_update_recall": 0.9712918660287081,
+      "label_distribution_executable": {
+        "additive_ltm": 569,
+        "block_heavy": 426,
+        "block_light": 220,
+        "commit_heavy": 376,
+        "decay_090": 145,
+        "decay_095": 149,
+        "wait_heavy": 231,
+        "wait_light": 410
+      },
+      "label_distribution_original": {
+        "block_heavy": 426,
+        "block_light": 220,
+        "commit_heavy": 376,
+        "decay_090": 145,
+        "decay_095": 149,
+        "neutral_additive": 569,
+        "wait_heavy": 231,
+        "wait_light": 410
+      },
+      "neutral_additive_rate": 0.6223277909738717,
+      "non_neutral_rule_top1_accuracy": 0.2227899846704139,
+      "predicted_rule_distribution": {
+        "additive_ltm": 1572,
+        "block_heavy": 352,
+        "block_light": 27,
+        "commit_heavy": 237,
+        "decay_090": 4,
+        "decay_095": 25,
+        "wait_heavy": 151,
+        "wait_light": 158
+      },
+      "predicted_rule_validation_mean_delta_ratio": 0.008555193430264825,
+      "raw_original_top1_accuracy": 0.34560570071258906,
+      "rule_top1_accuracy": 0.34560570071258906,
+      "rule_top3_accuracy": 0.5186064924782264,
+      "safety_auroc": 0.7640208565295457,
+      "sample_count": 2526,
+      "selected_harmful_rule_rate": 0.01583531274742676
+    },
+    "validation": {
+      "executable_rule_top1_accuracy": 0.3093681917211329,
+      "executable_rule_top3_accuracy": 0.5032679738562091,
+      "family_top1_accuracy": 0.3224400871459695,
+      "harmful_update_f1": 0.5638474295190713,
+      "harmful_update_precision": 0.3953488372093023,
+      "harmful_update_recall": 0.9826589595375722,
+      "label_distribution_executable": {
+        "additive_ltm": 100,
+        "block_heavy": 81,
+        "block_light": 32,
+        "commit_heavy": 73,
+        "decay_090": 19,
+        "decay_095": 29,
+        "wait_heavy": 51,
+        "wait_light": 74
+      },
+      "label_distribution_original": {
+        "block_heavy": 81,
+        "block_light": 32,
+        "commit_heavy": 73,
+        "decay_090": 19,
+        "decay_095": 29,
+        "neutral_additive": 100,
+        "wait_heavy": 51,
+        "wait_light": 74
+      },
+      "neutral_additive_rate": 0.5337690631808278,
+      "non_neutral_rule_top1_accuracy": 0.22562674094707522,
+      "predicted_rule_distribution": {
+        "additive_ltm": 245,
+        "block_heavy": 63,
+        "block_light": 9,
+        "commit_heavy": 93,
+        "decay_090": 5,
+        "decay_095": 1,
+        "wait_heavy": 20,
+        "wait_light": 23
+      },
+      "predicted_rule_validation_mean_delta_ratio": 0.008040149194424901,
+      "raw_original_top1_accuracy": 0.3093681917211329,
+      "rule_top1_accuracy": 0.3093681917211329,
+      "rule_top3_accuracy": 0.5032679738562091,
+      "safety_auroc": 0.7510004446420632,
+      "sample_count": 459,
+      "selected_harmful_rule_rate": 0.0
+    }
+  },
+  "min_confidence": 0.0,
+  "model_path": "C:\\PROGRAMING\\czr004\\artifacts\\models\\laur_ltm\\full_repair2_set_attention_t005_hard07\\laur_rule_attention_v2.pt",
+  "output_dir": "C:\\PROGRAMING\\czr004\\artifacts\\models\\laur_ltm\\full_repair2_set_attention_t005_hard07",
+  "phase4f_gate": {
+    "harmful_precision": {
+      "passed": true,
+      "threshold": 0.3,
+      "value": 0.3953488372093023
+    },
+    "harmful_recall": {
+      "passed": true,
+      "threshold": 0.8,
+      "value": 0.9826589595375722
+    },
+    "passed": false,
+    "predicted_mean_delta": {
+      "passed": true,
+      "threshold": 0.0,
+      "value": 0.008040149194424901
+    },
+    "validation_non_neutral": {
+      "passed": true,
+      "threshold": 50,
+      "value": 359
+    },
+    "validation_top1": {
+      "passed": false,
+      "threshold": 0.35,
+      "value": 0.3093681917211329
+    },
+    "validation_top3": {
+      "passed": false,
+      "threshold": 0.7,
+      "value": 0.5032679738562091
+    }
+  },
+  "schema_version": "phase4f_repair2_rule_attention_train_summary_v1",
+  "seed": 91
+}

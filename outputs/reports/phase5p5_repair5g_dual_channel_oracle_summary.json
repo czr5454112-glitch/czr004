@@ -1,0 +1,85 @@
+{
+  "candidate_methods": [
+    "repair5g_dual_balanced_decay",
+    "repair5g_dual_block_wait_cong_flow025",
+    "repair5g_dual_block_wait_cong_flow050",
+    "repair5g_dual_c_only_best_f4_observed",
+    "repair5g_dual_c_only_locked_f4",
+    "repair5g_dual_flow_only_025",
+    "repair5g_dual_flow_only_050",
+    "repair5g_dual_goal_gated_wait_025",
+    "repair5g_dual_goal_gated_wait_050"
+  ],
+  "component_summary": [
+    {
+      "best_mean_delta_ratio_vs_ltm": 0.007440336798399994,
+      "candidate_count": 2,
+      "component": "c_only",
+      "mean_of_candidate_means": 0.00755816699987499,
+      "total_better": 32,
+      "total_worse": 85
+    },
+    {
+      "best_mean_delta_ratio_vs_ltm": 0.018511684814274988,
+      "candidate_count": 2,
+      "component": "c_plus_f",
+      "mean_of_candidate_means": 0.020145834197399987,
+      "total_better": 2,
+      "total_worse": 99
+    },
+    {
+      "best_mean_delta_ratio_vs_ltm": 0.018833444063524992,
+      "candidate_count": 1,
+      "component": "c_plus_f_decay",
+      "mean_of_candidate_means": 0.018833444063524992,
+      "total_better": 5,
+      "total_worse": 49
+    },
+    {
+      "best_mean_delta_ratio_vs_ltm": 0.022428777828941655,
+      "candidate_count": 2,
+      "component": "f_only",
+      "mean_of_candidate_means": 0.022428777828941655,
+      "total_better": 0,
+      "total_worse": 100
+    },
+    {
+      "best_mean_delta_ratio_vs_ltm": 0.017697362382433326,
+      "candidate_count": 2,
+      "component": "goal_gated_wait",
+      "mean_of_candidate_means": 0.02006307010568749,
+      "total_better": 4,
+      "total_worse": 98
+    }
+  ],
+  "created_at": "2026-06-02T23:14:26.075561",
+  "decision": "dual_channel_no_headroom",
+  "gates": {
+    "cost_bounds_respected": true,
+    "dual_additive_parity_exact": true,
+    "dual_channel_oracle_better_gt_worse": false,
+    "dual_channel_oracle_mean_delta_ratio_vs_ltm_lt_0": false,
+    "phase5p5_allowed": false,
+    "phase6_allowed": false
+  },
+  "input_jsonl": "outputs\\logs\\phase5p5_repair5g_dual_channel_dev_probe\\phase5p5_repair5g_dual_channel_dev_probe.jsonl",
+  "oracle_bootstrap_ci": {
+    "ci_high": 0.006099029348233336,
+    "ci_low": -0.00205080619791666,
+    "mean": 0.001879629688233328,
+    "samples": 2000
+  },
+  "oracle_case_count": 120,
+  "oracle_stats": {
+    "better": 29,
+    "equal": 55,
+    "mean_delta_ratio_vs_ltm": 0.001879629688233328,
+    "method": "repair5g_dual_channel_oracle_static_proxy",
+    "rows": 120,
+    "worse": 36
+  },
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "row_count": 2280,
+  "schema_version": "phase5p5_repair5g_dual_channel_oracle_summary_v1"
+}

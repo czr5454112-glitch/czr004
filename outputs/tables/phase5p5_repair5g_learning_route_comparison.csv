@@ -1,0 +1,9 @@
+route,description,top_venue_attractiveness,current_readiness,main_risk,project_decision
+Static flow-shield,one or few fixed flow-shield rules,"medium for heuristic-search, low for ML",high,looks hand-tuned,keep as strong baseline
+Map-agent selector,table-like selector by map/agent group,medium-low,high,looks like benchmark-specific engineering,keep as baseline/fallback
+Discrete learned selector,learned model chooses candidate ID,medium,partial,must beat static; G5 failed,use only as safe bridge
+Safe learned-abstention selector,"default flow-shield, learned fallback/abstention",medium-high,next step,may only match static,best immediate route
+Learned mixture over safe experts,learned weights over static/map-agent/additive/C-equiv experts,high,requires runtime + labels,needs careful gates,preferred G6 route
+Learned bounded residual parameters,learned small residuals over flow-shield parameters,high,requires counterfactual labels,overfit/instability,preferred G6/G7 route after labels
+Graph/trace neural UpdateLTM,GNN/attention over trace/traffic graph outputs bounded UpdateLTM policy,high if well validated,not ready,data and ablation burden high,G7 only after counterfactual label quality
+Action policy / priority policy,neural MAPF action/priority/restart,not allowed for this project,forbidden,violates project scope,reject

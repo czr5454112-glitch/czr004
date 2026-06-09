@@ -1,0 +1,208 @@
+{
+  "aaai_ready": false,
+  "by_agent": {
+    "": {
+      "accuracy": 0.45,
+      "harmful_vs_static_rate": 0.15,
+      "helpful_vs_static_rate": 0.25,
+      "mean_selected_delta_vs_static": -0.010778176605500012,
+      "rows": 20
+    }
+  },
+  "by_label_class": {
+    "stable_high_confidence_nonstatic": {
+      "accuracy": 0.5,
+      "harmful_vs_static_rate": 0.0,
+      "helpful_vs_static_rate": 0.5,
+      "mean_selected_delta_vs_static": -0.02743107495600001,
+      "rows": 10
+    },
+    "stable_static": {
+      "accuracy": 0.4,
+      "harmful_vs_static_rate": 0.3,
+      "helpful_vs_static_rate": 0.0,
+      "mean_selected_delta_vs_static": 0.005874721744999989,
+      "rows": 10
+    }
+  },
+  "by_map": {
+    "": {
+      "accuracy": 0.45,
+      "harmful_vs_static_rate": 0.15,
+      "helpful_vs_static_rate": 0.25,
+      "mean_selected_delta_vs_static": -0.010778176605500012,
+      "rows": 20
+    }
+  },
+  "by_seed": {
+    "": {
+      "accuracy": 0.45,
+      "harmful_vs_static_rate": 0.15,
+      "helpful_vs_static_rate": 0.25,
+      "mean_selected_delta_vs_static": -0.010778176605500012,
+      "rows": 20
+    }
+  },
+  "calibration_bins_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase5p5_repair5g59_g58_eval_calibration_bins.csv",
+  "class_counts": {
+    "stable_high_confidence_nonstatic": 10,
+    "stable_static": 10
+  },
+  "confusion_by_map_agent_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase5p5_repair5g59_g58_eval_confusion_by_map_agent.csv",
+  "coverage_risk_curve": [
+    {
+      "abstention_rate": 0.0,
+      "coverage": 1.0,
+      "harmful_vs_static_rate": 0.15,
+      "mean_delta_vs_static": -0.010778176605500178,
+      "threshold": 0.5
+    },
+    {
+      "abstention_rate": 0.0,
+      "coverage": 1.0,
+      "harmful_vs_static_rate": 0.15,
+      "mean_delta_vs_static": -0.010778176605500178,
+      "threshold": 0.55
+    },
+    {
+      "abstention_rate": 0.050000000000000044,
+      "coverage": 0.95,
+      "harmful_vs_static_rate": 0.15,
+      "mean_delta_vs_static": -0.009934171949000259,
+      "threshold": 0.6
+    },
+    {
+      "abstention_rate": 0.050000000000000044,
+      "coverage": 0.95,
+      "harmful_vs_static_rate": 0.15,
+      "mean_delta_vs_static": -0.009934171949000259,
+      "threshold": 0.65
+    },
+    {
+      "abstention_rate": 0.050000000000000044,
+      "coverage": 0.95,
+      "harmful_vs_static_rate": 0.15,
+      "mean_delta_vs_static": -0.009934171949000259,
+      "threshold": 0.7
+    },
+    {
+      "abstention_rate": 0.09999999999999998,
+      "coverage": 0.9,
+      "harmful_vs_static_rate": 0.15,
+      "mean_delta_vs_static": -0.010113567131000423,
+      "threshold": 0.75
+    },
+    {
+      "abstention_rate": 0.09999999999999998,
+      "coverage": 0.9,
+      "harmful_vs_static_rate": 0.15,
+      "mean_delta_vs_static": -0.010113567131000423,
+      "threshold": 0.8
+    },
+    {
+      "abstention_rate": 0.09999999999999998,
+      "coverage": 0.9,
+      "harmful_vs_static_rate": 0.15,
+      "mean_delta_vs_static": -0.010113567131000423,
+      "threshold": 0.85
+    },
+    {
+      "abstention_rate": 0.15000000000000002,
+      "coverage": 0.85,
+      "harmful_vs_static_rate": 0.1,
+      "mean_delta_vs_static": -0.01174158883800036,
+      "threshold": 0.9
+    }
+  ],
+  "decision": "g58_eval_autopsy_completed_continue_corrected_controls",
+  "eval_rows": 20,
+  "failure_diagnosis": {
+    "candidate_space_too_narrow": true,
+    "control_implementation_bug": true,
+    "feature_signal_insufficient": true,
+    "insufficient_train_dev_rows": true,
+    "label_noise_or_budget_sensitivity": true,
+    "model_overfit_or_calibration": true
+  },
+  "g58_control_naming_audit": {
+    "observed_eval_columns": [
+      "additive_score",
+      "confidence",
+      "context_id",
+      "correct",
+      "harmful_vs_static",
+      "helpful_vs_static",
+      "label_class",
+      "majority_candidate_id",
+      "normalized_context_key",
+      "oracle_score",
+      "predicted_candidate_id",
+      "random_control_candidate_id",
+      "selected_candidate_id",
+      "selected_delta_vs_static",
+      "selected_oracle_regret",
+      "selected_score",
+      "shuffled_control_candidate_id",
+      "split",
+      "static_regret",
+      "static_score",
+      "target_candidate_id"
+    ],
+    "previous_eval_gate_names": [
+      "beats_random_features",
+      "beats_shuffled_labels"
+    ],
+    "requires_g59_corrected_controls": true,
+    "semantic_issue": "G5.8 recorded random/shuffled candidate choices, not separately trained random-feature or shuffled-label models."
+  },
+  "harmful_rows_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase5p5_repair5g59_g58_eval_harmful_rows.csv",
+  "helpful_rows_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase5p5_repair5g59_g58_eval_helpful_rows.csv",
+  "oracle_gap_distribution": {
+    "max": 0.03256043413999987,
+    "median": 0.0,
+    "min": -0.16635470284999987,
+    "p25": -0.002535925610000156,
+    "p75": 0.0
+  },
+  "overall_metrics": {
+    "harmful_vs_static_count": 3,
+    "harmful_vs_static_rate": 0.15,
+    "helpful_vs_static_count": 5,
+    "helpful_vs_static_rate": 0.25,
+    "mean_additive_score": 1.3794258228775,
+    "mean_delta_vs_additive": -0.11875287566100012,
+    "mean_delta_vs_static": -0.010778176605500178,
+    "mean_oracle_score": 1.2519910848995,
+    "mean_selected_score": 1.2606729472165,
+    "mean_static_score": 1.271451123822,
+    "nonstatic_selection_rate": 0.55,
+    "oracle_regret": 0.008681862316999966,
+    "rows": 20
+  },
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g59_g58_offline_eval_autopsy_summary_v1",
+  "selected_counts": {
+    "repair5g1_shield_c100_b125_w075_d100_beta0p35_max0p75": 11,
+    "repair5g2_best_frozen_static_candidate": 9
+  },
+  "selected_vs_oracle_regret_distribution": {
+    "max": 0.04287190082999981,
+    "median": 0.0031250000000000444,
+    "min": -0.002535925610000156,
+    "p25": 0.0,
+    "p75": 0.009212730320000029
+  },
+  "static_regret_distribution": {
+    "max": 0.16635470284999987,
+    "median": 0.005116279070000118,
+    "min": 0.0,
+    "p25": 0.0,
+    "p75": 0.017206477730000058
+  },
+  "target_counts": {
+    "repair5g1_shield_c100_b125_w075_d100_beta0p35_max0p75": 10,
+    "repair5g2_best_frozen_static_candidate": 10
+  }
+}

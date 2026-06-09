@@ -1,0 +1,26 @@
+{
+  "aaai_ready": false,
+  "decision": "logging_patch_static_verified_continue_smoke",
+  "external_lacam2_solver_status": "",
+  "gates": {
+    "external_lacam2_solver_untouched": true,
+    "logging_patch_hash_present": true,
+    "parser_fingerprints_written": true,
+    "project_owned_logging_files_touched": true,
+    "required_tokens_present": true,
+    "trace_event_sequence_preserved": true
+  },
+  "learned_runtime_policy_validated": false,
+  "logging_patch_hash": "1af7c0753448071f2761ef9ab7c83b883326de50e78825626582da559eef02a4",
+  "mapping": {
+    "backtrack_or_inheritance": "recursive PIBT priority inheritance failed",
+    "edge_swap": "candidate would swap with an already planned agent",
+    "priority_block": "reserved for future exact priority blocker logs",
+    "unknown": "legacy/default blocked event without exact cause",
+    "vertex_conflict": "occupied_next candidate already reserved"
+  },
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g525_logging_patch_static_summary_v1"
+}

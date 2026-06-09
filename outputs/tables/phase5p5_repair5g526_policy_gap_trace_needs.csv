@@ -1,0 +1,4 @@
+priority,trace_need,status,why,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+1,exact_priority_block_subreason,explicitly_unavailable,Risk calibration still cannot separate priority-block subcauses.,False,False,False,False,False
+2,all_failed_candidate_reasons_when_pibt_returns_false,explicitly_unavailable,Top-k selector needs failed-action distribution without adding UpdateLTM events.,False,False,False,False,False
+3,exact_counterfactual_edge_labels,proxy_only,Goal-aware update residuals remain diagnostic-only when exact labels are absent.,False,False,False,False,False

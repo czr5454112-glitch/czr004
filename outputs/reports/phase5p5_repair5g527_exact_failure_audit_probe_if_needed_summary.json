@@ -1,0 +1,16 @@
+{
+  "aaai_ready": false,
+  "audit_logging_available": false,
+  "candidate_limit_rule": "old14_plus_retained_g518_plus_top12_g522",
+  "contexts_limit": 24,
+  "decision": "exact_failure_audit_probe_skipped_logging_unavailable",
+  "learned_runtime_policy_validated": false,
+  "log_path": "outputs/logs/phase5p5_repair5g527_exact_failure_audit_probe_if_needed/probe_manifest.jsonl",
+  "max_workers": 1,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "probe_needed": true,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g527_exact_failure_audit_probe_if_needed_summary_v1",
+  "solver_probe_run": false
+}

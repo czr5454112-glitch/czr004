@@ -1,0 +1,48 @@
+{
+  "aaai_ready": false,
+  "answers": [
+    "Flow-shield representation validated: `True`.",
+    "Frozen map-agent selector better than static: `True` (selector mean -0.01862021635864017, static mean -0.016410173082962193).",
+    "Learned runtime selector necessary for AAAI story: `true`; G4 only validates static/map-agent flow-shield and an offline bridge.",
+    "Map-agent gains are concentrated in non-warehouse random/maze groups; warehouse remains no-op or fallback-heavy.",
+    "Stress preserves sign: `True`.",
+    "Safe claims are representation/protocol/diagnostic claims; learned runtime and AAAI-ready claims remain forbidden."
+  ],
+  "artifacts": {
+    "ablation_effect_table": "outputs\\tables\\phase5p5_repair5g4_ablation_effect_table.csv",
+    "contextual_selector_sweep": "outputs\\tables\\phase5p5_repair5g4_contextual_selector_sweep.csv",
+    "group_risk_table": "outputs\\tables\\phase5p5_repair5g4_group_risk_table.csv",
+    "oracle_regret_table": "outputs\\tables\\phase5p5_repair5g4_oracle_regret_table.csv",
+    "selector_vs_static_cases": "outputs\\tables\\phase5p5_repair5g4_selector_vs_static_cases.csv",
+    "stress_effect_table": "outputs\\tables\\phase5p5_repair5g4_stress_effect_table.csv"
+  },
+  "diagnostic_only": true,
+  "forbidden_claims": [
+    "AAAI-ready learned method.",
+    "Phase5.5 or Phase6 promotion.",
+    "Learned selector fresh validation passed.",
+    "Static flow-shield alone is the final learned contribution."
+  ],
+  "g4_summary": "outputs\\reports\\phase5p5_repair5g4_clean_frozen_validation_summary.json",
+  "partial_claims": [
+    "Map-agent selection improves static in G4, but this is not a learned runtime UpdateLTM claim.",
+    "AAAI positioning is plausible only as a future learned runtime contribution."
+  ],
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_gap_present": true,
+  "runtime_gap_report": "outputs\\reports\\phase5p5_repair5g4_contextual_selector_runtime_gap.md",
+  "safe_claims": [
+    "Flow-shielded goal-aware dual-channel UpdateLTM is protocol-clean under the accepted parity policy on G4.",
+    "Static/map-agent flow-shield beats additive LTM and scalar/C-equiv controls on G4 diagnostics.",
+    "Offline decision-stump selector is promising as a bridge but not yet a runtime-validated learned method."
+  ],
+  "schema_version": "phase5p5_repair5g4_paper_grade_autopsy_summary_v1",
+  "selector_report": "outputs\\reports\\phase5p5_repair5g4_contextual_selector_report.md",
+  "selector_vs_static": {
+    "selector_mean_delta_ratio_vs_ltm": -0.01862021635864017,
+    "selector_minus_static": -0.002210043275677979,
+    "static_mean_delta_ratio_vs_ltm": -0.016410173082962193
+  },
+  "stress_summary": "outputs\\reports\\phase5p5_repair5g4_time_iteration_stress_summary.json"
+}

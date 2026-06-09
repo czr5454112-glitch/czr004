@@ -1,0 +1,32 @@
+{
+  "created_at": "2026-06-02T15:08:31.618528",
+  "diagnostic_only": true,
+  "exact_additive_candidate_parity_exact": true,
+  "force_additive_parity_exact": true,
+  "inputs": {
+    "runtime_jsonl": "outputs\\logs\\phase5p5_repair5f3_parity_closure_eval\\phase5p5_repair5f3_parity_closure_eval.jsonl",
+    "runtime_laur_updates_jsonl": "outputs\\logs\\phase5p5_repair5f3_parity_closure_eval\\phase5p5_repair5f3_parity_closure_eval_laur_updates.jsonl",
+    "table_decisions_csv": "outputs\\tables\\phase5p5_repair5f_selector_simulation_decisions.csv",
+    "table_paired_csv": "outputs\\tables\\phase5p5_repair5f_selector_simulation_paired.csv"
+  },
+  "laur_disable_parity_exact": true,
+  "laur_force_additive_direct_parity_exact": true,
+  "mismatch_classification_counts": {},
+  "mismatch_count": 0,
+  "mismatch_examples": [],
+  "outcome_mismatch_count": 0,
+  "outputs": {
+    "mismatches_csv": "outputs\\tables\\phase5p5_repair5f3_parity_closure_eval_runtime_vs_table_mismatches.csv",
+    "report": "outputs\\reports\\phase5p5_repair5f3_parity_closure_eval_audit.md",
+    "summary_json": "outputs\\reports\\phase5p5_repair5f3_parity_closure_eval_audit_summary.json"
+  },
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "policy_mismatch_count": 0,
+  "runtime_outcomes_match_table_when_deterministic": true,
+  "runtime_selected_candidate_matches_table_policy": true,
+  "runtime_selector_update_cases": 30,
+  "runtime_updateparams_match_artifact": true,
+  "schema_version": "phase5p5_repair5f_runtime_vs_table_audit_v1",
+  "table_decision_rows": 30
+}

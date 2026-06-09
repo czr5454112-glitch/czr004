@@ -1,0 +1,4 @@
+classification_counts,exact_pairs,missing_row,mode,pair_rows,returncode2_no_solution_equivalent,strict_mismatch_pairs,time_budget_sensitivity,timeout_equivalent,true_semantic_parity_mismatch_count
+"{""exact"": 380, ""returncode2_no_solution_equivalent"": 69, ""time_budget_sensitivity"": 1}",380,0,A_seq_3s_r3,450,69,70,1,0,0
+"{""exact"": 300}",300,0,B_seq_5s_r2,300,0,0,0,0,0
+"{""exact"": 146, ""time_budget_sensitivity"": 4}",146,0,C_seq_10s_r1,150,0,4,4,0,0

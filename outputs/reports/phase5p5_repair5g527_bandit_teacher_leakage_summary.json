@@ -1,0 +1,26 @@
+{
+  "aaai_ready": false,
+  "bandit_chooses_actions_using_measured_context_budget_candidate_outcomes": true,
+  "bandit_is_runtime_policy": false,
+  "bandit_is_valid_teacher": true,
+  "decision": "bandit_valid_teacher_not_runtime_policy_continue_distillation",
+  "directly_uses_target_score_delta_oracle_or_risk_labels": true,
+  "distillation_allowed": true,
+  "field_audit_rows": 191,
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g527_bandit_teacher_leakage_summary_v1",
+  "selection_time_label_classes": {
+    "counterfactual_outcome": 2,
+    "oracle_label": 5
+  },
+  "supervised_labels_distillable": [
+    "target_bandit_selected_candidate",
+    "target_bandit_selected_region",
+    "target_bandit_action_class",
+    "target_bandit_should_fallback_static",
+    "target_bandit_selected_policy_utility_bucket"
+  ]
+}

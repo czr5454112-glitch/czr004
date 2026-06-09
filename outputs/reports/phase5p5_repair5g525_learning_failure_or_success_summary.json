@@ -1,0 +1,59 @@
+{
+  "aaai_ready": false,
+  "blocked_reasons_aligned_with_failure_classes": true,
+  "decision": "learning_failure_or_success_analyzed",
+  "did_blocked_reason_features_improve_top3_capture": false,
+  "did_candidate_induced_failure_decrease": true,
+  "did_candidate_specific_rank_effect_beat_g524_best": false,
+  "did_competing_rank_features_improve_region_top2_capture": true,
+  "did_static_recovery_capture_improve": false,
+  "feature_summary": {
+    "aaai_ready": false,
+    "candidate_budget_rows": 2160,
+    "context_budget_rows": 72,
+    "decision": "candidate_rank_effect_features_created",
+    "feature_count": 81,
+    "forbidden_feature_count": 0,
+    "forbidden_features": [],
+    "gates": {
+      "blocked_reason_features_present": true,
+      "candidate_budget_rows_match_enriched_probe_rows": true,
+      "candidate_specific_rank_effect_features_present": true,
+      "competing_rank_features_present": true,
+      "feature_count_gt_g524": true,
+      "forbidden_feature_count_eq_0": true,
+      "goal_aware_dual_channel_features_present": true
+    },
+    "learned_runtime_policy_validated": false,
+    "phase5p5_allowed": false,
+    "phase6_allowed": false,
+    "runtime_claim_allowed": false,
+    "schema_version": "phase5p5_repair5g525_candidate_rank_effect_features_summary_v1"
+  },
+  "learned_runtime_policy_validated": false,
+  "leave_one_map_family_still_collapses": false,
+  "next_step": "offline_neural_rank_effect_training_diagnostic_only",
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g525_learning_failure_or_success_summary_v1",
+  "teacher_summary": {
+    "aaai_ready": false,
+    "audit_label_rows": 2160,
+    "candidate_budget_rows": 2160,
+    "context_budget_rows": 72,
+    "decision": "blocked_rank_teacher_tables_created",
+    "learned_runtime_policy_validated": false,
+    "phase5p5_allowed": false,
+    "phase6_allowed": false,
+    "runtime_claim_allowed": false,
+    "schema_version": "phase5p5_repair5g525_blocked_rank_teacher_tables_summary_v1",
+    "target_candidate_top3_positive_rows": 185
+  },
+  "trace_fields_remain_missing": [
+    "exact_priority_block_subreason",
+    "all_failed_candidate_reasons_when_pibt_returns_false",
+    "same_checkpoint_exact_counterfactual_edge_labels"
+  ],
+  "wins_still_concentrated_in_fractional_coverage": true
+}

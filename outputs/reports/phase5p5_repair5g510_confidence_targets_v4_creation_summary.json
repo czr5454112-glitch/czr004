@@ -1,0 +1,15 @@
+{
+  "aaai_ready": false,
+  "ids_166_205_untouched": true,
+  "label_counts": {
+    "stable_high_confidence_parameter_candidate": 2
+  },
+  "observed_ids_only": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "rows": 2,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g510_confidence_targets_v4_creation_summary_v1",
+  "targets_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase5p5_repair5g510_confidence_targets_v4.csv",
+  "training_rows": 2
+}

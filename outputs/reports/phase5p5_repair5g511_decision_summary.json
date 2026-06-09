@@ -1,0 +1,23 @@
+{
+  "aaai_ready": false,
+  "candidate_space_oracle_gap_vs_g58": -0.028445334327249994,
+  "confidence_targets_decision": "confidence_targets_v5_failed_continue_label_design",
+  "decision": "confidence_targets_v5_failed_continue_label_design",
+  "feature_v3_allowed": false,
+  "integrity_decision": "full_lattice_integrity_passed",
+  "measured_contexts": 60,
+  "oracle_beats_additive_fraction": 1.0,
+  "oracle_beats_static_fraction": 0.8666666666666667,
+  "oracle_decision": "full_lattice_candidate_space_passed_continue_targets",
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "policy_training_allowed": false,
+  "primary_1000_2000_stable_contexts": 60,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g511_decision_summary_v1",
+  "target_label_counts": {
+    "stable_high_confidence_parameter_candidate": 52,
+    "stable_static": 8
+  },
+  "why_stopped": "Candidate-space gate passed, but confidence v5 lacks the required static/abstention and no-solution/budget-abstention coverage for safe policy training."
+}

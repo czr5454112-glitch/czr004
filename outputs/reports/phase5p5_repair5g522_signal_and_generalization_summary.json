@@ -1,0 +1,32 @@
+{
+  "aaai_ready": false,
+  "best_model": "old14_plus_g518_no_new_baseline",
+  "candidate_induced_failure_rows": 34,
+  "candidate_induced_failures_predictable": true,
+  "candidate_rows": 1470,
+  "decision": "signal_and_generalization_autopsy_completed",
+  "learned_runtime_policy_validated": false,
+  "leave_one_map_family_collapse_count": 3,
+  "leave_one_map_family_collapse_families": [
+    "maze",
+    "random",
+    "warehouse"
+  ],
+  "next_data_recommendation": [
+    "expand static-recovery contexts if recovery positives remain sparse",
+    "add more far-from-G5.18 fractional coverage if nearest-G5.18 memorization dominates",
+    "keep counterfactual checkpoint edge fields for residual/mixture learning",
+    "do not move to runtime until offline controls and heldout family behavior are clean"
+  ],
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "remaining_signal_just_nearest_g518_memorization": false,
+  "response_surface_signal_smooth_enough_to_learn": true,
+  "runtime_claim_allowed": false,
+  "safe_positive_candidate_rows": 129,
+  "schema_version": "phase5p5_repair5g522_signal_and_generalization_summary_v1",
+  "source_blind_control_matches_model": false,
+  "source_probe_rows": 2940,
+  "static_recovery_cases_learnable": false,
+  "static_recovery_rows": 0
+}

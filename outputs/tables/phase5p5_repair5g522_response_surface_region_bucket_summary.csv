@@ -1,0 +1,9 @@
+context_bucket,candidate_region,context_budget_pairs,safe_g522_win_pairs,mean_incremental_gap_vs_old14_plus_g518,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+candidate_induced_risk_contexts,B_static_recovery_feasibility,2,2,-0.03883949462,False,False,False,False,False
+candidate_induced_risk_contexts,C_risk_boundary,2,2,-0.02422233555,False,False,False,False,False
+candidate_induced_risk_contexts,old14,2,0,0.0,False,False,False,False,False
+new_opportunity_contexts,B_static_recovery_feasibility,6,6,-0.006365326467,False,False,False,False,False
+new_opportunity_contexts,C_risk_boundary,6,6,-0.0308233624,False,False,False,False,False
+new_opportunity_contexts,D_fractional_coverage,20,20,-0.021122565548,False,False,False,False,False
+static_near_oracle_or_no_new_safe_contexts,D_fractional_coverage,2,2,-0.01888693025,False,False,False,False,False
+static_near_oracle_or_no_new_safe_contexts,control_or_no_g522,2,0,,False,False,False,False,False

@@ -1,0 +1,151 @@
+{
+  "created_at": "2026-05-31T19:06:16.546978",
+  "diagnostic_only": true,
+  "feature_count": 23,
+  "features": [
+    {
+      "feature_name": "agents",
+      "mean": 74.25373134328358,
+      "rows": 804,
+      "std": 24.988859179482418
+    },
+    {
+      "feature_name": "free_cells",
+      "mean": 2895.597014925373,
+      "rows": 804,
+      "std": 3892.5022380756477
+    },
+    {
+      "feature_name": "density",
+      "mean": 0.07391623333764419,
+      "rows": 804,
+      "std": 0.04518999290692296
+    },
+    {
+      "feature_name": "map_width",
+      "mean": 60.88059701492537,
+      "rows": 804,
+      "std": 53.77274524316995
+    },
+    {
+      "feature_name": "map_height",
+      "mean": 38.940298507462686,
+      "rows": 804,
+      "std": 12.922132577816035
+    },
+    {
+      "feature_name": "obstacle_ratio",
+      "mean": 0.165986473880597,
+      "rows": 804,
+      "std": 0.09007823253881567
+    },
+    {
+      "feature_name": "iteration",
+      "mean": 1.3208955223880596,
+      "rows": 804,
+      "std": 1.0899866236934732
+    },
+    {
+      "feature_name": "has_solution_before",
+      "mean": 0.7089552238805971,
+      "rows": 804,
+      "std": 0.4542441132397971
+    },
+    {
+      "feature_name": "best_ratio_before",
+      "mean": 0.8497607949003358,
+      "rows": 804,
+      "std": 0.5501442439608812
+    },
+    {
+      "feature_name": "improved_last_iteration",
+      "mean": 0.0,
+      "rows": 804,
+      "std": 1.0
+    },
+    {
+      "feature_name": "returned_solutions_count_so_far",
+      "mean": 1.0,
+      "rows": 804,
+      "std": 1.0
+    },
+    {
+      "feature_name": "committed_count",
+      "mean": 0.0,
+      "rows": 804,
+      "std": 1.0
+    },
+    {
+      "feature_name": "blocked_count",
+      "mean": 0.0,
+      "rows": 804,
+      "std": 1.0
+    },
+    {
+      "feature_name": "wait_event_count",
+      "mean": 0.0,
+      "rows": 804,
+      "std": 1.0
+    },
+    {
+      "feature_name": "goal_wait_ignored_count",
+      "mean": 0.0,
+      "rows": 804,
+      "std": 1.0
+    },
+    {
+      "feature_name": "blocked_per_committed",
+      "mean": 0.0,
+      "rows": 804,
+      "std": 1.0
+    },
+    {
+      "feature_name": "wait_per_committed",
+      "mean": 0.0,
+      "rows": 804,
+      "std": 1.0
+    },
+    {
+      "feature_name": "blocked_per_agent",
+      "mean": 0.0,
+      "rows": 804,
+      "std": 1.0
+    },
+    {
+      "feature_name": "committed_per_agent",
+      "mean": 0.0,
+      "rows": 804,
+      "std": 1.0
+    },
+    {
+      "feature_name": "nonzero_edges_before",
+      "mean": 0.0,
+      "rows": 804,
+      "std": 1.0
+    },
+    {
+      "feature_name": "max_raw_before",
+      "mean": 0.0,
+      "rows": 804,
+      "std": 1.0
+    },
+    {
+      "feature_name": "entropy_edge_usage",
+      "mean": 0.0,
+      "rows": 804,
+      "std": 1.0
+    },
+    {
+      "feature_name": "weight_entropy",
+      "mean": 0.0,
+      "rows": 804,
+      "std": 1.0
+    }
+  ],
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "row_count": 804,
+  "schema_version": "phase5p5_repair5e3_train_feature_stats_v1",
+  "stat_source": "train_support_update_logs_only",
+  "train_update_jsonl": "C:\\PROGRAMING\\czr004\\outputs\\logs\\phase5p5_repair5e_caseb_preflight\\phase5p5_repair5e_caseb_preflight_laur_updates.jsonl"
+}

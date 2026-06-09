@@ -1,0 +1,23 @@
+# Phase5.5 Repair5G.5 Runtime Smoke Audit
+
+- `runtime_rows_full`: `True`
+- `expected_rows_full`: `True`
+- `missing_rows`: `0`
+- `schema_errors`: `0`
+- `solver_crash_count`: `0`
+- `semantic_parity_mismatch_count`: `0`
+- `selector_logs_present`: `True`
+- `allowed_feature_policy_passed`: `True`
+- `forbidden_feature_policy_passed`: `True`
+- `unexpected_runtime_features`: `[]`
+- `force_additive_policy_compliant`: `False`
+- `disable_policy_compliant`: `False`
+- `all_costs_finite`: `True`
+- `cost_bounds_respected`: `True`
+- `runtime_contextual_selector_mean_delta_ratio_vs_ltm`: `0.00350549546894118`
+- `runtime_contextual_selector_mean_delta_ratio_vs_ltm_lt_0`: `False`
+- `runtime_contextual_selector_not_broadly_harmful`: `False`
+- `phase5p5_allowed`: `False`
+- `phase6_allowed`: `False`
+- `aaai_ready`: `False`
+- `runtime_smoke_gates_passed`: `False`

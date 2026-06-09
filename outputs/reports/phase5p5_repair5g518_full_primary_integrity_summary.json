@@ -1,0 +1,41 @@
+{
+  "aaai_ready": false,
+  "candidate_count": 22,
+  "checkpoint_rows": 120,
+  "contexts": 60,
+  "decision": "g518_full_primary_integrity_passed_continue_oracle",
+  "duplicate_context_candidate_budget_rows": 0,
+  "expected_rows": 2640,
+  "external_lacam2_solver_status": [],
+  "gates": {
+    "budgets_eq_1000_2000": true,
+    "candidate_count_between_22_and_30": true,
+    "candidate_recognized_all": true,
+    "contexts_eq_60": true,
+    "duplicate_context_candidate_budget_rows_eq_0": true,
+    "external_lacam2_solver_untouched": true,
+    "ids_166_205_untouched": true,
+    "observed_ids_only": true,
+    "probe_ran": true,
+    "rows_eq_expected": true
+  },
+  "ids_166_205_untouched": true,
+  "learned_runtime_policy_validated": false,
+  "new_candidate_count": 8,
+  "observed_ids_only": true,
+  "old_candidate_count": 14,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "probe_ran": true,
+  "probe_rows": 2640,
+  "recognition": {
+    "candidate_recognized_all": true,
+    "fingerprint_rows": 2640,
+    "recognized_rows": 2640,
+    "rows": 2640,
+    "updateparams_fingerprint_all": true
+  },
+  "results_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase5p5_repair5g518_full_primary_probe_results.csv",
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g518_full_primary_integrity_summary_v1"
+}

@@ -1,0 +1,38 @@
+{
+  "aaai_ready": false,
+  "advanced_neural_network_stage": "g6_design_only_training_blocked",
+  "checkpoint_labels": "diagnostic_reopened_observed_only",
+  "counterfactual_labels": "available_observed_diagnostic",
+  "decision": "counterfactual_labels_available_adaptive_gap_found",
+  "learned_runtime_fresh_holdout": "blocked_not_run",
+  "learned_runtime_selector": "blocked_not_run",
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "policy_controls": "passed",
+  "requirements": [
+    {
+      "evidence_artifacts": "outputs/reports/phase5p5_repair5g53_update_transform_equivalence_summary.json",
+      "requirement_id": "update_ltm_transform_equivalence",
+      "status": "passed"
+    },
+    {
+      "evidence_artifacts": "outputs/reports/phase5p5_repair5g53_hook_overhead_ablation_summary.json",
+      "requirement_id": "runtime_hook_equivalence",
+      "status": "failed_time_budget_sensitivity"
+    },
+    {
+      "evidence_artifacts": "outputs/reports/phase5p5_repair5g54_counterfactual_label_summary.json",
+      "requirement_id": "counterfactual_labels",
+      "status": "available_observed_diagnostic"
+    },
+    {
+      "evidence_artifacts": "",
+      "requirement_id": "learned_runtime_fresh_holdout",
+      "status": "blocked_not_run"
+    }
+  ],
+  "runtime_hook_3s_exact_equivalence": "failed_time_budget_sensitivity",
+  "schema_version": "phase5p5_repair5g_aaai_readiness_summary_v5",
+  "update_transform_equivalence": "passed",
+  "updateparams_hash_equivalence": "passed"
+}

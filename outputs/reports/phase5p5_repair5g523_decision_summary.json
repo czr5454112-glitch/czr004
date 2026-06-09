@@ -1,0 +1,66 @@
+{
+  "aaai_ready": false,
+  "candidate_space_metrics": {
+    "candidate_induced_no_solution_count": 20,
+    "incremental_oracle_gap_vs_old14_plus_g518": -0.018164321965930263,
+    "safe_g522_win_budget_pairs": 74,
+    "safe_g522_win_contexts": 39,
+    "static_failure_candidate_recovers_count": 49
+  },
+  "component_decisions": {
+    "autopsy": "feature_signal_and_failure_modes_completed",
+    "candidate_set": "full_primary_candidate_set_created",
+    "contradiction": "g522_contradiction_explained_leakage_blocks_promotion",
+    "full_primary_oracle": "full_primary_response_surface_oracle_completed",
+    "full_primary_probe": "full_primary_response_surface_probe_integrity_passed_continue_oracle",
+    "recovery": "static_recovery_contexts_mined",
+    "surrogate": "leakage_free_surrogates_completed",
+    "teacher": "leakage_free_teacher_dataset_v2_created",
+    "trace": "runtime_safe_trace_feature_matrix_created",
+    "verify": "g522_artifacts_verified_continue_g523"
+  },
+  "decision": "g523_candidate_space_positive_but_learning_blocked_continue_trace_features",
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "positive_learning_gates": {
+    "candidate_space_full_primary_gate_passed": true,
+    "claims_remain_closed": true,
+    "controls_do_not_explain_signal": true,
+    "forbidden_feature_count_eq_0": true,
+    "full_primary_compatible": true,
+    "runtime_safe_feature_count_gt_0": true,
+    "surrogate_promising_gate_passed": false
+  },
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g523_decision_summary_v1",
+  "surrogate_metrics": {
+    "best_model": "region_prior_baseline",
+    "best_model_summary": {
+      "aaai_ready": false,
+      "avoidable_risk_ece": 0.03333333333333333,
+      "candidate_induced_no_solution_count": 0,
+      "contexts": 60,
+      "eval_scope": "seed_oof_aggregate",
+      "learned_runtime_policy_validated": false,
+      "model": "region_prior_baseline",
+      "phase5p5_allowed": false,
+      "phase6_allowed": false,
+      "row_type": "model_aggregate",
+      "runtime_claim_allowed": false,
+      "safe_policy_sim_utility": -0.0014372122034000002,
+      "top1_safe_oracle_capture_rate": 0.13333333333333333,
+      "top3_safe_oracle_capture_rate": 0.13333333333333333,
+      "top5_safe_oracle_capture_rate": 0.13333333333333333
+    },
+    "promising_surrogate": false
+  },
+  "teacher_metrics": {
+    "candidate_rows": 2640,
+    "context_rows": 60,
+    "edge_update_rows_or_blocker": 19200,
+    "forbidden_feature_count": 0,
+    "pairwise_rows": 3060,
+    "runtime_safe_feature_count": 28
+  }
+}

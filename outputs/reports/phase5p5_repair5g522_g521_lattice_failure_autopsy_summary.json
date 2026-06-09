@@ -1,0 +1,67 @@
+{
+  "aaai_ready": false,
+  "block_failure_counts": {
+    "block_B_high_beta": 7,
+    "block_C_wait_conservative": 4,
+    "block_D_decay_shield_ablation": 1
+  },
+  "block_gain_counts": {
+    "block_C_wait_conservative": 1
+  },
+  "decision": "g521_lattice_failure_autopsy_completed_continue_context_panel",
+  "dimension_change_counts": {
+    "alpha_cong_blocked": 4,
+    "alpha_cong_committed": 4,
+    "alpha_flow_wait_or_nonprogress": 4,
+    "flow_shield_beta": 2,
+    "rho_cong": 4,
+    "rho_flow": 1
+  },
+  "dimension_mean_abs_change": {
+    "alpha_cong_blocked": 0.025000000000000022,
+    "alpha_cong_committed": 0.012500000000000011,
+    "alpha_flow_progress": 0.0,
+    "alpha_flow_wait_or_nonprogress": 0.012500000000000011,
+    "c_only": 0.0,
+    "flow_shield_beta": 0.006249999999999995,
+    "max_flow_shield": 0.0,
+    "rho_cong": 0.01249999999999999,
+    "rho_flow": 0.0031250000000000028
+  },
+  "dominant_old14_candidates": {
+    "repair5g59_block_heavy_flow_guard": 2,
+    "repair5g59_flow_decay": 2,
+    "repair5g59_low_beta_high_cap": 2,
+    "repair5g59_wait_aggressive": 2
+  },
+  "dominant_retained_g518_candidates": {
+    "repair5g518_grid_c0p90_b1p40_f1p00_w0p45_dc0p95_df1p00_beta0p35_max0p75_c0": 2,
+    "repair5g518_grid_c0p90_b1p50_f1p00_w0p45_dc0p95_df1p00_beta0p45_max0p75_c0": 6,
+    "repair5g518_grid_c0p90_b1p65_f1p00_w0p45_dc0p95_df1p00_beta0p35_max0p75_c0": 2,
+    "repair5g518_grid_c1p20_b1p15_f1p00_w0p70_dc0p95_df1p00_beta0p55_max0p75_c0": 2,
+    "repair5g518_grid_c1p20_b1p15_f1p00_w0p70_dc0p95_df1p00_beta0p60_max0p75_c0": 2,
+    "repair5g518_grid_c1p20_b1p35_f1p00_w0p70_dc0p95_df1p00_beta0p60_max0p75_c0": 6,
+    "repair5g518_grid_c1p25_b1p25_f1p00_w0p35_dc0p95_df1p00_beta0p30_max0p75_c0": 4,
+    "repair5g518_grid_c1p25_b1p25_f1p00_w0p50_dc0p95_df1p00_beta0p35_max0p75_c0": 7
+  },
+  "exact_duplicate_g521_vs_g518_count": 8,
+  "g521_candidate_induced_no_solution_count": 12,
+  "g521_static_recovery_count": 0,
+  "learned_runtime_policy_validated": false,
+  "near_duplicate_g521_vs_g518_count": 16,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "recommended_response_surface_regions": [
+    "deduplicate exact aliases before second-wave selection",
+    "increase static-recovery and feasibility-oriented contexts",
+    "sample broader bounded response gradients instead of near-neighbor tweaks",
+    "include risk-boundary candidates as negative teacher labels"
+  ],
+  "response_region_focus_new_opportunity_contexts": 6,
+  "runtime_claim_allowed": false,
+  "safe_second_wave_win_contexts": 1,
+  "safe_win_robust_across_budgets_contexts": [],
+  "schema_version": "phase5p5_repair5g522_g521_lattice_failure_autopsy_summary_v1",
+  "second_wave_unique_param_count": 16,
+  "tie_breaking_hidden_duplicate_budget_pairs": 31
+}

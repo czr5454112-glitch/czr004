@@ -1,0 +1,22 @@
+# Repair5G.5.25 G5.24 Artifact Verification
+
+- schema_version: `phase5p5_repair5g525_g524_artifact_verification_summary_v1`
+- decision: `g524_artifacts_verified_continue_g525`
+- gates: `{'g524_decision_expected': True, 'g523_full_primary_rows_eq_5280': True, 'g523_contexts_eq_60': True, 'g523_candidates_eq_44': True, 'g523_incremental_gap_negative': True, 'g523_safe_g522_win_contexts_eq_39': True, 'g523_safe_g522_win_budget_pairs_eq_74': True, 'context_budget_rows_eq_120': True, 'candidate_budget_rows_eq_5280': True, 'pairwise_rows_eq_113520': True, 'feature_count_eq_73': True, 'forbidden_feature_count_eq_0': True, 'best_model_expected': True, 'top3_capture_expected': True, 'missing_trace_field_expected': True, 'raw_sha_mismatch_recorded': True, 'external_lacam2_solver_untouched': True, 'observed_ids_only': True, 'ids_166_205_untouched': True, 'claims_closed': True, 'g525_worklog_entry_before_probe': True}`
+- g523_rows: `5280`
+- g523_contexts: `60`
+- g523_candidates: `44`
+- g524_context_budget_rows: `120`
+- g524_candidate_budget_rows: `5280`
+- g524_pairwise_budget_rows: `113520`
+- g524_feature_count: `73`
+- g524_best_model: `agent_density_specialist_mixture`
+- g524_top3_safe_oracle_capture_rate: `0.13333333333333333`
+- raw_checkpoint_sha256_verified_if_possible: `False`
+- observed_ids_only: `True`
+- ids_166_205_untouched: `True`
+- phase5p5_allowed: `False`
+- phase6_allowed: `False`
+- runtime_claim_allowed: `False`
+- learned_runtime_policy_validated: `False`
+- aaai_ready: `False`

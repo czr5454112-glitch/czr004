@@ -1,0 +1,92 @@
+{
+  "by_mode": [
+    {
+      "classification_counts": "{\"exact\": 380, \"returncode2_no_solution_equivalent\": 69, \"time_budget_sensitivity\": 1}",
+      "exact_pairs": 380,
+      "missing_row": 0,
+      "mode": "A_seq_3s_r3",
+      "pair_rows": 450,
+      "returncode2_no_solution_equivalent": 69,
+      "strict_mismatch_pairs": 70,
+      "time_budget_sensitivity": 1,
+      "timeout_equivalent": 0,
+      "true_semantic_parity_mismatch_count": 0
+    },
+    {
+      "classification_counts": "{\"exact\": 300}",
+      "exact_pairs": 300,
+      "missing_row": 0,
+      "mode": "B_seq_5s_r2",
+      "pair_rows": 300,
+      "returncode2_no_solution_equivalent": 0,
+      "strict_mismatch_pairs": 0,
+      "time_budget_sensitivity": 0,
+      "timeout_equivalent": 0,
+      "true_semantic_parity_mismatch_count": 0
+    },
+    {
+      "classification_counts": "{\"exact\": 146, \"time_budget_sensitivity\": 4}",
+      "exact_pairs": 146,
+      "missing_row": 0,
+      "mode": "C_seq_10s_r1",
+      "pair_rows": 150,
+      "returncode2_no_solution_equivalent": 0,
+      "strict_mismatch_pairs": 4,
+      "time_budget_sensitivity": 4,
+      "timeout_equivalent": 0,
+      "true_semantic_parity_mismatch_count": 0
+    }
+  ],
+  "case_count": 25,
+  "case_sources": {
+    "g3_mismatch": 25
+  },
+  "command_count": 1050,
+  "created_at": "2026-06-03T21:12:01.279880",
+  "diagnostic_only": true,
+  "interpretation": "Sequential control-only reproduction found no true semantic parity mismatch; remaining strict differences are classified as budget/timeout/return-code equivalence.",
+  "methods": [
+    "lacam_star_ltm",
+    "always_additive_defer",
+    "repair5f_candidate_additive_ltm",
+    "laur_disable",
+    "laur_force_additive_direct",
+    "repair5g_dual_additive_parity",
+    "repair5g_dual_c_equiv_additive"
+  ],
+  "modes": [
+    {
+      "max_workers": 1,
+      "mode": "A_seq_3s_r3",
+      "repeats": 3,
+      "time_limit_sec": 3.0
+    },
+    {
+      "max_workers": 1,
+      "mode": "B_seq_5s_r2",
+      "repeats": 2,
+      "time_limit_sec": 5.0
+    },
+    {
+      "max_workers": 1,
+      "mode": "C_seq_10s_r1",
+      "repeats": 1,
+      "time_limit_sec": 10.0
+    }
+  ],
+  "pair_count": 900,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "protocol_reproducer_passed": true,
+  "row_count": 1050,
+  "schema_errors": 0,
+  "schema_version": "phase5p5_repair5g31_control_parity_reproducer_summary_v1",
+  "sentinel_used": false,
+  "solver_crash_count": 0,
+  "strict_mismatch_classification_counts": {
+    "returncode2_no_solution_equivalent": 69,
+    "time_budget_sensitivity": 5
+  },
+  "strict_mismatch_pair_count": 74,
+  "true_semantic_parity_mismatch_count": 0
+}

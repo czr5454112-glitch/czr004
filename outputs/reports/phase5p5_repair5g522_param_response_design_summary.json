@@ -1,0 +1,37 @@
+{
+  "aaai_ready": false,
+  "decision": "param_response_design_passed_continue_adapter",
+  "g518_retained_candidate_count": 8,
+  "g521_candidates_analysis_only": true,
+  "g521_previous_wave_candidate_count": 16,
+  "gates": {
+    "g518_retained_count_eq_8": true,
+    "g521_analysis_only": true,
+    "g521_selected_count_eq_16": true,
+    "no_selected_exact_duplicate_of_g518": true,
+    "old14_count_eq_14": true,
+    "probe_candidate_count_le_70": true,
+    "raw_method_string_dedup": true,
+    "raw_pool_count_ge_240": true,
+    "selected_fingerprint_dedup": true,
+    "selected_g522_count_eq_48": true,
+    "selected_g522_count_le_48": true
+  },
+  "learned_runtime_policy_validated": false,
+  "old14_candidate_count": 14,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "probe_candidate_count": 70,
+  "raw_pool_count": 529,
+  "raw_unique_fingerprint_count": 529,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g522_param_response_design_summary_v1",
+  "selected_g522_candidate_count": 48,
+  "selected_region_counts": {
+    "A_g518_winner_neighborhood": 12,
+    "B_static_recovery_feasibility": 12,
+    "C_risk_boundary": 8,
+    "D_fractional_coverage": 16
+  },
+  "selection_uses_g522_solver_outcomes": false
+}

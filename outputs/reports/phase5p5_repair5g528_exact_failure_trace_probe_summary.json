@@ -1,0 +1,32 @@
+{
+  "aaai_ready": false,
+  "candidate_budget_rows": 2640,
+  "candidate_recognized_all": true,
+  "context_budget_pairs": 60,
+  "decision": "exact_failure_trace_probe_passed",
+  "duplicate_context_candidate_budget_rows": 0,
+  "external_lacam2_clean": true,
+  "gates": {
+    "candidate_budget_rows_ge_1440": true,
+    "duplicate_context_candidate_budget_rows_eq_0": true,
+    "external_lacam2_clean": true,
+    "ids_166_205_untouched": true,
+    "new_exact_failure_audit_keys_present": true,
+    "observed_ids_only": true,
+    "raw_log_sha256_verified": true
+  },
+  "ids_166_205_untouched": true,
+  "label": "targeted_trace_probe",
+  "learned_runtime_policy_validated": false,
+  "new_exact_failure_audit_keys_present": true,
+  "observed_ids_only": true,
+  "parser_fingerprints_unchanged": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "raw_log": "outputs/logs/phase5p5_repair5g528_exact_failure_trace_probe/trace_exact_failure_audit.jsonl",
+  "raw_log_line_count": 2640,
+  "raw_log_sha256": "5dfd06d75961e71ef20fcf8dc5d86f9217f97cfba049c7783e93b48534c491a8",
+  "raw_log_sha256_verified": true,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g528_exact_failure_trace_probe_summary_v1"
+}

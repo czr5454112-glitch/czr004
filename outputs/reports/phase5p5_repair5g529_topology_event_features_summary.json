@@ -1,0 +1,24 @@
+{
+  "aaai_ready": false,
+  "candidate_budget_rows": 5280,
+  "candidate_topology_interaction_feature_count": 9,
+  "decision": "topology_event_features_created",
+  "event_graph_feature_count": 16,
+  "feature_count": 196,
+  "forbidden_feature_count": 0,
+  "forbidden_features": [],
+  "g528_feature_count": 148,
+  "gates": {
+    "candidate_topology_interactions_present": true,
+    "event_graph_features_present": true,
+    "feature_count_gt_g528": true,
+    "forbidden_feature_count_eq_0": true,
+    "topology_features_present": true
+  },
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g529_topology_event_features_summary_v1",
+  "topology_feature_count": 23
+}

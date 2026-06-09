@@ -1,0 +1,369 @@
+{
+  "branch": "phase4f5p5-stable-attention-lau",
+  "command_log_jsonl": "C:\\PROGRAMING\\czr004\\outputs\\logs\\phase5p5_repair5e2_runtime_feature_ood\\phase5p5_repair5e2_runtime_feature_ood_commands.jsonl",
+  "commit": "b16f87b",
+  "created_at": "2026-05-31T17:55:36.459765",
+  "decision_table_interpretation": {
+    "case": "C",
+    "oracle_positive": false,
+    "phase5p5_allowed": false,
+    "phase6_allowed": false,
+    "recommended_action": "stop_offline_gate_optimization_and_redesign_labels_or_output_space",
+    "repair5d_positive": true
+  },
+  "dirty": "tracked-dirty_untracked-present",
+  "laur_update_log_jsonl": "C:\\PROGRAMING\\czr004\\outputs\\logs\\phase5p5_repair5e2_runtime_feature_ood\\phase5p5_repair5e2_runtime_feature_ood_laur_updates.jsonl",
+  "oracle_proxy_rows": 0,
+  "oracle_report": "C:\\PROGRAMING\\czr004\\outputs\\reports\\phase5p5_repair5e2_runtime_feature_ood_oracle_report.md",
+  "oracle_summary_json": "C:\\PROGRAMING\\czr004\\outputs\\reports\\phase5p5_repair5e2_runtime_feature_ood_oracle_summary.json",
+  "paired_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase5p5_repair5e2_runtime_feature_ood_preflight_paired.csv",
+  "paired_method_stats": {
+    "always_additive_defer": {
+      "better": 0,
+      "equal": 1,
+      "mean_delta_ratio_vs_ltm": 0.0,
+      "rows": 1,
+      "worse": 0
+    },
+    "lacam_star": {
+      "better": 0,
+      "equal": 0,
+      "mean_delta_ratio_vs_ltm": 0.018534863200000196,
+      "rows": 1,
+      "worse": 1
+    },
+    "repair3_safe_runtime": {
+      "better": 0,
+      "equal": 1,
+      "mean_delta_ratio_vs_ltm": 0.0,
+      "rows": 1,
+      "worse": 0
+    },
+    "repair5d_composite_diagnostic_distilled": {
+      "better": 0,
+      "equal": 1,
+      "mean_delta_ratio_vs_ltm": 0.0,
+      "rows": 1,
+      "worse": 0
+    },
+    "repair5d_force_additive_defer_parity": {
+      "better": 0,
+      "equal": 1,
+      "mean_delta_ratio_vs_ltm": 0.0,
+      "rows": 1,
+      "worse": 0
+    },
+    "repair5e_caseb_ood_guard_distilled": {
+      "better": 0,
+      "equal": 1,
+      "mean_delta_ratio_vs_ltm": 0.0,
+      "rows": 1,
+      "worse": 0
+    },
+    "repair5e_caseb_ood_guard_force_additive_parity": {
+      "better": 0,
+      "equal": 1,
+      "mean_delta_ratio_vs_ltm": 0.0,
+      "rows": 1,
+      "worse": 0
+    }
+  },
+  "paired_row_count": 7,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "raw_jsonl": "C:\\PROGRAMING\\czr004\\outputs\\logs\\phase5p5_repair5e2_runtime_feature_ood\\phase5p5_repair5e2_runtime_feature_ood.jsonl",
+  "schema_errors": [],
+  "schema_version": "phase5p5_laur_diagnostic_preflight_exec_v1",
+  "scope": {
+    "agent_counts": [
+      50
+    ],
+    "instances_per_setting": 1,
+    "ltm_max_iterations": 4,
+    "maps": [
+      "random-32-32-20"
+    ],
+    "methods": [
+      "lacam_star",
+      "lacam_star_ltm",
+      "always_additive_defer",
+      "repair3_safe_runtime",
+      "repair5d_composite_diagnostic_distilled",
+      "repair5d_force_additive_defer_parity",
+      "repair5e_caseb_ood_guard_distilled",
+      "repair5e_caseb_ood_guard_force_additive_parity"
+    ],
+    "support_methods": [],
+    "time_limit_sec": 3.0
+  },
+  "skipped_methods": [
+    {
+      "method": "repair5d_native_composite_export",
+      "reason": "not_feasible_current_cxx_runtime_accepts_single_mlp_runtime_only_distilled_bridge_used"
+    },
+    {
+      "method": "oracle_teacher_forced_best_safe_update",
+      "reason": "not_executed_pass_include_oracle_static_probe_for_static_upper_bound_proxy"
+    },
+    {
+      "method": "repair3_runtime_export",
+      "reason": "existing_runtime_dir"
+    },
+    {
+      "method": "repair5d_spec",
+      "reason": "available"
+    },
+    {
+      "method": "repair5d_runtime_distill",
+      "reason": "available"
+    },
+    {
+      "method": "repair5e_ood_guard_runtime",
+      "reason": "available"
+    },
+    {
+      "method": "repair5e2_guarded_oracle_aligned_selector_runtime",
+      "reason": "available"
+    }
+  ],
+  "stop_conditions": {
+    "method_flags": {
+      "always_additive_defer": {
+        "ratio_worse_than_ltm_groups": 0,
+        "success_worse_than_ltm_groups": 0,
+        "zero_nonadditive_groups": 1
+      },
+      "lacam_star": {
+        "ratio_worse_than_ltm_groups": 1,
+        "success_worse_than_ltm_groups": 0,
+        "zero_nonadditive_groups": 0
+      },
+      "repair3_safe_runtime": {
+        "ratio_worse_than_ltm_groups": 0,
+        "success_worse_than_ltm_groups": 0,
+        "zero_nonadditive_groups": 0
+      },
+      "repair5d_composite_diagnostic_distilled": {
+        "ratio_worse_than_ltm_groups": 0,
+        "success_worse_than_ltm_groups": 0,
+        "zero_nonadditive_groups": 0
+      },
+      "repair5d_force_additive_defer_parity": {
+        "ratio_worse_than_ltm_groups": 0,
+        "success_worse_than_ltm_groups": 0,
+        "zero_nonadditive_groups": 1
+      },
+      "repair5e_caseb_ood_guard_distilled": {
+        "ratio_worse_than_ltm_groups": 0,
+        "success_worse_than_ltm_groups": 0,
+        "zero_nonadditive_groups": 1
+      },
+      "repair5e_caseb_ood_guard_force_additive_parity": {
+        "ratio_worse_than_ltm_groups": 0,
+        "success_worse_than_ltm_groups": 0,
+        "zero_nonadditive_groups": 1
+      }
+    },
+    "oracle_replay_executed": false,
+    "oracle_replay_scope": "not_executed",
+    "paired_rows": 7,
+    "repair5c_composite_closed_loop_executed": false,
+    "repair5d_composite_closed_loop_executed": true,
+    "strict_safety_mask_blocks_all_learned_choices": false
+  },
+  "summary_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase5p5_repair5e2_runtime_feature_ood_preflight_summary.csv",
+  "summary_rows": [
+    {
+      "agents": 50,
+      "expanded_delta_vs_ltm": 0.0,
+      "expanded_nodes_mean": 328.0,
+      "fallback_defer_rate": 0.25,
+      "laur_additive_fallback_count_mean": 1.0,
+      "laur_inference_count_mean": 3.0,
+      "laur_overhead_ms_mean": 0.0015,
+      "laur_safety_disabled_count_mean": 0.0,
+      "low_level_pibt_calls_mean": 28657.0,
+      "map": "random-32-32-20",
+      "method": "always_additive_defer",
+      "non_additive_update_rate": 0.0,
+      "ratio_delta_vs_ltm": 0.0,
+      "returned_solutions_count_mean": 1.0,
+      "runs": 1,
+      "selected_harmful_update_rate": null,
+      "selected_rules": "{\"additive_ltm\": 3}",
+      "success_rate": 1.0,
+      "successes": 1,
+      "sum_of_loss_ratio_mean": 1.13415710503,
+      "time_to_first_solution_ms_mean": 169.0,
+      "ttfs_delta_vs_ltm": -2.0
+    },
+    {
+      "agents": 50,
+      "expanded_delta_vs_ltm": 21246.0,
+      "expanded_nodes_mean": 21574.0,
+      "fallback_defer_rate": null,
+      "laur_additive_fallback_count_mean": 0.0,
+      "laur_inference_count_mean": 0.0,
+      "laur_overhead_ms_mean": 0.0,
+      "laur_safety_disabled_count_mean": 0.0,
+      "low_level_pibt_calls_mean": null,
+      "map": "random-32-32-20",
+      "method": "lacam_star",
+      "non_additive_update_rate": null,
+      "ratio_delta_vs_ltm": 0.018534863200000196,
+      "returned_solutions_count_mean": 1.0,
+      "runs": 1,
+      "selected_harmful_update_rate": null,
+      "selected_rules": "{}",
+      "success_rate": 1.0,
+      "successes": 1,
+      "sum_of_loss_ratio_mean": 1.15269196823,
+      "time_to_first_solution_ms_mean": 3302.3539,
+      "ttfs_delta_vs_ltm": 3131.3539
+    },
+    {
+      "agents": 50,
+      "expanded_delta_vs_ltm": null,
+      "expanded_nodes_mean": 328.0,
+      "fallback_defer_rate": null,
+      "laur_additive_fallback_count_mean": 0.0,
+      "laur_inference_count_mean": 0.0,
+      "laur_overhead_ms_mean": 0.0,
+      "laur_safety_disabled_count_mean": 0.0,
+      "low_level_pibt_calls_mean": 28657.0,
+      "map": "random-32-32-20",
+      "method": "lacam_star_ltm",
+      "non_additive_update_rate": null,
+      "ratio_delta_vs_ltm": null,
+      "returned_solutions_count_mean": 1.0,
+      "runs": 1,
+      "selected_harmful_update_rate": null,
+      "selected_rules": "{}",
+      "success_rate": 1.0,
+      "successes": 1,
+      "sum_of_loss_ratio_mean": 1.13415710503,
+      "time_to_first_solution_ms_mean": 171.0,
+      "ttfs_delta_vs_ltm": null
+    },
+    {
+      "agents": 50,
+      "expanded_delta_vs_ltm": 30.0,
+      "expanded_nodes_mean": 358.0,
+      "fallback_defer_rate": 0.25,
+      "laur_additive_fallback_count_mean": 1.0,
+      "laur_inference_count_mean": 3.0,
+      "laur_overhead_ms_mean": 0.3554,
+      "laur_safety_disabled_count_mean": 0.0,
+      "low_level_pibt_calls_mean": 32327.0,
+      "map": "random-32-32-20",
+      "method": "repair3_safe_runtime",
+      "non_additive_update_rate": 0.75,
+      "ratio_delta_vs_ltm": 0.0,
+      "returned_solutions_count_mean": 1.0,
+      "runs": 1,
+      "selected_harmful_update_rate": null,
+      "selected_rules": "{\"block_light\": 1, \"commit_heavy\": 2}",
+      "success_rate": 1.0,
+      "successes": 1,
+      "sum_of_loss_ratio_mean": 1.13415710503,
+      "time_to_first_solution_ms_mean": 175.0,
+      "ttfs_delta_vs_ltm": 4.0
+    },
+    {
+      "agents": 50,
+      "expanded_delta_vs_ltm": 30.0,
+      "expanded_nodes_mean": 358.0,
+      "fallback_defer_rate": 0.25,
+      "laur_additive_fallback_count_mean": 1.0,
+      "laur_inference_count_mean": 3.0,
+      "laur_overhead_ms_mean": 0.3867,
+      "laur_safety_disabled_count_mean": 0.0,
+      "low_level_pibt_calls_mean": 32327.0,
+      "map": "random-32-32-20",
+      "method": "repair5d_composite_diagnostic_distilled",
+      "non_additive_update_rate": 0.75,
+      "ratio_delta_vs_ltm": 0.0,
+      "returned_solutions_count_mean": 1.0,
+      "runs": 1,
+      "selected_harmful_update_rate": null,
+      "selected_rules": "{\"commit_heavy\": 3}",
+      "success_rate": 1.0,
+      "successes": 1,
+      "sum_of_loss_ratio_mean": 1.13415710503,
+      "time_to_first_solution_ms_mean": 170.0,
+      "ttfs_delta_vs_ltm": -1.0
+    },
+    {
+      "agents": 50,
+      "expanded_delta_vs_ltm": 0.0,
+      "expanded_nodes_mean": 328.0,
+      "fallback_defer_rate": 0.25,
+      "laur_additive_fallback_count_mean": 1.0,
+      "laur_inference_count_mean": 3.0,
+      "laur_overhead_ms_mean": 0.0013,
+      "laur_safety_disabled_count_mean": 0.0,
+      "low_level_pibt_calls_mean": 28657.0,
+      "map": "random-32-32-20",
+      "method": "repair5d_force_additive_defer_parity",
+      "non_additive_update_rate": 0.0,
+      "ratio_delta_vs_ltm": 0.0,
+      "returned_solutions_count_mean": 1.0,
+      "runs": 1,
+      "selected_harmful_update_rate": null,
+      "selected_rules": "{\"additive_ltm\": 3}",
+      "success_rate": 1.0,
+      "successes": 1,
+      "sum_of_loss_ratio_mean": 1.13415710503,
+      "time_to_first_solution_ms_mean": 162.0,
+      "ttfs_delta_vs_ltm": -9.0
+    },
+    {
+      "agents": 50,
+      "expanded_delta_vs_ltm": 0.0,
+      "expanded_nodes_mean": 328.0,
+      "fallback_defer_rate": 0.5714285714285714,
+      "laur_additive_fallback_count_mean": 4.0,
+      "laur_inference_count_mean": 3.0,
+      "laur_overhead_ms_mean": 0.3676,
+      "laur_safety_disabled_count_mean": 0.0,
+      "low_level_pibt_calls_mean": 28657.0,
+      "map": "random-32-32-20",
+      "method": "repair5e_caseb_ood_guard_distilled",
+      "non_additive_update_rate": 0.0,
+      "ratio_delta_vs_ltm": 0.0,
+      "returned_solutions_count_mean": 1.0,
+      "runs": 1,
+      "selected_harmful_update_rate": null,
+      "selected_rules": "{\"additive_ltm\": 3}",
+      "success_rate": 1.0,
+      "successes": 1,
+      "sum_of_loss_ratio_mean": 1.13415710503,
+      "time_to_first_solution_ms_mean": 165.0,
+      "ttfs_delta_vs_ltm": -6.0
+    },
+    {
+      "agents": 50,
+      "expanded_delta_vs_ltm": 0.0,
+      "expanded_nodes_mean": 328.0,
+      "fallback_defer_rate": 0.25,
+      "laur_additive_fallback_count_mean": 1.0,
+      "laur_inference_count_mean": 3.0,
+      "laur_overhead_ms_mean": 0.0014,
+      "laur_safety_disabled_count_mean": 0.0,
+      "low_level_pibt_calls_mean": 28657.0,
+      "map": "random-32-32-20",
+      "method": "repair5e_caseb_ood_guard_force_additive_parity",
+      "non_additive_update_rate": 0.0,
+      "ratio_delta_vs_ltm": 0.0,
+      "returned_solutions_count_mean": 1.0,
+      "runs": 1,
+      "selected_harmful_update_rate": null,
+      "selected_rules": "{\"additive_ltm\": 3}",
+      "success_rate": 1.0,
+      "successes": 1,
+      "sum_of_loss_ratio_mean": 1.13415710503,
+      "time_to_first_solution_ms_mean": 161.0,
+      "ttfs_delta_vs_ltm": -10.0
+    }
+  ]
+}

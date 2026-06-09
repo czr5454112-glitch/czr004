@@ -1,0 +1,70 @@
+{
+  "created_at_unix": 1780432206.8943074,
+  "done": [
+    {
+      "commands": 2100,
+      "name": "chunk_i26_30_a50",
+      "returncode": 0,
+      "rows": 2130,
+      "stderr_tail": ""
+    },
+    {
+      "commands": 2100,
+      "name": "chunk_i36_40_a50",
+      "returncode": 0,
+      "rows": 2130,
+      "stderr_tail": ""
+    },
+    {
+      "commands": 2100,
+      "name": "chunk_i41_45_a50",
+      "returncode": 0,
+      "rows": 2130,
+      "stderr_tail": ""
+    },
+    {
+      "commands": 2100,
+      "name": "chunk_i31_35_a50",
+      "returncode": 0,
+      "rows": 2130,
+      "stderr_tail": ""
+    },
+    {
+      "commands": 2100,
+      "name": "chunk_i41_45_a100",
+      "returncode": 0,
+      "rows": 2130,
+      "stderr_tail": ""
+    },
+    {
+      "commands": 2100,
+      "name": "chunk_i26_30_a100",
+      "returncode": 0,
+      "rows": 2130,
+      "stderr_tail": ""
+    },
+    {
+      "commands": 2100,
+      "name": "chunk_i31_35_a100",
+      "returncode": 0,
+      "rows": 2130,
+      "stderr_tail": ""
+    },
+    {
+      "commands": 2100,
+      "name": "chunk_i36_40_a100",
+      "returncode": 0,
+      "rows": 2130,
+      "stderr_tail": ""
+    }
+  ],
+  "expected_command_rows": 16800,
+  "expected_solver_rows_with_synthetic": 17040,
+  "final_returncode": 0,
+  "pending": [],
+  "phase": "complete",
+  "running": [],
+  "schema_version": "phase5p5_repair5g1_dev_chunk_status_v1",
+  "total_command_rows": 16800,
+  "total_solver_rows": 17040
+}

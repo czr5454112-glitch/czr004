@@ -1,0 +1,50 @@
+{
+  "aaai_ready": false,
+  "action_class_counts": {
+    "abstain_due_risk": 9,
+    "old14_g518_fallback": 36,
+    "old14_select": 35,
+    "safe_g522_select": 40
+  },
+  "answers": {
+    "candidate_matching_too_hard": true,
+    "current_topology_event_features_absent": [
+      "map_graph_degree_bottleneck",
+      "agent_density_path_overlap",
+      "failure_interaction_graph_motifs",
+      "candidate_topology_updateparam_cross_terms"
+    ],
+    "exact_failure_features_helped": false,
+    "primary_blockers": [
+      "data_scarcity",
+      "topology_event_state_absent",
+      "candidate_specific_label_brittleness",
+      "warehouse_risk_calibration"
+    ],
+    "region_action_more_feasible_than_candidate": true
+  },
+  "best_g528_model": "pairwise_teacher_preference_ranker",
+  "candidate_budget_rows": 5280,
+  "context_budget_labels": 120,
+  "decision": "distillation_blocker_decomposition_completed",
+  "learned_runtime_policy_validated": false,
+  "map_family_counts": {
+    "maze": 40,
+    "random": 40,
+    "warehouse": 40
+  },
+  "minimum_data_expansion_needed": {
+    "fallback_or_abstain_current": 45,
+    "fallback_or_abstain_needed_for_80": 35,
+    "safe_g522_select_current": 40,
+    "safe_g522_select_needed_for_100": 60,
+    "warehouse_current": 40,
+    "warehouse_needed_for_40": 0
+  },
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g529_distillation_blocker_decomposition_summary_v1",
+  "unique_contexts": 60,
+  "warehouse_failure_cases": 25
+}

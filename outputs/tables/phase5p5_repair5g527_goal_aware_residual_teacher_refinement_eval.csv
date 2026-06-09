@@ -1,0 +1,6 @@
+model,selected_teacher_rows,residual_mae,edge_update_teacher_proxy_only,bootstrap_samples_requested,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+region_to_param_residual_ridge,120,0.014741064236,True,300,False,False,False,False,False
+trace_rank_effect_to_param_residual,120,0.010889396836,True,300,False,False,False,False,False
+small_mlp_if_available,120,0.014328868061,True,300,False,False,False,False,False
+graph_edge_proxy_aggregation,120,0.023923351756,True,300,False,False,False,False,False
+shuffled_control,120,0.015127865199,True,300,False,False,False,False,False

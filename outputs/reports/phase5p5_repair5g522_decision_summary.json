@@ -1,0 +1,70 @@
+{
+  "aaai_ready": false,
+  "candidate_space_metrics": {
+    "candidate_induced_no_solution_count": 27,
+    "incremental_oracle_gap_vs_old14_plus_g518": -0.020237024125000037,
+    "safe_g522_win_contexts": 19,
+    "static_failure_candidate_recovers_count": 0
+  },
+  "claims_closed": {
+    "aaai_ready": false,
+    "learned_runtime_policy_validated": false,
+    "phase5p5_allowed": false,
+    "phase6_allowed": false,
+    "runtime_claim_allowed": false
+  },
+  "component_decisions": {
+    "adapter": "response_design_adapter_passed_continue_probe",
+    "autopsy": "g521_lattice_failure_autopsy_completed_continue_context_panel",
+    "context": "context_panel_passed_continue_response_design",
+    "design": "param_response_design_passed_continue_adapter",
+    "oracle": "response_surface_oracle_completed_continue_teacher_dataset",
+    "probe": "response_surface_probe_integrity_passed_continue_oracle",
+    "signal": "signal_and_generalization_autopsy_completed",
+    "surrogate": "neural_ready_surrogates_completed",
+    "teacher": "neural_teacher_dataset_created",
+    "verify": "g521_artifacts_verified_continue_g522"
+  },
+  "decision": "g522_no_learnable_signal_return_to_feature_or_trace_design",
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "positive_decision_gates": {
+    "candidate_space_gain_or_richer_teacher_labels": true,
+    "claims_remain_closed": true,
+    "controls_do_not_explain_signal": true,
+    "forbidden_feature_count_eq_0": false,
+    "response_surface_dataset_rows_gt_g521": true,
+    "target_semantics_valid": true
+  },
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g522_decision_summary_v1",
+  "surrogate_metrics": {
+    "best_model": "old14_plus_g518_no_new_baseline",
+    "best_model_summary": {
+      "aaai_ready": false,
+      "avoidable_risk_ece": 0.0,
+      "candidate_induced_no_solution_count": 0,
+      "contexts": 21,
+      "eval_scope": "seed_oof_aggregate",
+      "learned_runtime_policy_validated": false,
+      "model": "old14_plus_g518_no_new_baseline",
+      "phase5p5_allowed": false,
+      "phase6_allowed": false,
+      "row_type": "model_aggregate",
+      "runtime_claim_allowed": false,
+      "safe_policy_sim_utility": 0.0,
+      "top3_safe_oracle_capture_rate": 0.0
+    },
+    "promising_surrogate": false
+  },
+  "teacher_metrics": {
+    "candidate_induced_failure_rows": 34,
+    "candidate_rows": 1470,
+    "context_rows": 21,
+    "edge_update_rows_or_blocker": 2688,
+    "pairwise_rows": 1071,
+    "safe_positive_candidate_rows": 129,
+    "static_recovery_rows": 0
+  }
+}

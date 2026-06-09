@@ -1,0 +1,97 @@
+{
+  "branch": "phase4f5p5-stable-attention-lau",
+  "commit": "70951f0",
+  "created_at": "2026-05-31T12:14:34.069518",
+  "diagnostic_preflight_warranted": true,
+  "dirty": "tracked-dirty_untracked-present",
+  "inputs": {
+    "attention_summary_json": null,
+    "composite_summary_json": "C:\\PROGRAMING\\czr004\\outputs\\reports\\phase4f_repair5c_composite_inference_summary.json",
+    "reranker_summary_json": "C:\\PROGRAMING\\czr004\\outputs\\reports\\phase4f_repair5c_top3_reranker_eval_summary.json"
+  },
+  "offline_signals": {
+    "attention_high_margin_capture": null,
+    "attention_selected_vs_additive_delta": null,
+    "composite_best_mode": {
+      "metrics": {
+        "avoidable_defer_additive": 0.11935483870967742,
+        "decision_distribution": {
+          "defer_ltm": 278,
+          "use_nonadditive": 484
+        },
+        "global_additive_or_defer_rate": 0.3648293963254593,
+        "harmful_f1": 1.0,
+        "harmful_precision": 1.0,
+        "harmful_recall": 1.0,
+        "high_margin_capture": 0.667741935483871,
+        "high_margin_opportunity_count": 310,
+        "rule_top1": 0.2753623188405797,
+        "rule_top3": 0.7060041407867494,
+        "safe_utility_top1": 0.2152230971128609,
+        "safe_utility_top3": 0.463254593175853,
+        "sample_count": 762,
+        "selected_harmful_rate": 0.0,
+        "selected_rule_distribution": {
+          "additive_ltm": 278,
+          "block_heavy": 56,
+          "block_light": 3,
+          "commit_heavy": 284,
+          "decay_090": 12,
+          "decay_095": 41,
+          "wait_heavy": 3,
+          "wait_light": 85
+        },
+        "selected_vs_additive_delta": 0.042605085480568225,
+        "selected_vs_additive_utility": 0.015104708615881854,
+        "target_nonadditive_count": 483,
+        "utility_regret_to_oracle": 0.015401157439898052
+      },
+      "mode": "learned_decision_oracle_safety"
+    },
+    "reranker_validation": {
+      "high_margin_capture_proxy": 0.7451612903225806,
+      "sample_count": 762,
+      "selected_harmful_rate": 0.1141732283464567,
+      "selected_rule_distribution": {
+        "block_heavy": 238,
+        "commit_heavy": 257,
+        "decay_095": 29,
+        "wait_light": 238
+      },
+      "selected_vs_additive_delta": 0.009962825950379093,
+      "target_in_candidates_rate": 0.6430446194225722,
+      "top1_among_candidates": 0.4304461942257218,
+      "utility_regret": 0.017757860889241195
+    }
+  },
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "recommended_scope": {
+    "candidates": [
+      "LaCAM*",
+      "LaCAM*+LTM",
+      "Repair3 safe runtime",
+      "Repair5C composite/reranker diagnostic",
+      "always-additive/defer",
+      "oracle replay or teacher-forced update choices if feasible"
+    ],
+    "max_agent_counts": 2,
+    "max_instances_per_setting": 3,
+    "max_maps": 2,
+    "time_budget_seconds": 3
+  },
+  "required_boundary": [
+    "diagnostic-only",
+    "no Phase5.5 promotion",
+    "no solver semantic changes",
+    "include LaCAM*, LaCAM*+LTM, Repair3, learned candidate, oracle replay/teacher-forced if feasible",
+    "report success, sum_of_loss_ratio, expanded nodes, TTFS, defer rate, non-additive rate, selected-vs-additive delta"
+  ],
+  "schema_version": "phase5p5_laur_diagnostic_preflight_plan_v1",
+  "stop_conditions": [
+    "offline candidate is worse than additive LTM on success or sum_of_loss_ratio",
+    "non-additive rate collapses to zero",
+    "strict safety mask blocks all learned choices",
+    "oracle replay fails to transfer any measurable advantage"
+  ]
+}

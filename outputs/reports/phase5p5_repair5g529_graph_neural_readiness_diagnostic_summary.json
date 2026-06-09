@@ -1,0 +1,20 @@
+{
+  "aaai_ready": false,
+  "bootstrap_samples_requested": 300,
+  "decision": "graph_neural_readiness_diagnostic_completed",
+  "diagnostic_only_not_runtime": true,
+  "does_neural_beat_sklearn_tree_ridge_baseline": true,
+  "learned_runtime_policy_validated": false,
+  "models_present": [
+    "deepsets_failure_event_encoder",
+    "topology_trace_mlp",
+    "candidate_param_cross_attention_proxy",
+    "hierarchical_two_head_mlp"
+  ],
+  "neural_model_rows": 120,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g529_graph_neural_readiness_diagnostic_summary_v1",
+  "torch_available": false
+}

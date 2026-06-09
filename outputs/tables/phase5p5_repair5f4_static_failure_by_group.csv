@@ -1,0 +1,49 @@
+method,label,map,agents,rows,better,equal,worse,mean_delta_ratio_vs_ltm,median_delta_ratio_vs_ltm,success_regressions,success_improvements,equal_share,worse_share,mostly_no_effect
+repair5f_static_c100_b100_w075_d090,locked wait 0.75 + decay 0.90,maze-32-32-4,100,20,10,0,10,0.0013037860594999674,-0.00021774872500002207,0,0,0.0,0.5,False
+repair5f_static_c100_b100_w075_d090,locked wait 0.75 + decay 0.90,random-32-32-20,50,20,0,18,2,0.0009064062550000029,0.0,0,0,0.9,0.1,True
+repair5f_static_c100_b100_w075_d090,locked wait 0.75 + decay 0.90,warehouse-10-20-10-2-1,50,20,0,20,0,0.0,0.0,0,0,1.0,0.0,True
+repair5f_static_c100_b100_w075_d090,locked wait 0.75 + decay 0.90,warehouse-10-20-10-2-1,100,20,0,20,0,0.0,0.0,0,0,1.0,0.0,True
+repair5f_static_c100_b100_w075_d090,locked wait 0.75 + decay 0.90,maze-32-32-4,50,20,8,6,6,-0.0008071347669000139,0.0,0,0,0.3,0.3,False
+repair5f_static_c100_b100_w075_d090,locked wait 0.75 + decay 0.90,random-32-32-20,100,20,7,4,9,-0.0011319122852000041,0.0,0,0,0.2,0.45,False
+repair5e5_crossfold_utility_reranker,Repair5E5 real diagnostic,maze-32-32-4,50,20,5,8,7,0.0015425090368499984,0.0,0,0,0.4,0.35,False
+repair5f_static_c100_b100_w075_d095,wait 0.75 + decay 0.95,maze-32-32-4,50,20,5,10,5,0.0014443016162499767,0.0,0,0,0.5,0.25,False
+repair5e5_crossfold_utility_reranker_shuffled_labels_diagnostic,Repair5E5 shuffled diagnostic,random-32-32-20,50,20,0,18,2,0.0010795664280000006,0.0,0,0,0.9,0.1,True
+repair5f_static_c100_b100_w100_d090,decay 0.90 only,random-32-32-20,50,20,0,18,2,0.0010795664280000006,0.0,0,0,0.9,0.1,True
+repair5f_f4_deterministic_random_candidate_diagnostic,deterministic random candidate diagnostic,maze-32-32-4,100,20,8,0,12,0.0010140358759999969,0.00601200686999992,0,0,0.0,0.6,False
+repair5f_static_c100_b100_w100_d095,decay 0.95 only,random-32-32-20,50,20,0,18,2,0.0008642348174999981,0.0,0,0,0.9,0.1,True
+repair5f_static_c100_b100_w100_d095,decay 0.95 only,random-32-32-20,100,20,8,6,6,0.0007997724246999738,0.0,0,0,0.3,0.3,False
+repair5f_f4_deterministic_random_candidate_diagnostic,deterministic random candidate diagnostic,maze-32-32-4,50,20,3,10,7,0.0007733347819499859,0.0,0,0,0.5,0.35,False
+repair5e5_crossfold_utility_reranker,Repair5E5 real diagnostic,random-32-32-20,50,20,0,18,2,0.0006058368844999995,0.0,0,0,0.9,0.1,True
+repair5e5_crossfold_utility_reranker,Repair5E5 real diagnostic,random-32-32-20,100,20,8,6,6,0.0005796005491999878,0.0,0,0,0.3,0.3,False
+repair5f_static_c100_b100_w100_d095,decay 0.95 only,maze-32-32-4,50,20,6,10,4,0.0003974422609500039,0.0,0,0,0.5,0.2,False
+repair5f_static_c100_b100_w075_d100,wait 0.75 only,random-32-32-20,50,20,1,18,1,0.00030437262949999376,0.0,0,0,0.9,0.05,True
+repair5f_static_c100_b100_w075_d100,wait 0.75 only,maze-32-32-4,100,20,9,0,11,0.0002982531904999641,0.007510258069999942,0,0,0.0,0.55,False
+repair5f_static_c100_b100_w075_d095,wait 0.75 + decay 0.95,random-32-32-20,50,20,1,18,1,0.00021756882200000272,0.0,0,0,0.9,0.05,True
+repair5e5_crossfold_utility_reranker,Repair5E5 real diagnostic,maze-32-32-4,100,20,0,20,0,0.0,0.0,0,0,1.0,0.0,True
+repair5e5_crossfold_utility_reranker,Repair5E5 real diagnostic,warehouse-10-20-10-2-1,50,20,0,20,0,0.0,0.0,0,0,1.0,0.0,True
+repair5e5_crossfold_utility_reranker,Repair5E5 real diagnostic,warehouse-10-20-10-2-1,100,20,0,20,0,0.0,0.0,0,0,1.0,0.0,True
+repair5e5_crossfold_utility_reranker_shuffled_labels_diagnostic,Repair5E5 shuffled diagnostic,maze-32-32-4,100,20,0,20,0,0.0,0.0,0,0,1.0,0.0,True
+repair5e5_crossfold_utility_reranker_shuffled_labels_diagnostic,Repair5E5 shuffled diagnostic,warehouse-10-20-10-2-1,50,20,0,20,0,0.0,0.0,0,0,1.0,0.0,True
+repair5e5_crossfold_utility_reranker_shuffled_labels_diagnostic,Repair5E5 shuffled diagnostic,warehouse-10-20-10-2-1,100,20,0,20,0,0.0,0.0,0,0,1.0,0.0,True
+repair5f_f4_deterministic_random_candidate_diagnostic,deterministic random candidate diagnostic,warehouse-10-20-10-2-1,50,20,0,20,0,0.0,0.0,0,0,1.0,0.0,True
+repair5f_f4_deterministic_random_candidate_diagnostic,deterministic random candidate diagnostic,warehouse-10-20-10-2-1,100,20,0,20,0,0.0,0.0,0,0,1.0,0.0,True
+repair5f_static_c100_b100_w075_d095,wait 0.75 + decay 0.95,warehouse-10-20-10-2-1,50,20,0,20,0,0.0,0.0,0,0,1.0,0.0,True
+repair5f_static_c100_b100_w075_d095,wait 0.75 + decay 0.95,warehouse-10-20-10-2-1,100,20,0,20,0,0.0,0.0,0,0,1.0,0.0,True
+repair5f_static_c100_b100_w075_d100,wait 0.75 only,warehouse-10-20-10-2-1,50,20,0,20,0,0.0,0.0,0,0,1.0,0.0,True
+repair5f_static_c100_b100_w075_d100,wait 0.75 only,warehouse-10-20-10-2-1,100,20,0,20,0,0.0,0.0,0,0,1.0,0.0,True
+repair5f_static_c100_b100_w100_d090,decay 0.90 only,warehouse-10-20-10-2-1,50,20,0,20,0,0.0,0.0,0,0,1.0,0.0,True
+repair5f_static_c100_b100_w100_d090,decay 0.90 only,warehouse-10-20-10-2-1,100,20,0,20,0,0.0,0.0,0,0,1.0,0.0,True
+repair5f_static_c100_b100_w100_d095,decay 0.95 only,warehouse-10-20-10-2-1,50,20,0,20,0,0.0,0.0,0,0,1.0,0.0,True
+repair5f_static_c100_b100_w100_d095,decay 0.95 only,warehouse-10-20-10-2-1,100,20,0,20,0,0.0,0.0,0,0,1.0,0.0,True
+repair5f_static_c100_b100_w075_d100,wait 0.75 only,maze-32-32-4,50,20,6,10,4,-0.0004780790018500014,0.0,0,0,0.5,0.2,False
+repair5e5_crossfold_utility_reranker_shuffled_labels_diagnostic,Repair5E5 shuffled diagnostic,maze-32-32-4,50,20,5,9,6,-0.000498008484000012,0.0,0,0,0.45,0.3,False
+repair5f_static_c100_b100_w100_d090,decay 0.90 only,random-32-32-20,100,20,7,6,7,-0.0005353474037000094,0.0,0,0,0.3,0.35,False
+repair5f_f4_deterministic_random_candidate_diagnostic,deterministic random candidate diagnostic,random-32-32-20,50,20,2,17,1,-0.0007380532190000011,0.0,0,0,0.85,0.05,True
+repair5f_static_c100_b100_w100_d090,decay 0.90 only,maze-32-32-4,50,20,6,9,5,-0.0010235583650500036,0.0,0,0,0.45,0.25,False
+repair5f_static_c100_b100_w100_d095,decay 0.95 only,maze-32-32-4,100,20,11,0,9,-0.001323388331999986,-0.0021026808500000937,0,0,0.0,0.45,False
+repair5f_static_c100_b100_w100_d090,decay 0.90 only,maze-32-32-4,100,20,10,1,9,-0.0013592481940000178,-0.001029601030000049,0,0,0.05,0.45,False
+repair5f_static_c100_b100_w075_d095,wait 0.75 + decay 0.95,random-32-32-20,100,20,8,6,6,-0.0027636814639999787,0.0,0,0,0.3,0.3,False
+repair5e5_crossfold_utility_reranker_shuffled_labels_diagnostic,Repair5E5 shuffled diagnostic,random-32-32-20,100,20,10,5,5,-0.003277136690650001,-0.0008771929799999967,0,0,0.25,0.25,False
+repair5f_static_c100_b100_w075_d095,wait 0.75 + decay 0.95,maze-32-32-4,100,20,8,2,10,-0.0038100081755000235,0.0004652244749999701,0,0,0.1,0.5,False
+repair5f_static_c100_b100_w075_d100,wait 0.75 only,random-32-32-20,100,20,9,4,7,-0.005163833772650017,0.0,0,0,0.2,0.35,False
+repair5f_f4_deterministic_random_candidate_diagnostic,deterministic random candidate diagnostic,random-32-32-20,100,20,9,4,7,-0.005542520278300022,0.0,0,0,0.2,0.35,False

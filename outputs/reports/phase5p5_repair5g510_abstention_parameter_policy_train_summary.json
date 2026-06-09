@@ -1,0 +1,14 @@
+{
+  "aaai_ready": false,
+  "blocked_reasons": [
+    "confidence_targets_v4_training_gate_failed",
+    "feature_signal_v2_failed_continue_feature_design"
+  ],
+  "decision": "abstention_parameter_policy_training_skipped_gate_failed",
+  "model_json": "",
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g510_abstention_parameter_policy_train_summary_v1",
+  "training_skipped": true
+}

@@ -1,0 +1,45 @@
+{
+  "aaai_ready": false,
+  "best_residual_model": {
+    "aaai_ready": false,
+    "context_aggregate_update_error": 1.198711110368951,
+    "dev_rows": 3648,
+    "edge_residual_mae": 1.2279655120635737,
+    "edge_residual_rank_correlation": 0.6275527081087889,
+    "heldout_map_family_update_error": "",
+    "learned_runtime_policy_validated": false,
+    "model": "fixed_g522_best_region_proxy",
+    "phase5p5_allowed": false,
+    "phase6_allowed": false,
+    "region_conditioned_update_error": "",
+    "runtime_claim_allowed": false,
+    "target": "target_edge_residual_vs_additive"
+  },
+  "bootstrap_samples_requested": 300,
+  "decision": "edge_update_surrogates_evaluated",
+  "dev_rows": 3648,
+  "edge_update_teacher_proxy_only": true,
+  "learned_runtime_policy_validated": false,
+  "models": [
+    "additive_baseline_proxy",
+    "fixed_g522_best_region_proxy",
+    "param_only_ablation",
+    "ridge_residual_model",
+    "shuffled_label_control",
+    "small_mlp_if_torch_available",
+    "trace_only_ablation"
+  ],
+  "neural_readiness_use": "offline_residual_modeling_only_no_solver_policy_claim",
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g524_edge_update_surrogates_summary_v1",
+  "targets": [
+    "target_edge_oracle_dual_channel_update",
+    "target_edge_residual_vs_additive",
+    "target_edge_flow_shield_component",
+    "target_edge_congestion_component"
+  ],
+  "teacher_rows": 19200,
+  "train_rows": 15552
+}

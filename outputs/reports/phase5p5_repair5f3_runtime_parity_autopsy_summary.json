@@ -1,0 +1,787 @@
+{
+  "case_mismatch_examples": [
+    {
+      "agents": 50,
+      "classifications": [
+        "runtime artifact loaded when it should have been bypassed",
+        "wrapper/method alias mismatch"
+      ],
+      "map": "maze-32-32-4",
+      "method": "always_additive_defer",
+      "outcome_exact": true,
+      "seed": 21
+    },
+    {
+      "agents": 50,
+      "classifications": [
+        "runtime artifact loaded when it should have been bypassed",
+        "wrapper/method alias mismatch"
+      ],
+      "map": "maze-32-32-4",
+      "method": "always_additive_defer",
+      "outcome_exact": true,
+      "seed": 22
+    },
+    {
+      "agents": 50,
+      "classifications": [
+        "runtime artifact loaded when it should have been bypassed",
+        "wrapper/method alias mismatch"
+      ],
+      "map": "maze-32-32-4",
+      "method": "always_additive_defer",
+      "outcome_exact": true,
+      "seed": 23
+    },
+    {
+      "agents": 50,
+      "classifications": [
+        "runtime artifact loaded when it should have been bypassed",
+        "wrapper/method alias mismatch"
+      ],
+      "map": "maze-32-32-4",
+      "method": "always_additive_defer",
+      "outcome_exact": true,
+      "seed": 24
+    },
+    {
+      "agents": 50,
+      "classifications": [
+        "runtime artifact loaded when it should have been bypassed",
+        "wrapper/method alias mismatch"
+      ],
+      "map": "maze-32-32-4",
+      "method": "always_additive_defer",
+      "outcome_exact": true,
+      "seed": 25
+    },
+    {
+      "agents": 100,
+      "classifications": [
+        "runtime artifact loaded when it should have been bypassed",
+        "wrapper/method alias mismatch"
+      ],
+      "map": "maze-32-32-4",
+      "method": "always_additive_defer",
+      "outcome_exact": true,
+      "seed": 21
+    },
+    {
+      "agents": 100,
+      "classifications": [
+        "runtime artifact loaded when it should have been bypassed",
+        "wrapper/method alias mismatch"
+      ],
+      "map": "maze-32-32-4",
+      "method": "always_additive_defer",
+      "outcome_exact": true,
+      "seed": 22
+    },
+    {
+      "agents": 100,
+      "classifications": [
+        "runtime artifact loaded when it should have been bypassed",
+        "wrapper/method alias mismatch"
+      ],
+      "map": "maze-32-32-4",
+      "method": "always_additive_defer",
+      "outcome_exact": true,
+      "seed": 23
+    },
+    {
+      "agents": 100,
+      "classifications": [
+        "runtime artifact loaded when it should have been bypassed",
+        "wrapper/method alias mismatch"
+      ],
+      "map": "maze-32-32-4",
+      "method": "always_additive_defer",
+      "outcome_exact": true,
+      "seed": 24
+    },
+    {
+      "agents": 100,
+      "classifications": [
+        "runtime artifact loaded when it should have been bypassed",
+        "wrapper/method alias mismatch"
+      ],
+      "map": "maze-32-32-4",
+      "method": "always_additive_defer",
+      "outcome_exact": true,
+      "seed": 25
+    },
+    {
+      "agents": 50,
+      "classifications": [
+        "runtime artifact loaded when it should have been bypassed",
+        "wrapper/method alias mismatch"
+      ],
+      "map": "random-32-32-20",
+      "method": "always_additive_defer",
+      "outcome_exact": true,
+      "seed": 21
+    },
+    {
+      "agents": 50,
+      "classifications": [
+        "runtime artifact loaded when it should have been bypassed",
+        "wrapper/method alias mismatch"
+      ],
+      "map": "random-32-32-20",
+      "method": "always_additive_defer",
+      "outcome_exact": true,
+      "seed": 22
+    },
+    {
+      "agents": 50,
+      "classifications": [
+        "runtime artifact loaded when it should have been bypassed",
+        "wrapper/method alias mismatch"
+      ],
+      "map": "random-32-32-20",
+      "method": "always_additive_defer",
+      "outcome_exact": true,
+      "seed": 23
+    },
+    {
+      "agents": 50,
+      "classifications": [
+        "runtime artifact loaded when it should have been bypassed",
+        "wrapper/method alias mismatch"
+      ],
+      "map": "random-32-32-20",
+      "method": "always_additive_defer",
+      "outcome_exact": true,
+      "seed": 24
+    },
+    {
+      "agents": 50,
+      "classifications": [
+        "runtime artifact loaded when it should have been bypassed",
+        "wrapper/method alias mismatch"
+      ],
+      "map": "random-32-32-20",
+      "method": "always_additive_defer",
+      "outcome_exact": true,
+      "seed": 25
+    },
+    {
+      "agents": 100,
+      "classifications": [
+        "runtime artifact loaded when it should have been bypassed",
+        "wrapper/method alias mismatch"
+      ],
+      "map": "random-32-32-20",
+      "method": "always_additive_defer",
+      "outcome_exact": true,
+      "seed": 21
+    },
+    {
+      "agents": 100,
+      "classifications": [
+        "runtime artifact loaded when it should have been bypassed",
+        "wrapper/method alias mismatch"
+      ],
+      "map": "random-32-32-20",
+      "method": "always_additive_defer",
+      "outcome_exact": true,
+      "seed": 22
+    },
+    {
+      "agents": 100,
+      "classifications": [
+        "runtime artifact loaded when it should have been bypassed",
+        "wrapper/method alias mismatch"
+      ],
+      "map": "random-32-32-20",
+      "method": "always_additive_defer",
+      "outcome_exact": true,
+      "seed": 23
+    },
+    {
+      "agents": 100,
+      "classifications": [
+        "runtime artifact loaded when it should have been bypassed",
+        "wrapper/method alias mismatch"
+      ],
+      "map": "random-32-32-20",
+      "method": "always_additive_defer",
+      "outcome_exact": true,
+      "seed": 24
+    },
+    {
+      "agents": 100,
+      "classifications": [
+        "runtime artifact loaded when it should have been bypassed",
+        "wrapper/method alias mismatch"
+      ],
+      "map": "random-32-32-20",
+      "method": "always_additive_defer",
+      "outcome_exact": true,
+      "seed": 25
+    },
+    {
+      "agents": 50,
+      "classifications": [
+        "runtime artifact loaded when it should have been bypassed",
+        "wrapper/method alias mismatch"
+      ],
+      "map": "warehouse-10-20-10-2-1",
+      "method": "always_additive_defer",
+      "outcome_exact": true,
+      "seed": 21
+    },
+    {
+      "agents": 50,
+      "classifications": [
+        "runtime artifact loaded when it should have been bypassed",
+        "wrapper/method alias mismatch"
+      ],
+      "map": "warehouse-10-20-10-2-1",
+      "method": "always_additive_defer",
+      "outcome_exact": true,
+      "seed": 22
+    },
+    {
+      "agents": 50,
+      "classifications": [
+        "runtime artifact loaded when it should have been bypassed",
+        "wrapper/method alias mismatch"
+      ],
+      "map": "warehouse-10-20-10-2-1",
+      "method": "always_additive_defer",
+      "outcome_exact": true,
+      "seed": 23
+    },
+    {
+      "agents": 50,
+      "classifications": [
+        "runtime artifact loaded when it should have been bypassed",
+        "wrapper/method alias mismatch"
+      ],
+      "map": "warehouse-10-20-10-2-1",
+      "method": "always_additive_defer",
+      "outcome_exact": true,
+      "seed": 24
+    },
+    {
+      "agents": 50,
+      "classifications": [
+        "runtime artifact loaded when it should have been bypassed",
+        "wrapper/method alias mismatch"
+      ],
+      "map": "warehouse-10-20-10-2-1",
+      "method": "always_additive_defer",
+      "outcome_exact": true,
+      "seed": 25
+    },
+    {
+      "agents": 100,
+      "classifications": [
+        "finite/nonfinite ratio mismatch",
+        "lower_bound mismatch",
+        "makespan mismatch",
+        "runtime artifact loaded when it should have been bypassed",
+        "success mismatch",
+        "sum_of_loss mismatch",
+        "time-budget / nondeterministic rerun difference",
+        "wrapper/method alias mismatch"
+      ],
+      "map": "warehouse-10-20-10-2-1",
+      "method": "always_additive_defer",
+      "outcome_exact": false,
+      "seed": 21
+    },
+    {
+      "agents": 100,
+      "classifications": [
+        "runtime artifact loaded when it should have been bypassed",
+        "wrapper/method alias mismatch"
+      ],
+      "map": "warehouse-10-20-10-2-1",
+      "method": "always_additive_defer",
+      "outcome_exact": true,
+      "seed": 22
+    },
+    {
+      "agents": 100,
+      "classifications": [
+        "runtime artifact loaded when it should have been bypassed",
+        "wrapper/method alias mismatch"
+      ],
+      "map": "warehouse-10-20-10-2-1",
+      "method": "always_additive_defer",
+      "outcome_exact": true,
+      "seed": 23
+    },
+    {
+      "agents": 100,
+      "classifications": [
+        "runtime artifact loaded when it should have been bypassed",
+        "wrapper/method alias mismatch"
+      ],
+      "map": "warehouse-10-20-10-2-1",
+      "method": "always_additive_defer",
+      "outcome_exact": true,
+      "seed": 24
+    },
+    {
+      "agents": 100,
+      "classifications": [
+        "runtime artifact loaded when it should have been bypassed",
+        "wrapper/method alias mismatch"
+      ],
+      "map": "warehouse-10-20-10-2-1",
+      "method": "always_additive_defer",
+      "outcome_exact": true,
+      "seed": 25
+    },
+    {
+      "agents": 50,
+      "classifications": [
+        "runtime artifact loaded when it should have been bypassed",
+        "update log / feature extraction executed in a parity path",
+        "wrapper/method alias mismatch"
+      ],
+      "map": "maze-32-32-4",
+      "method": "repair5f_candidate_additive_ltm",
+      "outcome_exact": true,
+      "seed": 21
+    },
+    {
+      "agents": 50,
+      "classifications": [
+        "runtime artifact loaded when it should have been bypassed",
+        "update log / feature extraction executed in a parity path",
+        "wrapper/method alias mismatch"
+      ],
+      "map": "maze-32-32-4",
+      "method": "repair5f_candidate_additive_ltm",
+      "outcome_exact": true,
+      "seed": 22
+    },
+    {
+      "agents": 50,
+      "classifications": [
+        "runtime artifact loaded when it should have been bypassed",
+        "update log / feature extraction executed in a parity path",
+        "wrapper/method alias mismatch"
+      ],
+      "map": "maze-32-32-4",
+      "method": "repair5f_candidate_additive_ltm",
+      "outcome_exact": true,
+      "seed": 23
+    },
+    {
+      "agents": 50,
+      "classifications": [
+        "runtime artifact loaded when it should have been bypassed",
+        "update log / feature extraction executed in a parity path",
+        "wrapper/method alias mismatch"
+      ],
+      "map": "maze-32-32-4",
+      "method": "repair5f_candidate_additive_ltm",
+      "outcome_exact": true,
+      "seed": 24
+    },
+    {
+      "agents": 50,
+      "classifications": [
+        "runtime artifact loaded when it should have been bypassed",
+        "update log / feature extraction executed in a parity path",
+        "wrapper/method alias mismatch"
+      ],
+      "map": "maze-32-32-4",
+      "method": "repair5f_candidate_additive_ltm",
+      "outcome_exact": true,
+      "seed": 25
+    },
+    {
+      "agents": 100,
+      "classifications": [
+        "runtime artifact loaded when it should have been bypassed",
+        "update log / feature extraction executed in a parity path",
+        "wrapper/method alias mismatch"
+      ],
+      "map": "maze-32-32-4",
+      "method": "repair5f_candidate_additive_ltm",
+      "outcome_exact": true,
+      "seed": 21
+    },
+    {
+      "agents": 100,
+      "classifications": [
+        "runtime artifact loaded when it should have been bypassed",
+        "update log / feature extraction executed in a parity path",
+        "wrapper/method alias mismatch"
+      ],
+      "map": "maze-32-32-4",
+      "method": "repair5f_candidate_additive_ltm",
+      "outcome_exact": true,
+      "seed": 22
+    },
+    {
+      "agents": 100,
+      "classifications": [
+        "runtime artifact loaded when it should have been bypassed",
+        "update log / feature extraction executed in a parity path",
+        "wrapper/method alias mismatch"
+      ],
+      "map": "maze-32-32-4",
+      "method": "repair5f_candidate_additive_ltm",
+      "outcome_exact": true,
+      "seed": 23
+    },
+    {
+      "agents": 100,
+      "classifications": [
+        "runtime artifact loaded when it should have been bypassed",
+        "update log / feature extraction executed in a parity path",
+        "wrapper/method alias mismatch"
+      ],
+      "map": "maze-32-32-4",
+      "method": "repair5f_candidate_additive_ltm",
+      "outcome_exact": true,
+      "seed": 24
+    },
+    {
+      "agents": 100,
+      "classifications": [
+        "runtime artifact loaded when it should have been bypassed",
+        "update log / feature extraction executed in a parity path",
+        "wrapper/method alias mismatch"
+      ],
+      "map": "maze-32-32-4",
+      "method": "repair5f_candidate_additive_ltm",
+      "outcome_exact": true,
+      "seed": 25
+    },
+    {
+      "agents": 50,
+      "classifications": [
+        "runtime artifact loaded when it should have been bypassed",
+        "update log / feature extraction executed in a parity path",
+        "wrapper/method alias mismatch"
+      ],
+      "map": "random-32-32-20",
+      "method": "repair5f_candidate_additive_ltm",
+      "outcome_exact": true,
+      "seed": 21
+    },
+    {
+      "agents": 50,
+      "classifications": [
+        "runtime artifact loaded when it should have been bypassed",
+        "update log / feature extraction executed in a parity path",
+        "wrapper/method alias mismatch"
+      ],
+      "map": "random-32-32-20",
+      "method": "repair5f_candidate_additive_ltm",
+      "outcome_exact": true,
+      "seed": 22
+    },
+    {
+      "agents": 50,
+      "classifications": [
+        "runtime artifact loaded when it should have been bypassed",
+        "update log / feature extraction executed in a parity path",
+        "wrapper/method alias mismatch"
+      ],
+      "map": "random-32-32-20",
+      "method": "repair5f_candidate_additive_ltm",
+      "outcome_exact": true,
+      "seed": 23
+    },
+    {
+      "agents": 50,
+      "classifications": [
+        "runtime artifact loaded when it should have been bypassed",
+        "update log / feature extraction executed in a parity path",
+        "wrapper/method alias mismatch"
+      ],
+      "map": "random-32-32-20",
+      "method": "repair5f_candidate_additive_ltm",
+      "outcome_exact": true,
+      "seed": 24
+    },
+    {
+      "agents": 50,
+      "classifications": [
+        "runtime artifact loaded when it should have been bypassed",
+        "update log / feature extraction executed in a parity path",
+        "wrapper/method alias mismatch"
+      ],
+      "map": "random-32-32-20",
+      "method": "repair5f_candidate_additive_ltm",
+      "outcome_exact": true,
+      "seed": 25
+    },
+    {
+      "agents": 100,
+      "classifications": [
+        "runtime artifact loaded when it should have been bypassed",
+        "update log / feature extraction executed in a parity path",
+        "wrapper/method alias mismatch"
+      ],
+      "map": "random-32-32-20",
+      "method": "repair5f_candidate_additive_ltm",
+      "outcome_exact": true,
+      "seed": 21
+    },
+    {
+      "agents": 100,
+      "classifications": [
+        "runtime artifact loaded when it should have been bypassed",
+        "update log / feature extraction executed in a parity path",
+        "wrapper/method alias mismatch"
+      ],
+      "map": "random-32-32-20",
+      "method": "repair5f_candidate_additive_ltm",
+      "outcome_exact": true,
+      "seed": 22
+    },
+    {
+      "agents": 100,
+      "classifications": [
+        "runtime artifact loaded when it should have been bypassed",
+        "update log / feature extraction executed in a parity path",
+        "wrapper/method alias mismatch"
+      ],
+      "map": "random-32-32-20",
+      "method": "repair5f_candidate_additive_ltm",
+      "outcome_exact": true,
+      "seed": 23
+    },
+    {
+      "agents": 100,
+      "classifications": [
+        "runtime artifact loaded when it should have been bypassed",
+        "update log / feature extraction executed in a parity path",
+        "wrapper/method alias mismatch"
+      ],
+      "map": "random-32-32-20",
+      "method": "repair5f_candidate_additive_ltm",
+      "outcome_exact": true,
+      "seed": 24
+    },
+    {
+      "agents": 100,
+      "classifications": [
+        "runtime artifact loaded when it should have been bypassed",
+        "update log / feature extraction executed in a parity path",
+        "wrapper/method alias mismatch"
+      ],
+      "map": "random-32-32-20",
+      "method": "repair5f_candidate_additive_ltm",
+      "outcome_exact": true,
+      "seed": 25
+    }
+  ],
+  "classification_counts": {
+    "finite/nonfinite ratio mismatch": 3,
+    "lower_bound mismatch": 3,
+    "makespan mismatch": 3,
+    "runtime artifact loaded when it should have been bypassed": 90,
+    "success mismatch": 6,
+    "sum_of_loss mismatch": 3,
+    "time-budget / nondeterministic rerun difference": 19,
+    "update log / feature extraction executed in a parity path": 30,
+    "wrapper/method alias mismatch": 303
+  },
+  "core_mismatch_case_count": 3,
+  "core_mismatch_cases": [
+    {
+      "agents": 100,
+      "classifications": [
+        "finite/nonfinite ratio mismatch",
+        "lower_bound mismatch",
+        "makespan mismatch",
+        "runtime artifact loaded when it should have been bypassed",
+        "success mismatch",
+        "sum_of_loss mismatch",
+        "time-budget / nondeterministic rerun difference",
+        "wrapper/method alias mismatch"
+      ],
+      "map": "warehouse-10-20-10-2-1",
+      "method": "always_additive_defer",
+      "outcome_exact": false,
+      "seed": 21
+    },
+    {
+      "agents": 100,
+      "classifications": [
+        "finite/nonfinite ratio mismatch",
+        "lower_bound mismatch",
+        "makespan mismatch",
+        "runtime artifact loaded when it should have been bypassed",
+        "success mismatch",
+        "sum_of_loss mismatch",
+        "time-budget / nondeterministic rerun difference",
+        "update log / feature extraction executed in a parity path",
+        "wrapper/method alias mismatch"
+      ],
+      "map": "warehouse-10-20-10-2-1",
+      "method": "repair5f_candidate_additive_ltm",
+      "outcome_exact": false,
+      "seed": 21
+    },
+    {
+      "agents": 100,
+      "classifications": [
+        "finite/nonfinite ratio mismatch",
+        "lower_bound mismatch",
+        "makespan mismatch",
+        "runtime artifact loaded when it should have been bypassed",
+        "success mismatch",
+        "sum_of_loss mismatch",
+        "time-budget / nondeterministic rerun difference",
+        "wrapper/method alias mismatch"
+      ],
+      "map": "warehouse-10-20-10-2-1",
+      "method": "repair5f_bounded_updateparam_selector_force_additive_parity",
+      "outcome_exact": false,
+      "seed": 21
+    }
+  ],
+  "core_outcome_fields": [
+    "success",
+    "feasible",
+    "sum_of_loss",
+    "lower_bound",
+    "sum_of_loss_ratio",
+    "makespan"
+  ],
+  "core_outcome_parity_exact_by_method": {
+    "always_additive_defer": false,
+    "laur_disable": false,
+    "laur_force_additive_direct": false,
+    "repair5f_bounded_updateparam_selector_force_additive_parity": false,
+    "repair5f_candidate_additive_ltm": false
+  },
+  "created_at": "2026-06-02T14:38:18.953000",
+  "diagnostic_only": true,
+  "duplicate_key_count": 0,
+  "duplicate_raw_rows_dropped": 0,
+  "effort_fields": [
+    "returned_solutions_count",
+    "ltm_iterations",
+    "expanded_nodes",
+    "high_level_expansions",
+    "low_level_pibt_calls"
+  ],
+  "eval_summary_runtime_gates": {
+    "exact_additive_candidate_parity_exact": false,
+    "force_additive_parity_exact": false,
+    "phase5p5_allowed_false": true,
+    "phase6_allowed_false": true,
+    "runtime_selector_beats_random_diagnostic": true,
+    "runtime_selector_beats_shuffled_utility_diagnostic": true,
+    "runtime_selector_better_gt_worse": true,
+    "runtime_selector_does_not_collapse_to_additive_parity": true,
+    "runtime_selector_improves_over_e5_real_selector": true,
+    "runtime_selector_mean_delta_lt_0": true,
+    "runtime_selector_ratio_worse_groups_le_1": true,
+    "runtime_selector_success_worse_groups_eq_0": true,
+    "support_final_leakage_false": true
+  },
+  "exact_additive_candidate_parity_exact": false,
+  "feature_extraction_rows_by_method": {
+    "always_additive_defer": 0,
+    "laur_disable": 0,
+    "laur_force_additive_direct": 0,
+    "repair5f_bounded_updateparam_selector_force_additive_parity": 0,
+    "repair5f_candidate_additive_ltm": 103
+  },
+  "force_additive_parity_exact": false,
+  "inputs": {
+    "commands_jsonl": "outputs\\logs\\phase5p5_repair5f_runtime_export_eval\\phase5p5_repair5f_runtime_export_eval_commands.jsonl",
+    "eval_summary_json": "outputs\\reports\\phase5p5_repair5f_runtime_export_eval_summary.json",
+    "laur_updates_jsonl": "outputs\\logs\\phase5p5_repair5f_runtime_export_eval\\phase5p5_repair5f_runtime_export_eval_laur_updates.jsonl",
+    "paired_csv": "outputs\\tables\\phase5p5_repair5f_runtime_export_eval_paired.csv",
+    "raw_jsonl": "outputs\\logs\\phase5p5_repair5f_runtime_export_eval\\phase5p5_repair5f_runtime_export_eval.jsonl",
+    "table_audit_summary_json": "outputs\\reports\\phase5p5_repair5f_runtime_vs_table_audit_summary.json"
+  },
+  "laur_disable_parity_exact": false,
+  "laur_force_additive_direct_parity_exact": false,
+  "method_present": {
+    "always_additive_defer": true,
+    "laur_disable": false,
+    "laur_force_additive_direct": false,
+    "repair5f_bounded_updateparam_selector_force_additive_parity": true,
+    "repair5f_candidate_additive_ltm": true
+  },
+  "mismatch_counts_by_method": {
+    "always_additive_defer": 162,
+    "repair5f_bounded_updateparam_selector_force_additive_parity": 162,
+    "repair5f_candidate_additive_ltm": 136
+  },
+  "mismatch_rows": 460,
+  "outputs": {
+    "mismatch_csv": "outputs\\tables\\phase5p5_repair5f3_runtime_parity_mismatches.csv",
+    "report": "outputs\\reports\\phase5p5_repair5f3_runtime_parity_autopsy.md",
+    "summary_json": "outputs\\reports\\phase5p5_repair5f3_runtime_parity_autopsy_summary.json"
+  },
+  "paired_csv_rows": 270,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "raw_rows_after_dedupe": 300,
+  "raw_rows_before_dedupe": 300,
+  "reported_fields": [
+    "success",
+    "feasible",
+    "sum_of_loss",
+    "lower_bound",
+    "sum_of_loss_ratio",
+    "makespan",
+    "returned_solutions_count",
+    "ltm_iterations",
+    "expanded_nodes",
+    "high_level_expansions",
+    "low_level_pibt_calls",
+    "selected_candidate_id",
+    "laur_update_mode",
+    "laur_force_additive",
+    "laur_model_path",
+    "method_alias",
+    "return_code",
+    "command_line"
+  ],
+  "runtime_vs_table_audit": {
+    "created_at": "2026-06-02T13:31:12.670103",
+    "diagnostic_only": true,
+    "exact_additive_candidate_parity_exact": false,
+    "force_additive_parity_exact": false,
+    "inputs": {
+      "runtime_jsonl": "outputs\\logs\\phase5p5_repair5f_runtime_export_eval\\phase5p5_repair5f_runtime_export_eval.jsonl",
+      "runtime_laur_updates_jsonl": "outputs\\logs\\phase5p5_repair5f_runtime_export_eval\\phase5p5_repair5f_runtime_export_eval_laur_updates.jsonl",
+      "table_decisions_csv": "outputs\\tables\\phase5p5_repair5f_selector_simulation_decisions.csv",
+      "table_paired_csv": "outputs\\tables\\phase5p5_repair5f_selector_simulation_paired.csv"
+    },
+    "mismatch_classification_counts": {},
+    "mismatch_count": 0,
+    "mismatch_examples": [],
+    "outcome_mismatch_count": 0,
+    "outputs": {
+      "mismatches_csv": "outputs\\tables\\phase5p5_repair5f_runtime_vs_table_mismatches.csv",
+      "report": "outputs\\reports\\phase5p5_repair5f_runtime_vs_table_audit.md",
+      "summary_json": "outputs\\reports\\phase5p5_repair5f_runtime_vs_table_audit_summary.json"
+    },
+    "phase5p5_allowed": false,
+    "phase6_allowed": false,
+    "policy_mismatch_count": 0,
+    "runtime_outcomes_match_table_when_deterministic": true,
+    "runtime_selected_candidate_matches_table_policy": true,
+    "runtime_selector_update_cases": 30,
+    "runtime_updateparams_match_artifact": true,
+    "schema_version": "phase5p5_repair5f_runtime_vs_table_audit_v1",
+    "table_decision_rows": 30
+  },
+  "schema_version": "phase5p5_repair5f3_runtime_parity_autopsy_v1",
+  "update_log_counts_by_method": {
+    "always_additive_defer": 0,
+    "laur_disable": 0,
+    "laur_force_additive_direct": 0,
+    "repair5f_bounded_updateparam_selector_force_additive_parity": 0,
+    "repair5f_candidate_additive_ltm": 103
+  }
+}

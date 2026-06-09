@@ -1,0 +1,14 @@
+better,bootstrap,equal,mean_delta_ratio_vs_ltm,median_delta_ratio_vs_ltm,method,ratio_worse_than_ltm_groups,rows,success_worse_than_ltm_groups,worse
+1,"{'mean': 0.0, 'ci_low': 0.0, 'ci_high': 0.0, 'prob_mean_lt_0': 0.0, 'samples': 2000}",53,0.0,0.0,always_additive_defer,0,60,0,3
+1,"{'mean': 0.0, 'ci_low': 0.0, 'ci_high': 0.0, 'prob_mean_lt_0': 0.0, 'samples': 2000}",53,0.0,0.0,laur_disable,0,60,0,3
+1,"{'mean': 0.0, 'ci_low': 0.0, 'ci_high': 0.0, 'prob_mean_lt_0': 0.0, 'samples': 2000}",52,0.0,0.0,laur_force_additive_direct,0,60,0,4
+0,"{'mean': 0.0, 'ci_low': 0.0, 'ci_high': 0.0, 'prob_mean_lt_0': 0.0, 'samples': 2000}",53,0.0,0.0,repair5f_candidate_additive_ltm,0,60,0,3
+35,"{'mean': -0.02232529495036001, 'ci_low': -0.029478286439480014, 'ci_high': -0.015311560357279996, 'prob_mean_lt_0': 1.0, 'samples': 2000}",14,-0.02232529495036001,-0.016845130315000012,repair5g2_best_frozen_static_candidate,0,60,0,8
+35,"{'mean': -0.026533959629559997, 'ci_low': -0.034115594257359994, 'ci_high': -0.019110226910960003, 'prob_mean_lt_0': 1.0, 'samples': 2000}",14,-0.026533959629559997,-0.028063703265000073,repair5g2_frozen_static_or_selector,0,60,0,9
+3,"{'mean': -0.0003265706005882348, 'ci_low': -0.0009797118017647044, 'ci_high': 0.0, 'prob_mean_lt_0': 0.623, 'samples': 2000}",50,-0.0003265706005882348,0.0,repair5g5_contextual_flow_shield_selector_disable,0,60,0,5
+2,"{'mean': 0.0, 'ci_low': 0.0, 'ci_high': 0.0, 'prob_mean_lt_0': 0.0, 'samples': 2000}",51,0.0,0.0,repair5g5_contextual_flow_shield_selector_force_additive_parity,0,60,0,5
+34,"{'mean': -0.020724342164560004, 'ci_low': -0.028100925153319998, 'ci_high': -0.01336225128236, 'prob_mean_lt_0': 1.0, 'samples': 2000}",14,-0.020724342164560004,-0.016423187814999962,repair5g5_contextual_flow_shield_selector_random_feature_diagnostic,0,60,0,10
+8,"{'mean': 0.00350549546894118, 'ci_low': 0.000277532217098031, 'ci_high': 0.0072703553032941485, 'prob_mean_lt_0': 0.014, 'samples': 2000}",27,0.00350549546894118,0.0,repair5g5_contextual_flow_shield_selector_runtime,2,60,0,23
+34,"{'mean': -0.020724342164560004, 'ci_low': -0.028100925153319998, 'ci_high': -0.01336225128236, 'prob_mean_lt_0': 1.0, 'samples': 2000}",14,-0.020724342164560004,-0.016423187814999962,repair5g5_contextual_flow_shield_selector_shuffled_label_diagnostic,0,60,0,10
+2,"{'mean': -1.9661913333329238e-05, 'ci_low': -5.898573999998772e-05, 'ci_high': 0.0, 'prob_mean_lt_0': 0.633, 'samples': 2000}",50,-1.9661913333329238e-05,0.0,repair5g_dual_additive_parity,0,60,0,5
+4,"{'mean': -0.00035315716419999534, 'ci_low': -0.0010394163409999902, 'ci_high': 0.0, 'prob_mean_lt_0': 0.872, 'samples': 2000}",48,-0.00035315716419999534,0.0,repair5g_dual_c_equiv_additive,0,60,0,6

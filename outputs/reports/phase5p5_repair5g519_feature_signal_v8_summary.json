@@ -1,0 +1,182 @@
+{
+  "aaai_ready": false,
+  "decision": "feature_signal_v8_passed_continue_ranker_suite",
+  "feature_count": 88,
+  "feature_groups": {
+    "candidate_param_features": 23,
+    "map_context_features": 12,
+    "rich_context_features": 18,
+    "rich_x_candidate_interactions": 13,
+    "within_context_centered_features": 22
+  },
+  "forbidden_feature_count": 0,
+  "forbidden_features": [],
+  "gates": {
+    "candidate_param_features_present": true,
+    "feature_count_gt_0": true,
+    "forbidden_feature_count_eq_0": true,
+    "rich_context_features_present": true,
+    "rich_x_candidate_interactions_present": true,
+    "within_context_centered_features_present": true
+  },
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "rows": 1320,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g519_feature_signal_v8_summary_v1",
+  "top_abs_corr_delta": [
+    {
+      "abs_corr_delta": 0.49536863346559157,
+      "abs_corr_harmful": 0.2588371752894164,
+      "feature": "feature_centered_interaction_rich_progress_ratio_x_alpha_flow_progress"
+    },
+    {
+      "abs_corr_delta": 0.48152893142450476,
+      "abs_corr_harmful": 0.2556532369883307,
+      "feature": "feature_candidate_alpha_flow_progress"
+    },
+    {
+      "abs_corr_delta": 0.48152893142450476,
+      "abs_corr_harmful": 0.2556532369883307,
+      "feature": "feature_centered_candidate_alpha_flow_progress"
+    },
+    {
+      "abs_corr_delta": 0.46503530175249097,
+      "abs_corr_harmful": 0.28013691384360323,
+      "feature": "feature_interaction_rich_progress_ratio_x_alpha_flow_progress"
+    },
+    {
+      "abs_corr_delta": 0.43067119605464355,
+      "abs_corr_harmful": 0.22103010490653674,
+      "feature": "feature_candidate_max_flow_shield"
+    },
+    {
+      "abs_corr_delta": 0.43067119605464355,
+      "abs_corr_harmful": 0.22103010490653674,
+      "feature": "feature_centered_candidate_max_flow_shield"
+    },
+    {
+      "abs_corr_delta": 0.43067119605464355,
+      "abs_corr_harmful": 0.22103010490653674,
+      "feature": "feature_centered_interaction_rich_cost_max_x_max_flow_shield"
+    },
+    {
+      "abs_corr_delta": 0.43067119605464355,
+      "abs_corr_harmful": 0.22103010490653674,
+      "feature": "feature_interaction_rich_cost_max_x_max_flow_shield"
+    },
+    {
+      "abs_corr_delta": 0.40931149522084026,
+      "abs_corr_harmful": 0.21875082080561128,
+      "feature": "feature_candidate_flow_shield_beta"
+    },
+    {
+      "abs_corr_delta": 0.40931149522084026,
+      "abs_corr_harmful": 0.21875082080561145,
+      "feature": "feature_centered_candidate_flow_shield_beta"
+    },
+    {
+      "abs_corr_delta": 0.3290149689309056,
+      "abs_corr_harmful": 0.15991141863256494,
+      "feature": "feature_candidate_family_additive"
+    },
+    {
+      "abs_corr_delta": 0.3290149689309056,
+      "abs_corr_harmful": 0.15991141863256494,
+      "feature": "feature_candidate_is_additive_fallback"
+    },
+    {
+      "abs_corr_delta": 0.31145482795518437,
+      "abs_corr_harmful": 0.16736491695865904,
+      "feature": "feature_candidate_c_only"
+    },
+    {
+      "abs_corr_delta": 0.31145482795518425,
+      "abs_corr_harmful": 0.16736491695865893,
+      "feature": "feature_centered_candidate_c_only"
+    },
+    {
+      "abs_corr_delta": 0.30303761559825987,
+      "abs_corr_harmful": 0.19933022564605513,
+      "feature": "feature_candidate_family_static_boundary"
+    }
+  ],
+  "top_abs_corr_harmful": [
+    {
+      "abs_corr_delta": 0.09376132014345898,
+      "abs_corr_harmful": 0.5664764093835335,
+      "feature": "feature_map_family_warehouse"
+    },
+    {
+      "abs_corr_delta": 0.09866694429318144,
+      "abs_corr_harmful": 0.5108442167185141,
+      "feature": "feature_rich_committed_per_agent"
+    },
+    {
+      "abs_corr_delta": 0.09750537026006649,
+      "abs_corr_harmful": 0.4930213710439594,
+      "feature": "feature_map_trace_events_per_agent"
+    },
+    {
+      "abs_corr_delta": 0.0990073527160534,
+      "abs_corr_harmful": 0.484936269957583,
+      "feature": "feature_interaction_rich_committed_per_agent_x_alpha_cong_committed"
+    },
+    {
+      "abs_corr_delta": 0.059413176562770315,
+      "abs_corr_harmful": 0.431657283542064,
+      "feature": "feature_rich_progress_committed_count"
+    },
+    {
+      "abs_corr_delta": 0.06381577374699808,
+      "abs_corr_harmful": 0.41268787636227067,
+      "feature": "feature_rich_committed_count"
+    },
+    {
+      "abs_corr_delta": 0.03663012754558974,
+      "abs_corr_harmful": 0.3991010069442701,
+      "feature": "feature_map_trace_events_log"
+    },
+    {
+      "abs_corr_delta": 0.06046384879332509,
+      "abs_corr_harmful": 0.386745982590826,
+      "feature": "feature_map_trace_event_count"
+    },
+    {
+      "abs_corr_delta": 0.06424720419264808,
+      "abs_corr_harmful": 0.37942164920868104,
+      "feature": "feature_rich_nonprogress_committed_count"
+    },
+    {
+      "abs_corr_delta": 0.0061385045363579775,
+      "abs_corr_harmful": 0.3468897669306589,
+      "feature": "feature_interaction_rich_blocked_per_committed_x_alpha_cong_blocked"
+    },
+    {
+      "abs_corr_delta": 0.0641251991346255,
+      "abs_corr_harmful": 0.3210438073648571,
+      "feature": "feature_rich_blocked_per_committed"
+    },
+    {
+      "abs_corr_delta": 0.06017867410716703,
+      "abs_corr_harmful": 0.29641207467743014,
+      "feature": "feature_map_family_random"
+    },
+    {
+      "abs_corr_delta": 0.06635166650182915,
+      "abs_corr_harmful": 0.29228402770074674,
+      "feature": "feature_rich_wait_per_committed"
+    },
+    {
+      "abs_corr_delta": 0.46503530175249097,
+      "abs_corr_harmful": 0.28013691384360323,
+      "feature": "feature_interaction_rich_progress_ratio_x_alpha_flow_progress"
+    },
+    {
+      "abs_corr_delta": 0.033582646036291776,
+      "abs_corr_harmful": 0.27006433470610347,
+      "feature": "feature_map_family_maze"
+    }
+  ]
+}

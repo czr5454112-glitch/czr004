@@ -1,0 +1,21 @@
+{
+  "autopsy_summary": "outputs\\reports\\phase5p5_repair5g3_protocol_failure_autopsy_summary.json",
+  "broad_validation_policy": "semantic_parity_plus_time_budget_equivalence_required",
+  "created_at": "2026-06-03T21:12:25.848367",
+  "diagnostic_only": true,
+  "gates": {
+    "autopsy_ready_for_reproducer": true,
+    "bool_as_int_gate_type_violations_zero": true,
+    "parity_policy_accepted": true,
+    "phase5p5_allowed": false,
+    "phase6_allowed": false,
+    "reproducer_passed": true,
+    "semantic_parity_mismatch_zero": true
+  },
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "policy_decision": "time_budget_equivalent_parity_accepted_for_g4_broad_validation",
+  "reproducer_summary": "outputs\\reports\\phase5p5_repair5g31_control_parity_reproducer_summary.json",
+  "schema_version": "phase5p5_repair5g31_parity_policy_summary_v1",
+  "strict_parity_restored": false
+}

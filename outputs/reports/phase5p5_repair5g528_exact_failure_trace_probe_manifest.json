@@ -1,0 +1,8 @@
+{
+  "candidate_budget_rows": 2640,
+  "context_budget_pairs": 60,
+  "raw_log": "outputs/logs/phase5p5_repair5g528_exact_failure_trace_probe/trace_exact_failure_audit.jsonl",
+  "raw_log_line_count": 2640,
+  "raw_log_sha256": "5dfd06d75961e71ef20fcf8dc5d86f9217f97cfba049c7783e93b48534c491a8",
+  "schema_version": "phase5p5_repair5g528_exact_failure_trace_probe_manifest_v1"
+}

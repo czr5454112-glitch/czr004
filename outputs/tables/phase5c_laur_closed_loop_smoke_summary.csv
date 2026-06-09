@@ -1,0 +1,55 @@
+map,agents,method,runs,successes,success_rate,ratio_mean,runtime_ms_mean,expanded_nodes_mean,low_level_pibt_calls_mean,laur_inference_count_mean,laur_inference_total_ms_mean,laur_additive_fallback_count_mean,laur_safety_disabled_count_mean,selected_rules
+maze-32-32-4,50,lacam_star,1,1,1.0,1.1807860262,3081.1392,6895.0,nan,0.0,0.0,0.0,0.0,{}
+maze-32-32-4,50,lacam_star_lau_ltm_force_additive,1,1,1.0,1.15109170306,875.3088,497.0,24650.0,3.0,0.0014,1.0,0.0,"{""additive_ltm"": 3}"
+maze-32-32-4,50,lacam_star_lau_ltm_learned_every_k2,1,1,1.0,1.15720524017,856.654,497.0,24650.0,1.0,0.1196,3.0,0.0,"{""block_light"": 1}"
+maze-32-32-4,50,lacam_star_lau_ltm_learned_every_restart,1,1,1.0,1.14104803493,891.3928,499.0,24750.0,4.0,0.4008,0.0,0.0,"{""block_light"": 2, ""commit_heavy"": 1, ""wait_light"": 1}"
+maze-32-32-4,50,lacam_star_lau_ltm_learned_no_safety,1,1,1.0,1.17947598253,892.7408,520.0,25800.0,3.0,0.3091,1.0,0.0,"{""block_light"": 2, ""commit_heavy"": 1}"
+maze-32-32-4,50,lacam_star_lau_ltm_learned_safety,1,1,1.0,1.17947598253,896.9914,520.0,25800.0,3.0,0.3062,1.0,0.0,"{""block_light"": 2, ""commit_heavy"": 1}"
+maze-32-32-4,50,lacam_star_lau_ltm_static_block_heavy,1,1,1.0,1.16026200873,830.1106,464.0,23000.0,0.0,0.0,0.0,0.0,"{""block_heavy"": 4}"
+maze-32-32-4,50,lacam_star_lau_ltm_static_decay_095,1,1,1.0,1.18122270742,854.4537,526.0,26100.0,0.0,0.0,0.0,0.0,"{""decay_095"": 4}"
+maze-32-32-4,50,lacam_star_ltm,1,1,1.0,1.15109170306,853.1518,497.0,24650.0,0.0,0.0,0.0,0.0,{}
+maze-32-32-4,100,lacam_star,1,1,1.0,1.32391355972,3113.1033,8715.0,nan,0.0,0.0,0.0,0.0,{}
+maze-32-32-4,100,lacam_star_lau_ltm_force_additive,1,1,1.0,1.27024459748,1746.065,565.0,56073.0,3.0,0.0015,1.0,0.0,"{""additive_ltm"": 3}"
+maze-32-32-4,100,lacam_star_lau_ltm_learned_every_k2,1,1,1.0,1.30634053669,1765.8056,612.0,60747.0,1.0,0.1188,3.0,0.0,"{""block_light"": 1}"
+maze-32-32-4,100,lacam_star_lau_ltm_learned_every_restart,1,1,1.0,1.24792210876,1716.5016,528.0,52384.0,4.0,0.4396,0.0,0.0,"{""block_light"": 3, ""wait_light"": 1}"
+maze-32-32-4,100,lacam_star_lau_ltm_learned_no_safety,1,1,1.0,1.24269769651,1719.278,526.0,52182.0,3.0,0.3078,1.0,0.0,"{""block_light"": 3}"
+maze-32-32-4,100,lacam_star_lau_ltm_learned_safety,1,1,1.0,1.24269769651,1718.0943,526.0,52182.0,3.0,0.326,1.0,0.0,"{""block_light"": 3}"
+maze-32-32-4,100,lacam_star_lau_ltm_static_block_heavy,1,1,1.0,1.26668249822,1700.9357,593.0,58863.0,0.0,0.0,0.0,0.0,"{""block_heavy"": 4}"
+maze-32-32-4,100,lacam_star_lau_ltm_static_decay_095,1,1,1.0,1.2624079791,1707.4488,576.0,57170.0,0.0,0.0,0.0,0.0,"{""decay_095"": 4}"
+maze-32-32-4,100,lacam_star_ltm,1,1,1.0,1.27024459748,1691.3636,565.0,56073.0,0.0,0.0,0.0,0.0,{}
+random-32-32-20,50,lacam_star,1,1,1.0,1.15269196823,3382.1655,22177.0,nan,0.0,0.0,0.0,0.0,{}
+random-32-32-20,50,lacam_star_lau_ltm_force_additive,1,1,1.0,1.13415710503,833.0879,328.0,28657.0,3.0,0.0016,1.0,0.0,"{""additive_ltm"": 3}"
+random-32-32-20,50,lacam_star_lau_ltm_learned_every_k2,1,1,1.0,1.13415710503,813.3813,333.0,30409.0,1.0,0.1188,3.0,0.0,"{""commit_heavy"": 1}"
+random-32-32-20,50,lacam_star_lau_ltm_learned_every_restart,1,1,1.0,1.13415710503,851.4853,312.0,30104.0,4.0,0.4035,0.0,0.0,"{""block_light"": 1, ""commit_heavy"": 2, ""wait_light"": 1}"
+random-32-32-20,50,lacam_star_lau_ltm_learned_no_safety,1,1,1.0,1.13415710503,849.9718,358.0,32327.0,3.0,0.3087,1.0,0.0,"{""block_light"": 1, ""commit_heavy"": 2}"
+random-32-32-20,50,lacam_star_lau_ltm_learned_safety,1,1,1.0,1.13415710503,855.0191,358.0,32327.0,3.0,0.3528,1.0,0.0,"{""block_light"": 1, ""commit_heavy"": 2}"
+random-32-32-20,50,lacam_star_lau_ltm_static_block_heavy,1,1,1.0,1.13415710503,812.0522,333.0,30415.0,0.0,0.0,0.0,0.0,"{""block_heavy"": 4}"
+random-32-32-20,50,lacam_star_lau_ltm_static_decay_095,1,1,1.0,1.13415710503,679.1014,226.0,11099.0,0.0,0.0,0.0,0.0,"{""decay_095"": 4}"
+random-32-32-20,50,lacam_star_ltm,1,1,1.0,1.13415710503,804.5497,328.0,28657.0,0.0,0.0,0.0,0.0,{}
+random-32-32-20,100,lacam_star,1,1,1.0,1.28865058088,3060.2676,4499.0,nan,0.0,0.0,0.0,0.0,{}
+random-32-32-20,100,lacam_star_lau_ltm_force_additive,1,1,1.0,1.28865058088,1368.4434,237.0,23387.0,3.0,0.0017,1.0,0.0,"{""additive_ltm"": 3}"
+random-32-32-20,100,lacam_star_lau_ltm_learned_every_k2,1,1,1.0,1.28865058088,1372.4848,244.0,25966.0,1.0,0.114,3.0,0.0,"{""block_light"": 1}"
+random-32-32-20,100,lacam_star_lau_ltm_learned_every_restart,1,1,1.0,1.28865058088,1386.2838,243.0,23886.0,4.0,0.4025,0.0,0.0,"{""block_light"": 3, ""wait_light"": 1}"
+random-32-32-20,100,lacam_star_lau_ltm_learned_no_safety,1,1,1.0,1.28865058088,1629.0402,342.0,62562.0,3.0,0.8787,1.0,0.0,"{""block_light"": 3}"
+random-32-32-20,100,lacam_star_lau_ltm_learned_safety,1,1,1.0,1.28865058088,1614.2458,342.0,62562.0,3.0,0.3045,1.0,0.0,"{""block_light"": 3}"
+random-32-32-20,100,lacam_star_lau_ltm_static_block_heavy,1,1,1.0,1.28865058088,1325.5475,238.0,23873.0,0.0,0.0,0.0,0.0,"{""block_heavy"": 4}"
+random-32-32-20,100,lacam_star_lau_ltm_static_decay_095,1,1,1.0,1.27167113494,1347.522,236.0,24472.0,0.0,0.0,0.0,0.0,"{""decay_095"": 4}"
+random-32-32-20,100,lacam_star_ltm,1,1,1.0,1.28865058088,1328.9307,237.0,23387.0,0.0,0.0,0.0,0.0,{}
+warehouse-10-20-10-2-1,50,lacam_star,1,1,1.0,1.06539339838,3096.6795,7132.0,nan,0.0,0.0,0.0,0.0,{}
+warehouse-10-20-10-2-1,50,lacam_star_lau_ltm_force_additive,1,1,1.0,1.08573801121,3883.7881,443.0,22000.0,2.0,0.0017,1.0,0.0,"{""additive_ltm"": 2}"
+warehouse-10-20-10-2-1,50,lacam_star_lau_ltm_learned_every_k2,1,1,1.0,1.08573801121,3779.3872,443.0,22000.0,1.0,0.1365,2.0,0.0,"{""block_light"": 1}"
+warehouse-10-20-10-2-1,50,lacam_star_lau_ltm_learned_every_restart,1,1,1.0,1.08573801121,3977.963,436.0,21650.0,3.0,0.4016,0.0,0.0,"{""block_light"": 3}"
+warehouse-10-20-10-2-1,50,lacam_star_lau_ltm_learned_no_safety,1,1,1.0,1.08573801121,3820.8538,443.0,22000.0,2.0,0.3362,1.0,0.0,"{""block_light"": 2}"
+warehouse-10-20-10-2-1,50,lacam_star_lau_ltm_learned_safety,1,1,1.0,1.08573801121,3920.977,443.0,22000.0,2.0,0.2563,1.0,0.0,"{""block_light"": 2}"
+warehouse-10-20-10-2-1,50,lacam_star_lau_ltm_static_block_heavy,1,1,1.0,1.08573801121,3742.1541,458.0,22750.0,0.0,0.0,0.0,0.0,"{""block_heavy"": 3}"
+warehouse-10-20-10-2-1,50,lacam_star_lau_ltm_static_decay_095,1,1,1.0,1.08573801121,3712.2927,443.0,22000.0,0.0,0.0,0.0,0.0,"{""decay_095"": 3}"
+warehouse-10-20-10-2-1,50,lacam_star_ltm,1,1,1.0,1.08573801121,3729.6586,443.0,22000.0,0.0,0.0,0.0,0.0,{}
+warehouse-10-20-10-2-1,100,lacam_star,1,1,1.0,1.14031526152,3080.7741,3659.0,nan,0.0,0.0,0.0,0.0,{}
+warehouse-10-20-10-2-1,100,lacam_star_lau_ltm_force_additive,1,1,1.0,1.13446381658,5031.8746,194.0,19200.0,1.0,0.0004,1.0,0.0,"{""additive_ltm"": 1}"
+warehouse-10-20-10-2-1,100,lacam_star_lau_ltm_learned_every_k2,1,1,1.0,1.13446381658,5039.4543,194.0,19200.0,0.0,0.0,2.0,0.0,{}
+warehouse-10-20-10-2-1,100,lacam_star_lau_ltm_learned_every_restart,1,1,1.0,1.13446381658,5266.3321,194.0,19200.0,2.0,0.3147,0.0,0.0,"{""block_light"": 2}"
+warehouse-10-20-10-2-1,100,lacam_star_lau_ltm_learned_no_safety,1,1,1.0,1.13446381658,5120.1633,194.0,19200.0,1.0,0.227,1.0,0.0,"{""block_light"": 1}"
+warehouse-10-20-10-2-1,100,lacam_star_lau_ltm_learned_safety,1,1,1.0,1.13446381658,5303.2462,194.0,19200.0,1.0,0.192,1.0,0.0,"{""block_light"": 1}"
+warehouse-10-20-10-2-1,100,lacam_star_lau_ltm_static_block_heavy,1,1,1.0,1.13446381658,5251.4835,194.0,19200.0,0.0,0.0,0.0,0.0,"{""block_heavy"": 2}"
+warehouse-10-20-10-2-1,100,lacam_star_lau_ltm_static_decay_095,1,1,1.0,1.13446381658,5004.1363,194.0,19200.0,0.0,0.0,0.0,0.0,"{""decay_095"": 2}"
+warehouse-10-20-10-2-1,100,lacam_star_ltm,1,1,1.0,1.13446381658,5038.1544,194.0,19200.0,0.0,0.0,0.0,0.0,{}

@@ -1,0 +1,20 @@
+{
+  "aaai_ready": false,
+  "cases_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase5p5_repair5g56_warehouse_probe_failure_cases.csv",
+  "classification_counts": {
+    "budget_sensitive_solution": 5,
+    "no_solution_all_candidates": 35
+  },
+  "decision": "warehouse_probe_failures_classified",
+  "gates": {
+    "ids_166_205_untouched": true,
+    "observed_ids_only": true,
+    "warehouse_contexts_classified": true,
+    "warehouse_nan_gap_rows_explained": true,
+    "warehouse_probe_failure_analysis_passed": true
+  },
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "schema_version": "phase5p5_repair5g56_warehouse_probe_failure_summary_v1",
+  "warehouse_contexts": 40
+}

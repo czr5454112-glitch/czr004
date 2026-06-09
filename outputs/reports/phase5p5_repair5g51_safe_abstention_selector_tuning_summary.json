@@ -1,0 +1,33 @@
+{
+  "aaai_ready": false,
+  "bad_g5_stump_mean_delta_ratio_vs_ltm": 0.00350549546894118,
+  "candidate_count": 8,
+  "diagnostic_only": true,
+  "forbidden_feature_policy_passed": true,
+  "offline_gates_passed": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "policy_family": "default_to_validated_flow_shield_with_no_early_ltm_iteration_c_equiv_branch",
+  "schema_version": "phase5p5_repair5g51_safe_abstention_selector_tuning_summary_v1",
+  "selected_selector": {
+    "better": "35",
+    "default_policy": "validated_flow_shield",
+    "equal": "14",
+    "mean_delta_ratio_vs_ltm": -0.026533959629559997,
+    "offline_gates_passed": true,
+    "ratio_worse_than_ltm_groups": "0",
+    "safe_selector_beats_bad_g5_stump": true,
+    "safe_selector_default_is_validated_flow_shield": true,
+    "safe_selector_mean_delta_ratio_vs_ltm_lt_neg_0p010": true,
+    "safe_selector_not_worse_than_static_by_more_than_0p001": true,
+    "safe_selector_ratio_worse_than_ltm_groups_eq_0": true,
+    "safe_selector_success_worse_than_ltm_groups_eq_0": true,
+    "safe_selector_uses_no_forbidden_features": true,
+    "selector_name": "safe_map_agent_default",
+    "source_method": "repair5g2_frozen_static_or_selector",
+    "success_worse_than_ltm_groups": "0",
+    "uses_forbidden_features": false,
+    "worse": "9"
+  },
+  "viable_candidate_count": 5
+}

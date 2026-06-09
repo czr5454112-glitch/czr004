@@ -1,0 +1,4 @@
+audit_field,present_in_project_owned_code,matches,audit_only,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+exact_priority_block_subreason,False,,True,False,False,False,False,False
+all_failed_candidate_reasons_when_pibt_returns_false,False,,True,False,False,False,False,False
+failed_candidate_rank_histogram_when_pibt_returns_false,False,,True,False,False,False,False,False

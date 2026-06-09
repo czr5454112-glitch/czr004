@@ -1,0 +1,35 @@
+{
+  "aaai_ready": false,
+  "candidate_ids": [
+    "repair5g516_slow_decay_safer_beta025_cap050",
+    "repair5g516_slow_decay_safer_beta020_cap045",
+    "repair5g516_slow_decay_safer_beta015_cap040",
+    "repair5g516_wait_aggressive_low_cap",
+    "repair5g516_wait_conservative_mid_cap",
+    "repair5g516_wait_aggressive_fast_flow_decay",
+    "repair5g516_commit_heavy_low_beta",
+    "repair5g516_commit_heavy_static_guard",
+    "repair5g516_static_boundary_light_flow",
+    "repair5g516_static_boundary_c_only"
+  ],
+  "decision": "targeted_repair_lattice_requires_adapter_followup",
+  "executable_candidate_count": 0,
+  "families": [
+    "commit_neighborhood",
+    "conservative_static_boundary",
+    "safer_slow_decay",
+    "wait_neighborhood"
+  ],
+  "gates": {
+    "current_cpp_adapter_recognizes_all": false,
+    "error_bank_available": true,
+    "new_candidate_count_le_12": true,
+    "update_only": true
+  },
+  "learned_runtime_policy_validated": false,
+  "new_candidate_count": 10,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g516_targeted_repair_lattice_summary_v1"
+}

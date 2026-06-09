@@ -1,0 +1,27 @@
+{
+  "aaai_ready": false,
+  "context_count": 140,
+  "decision": "probe_budget_instability_blocks_training",
+  "evidence_artifacts": {
+    "budget_stability": "C:\\PROGRAMING\\czr004\\outputs\\reports\\phase5p5_repair5g56_probe_budget_stability_summary.json",
+    "eval": "C:\\PROGRAMING\\czr004\\outputs\\reports\\phase5p5_repair5g56_offline_safe_mixture_eval_summary.json",
+    "feature_allowlist": "C:\\PROGRAMING\\czr004\\outputs\\reports\\phase5p5_repair5g56_perf_feature_allowlist_summary.json",
+    "label_completion": "C:\\PROGRAMING\\czr004\\outputs\\reports\\phase5p5_repair5g56_counterfactual_label_completion_summary.json",
+    "targets": "C:\\PROGRAMING\\czr004\\outputs\\reports\\phase5p5_repair5g56_g6_target_construction_summary.json",
+    "train": "C:\\PROGRAMING\\czr004\\outputs\\reports\\phase5p5_repair5g56_offline_safe_mixture_summary.json",
+    "warehouse": "C:\\PROGRAMING\\czr004\\outputs\\reports\\phase5p5_repair5g56_warehouse_probe_failure_summary.json"
+  },
+  "g6_training_allowed": false,
+  "ids_166_205_untouched": true,
+  "label_rows": 980,
+  "later_iteration_context_count": 20,
+  "next_step_allowed": "G6.1 runtime preflight design only if offline G6 passed; otherwise continue G5.6 label/probe scaling",
+  "offline_eval_decision": "blocked_no_trained_model",
+  "offline_training_run": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g56_decision_summary_v1",
+  "training_eligible_stable_contexts": 4,
+  "training_eligible_targets": 4
+}

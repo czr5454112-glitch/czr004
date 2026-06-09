@@ -1,0 +1,25 @@
+{
+  "aaai_ready": false,
+  "best_residual_model": {
+    "aaai_ready": false,
+    "bootstrap_samples_requested": 300,
+    "edge_update_teacher_proxy_only": true,
+    "learned_runtime_policy_validated": false,
+    "model": "trace_rank_effect_to_param_residual",
+    "phase5p5_allowed": false,
+    "phase6_allowed": false,
+    "residual_mae": 0.010889396836,
+    "runtime_claim_allowed": false,
+    "selected_teacher_rows": 120
+  },
+  "decision": "goal_aware_residual_teacher_refinement_evaluated",
+  "edge_update_teacher_proxy_only": true,
+  "eval_rows": 5,
+  "future_neural_update_ltm_learning_only": true,
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g527_goal_aware_residual_teacher_refinement_summary_v1",
+  "selected_teacher_rows": 120
+}

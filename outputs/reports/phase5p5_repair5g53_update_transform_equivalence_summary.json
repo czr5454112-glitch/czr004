@@ -1,0 +1,21 @@
+{
+  "aaai_ready": false,
+  "audit_jsonl": "C:\\PROGRAMING\\czr004\\outputs\\logs\\phase5p5_repair5g53_update_transform_equivalence\\phase5p5_repair5g53_update_transform_audit.jsonl",
+  "branch": "phase4f5p5-stable-attention-lau",
+  "commit": "2e1d30c",
+  "decision": "continue_minimal_hook_gate",
+  "gates": {
+    "all_candidates_recognized": true,
+    "audit_rows_gt_0": true,
+    "cf_update_stat_mismatch_count": 0,
+    "params_hash_mismatch_count": 0,
+    "traffic_after_hash_mismatch_count": 0,
+    "true_semantic_mismatch_count": 0,
+    "update_transform_equivalence_passed": true
+  },
+  "mismatch_rows": 0,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "row_count": 870,
+  "schema_version": "phase5p5_repair5g53_update_transform_equivalence_summary_v1"
+}

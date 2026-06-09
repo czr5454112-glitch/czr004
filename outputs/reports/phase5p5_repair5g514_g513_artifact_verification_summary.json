@@ -1,0 +1,32 @@
+{
+  "aaai_ready": false,
+  "csv_counts": {
+    "outputs/tables/phase5p5_repair5g512_candidate_feature_matrix_v3.csv": 840,
+    "outputs/tables/phase5p5_repair5g512_candidate_ranker_context_decisions.csv": 30,
+    "outputs/tables/phase5p5_repair5g512_candidate_ranker_eval.csv": 23,
+    "outputs/tables/phase5p5_repair5g512_candidate_regret_targets.csv": 840,
+    "outputs/tables/phase5p5_repair5g513_g512_selection_audit.csv": 30,
+    "outputs/tables/phase5p5_repair5g513_hard_control_eval.csv": 527,
+    "outputs/tables/phase5p5_repair5g513_static_abstention_safety_preflight.csv": 30
+  },
+  "decision": "g513_artifacts_verified_continue_g514",
+  "g513_decision": "candidate_ranker_signal_reduced_to_simple_prior_continue_rich_features",
+  "g513_hard_control_decision": "candidate_ranker_signal_reduced_to_simple_prior_continue_rich_features",
+  "g513_rich_scan_decision": "rich_context_features_missing_requires_local_feature_probe",
+  "gates": {
+    "g512_candidate_rows_ge_840": true,
+    "g513_decision_is_simple_prior_downgrade": true,
+    "g513_hard_control_summary_present": true,
+    "g513_rich_scan_present": true,
+    "json_and_csv_parse": true,
+    "required_csv_present": true,
+    "required_json_present": true
+  },
+  "learned_runtime_policy_validated": false,
+  "malformed": [],
+  "missing": [],
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g514_g513_artifact_verification_summary_v1"
+}

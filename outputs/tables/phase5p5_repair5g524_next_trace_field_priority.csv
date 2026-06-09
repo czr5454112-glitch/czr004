@@ -1,0 +1,5 @@
+priority,trace_field,status,why_needed,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+1,blocked_reason_and_competing_neighbor_rank,missing_or_ambiguous,Separate candidate-induced risk from useful congestion/flow signal before applying candidate parameters.,False,False,False,False,False
+2,same_checkpoint_counterfactual_short_probe_manifest,partially_available_as_update_probe_log,Turn proxy edge/update labels into exact residual labels for bounded neural UpdateLTM.,False,False,False,False,False
+3,per_agent_goal_progress_edge_events,partially_available,Identify when F-channel evidence is true goal progress versus repeated waiting around bottlenecks.,False,False,False,False,False
+4,pre_update_edge_c_and_f_channels,available_in_checkpoint_sparse_fields,Keep trace x parameter interactions runtime-safe and pre-choice.,False,False,False,False,False

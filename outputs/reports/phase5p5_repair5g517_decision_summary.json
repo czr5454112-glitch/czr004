@@ -1,0 +1,20 @@
+{
+  "aaai_ready": false,
+  "adapter_recognition_decision": "adapter_recognition_passed_continue_local_probe",
+  "adapter_smoke_decision": "adapter_smoke_passed_continue_targeted_probe",
+  "decision": "targeted_repair_lattice_no_oracle_gain_continue_lattice_design",
+  "full_primary_integrity_decision": "full_primary_not_run_targeted_oracle_gate_not_passed",
+  "full_primary_oracle_decision": "full_primary_not_run_targeted_oracle_gate_not_passed",
+  "learned_runtime_policy_validated": false,
+  "next_step": "continue targeted repair lattice design",
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "ranker_decision": "",
+  "runtime_claim_allowed": false,
+  "safety_package_complete": false,
+  "safety_update_decision": "static_abstention_safety_package_incomplete_continue_local",
+  "schema_version": "phase5p5_repair5g517_decision_summary_v1",
+  "server_required": false,
+  "targeted_lattice_oracle_decision": "targeted_repair_lattice_no_oracle_gain_continue_lattice_design",
+  "targeted_probe_integrity_decision": "targeted_probe_integrity_passed_continue_oracle"
+}

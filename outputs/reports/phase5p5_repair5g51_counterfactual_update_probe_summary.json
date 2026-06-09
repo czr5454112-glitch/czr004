@@ -1,0 +1,18 @@
+{
+  "aaai_ready": false,
+  "available_label_rows": 0,
+  "candidate_count": 7,
+  "context_count": 500,
+  "counterfactual_labels_available": false,
+  "gap": "missing traffic_before and replayable trace-event checkpoint snapshots",
+  "label_rows": 3500,
+  "minimal_cpp_checkpoint_export_required": [
+    "pre-update traffic map raw/flow edge state",
+    "trace event list for the current iteration",
+    "LtmIterationStats used by runtime feature extraction",
+    "candidate UpdateParams id and applied cost audit after update"
+  ],
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "schema_version": "phase5p5_repair5g51_counterfactual_update_probe_summary_v1"
+}

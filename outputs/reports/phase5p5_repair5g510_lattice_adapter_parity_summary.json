@@ -1,0 +1,48 @@
+{
+  "aaai_ready": false,
+  "additive_parity": {
+    "compared_pairs": 4,
+    "left_id": "repair5g59_additive_fallback",
+    "mismatch_count": 0,
+    "mismatches": [],
+    "passed": true,
+    "right_id": "additive_ltm"
+  },
+  "c_only_rows": 4,
+  "decision": "lattice_adapter_parity_passed",
+  "gates": {
+    "additive_fallback_matches_additive_ltm": true,
+    "all_lattice_rows_recognized": true,
+    "c_only_f_disabled_candidate_runs": true,
+    "c_only_f_disabled_params_verified": true,
+    "candidate_id_propagated": true,
+    "ids_166_205_untouched": true,
+    "observed_ids_only": true,
+    "static_abstain_alias_matches_static": true,
+    "static_flow_shield_matches_prior_static": true
+  },
+  "lattice_candidate_count": 14,
+  "lattice_rows": 56,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "probe_rows": 64,
+  "recognized_lattice_rows": 56,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g510_lattice_adapter_parity_summary_v1",
+  "static_alias_parity": {
+    "compared_pairs": 4,
+    "left_id": "repair5g59_static_flow_shield",
+    "mismatch_count": 0,
+    "mismatches": [],
+    "passed": true,
+    "right_id": "repair5g59_static_abstain_candidate"
+  },
+  "static_parity": {
+    "compared_pairs": 4,
+    "left_id": "repair5g59_static_flow_shield",
+    "mismatch_count": 0,
+    "mismatches": [],
+    "passed": true,
+    "right_id": "repair5g2_best_frozen_static_candidate"
+  }
+}

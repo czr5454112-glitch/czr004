@@ -1,0 +1,52 @@
+{
+  "answers": [
+    {
+      "answer": "{'returncode2_no_solution_equivalent': 106, 'time_budget_sensitivity': 8}; strict differences were attributed to time-budget/return-code-2 equivalence, not semantic mismatch.",
+      "question": "1. What exactly caused G3 strict parity failure?"
+    },
+    {
+      "answer": "true_semantic=0, reproducer_true_semantic=0",
+      "question": "2. Is it a true semantic mismatch or time-budget/reporting equivalence?"
+    },
+    {
+      "answer": "True",
+      "question": "3. Is the protocol now clean enough for a new final validation?"
+    },
+    {
+      "answer": "protocol=True, representation=True, decision=flow_shield_representation_valid_selector_unclear",
+      "question": "4. Did G4 clean validation pass, if run?"
+    },
+    {
+      "answer": "best_flow_shield=repair5g2_frozen_static_or_selector",
+      "question": "5. Is static flow-shield enough?"
+    },
+    {
+      "answer": "selector_beats_static",
+      "question": "6. Does selector add value over static?"
+    },
+    {
+      "answer": "offline_bridge=True, runtime_integration_feasible=False",
+      "question": "7. Is a learned contextual UpdateLTM selector justified?"
+    },
+    {
+      "answer": "IDs 1..105 are observed before G4; IDs 126..165 are observed if G4 clean validation completed.",
+      "question": "8. Which IDs are now observed?"
+    },
+    {
+      "answer": "IDs 166..205 or the next untouched range remain reserved for learned-selector fresh evaluation if a runtime selector is frozen.",
+      "question": "9. Which clean IDs are reserved next?"
+    }
+  ],
+  "autopsy_summary": "outputs\\reports\\phase5p5_repair5g3_protocol_failure_autopsy_summary.json",
+  "created_at": "2026-06-04T02:13:16.228845",
+  "decision": "continue_learning_bridge_offline",
+  "diagnostic_only": true,
+  "g4_summary": "outputs\\reports\\phase5p5_repair5g4_clean_frozen_validation_summary.json",
+  "learning_summary": "outputs\\reports\\phase5p5_repair5g4_contextual_selector_summary.json",
+  "parity_policy_summary": "outputs\\reports\\phase5p5_repair5g31_parity_policy_summary.json",
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "reproducer_summary": "outputs\\reports\\phase5p5_repair5g31_control_parity_reproducer_summary.json",
+  "schema_version": "phase5p5_repair5g31_g4_decision_summary_v1",
+  "stress_summary": "outputs\\reports\\phase5p5_repair5g4_time_iteration_stress_summary.json"
+}

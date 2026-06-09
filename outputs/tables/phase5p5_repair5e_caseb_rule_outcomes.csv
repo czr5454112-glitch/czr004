@@ -1,0 +1,11 @@
+method,rule,scenario_rows,weighted_update_count,mean_delta_ratio_vs_ltm_weighted,better_scenarios,equal_scenarios,worse_scenarios
+oracle_teacher_forced_best_safe_update_static_proxy,block_heavy,3,7,-0.012063471128571455,2,1,0
+oracle_teacher_forced_best_safe_update_static_proxy,block_light,4,12,-0.021334549255,4,0,0
+oracle_teacher_forced_best_safe_update_static_proxy,commit_heavy,1,1,0.0,0,1,0
+oracle_teacher_forced_best_safe_update_static_proxy,decay_090,2,5,-0.012043232118000046,1,1,0
+oracle_teacher_forced_best_safe_update_static_proxy,wait_heavy,2,4,0.0,0,2,0
+oracle_teacher_forced_best_safe_update_static_proxy,wait_light,6,16,-0.009152964281250037,1,4,1
+repair3_safe_runtime,block_light,18,36,-0.004124829418055581,4,11,3
+repair3_safe_runtime,commit_heavy,6,9,0.004617172475555536,0,4,2
+repair5d_composite_diagnostic_distilled,commit_heavy,16,43,0.0032570777469767102,1,10,5
+repair5d_composite_diagnostic_distilled,wait_light,2,2,0.0,0,2,0

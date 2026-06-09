@@ -1,0 +1,380 @@
+{
+  "agent_counts": [
+    50,
+    100
+  ],
+  "created_at": "2026-06-02T21:22:25.593045",
+  "effective_instance_ids": [
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45
+  ],
+  "final_missing_count": 0,
+  "final_missing_examples": [],
+  "generated_count": 54,
+  "generated_examples": [
+    {
+      "instance_id": 28,
+      "map": "random-32-32-20",
+      "pairs": 100,
+      "path": "outputs\\tmp\\phase5p5_repair5g_dual_channel_scenarios\\random-32-32-20-random-28.scen",
+      "sha256": "0f228120afd53b9fac19be73df076dce72db236ba2048fe1984f51402ee6ebfb"
+    },
+    {
+      "instance_id": 29,
+      "map": "random-32-32-20",
+      "pairs": 100,
+      "path": "outputs\\tmp\\phase5p5_repair5g_dual_channel_scenarios\\random-32-32-20-random-29.scen",
+      "sha256": "a5b434e36fccda8652e299af12f12f97b7fc0750acd922fbc4f44d11124061af"
+    },
+    {
+      "instance_id": 30,
+      "map": "random-32-32-20",
+      "pairs": 100,
+      "path": "outputs\\tmp\\phase5p5_repair5g_dual_channel_scenarios\\random-32-32-20-random-30.scen",
+      "sha256": "d016632ba7e2cf28e35db5711e7ab25d62e3e8bce18ed23b3a9c7840c5fb6d0e"
+    },
+    {
+      "instance_id": 31,
+      "map": "random-32-32-20",
+      "pairs": 100,
+      "path": "outputs\\tmp\\phase5p5_repair5g_dual_channel_scenarios\\random-32-32-20-random-31.scen",
+      "sha256": "8f353b055ad6b8801dcb1432a49abe9f2f079dd354cd2e1a5e41d0393c40d0af"
+    },
+    {
+      "instance_id": 32,
+      "map": "random-32-32-20",
+      "pairs": 100,
+      "path": "outputs\\tmp\\phase5p5_repair5g_dual_channel_scenarios\\random-32-32-20-random-32.scen",
+      "sha256": "24738e8535c3e4ed37de1dfe15341e2ff52c1b72115b348f8693fdafe39f0ac5"
+    },
+    {
+      "instance_id": 33,
+      "map": "random-32-32-20",
+      "pairs": 100,
+      "path": "outputs\\tmp\\phase5p5_repair5g_dual_channel_scenarios\\random-32-32-20-random-33.scen",
+      "sha256": "b0c9044e627160fe409483535cdbb2238be8d771232092e2e71ea8d12b97b77b"
+    },
+    {
+      "instance_id": 34,
+      "map": "random-32-32-20",
+      "pairs": 100,
+      "path": "outputs\\tmp\\phase5p5_repair5g_dual_channel_scenarios\\random-32-32-20-random-34.scen",
+      "sha256": "b6a657d63b31ecd4e4f10d7aaf0887f894b6f0d5a1d8af17007d47d5fd89188a"
+    },
+    {
+      "instance_id": 35,
+      "map": "random-32-32-20",
+      "pairs": 100,
+      "path": "outputs\\tmp\\phase5p5_repair5g_dual_channel_scenarios\\random-32-32-20-random-35.scen",
+      "sha256": "da24bd82357c03d0f3c2584b7432087cbd01762b5d1de80a44750ad9cd67c95a"
+    },
+    {
+      "instance_id": 36,
+      "map": "random-32-32-20",
+      "pairs": 100,
+      "path": "outputs\\tmp\\phase5p5_repair5g_dual_channel_scenarios\\random-32-32-20-random-36.scen",
+      "sha256": "3009923f839fcef9433360c80e63f0f4b296ec1f64435e0a6823dc3333217d7e"
+    },
+    {
+      "instance_id": 37,
+      "map": "random-32-32-20",
+      "pairs": 100,
+      "path": "outputs\\tmp\\phase5p5_repair5g_dual_channel_scenarios\\random-32-32-20-random-37.scen",
+      "sha256": "bf7677bf8f5818500fb635b4f1e03ce573a574331220b9a513b0c27bc10ab3e1"
+    },
+    {
+      "instance_id": 38,
+      "map": "random-32-32-20",
+      "pairs": 100,
+      "path": "outputs\\tmp\\phase5p5_repair5g_dual_channel_scenarios\\random-32-32-20-random-38.scen",
+      "sha256": "38b1c15c954b00608445c4a0a31f1f7e67cce0363797ddb7c658322c7b29c202"
+    },
+    {
+      "instance_id": 39,
+      "map": "random-32-32-20",
+      "pairs": 100,
+      "path": "outputs\\tmp\\phase5p5_repair5g_dual_channel_scenarios\\random-32-32-20-random-39.scen",
+      "sha256": "39e7a3fc7644c152e23c7d32fdf145e999dc48781cdeabdc667c8b31a9fc6906"
+    },
+    {
+      "instance_id": 40,
+      "map": "random-32-32-20",
+      "pairs": 100,
+      "path": "outputs\\tmp\\phase5p5_repair5g_dual_channel_scenarios\\random-32-32-20-random-40.scen",
+      "sha256": "1147573a8a0cb1dc8c4580674e072bad831ebf0bd9b7fe1fa4d6013b3c7359bd"
+    },
+    {
+      "instance_id": 41,
+      "map": "random-32-32-20",
+      "pairs": 100,
+      "path": "outputs\\tmp\\phase5p5_repair5g_dual_channel_scenarios\\random-32-32-20-random-41.scen",
+      "sha256": "b59285ab8d8e238892642b7ece3c847ba975ca291eef8b21f4a9d168a9784250"
+    },
+    {
+      "instance_id": 42,
+      "map": "random-32-32-20",
+      "pairs": 100,
+      "path": "outputs\\tmp\\phase5p5_repair5g_dual_channel_scenarios\\random-32-32-20-random-42.scen",
+      "sha256": "abdfb15bc5362e69caa342abd5ff9444c9b8c62ee5fc91a4f918b034015eb611"
+    },
+    {
+      "instance_id": 43,
+      "map": "random-32-32-20",
+      "pairs": 100,
+      "path": "outputs\\tmp\\phase5p5_repair5g_dual_channel_scenarios\\random-32-32-20-random-43.scen",
+      "sha256": "91bc5c44a5125944b9d88f743aef11af7277c0c1a0a4b1c195590b92b1f6b60e"
+    },
+    {
+      "instance_id": 44,
+      "map": "random-32-32-20",
+      "pairs": 100,
+      "path": "outputs\\tmp\\phase5p5_repair5g_dual_channel_scenarios\\random-32-32-20-random-44.scen",
+      "sha256": "2a4cd458ed951277acf3ddbe8ad48d941e025a6a1763d3faa9851f02610511c3"
+    },
+    {
+      "instance_id": 45,
+      "map": "random-32-32-20",
+      "pairs": 100,
+      "path": "outputs\\tmp\\phase5p5_repair5g_dual_channel_scenarios\\random-32-32-20-random-45.scen",
+      "sha256": "33861c17ecd882593e3d4791c803d3e15e008d008c69f6e21b740992278523ea"
+    },
+    {
+      "instance_id": 28,
+      "map": "maze-32-32-4",
+      "pairs": 100,
+      "path": "outputs\\tmp\\phase5p5_repair5g_dual_channel_scenarios\\maze-32-32-4-random-28.scen",
+      "sha256": "93a2ba091cb020e3acfb3ceb48bce6d4647cfc0d3fa6c7f272f4d791b826a5ce"
+    },
+    {
+      "instance_id": 29,
+      "map": "maze-32-32-4",
+      "pairs": 100,
+      "path": "outputs\\tmp\\phase5p5_repair5g_dual_channel_scenarios\\maze-32-32-4-random-29.scen",
+      "sha256": "436580de16df330da16da60c7a07e8e4f6ca477dbbd7744552dd572fd1032a57"
+    }
+  ],
+  "generated_missing_scenarios": true,
+  "generator_policy": {
+    "base_seed": 20260522,
+    "equivalent_command": "python scripts/generate_phase1a_scenarios.py --manifest <f4 maps with instances 26..45> --output-dir outputs\\tmp\\phase5p5_repair5g_dual_channel_scenarios --base-seed 20260522",
+    "script_version": "phase1a-scenario-generator-v1",
+    "seed_function": "sha256(script_version|base_seed|map_name|instance_id)",
+    "source": "scripts/generate_phase1a_scenarios.py functions"
+  },
+  "initial_missing_count": 54,
+  "initial_missing_examples": [
+    {
+      "instance_id": 28,
+      "map": "random-32-32-20"
+    },
+    {
+      "instance_id": 29,
+      "map": "random-32-32-20"
+    },
+    {
+      "instance_id": 30,
+      "map": "random-32-32-20"
+    },
+    {
+      "instance_id": 31,
+      "map": "random-32-32-20"
+    },
+    {
+      "instance_id": 32,
+      "map": "random-32-32-20"
+    },
+    {
+      "instance_id": 33,
+      "map": "random-32-32-20"
+    },
+    {
+      "instance_id": 34,
+      "map": "random-32-32-20"
+    },
+    {
+      "instance_id": 35,
+      "map": "random-32-32-20"
+    },
+    {
+      "instance_id": 36,
+      "map": "random-32-32-20"
+    },
+    {
+      "instance_id": 37,
+      "map": "random-32-32-20"
+    },
+    {
+      "instance_id": 38,
+      "map": "random-32-32-20"
+    },
+    {
+      "instance_id": 39,
+      "map": "random-32-32-20"
+    },
+    {
+      "instance_id": 40,
+      "map": "random-32-32-20"
+    },
+    {
+      "instance_id": 41,
+      "map": "random-32-32-20"
+    },
+    {
+      "instance_id": 42,
+      "map": "random-32-32-20"
+    },
+    {
+      "instance_id": 43,
+      "map": "random-32-32-20"
+    },
+    {
+      "instance_id": 44,
+      "map": "random-32-32-20"
+    },
+    {
+      "instance_id": 45,
+      "map": "random-32-32-20"
+    },
+    {
+      "instance_id": 28,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 29,
+      "map": "maze-32-32-4"
+    }
+  ],
+  "reduced_scope_reason": "",
+  "requested_instance_ids": [
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45
+  ],
+  "requested_maps": [
+    "random-32-32-20",
+    "maze-32-32-4",
+    "warehouse-10-20-10-2-1"
+  ],
+  "scenario_dir": "outputs\\tmp\\phase5p5_repair5g_dual_channel_scenarios",
+  "scenario_metadata": "outputs\\reports\\phase5p5_repair5g_dual_channel_scenario_generation.json",
+  "schema_version": "phase5p5_repair5f4_scenario_generation_v1",
+  "source_missing_count": 60,
+  "source_missing_examples": [
+    {
+      "instance_id": 26,
+      "map": "random-32-32-20"
+    },
+    {
+      "instance_id": 27,
+      "map": "random-32-32-20"
+    },
+    {
+      "instance_id": 28,
+      "map": "random-32-32-20"
+    },
+    {
+      "instance_id": 29,
+      "map": "random-32-32-20"
+    },
+    {
+      "instance_id": 30,
+      "map": "random-32-32-20"
+    },
+    {
+      "instance_id": 31,
+      "map": "random-32-32-20"
+    },
+    {
+      "instance_id": 32,
+      "map": "random-32-32-20"
+    },
+    {
+      "instance_id": 33,
+      "map": "random-32-32-20"
+    },
+    {
+      "instance_id": 34,
+      "map": "random-32-32-20"
+    },
+    {
+      "instance_id": 35,
+      "map": "random-32-32-20"
+    },
+    {
+      "instance_id": 36,
+      "map": "random-32-32-20"
+    },
+    {
+      "instance_id": 37,
+      "map": "random-32-32-20"
+    },
+    {
+      "instance_id": 38,
+      "map": "random-32-32-20"
+    },
+    {
+      "instance_id": 39,
+      "map": "random-32-32-20"
+    },
+    {
+      "instance_id": 40,
+      "map": "random-32-32-20"
+    },
+    {
+      "instance_id": 41,
+      "map": "random-32-32-20"
+    },
+    {
+      "instance_id": 42,
+      "map": "random-32-32-20"
+    },
+    {
+      "instance_id": 43,
+      "map": "random-32-32-20"
+    },
+    {
+      "instance_id": 44,
+      "map": "random-32-32-20"
+    },
+    {
+      "instance_id": 45,
+      "map": "random-32-32-20"
+    }
+  ],
+  "source_scenario_dir": "outputs\\tmp\\phase1a\\generated\\phase1a-generated-random"
+}

@@ -1,0 +1,16 @@
+{
+  "calibrated_stats_hashes": {
+    "ood_feature_stats_override.csv": "a1e91f811ebb0c3d0b3ebdfb7566511c44ef6d3da8fdfd38a58e81a0841152fa",
+    "ood_feature_stats_train.csv": "f5522e30ef0b105020544b73984943e7b8957deef630ca394f4edfbe74cc551a"
+  },
+  "created_at": "2026-06-01T10:34:37.237522",
+  "diagnostic_only": true,
+  "notes": [
+    "Ablation: keep E3 split selector support table, replace only OOD stats with E4 train-support calibration."
+  ],
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_dir": "C:\\PROGRAMING\\czr004\\artifacts\\models\\laur_ltm\\repair5e4_calibrated_guard_only_on_e3_split",
+  "schema_version": "phase5p5_repair5e4_calibrated_guard_only_on_e3_split_v1",
+  "source_runtime_dir": "C:\\PROGRAMING\\czr004\\artifacts\\models\\laur_ltm\\repair5e3_split_guarded_selector"
+}

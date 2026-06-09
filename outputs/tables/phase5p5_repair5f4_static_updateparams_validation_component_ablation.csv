@@ -1,0 +1,5 @@
+component_ablation,mechanism,rows,full_mean_delta_ratio_vs_ltm,ablation_mean_delta_ratio_vs_ltm,full_minus_ablation_mean_delta,full_better_cases,full_equal_cases,full_worse_cases,full_mean_beats_or_ties_ablation
+repair5f_static_c100_b100_w075_d100,wait-spillover reduction only,120,4.51908770666587e-05,-0.0008398811590833434,0.0008850720361500021,27,70,23,False
+repair5f_static_c100_b100_w100_d090,decay 0.90 only,120,4.51908770666587e-05,-0.0003064312557916717,0.0003516221328583304,26,70,24,False
+repair5f_static_c100_b100_w100_d095,mild decay 0.95 only,120,4.51908770666587e-05,0.00012301019519166494,-7.781931812500625e-05,29,70,21,True
+repair5f_static_c100_b100_w075_d095,wait reduction + mild decay,120,4.51908770666587e-05,-0.0008186365335416705,0.0008638274106083292,27,69,24,False

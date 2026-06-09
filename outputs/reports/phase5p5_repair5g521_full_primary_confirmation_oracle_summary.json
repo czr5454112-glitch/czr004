@@ -1,0 +1,12 @@
+{
+  "aaai_ready": false,
+  "decision": "full_primary_confirmation_skipped_targeted_gate_failed",
+  "learned_runtime_policy_validated": false,
+  "no_run_reason": "targeted second-wave gate did not pass",
+  "oracle_analyzed": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g521_full_primary_confirmation_oracle_summary_v1",
+  "targeted_decision": "targeted_second_wave_gate_failed_lattice_autopsy"
+}

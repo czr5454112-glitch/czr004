@@ -1,0 +1,31 @@
+{
+  "aaai_ready": false,
+  "candidate_rows_per_context_max": 22,
+  "candidate_rows_per_context_min": 22,
+  "contexts": 60,
+  "decision": "opportunity_feature_matrix_v9_passed_continue_policy_eval",
+  "family_local_centered_feature_count": 13,
+  "feature_count": 114,
+  "forbidden_feature_count": 0,
+  "forbidden_features": [],
+  "gates": {
+    "candidates_per_context_eq_22": true,
+    "contexts_eq_60": true,
+    "family_local_centered_features_present": true,
+    "forbidden_feature_count_eq_0": true,
+    "nearest_old_features_present": true,
+    "new_specialist_features_present": true,
+    "opportunity_labels_not_features": true,
+    "rows_eq_1320": true,
+    "runtime_safe_feature_count_gt_v8": true
+  },
+  "learned_runtime_policy_validated": false,
+  "nearest_old_feature_count": 5,
+  "new_specialist_feature_count": 6,
+  "perf_feature_count": 114,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "rows": 1320,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g520_opportunity_feature_matrix_v9_summary_v1"
+}

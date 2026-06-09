@@ -1,0 +1,11 @@
+feature_group,feature_count,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+feature_full_coverage_,1,False,False,False,False,False
+feature_g525_,1,False,False,False,False,False
+feature_missing_,1,False,False,False,False,False
+feature_rank_effect_,6,False,False,False,False,False
+feature_failed_candidate_,6,False,False,False,False,False
+feature_goal_,8,False,False,False,False,False
+feature_blocked_,5,False,False,False,False,False
+feature_competing_,2,False,False,False,False,False
+feature_param_,9,False,False,False,False,False
+feature_mix_,63,False,False,False,False,False

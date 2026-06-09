@@ -1,0 +1,31 @@
+{
+  "aaai_ready": false,
+  "abstention_reasons": {},
+  "abstention_reasons_logged": false,
+  "budget_sensitive_context_keys": [],
+  "budget_sensitive_coverage": 0,
+  "decision": "static_abstention_safety_package_incomplete_continue_local",
+  "harmful_false_positive_context_keys": [
+    "maze-32-32-4|a50|s151|it0|14650fb0739d0383",
+    "random-32-32-20|a50|s151|it0|14650fb0739d0383",
+    "warehouse-10-20-10-2-1|a100|s154|it0|14650fb0739d0383"
+  ],
+  "harmful_false_positive_contexts": 3,
+  "high_uncertainty_context_keys": [],
+  "high_uncertainty_contexts": 0,
+  "ids_166_205_untouched": true,
+  "learned_runtime_policy_validated": false,
+  "no_solution_or_infeasible_coverage": 86,
+  "observed_ids_only": true,
+  "ood_like_holdout_coverage": 0,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "safety_package_complete": false,
+  "schema_version": "phase5p5_repair5g517_static_abstention_safety_update_summary_v1",
+  "static_near_oracle_context_keys": [],
+  "static_near_oracle_contexts": 0,
+  "static_win_context_keys": [],
+  "static_wins": 0,
+  "targeted_oracle_decision": "targeted_repair_lattice_no_oracle_gain_continue_lattice_design"
+}

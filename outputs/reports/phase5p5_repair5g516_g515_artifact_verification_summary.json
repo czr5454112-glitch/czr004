@@ -1,0 +1,31 @@
+{
+  "aaai_ready": false,
+  "candidate_rows_per_context_max": 14,
+  "candidate_rows_per_context_min": 14,
+  "contexts": 60,
+  "decision": "g515_artifacts_verified_continue_g516",
+  "forbidden_feature_count": 0,
+  "g515_decision": "interaction_ranker_no_better_than_v4_continue_feature_design",
+  "gates": {
+    "contexts_eq_60": true,
+    "false_positive_autopsy_present": true,
+    "forbidden_feature_count_eq_0": true,
+    "fourteen_candidates_per_context": true,
+    "g515_decision_no_better_than_v4": true,
+    "ids_166_205_untouched": true,
+    "observed_ids_only": true,
+    "oof_eval_summary_present": true,
+    "required_files_present": true,
+    "static_abstention_safety_update_present": true,
+    "v5_rows_eq_840": true
+  },
+  "ids_166_205_untouched": true,
+  "learned_runtime_policy_validated": false,
+  "missing_artifacts": [],
+  "observed_ids_only": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g516_g515_artifact_verification_summary_v1",
+  "v5_rows": 840
+}

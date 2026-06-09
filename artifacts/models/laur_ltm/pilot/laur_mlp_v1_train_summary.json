@@ -1,0 +1,106 @@
+{
+  "epochs": 300,
+  "feature_count": 36,
+  "feature_stats_path": "/root/shared-nvme/czr004/artifacts/models/laur_ltm/pilot/laur_mlp_v1_feature_stats.json",
+  "final_loss": 0.0665762722492218,
+  "gate": {
+    "model_export_file_exists": true,
+    "passed": true,
+    "phase4f_smoke_passed": true,
+    "schema_validation_passes": true,
+    "train_script_runs_end_to_end": true,
+    "validation_metrics_computed": true
+  },
+  "hidden_dim": 64,
+  "loss_components": {
+    "additive_deviation_penalty": 0.8040184378623962,
+    "delta_regression": 0.0016497131437063217,
+    "rule_ce": 0.023619262501597404,
+    "safety_bce": 0.052928436547517776
+  },
+  "rules": [
+    "additive_ltm",
+    "commit_heavy",
+    "block_heavy",
+    "block_light",
+    "wait_light",
+    "wait_heavy",
+    "decay_095",
+    "decay_090",
+    "neutral_additive"
+  ],
+  "rules_path": "/root/shared-nvme/czr004/artifacts/models/laur_ltm/pilot/laur_mlp_v1_rules.json",
+  "sample_count": 320,
+  "schema_version": "phase4_laur_train_summary_v1",
+  "test_metrics": null,
+  "test_sample_count": 0,
+  "train_metrics": {
+    "delta_pred_smooth_l1_proxy": 0.02633988442967293,
+    "harmful_update_f1": 1.0,
+    "harmful_update_precision": 1.0,
+    "harmful_update_recall": 1.0,
+    "label_distribution": {
+      "block_heavy": 54,
+      "block_light": 16,
+      "commit_heavy": 47,
+      "decay_090": 18,
+      "decay_095": 8,
+      "neutral_additive": 48,
+      "wait_heavy": 29,
+      "wait_light": 20
+    },
+    "neutral_additive_rate": 0.2,
+    "non_neutral_rule_top1_accuracy": 1.0,
+    "predicted_best_rule_mean_delta_ratio_proxy": 0.024696161650952675,
+    "predicted_rule_distribution": {
+      "block_heavy": 54,
+      "block_light": 16,
+      "commit_heavy": 47,
+      "decay_090": 18,
+      "decay_095": 8,
+      "neutral_additive": 48,
+      "wait_heavy": 29,
+      "wait_light": 20
+    },
+    "rule_top1_accuracy": 1.0,
+    "rule_top3_accuracy": 1.0,
+    "safety_auroc": 1.0,
+    "sample_count": 240
+  },
+  "train_sample_count": 240,
+  "validation_metrics": {
+    "delta_pred_smooth_l1_proxy": 0.06369490272859873,
+    "harmful_update_f1": 0.12121212121212122,
+    "harmful_update_precision": 0.4,
+    "harmful_update_recall": 0.07142857142857142,
+    "label_distribution": {
+      "block_heavy": 11,
+      "block_light": 5,
+      "commit_heavy": 16,
+      "decay_090": 5,
+      "decay_095": 5,
+      "neutral_additive": 22,
+      "wait_heavy": 9,
+      "wait_light": 7
+    },
+    "neutral_additive_rate": 0.1125,
+    "non_neutral_rule_top1_accuracy": 0.15517241379310345,
+    "predicted_best_rule_mean_delta_ratio_proxy": 0.0024322686550648748,
+    "predicted_rule_distribution": {
+      "block_heavy": 38,
+      "block_light": 4,
+      "commit_heavy": 13,
+      "decay_090": 1,
+      "neutral_additive": 9,
+      "wait_heavy": 8,
+      "wait_light": 7
+    },
+    "rule_top1_accuracy": 0.1375,
+    "rule_top3_accuracy": 0.4875,
+    "safety_auroc": 0.3873626373626374,
+    "sample_count": 80
+  },
+  "validation_sample_count": 80,
+  "validation_source": "validation",
+  "weights_path": "/root/shared-nvme/czr004/artifacts/models/laur_ltm/pilot/laur_mlp_v1_weights.json"
+}

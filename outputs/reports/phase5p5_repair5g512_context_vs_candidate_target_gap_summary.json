@@ -1,0 +1,31 @@
+{
+  "aaai_ready": false,
+  "candidate_level_regret_ranking_is_right_target": true,
+  "decision": "target_redesign_passed_candidate_level_regret_ranking",
+  "g511_context_label_counts": {
+    "stable_high_confidence_parameter_candidate": 52,
+    "stable_static": 8
+  },
+  "g511_context_rows": 60,
+  "g511_no_solution_or_budget_abstain_count": 0,
+  "g511_stable_high_confidence_parameter_candidate": 52,
+  "g511_stable_static": 8,
+  "g512_candidate_label_counts": {
+    "additive_bad_baseline": 60,
+    "c_only_ablation_candidate": 60,
+    "harmful_parameter_candidate": 266,
+    "helpful_parameter_candidate": 193,
+    "neutral_parameter_candidate": 141,
+    "static_fallback_candidate": 120
+  },
+  "g512_candidate_level_rows": 840,
+  "g512_candidates": 14,
+  "g512_contexts": 60,
+  "offline_candidate_ranking_diagnostics_require_no_solution_or_budget_abstain": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "required_conclusion": "G5.11 failed because context-level oracle class labels are too coarse for a parameter lattice.",
+  "runtime_claim_allowed": false,
+  "runtime_phase5p5_still_requires_static_abstention_no_solution_budget_ood_safety_package": true,
+  "schema_version": "phase5p5_repair5g512_context_vs_candidate_target_gap_summary_v1"
+}

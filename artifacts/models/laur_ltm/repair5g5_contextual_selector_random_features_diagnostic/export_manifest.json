@@ -1,0 +1,8 @@
+{
+  "created_at": "2026-06-04T10:25:15.047479",
+  "diagnostic_only": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "schema_version": "phase5p5_repair5g5_diagnostic_selector_manifest_v1",
+  "selector_spec": "artifacts\\models\\laur_ltm\\repair5g5_contextual_selector_random_features_diagnostic\\selector_spec.json"
+}

@@ -1,0 +1,4 @@
+feature_name,mean,std
+entropy_edge_usage,6.5,1.0
+has_solution_before,0.5,0.5
+improved_last_iteration,0.5,0.5

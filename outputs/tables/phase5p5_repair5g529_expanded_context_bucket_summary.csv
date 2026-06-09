@@ -1,0 +1,8 @@
+bucket,context_budget_pairs,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+abstain_due_risk,9,False,False,False,False,False
+old14_or_g518_fallback,36,False,False,False,False,False
+other_teacher_select,35,False,False,False,False,False
+safe_g522_teacher_select,40,False,False,False,False,False
+map_family_maze,40,False,False,False,False,False
+map_family_random,40,False,False,False,False,False
+map_family_warehouse,40,False,False,False,False,False

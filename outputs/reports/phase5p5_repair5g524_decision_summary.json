@@ -1,0 +1,55 @@
+{
+  "aaai_ready": false,
+  "best_model": "agent_density_specialist_mixture",
+  "best_model_summary": {
+    "aaai_ready": false,
+    "avoidable_risk_ece": 0.042592592592633316,
+    "candidate_induced_no_solution_count": 7,
+    "context_budget_pairs": 120,
+    "eval_scope": "seed_oof_aggregate",
+    "fold_id": "all",
+    "learned_runtime_policy_validated": false,
+    "model": "agent_density_specialist_mixture",
+    "phase5p5_allowed": false,
+    "phase6_allowed": false,
+    "region_top1_capture_rate": 0.13333333333333333,
+    "region_top2_capture_rate": 0.13333333333333333,
+    "row_type": "model_aggregate",
+    "runtime_claim_allowed": false,
+    "safe_policy_sim_utility": 0.007401180368250002,
+    "static_recovery_capture_count": 1,
+    "top1_safe_oracle_capture_rate": 0.03333333333333333,
+    "top3_safe_oracle_capture_rate": 0.13333333333333333,
+    "top5_safe_oracle_capture_rate": 0.13333333333333333
+  },
+  "component_decisions": {
+    "budget_teacher": "budget_pair_teacher_tables_created",
+    "edge": "edge_update_surrogates_evaluated",
+    "failure": "model_failure_and_next_trace_fields_completed",
+    "features": "trace_enriched_feature_matrix_created",
+    "inventory": "checkpoint_trace_field_inventory_completed",
+    "models": "region_to_parameter_models_evaluated",
+    "verify": "g523_artifacts_verified_continue_g524"
+  },
+  "decision": "g524_candidate_space_positive_learning_still_blocked_collect_richer_trace",
+  "edge_update_teacher_proxy_only": true,
+  "learned_runtime_policy_validated": false,
+  "missing_trace_fields": [
+    "blocked_reason_and_competing_neighbor_rank"
+  ],
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "positive_learning_gates": {
+    "candidate_induced_no_solution_count_le_baseline": false,
+    "candidate_space_full_primary_evidence_positive": true,
+    "claims_remain_closed": true,
+    "controls_do_not_match": true,
+    "forbidden_feature_count_eq_0": true,
+    "leave_one_map_family_does_not_collapse": false,
+    "region_top2_capture_rate_ge_0p50": false,
+    "safe_policy_sim_utility_beats_region_prior_baseline": true,
+    "top3_safe_oracle_capture_rate_ge_0p25": false
+  },
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g524_decision_summary_v1"
+}

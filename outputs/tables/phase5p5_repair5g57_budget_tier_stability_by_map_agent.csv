@@ -1,0 +1,7 @@
+agents,context_count,map,no_solution_1000,no_solution_2000,primary_1000_2000_measured,primary_1000_2000_stable_contexts,stress_250_disagreements,top1_agree_1000_2000,top2_agree_1000_2000,top3_agree_1000_2000
+100,5,maze-32-32-4,0,0,5,5,5,5,5,5
+50,5,maze-32-32-4,0,0,5,5,5,5,5,5
+100,5,random-32-32-20,0,0,5,5,5,5,5,5
+50,5,random-32-32-20,0,0,5,5,1,5,5,5
+100,5,warehouse-10-20-10-2-1,5,5,5,0,0,5,5,5
+50,5,warehouse-10-20-10-2-1,5,0,5,0,0,5,0,0

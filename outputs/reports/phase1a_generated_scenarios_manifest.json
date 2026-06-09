@@ -1,0 +1,1297 @@
+{
+  "base_seed": 20260522,
+  "maps": [
+    {
+      "free_cells_largest_component": 1024,
+      "height": 32,
+      "instances": [
+        {
+          "id": 1,
+          "pairs": 1000,
+          "path": "phase1a-generated-random/empty-32-32-random-1.scen",
+          "sha256": "05df3b5ea4cf9c9d6d5af5c46d4672714c3591c08d413e0176197a40e662c4f4"
+        },
+        {
+          "id": 2,
+          "pairs": 1000,
+          "path": "phase1a-generated-random/empty-32-32-random-2.scen",
+          "sha256": "f2dfa7d167cc835eb3d22da5969bcf2bfef32faff87a2bf0674ee0a44dadd8bf"
+        },
+        {
+          "id": 3,
+          "pairs": 1000,
+          "path": "phase1a-generated-random/empty-32-32-random-3.scen",
+          "sha256": "17715295b987d25b4bdd17108df860dceb04b87ee20f756b546209b433c0ff08"
+        },
+        {
+          "id": 4,
+          "pairs": 1000,
+          "path": "phase1a-generated-random/empty-32-32-random-4.scen",
+          "sha256": "112a9103f61842e06f522e5bbca0f5383fc1e9500e80fd058d6d2efa362c69a5"
+        },
+        {
+          "id": 5,
+          "pairs": 1000,
+          "path": "phase1a-generated-random/empty-32-32-random-5.scen",
+          "sha256": "ff92daac1f5a148891a1ebc28b59d29944110de1e8c0d456f153472662bfb985"
+        },
+        {
+          "id": 6,
+          "pairs": 1000,
+          "path": "phase1a-generated-random/empty-32-32-random-6.scen",
+          "sha256": "86ad9c5fae459511e8bc23bf34aa7650237c6cca02b86c7e2bbf83dcf83f16ef"
+        },
+        {
+          "id": 7,
+          "pairs": 1000,
+          "path": "phase1a-generated-random/empty-32-32-random-7.scen",
+          "sha256": "c9fe8cde122f20b30a913e1aecf155c3b06d077b2f79c6d70438f6e837a11270"
+        },
+        {
+          "id": 8,
+          "pairs": 1000,
+          "path": "phase1a-generated-random/empty-32-32-random-8.scen",
+          "sha256": "1e36078326436222ee25318f6b871c28698f8fb8c1ee25b3e3599321abb1dc22"
+        },
+        {
+          "id": 9,
+          "pairs": 1000,
+          "path": "phase1a-generated-random/empty-32-32-random-9.scen",
+          "sha256": "769777c810a92fa9d5c220bb9eb2f185384dfc9e5be46e1b08aa81516bcc5177"
+        },
+        {
+          "id": 10,
+          "pairs": 1000,
+          "path": "phase1a-generated-random/empty-32-32-random-10.scen",
+          "sha256": "f0945c96c16cdda7e4e1a00e873e1bb7bcbb10ba901bb5bbdef1cd288b0ed5aa"
+        },
+        {
+          "id": 11,
+          "pairs": 1000,
+          "path": "phase1a-generated-random/empty-32-32-random-11.scen",
+          "sha256": "bbf3b51a025278c959a0a311b43f8ef76e6e53478758ccc9a6413040ed5fe0e6"
+        },
+        {
+          "id": 12,
+          "pairs": 1000,
+          "path": "phase1a-generated-random/empty-32-32-random-12.scen",
+          "sha256": "0da5e22146b574735bdcc7ae81103d136063becf3a07d98a6cf98c6761602acc"
+        },
+        {
+          "id": 13,
+          "pairs": 1000,
+          "path": "phase1a-generated-random/empty-32-32-random-13.scen",
+          "sha256": "70c22f3ac0b2a10e42c6354e5c4318996843831b3db5f82406fd693a2bb6ec1e"
+        },
+        {
+          "id": 14,
+          "pairs": 1000,
+          "path": "phase1a-generated-random/empty-32-32-random-14.scen",
+          "sha256": "cae803378029ba885cf1bfa3c79b635645eb00077c0c9f7b5189a6e2a5b1156c"
+        },
+        {
+          "id": 15,
+          "pairs": 1000,
+          "path": "phase1a-generated-random/empty-32-32-random-15.scen",
+          "sha256": "f94e508c5b2acdb5cfd12c227b65a55f8c6b0fb2ac5d958483ecd280df0f27c0"
+        },
+        {
+          "id": 16,
+          "pairs": 1000,
+          "path": "phase1a-generated-random/empty-32-32-random-16.scen",
+          "sha256": "ac96581b05abf7e376cd4b8c92f8b7f8df4b0335d035702570181ed1319aceaf"
+        },
+        {
+          "id": 17,
+          "pairs": 1000,
+          "path": "phase1a-generated-random/empty-32-32-random-17.scen",
+          "sha256": "44dedc4c4aee52117f2e82bdce16843fa76623687b22b2940146990bedac92b7"
+        },
+        {
+          "id": 18,
+          "pairs": 1000,
+          "path": "phase1a-generated-random/empty-32-32-random-18.scen",
+          "sha256": "f747e71cf3764f4b400fdeb7d9d5e0e4734e4ad79a99884ec03d6c51310bdff9"
+        },
+        {
+          "id": 19,
+          "pairs": 1000,
+          "path": "phase1a-generated-random/empty-32-32-random-19.scen",
+          "sha256": "0fa73e2dff0373829193d7044aece7449745d329607a33543fcbb86fb6934a5e"
+        },
+        {
+          "id": 20,
+          "pairs": 1000,
+          "path": "phase1a-generated-random/empty-32-32-random-20.scen",
+          "sha256": "16d7ad2bbb38d46b263ef91f09d86ce2832aaa2290bc7763b771a70a6e1bf0a5"
+        },
+        {
+          "id": 21,
+          "pairs": 1000,
+          "path": "phase1a-generated-random/empty-32-32-random-21.scen",
+          "sha256": "f7d2656e5f1c5286b2539578e2774e790bf82a00ea2efe38f20eac62078def7c"
+        },
+        {
+          "id": 22,
+          "pairs": 1000,
+          "path": "phase1a-generated-random/empty-32-32-random-22.scen",
+          "sha256": "743277efafa982e887a040849af7e5415106a3161ae4d3a2f399517dc9e65cc9"
+        },
+        {
+          "id": 23,
+          "pairs": 1000,
+          "path": "phase1a-generated-random/empty-32-32-random-23.scen",
+          "sha256": "41fbf46f87c9f6df6d587f75a954244d1691bccd42b27b118998223f6d04691a"
+        },
+        {
+          "id": 24,
+          "pairs": 1000,
+          "path": "phase1a-generated-random/empty-32-32-random-24.scen",
+          "sha256": "585ec4c4449419cb522e8f0526d6e769a581a49d47376f74905f90b14961286f"
+        },
+        {
+          "id": 25,
+          "pairs": 1000,
+          "path": "phase1a-generated-random/empty-32-32-random-25.scen",
+          "sha256": "08337e721e5397cca47ea94eefafa6509f113ade8eb099fb6fe49a8cd84cc4fe"
+        }
+      ],
+      "map": "empty-32-32",
+      "map_path": "external/lacam2/scripts/map/empty-32-32.map",
+      "max_agents": 1000,
+      "width": 32
+    },
+    {
+      "free_cells_largest_component": 2304,
+      "height": 48,
+      "instances": [
+        {
+          "id": 1,
+          "pairs": 2000,
+          "path": "phase1a-generated-random/empty-48-48-random-1.scen",
+          "sha256": "ba08ee1a51b240e19ec335ca997a41c6fc435482de992532cf2048793a9451b4"
+        },
+        {
+          "id": 2,
+          "pairs": 2000,
+          "path": "phase1a-generated-random/empty-48-48-random-2.scen",
+          "sha256": "5e395b519dd6b3151aa809aabbc01a54f35fa191442c509e62bfe35edc5da549"
+        },
+        {
+          "id": 3,
+          "pairs": 2000,
+          "path": "phase1a-generated-random/empty-48-48-random-3.scen",
+          "sha256": "fb09cc4f0bef55a059f6103dbcc5bfdf9b11199c6a50acfcdbd37df897c04963"
+        },
+        {
+          "id": 4,
+          "pairs": 2000,
+          "path": "phase1a-generated-random/empty-48-48-random-4.scen",
+          "sha256": "f61114b19c6bde159697eb8421af936892b7c3afbdd2d672262352f9d6e84c4d"
+        },
+        {
+          "id": 5,
+          "pairs": 2000,
+          "path": "phase1a-generated-random/empty-48-48-random-5.scen",
+          "sha256": "ffcb2e57b7bb0551189344819e75f546411a3ff949e40d44179098a4c42edc63"
+        },
+        {
+          "id": 6,
+          "pairs": 2000,
+          "path": "phase1a-generated-random/empty-48-48-random-6.scen",
+          "sha256": "fb17737b658aa21ca6b05e7e1c4996f47115a9aa049e8b56a8d230842d48cecf"
+        },
+        {
+          "id": 7,
+          "pairs": 2000,
+          "path": "phase1a-generated-random/empty-48-48-random-7.scen",
+          "sha256": "6ef2363cf49b03cd78ec6b440011092e1fcb7262d080faa3d85423f887113551"
+        },
+        {
+          "id": 8,
+          "pairs": 2000,
+          "path": "phase1a-generated-random/empty-48-48-random-8.scen",
+          "sha256": "d2f5faafe01cf11206800e15462454a60ebc40d3387b80a7330380d8f9fded54"
+        },
+        {
+          "id": 9,
+          "pairs": 2000,
+          "path": "phase1a-generated-random/empty-48-48-random-9.scen",
+          "sha256": "128afbc11d33b1c09447e6d5bd3e2d04a9be3302d93c96b12468878251099a36"
+        },
+        {
+          "id": 10,
+          "pairs": 2000,
+          "path": "phase1a-generated-random/empty-48-48-random-10.scen",
+          "sha256": "7f69e0bd94f7010c51aa00c91e8a5d6473a6f0f2a081f5aaa57825839a26e7e7"
+        },
+        {
+          "id": 11,
+          "pairs": 2000,
+          "path": "phase1a-generated-random/empty-48-48-random-11.scen",
+          "sha256": "4a4562087df2a4102c44fa2989db488fa3582998687b3af12d9f15001203b0ae"
+        },
+        {
+          "id": 12,
+          "pairs": 2000,
+          "path": "phase1a-generated-random/empty-48-48-random-12.scen",
+          "sha256": "0737a4ae7d37f8d6751110f7a0dc8816bff58c2bad0e25d7316fc63876903f1f"
+        },
+        {
+          "id": 13,
+          "pairs": 2000,
+          "path": "phase1a-generated-random/empty-48-48-random-13.scen",
+          "sha256": "279bffc6a0700ff59da5bc034d4d60a44d87277e9089eebfe905f02407675495"
+        },
+        {
+          "id": 14,
+          "pairs": 2000,
+          "path": "phase1a-generated-random/empty-48-48-random-14.scen",
+          "sha256": "9f207356469e2cdd6994da2e7a9e7d23b208c16c6c293677671b56b4683776cc"
+        },
+        {
+          "id": 15,
+          "pairs": 2000,
+          "path": "phase1a-generated-random/empty-48-48-random-15.scen",
+          "sha256": "da8ce1e54fc24178eced1d21d29213aa22c0f1758ef02e4a17d639b3e492430d"
+        },
+        {
+          "id": 16,
+          "pairs": 2000,
+          "path": "phase1a-generated-random/empty-48-48-random-16.scen",
+          "sha256": "c06b72d2ce7876becb01b9c0343a7e59ca8ba2436c1557909c50bcbee961c30c"
+        },
+        {
+          "id": 17,
+          "pairs": 2000,
+          "path": "phase1a-generated-random/empty-48-48-random-17.scen",
+          "sha256": "7e0d07ea2a5c9a440e06ff87a1fbf1255554ccc352e8ca28d253a78318f13c12"
+        },
+        {
+          "id": 18,
+          "pairs": 2000,
+          "path": "phase1a-generated-random/empty-48-48-random-18.scen",
+          "sha256": "95d3200bfb85951bbf4fd16d5405c54763291101e928789e8e6819ddba1a7f4d"
+        },
+        {
+          "id": 19,
+          "pairs": 2000,
+          "path": "phase1a-generated-random/empty-48-48-random-19.scen",
+          "sha256": "ac07481db2e4009914fe77a2bc5eea7e340306f50e0ddafb46c5d928f43e6de1"
+        },
+        {
+          "id": 20,
+          "pairs": 2000,
+          "path": "phase1a-generated-random/empty-48-48-random-20.scen",
+          "sha256": "c51746f9f679883100c993781889cca20ebb6a67c9681475be0add16d125be3a"
+        },
+        {
+          "id": 21,
+          "pairs": 2000,
+          "path": "phase1a-generated-random/empty-48-48-random-21.scen",
+          "sha256": "f767d8221270241be68776206079723a3811c03c3d57ca05d480da16a33f654a"
+        },
+        {
+          "id": 22,
+          "pairs": 2000,
+          "path": "phase1a-generated-random/empty-48-48-random-22.scen",
+          "sha256": "b2919adeb84d75c3e4ca52eb494c3f89f6ee1944630ec461af88b11584837608"
+        },
+        {
+          "id": 23,
+          "pairs": 2000,
+          "path": "phase1a-generated-random/empty-48-48-random-23.scen",
+          "sha256": "5097ad414ed8a47be5fbbb85ec7b2629faac3833fb09a7fb0b3bff6923282e6d"
+        },
+        {
+          "id": 24,
+          "pairs": 2000,
+          "path": "phase1a-generated-random/empty-48-48-random-24.scen",
+          "sha256": "d1c1b26c266e65ac4a767727e1a57e7da66c1fbdfdb0fb7bae0bed3ea1d36489"
+        },
+        {
+          "id": 25,
+          "pairs": 2000,
+          "path": "phase1a-generated-random/empty-48-48-random-25.scen",
+          "sha256": "98c52953d9faf0389443e6aeedb0b87ceb66ec1c7c610a4b863eaf29c24d2720"
+        }
+      ],
+      "map": "empty-48-48",
+      "map_path": "external/lacam2/scripts/map/empty-48-48.map",
+      "max_agents": 2000,
+      "width": 48
+    },
+    {
+      "free_cells_largest_component": 819,
+      "height": 32,
+      "instances": [
+        {
+          "id": 1,
+          "pairs": 700,
+          "path": "phase1a-generated-random/random-32-32-20-random-1.scen",
+          "sha256": "ca6c9157c84e45e43ec7f283e7e36dba841eab1c813e6534e35ff430075eba07"
+        },
+        {
+          "id": 2,
+          "pairs": 700,
+          "path": "phase1a-generated-random/random-32-32-20-random-2.scen",
+          "sha256": "5d83ad0db596edfeaf7be1815b89f5a157b5836879df195c2dcbc51204a1f2cd"
+        },
+        {
+          "id": 3,
+          "pairs": 700,
+          "path": "phase1a-generated-random/random-32-32-20-random-3.scen",
+          "sha256": "3f509b765f14385a4aaad4177158c9dffeeeb228a9bbbb0800880bdb8d371d48"
+        },
+        {
+          "id": 4,
+          "pairs": 700,
+          "path": "phase1a-generated-random/random-32-32-20-random-4.scen",
+          "sha256": "fc876f4fc0fc73f3f8adae854dec3151c51bc23417933c8a961c7727e530c249"
+        },
+        {
+          "id": 5,
+          "pairs": 700,
+          "path": "phase1a-generated-random/random-32-32-20-random-5.scen",
+          "sha256": "11ccb2e4cb49c6ec908fdbfe04415bebc85d4421a5b683256408158e20483106"
+        },
+        {
+          "id": 6,
+          "pairs": 700,
+          "path": "phase1a-generated-random/random-32-32-20-random-6.scen",
+          "sha256": "3b8a4a8a3ad74f794c74767deafb7b57f6834db7af7592da66a9691dfb1a8b2c"
+        },
+        {
+          "id": 7,
+          "pairs": 700,
+          "path": "phase1a-generated-random/random-32-32-20-random-7.scen",
+          "sha256": "88c95757d6a607977328d8f49ae43d769cc90f785c694d9356481df701a56c07"
+        },
+        {
+          "id": 8,
+          "pairs": 700,
+          "path": "phase1a-generated-random/random-32-32-20-random-8.scen",
+          "sha256": "ce9493c7086a5f77dcb5819c60dae2edadd3e26e5bb464084fdc9f28c39f1041"
+        },
+        {
+          "id": 9,
+          "pairs": 700,
+          "path": "phase1a-generated-random/random-32-32-20-random-9.scen",
+          "sha256": "5d65378229e3b7fb3d78d9d662349d82a1a19d244364bc7aeb13f25b082f48c1"
+        },
+        {
+          "id": 10,
+          "pairs": 700,
+          "path": "phase1a-generated-random/random-32-32-20-random-10.scen",
+          "sha256": "d2e6312d142f5e58529c6856ee83233e4b4adce5a674772907872c2d9e33148a"
+        },
+        {
+          "id": 11,
+          "pairs": 700,
+          "path": "phase1a-generated-random/random-32-32-20-random-11.scen",
+          "sha256": "651ed038b6bf528303a724337057c6fb329595f91b8cde3371123b27e7555be4"
+        },
+        {
+          "id": 12,
+          "pairs": 700,
+          "path": "phase1a-generated-random/random-32-32-20-random-12.scen",
+          "sha256": "66a234a3f408b35f7f92fa04933812510a9a3320a995e7534c8aa4295e8d9b8e"
+        },
+        {
+          "id": 13,
+          "pairs": 700,
+          "path": "phase1a-generated-random/random-32-32-20-random-13.scen",
+          "sha256": "c69c181d607ae5da9d0074740f3285c895aaf238c8f76f2ed14685b6e31b46c6"
+        },
+        {
+          "id": 14,
+          "pairs": 700,
+          "path": "phase1a-generated-random/random-32-32-20-random-14.scen",
+          "sha256": "93e9dcf81915d83ca912038f20591dba8cf1d67773e317e5a7d5f44e6e74ddda"
+        },
+        {
+          "id": 15,
+          "pairs": 700,
+          "path": "phase1a-generated-random/random-32-32-20-random-15.scen",
+          "sha256": "a54c832f0b1ff47ca9d7f9580dfc4c5f567beb7798a362dd9bb1602e8f6c2a4f"
+        },
+        {
+          "id": 16,
+          "pairs": 700,
+          "path": "phase1a-generated-random/random-32-32-20-random-16.scen",
+          "sha256": "74e658ae58da558fe88106a0bc9246d3cf3a81d9256d6e46b2102bf96d70ac37"
+        },
+        {
+          "id": 17,
+          "pairs": 700,
+          "path": "phase1a-generated-random/random-32-32-20-random-17.scen",
+          "sha256": "0ff5cda5eab40d686f4785d41f1bf2f750203b78a54cfa5f7ea4b3e4b93ea541"
+        },
+        {
+          "id": 18,
+          "pairs": 700,
+          "path": "phase1a-generated-random/random-32-32-20-random-18.scen",
+          "sha256": "afbaa4f0dc6e089668a603adc6b2b5c48fdf8c1d9c68a2c07929524fc27aa5c9"
+        },
+        {
+          "id": 19,
+          "pairs": 700,
+          "path": "phase1a-generated-random/random-32-32-20-random-19.scen",
+          "sha256": "cbea505f7d95348fa99b3743a4ff5e2ef9a021e70a36da57527c4d6bb2c66460"
+        },
+        {
+          "id": 20,
+          "pairs": 700,
+          "path": "phase1a-generated-random/random-32-32-20-random-20.scen",
+          "sha256": "0ecf6ad22794472dbf3971a405c18c65f83ebd1939c84b17d946255b5c523f07"
+        },
+        {
+          "id": 21,
+          "pairs": 700,
+          "path": "phase1a-generated-random/random-32-32-20-random-21.scen",
+          "sha256": "812952b772d7911fe7f4622851927088bb824fa40ff4b3b4bb00ca2b721619e2"
+        },
+        {
+          "id": 22,
+          "pairs": 700,
+          "path": "phase1a-generated-random/random-32-32-20-random-22.scen",
+          "sha256": "7a97f3d91cc7c9ff46847d43c6bdfbf589f806553a45d10ec576629ad6366a63"
+        },
+        {
+          "id": 23,
+          "pairs": 700,
+          "path": "phase1a-generated-random/random-32-32-20-random-23.scen",
+          "sha256": "c8e4961d5c560435f46bbee239772bd99b9ec6bc63d5f59b757759bf7ee6c9ec"
+        },
+        {
+          "id": 24,
+          "pairs": 700,
+          "path": "phase1a-generated-random/random-32-32-20-random-24.scen",
+          "sha256": "3f0ee348d943dd3d9752bc61bcb84b853c9c303cbeeaa787689c241ea9dc7323"
+        },
+        {
+          "id": 25,
+          "pairs": 700,
+          "path": "phase1a-generated-random/random-32-32-20-random-25.scen",
+          "sha256": "98513eca6c8c455f229e44e364656d2185c38ae503c6bc16af78a76f8a29cf23"
+        }
+      ],
+      "map": "random-32-32-20",
+      "map_path": "external/lacam2/scripts/map/random-32-32-20.map",
+      "max_agents": 700,
+      "width": 32
+    },
+    {
+      "free_cells_largest_component": 790,
+      "height": 32,
+      "instances": [
+        {
+          "id": 1,
+          "pairs": 500,
+          "path": "phase1a-generated-random/maze-32-32-4-random-1.scen",
+          "sha256": "09926cd5dabb4d43d23ab7a3810d10ad3ac7afdc1afac59939ce6b3b80c7f8d6"
+        },
+        {
+          "id": 2,
+          "pairs": 500,
+          "path": "phase1a-generated-random/maze-32-32-4-random-2.scen",
+          "sha256": "522a857bbd0c9fc266c257051569c026b0af0576c7eb3c9d4b09704a18aba85c"
+        },
+        {
+          "id": 3,
+          "pairs": 500,
+          "path": "phase1a-generated-random/maze-32-32-4-random-3.scen",
+          "sha256": "fda34374443ca867b5fb028ef0e1979a04b90e7266b0f11d11d1cb3eb25a978a"
+        },
+        {
+          "id": 4,
+          "pairs": 500,
+          "path": "phase1a-generated-random/maze-32-32-4-random-4.scen",
+          "sha256": "c9541e4fb28fc2ecd394a78b12a080d3229a43cdd59f424ddc24050dd710ff05"
+        },
+        {
+          "id": 5,
+          "pairs": 500,
+          "path": "phase1a-generated-random/maze-32-32-4-random-5.scen",
+          "sha256": "548882af57b9987bb285709d250d35f10c53a153930b043451a51adeea8b0538"
+        },
+        {
+          "id": 6,
+          "pairs": 500,
+          "path": "phase1a-generated-random/maze-32-32-4-random-6.scen",
+          "sha256": "9b9b5cc61df3e62fa827f9bc8aaaec1a8ccb4f635fc486a60b6b9f00555dbf3f"
+        },
+        {
+          "id": 7,
+          "pairs": 500,
+          "path": "phase1a-generated-random/maze-32-32-4-random-7.scen",
+          "sha256": "f88b3399fb05461bdf4a5c954df8cb16c3610fa85838a6d6f61e0626a8396f08"
+        },
+        {
+          "id": 8,
+          "pairs": 500,
+          "path": "phase1a-generated-random/maze-32-32-4-random-8.scen",
+          "sha256": "d2b1f84e86caea019823e671bd25cc5558ca00176f78946f63dca9f0141a3fdf"
+        },
+        {
+          "id": 9,
+          "pairs": 500,
+          "path": "phase1a-generated-random/maze-32-32-4-random-9.scen",
+          "sha256": "4a892b4574e3f35318761b053126ba9704d997d9af156a1b83d23bd6158c5f08"
+        },
+        {
+          "id": 10,
+          "pairs": 500,
+          "path": "phase1a-generated-random/maze-32-32-4-random-10.scen",
+          "sha256": "26b56d7c4a257ea6fb13e68e33ed458523ddbe104127aa8af91938dc9223eb8c"
+        },
+        {
+          "id": 11,
+          "pairs": 500,
+          "path": "phase1a-generated-random/maze-32-32-4-random-11.scen",
+          "sha256": "f51d91f781871141bf207e8dcb62943ee94cf52a58b0e39d3d0022d5da8baa9b"
+        },
+        {
+          "id": 12,
+          "pairs": 500,
+          "path": "phase1a-generated-random/maze-32-32-4-random-12.scen",
+          "sha256": "f6f474de584cca48ecb95991dc48b9a1f04ea37e347df04f093592cf4b2a9f48"
+        },
+        {
+          "id": 13,
+          "pairs": 500,
+          "path": "phase1a-generated-random/maze-32-32-4-random-13.scen",
+          "sha256": "c7e6023c0a5a14a31bf383007a5b5aacad06d60a82b2e5b558efc33cfe8b2b4f"
+        },
+        {
+          "id": 14,
+          "pairs": 500,
+          "path": "phase1a-generated-random/maze-32-32-4-random-14.scen",
+          "sha256": "a1831a5c5faa48f108b64e8a556f70352f5596455183d2a1965334b55dc8d129"
+        },
+        {
+          "id": 15,
+          "pairs": 500,
+          "path": "phase1a-generated-random/maze-32-32-4-random-15.scen",
+          "sha256": "7665cdaf22e19597860b655bf3ff20758cd5953cbeddffd045a4b63561e2305d"
+        },
+        {
+          "id": 16,
+          "pairs": 500,
+          "path": "phase1a-generated-random/maze-32-32-4-random-16.scen",
+          "sha256": "b7e60974de34d4500a68d41c572af5cf7c20914be83d02da3334684510252416"
+        },
+        {
+          "id": 17,
+          "pairs": 500,
+          "path": "phase1a-generated-random/maze-32-32-4-random-17.scen",
+          "sha256": "9615940b4a26349d96caf4a0bdbdc91642a5e812a899a67502c4680fd28947b1"
+        },
+        {
+          "id": 18,
+          "pairs": 500,
+          "path": "phase1a-generated-random/maze-32-32-4-random-18.scen",
+          "sha256": "2367a646bb65bcfe3bccb6ba36a16587fb37e601cc817144086c9d394e483b3f"
+        },
+        {
+          "id": 19,
+          "pairs": 500,
+          "path": "phase1a-generated-random/maze-32-32-4-random-19.scen",
+          "sha256": "662f78fbe61c1d7ad555b4c5f76fbc9ca0798099dca68cacf86a443b594fdcc0"
+        },
+        {
+          "id": 20,
+          "pairs": 500,
+          "path": "phase1a-generated-random/maze-32-32-4-random-20.scen",
+          "sha256": "c9fae65f79e7600d8b5877ed980756713985851d65be8c473430bf652ec27c46"
+        },
+        {
+          "id": 21,
+          "pairs": 500,
+          "path": "phase1a-generated-random/maze-32-32-4-random-21.scen",
+          "sha256": "3445e698a8e1cd29ab31a09a5a654e9ccdc8d2d51b7ae390c09271711a323f4b"
+        },
+        {
+          "id": 22,
+          "pairs": 500,
+          "path": "phase1a-generated-random/maze-32-32-4-random-22.scen",
+          "sha256": "138ffb86bbb279c8fdc8227082dbe7220dab58afa4bcd42d9ca66e643d704c10"
+        },
+        {
+          "id": 23,
+          "pairs": 500,
+          "path": "phase1a-generated-random/maze-32-32-4-random-23.scen",
+          "sha256": "220d45501ca77a413463aa82c7196a434785d2f3834549a818a44add1ee6372f"
+        },
+        {
+          "id": 24,
+          "pairs": 500,
+          "path": "phase1a-generated-random/maze-32-32-4-random-24.scen",
+          "sha256": "074b39f8fff21ccdbac6a802e57933467418918296661de31b6b4f6fa6ff2354"
+        },
+        {
+          "id": 25,
+          "pairs": 500,
+          "path": "phase1a-generated-random/maze-32-32-4-random-25.scen",
+          "sha256": "5e533e5a991329b7c00cd75b4f4a5491363fa9411ab894661387a1141d8e89ed"
+        }
+      ],
+      "map": "maze-32-32-4",
+      "map_path": "external/lacam2/scripts/map/maze-32-32-4.map",
+      "max_agents": 500,
+      "width": 32
+    },
+    {
+      "free_cells_largest_component": 3270,
+      "height": 64,
+      "instances": [
+        {
+          "id": 1,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/random-64-64-20-random-1.scen",
+          "sha256": "11810e7f51d4fb576dc3cdd3e8f8fe8aaaef7e23c81a8f2a56d7325f94785bfd"
+        },
+        {
+          "id": 2,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/random-64-64-20-random-2.scen",
+          "sha256": "bd9204a89b1f870e04400168a928a1265c23bbee5b1073e100aed075aa62d165"
+        },
+        {
+          "id": 3,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/random-64-64-20-random-3.scen",
+          "sha256": "eae801a338bf78ae9374aaf8b9b787f4549131ee4b6af5a47a6d85df92a0cca6"
+        },
+        {
+          "id": 4,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/random-64-64-20-random-4.scen",
+          "sha256": "9a539a958d77b39bb071e7bc4c8e01b107268fb31917c1e6d45ba53d5313a836"
+        },
+        {
+          "id": 5,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/random-64-64-20-random-5.scen",
+          "sha256": "7471af53da66aa34bd21d077657a92ef404352dbc38134907d03ab78c76187b2"
+        },
+        {
+          "id": 6,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/random-64-64-20-random-6.scen",
+          "sha256": "b60fca588296af22ae18a9373cd48736eaff79d2dc6203e25db13b96530820ed"
+        },
+        {
+          "id": 7,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/random-64-64-20-random-7.scen",
+          "sha256": "28920f7188617c334923c4bbf813bb6b1b43df7673dfbe50b241082ef5a22197"
+        },
+        {
+          "id": 8,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/random-64-64-20-random-8.scen",
+          "sha256": "e6d318e8a3444d44275e9e86046dafcd9ca32d471c4021f0ec358c8d562a6e6e"
+        },
+        {
+          "id": 9,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/random-64-64-20-random-9.scen",
+          "sha256": "e949e8f1ca44a4dbbf096eedc41bf8804d42021ef8a46f6cb1f0ddb60a0b5ff7"
+        },
+        {
+          "id": 10,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/random-64-64-20-random-10.scen",
+          "sha256": "308d8b5c0b725822a90949786e07708d7742be63d03192343129aa406e47d518"
+        },
+        {
+          "id": 11,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/random-64-64-20-random-11.scen",
+          "sha256": "fed461ffb3a66f21c58a243f35382f17faa65184d9998d90d4774128071b82c9"
+        },
+        {
+          "id": 12,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/random-64-64-20-random-12.scen",
+          "sha256": "48842678a5b4c98497cc683c762f785d3b14833e0dd425cff8dd51ddeb9daf03"
+        },
+        {
+          "id": 13,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/random-64-64-20-random-13.scen",
+          "sha256": "d9f7f81f81856ef48e103933efc8a6477b298eb64b63cb90dc5d9ccc67d0ff2c"
+        },
+        {
+          "id": 14,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/random-64-64-20-random-14.scen",
+          "sha256": "604e439e0b8b08d5407edc422d411161d5d83fa01a111b560d68070fadc8c350"
+        },
+        {
+          "id": 15,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/random-64-64-20-random-15.scen",
+          "sha256": "15fd7390b396ca6c6584a0e0291e8a184a807c6104abf5bb4d9a014e132e9557"
+        },
+        {
+          "id": 16,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/random-64-64-20-random-16.scen",
+          "sha256": "cfa1ec078c97c8ae7966ba33efe7f72632f58b2dbebd5121cc6f18a645221169"
+        },
+        {
+          "id": 17,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/random-64-64-20-random-17.scen",
+          "sha256": "f0224700def61aba724c6d6947ec5eedfee3c9ad6f6859b312a8c1bb93b24381"
+        },
+        {
+          "id": 18,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/random-64-64-20-random-18.scen",
+          "sha256": "2cadfa26ecb1ba837d43d332e43c48544c450953eed6087c791149cf3cb17873"
+        },
+        {
+          "id": 19,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/random-64-64-20-random-19.scen",
+          "sha256": "e1e421c734c78ca711961dd9aab252ca6de338be9de5dfb9a0ee5f0ebb9c7b64"
+        },
+        {
+          "id": 20,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/random-64-64-20-random-20.scen",
+          "sha256": "adb5530914602a7273e44d5086171e50193d5b740016c32f5fc34596cdcc8ddd"
+        },
+        {
+          "id": 21,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/random-64-64-20-random-21.scen",
+          "sha256": "499f050ee9ecfa0b9a1f0fb11f9dc2bdcc96d5d3c68f242f217f04bfa35180be"
+        },
+        {
+          "id": 22,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/random-64-64-20-random-22.scen",
+          "sha256": "3937475080f7942addeac0a1537494a2401db43b2d4c11e6872f0f8fdeb1b133"
+        },
+        {
+          "id": 23,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/random-64-64-20-random-23.scen",
+          "sha256": "4987be8b38e5b9d4aa50ccbce27cd06ec860f81b9f3807d50c6fcd2fd1809063"
+        },
+        {
+          "id": 24,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/random-64-64-20-random-24.scen",
+          "sha256": "48f2fbd054bb26cf1cabee9f21a5df57542a1834bc93a0ed1bfd42e6624ab566"
+        },
+        {
+          "id": 25,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/random-64-64-20-random-25.scen",
+          "sha256": "8ed9c56f635f9265e2d17a37a699a5e274f079e3aa358510cb2af26528aa56dd"
+        }
+      ],
+      "map": "random-64-64-20",
+      "map_path": "external/lacam2/scripts/map/random-64-64-20.map",
+      "max_agents": 3000,
+      "width": 64
+    },
+    {
+      "free_cells_largest_component": 3232,
+      "height": 64,
+      "instances": [
+        {
+          "id": 1,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/room-64-64-8-random-1.scen",
+          "sha256": "189a4cbd5a5eac61335238e593ccfa8a35d6eb291df8deb588547435a0b34be3"
+        },
+        {
+          "id": 2,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/room-64-64-8-random-2.scen",
+          "sha256": "d59732e2f99168adbd273dc764abb928b85290bd21f6a116037730542a6a5e4a"
+        },
+        {
+          "id": 3,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/room-64-64-8-random-3.scen",
+          "sha256": "12d4164005563adaad9beec55a3ecc500839a4db1e492af65003b6771532573c"
+        },
+        {
+          "id": 4,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/room-64-64-8-random-4.scen",
+          "sha256": "e45b02d22a747c6bdf4d6003ebfb4842f1d0aa041cddc782bc3d6314ba0c33ee"
+        },
+        {
+          "id": 5,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/room-64-64-8-random-5.scen",
+          "sha256": "7626696302a815dc5a044d591b428c8e8b6f4233bf940f11fac51174a9157483"
+        },
+        {
+          "id": 6,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/room-64-64-8-random-6.scen",
+          "sha256": "99a68773d52023b8f1274de4e16642c96a350d01ec0e7014ba722c079a0c92a5"
+        },
+        {
+          "id": 7,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/room-64-64-8-random-7.scen",
+          "sha256": "c5e54774236ef1cb962b20694a9fa9c52de846b18ccb09752b62c6b8e870b36c"
+        },
+        {
+          "id": 8,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/room-64-64-8-random-8.scen",
+          "sha256": "daf2aa48d06def38b67e93474096170c86e2d7232839b42ebc9e9237c79b9195"
+        },
+        {
+          "id": 9,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/room-64-64-8-random-9.scen",
+          "sha256": "5fb4a175b81d9bd44880dbc5cdf91a0a7810e1696c3e7e7f150de1442f1fc620"
+        },
+        {
+          "id": 10,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/room-64-64-8-random-10.scen",
+          "sha256": "e0679d7fd112af5063a31ee875c22d73084d36001336b8fd2efaf2c93867e1eb"
+        },
+        {
+          "id": 11,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/room-64-64-8-random-11.scen",
+          "sha256": "61a287e76b1ad90c48b055cb5753e61963d57f810f151f9ea7d8a474bfd7fd9c"
+        },
+        {
+          "id": 12,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/room-64-64-8-random-12.scen",
+          "sha256": "4765a514602a095681d3614564d87aa575aa573774fbae7baf0bd746a8b5ca35"
+        },
+        {
+          "id": 13,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/room-64-64-8-random-13.scen",
+          "sha256": "7ad8e35fbb0475522ea1f192b40ce75683fc9c33d73eea9d42632d8cf1d8b929"
+        },
+        {
+          "id": 14,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/room-64-64-8-random-14.scen",
+          "sha256": "551923d8576347bb328c305a6e27c0f8842a8d8e5fccd0945f0f66505bf0da38"
+        },
+        {
+          "id": 15,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/room-64-64-8-random-15.scen",
+          "sha256": "ca7666e43c69514174cda693a717e040c170ed9de2a7d5d33955dd3805e61bbf"
+        },
+        {
+          "id": 16,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/room-64-64-8-random-16.scen",
+          "sha256": "2822057c882b45cb7accdee9f785fd6daed5bf3c176b12deda9cde363787c779"
+        },
+        {
+          "id": 17,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/room-64-64-8-random-17.scen",
+          "sha256": "65e8979c66dd2f049f1a28a6190e4ee65699788ff5cc49305a00b64077acdfad"
+        },
+        {
+          "id": 18,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/room-64-64-8-random-18.scen",
+          "sha256": "66f7fad001e6d06254b546611208980a473a88add28635c71c955713f0435505"
+        },
+        {
+          "id": 19,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/room-64-64-8-random-19.scen",
+          "sha256": "4d8357a8cd2fd754482d66d01691a1ea64ad59ec9f4a73ccc698687bc7982b29"
+        },
+        {
+          "id": 20,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/room-64-64-8-random-20.scen",
+          "sha256": "4df0859010b34de8c04a67ae2d434ecbd9ce958edb7418d9260d582085865b33"
+        },
+        {
+          "id": 21,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/room-64-64-8-random-21.scen",
+          "sha256": "229dce025265e6b60f99b02c09ba7c23baaadc0df4829af12ba8a9d964b149ac"
+        },
+        {
+          "id": 22,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/room-64-64-8-random-22.scen",
+          "sha256": "d18f073c83e7e2317db7c249e5a8f13c43086be142c19813d86de04b8654899f"
+        },
+        {
+          "id": 23,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/room-64-64-8-random-23.scen",
+          "sha256": "b2aec4881d1826eedbfc233f73f7aefd9ceef7ac064f746fa779cc79f2a907fa"
+        },
+        {
+          "id": 24,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/room-64-64-8-random-24.scen",
+          "sha256": "00014f0af3af0e6dd256d32c59e8f3b78b1181f0f4865b1a94300a4ceb9bc3b8"
+        },
+        {
+          "id": 25,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/room-64-64-8-random-25.scen",
+          "sha256": "d38b124ac0fdaea5ed4bf756df1ad16b826691b6c604e913f19c3c0a728b123b"
+        }
+      ],
+      "map": "room-64-64-8",
+      "map_path": "external/lacam2/scripts/map/room-64-64-8.map",
+      "max_agents": 3000,
+      "width": 64
+    },
+    {
+      "free_cells_largest_component": 5699,
+      "height": 63,
+      "instances": [
+        {
+          "id": 1,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/warehouse-10-20-10-2-1-random-1.scen",
+          "sha256": "93ec82a8e8dd39431cd71c40c1134f07bb4bd082715fd2b079fdd5ba0a582bee"
+        },
+        {
+          "id": 2,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/warehouse-10-20-10-2-1-random-2.scen",
+          "sha256": "b6ba82a60cb3de7e3420a66299ff3eef5a315ef5fdcfccf67c4dbfc80dfe0029"
+        },
+        {
+          "id": 3,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/warehouse-10-20-10-2-1-random-3.scen",
+          "sha256": "9065ec13ba4849fc962b15463de26909f60a7eda373d2e9ce50c782c68787157"
+        },
+        {
+          "id": 4,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/warehouse-10-20-10-2-1-random-4.scen",
+          "sha256": "2901e4d7e46e6eba4a1e501b5f942daa68b6e3cbd8ab3edda2b1bb9478268982"
+        },
+        {
+          "id": 5,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/warehouse-10-20-10-2-1-random-5.scen",
+          "sha256": "907a9a30373887b377b341863e9037ecd5edb5144ec25b903fc59a07eaa4ac74"
+        },
+        {
+          "id": 6,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/warehouse-10-20-10-2-1-random-6.scen",
+          "sha256": "f30dfd5b355d8c95e12c7231b24387748b9958a68bb697d1f0eba856327a81f1"
+        },
+        {
+          "id": 7,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/warehouse-10-20-10-2-1-random-7.scen",
+          "sha256": "b106eea4498c79d2f8d945cb1141570b5f823b508b28b7b013dc1b92b4c406e3"
+        },
+        {
+          "id": 8,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/warehouse-10-20-10-2-1-random-8.scen",
+          "sha256": "7136efe61dc74bc1ce3ea58cf0e30738d4578c6b40a7971efe6db448627e0981"
+        },
+        {
+          "id": 9,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/warehouse-10-20-10-2-1-random-9.scen",
+          "sha256": "23fb126055d3f56f4abc614061358e6beb36688fb97b66d27dc46d303a99fab4"
+        },
+        {
+          "id": 10,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/warehouse-10-20-10-2-1-random-10.scen",
+          "sha256": "454c01255df104cc81b670812fafcbdbb5f1a8a42b0d960c994b2d648c7dfcf2"
+        },
+        {
+          "id": 11,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/warehouse-10-20-10-2-1-random-11.scen",
+          "sha256": "8c3e47a20136c7fba6774d7b4d7a7fe6e1d044777aba6b5529fba9c79db3d7d9"
+        },
+        {
+          "id": 12,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/warehouse-10-20-10-2-1-random-12.scen",
+          "sha256": "e9ea7eeac0d0a02cb4cfb13c72cbe579575504ea0b447a4ad7c717da663f6853"
+        },
+        {
+          "id": 13,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/warehouse-10-20-10-2-1-random-13.scen",
+          "sha256": "884732cb7e643ea010d14ad5f49db9723e9d8a8b02f6734914f0f95be2a5c137"
+        },
+        {
+          "id": 14,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/warehouse-10-20-10-2-1-random-14.scen",
+          "sha256": "266bb16fd6a0f816c871417a3dbd2fe58f7ae5681636fa301a215454749d0039"
+        },
+        {
+          "id": 15,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/warehouse-10-20-10-2-1-random-15.scen",
+          "sha256": "28b2e8802650856e95e13881bc4a4f69f43ba949fc4aa3bda05fa9177d2debf7"
+        },
+        {
+          "id": 16,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/warehouse-10-20-10-2-1-random-16.scen",
+          "sha256": "80885e1778b353efae40825f08d22b6c507229c6514a6525b1b99175e2ba8b82"
+        },
+        {
+          "id": 17,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/warehouse-10-20-10-2-1-random-17.scen",
+          "sha256": "544f00e39c72c941073afb95641cfbc57e7bab80d53623802bad285bc4d2968e"
+        },
+        {
+          "id": 18,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/warehouse-10-20-10-2-1-random-18.scen",
+          "sha256": "90b7d65bf87bc066fc58fbcebc9d7b48715f33018fb0c581a579bad5d3097e1b"
+        },
+        {
+          "id": 19,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/warehouse-10-20-10-2-1-random-19.scen",
+          "sha256": "d1c17e8485d8fa6bd3462de95c2bc94f109a6d6ff5cd0c9a563453c09af24dde"
+        },
+        {
+          "id": 20,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/warehouse-10-20-10-2-1-random-20.scen",
+          "sha256": "d7525f3c9725549d39dcef1c9e1ec7fb0226913f850994c3a9d5b096d5aaaa90"
+        },
+        {
+          "id": 21,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/warehouse-10-20-10-2-1-random-21.scen",
+          "sha256": "dd7147c67e590c8e42253e153fb69062cb1893c400b9c7c885127a05a7147603"
+        },
+        {
+          "id": 22,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/warehouse-10-20-10-2-1-random-22.scen",
+          "sha256": "85ad4df6182b891d1d1fce9116f5b7d860ade214dce2e9cc88ea37a6464ff1f2"
+        },
+        {
+          "id": 23,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/warehouse-10-20-10-2-1-random-23.scen",
+          "sha256": "22033bb056210d1c6c9f60deec5588631478cf8f80beb8ca403b0e01a7b82e8a"
+        },
+        {
+          "id": 24,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/warehouse-10-20-10-2-1-random-24.scen",
+          "sha256": "f192512e707be23d799d0e8ca9e80c99145dfe14ac58021cdd60857122bde558"
+        },
+        {
+          "id": 25,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/warehouse-10-20-10-2-1-random-25.scen",
+          "sha256": "092ddfe290fbb504c4c35cf31daf7c6506242194fd0b75d7c5170f0120841194"
+        }
+      ],
+      "map": "warehouse-10-20-10-2-1",
+      "map_path": "external/lacam2/scripts/map/warehouse-10-20-10-2-1.map",
+      "max_agents": 3000,
+      "width": 161
+    },
+    {
+      "free_cells_largest_component": 9776,
+      "height": 84,
+      "instances": [
+        {
+          "id": 1,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/warehouse-10-20-10-2-2-random-1.scen",
+          "sha256": "d77a9ebd0faa5c67f82e4689ef21fd2c16816eae57efaf1503041b3172ce98c2"
+        },
+        {
+          "id": 2,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/warehouse-10-20-10-2-2-random-2.scen",
+          "sha256": "49052bfbbb00a7892c237ed32761152eccf6a33c7b1929819a814b6212cd2289"
+        },
+        {
+          "id": 3,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/warehouse-10-20-10-2-2-random-3.scen",
+          "sha256": "644392f4d02b1135fd157911ae63c2a61ac639cb52e8f76e1dd0dd03a582b670"
+        },
+        {
+          "id": 4,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/warehouse-10-20-10-2-2-random-4.scen",
+          "sha256": "12b23ed9e327090f4fa3f45b65732fdca3200fde66b213cb15035726899a8f17"
+        },
+        {
+          "id": 5,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/warehouse-10-20-10-2-2-random-5.scen",
+          "sha256": "cf4429c9d874e4614f6d1922d67764b9b4d698f6a3853b2d74732886f7b53f4c"
+        },
+        {
+          "id": 6,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/warehouse-10-20-10-2-2-random-6.scen",
+          "sha256": "ae385730c769919aedebb8ce20f31c1bef5e2d0396a090f6baed1cbd40451e2f"
+        },
+        {
+          "id": 7,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/warehouse-10-20-10-2-2-random-7.scen",
+          "sha256": "04ce14cff5ee14c249dbaa2f34d515275645ee46ee97d0b670d3a21f34ffa44d"
+        },
+        {
+          "id": 8,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/warehouse-10-20-10-2-2-random-8.scen",
+          "sha256": "faa5c61d63322cf276f69dcb3601da310b48f8be8fee91f59b40a95e0648a6a3"
+        },
+        {
+          "id": 9,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/warehouse-10-20-10-2-2-random-9.scen",
+          "sha256": "72315bdd9eeeddf29bd7ea2d832d1e830e8803408a8fac805d2a328a0ac5de45"
+        },
+        {
+          "id": 10,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/warehouse-10-20-10-2-2-random-10.scen",
+          "sha256": "17428d40149d1112340f3d47e36bb9b68c9d5f2972b997016d2d9e2548e3688a"
+        },
+        {
+          "id": 11,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/warehouse-10-20-10-2-2-random-11.scen",
+          "sha256": "fc7d057ddc97fb370025520877f8c22b17194f5bb4de6e979cf778da833f022d"
+        },
+        {
+          "id": 12,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/warehouse-10-20-10-2-2-random-12.scen",
+          "sha256": "9a0777ed23ea24478dd2f77d93fc320fef35f73f4deaafbd8a4e4bdb1c362fb9"
+        },
+        {
+          "id": 13,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/warehouse-10-20-10-2-2-random-13.scen",
+          "sha256": "388ea373f4c1f29eb286f0a4697abca6a54ebaac9d90895c5a10e20ed2220749"
+        },
+        {
+          "id": 14,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/warehouse-10-20-10-2-2-random-14.scen",
+          "sha256": "de463602829d7d241858c1b7573aa856d5d5b63bdd1627d6630ed2776ec87452"
+        },
+        {
+          "id": 15,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/warehouse-10-20-10-2-2-random-15.scen",
+          "sha256": "034e7f2c7b7547090351e5ace09780154c9b3a9f13c0211ec1776a4f0de16f3e"
+        },
+        {
+          "id": 16,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/warehouse-10-20-10-2-2-random-16.scen",
+          "sha256": "eda04b93cba682523251b103222d4271ac2cdc51dac18b6f040f756cb198f98d"
+        },
+        {
+          "id": 17,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/warehouse-10-20-10-2-2-random-17.scen",
+          "sha256": "840866900ae6c5f6e1bfe5a4673e47c2505a7ab178fd3632198cbc877ee40188"
+        },
+        {
+          "id": 18,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/warehouse-10-20-10-2-2-random-18.scen",
+          "sha256": "ff67956ab4b272a039867246aa393d781cbf3db2bfa5c0472aa148bac7f429bf"
+        },
+        {
+          "id": 19,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/warehouse-10-20-10-2-2-random-19.scen",
+          "sha256": "71d0b9a45c8f658e2c49c6cb4f081353f8592a22c34343cfe982c828b406a951"
+        },
+        {
+          "id": 20,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/warehouse-10-20-10-2-2-random-20.scen",
+          "sha256": "916ba60a619ebe0c0247883a846c018513db1643620d8f9e2be3d01682531c14"
+        },
+        {
+          "id": 21,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/warehouse-10-20-10-2-2-random-21.scen",
+          "sha256": "51a1c481654240326d35a45725b2733662017be086d481dc6e435d4d35e4c6a0"
+        },
+        {
+          "id": 22,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/warehouse-10-20-10-2-2-random-22.scen",
+          "sha256": "019b3371121dd1d3daa8078d22039924f9a1de47fdbe6a156eb8275e8c55e598"
+        },
+        {
+          "id": 23,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/warehouse-10-20-10-2-2-random-23.scen",
+          "sha256": "b7f94be05847d338d578be766c6bbccd27820d2c1a16f7831fe75362aed62b6b"
+        },
+        {
+          "id": 24,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/warehouse-10-20-10-2-2-random-24.scen",
+          "sha256": "d83cfadc9a00155c68223ba49f04156bddef3eb35256b3808dea885b774389a6"
+        },
+        {
+          "id": 25,
+          "pairs": 3000,
+          "path": "phase1a-generated-random/warehouse-10-20-10-2-2-random-25.scen",
+          "sha256": "b0fdcc47ed5c7b1e6e7f4d2ec46e598641a523f5f209c7b2ebbbbca71c82652f"
+        }
+      ],
+      "map": "warehouse-10-20-10-2-2",
+      "map_path": "external/lacam2/scripts/map/warehouse-10-20-10-2-2.map",
+      "max_agents": 3000,
+      "width": 170
+    }
+  ],
+  "rules": {
+    "component": "largest 4-neighbor connected free-cell component",
+    "distance_column": "Manhattan distance hint; LaCAM2 parser ignores this column and recomputes graph distances",
+    "goals": "sampled without replacement",
+    "per_agent_start_goal": "start != goal",
+    "starts": "sampled without replacement"
+  },
+  "scenario_dir": "outputs/tmp/phase1a/generated/phase1a-generated-random",
+  "scenario_zip": "outputs/tmp/phase1a/generated/phase1a-generated-random.zip",
+  "script_version": "phase1a-scenario-generator-v1",
+  "source_manifest": "configs/phase1a/manifest_plus_3000.jsonl",
+  "zip_sha256": "de0308757a107e845de0cf9a200c6bb8144ed1da3134ca8484f86468bb722a93"
+}

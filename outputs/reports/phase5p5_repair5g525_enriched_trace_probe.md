@@ -1,0 +1,21 @@
+# Repair5G.5.25 Enriched Trace Probe
+
+- schema_version: `phase5p5_repair5g525_enriched_trace_probe_summary_v1`
+- decision: `enriched_trace_probe_passed_continue_features`
+- probe_mode: `fresh_trace_only_with_committed_g523_candidate_budget_outcomes`
+- contexts: `36`
+- candidates: `30`
+- budgets: `[1000, 2000]`
+- expected_rows: `2160`
+- candidate_budget_rows: `2160`
+- trace_context_budget_rows: `133`
+- candidate_recognition: `{'recognized': 30, 'unrecognized': 0, 'source': 'g523_committed_integrity_plus_g525_smoke'}`
+- reduction_reason: `deterministic minimum acceptable fresh-trace subset to avoid another large raw counterfactual log`
+- gates: `{'observed_ids_only': True, 'ids_166_205_untouched': True, 'duplicate_context_candidate_budget_rows_eq_0': True, 'all_selected_candidates_recognized': True, 'new_trace_keys_present': True, 'raw_log_sha256_verified': True, 'external_lacam2_untouched': True, 'minimum_contexts': True, 'minimum_candidates': True, 'candidate_budget_rows_match_expected': True}`
+- observed_ids_only: `True`
+- ids_166_205_untouched: `True`
+- phase5p5_allowed: `False`
+- phase6_allowed: `False`
+- runtime_claim_allowed: `False`
+- learned_runtime_policy_validated: `False`
+- aaai_ready: `False`

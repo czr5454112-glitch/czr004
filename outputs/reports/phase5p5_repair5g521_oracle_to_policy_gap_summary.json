@@ -1,0 +1,19 @@
+{
+  "aaai_ready": false,
+  "best_policy": "conformal_abstention_selector",
+  "calibration_ece_avoidable_risk": 0.2635924761841143,
+  "decision": "oracle_to_policy_gap_autopsy_completed",
+  "group_summary_rows": 12,
+  "harmful_classification_counts": {},
+  "harmful_new_false_positive_contexts": 0,
+  "learned_runtime_policy_validated": false,
+  "missed_classification_counts": {
+    "safety_gate_overblocked": 6
+  },
+  "missed_opportunity_contexts": 6,
+  "parameter_delta_rows": 6,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g521_oracle_to_policy_gap_summary_v1"
+}

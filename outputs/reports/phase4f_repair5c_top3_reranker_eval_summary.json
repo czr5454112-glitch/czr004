@@ -1,0 +1,46 @@
+{
+  "base_eval_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase4f_repair5_expand5000_postnext_hightoken_attn_mlp_head_rank_recall_perrule_eval_seed61.csv",
+  "branch": "phase4f5p5-stable-attention-lau",
+  "commit": "70951f0",
+  "created_at": "2026-05-31T12:14:23.382176",
+  "dataset": "C:\\PROGRAMING\\czr004\\artifacts\\teacher\\laur\\full_repair5_attention_native_expand5000_rawtrace_hightoken\\update_labels\\phase4_laur_attention_native_expand5000_rawtrace_hightoken_dataset.jsonl.zst",
+  "dirty": "tracked-dirty_untracked-present",
+  "metrics_by_split": {
+    "train": {
+      "high_margin_capture_proxy": 0.7687344913151365,
+      "sample_count": 4194,
+      "selected_harmful_rate": 0.13161659513590845,
+      "selected_rule_distribution": {
+        "block_heavy": 1233,
+        "block_light": 50,
+        "commit_heavy": 892,
+        "decay_095": 48,
+        "wait_heavy": 23,
+        "wait_light": 1948
+      },
+      "selected_vs_additive_delta": 0.011642141686006042,
+      "target_in_candidates_rate": 0.6351931330472103,
+      "top1_among_candidates": 0.4284692417739628,
+      "utility_regret": 0.019428660730990983
+    },
+    "validation": {
+      "high_margin_capture_proxy": 0.7451612903225806,
+      "sample_count": 762,
+      "selected_harmful_rate": 0.1141732283464567,
+      "selected_rule_distribution": {
+        "block_heavy": 238,
+        "commit_heavy": 257,
+        "decay_095": 29,
+        "wait_light": 238
+      },
+      "selected_vs_additive_delta": 0.009962825950379093,
+      "target_in_candidates_rate": 0.6430446194225722,
+      "top1_among_candidates": 0.4304461942257218,
+      "utility_regret": 0.017757860889241195
+    }
+  },
+  "model": "C:\\PROGRAMING\\czr004\\artifacts\\models\\laur_ltm\\repair5c_top3_reranker_seed61\\model.pt",
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "schema_version": "phase4f_repair5c_topk_reranker_eval_summary_v1"
+}

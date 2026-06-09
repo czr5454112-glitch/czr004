@@ -1,0 +1,45 @@
+{
+  "aaai_ready": false,
+  "best_single_candidate_train_only": "repair5g59_low_beta_high_cap",
+  "budget_sensitive_contexts": 0,
+  "candidate_distribution_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase5p5_repair5g510_lattice_candidate_distribution.csv",
+  "candidate_space_improves_g58": true,
+  "candidate_space_oracle_gap_vs_g58": -0.015080627924999979,
+  "complete_primary_contexts": 2,
+  "context_oracle_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase5p5_repair5g510_lattice_oracle_by_context.csv",
+  "counterfactuals_run": true,
+  "decision": "lattice_adapter_smoke_passed_server_required_for_full_run",
+  "gates": {
+    "candidate_space_oracle_gap_vs_g58_reported": true,
+    "complete_primary_contexts_ge_60": false,
+    "ids_166_205_untouched": true,
+    "measured_contexts_ge_60": false,
+    "observed_ids_only": true,
+    "oracle_beats_additive_fraction_reported": true,
+    "oracle_beats_static_fraction_reported": true,
+    "primary_1000_2000_stable_contexts_ge_40": false
+  },
+  "later_iteration_measured_contexts": 0,
+  "mean_oracle_gap_over_additive": -0.15941233049000003,
+  "mean_oracle_gap_over_static": -0.028712565610000018,
+  "measured_contexts": 2,
+  "no_solution_or_infeasible_probe_rows": 37,
+  "oracle_beats_additive_fraction": 1.0,
+  "oracle_beats_static_fraction": 1.0,
+  "per_candidate_win_distribution": {
+    "repair5g59_low_beta_high_cap": 2
+  },
+  "per_map_agent_oracle_wins": {
+    "random-32-32-20|a100": {
+      "repair5g59_low_beta_high_cap": 1
+    },
+    "random-32-32-20|a50": {
+      "repair5g59_low_beta_high_cap": 1
+    }
+  },
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "primary_1000_2000_stable_contexts": 2,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g510_lattice_counterfactual_analysis_summary_v1"
+}

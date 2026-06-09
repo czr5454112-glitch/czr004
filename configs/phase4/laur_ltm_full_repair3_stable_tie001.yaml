@@ -1,0 +1,48 @@
+schema_version: phase4_laur_stable_target_config_v1
+mode: phase4-full-repair3-stable-tie001
+
+base_config: configs/phase4/laur_ltm_full_repair1.yaml
+source_dataset_jsonl: artifacts/teacher/laur/full_repair1/update_labels/phase4_laur_update_dataset_full_repair1.jsonl
+source_probe_jsonl: artifacts/teacher/laur/full_repair1/probes/phase4_laur_probe_full_repair1.jsonl
+
+stable_target:
+  tie_epsilon: 0.01
+  neutral_delta_threshold: 0.005
+  prefer_additive_if_tied: true
+  rule_priority:
+    - additive_ltm
+    - commit_heavy
+    - block_heavy
+    - wait_light
+    - wait_heavy
+    - block_light
+    - decay_095
+    - decay_090
+  dataset_jsonl: artifacts/teacher/laur/full_repair3_stable_targets/update_labels/phase4_laur_update_dataset_full_repair3_stable_tie001.jsonl
+  dataset_summary_json: outputs/reports/phase4_laur_update_dataset_full_repair3_stable_tie001_summary.json
+  dataset_summary_csv: outputs/tables/phase4_laur_update_dataset_full_repair3_stable_tie001_summary.csv
+
+training:
+  inherits: configs/phase4/laur_ltm_full_repair1.yaml
+  model_output_dir: artifacts/models/laur_ltm/full_repair3_stable_tie001_mlp
+  train_report_md: outputs/reports/phase4f_repair3_stable_tie001_train.md
+  train_summary_json: outputs/reports/phase4f_repair3_stable_tie001_train_summary.json
+  eval_report_md: outputs/reports/phase4f_repair3_stable_tie001_eval_h010.md
+  eval_summary_json: outputs/reports/phase4f_repair3_stable_tie001_eval_h010_summary.json
+  eval_summary_csv: outputs/tables/phase4f_repair3_stable_tie001_eval_h010.csv
+  seed: 61
+  harmful_threshold: 0.10
+
+gate:
+  validation_top1_min: 0.35
+  validation_top3_min: 0.70
+  harmful_recall_min: 0.80
+  harmful_precision_min: 0.30
+  predicted_rule_mean_delta_min_exclusive: 0.0
+  validation_non_neutral_min: 50
+
+conservative_fallback:
+  diagnostic_only: true
+  safety_threshold_candidate: 0.30
+  evidence_report: outputs/reports/phase4f_repair3_conservative_fallback_report.md
+  note: Use only as the first Phase5 fallback candidate after parity smoke; it does not replace the Phase4F exact-rule gate.

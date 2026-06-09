@@ -1,0 +1,32 @@
+{
+  "aaai_ready": false,
+  "category_counts": {
+    "candidate_disagreement": 21,
+    "harmful_false_positive": 3,
+    "high_uncertainty": 37,
+    "missed_helpful_fallback": 39,
+    "oracle_gap_high": 20,
+    "static_near_oracle": 8
+  },
+  "decision": "error_bank_created_continue_lattice",
+  "error_bank_rows": 128,
+  "gates": {
+    "error_bank_rows_gt_0": true,
+    "harmful_fp_count_ge_2": true,
+    "ids_166_205_untouched": true,
+    "missed_helpful_count_gt_0": true,
+    "observed_ids_only": true,
+    "static_near_oracle_count_ge_8": true
+  },
+  "harmful_fp_count": 3,
+  "high_uncertainty_count": 37,
+  "ids_166_205_untouched": true,
+  "learned_runtime_policy_validated": false,
+  "missed_helpful_count": 39,
+  "observed_ids_only": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g516_error_bank_summary_v1",
+  "static_near_oracle_count": 8
+}

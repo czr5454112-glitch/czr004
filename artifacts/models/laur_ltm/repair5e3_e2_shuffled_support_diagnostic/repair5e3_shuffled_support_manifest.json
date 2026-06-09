@@ -1,0 +1,16 @@
+{
+  "created_at": "2026-05-31T19:06:16.594496",
+  "diagnostic_only": true,
+  "notes": [
+    "Ablation only: E2 support rule ids are rotated across contexts.",
+    "This artifact is not a learned selector and must not be promoted."
+  ],
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_dir": "artifacts\\models\\laur_ltm\\repair5e3_e2_shuffled_support_diagnostic",
+  "schema_version": "phase5p5_repair5e3_e2_shuffled_support_diagnostic_v1",
+  "solver_semantic_changes": false,
+  "source_recovery_csv": "artifacts\\models\\laur_ltm\\repair5e2_guarded_oracle_aligned_selector\\repair5e2_recovery_rules.csv",
+  "source_recovery_sha256": "70de37c25d2367d6d8d69ab156023821e5aaef2567f5cb599245b3c8e82bdf5e",
+  "source_runtime_dir": "artifacts\\models\\laur_ltm\\repair5e2_guarded_oracle_aligned_selector"
+}

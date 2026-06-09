@@ -1,0 +1,49 @@
+{
+  "aaai_ready": false,
+  "agent_counts": [
+    50,
+    100
+  ],
+  "candidate_count": 7,
+  "candidate_ids": [
+    "additive_ltm",
+    "repair5g2_best_frozen_static_candidate",
+    "repair5g2_frozen_static_or_selector",
+    "repair5g2_c_equiv_best_frozen_baseline",
+    "repair5g1_shield_c100_b125_w075_d100_beta0p35_max0p75",
+    "repair5g1_shield_c125_b125_w075_d095_beta0p2_max0p5",
+    "repair5g1_shield_c125_b125_w075_d095_beta0p35_max0p75"
+  ],
+  "checkpoint_jsonl": "C:\\PROGRAMING\\czr004\\outputs\\logs\\phase5p5_repair5g56_counterfactual_label_completion\\phase5p5_repair5g56_update_checkpoints.jsonl",
+  "checkpoint_rows": 80,
+  "context_count": 80,
+  "diagnostic_only": true,
+  "ids_166_205_untouched": true,
+  "instance_ids": [
+    156,
+    157,
+    158,
+    159,
+    160,
+    161,
+    162,
+    163,
+    164,
+    165
+  ],
+  "ltm_max_iterations": 4,
+  "maps": [
+    "random-32-32-20",
+    "maze-32-32-4",
+    "warehouse-10-20-10-2-1"
+  ],
+  "max_contexts_per_group": 2,
+  "observed_ids_only": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "probe_jsonl": "C:\\PROGRAMING\\czr004\\outputs\\logs\\phase5p5_repair5g56_counterfactual_label_completion\\phase5p5_repair5g56_counterfactual_update_probes.jsonl",
+  "probe_rows": 560,
+  "schema_version": "phase5p5_repair5g56_counterfactual_label_completion_run_summary_v1",
+  "short_budget_ms": 1000.0,
+  "time_limit_sec": 5.0
+}

@@ -1,0 +1,3 @@
+all_duplicate_keys,path,raw_solver_duplicate_keys,raw_solver_rows,resume_safe_raw_solver_rows,row_count,selector_alias_rows,source,synthetic_diagnostic_rows,synthetic_rows_counted_as_raw_solver_rows
+0,outputs\logs\phase5p5_repair5g3_broader_validation\phase5p5_repair5g3_broader_validation.jsonl,0,3840,True,6240,960,g3_broader_jsonl,1440,0
+0,outputs\logs\phase5p5_repair5g3_determinism_repeat\phase5p5_repair5g3_determinism_repeat.jsonl,0,2160,True,3240,720,g3_determinism_repeat_jsonl,360,0

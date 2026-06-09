@@ -1,0 +1,29 @@
+{
+  "aaai_ready": false,
+  "budget_values_ms": [
+    250.0,
+    500.0,
+    1000.0
+  ],
+  "candidate_rank_stability_measured": true,
+  "g6_training_allowed": false,
+  "gates": {
+    "candidate_rank_stability_measured": true,
+    "oracle_candidate_stability_measured": true,
+    "static_vs_oracle_sign_stability_measured": true,
+    "unstable_labels_separated_from_training_eligible": true
+  },
+  "measured_contexts": 6,
+  "oracle_candidate_stability_measured": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "probe_budget_stability_measured": true,
+  "probe_rows": 126,
+  "rank_stability_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase5p5_repair5g55_probe_budget_rank_stability.csv",
+  "schema_version": "phase5p5_repair5g55_probe_budget_stability_summary_v1",
+  "sign_stable_contexts": 3,
+  "static_vs_oracle_sign_stability_measured": true,
+  "training_eligible_stable_contexts": 3,
+  "unstable_contexts": 3,
+  "unstable_labels_separated_from_training_eligible": true
+}

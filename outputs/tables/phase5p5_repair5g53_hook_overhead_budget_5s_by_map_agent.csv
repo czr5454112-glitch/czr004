@@ -1,0 +1,25 @@
+agents,better,bootstrap,equal,map,mean_delta_ratio_vs_ltm,median_delta_ratio_vs_ltm,method,ratio_worse_than_ltm_groups,rows,success_worse_than_ltm_groups,worse
+100,0,"{'mean': 0.0, 'ci_low': 0.0, 'ci_high': 0.0, 'prob_mean_lt_0': 0.0, 'samples': 2000}",10,warehouse-10-20-10-2-1,0.0,0.0,repair5g1_shield_c100_b125_w075_d100_beta0p35_max0p75,0,10,0,0
+100,0,"{'mean': 0.0, 'ci_low': 0.0, 'ci_high': 0.0, 'prob_mean_lt_0': 0.0, 'samples': 2000}",10,warehouse-10-20-10-2-1,0.0,0.0,repair5g1_shield_c125_b125_w075_d095_beta0p2_max0p5,0,10,0,0
+100,0,"{'mean': 0.0, 'ci_low': 0.0, 'ci_high': 0.0, 'prob_mean_lt_0': 0.0, 'samples': 2000}",10,warehouse-10-20-10-2-1,0.0,0.0,repair5g1_shield_c125_b125_w075_d095_beta0p35_max0p75,0,10,0,0
+100,0,"{'mean': 0.0, 'ci_low': 0.0, 'ci_high': 0.0, 'prob_mean_lt_0': 0.0, 'samples': 2000}",10,warehouse-10-20-10-2-1,0.0,0.0,repair5g2_best_frozen_static_candidate,0,10,0,0
+100,0,"{'mean': 0.0, 'ci_low': 0.0, 'ci_high': 0.0, 'prob_mean_lt_0': 0.0, 'samples': 2000}",10,warehouse-10-20-10-2-1,0.0,0.0,repair5g2_c_equiv_best_frozen_baseline,0,10,0,0
+100,0,"{'mean': 0.0, 'ci_low': 0.0, 'ci_high': 0.0, 'prob_mean_lt_0': 0.0, 'samples': 2000}",10,warehouse-10-20-10-2-1,0.0,0.0,repair5g2_frozen_static_or_selector,0,10,0,0
+100,0,"{'mean': 0.0, 'ci_low': 0.0, 'ci_high': 0.0, 'prob_mean_lt_0': 0.0, 'samples': 2000}",10,warehouse-10-20-10-2-1,0.0,0.0,repair5g2_g1_top_diagnostic_candidate,0,10,0,0
+100,0,"{'mean': 0.0, 'ci_low': 0.0, 'ci_high': 0.0, 'prob_mean_lt_0': 0.0, 'samples': 2000}",10,warehouse-10-20-10-2-1,0.0,0.0,repair5g53_runtime_always_map_agent_minimal_hook,0,10,0,0
+100,0,"{'mean': 0.0, 'ci_low': 0.0, 'ci_high': 0.0, 'prob_mean_lt_0': 0.0, 'samples': 2000}",10,warehouse-10-20-10-2-1,0.0,0.0,repair5g53_runtime_always_static_minimal_hook,0,10,0,0
+100,0,"{'mean': 0.0, 'ci_low': 0.0, 'ci_high': 0.0, 'prob_mean_lt_0': 0.0, 'samples': 2000}",10,warehouse-10-20-10-2-1,0.0,0.0,repair5g53_runtime_static_shadow_noop_minimal,0,10,0,0
+100,0,"{'mean': 0.0, 'ci_low': 0.0, 'ci_high': 0.0, 'prob_mean_lt_0': 0.0, 'samples': 2000}",10,warehouse-10-20-10-2-1,0.0,0.0,repair5g53_shadow_static_deferred_log,0,10,0,0
+100,0,"{'mean': 0.0, 'ci_low': 0.0, 'ci_high': 0.0, 'prob_mean_lt_0': 0.0, 'samples': 2000}",10,warehouse-10-20-10-2-1,0.0,0.0,repair5g53_shadow_static_full_log,0,10,0,0
+100,0,"{'mean': 0.0, 'ci_low': 0.0, 'ci_high': 0.0, 'prob_mean_lt_0': 0.0, 'samples': 2000}",10,warehouse-10-20-10-2-1,0.0,0.0,repair5g53_static_hook_cost_audit_only,0,10,0,0
+100,0,"{'mean': 0.0, 'ci_low': 0.0, 'ci_high': 0.0, 'prob_mean_lt_0': 0.0, 'samples': 2000}",10,warehouse-10-20-10-2-1,0.0,0.0,repair5g53_static_hook_features_no_cost_audit,0,10,0,0
+100,0,"{'mean': 0.0, 'ci_low': 0.0, 'ci_high': 0.0, 'prob_mean_lt_0': 0.0, 'samples': 2000}",10,warehouse-10-20-10-2-1,0.0,0.0,repair5g53_static_hook_full_features_jsonl,0,10,0,0
+100,0,"{'mean': 0.0, 'ci_low': 0.0, 'ci_high': 0.0, 'prob_mean_lt_0': 0.0, 'samples': 2000}",10,warehouse-10-20-10-2-1,0.0,0.0,repair5g53_static_hook_full_features_no_jsonl,0,10,0,0
+100,0,"{'mean': 0.0, 'ci_low': 0.0, 'ci_high': 0.0, 'prob_mean_lt_0': 0.0, 'samples': 2000}",10,warehouse-10-20-10-2-1,0.0,0.0,repair5g53_static_hook_jsonl_log_only,0,10,0,0
+100,0,"{'mean': 0.0, 'ci_low': 0.0, 'ci_high': 0.0, 'prob_mean_lt_0': 0.0, 'samples': 2000}",10,warehouse-10-20-10-2-1,0.0,0.0,repair5g53_static_hook_memory_counter,0,10,0,0
+100,0,"{'mean': 0.0, 'ci_low': 0.0, 'ci_high': 0.0, 'prob_mean_lt_0': 0.0, 'samples': 2000}",10,warehouse-10-20-10-2-1,0.0,0.0,repair5g53_static_hook_minimal,0,10,0,0
+100,0,"{'mean': 0.0, 'ci_low': 0.0, 'ci_high': 0.0, 'prob_mean_lt_0': 0.0, 'samples': 2000}",10,warehouse-10-20-10-2-1,0.0,0.0,repair5g53_static_hook_params_hash_only,0,10,0,0
+100,0,"{'mean': 0.0, 'ci_low': 0.0, 'ci_high': 0.0, 'prob_mean_lt_0': 0.0, 'samples': 2000}",10,warehouse-10-20-10-2-1,0.0,0.0,repair5g53_static_hook_traffic_hash_only,0,10,0,0
+100,0,"{'mean': 0.0, 'ci_low': 0.0, 'ci_high': 0.0, 'prob_mean_lt_0': 0.0, 'samples': 2000}",10,warehouse-10-20-10-2-1,0.0,0.0,repair5g_dual_c_equiv_additive,0,10,0,0
+100,0,"{'mean': 0.0, 'ci_low': 0.0, 'ci_high': 0.0, 'prob_mean_lt_0': 0.0, 'samples': 2000}",10,warehouse-10-20-10-2-1,0.0,0.0,repair5g_dual_c_equiv_c100_b100_w075_d095,0,10,0,0
+100,0,"{'mean': 0.0, 'ci_low': 0.0, 'ci_high': 0.0, 'prob_mean_lt_0': 0.0, 'samples': 2000}",10,warehouse-10-20-10-2-1,0.0,0.0,repair5g_dual_c_equiv_c100_b100_w075_d100,0,10,0,0

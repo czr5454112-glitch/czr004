@@ -1,0 +1,13 @@
+group_type,group_key,rows,classification_counts,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+map_agent_group,maze-32-32-4|a50,3,{'safety_gate_overblocked': 3},False,False,False,False,False
+map_agent_group,random-32-32-20|a100,1,{'safety_gate_overblocked': 1},False,False,False,False,False
+map_agent_group,random-32-32-20|a50,2,{'safety_gate_overblocked': 2},False,False,False,False,False
+map_family,maze,3,{'safety_gate_overblocked': 3},False,False,False,False,False
+map_family,random,3,{'safety_gate_overblocked': 3},False,False,False,False,False
+candidate_block,block_heavy,3,{'safety_gate_overblocked': 3},False,False,False,False,False
+candidate_block,high_beta,2,{'safety_gate_overblocked': 2},False,False,False,False,False
+candidate_block,wait_conservative,1,{'safety_gate_overblocked': 1},False,False,False,False,False
+selected_candidate_family,static,6,{'safety_gate_overblocked': 6},False,False,False,False,False
+oracle_candidate_family,block_heavy,3,{'safety_gate_overblocked': 3},False,False,False,False,False
+oracle_candidate_family,high_beta,2,{'safety_gate_overblocked': 2},False,False,False,False,False
+oracle_candidate_family,wait_conservative,1,{'safety_gate_overblocked': 1},False,False,False,False,False

@@ -1,0 +1,32 @@
+{
+  "aaai_ready": false,
+  "calibration_best_policy": "old14_g518_fallback_selector",
+  "candidate_budget_rows": 5280,
+  "context_budget_rows": 120,
+  "decision": "g527_artifacts_verified_continue_g528",
+  "distillation_best_model": "bandit_teacher_candidate_ranker",
+  "g527_decision": "g527_bandit_teacher_valid_but_distillation_blocked_need_exact_failure_audit",
+  "gates": {
+    "bandit_not_runtime_policy": true,
+    "bandit_teacher_valid_as_teacher": true,
+    "calibration_failed_expected": true,
+    "candidate_budget_rows_eq_5280": true,
+    "claims_remain_closed": true,
+    "context_budget_rows_eq_120": true,
+    "distillation_failed_expected": true,
+    "exact_failure_audit_unavailable_in_g527": true,
+    "external_lacam2_clean": true,
+    "g526_bandit_teacher_matches_expected": true,
+    "g527_decision_expected": true,
+    "policy_decision_rows_eq_120": true,
+    "teacher_candidate_induced_eq_0": true,
+    "teacher_selected_utility_expected": true
+  },
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "policy_decision_rows": 120,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g528_g527_artifact_verification_summary_v1",
+  "teacher_selected_policy_utility": -0.011588397798
+}

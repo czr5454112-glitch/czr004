@@ -1,0 +1,50 @@
+{
+  "aaai_ready": false,
+  "by_context_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase5p5_repair5g57_budget_tier_stability_by_context.csv",
+  "by_map_agent_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase5p5_repair5g57_budget_tier_stability_by_map_agent.csv",
+  "candidate_feasibility_by_budget": {
+    "1000": 20,
+    "2000": 25,
+    "250": 10,
+    "500": 19
+  },
+  "candidate_rank_top1_agreement_1000_2000_count": 30,
+  "candidate_rank_top2_agreement_1000_2000_count": 25,
+  "candidate_rank_top3_agreement_1000_2000_count": 25,
+  "context_count": 30,
+  "decision": "budget_tier_stability_analyzed",
+  "gates": {
+    "budget_tier_stability_analyzed": true,
+    "candidate_feasibility_by_budget_reported": true,
+    "ids_166_205_untouched": true,
+    "margin_stability_by_budget_reported": true,
+    "no_solution_by_budget_reported": true,
+    "observed_ids_only": true,
+    "primary_1000_2000_stable_contexts_count_reported": true,
+    "stress_250_disagreement_rate_reported": true
+  },
+  "label_rows": 980,
+  "labels_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase5p5_repair5g56_counterfactual_update_labels.csv",
+  "no_solution_by_budget": {
+    "1000": 10,
+    "2000": 5,
+    "250": 20,
+    "500": 11
+  },
+  "oracle_agreement_1000_2000_count": 20,
+  "oracle_agreement_500_with_1000_2000_count": 11,
+  "oracle_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase5p5_repair5g56_oracle_by_context.csv",
+  "oracle_rows": 140,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "primary_1000_2000_measured_contexts": 30,
+  "primary_1000_2000_stable_contexts": 20,
+  "rank_rows": 966,
+  "rank_stability_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase5p5_repair5g56_probe_budget_rank_stability.csv",
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g57_budget_tier_stability_summary_v1",
+  "static_vs_oracle_sign_agreement_1000_2000_count": 30,
+  "stress_250_compared_contexts": 30,
+  "stress_250_disagreement_contexts": 16,
+  "stress_250_disagreement_rate": 0.5333333333333333
+}

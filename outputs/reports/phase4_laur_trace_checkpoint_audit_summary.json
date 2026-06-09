@@ -1,0 +1,15 @@
+{
+  "checkpoint_jsonl": "artifacts\\teacher\\laur\\checkpoints\\phase4_laur_checkpoints_smoke.jsonl",
+  "checkpoint_rows": 4,
+  "checkpoint_schema_error_count": 0,
+  "checkpoint_schema_errors": [],
+  "join_error_count": 0,
+  "join_errors": [],
+  "passed": true,
+  "split_error_count": 0,
+  "split_errors": [],
+  "trace_jsonl": "artifacts\\teacher\\laur\\traces\\phase4_laur_trace_smoke.jsonl",
+  "trace_rows": 11489,
+  "trace_schema_error_count": 0,
+  "trace_schema_errors": []
+}

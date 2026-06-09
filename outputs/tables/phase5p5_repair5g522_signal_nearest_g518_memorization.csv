@@ -1,0 +1,4 @@
+nearest_g518_bucket,candidate_rows,safe_positive_rows,candidate_induced_failure_rows,mean_delta_vs_old14_plus_g518,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+far_g518,63,8,2,0.053957280362,False,False,False,False,False
+mid_g518,441,85,7,0.032897270166,False,False,False,False,False
+near_g518,504,36,14,0.032645774578,False,False,False,False,False

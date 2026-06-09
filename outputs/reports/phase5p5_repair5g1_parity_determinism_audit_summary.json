@@ -1,0 +1,83 @@
+{
+  "branch": "phase4f5p5-stable-attention-lau",
+  "bulk_dev_gates": {
+    "additive_parity_exact": false,
+    "all_costs_finite": true,
+    "always_additive_defer_parity_exact": false,
+    "cost_bounds_respected": true,
+    "dual_additive_parity_exact": false,
+    "dual_c_equiv_additive_parity_exact": false,
+    "dual_c_equiv_best_f4_static_matches_scalar": false,
+    "dual_c_equiv_locked_matches_scalar": false,
+    "laur_disable_parity_exact": false,
+    "laur_force_additive_direct_parity_exact": false
+  },
+  "bulk_dev_summary_flags": {
+    "additive_parity_exact": false,
+    "dual_additive_parity_exact": false,
+    "dual_c_equiv_additive_parity_exact": false,
+    "dual_c_equiv_best_f4_static_matches_scalar": false,
+    "dual_c_equiv_locked_matches_scalar": false,
+    "laur_disable_parity_exact": false,
+    "laur_force_additive_direct_parity_exact": false,
+    "missing_rows": 0,
+    "schema_errors": 0
+  },
+  "classification_counts": {
+    "time_budget_sensitivity": 58
+  },
+  "commit": "19663c6",
+  "created_at": "2026-06-03T09:06:48.719572",
+  "diagnostic_only": true,
+  "dirty": "tracked-dirty_untracked-present",
+  "inputs": {
+    "dev_jsonl": "outputs\\logs\\phase5p5_repair5g1_dev_probe\\phase5p5_repair5g1_dev_probe.jsonl",
+    "dev_summary_json": "outputs\\reports\\phase5p5_repair5g1_dev_probe_summary.json",
+    "oracle_summary_json": "outputs\\reports\\phase5p5_repair5g1_agent_aware_dual_channel_oracle_summary.json",
+    "smoke_summary_json": "outputs\\reports\\phase5p5_repair5g1_smoke_summary.json"
+  },
+  "interpretation": "Sequential G1 smoke parity is exact. Bulk dev discrepancies are classified as time-budget sensitivity or missing/reporting issues rather than semantic mismatches, so G2 may proceed with a fresh frozen protocol.",
+  "mismatch_count": 58,
+  "mismatch_csv": "outputs\\tables\\phase5p5_repair5g1_parity_mismatch_cases.csv",
+  "oracle_check": {
+    "flow_shield_component_present": true,
+    "oracle_better": 82,
+    "oracle_bootstrap_ci": {
+      "ci_high": -0.028073538158008476,
+      "ci_low": -0.038997441793415265,
+      "mean": -0.033505006472296615,
+      "prob_mean_lt_0": 1.0,
+      "samples": 2000
+    },
+    "oracle_equal": 38,
+    "oracle_mean_delta_ratio_vs_ltm": -0.033505006472296615,
+    "oracle_worse": 0
+  },
+  "pair_exact_from_dev_rows": {
+    "lacam_star_ltm__vs__always_additive_defer": false,
+    "lacam_star_ltm__vs__laur_disable": false,
+    "lacam_star_ltm__vs__laur_force_additive_direct": false,
+    "lacam_star_ltm__vs__repair5f_candidate_additive_ltm": false,
+    "lacam_star_ltm__vs__repair5g_dual_additive_parity": false,
+    "lacam_star_ltm__vs__repair5g_dual_c_equiv_additive": false,
+    "repair5f4_best_static_c125_b125_w075_d095_diagnostic_only__vs__repair5g_dual_c_equiv_c125_b125_w075_d095": false,
+    "repair5f_static_c100_b100_w075_d090__vs__repair5g_dual_c_equiv_c100_b100_w075_d090": false
+  },
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "proceed_to_g2_selector_protocol": true,
+  "report": "outputs\\reports\\phase5p5_repair5g1_parity_determinism_audit.md",
+  "schema_version": "phase5p5_repair5g1_parity_determinism_audit_v1",
+  "smoke_gates": {
+    "additive_parity_exact": true,
+    "critical_smoke_gates_passed": true,
+    "dual_additive_parity_exact": true,
+    "dual_c_equiv_additive_parity_exact": true,
+    "dual_c_equiv_best_f4_static_matches_scalar": true,
+    "dual_c_equiv_locked_matches_scalar": true,
+    "laur_disable_parity_exact": true,
+    "laur_force_additive_direct_parity_exact": true
+  },
+  "top_g1_flow_shield_conclusions_robust_to_sequential_smoke_controls": true,
+  "true_semantic_mismatch": false
+}

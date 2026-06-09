@@ -1,0 +1,22 @@
+{
+  "aaai_ready": false,
+  "agent_counts": [
+    50
+  ],
+  "checkpoint_export_passed": true,
+  "checkpoint_jsonl": "C:\\PROGRAMING\\czr004\\outputs\\logs\\phase5p5_repair5g54_checkpoint_export\\phase5p5_repair5g54_update_checkpoints.jsonl",
+  "checkpoint_rows": 4,
+  "diagnostic_only": true,
+  "gate_reason": "semantic_replay_passed_budget_stress_reported_separately",
+  "ids_166_205_untouched": true,
+  "instance_ids": [
+    146
+  ],
+  "maps": [
+    "random-32-32-20"
+  ],
+  "observed_ids_only": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "schema_version": "phase5p5_repair5g54_checkpoint_export_observed_summary_v1"
+}

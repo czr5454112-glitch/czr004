@@ -1,0 +1,18 @@
+{
+  "aaai_ready": false,
+  "candidate_induced_failures_predictable": true,
+  "decision": "feature_signal_and_failure_modes_completed",
+  "full_primary_confirmation_preserved_gain": true,
+  "leakage_repair_removed_forbidden_features": true,
+  "learned_runtime_policy_validated": false,
+  "leave_one_map_family_collapse_families": [],
+  "map_agent_memorization_risk": false,
+  "nearest_g518_residual_memorization_risk": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "required_new_trace_fields_count": 4,
+  "runtime_claim_allowed": false,
+  "runtime_safe_features_retain_predictive_signal": true,
+  "schema_version": "phase5p5_repair5g523_feature_signal_and_failure_modes_summary_v1",
+  "static_recovery_contexts_real_and_learnable": true
+}

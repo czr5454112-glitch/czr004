@@ -1,0 +1,10 @@
+{
+  "aaai_ready": false,
+  "created_at": "2026-06-04T12:29:57.853279",
+  "diagnostic_only": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "schema_version": "phase5p5_repair5g51_selector_manifest_v1",
+  "selector_spec": "artifacts\\models\\laur_ltm\\repair5g51_sanity_selectors\\always_static_flow_shield\\selector_spec.json",
+  "selector_spec_hash": "67e4a68478f836d0f546affffd9147247ad2216c2cb7bc575e9d153ed6ea6986"
+}

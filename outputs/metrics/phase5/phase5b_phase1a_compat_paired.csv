@@ -1,0 +1,2 @@
+map,agents,seed,scen,baseline_method,contender_method,baseline_ratio,contender_ratio,delta_ratio,relative_improvement,contender_better
+loop-dry-run,3,1,loop.scen,lacam_star,lacam_star_ltm,3.75,3.75,0.0,0.0,False

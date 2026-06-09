@@ -1,0 +1,170 @@
+{
+  "allowed_feature_names": [
+    "agents",
+    "map_width",
+    "map_height",
+    "obstacle_ratio",
+    "free_cells",
+    "density",
+    "ltm_iterations",
+    "returned_solutions_count_so_far",
+    "committed_count",
+    "blocked_count",
+    "wait_event_count",
+    "progress_committed_count",
+    "nonprogress_committed_count",
+    "blocked_per_committed",
+    "wait_per_committed",
+    "blocked_per_agent",
+    "committed_per_agent",
+    "progress_ratio",
+    "c_update_count",
+    "f_update_count",
+    "c_nonzero_edges",
+    "f_nonzero_edges",
+    "c_flow_update_ratio",
+    "cost_min",
+    "cost_max",
+    "cost_span",
+    "cost_bounds_respected",
+    "best_ratio_before",
+    "has_incumbent_before",
+    "improved_last_iteration"
+  ],
+  "created_at": "2026-06-03T13:40:02.594093",
+  "development_gates": {
+    "development_gates_passed": true,
+    "phase5p5_allowed": false,
+    "phase6_allowed": false,
+    "selector_beats_random_diagnostic": true,
+    "selector_beats_shuffled_diagnostic": true,
+    "selector_better_gt_worse": true,
+    "selector_bootstrap_probability_mean_delta_lt_0_ge_0p95": true,
+    "selector_mean_delta_ratio_vs_ltm_lt_neg_0p003": true,
+    "selector_ratio_worse_than_ltm_groups_le_1": true,
+    "selector_success_worse_than_ltm_groups_eq_0": true,
+    "selector_uses_no_forbidden_features": true
+  },
+  "development_metrics": {
+    "better": 65,
+    "bootstrap": {
+      "ci_high": -0.008207305995033325,
+      "ci_low": -0.019766175396675002,
+      "mean": -0.014155347174674999,
+      "prob_mean_lt_0": 1.0,
+      "samples": 2000
+    },
+    "equal": 45,
+    "mean_delta_ratio_vs_ltm": -0.014155347174674999,
+    "median_delta_ratio_vs_ltm": -0.005279456539499905,
+    "ratio_worse_than_ltm_groups": 1,
+    "rows": 120,
+    "selected_candidate_distribution": {
+      "repair5g1_shield_c100_b125_w075_d100_beta0p35_max0p75": 20,
+      "repair5g1_shield_c125_b125_w075_d095_beta0p2_max0p5": 20,
+      "repair5g1_shield_c125_b125_w075_d095_beta0p35_max0p75": 40,
+      "repair5g_dual_c_equiv_additive": 20,
+      "repair5g_dual_c_equiv_c100_b100_w075_d095": 20
+    },
+    "success_worse_than_ltm_groups": 0,
+    "worse": 10
+  },
+  "diagnostic_only": true,
+  "final_ids_used_for_tuning": false,
+  "forbidden_feature_names": [
+    "instance_id",
+    "seed as decision feature",
+    "scen as decision feature",
+    "candidate outcome columns from held-out fold",
+    "final solver outcome not available before update",
+    "F4/G1 oracle label as runtime feature"
+  ],
+  "forbidden_final_ids": "46..65",
+  "g1_top_diagnostic_candidate": "repair5g1_shield_c125_b125_w075_d095_beta0p35_max0p75",
+  "group_rules": [
+    {
+      "agents": 50,
+      "candidate": "repair5g1_shield_c125_b125_w075_d095_beta0p35_max0p75",
+      "map": "maze-32-32-4"
+    },
+    {
+      "agents": 100,
+      "candidate": "repair5g1_shield_c125_b125_w075_d095_beta0p2_max0p5",
+      "map": "maze-32-32-4"
+    },
+    {
+      "agents": 50,
+      "candidate": "repair5g1_shield_c125_b125_w075_d095_beta0p35_max0p75",
+      "map": "random-32-32-20"
+    },
+    {
+      "agents": 100,
+      "candidate": "repair5g1_shield_c100_b125_w075_d100_beta0p35_max0p75",
+      "map": "random-32-32-20"
+    },
+    {
+      "agents": 50,
+      "candidate": "repair5g_dual_c_equiv_c100_b100_w075_d095",
+      "map": "warehouse-10-20-10-2-1"
+    },
+    {
+      "agents": 100,
+      "candidate": "repair5g_dual_c_equiv_additive",
+      "map": "warehouse-10-20-10-2-1"
+    }
+  ],
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "random_diagnostic_metrics": {
+    "better": 29,
+    "bootstrap": {
+      "ci_high": 0.0049366804643333284,
+      "ci_low": -0.0036579794906500106,
+      "mean": 0.0004510143411833284,
+      "prob_mean_lt_0": 0.4305,
+      "samples": 2000
+    },
+    "equal": 62,
+    "mean_delta_ratio_vs_ltm": 0.0004510143411833284,
+    "median_delta_ratio_vs_ltm": 0.0,
+    "ratio_worse_than_ltm_groups": 3,
+    "rows": 120,
+    "selected_candidate_distribution": {
+      "repair5g_random_dual_candidate_diagnostic": 120
+    },
+    "success_worse_than_ltm_groups": 0,
+    "worse": 29
+  },
+  "schema_version": "phase5p5_repair5g2_frozen_selector_spec_v1",
+  "selected_c_equiv_baseline": "repair5g_dual_c_equiv_c100_b100_w075_d100",
+  "selected_group_selector_default_candidate": "repair5g1_shield_c125_b125_w075_d095_beta0p35_max0p75",
+  "selected_selector_type": "map_agent_group_static_selector",
+  "selected_static_candidate": "repair5g1_shield_c125_b125_w075_d095_beta0p35_max0p75",
+  "shuffled_diagnostic_metrics": {
+    "better": 49,
+    "bootstrap": {
+      "ci_high": -0.004511336415908341,
+      "ci_low": -0.014253123298108327,
+      "mean": -0.009432185142358336,
+      "prob_mean_lt_0": 0.9995,
+      "samples": 2000
+    },
+    "equal": 51,
+    "mean_delta_ratio_vs_ltm": -0.009432185142358336,
+    "median_delta_ratio_vs_ltm": 0.0,
+    "ratio_worse_than_ltm_groups": 1,
+    "rows": 120,
+    "selected_candidate_distribution": {
+      "repair5g_shuffled_goal_progress_diagnostic": 120
+    },
+    "success_worse_than_ltm_groups": 0,
+    "worse": 20
+  },
+  "support_dev_data_used": {
+    "development_validation_ids": "26..45",
+    "g1_dev_long_csv": "outputs\\tables\\phase5p5_repair5g1_dev_utility_long.csv",
+    "support_ids": "1..25",
+    "support_long_csv": "outputs\\tables\\phase5p5_repair5g2_support_utility_long.csv",
+    "train_contexts_csv": "outputs\\tables\\phase5p5_repair5g2_selector_train_contexts.csv"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "aaai_ready": false,
+  "counterfactuals_run": false,
+  "decision": "counterfactual_probe_not_run_server_required",
+  "execute_local_requested": false,
+  "ids_166_205_untouched": true,
+  "local_compute_cannot_finish": true,
+  "local_compute_reason": "The local Python layer can design the expanded lattice, but the current C++/probe harness does not expose these new G5.9 lattice candidates as executable UpdateLTM runtime candidates without a dedicated server run.",
+  "observed_ids_only": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "plan_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase5p5_repair5g59_goal_aware_dual_channel_counterfactual_plan.csv",
+  "planned_candidates": 14,
+  "planned_contexts": 60,
+  "planned_rows": 2520,
+  "primary_budgets_ms": [
+    1000,
+    2000
+  ],
+  "results_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase5p5_repair5g59_goal_aware_dual_channel_counterfactual_results.csv",
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g59_goal_aware_dual_channel_counterfactual_run_summary_v1",
+  "stress_budget_ms": 250
+}

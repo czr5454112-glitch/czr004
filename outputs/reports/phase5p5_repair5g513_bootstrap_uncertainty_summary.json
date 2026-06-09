@@ -1,0 +1,71 @@
+{
+  "aaai_ready": false,
+  "bootstrap_samples": 2000,
+  "decision": "bootstrap_uncertainty_reported",
+  "dev_contexts": 30,
+  "difference_vs_safe_slow_decay_train_gate": {
+    "bootstrap_samples": 2000,
+    "ci_high_p975": 0.0,
+    "ci_low_p025": -0.007377805103000001,
+    "estimate": -0.0024592683676666668,
+    "metric": "difference_vs_control_mean_delta_vs_static",
+    "policy": "g512_ranker",
+    "rhs_policy": "safe_slow_decay_train_gate",
+    "row_type": "policy_difference_interval"
+  },
+  "difference_vs_safe_train_only_map_agent_gate": {
+    "bootstrap_samples": 2000,
+    "ci_high_p975": 0.014461535744075004,
+    "ci_low_p025": -0.007216383100458336,
+    "estimate": 0.003307332936999998,
+    "metric": "difference_vs_control_mean_delta_vs_static",
+    "policy": "g512_ranker",
+    "rhs_policy": "safe_train_only_map_agent_gate",
+    "row_type": "policy_difference_interval"
+  },
+  "g512_coverage_interval": {
+    "bootstrap_samples": 2000,
+    "ci_high_p975": 0.3333333333333333,
+    "ci_low_p025": 0.06666666666666667,
+    "estimate": 0.2,
+    "metric": "coverage",
+    "policy": "g512_ranker",
+    "rhs_policy": "",
+    "row_type": "policy_interval"
+  },
+  "g512_harmful_vs_static_rate_interval": {
+    "bootstrap_samples": 2000,
+    "ci_high_p975": 0.1,
+    "ci_low_p025": 0.0,
+    "estimate": 0.03333333333333333,
+    "metric": "harmful_vs_static_rate",
+    "policy": "g512_ranker",
+    "rhs_policy": "",
+    "row_type": "policy_interval"
+  },
+  "g512_mean_delta_vs_static_interval": {
+    "bootstrap_samples": 2000,
+    "ci_high_p975": -0.001935500437,
+    "ci_low_p025": -0.021546915625858334,
+    "estimate": -0.010423295036333333,
+    "metric": "mean_delta_vs_static",
+    "policy": "g512_ranker",
+    "rhs_policy": "",
+    "row_type": "policy_interval"
+  },
+  "g512_regret_to_oracle_interval": {
+    "bootstrap_samples": 2000,
+    "ci_high_p975": 0.03943483652210832,
+    "ci_low_p025": 0.016980973490691664,
+    "estimate": 0.027511037073000004,
+    "metric": "regret_to_oracle",
+    "policy": "g512_ranker",
+    "rhs_policy": "",
+    "row_type": "policy_interval"
+  },
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g513_bootstrap_uncertainty_summary_v1"
+}

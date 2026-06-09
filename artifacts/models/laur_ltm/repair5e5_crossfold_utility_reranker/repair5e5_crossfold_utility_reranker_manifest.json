@@ -1,0 +1,27 @@
+{
+  "created_at": "2026-06-01T15:41:09.518131",
+  "diagnostic_only": true,
+  "fold_id": 4,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_dir": "C:\\PROGRAMING\\czr004\\artifacts\\models\\laur_ltm\\repair5e5_crossfold_utility_reranker",
+  "schema_version": "phase5p5_repair5e5_runtime_variant_v1",
+  "selected_rule_distribution": {
+    "block_heavy": 80,
+    "wait_heavy": 4
+  },
+  "selector_csv_sha256": "581af17a0c74ef17d00e45b122d9ac5d6b3cb673602006a7e589c4c6feabf48f",
+  "selector_rows": 84,
+  "thresholds": {
+    "allow_commit_heavy": false,
+    "max_neighbor_distance": 1000000000.0,
+    "max_rule_risk": 0.25,
+    "min_fold_agreement": 1,
+    "min_predicted_margin": 0.001,
+    "min_support_count": 4,
+    "non_additive_budget": 3,
+    "rule_risk_caps": {
+      "commit_heavy": 0.0
+    }
+  }
+}

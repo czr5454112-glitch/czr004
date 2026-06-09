@@ -1,0 +1,525 @@
+{
+  "agent_counts": [
+    50,
+    100
+  ],
+  "audit_report": "outputs\\reports\\phase5p5_repair5g2_fresh_final_eval_audit.md",
+  "branch": "phase4f5p5-stable-attention-lau",
+  "by_map_agent_csv": "outputs\\tables\\phase5p5_repair5g2_fresh_final_eval_by_map_agent.csv",
+  "candidate_subset_csv": "outputs\\tables\\phase5p5_repair5g2_candidate_subset.csv",
+  "command_log": "outputs\\logs\\phase5p5_repair5g2_fresh_final_eval\\phase5p5_repair5g2_fresh_final_eval_commands.jsonl",
+  "commit": "19663c6",
+  "created_at": "2026-06-03T15:35:37.752014",
+  "diagnostic_only": true,
+  "dirty": "tracked-dirty_untracked-present",
+  "expected_row_count": 2520,
+  "final_ids_not_used_in_tuning": true,
+  "gates": {
+    "additive_parity_exact": true,
+    "all_costs_finite": true,
+    "always_additive_defer_parity_exact": true,
+    "cost_bounds_respected": true,
+    "dual_additive_parity_exact": true,
+    "dual_c_equiv_additive_parity_exact": true,
+    "final_ids_not_used_in_tuning": true,
+    "full_expected_rows": true,
+    "laur_disable_parity_exact": true,
+    "laur_force_additive_direct_parity_exact": true,
+    "missing_rows_zero": true,
+    "no_solver_crashes": true,
+    "phase5p5_allowed": false,
+    "phase6_allowed": false,
+    "protocol_gates_passed": true,
+    "schema_errors_zero": true
+  },
+  "instance_ids": [
+    46,
+    47,
+    48,
+    49,
+    50,
+    51,
+    52,
+    53,
+    54,
+    55,
+    56,
+    57,
+    58,
+    59,
+    60,
+    61,
+    62,
+    63,
+    64,
+    65
+  ],
+  "long_csv": "outputs\\tables\\phase5p5_repair5g2_fresh_final_eval_paired.csv",
+  "ltm_max_iterations": 4,
+  "maps": [
+    "random-32-32-20",
+    "maze-32-32-4",
+    "warehouse-10-20-10-2-1"
+  ],
+  "method_stats": {
+    "always_additive_defer": {
+      "better": 0,
+      "equal": 120,
+      "mean_delta_ratio_vs_ltm": 0.0,
+      "method": "always_additive_defer",
+      "rows": 120,
+      "worse": 0
+    },
+    "laur_disable": {
+      "better": 0,
+      "equal": 120,
+      "mean_delta_ratio_vs_ltm": 0.0,
+      "method": "laur_disable",
+      "rows": 120,
+      "worse": 0
+    },
+    "laur_force_additive_direct": {
+      "better": 0,
+      "equal": 120,
+      "mean_delta_ratio_vs_ltm": 0.0,
+      "method": "laur_force_additive_direct",
+      "rows": 120,
+      "worse": 0
+    },
+    "repair5f4_best_static_c125_b125_w075_d095_diagnostic_only": {
+      "better": 27,
+      "equal": 62,
+      "mean_delta_ratio_vs_ltm": -0.0010749925600083328,
+      "method": "repair5f4_best_static_c125_b125_w075_d095_diagnostic_only",
+      "rows": 120,
+      "worse": 31
+    },
+    "repair5f_candidate_additive_ltm": {
+      "better": 0,
+      "equal": 120,
+      "mean_delta_ratio_vs_ltm": 0.0,
+      "method": "repair5f_candidate_additive_ltm",
+      "rows": 120,
+      "worse": 0
+    },
+    "repair5f_static_c100_b100_w075_d090": {
+      "better": 27,
+      "equal": 63,
+      "mean_delta_ratio_vs_ltm": -0.001414189259383326,
+      "method": "repair5f_static_c100_b100_w075_d090",
+      "rows": 120,
+      "worse": 30
+    },
+    "repair5g1_shield_c100_b125_w075_d100_beta0p35_max0p75": {
+      "better": 65,
+      "equal": 43,
+      "mean_delta_ratio_vs_ltm": -0.01839701972659998,
+      "method": "repair5g1_shield_c100_b125_w075_d100_beta0p35_max0p75",
+      "rows": 120,
+      "worse": 12
+    },
+    "repair5g1_shield_c125_b125_w075_d095_beta0p2_max0p5": {
+      "better": 53,
+      "equal": 51,
+      "mean_delta_ratio_vs_ltm": -0.013749414518608331,
+      "method": "repair5g1_shield_c125_b125_w075_d095_beta0p2_max0p5",
+      "rows": 120,
+      "worse": 16
+    },
+    "repair5g1_shield_c125_b125_w075_d095_beta0p35_max0p75": {
+      "better": 64,
+      "equal": 43,
+      "mean_delta_ratio_vs_ltm": -0.020043939351749987,
+      "method": "repair5g1_shield_c125_b125_w075_d095_beta0p35_max0p75",
+      "rows": 120,
+      "worse": 13
+    },
+    "repair5g2_best_frozen_static_candidate": {
+      "better": 64,
+      "equal": 43,
+      "mean_delta_ratio_vs_ltm": -0.020043939351749987,
+      "method": "repair5g2_best_frozen_static_candidate",
+      "rows": 120,
+      "worse": 13
+    },
+    "repair5g2_c_equiv_best_frozen_baseline": {
+      "better": 31,
+      "equal": 62,
+      "mean_delta_ratio_vs_ltm": -0.0022770787914083196,
+      "method": "repair5g2_c_equiv_best_frozen_baseline",
+      "rows": 120,
+      "worse": 27
+    },
+    "repair5g2_frozen_static_or_selector": {
+      "better": 62,
+      "equal": 44,
+      "mean_delta_ratio_vs_ltm": -0.020112979571774988,
+      "method": "repair5g2_frozen_static_or_selector",
+      "rows": 120,
+      "worse": 14
+    },
+    "repair5g2_g1_top_diagnostic_candidate": {
+      "better": 64,
+      "equal": 43,
+      "mean_delta_ratio_vs_ltm": -0.020043939351749987,
+      "method": "repair5g2_g1_top_diagnostic_candidate",
+      "rows": 120,
+      "worse": 13
+    },
+    "repair5g2_random_candidate_diagnostic": {
+      "better": 52,
+      "equal": 55,
+      "mean_delta_ratio_vs_ltm": -0.01329058551464166,
+      "method": "repair5g2_random_candidate_diagnostic",
+      "rows": 120,
+      "worse": 13
+    },
+    "repair5g2_shuffled_flow_shield_diagnostic": {
+      "better": 63,
+      "equal": 43,
+      "mean_delta_ratio_vs_ltm": -0.019850973894158318,
+      "method": "repair5g2_shuffled_flow_shield_diagnostic",
+      "rows": 120,
+      "worse": 14
+    },
+    "repair5g2_shuffled_goal_progress_diagnostic": {
+      "better": 60,
+      "equal": 44,
+      "mean_delta_ratio_vs_ltm": -0.01761917499324165,
+      "method": "repair5g2_shuffled_goal_progress_diagnostic",
+      "rows": 120,
+      "worse": 16
+    },
+    "repair5g_dual_additive_parity": {
+      "better": 0,
+      "equal": 120,
+      "mean_delta_ratio_vs_ltm": 0.0,
+      "method": "repair5g_dual_additive_parity",
+      "rows": 120,
+      "worse": 0
+    },
+    "repair5g_dual_c_equiv_additive": {
+      "better": 0,
+      "equal": 120,
+      "mean_delta_ratio_vs_ltm": 0.0,
+      "method": "repair5g_dual_c_equiv_additive",
+      "rows": 120,
+      "worse": 0
+    },
+    "repair5g_dual_c_equiv_c100_b100_w075_d095": {
+      "better": 29,
+      "equal": 66,
+      "mean_delta_ratio_vs_ltm": -0.0003688872225583284,
+      "method": "repair5g_dual_c_equiv_c100_b100_w075_d095",
+      "rows": 120,
+      "worse": 25
+    },
+    "repair5g_dual_c_equiv_c100_b100_w075_d100": {
+      "better": 31,
+      "equal": 62,
+      "mean_delta_ratio_vs_ltm": -0.0022770787914083196,
+      "method": "repair5g_dual_c_equiv_c100_b100_w075_d100",
+      "rows": 120,
+      "worse": 27
+    }
+  },
+  "methods": [
+    "repair5f_static_c100_b100_w075_d090",
+    "repair5g_dual_c_equiv_c100_b100_w075_d100",
+    "laur_disable",
+    "repair5f4_best_static_c125_b125_w075_d095_diagnostic_only",
+    "repair5g1_shield_c125_b125_w075_d095_beta0p2_max0p5",
+    "repair5g_dual_c_equiv_additive",
+    "repair5g1_shield_c125_b125_w075_d095_beta0p35_max0p75",
+    "lacam_star_ltm",
+    "always_additive_defer",
+    "laur_force_additive_direct",
+    "repair5g_dual_additive_parity",
+    "repair5f_candidate_additive_ltm",
+    "repair5g_dual_c_equiv_c100_b100_w075_d095",
+    "repair5g1_shield_c100_b125_w075_d100_beta0p35_max0p75"
+  ],
+  "missing_examples": [],
+  "missing_rows": 0,
+  "output_jsonl": "outputs\\logs\\phase5p5_repair5g2_fresh_final_eval\\phase5p5_repair5g2_fresh_final_eval.jsonl",
+  "parity_mismatch_classification_counts": {},
+  "parity_mismatch_count": 0,
+  "parity_mismatch_csv": "outputs\\reports\\phase5p5_repair5g2_fresh_final_eval_parity_mismatches.csv",
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "report": "outputs\\reports\\phase5p5_repair5g2_fresh_final_eval_report.md",
+  "row_count": 2520,
+  "scenario_audit": {
+    "agent_counts": [
+      50,
+      100
+    ],
+    "created_at": "2026-06-03T15:35:37.115321",
+    "effective_instance_ids": [
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61,
+      62,
+      63,
+      64,
+      65
+    ],
+    "final_missing_count": 0,
+    "final_missing_examples": [],
+    "generated_count": 60,
+    "generated_examples": [
+      {
+        "instance_id": 46,
+        "map": "random-32-32-20",
+        "path": "outputs\\tmp\\phase5p5_repair5g2_scenarios\\random-32-32-20-random-46.scen"
+      },
+      {
+        "instance_id": 47,
+        "map": "random-32-32-20",
+        "path": "outputs\\tmp\\phase5p5_repair5g2_scenarios\\random-32-32-20-random-47.scen"
+      },
+      {
+        "instance_id": 48,
+        "map": "random-32-32-20",
+        "path": "outputs\\tmp\\phase5p5_repair5g2_scenarios\\random-32-32-20-random-48.scen"
+      },
+      {
+        "instance_id": 49,
+        "map": "random-32-32-20",
+        "path": "outputs\\tmp\\phase5p5_repair5g2_scenarios\\random-32-32-20-random-49.scen"
+      },
+      {
+        "instance_id": 50,
+        "map": "random-32-32-20",
+        "path": "outputs\\tmp\\phase5p5_repair5g2_scenarios\\random-32-32-20-random-50.scen"
+      },
+      {
+        "instance_id": 51,
+        "map": "random-32-32-20",
+        "path": "outputs\\tmp\\phase5p5_repair5g2_scenarios\\random-32-32-20-random-51.scen"
+      },
+      {
+        "instance_id": 52,
+        "map": "random-32-32-20",
+        "path": "outputs\\tmp\\phase5p5_repair5g2_scenarios\\random-32-32-20-random-52.scen"
+      },
+      {
+        "instance_id": 53,
+        "map": "random-32-32-20",
+        "path": "outputs\\tmp\\phase5p5_repair5g2_scenarios\\random-32-32-20-random-53.scen"
+      },
+      {
+        "instance_id": 54,
+        "map": "random-32-32-20",
+        "path": "outputs\\tmp\\phase5p5_repair5g2_scenarios\\random-32-32-20-random-54.scen"
+      },
+      {
+        "instance_id": 55,
+        "map": "random-32-32-20",
+        "path": "outputs\\tmp\\phase5p5_repair5g2_scenarios\\random-32-32-20-random-55.scen"
+      },
+      {
+        "instance_id": 56,
+        "map": "random-32-32-20",
+        "path": "outputs\\tmp\\phase5p5_repair5g2_scenarios\\random-32-32-20-random-56.scen"
+      },
+      {
+        "instance_id": 57,
+        "map": "random-32-32-20",
+        "path": "outputs\\tmp\\phase5p5_repair5g2_scenarios\\random-32-32-20-random-57.scen"
+      },
+      {
+        "instance_id": 58,
+        "map": "random-32-32-20",
+        "path": "outputs\\tmp\\phase5p5_repair5g2_scenarios\\random-32-32-20-random-58.scen"
+      },
+      {
+        "instance_id": 59,
+        "map": "random-32-32-20",
+        "path": "outputs\\tmp\\phase5p5_repair5g2_scenarios\\random-32-32-20-random-59.scen"
+      },
+      {
+        "instance_id": 60,
+        "map": "random-32-32-20",
+        "path": "outputs\\tmp\\phase5p5_repair5g2_scenarios\\random-32-32-20-random-60.scen"
+      },
+      {
+        "instance_id": 61,
+        "map": "random-32-32-20",
+        "path": "outputs\\tmp\\phase5p5_repair5g2_scenarios\\random-32-32-20-random-61.scen"
+      },
+      {
+        "instance_id": 62,
+        "map": "random-32-32-20",
+        "path": "outputs\\tmp\\phase5p5_repair5g2_scenarios\\random-32-32-20-random-62.scen"
+      },
+      {
+        "instance_id": 63,
+        "map": "random-32-32-20",
+        "path": "outputs\\tmp\\phase5p5_repair5g2_scenarios\\random-32-32-20-random-63.scen"
+      },
+      {
+        "instance_id": 64,
+        "map": "random-32-32-20",
+        "path": "outputs\\tmp\\phase5p5_repair5g2_scenarios\\random-32-32-20-random-64.scen"
+      },
+      {
+        "instance_id": 65,
+        "map": "random-32-32-20",
+        "path": "outputs\\tmp\\phase5p5_repair5g2_scenarios\\random-32-32-20-random-65.scen"
+      }
+    ],
+    "generated_missing_scenarios": true,
+    "generator_policy": {
+      "base_seed": 20260522,
+      "equivalent_command": "python scripts/generate_phase1a_scenarios.py --manifest <f4 maps with instances 26..45> --output-dir outputs\\tmp\\phase5p5_repair5g2_scenarios --base-seed 20260522",
+      "script_version": "phase1a-scenario-generator-v1",
+      "seed_function": "sha256(script_version|base_seed|map_name|instance_id)",
+      "source": "scripts/generate_phase1a_scenarios.py functions"
+    },
+    "initial_missing_count": 0,
+    "initial_missing_examples": [],
+    "reduced_scope_reason": "",
+    "requested_instance_ids": [
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61,
+      62,
+      63,
+      64,
+      65
+    ],
+    "requested_maps": [
+      "random-32-32-20",
+      "maze-32-32-4",
+      "warehouse-10-20-10-2-1"
+    ],
+    "scenario_dir": "outputs\\tmp\\phase5p5_repair5g2_scenarios",
+    "scenario_metadata": "outputs\\reports\\phase5p5_repair5g2_scenario_generation.json",
+    "schema_version": "phase5p5_repair5f4_scenario_generation_v1",
+    "source_missing_count": 60,
+    "source_missing_examples": [
+      {
+        "instance_id": 46,
+        "map": "random-32-32-20"
+      },
+      {
+        "instance_id": 47,
+        "map": "random-32-32-20"
+      },
+      {
+        "instance_id": 48,
+        "map": "random-32-32-20"
+      },
+      {
+        "instance_id": 49,
+        "map": "random-32-32-20"
+      },
+      {
+        "instance_id": 50,
+        "map": "random-32-32-20"
+      },
+      {
+        "instance_id": 51,
+        "map": "random-32-32-20"
+      },
+      {
+        "instance_id": 52,
+        "map": "random-32-32-20"
+      },
+      {
+        "instance_id": 53,
+        "map": "random-32-32-20"
+      },
+      {
+        "instance_id": 54,
+        "map": "random-32-32-20"
+      },
+      {
+        "instance_id": 55,
+        "map": "random-32-32-20"
+      },
+      {
+        "instance_id": 56,
+        "map": "random-32-32-20"
+      },
+      {
+        "instance_id": 57,
+        "map": "random-32-32-20"
+      },
+      {
+        "instance_id": 58,
+        "map": "random-32-32-20"
+      },
+      {
+        "instance_id": 59,
+        "map": "random-32-32-20"
+      },
+      {
+        "instance_id": 60,
+        "map": "random-32-32-20"
+      },
+      {
+        "instance_id": 61,
+        "map": "random-32-32-20"
+      },
+      {
+        "instance_id": 62,
+        "map": "random-32-32-20"
+      },
+      {
+        "instance_id": 63,
+        "map": "random-32-32-20"
+      },
+      {
+        "instance_id": 64,
+        "map": "random-32-32-20"
+      },
+      {
+        "instance_id": 65,
+        "map": "random-32-32-20"
+      }
+    ],
+    "source_scenario_dir": "outputs\\tmp\\phase1a\\generated\\phase1a-generated-random"
+  },
+  "schema_errors": 0,
+  "schema_version": "phase5p5_repair5g2_fresh_final_summary_v1",
+  "scope": "fresh_final",
+  "solver_crash_count": 0,
+  "summary_csv": "outputs\\tables\\phase5p5_repair5g2_fresh_final_eval_summary.csv",
+  "synthetic_methods": [
+    "repair5g2_random_candidate_diagnostic",
+    "repair5g2_shuffled_goal_progress_diagnostic",
+    "repair5g2_shuffled_flow_shield_diagnostic"
+  ],
+  "time_limit_sec": 3.0,
+  "true_semantic_parity_mismatch_count": 0,
+  "update_log": "outputs\\logs\\phase5p5_repair5g2_fresh_final_eval\\phase5p5_repair5g2_fresh_final_eval_ltm_updates.jsonl",
+  "wide_csv": "outputs\\tables\\phase5p5_repair5g2_fresh_final_eval_wide.csv"
+}

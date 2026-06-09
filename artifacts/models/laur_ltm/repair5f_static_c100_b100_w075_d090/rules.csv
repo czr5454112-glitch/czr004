@@ -1,0 +1,2 @@
+rule_id,alpha_commit,alpha_block,alpha_wait,rho_decay,saturation_scale,contraflow_penalty,force_additive,predicted_delta_ratio,predicted_margin_ratio,nearest_support_count,selected_rule_source,guard_reason
+c100_b100_w075_d090,1,1,0.75,0.9,1,0,false,-0.00373264898322,0.00373264898322,120,repair5f_support_trained_static_updateparam,support_trained_static_policy

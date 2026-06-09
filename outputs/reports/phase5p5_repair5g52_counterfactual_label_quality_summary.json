@@ -1,0 +1,20 @@
+{
+  "aaai_ready": false,
+  "available_label_rows": 0,
+  "context_count": 0,
+  "decision": "counterfactual_labels_unavailable",
+  "gates": {
+    "available_label_rows_gt_0": false,
+    "candidate_coverage_complete": false,
+    "counterfactual_label_quality_passed": false,
+    "feature_leakage_audit_passes": false,
+    "label_rows_gt_0": false,
+    "labels_are_contextual_not_run_level": false,
+    "oracle_gap_over_static_measured": false
+  },
+  "label_rows": 0,
+  "oracle_rows": 0,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "schema_version": "phase5p5_repair5g52_counterfactual_label_quality_summary_v1"
+}

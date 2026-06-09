@@ -1,0 +1,21 @@
+# Repair5G.5.26 G5.25 Artifact Verification
+
+- schema_version: `phase5p5_repair5g526_g525_artifact_verification_summary_v1`
+- decision: `g525_artifacts_verified_continue_g526`
+- gates: `{'g525_decision_expected': True, 'g525_best_model_expected': True, 'g525_top3_expected': True, 'g525_region_top2_expected': True, 'g525_candidate_induced_count_expected': True, 'g525_context_budget_pairs_eq_72': True, 'g525_candidate_budget_rows_eq_2160': True, 'g525_raw_sha_verified': True, 'g525_forbidden_feature_count_eq_0': True, 'g525_logging_static_project_owned': True, 'g523_contexts_eq_60': True, 'g523_candidates_eq_44': True, 'g523_rows_eq_5280': True, 'g523_safe_win_contexts_eq_39': True, 'g523_context_budget_rows_eq_120': True, 'external_lacam2_untouched': True, 'observed_ids_only': True, 'ids_166_205_untouched': True, 'claims_closed': True, 'g526_worklog_entry_before_probe': True}`
+- g525_decision: `g525_rank_effect_partial_gain_continue_trace_feature_design`
+- g525_best_model: `trace_plus_rank_effect_two_head_model`
+- g525_best_model_summary: `{'aaai_ready': False, 'avoidable_risk_ece': 0.07882110228042145, 'candidate_induced_no_solution_count': 6, 'context_budget_pairs': 72, 'eval_scope': 'seed_oof', 'fold_id': 'all', 'learned_runtime_policy_validated': False, 'model': 'trace_plus_rank_effect_two_head_model', 'phase5p5_allowed': False, 'phase6_allowed': False, 'region_top1_capture_rate': 0.5, 'region_top2_capture_rate': 0.7083333333333334, 'row_type': 'model_aggregate', 'runtime_claim_allowed': False, 'safe_policy_sim_utility': 0.023052887525833326, 'static_recovery_capture_count': 1, 'top1_safe_oracle_capture_rate': 0.08333333333333333, 'top3_safe_oracle_capture_rate': 0.3055555555555556, 'top5_safe_oracle_capture_rate': 0.3888888888888889}`
+- g525_enriched_trace_context_budget_pairs: `72`
+- g525_candidate_budget_rows: `2160`
+- g523_full_primary_rows: `5280`
+- g523_contexts: `60`
+- g523_candidates: `44`
+- external_lacam2_solver_status: ``
+- observed_ids_only: `True`
+- ids_166_205_untouched: `True`
+- phase5p5_allowed: `False`
+- phase6_allowed: `False`
+- runtime_claim_allowed: `False`
+- learned_runtime_policy_validated: `False`
+- aaai_ready: `False`

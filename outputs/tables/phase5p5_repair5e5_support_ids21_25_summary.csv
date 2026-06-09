@@ -1,0 +1,19 @@
+map,agents,method,runs,successes,success_rate,sum_of_loss_ratio_mean,expanded_nodes_mean,time_to_first_solution_ms_mean,returned_solutions_count_mean,low_level_pibt_calls_mean,laur_overhead_ms_mean,laur_inference_count_mean,laur_additive_fallback_count_mean,laur_safety_disabled_count_mean,fallback_defer_rate,non_additive_update_rate,selected_harmful_update_rate,selected_rules,ratio_delta_vs_ltm,expanded_delta_vs_ltm,ttfs_delta_vs_ltm
+maze-32-32-4,50,always_additive_defer,5,5,1.0,1.185242544024,435.6,188.2,1.0,21575.4,0.0,0.0,1.0,0.0,0.25,0.0,,"{""additive_ltm"": 15}",0.0,0.0,1.1999999999999886
+maze-32-32-4,50,lacam_star_ltm,5,5,1.0,1.185242544024,435.6,187.0,1.0,21575.4,0.0,0.0,0.0,0.0,,,,{},,,
+maze-32-32-4,50,oracle_teacher_forced_best_safe_update_static_proxy,5,5,1.0,1.163585877162,426.8,190.4,1.0,21137.8,0.0,0.0,1.0,0.0,0.25,0.75,,"{""commit_heavy"": 3, ""decay_090"": 3, ""wait_heavy"": 3, ""wait_light"": 6}",-0.021656666861999962,-8.800000000000011,3.4000000000000057
+maze-32-32-4,100,always_additive_defer,5,5,1.0,1.259743057366,537.6,395.0,1.0,62993.4,0.0,0.0,1.0,0.0,0.25,0.0,,"{""additive_ltm"": 15}",0.0,0.0,-0.8000000000000114
+maze-32-32-4,100,lacam_star_ltm,5,5,1.0,1.259743057366,537.6,395.8,1.0,62993.4,0.0,0.0,0.0,0.0,,,,{},,,
+maze-32-32-4,100,oracle_teacher_forced_best_safe_update_static_proxy,5,5,1.0,1.246184685418,528.2,395.8,1.0,62653.0,0.0,0.0,1.0,0.0,0.25,0.75,,"{""block_heavy"": 3, ""commit_heavy"": 3, ""decay_090"": 3, ""decay_095"": 3, ""wait_light"": 3}",-0.013558371947999914,-9.399999999999977,0.0
+random-32-32-20,50,always_additive_defer,5,5,1.0,1.152551037608,229.4,160.0,1.0,14588.4,0.0,0.0,1.0,0.0,0.25,0.0,,"{""additive_ltm"": 15}",0.0,0.0,-5.400000000000006
+random-32-32-20,50,lacam_star_ltm,5,5,1.0,1.152551037608,229.4,165.4,1.0,14588.4,0.0,0.0,0.0,0.0,,,,{},,,
+random-32-32-20,50,oracle_teacher_forced_best_safe_update_static_proxy,5,5,1.0,1.148166444848,204.4,162.0,1.0,10223.2,0.0,0.0,1.0,0.0,0.25,0.75,,"{""block_light"": 3, ""commit_heavy"": 6, ""decay_090"": 3, ""wait_heavy"": 3}",-0.004384592759999917,-25.0,-3.4000000000000057
+random-32-32-20,100,always_additive_defer,5,5,1.0,1.1863313626698,271.4,327.6,1.0,32894.6,0.0,0.0,1.0,0.0,0.25,0.0,,"{""additive_ltm"": 15}",0.0,0.0,-3.3999999999999773
+random-32-32-20,100,lacam_star_ltm,5,5,1.0,1.1863313626698,271.4,331.0,1.0,32894.6,0.0,0.0,0.0,0.0,,,,{},,,
+random-32-32-20,100,oracle_teacher_forced_best_safe_update_static_proxy,5,5,1.0,1.1637490592716,249.2,328.8,1.0,27563.4,0.0,0.0,1.0,0.0,0.25,0.75,,"{""block_light"": 3, ""commit_heavy"": 3, ""decay_090"": 3, ""decay_095"": 3, ""wait_heavy"": 3}",-0.0225823033982,-22.19999999999999,-2.1999999999999886
+warehouse-10-20-10-2-1,50,always_additive_defer,5,5,1.0,1.07784849222,392.2,1334.0,1.0,19457.4,0.0,0.0,1.0,0.0,0.3333333333333333,0.0,,"{""additive_ltm"": 10}",0.0,0.0,13.599999999999909
+warehouse-10-20-10-2-1,50,lacam_star_ltm,5,5,1.0,1.07784849222,392.2,1320.4,1.0,19457.4,0.0,0.0,0.0,0.0,,,,{},,,
+warehouse-10-20-10-2-1,50,oracle_teacher_forced_best_safe_update_static_proxy,5,5,1.0,1.07784849222,391.6,1352.2,1.0,19457.4,0.0,0.0,1.0,0.0,0.4166666666666667,0.5833333333333334,,"{""commit_heavy"": 2, ""decay_090"": 2, ""wait_heavy"": 3}",0.0,-0.5999999999999659,31.799999999999955
+warehouse-10-20-10-2-1,100,always_additive_defer,5,5,1.0,1.170794865788,209.4,2669.6,1.0,20731.2,0.0,0.0,1.0,0.0,0.5,0.0,,"{""additive_ltm"": 5}",0.0,0.0,65.19999999999982
+warehouse-10-20-10-2-1,100,lacam_star_ltm,5,5,1.0,1.170794865788,209.4,2604.4,1.0,20731.2,0.0,0.0,0.0,0.0,,,,{},,,
+warehouse-10-20-10-2-1,100,oracle_teacher_forced_best_safe_update_static_proxy,5,5,1.0,1.170794865788,209.4,2497.2,1.0,20731.2,0.0,0.0,1.0,0.0,0.5,0.5,,"{""block_light"": 1, ""decay_090"": 1, ""wait_heavy"": 1, ""wait_light"": 2}",0.0,0.0,-107.20000000000027

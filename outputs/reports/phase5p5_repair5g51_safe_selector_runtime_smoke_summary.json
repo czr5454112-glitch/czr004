@@ -1,0 +1,14 @@
+{
+  "aaai_ready": false,
+  "blocked_reason": "runtime_hook_sanity_not_passed",
+  "decision": "blocked_not_run",
+  "gates": {
+    "aaai_ready": false,
+    "phase5p5_allowed": false,
+    "phase6_allowed": false,
+    "safe_selector_runtime_smoke_passed": false
+  },
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "schema_version": "phase5p5_repair5g51_safe_selector_runtime_smoke_summary_v1"
+}

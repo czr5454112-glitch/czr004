@@ -1,0 +1,4 @@
+[submodule "external/lacam2"]
+	path = external/lacam2
+	url = https://github.com/Kei18/lacam2.git
+	ignore = untracked

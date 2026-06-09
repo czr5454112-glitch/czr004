@@ -1,0 +1,30 @@
+{
+  "schema_version": "phase5p5_repair5g53_runtime_feature_cost_audit_summary_v1",
+  "primary_3s": {
+    "component_rows": 840,
+    "dominant_overhead_component": "repair5g53_cost_audit_ms",
+    "mean_positive_update_policy_total_ms": 582.7920456416465,
+    "mean_positive_feature_build_ms": 1271.620347457627,
+    "mean_positive_cost_audit_ms": 1607.4005457627118,
+    "mean_positive_traffic_hash_ms": 173.12367966101695,
+    "mean_positive_json_write_ms": 6.4949841807909605,
+    "mean_positive_params_hash_ms": 0.6596593220338983
+  },
+  "targeted_warehouse_100_5s": {
+    "hook_overhead_ablation_passed": true,
+    "minimal_hook_mismatch_count": 0,
+    "dominant_overhead_component": "repair5g53_cost_audit_ms",
+    "mean_positive_cost_audit_ms": 2861.07076
+  },
+  "targeted_warehouse_100_10s": {
+    "hook_overhead_ablation_passed": true,
+    "minimal_hook_mismatch_count": 0,
+    "dominant_overhead_component": "repair5g53_cost_audit_ms",
+    "mean_positive_cost_audit_ms": 5949.77552
+  },
+  "perf_mode_rule": "Performance runtime must use cheap features and avoid sync JSONL, full traffic hash, checkpoint copying, and full graph cost_audit.",
+  "audit_mode_rule": "Audit runtime may compute expensive diagnostics but must not be used for performance claims.",
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "aaai_ready": false
+}

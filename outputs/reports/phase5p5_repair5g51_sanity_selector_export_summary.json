@@ -1,0 +1,26 @@
+{
+  "aaai_ready": false,
+  "diagnostic_only": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "schema_version": "phase5p5_repair5g51_sanity_selector_export_summary_v1",
+  "selector_dir": "artifacts\\models\\laur_ltm\\repair5g51_sanity_selectors",
+  "selectors": {
+    "repair5g51_runtime_always_additive_selector": {
+      "selector_spec": "artifacts\\models\\laur_ltm\\repair5g51_sanity_selectors\\always_additive\\selector_spec.json",
+      "selector_spec_hash": "1fafcfa4aae491ff035b90d9aabfc88979b8c03a3801bdc6ec3af3afa866c7ea"
+    },
+    "repair5g51_runtime_always_map_agent_selector": {
+      "selector_spec": "artifacts\\models\\laur_ltm\\repair5g51_sanity_selectors\\always_map_agent_selector\\selector_spec.json",
+      "selector_spec_hash": "77d30538258187568a067f50f9550d136ecb37a430dc1563b6fe04201558356a"
+    },
+    "repair5g51_runtime_always_static_flow_shield": {
+      "selector_spec": "artifacts\\models\\laur_ltm\\repair5g51_sanity_selectors\\always_static_flow_shield\\selector_spec.json",
+      "selector_spec_hash": "67e4a68478f836d0f546affffd9147247ad2216c2cb7bc575e9d153ed6ea6986"
+    },
+    "repair5g51_runtime_bad_g5_stump": {
+      "selector_spec": "artifacts\\models\\laur_ltm\\repair5g51_sanity_selectors\\bad_g5_stump\\selector_spec.json",
+      "selector_spec_hash": "fa8c5a5be30d2c9be79ca0c32a4f9be1acdcae0cb24d5e74e36ea601efe7a82a"
+    }
+  }
+}

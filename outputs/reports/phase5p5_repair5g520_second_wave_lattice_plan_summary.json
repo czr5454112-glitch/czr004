@@ -1,0 +1,52 @@
+{
+  "aaai_ready": false,
+  "budgets_ms": [
+    1000,
+    2000
+  ],
+  "candidate_plan": {
+    "blocks": [
+      {
+        "block": "block_heavy",
+        "candidate_cap": 4,
+        "region": "around c0p90,b1p40..1p65,w0p40..0p55,beta0p35..0p50"
+      },
+      {
+        "block": "high_beta",
+        "candidate_cap": 4,
+        "region": "around c1p20,b1p15..1p35,w0p70,beta0p55..0p65"
+      },
+      {
+        "block": "wait_conservative",
+        "candidate_cap": 4,
+        "region": "around w0p35..0p50,beta0p30..0p35"
+      },
+      {
+        "block": "flow_decay",
+        "candidate_cap": 4,
+        "region": "around dc/df combinations that reduce old-oracle regret"
+      }
+    ],
+    "new_candidate_cap": 16,
+    "old14_controls": "include all old14 controls"
+  },
+  "decision": "second_wave_lattice_planned_continue_local_probe",
+  "ids_166_205_untouched": true,
+  "learned_runtime_policy_validated": false,
+  "max_workers": 1,
+  "no_166_205": true,
+  "observed_ids_only": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "plan_created": true,
+  "planning_gates": {
+    "corrected_targets_reveal_candidate_space_gain_too_sparse": false,
+    "new_candidate_harmful_selection_count_gt_0": false,
+    "policy_new_opportunity_capture_rate_lt_0p20": true
+  },
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g520_second_wave_lattice_plan_summary_v1",
+  "solver_run": false,
+  "target_context_cap": 24,
+  "target_context_count": 16
+}

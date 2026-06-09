@@ -1,0 +1,91 @@
+{
+  "epochs": 300,
+  "feature_count": 36,
+  "feature_stats_path": "C:\\PROGRAMING\\czr004\\artifacts\\models\\laur_ltm\\smoke\\laur_mlp_v1_feature_stats.json",
+  "final_loss": 0.02005002461373806,
+  "gate": {
+    "model_export_file_exists": true,
+    "passed": true,
+    "phase4f_smoke_passed": true,
+    "schema_validation_passes": true,
+    "train_script_runs_end_to_end": true,
+    "validation_metrics_computed": true
+  },
+  "hidden_dim": 64,
+  "loss_components": {
+    "additive_deviation_penalty": 1.0,
+    "delta_regression": 5.340810085852077e-11,
+    "rule_ce": 6.496862170024542e-06,
+    "safety_bce": 8.705515210749581e-05
+  },
+  "rules": [
+    "additive_ltm",
+    "commit_heavy",
+    "block_heavy",
+    "block_light",
+    "wait_light",
+    "wait_heavy",
+    "decay_095",
+    "decay_090",
+    "neutral_additive"
+  ],
+  "rules_path": "C:\\PROGRAMING\\czr004\\artifacts\\models\\laur_ltm\\smoke\\laur_mlp_v1_rules.json",
+  "sample_count": 4,
+  "schema_version": "phase4_laur_train_summary_v1",
+  "test_metrics": null,
+  "test_sample_count": 0,
+  "train_metrics": {
+    "delta_pred_smooth_l1_proxy": 9.408881696439195e-06,
+    "harmful_update_f1": 1.0,
+    "harmful_update_precision": 1.0,
+    "harmful_update_recall": 1.0,
+    "label_distribution": {
+      "block_heavy": 1,
+      "commit_heavy": 1,
+      "decay_090": 1,
+      "wait_light": 1
+    },
+    "neutral_additive_rate": 0.0,
+    "non_neutral_rule_top1_accuracy": 1.0,
+    "predicted_best_rule_mean_delta_ratio_proxy": 0.0211141060197675,
+    "predicted_rule_distribution": {
+      "block_heavy": 1,
+      "commit_heavy": 1,
+      "decay_090": 1,
+      "wait_light": 1
+    },
+    "rule_top1_accuracy": 1.0,
+    "rule_top3_accuracy": 1.0,
+    "safety_auroc": 1.0,
+    "sample_count": 4
+  },
+  "train_sample_count": 4,
+  "validation_metrics": {
+    "delta_pred_smooth_l1_proxy": 9.408881696439195e-06,
+    "harmful_update_f1": 1.0,
+    "harmful_update_precision": 1.0,
+    "harmful_update_recall": 1.0,
+    "label_distribution": {
+      "block_heavy": 1,
+      "commit_heavy": 1,
+      "decay_090": 1,
+      "wait_light": 1
+    },
+    "neutral_additive_rate": 0.0,
+    "non_neutral_rule_top1_accuracy": 1.0,
+    "predicted_best_rule_mean_delta_ratio_proxy": 0.0211141060197675,
+    "predicted_rule_distribution": {
+      "block_heavy": 1,
+      "commit_heavy": 1,
+      "decay_090": 1,
+      "wait_light": 1
+    },
+    "rule_top1_accuracy": 1.0,
+    "rule_top3_accuracy": 1.0,
+    "safety_auroc": 1.0,
+    "sample_count": 4
+  },
+  "validation_sample_count": 4,
+  "validation_source": "all_rows_smoke_reuse",
+  "weights_path": "C:\\PROGRAMING\\czr004\\artifacts\\models\\laur_ltm\\smoke\\laur_mlp_v1_weights.json"
+}

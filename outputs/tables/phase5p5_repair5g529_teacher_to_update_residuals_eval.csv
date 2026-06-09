@@ -1,0 +1,7 @@
+model,region_accuracy,param_residual_mae,edge_update_teacher_proxy_only,bootstrap_samples_requested,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+topology_to_region_residual,0.0,0.090916666667,True,300,False,False,False,False,False
+exact_failure_to_param_residual,0.0,0.090916666667,True,300,False,False,False,False,False
+action_class_to_param_residual,0.0,0.090916666667,True,300,False,False,False,False,False
+map_family_mixture_residual,0.0,0.090916666667,True,300,False,False,False,False,False
+small_mlp_if_available,0.0,0.090916666667,True,300,False,False,False,False,False
+shuffled_control,0.0,0.090916666667,True,300,False,False,False,False,False

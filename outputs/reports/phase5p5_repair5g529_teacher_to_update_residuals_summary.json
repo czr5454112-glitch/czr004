@@ -1,0 +1,26 @@
+{
+  "aaai_ready": false,
+  "best_model": "topology_to_region_residual",
+  "best_model_summary": {
+    "aaai_ready": false,
+    "bootstrap_samples_requested": 300,
+    "edge_update_teacher_proxy_only": true,
+    "learned_runtime_policy_validated": false,
+    "model": "topology_to_region_residual",
+    "param_residual_mae": 0.090916666667,
+    "phase5p5_allowed": false,
+    "phase6_allowed": false,
+    "region_accuracy": 0.0,
+    "runtime_claim_allowed": false
+  },
+  "bootstrap_samples_requested": 300,
+  "decision": "teacher_to_update_residuals_evaluated",
+  "edge_update_teacher_proxy_only": true,
+  "eval_rows": 6,
+  "label_rows": 120,
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g529_teacher_to_update_residuals_summary_v1"
+}

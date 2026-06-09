@@ -1,0 +1,64 @@
+{
+  "aaai_ready": false,
+  "contexts_with_no_solution_or_nonfinite": 35,
+  "corrected_label_fields": [
+    "solution_quality_delta_vs_static",
+    "solution_quality_harmful_vs_static",
+    "no_solution_or_infeasible",
+    "budget_missing_or_nonfinite",
+    "safe_static_neutral",
+    "harmful_total"
+  ],
+  "decision": "static_harm_semantics_bug_fixed_continue_corrected_targets",
+  "finite_number_inf_conversion_created_static_harm_labels": true,
+  "gates": {
+    "corrected_labels_present": true,
+    "old_static_harm_explained_by_no_solution": false,
+    "rows_eq_1320": true,
+    "static_rows_eq_60": true,
+    "static_solution_quality_harm_zero": true
+  },
+  "learned_runtime_policy_validated": false,
+  "metric_shift_if_no_solution_separated": [
+    {
+      "corrected_false_positive_count": 23,
+      "corrected_mean_solution_quality_delta_vs_static": 0.0,
+      "corrected_no_solution_rate": 0.38333333333333336,
+      "corrected_solution_quality_harmful_rate": 0.0,
+      "corrected_total_harmful_rate": 0.38333333333333336,
+      "old_false_positive_count": "20",
+      "old_harmful_vs_static_rate": "0.3333333333333333",
+      "policy": "static_flow_shield"
+    },
+    {
+      "corrected_false_positive_count": 23,
+      "corrected_mean_solution_quality_delta_vs_static": -0.00046251217149999996,
+      "corrected_no_solution_rate": 0.38333333333333336,
+      "corrected_solution_quality_harmful_rate": 0.0,
+      "corrected_total_harmful_rate": 0.38333333333333336,
+      "old_false_positive_count": "20",
+      "old_harmful_vs_static_rate": "0.3333333333333333",
+      "policy": "no_new_candidate_ablation"
+    },
+    {
+      "corrected_false_positive_count": 23,
+      "corrected_mean_solution_quality_delta_vs_static": -0.00046251217149999996,
+      "corrected_no_solution_rate": 0.38333333333333336,
+      "corrected_solution_quality_harmful_rate": 0.0,
+      "corrected_total_harmful_rate": 0.38333333333333336,
+      "old_false_positive_count": "20",
+      "old_harmful_vs_static_rate": "0.3333333333333333",
+      "policy": "old14_only_ranker"
+    }
+  ],
+  "old_harmful_rows_explained_by_no_solution_or_nonfinite": 464,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g520_target_semantics_audit_summary_v1",
+  "static_flow_shield_no_solution_or_nonfinite_count": 23,
+  "static_flow_shield_old_harmful_vs_static_count": 20,
+  "static_flow_shield_rows": 60,
+  "static_flow_shield_solution_quality_harmful_count": 0,
+  "target_rows": 1320
+}

@@ -1,0 +1,9 @@
+rule_id,alpha_commit,alpha_block,alpha_wait,rho_decay,saturation_scale,contraflow_penalty,force_additive
+additive_ltm,1.0,1.0,1.0,1.0,1.0,0.0,true
+commit_heavy,1.5,1.0,1.0,1.0,1.0,0.0,false
+block_heavy,1.0,1.5,1.0,1.0,1.0,0.0,false
+block_light,1.0,0.5,1.0,1.0,1.0,0.0,false
+wait_light,1.0,1.0,0.5,1.0,1.0,0.0,false
+wait_heavy,1.0,1.0,1.5,1.0,1.0,0.0,false
+decay_095,1.0,1.0,1.0,0.95,1.0,0.0,false
+decay_090,1.0,1.0,1.0,0.9,1.0,0.0,false

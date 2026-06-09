@@ -1,0 +1,52 @@
+{
+  "aaai_ready": false,
+  "budgets": [
+    1000,
+    2000
+  ],
+  "candidate_count": 22,
+  "complete_context_budget_pairs": 120,
+  "context_budget_pairs": 120,
+  "contexts": 60,
+  "decision": "g518_artifacts_verified_continue_g519",
+  "duplicate_context_candidate_budget_rows": 0,
+  "full_primary_rows": 2640,
+  "gates": {
+    "budgets_eq_1000_2000": true,
+    "candidate_count_eq_22": true,
+    "complete_context_budget_pairs_eq_120": true,
+    "contexts_eq_60": true,
+    "duplicate_context_candidate_budget_rows_eq_0": true,
+    "full_primary_rows_eq_2640": true,
+    "g518_final_decision": true,
+    "ids_166_205_untouched": true,
+    "integrity_summary_contexts_eq_60": true,
+    "mean_new_oracle_gap_vs_old_oracle_lt_0": true,
+    "new_candidate_count_eq_8": true,
+    "new_candidate_win_count_gt_0": true,
+    "observed_ids_only": true,
+    "old_candidate_count_eq_14": true,
+    "runtime_claim_allowed_false": true
+  },
+  "ids_166_205_untouched": true,
+  "learned_runtime_policy_validated": false,
+  "mean_new_oracle_gap_vs_old_oracle": -0.002209805308139531,
+  "missing_required_inputs": [],
+  "new_candidate_count": 8,
+  "new_candidate_win_count": 32,
+  "observed_ids_only": true,
+  "old_candidate_count": 14,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "required_inputs": [
+    "outputs/reports/phase5p5_repair5g518_decision_summary.json",
+    "outputs/reports/phase5p5_repair5g518_full_primary_integrity_summary.json",
+    "outputs/reports/phase5p5_repair5g518_full_primary_oracle_summary.json",
+    "outputs/tables/phase5p5_repair5g518_full_primary_probe_results.csv",
+    "outputs/tables/phase5p5_repair5g515_candidate_feature_matrix_v5.csv",
+    "outputs/tables/phase5p5_repair5g514_rich_context_features_by_context.csv",
+    "outputs/tables/phase5p5_repair5g518_selected_candidate_batches.csv"
+  ],
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g519_g518_artifact_verification_summary_v1"
+}

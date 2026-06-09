@@ -1,0 +1,17 @@
+{
+  "created_at": "2026-05-31T16:53:33.073467",
+  "diagnostic_only": true,
+  "diagnostic_runtime_dir": "artifacts\\models\\laur_ltm\\repair5d_composite_distilled_ood_guard",
+  "guard_cli": "--laur-ood-z-threshold",
+  "guard_threshold": 5.0,
+  "notes": [
+    "Model weights are copied from the frozen Repair5D composite distill bridge.",
+    "The guard is activated by phase1a_batch runtime CLI, not by changing solver semantics.",
+    "If max runtime feature absolute z-score is at or above the threshold, the LAUR update defers to additive_ltm."
+  ],
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "schema_version": "phase5p5_repair5e_ood_guard_runtime_v1",
+  "selected_repair": "OOD/defer guard around existing Repair5D distill bridge",
+  "source_runtime_dir": "artifacts\\models\\laur_ltm\\repair5d_composite_distilled"
+}

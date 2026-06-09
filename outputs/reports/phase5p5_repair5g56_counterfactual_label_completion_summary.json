@@ -1,0 +1,55 @@
+{
+  "aaai_ready": false,
+  "candidate_count": 7,
+  "checkpoint_jsonl": [
+    "C:\\PROGRAMING\\czr004\\outputs\\logs\\phase5p5_repair5g56_counterfactual_label_completion\\phase5p5_repair5g56_update_checkpoints.jsonl",
+    "C:\\PROGRAMING\\czr004\\outputs\\logs\\phase5p5_repair5g55_scaled_counterfactual_labels\\phase5p5_repair5g55_update_checkpoints.jsonl"
+  ],
+  "checkpoint_rows": 239,
+  "context_count": 140,
+  "contexts_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase5p5_repair5g56_counterfactual_contexts.csv",
+  "decision": "counterfactual_label_completion_passed",
+  "g6_training_allowed": false,
+  "gates": {
+    "checkpoint_replayability_still_passes": true,
+    "context_count_ge_120": true,
+    "counterfactual_label_completion_passed": true,
+    "ids_166_205_untouched": true,
+    "iteration_coverage_reported": true,
+    "label_rows_equal_context_count_times_candidate_count": true,
+    "later_iteration_context_count_gt_0": true,
+    "map_agent_coverage_complete": true,
+    "observed_ids_only": true,
+    "same_context_labels_exist_for_all_candidates": true
+  },
+  "iteration_coverage": {
+    "0": 120,
+    "1": 20
+  },
+  "label_rows": 980,
+  "labels_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase5p5_repair5g56_counterfactual_update_labels.csv",
+  "later_iteration_context_count": 20,
+  "later_iteration_unavailable_reason": "",
+  "map_agent_groups": [
+    "maze-32-32-4|a100",
+    "maze-32-32-4|a50",
+    "random-32-32-20|a100",
+    "random-32-32-20|a50",
+    "warehouse-10-20-10-2-1|a100",
+    "warehouse-10-20-10-2-1|a50"
+  ],
+  "mean_oracle_gap_over_static": -0.01113516710276,
+  "missing_map_agent_groups": [],
+  "nonzero_trace_contexts": 140,
+  "oracle_beats_static_contexts": 54,
+  "oracle_beats_static_fraction": 0.38571428571428573,
+  "oracle_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase5p5_repair5g56_oracle_by_context.csv",
+  "oracle_rows": 140,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "probe_jsonl": [
+    "C:\\PROGRAMING\\czr004\\outputs\\logs\\phase5p5_repair5g56_counterfactual_label_completion\\phase5p5_repair5g56_counterfactual_update_probes.jsonl",
+    "C:\\PROGRAMING\\czr004\\outputs\\logs\\phase5p5_repair5g55_scaled_counterfactual_labels\\phase5p5_repair5g55_counterfactual_update_probes.jsonl"
+  ],
+  "schema_version": "phase5p5_repair5g56_counterfactual_label_completion_summary_v1"
+}

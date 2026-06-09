@@ -1,0 +1,7 @@
+item,status,evidence,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+candidate_space_full_primary_positive,True,G5.23 oracle gate,False,False,False,False,False
+budget_pair_labels_created,True,outputs/reports/phase5p5_repair5g524_budget_pair_teacher_tables_summary.json,False,False,False,False,False
+trace_enriched_features_clean,True,outputs/reports/phase5p5_repair5g524_trace_enriched_feature_matrix_summary.json,False,False,False,False,False
+region_to_parameter_gate_passed,False,outputs/reports/phase5p5_repair5g524_region_to_parameter_models_summary.json,False,False,False,False,False
+edge_teacher_exact,False,proxy_only,False,False,False,False,False
+runtime_claim_allowed,False,closed by design,False,False,False,False,False

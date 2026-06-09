@@ -1,0 +1,109 @@
+{
+  "metadata": {
+    "config": "/root/shared-nvme/czr004/configs/phase4/laur_ltm_pilot.yaml",
+    "created_at": "2026-05-26T14:57:52.371742",
+    "dataset": "/root/shared-nvme/czr004/artifacts/teacher/laur/pilot/update_labels/phase4_laur_update_dataset_pilot.jsonl",
+    "epochs": 300,
+    "feature_set": "aggregate_checkpoint_v1",
+    "hidden_dim": 64,
+    "learning_rate": 0.01,
+    "seed": 7,
+    "weight_decay": 0.0001
+  },
+  "model_name": "LAU-MLP-v1",
+  "rule_params": {
+    "additive_ltm": {
+      "alpha_block": 1.0,
+      "alpha_commit": 1.0,
+      "alpha_wait": 1.0,
+      "contraflow_penalty": 0.0,
+      "force_additive": true,
+      "rho_decay": 1.0,
+      "saturation_scale": 1.0
+    },
+    "block_heavy": {
+      "alpha_block": 1.5,
+      "alpha_commit": 1.0,
+      "alpha_wait": 1.0,
+      "contraflow_penalty": 0.0,
+      "force_additive": false,
+      "rho_decay": 1.0,
+      "saturation_scale": 1.0
+    },
+    "block_light": {
+      "alpha_block": 0.5,
+      "alpha_commit": 1.0,
+      "alpha_wait": 1.0,
+      "contraflow_penalty": 0.0,
+      "force_additive": false,
+      "rho_decay": 1.0,
+      "saturation_scale": 1.0
+    },
+    "commit_heavy": {
+      "alpha_block": 1.0,
+      "alpha_commit": 1.5,
+      "alpha_wait": 1.0,
+      "contraflow_penalty": 0.0,
+      "force_additive": false,
+      "rho_decay": 1.0,
+      "saturation_scale": 1.0
+    },
+    "decay_090": {
+      "alpha_block": 1.0,
+      "alpha_commit": 1.0,
+      "alpha_wait": 1.0,
+      "contraflow_penalty": 0.0,
+      "force_additive": false,
+      "rho_decay": 0.9,
+      "saturation_scale": 1.0
+    },
+    "decay_095": {
+      "alpha_block": 1.0,
+      "alpha_commit": 1.0,
+      "alpha_wait": 1.0,
+      "contraflow_penalty": 0.0,
+      "force_additive": false,
+      "rho_decay": 0.95,
+      "saturation_scale": 1.0
+    },
+    "neutral_additive": {
+      "alpha_block": 1.0,
+      "alpha_commit": 1.0,
+      "alpha_wait": 1.0,
+      "contraflow_penalty": 0.0,
+      "force_additive": true,
+      "rho_decay": 1.0,
+      "saturation_scale": 1.0
+    },
+    "wait_heavy": {
+      "alpha_block": 1.0,
+      "alpha_commit": 1.0,
+      "alpha_wait": 1.5,
+      "contraflow_penalty": 0.0,
+      "force_additive": false,
+      "rho_decay": 1.0,
+      "saturation_scale": 1.0
+    },
+    "wait_light": {
+      "alpha_block": 1.0,
+      "alpha_commit": 1.0,
+      "alpha_wait": 0.5,
+      "contraflow_penalty": 0.0,
+      "force_additive": false,
+      "rho_decay": 1.0,
+      "saturation_scale": 1.0
+    }
+  },
+  "rules": {
+    "0": "additive_ltm",
+    "1": "commit_heavy",
+    "2": "block_heavy",
+    "3": "block_light",
+    "4": "wait_light",
+    "5": "wait_heavy",
+    "6": "decay_095",
+    "7": "decay_090",
+    "8": "neutral_additive"
+  },
+  "schema_version": "laur_mlp_v1_rules"
+}

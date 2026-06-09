@@ -1,0 +1,13 @@
+method,component,rows,better,equal,worse,mean_delta_ratio_vs_ltm
+repair5g_dual_channel_oracle_static_proxy,,120,29,55,36,0.001879629688233328
+repair5g_dual_c_only_best_f4_observed,c_only,120,17,61,42,0.007440336798399994
+repair5g_dual_c_only_locked_f4,c_only,120,15,62,43,0.007675997201349986
+repair5g_shuffled_goal_progress_diagnostic,,120,13,62,45,0.010474970962683326
+repair5g_dual_goal_gated_wait_025,goal_gated_wait,120,4,68,48,0.017697362382433326
+repair5g_dual_block_wait_cong_flow025,c_plus_f,120,2,69,49,0.018511684814274988
+repair5g_dual_balanced_decay,c_plus_f_decay,120,5,66,49,0.018833444063524992
+repair5g_random_dual_candidate_diagnostic,,120,5,69,46,0.019861634269858323
+repair5g_dual_block_wait_cong_flow050,c_plus_f,120,0,70,50,0.021779983580524985
+repair5g_dual_flow_only_025,f_only,120,0,70,50,0.022428777828941655
+repair5g_dual_flow_only_050,f_only,120,0,70,50,0.022428777828941655
+repair5g_dual_goal_gated_wait_050,goal_gated_wait,120,0,70,50,0.022428777828941655

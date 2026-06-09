@@ -1,0 +1,259 @@
+{
+  "agent_counts": [
+    50,
+    100
+  ],
+  "created_at": "2026-06-03T15:35:37.115321",
+  "effective_instance_ids": [
+    46,
+    47,
+    48,
+    49,
+    50,
+    51,
+    52,
+    53,
+    54,
+    55,
+    56,
+    57,
+    58,
+    59,
+    60,
+    61,
+    62,
+    63,
+    64,
+    65
+  ],
+  "final_missing_count": 0,
+  "final_missing_examples": [],
+  "generated_count": 60,
+  "generated_examples": [
+    {
+      "instance_id": 46,
+      "map": "random-32-32-20",
+      "path": "outputs\\tmp\\phase5p5_repair5g2_scenarios\\random-32-32-20-random-46.scen"
+    },
+    {
+      "instance_id": 47,
+      "map": "random-32-32-20",
+      "path": "outputs\\tmp\\phase5p5_repair5g2_scenarios\\random-32-32-20-random-47.scen"
+    },
+    {
+      "instance_id": 48,
+      "map": "random-32-32-20",
+      "path": "outputs\\tmp\\phase5p5_repair5g2_scenarios\\random-32-32-20-random-48.scen"
+    },
+    {
+      "instance_id": 49,
+      "map": "random-32-32-20",
+      "path": "outputs\\tmp\\phase5p5_repair5g2_scenarios\\random-32-32-20-random-49.scen"
+    },
+    {
+      "instance_id": 50,
+      "map": "random-32-32-20",
+      "path": "outputs\\tmp\\phase5p5_repair5g2_scenarios\\random-32-32-20-random-50.scen"
+    },
+    {
+      "instance_id": 51,
+      "map": "random-32-32-20",
+      "path": "outputs\\tmp\\phase5p5_repair5g2_scenarios\\random-32-32-20-random-51.scen"
+    },
+    {
+      "instance_id": 52,
+      "map": "random-32-32-20",
+      "path": "outputs\\tmp\\phase5p5_repair5g2_scenarios\\random-32-32-20-random-52.scen"
+    },
+    {
+      "instance_id": 53,
+      "map": "random-32-32-20",
+      "path": "outputs\\tmp\\phase5p5_repair5g2_scenarios\\random-32-32-20-random-53.scen"
+    },
+    {
+      "instance_id": 54,
+      "map": "random-32-32-20",
+      "path": "outputs\\tmp\\phase5p5_repair5g2_scenarios\\random-32-32-20-random-54.scen"
+    },
+    {
+      "instance_id": 55,
+      "map": "random-32-32-20",
+      "path": "outputs\\tmp\\phase5p5_repair5g2_scenarios\\random-32-32-20-random-55.scen"
+    },
+    {
+      "instance_id": 56,
+      "map": "random-32-32-20",
+      "path": "outputs\\tmp\\phase5p5_repair5g2_scenarios\\random-32-32-20-random-56.scen"
+    },
+    {
+      "instance_id": 57,
+      "map": "random-32-32-20",
+      "path": "outputs\\tmp\\phase5p5_repair5g2_scenarios\\random-32-32-20-random-57.scen"
+    },
+    {
+      "instance_id": 58,
+      "map": "random-32-32-20",
+      "path": "outputs\\tmp\\phase5p5_repair5g2_scenarios\\random-32-32-20-random-58.scen"
+    },
+    {
+      "instance_id": 59,
+      "map": "random-32-32-20",
+      "path": "outputs\\tmp\\phase5p5_repair5g2_scenarios\\random-32-32-20-random-59.scen"
+    },
+    {
+      "instance_id": 60,
+      "map": "random-32-32-20",
+      "path": "outputs\\tmp\\phase5p5_repair5g2_scenarios\\random-32-32-20-random-60.scen"
+    },
+    {
+      "instance_id": 61,
+      "map": "random-32-32-20",
+      "path": "outputs\\tmp\\phase5p5_repair5g2_scenarios\\random-32-32-20-random-61.scen"
+    },
+    {
+      "instance_id": 62,
+      "map": "random-32-32-20",
+      "path": "outputs\\tmp\\phase5p5_repair5g2_scenarios\\random-32-32-20-random-62.scen"
+    },
+    {
+      "instance_id": 63,
+      "map": "random-32-32-20",
+      "path": "outputs\\tmp\\phase5p5_repair5g2_scenarios\\random-32-32-20-random-63.scen"
+    },
+    {
+      "instance_id": 64,
+      "map": "random-32-32-20",
+      "path": "outputs\\tmp\\phase5p5_repair5g2_scenarios\\random-32-32-20-random-64.scen"
+    },
+    {
+      "instance_id": 65,
+      "map": "random-32-32-20",
+      "path": "outputs\\tmp\\phase5p5_repair5g2_scenarios\\random-32-32-20-random-65.scen"
+    }
+  ],
+  "generated_missing_scenarios": true,
+  "generator_policy": {
+    "base_seed": 20260522,
+    "equivalent_command": "python scripts/generate_phase1a_scenarios.py --manifest <f4 maps with instances 26..45> --output-dir outputs\\tmp\\phase5p5_repair5g2_scenarios --base-seed 20260522",
+    "script_version": "phase1a-scenario-generator-v1",
+    "seed_function": "sha256(script_version|base_seed|map_name|instance_id)",
+    "source": "scripts/generate_phase1a_scenarios.py functions"
+  },
+  "initial_missing_count": 0,
+  "initial_missing_examples": [],
+  "reduced_scope_reason": "",
+  "requested_instance_ids": [
+    46,
+    47,
+    48,
+    49,
+    50,
+    51,
+    52,
+    53,
+    54,
+    55,
+    56,
+    57,
+    58,
+    59,
+    60,
+    61,
+    62,
+    63,
+    64,
+    65
+  ],
+  "requested_maps": [
+    "random-32-32-20",
+    "maze-32-32-4",
+    "warehouse-10-20-10-2-1"
+  ],
+  "scenario_dir": "outputs\\tmp\\phase5p5_repair5g2_scenarios",
+  "scenario_metadata": "outputs\\reports\\phase5p5_repair5g2_scenario_generation.json",
+  "schema_version": "phase5p5_repair5f4_scenario_generation_v1",
+  "source_missing_count": 60,
+  "source_missing_examples": [
+    {
+      "instance_id": 46,
+      "map": "random-32-32-20"
+    },
+    {
+      "instance_id": 47,
+      "map": "random-32-32-20"
+    },
+    {
+      "instance_id": 48,
+      "map": "random-32-32-20"
+    },
+    {
+      "instance_id": 49,
+      "map": "random-32-32-20"
+    },
+    {
+      "instance_id": 50,
+      "map": "random-32-32-20"
+    },
+    {
+      "instance_id": 51,
+      "map": "random-32-32-20"
+    },
+    {
+      "instance_id": 52,
+      "map": "random-32-32-20"
+    },
+    {
+      "instance_id": 53,
+      "map": "random-32-32-20"
+    },
+    {
+      "instance_id": 54,
+      "map": "random-32-32-20"
+    },
+    {
+      "instance_id": 55,
+      "map": "random-32-32-20"
+    },
+    {
+      "instance_id": 56,
+      "map": "random-32-32-20"
+    },
+    {
+      "instance_id": 57,
+      "map": "random-32-32-20"
+    },
+    {
+      "instance_id": 58,
+      "map": "random-32-32-20"
+    },
+    {
+      "instance_id": 59,
+      "map": "random-32-32-20"
+    },
+    {
+      "instance_id": 60,
+      "map": "random-32-32-20"
+    },
+    {
+      "instance_id": 61,
+      "map": "random-32-32-20"
+    },
+    {
+      "instance_id": 62,
+      "map": "random-32-32-20"
+    },
+    {
+      "instance_id": 63,
+      "map": "random-32-32-20"
+    },
+    {
+      "instance_id": 64,
+      "map": "random-32-32-20"
+    },
+    {
+      "instance_id": 65,
+      "map": "random-32-32-20"
+    }
+  ],
+  "source_scenario_dir": "outputs\\tmp\\phase1a\\generated\\phase1a-generated-random"
+}

@@ -1,0 +1,9 @@
+better,bootstrap,equal,mean_delta_ratio_vs_ltm,median_delta_ratio_vs_ltm,method,ratio_worse_than_ltm_groups,rows,success_worse_than_ltm_groups,worse
+0,"{'mean': 0.0, 'ci_low': 0.0, 'ci_high': 0.0, 'prob_mean_lt_0': 0.0, 'samples': 2000}",50,0.0,0.0,always_additive_defer,0,60,0,0
+0,"{'mean': 0.0, 'ci_low': 0.0, 'ci_high': 0.0, 'prob_mean_lt_0': 0.0, 'samples': 2000}",50,0.0,0.0,laur_disable,0,60,0,0
+0,"{'mean': 0.0, 'ci_low': 0.0, 'ci_high': 0.0, 'prob_mean_lt_0': 0.0, 'samples': 2000}",50,0.0,0.0,laur_force_additive_direct,0,60,0,0
+0,"{'mean': 0.0, 'ci_low': 0.0, 'ci_high': 0.0, 'prob_mean_lt_0': 0.0, 'samples': 2000}",50,0.0,0.0,repair5f_candidate_additive_ltm,0,60,0,0
+0,"{'mean': 0.0, 'ci_low': 0.0, 'ci_high': 0.0, 'prob_mean_lt_0': 0.0, 'samples': 2000}",50,0.0,0.0,repair5g5_contextual_flow_shield_selector_disable,0,60,0,0
+0,"{'mean': 0.002297870613999997, 'ci_low': 0.0, 'ci_high': 0.0059950174643999925, 'prob_mean_lt_0': 0.0, 'samples': 2000}",48,0.002297870613999997,0.0,repair5g5_contextual_flow_shield_selector_force_additive_parity,1,60,0,2
+0,"{'mean': 0.0, 'ci_low': 0.0, 'ci_high': 0.0, 'prob_mean_lt_0': 0.0, 'samples': 2000}",50,0.0,0.0,repair5g_dual_additive_parity,0,60,0,0
+0,"{'mean': 0.0, 'ci_low': 0.0, 'ci_high': 0.0, 'prob_mean_lt_0': 0.0, 'samples': 2000}",50,0.0,0.0,repair5g_dual_c_equiv_additive,0,60,0,0

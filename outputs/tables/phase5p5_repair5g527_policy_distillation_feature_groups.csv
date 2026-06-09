@@ -1,0 +1,15 @@
+feature_group,feature_count,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+feature_map_,0,False,False,False,False,False
+feature_agent_,0,False,False,False,False,False
+feature_budget_,0,False,False,False,False,False
+feature_trace_,0,False,False,False,False,False
+feature_blocked_reason_,3,False,False,False,False,False
+feature_competing_rank_,0,False,False,False,False,False
+feature_rank_margin_,0,False,False,False,False,False
+feature_candidate_param_,0,False,False,False,False,False
+feature_candidate_geometry_,0,False,False,False,False,False
+feature_region_prior_,0,False,False,False,False,False
+feature_rank_effect_,6,False,False,False,False,False
+feature_goal_aware_,6,False,False,False,False,False
+feature_mix_,63,False,False,False,False,False
+feature_policy_prior_,5,False,False,False,False,False

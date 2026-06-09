@@ -1,0 +1,22 @@
+{
+  "aaai_ready": false,
+  "candidate_set_hash": "ba12bc726102e8c13ff968790f0afa234cada652fac405ea59b288cae7700f26",
+  "created_at": "2026-06-04T10:25:15.030750",
+  "diagnostic_only": true,
+  "export_manifest_hash": "97b2b351098c694a839265b491820fa7fb1622dd59a39d578a9a9a9f91f12be3",
+  "feature_schema_hash": "49963f8c62c876f4fa9d3e96609630b010888b5cf0c60106c4221126a1807759",
+  "forbidden_final_ids": "166..205 primary learned-runtime holdout",
+  "outputs": {
+    "candidate_set": "artifacts\\models\\laur_ltm\\repair5g5_contextual_flow_shield_selector\\candidate_set.csv",
+    "export_manifest": "artifacts\\models\\laur_ltm\\repair5g5_contextual_flow_shield_selector\\export_manifest.json",
+    "feature_schema": "artifacts\\models\\laur_ltm\\repair5g5_contextual_flow_shield_selector\\feature_schema.json",
+    "selector_spec": "artifacts\\models\\laur_ltm\\repair5g5_contextual_flow_shield_selector\\selector_spec.json"
+  },
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_integration_target": "cpp/tools/phase1a_batch.cpp:LtmOptions.update_policy",
+  "schema_version": "phase5p5_repair5g5_contextual_selector_export_summary_v1",
+  "selector_hash": "fa8c5a5be30d2c9be79ca0c32a4f9be1acdcae0cb24d5e74e36ea601efe7a82a",
+  "selector_name": "decision_stump_selector",
+  "training_data_ranges": "observed IDs 1..165; G4 clean IDs excluded from tuning in the bridge dataset"
+}

@@ -1,0 +1,29 @@
+{
+  "aaai_ready": false,
+  "abstain_to_static_count": 0,
+  "abstain_to_static_reason": "No measured context had primary-budget oracle disagreement while static stayed within the near-oracle margin.",
+  "decision": "confidence_targets_v4_training_gate_failed",
+  "gates": {
+    "head_b_training_rows_ge_40": false,
+    "ids_166_205_untouched": true,
+    "measured_confidence_contexts_ge_60": false,
+    "no_solution_or_budget_abstain_count_gt_0": false,
+    "observed_ids_only": true,
+    "primary_1000_2000_stable_contexts_ge_40": false,
+    "stable_high_confidence_parameter_candidate_ge_10": false,
+    "stable_static_or_abstain_ge_10": false
+  },
+  "head_b_training_rows": 2,
+  "label_counts": {
+    "stable_high_confidence_parameter_candidate": 2
+  },
+  "measured_confidence_contexts": 2,
+  "no_solution_or_budget_abstain_count": 0,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "primary_1000_2000_stable_contexts": 2,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g510_confidence_targets_v4_summary_v1",
+  "stable_high_confidence_parameter_candidate": 2,
+  "stable_static_or_abstain": 0
+}

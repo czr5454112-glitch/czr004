@@ -1,0 +1,10 @@
+{
+  "aaai_ready": false,
+  "created_at": "2026-06-04T12:29:57.871446",
+  "diagnostic_only": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "schema_version": "phase5p5_repair5g51_selector_manifest_v1",
+  "selector_spec": "artifacts\\models\\laur_ltm\\repair5g51_safe_abstention_selector\\selector_spec.json",
+  "selector_spec_hash": "fbd909fc63c1b8b1b2e99dca59c024d2ff8dbd8c92ebf783b91d45b39cae02fd"
+}

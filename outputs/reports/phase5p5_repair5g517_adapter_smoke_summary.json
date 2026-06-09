@@ -1,0 +1,65 @@
+{
+  "aaai_ready": false,
+  "candidate_ids": [
+    "repair5g516_slow_decay_safer_beta025_cap050",
+    "repair5g516_slow_decay_safer_beta020_cap045",
+    "repair5g516_slow_decay_safer_beta015_cap040",
+    "repair5g516_wait_aggressive_low_cap",
+    "repair5g516_wait_conservative_mid_cap",
+    "repair5g516_wait_aggressive_fast_flow_decay",
+    "repair5g516_commit_heavy_low_beta",
+    "repair5g516_commit_heavy_static_guard",
+    "repair5g516_static_boundary_light_flow",
+    "repair5g516_static_boundary_c_only"
+  ],
+  "checkpoint_rows": 2,
+  "context": {
+    "agents": 50,
+    "map": "maze-32-32-4",
+    "seed": 151
+  },
+  "decision": "adapter_smoke_passed_continue_targeted_probe",
+  "external_lacam2_solver_status": [],
+  "gates": {
+    "candidate_recognized_all": true,
+    "checkpoint_rows_gt_0": true,
+    "external_lacam2_solver_untouched": true,
+    "ids_166_205_untouched": true,
+    "max_workers_eq_1": true,
+    "observed_ids_only": true,
+    "repair_candidate_count_eq_10": true,
+    "repair_candidate_rows_eq_10": true,
+    "smoke_probe_ran": true,
+    "updateparams_fingerprint_all": true
+  },
+  "ids_166_205_untouched": true,
+  "learned_runtime_policy_validated": false,
+  "observed_ids_only": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "probe_jsonl": "C:\\PROGRAMING\\czr004\\outputs\\logs\\phase5p5_repair5g517_adapter_smoke\\phase5p5_repair5g517_adapter_smoke_update_probes.jsonl",
+  "probe_ran": true,
+  "probe_rows": 10,
+  "recognition": {
+    "candidate_recognized_all": true,
+    "fingerprint_rows": 10,
+    "recognized_rows": 10,
+    "rows": 10,
+    "updateparams_fingerprint_all": true
+  },
+  "results_csv": "C:\\PROGRAMING\\czr004\\outputs\\tables\\phase5p5_repair5g517_adapter_smoke_results.csv",
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g517_adapter_smoke_summary_v1",
+  "seen_repair_candidates": [
+    "repair5g516_commit_heavy_low_beta",
+    "repair5g516_commit_heavy_static_guard",
+    "repair5g516_slow_decay_safer_beta015_cap040",
+    "repair5g516_slow_decay_safer_beta020_cap045",
+    "repair5g516_slow_decay_safer_beta025_cap050",
+    "repair5g516_static_boundary_c_only",
+    "repair5g516_static_boundary_light_flow",
+    "repair5g516_wait_aggressive_fast_flow_decay",
+    "repair5g516_wait_aggressive_low_cap",
+    "repair5g516_wait_conservative_mid_cap"
+  ]
+}

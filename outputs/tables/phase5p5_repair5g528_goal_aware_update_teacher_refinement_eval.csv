@@ -1,0 +1,7 @@
+row_type,model,region_accuracy,param_mae,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+model_aggregate,action_class_to_param_residual,1.0,0.001356637974,False,False,False,False,False
+model_aggregate,exact_failure_to_param_residual,1.0,0.001356637974,False,False,False,False,False
+model_aggregate,map_family_mixture_residual,1.0,0.001356637974,False,False,False,False,False
+model_aggregate,candidate_param_residual,1.0,0.001356637974,False,False,False,False,False
+model_aggregate,small_mlp_if_available,1.0,0.001356637974,False,False,False,False,False
+model_aggregate,shuffled_control,0.0,0.157455791856,False,False,False,False,False

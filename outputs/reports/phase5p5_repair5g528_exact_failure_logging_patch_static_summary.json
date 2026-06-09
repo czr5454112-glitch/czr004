@@ -1,0 +1,24 @@
+{
+  "aaai_ready": false,
+  "audit_precision": "partial",
+  "decision": "exact_failure_logging_patch_static_verified",
+  "gates": {
+    "candidate_parser_fingerprints_unchanged": true,
+    "external_lacam2_clean": true,
+    "new_audit_json_keys_present_in_smoke_or_static": true,
+    "project_owned_files_only": true,
+    "solver_semantics_changed": false,
+    "trace_event_sequence_preserved": true
+  },
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "project_owned_files": [
+    "cpp/ltm/ltm.hpp",
+    "cpp/ltm/ltm.cpp",
+    "cpp/tools/phase1a_batch.cpp",
+    "cpp/tools/phase4_laur_record.cpp"
+  ],
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g528_exact_failure_logging_patch_static_summary_v1"
+}

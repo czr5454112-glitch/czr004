@@ -1,0 +1,29 @@
+{
+  "aaai_ready": false,
+  "action_class_counts": {
+    "abstain_due_risk": 9,
+    "old14_g518_fallback": 36,
+    "old14_select": 35,
+    "safe_g522_select": 40
+  },
+  "bandit_selected_candidate_induced_no_solution_count": 0,
+  "bandit_selected_policy_utility": -0.011588397798,
+  "candidate_budget_rows": 5280,
+  "context_budget_rows": 120,
+  "decision": "conservative_policy_teacher_created",
+  "forbidden_feature_count": 0,
+  "gates": {
+    "bandit_selected_candidate_induced_no_solution_count_eq_0": true,
+    "bandit_selected_policy_utility_lt_0": true,
+    "candidate_budget_rows_eq_5280": true,
+    "context_budget_rows_eq_120": true,
+    "forbidden_feature_count_eq_0": true,
+    "policy_decision_rows_eq_120": true
+  },
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "policy_decision_rows": 120,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g527_conservative_policy_teacher_summary_v1"
+}

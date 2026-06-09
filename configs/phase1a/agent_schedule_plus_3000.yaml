@@ -1,0 +1,26 @@
+phase: phase1a_plus_3000
+source:
+  base: "2603.07891v1.pdf Figure 1 axis ticks, rendered locally from page 6"
+  extension: "User-requested 3000-agent stress-test point on maps with at least 3000 free cells"
+notes:
+  - "The base schedule remains the Phase1a paper-parity schedule."
+  - "The 3000-agent point is an extension and must be reported separately from the paper-parity base."
+  - "3000 agents are added only on maps whose free-cell count is at least 3000."
+
+maps:
+  - name: empty-32-32
+    agent_counts: [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000]
+  - name: empty-48-48
+    agent_counts: [200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000]
+  - name: random-32-32-20
+    agent_counts: [100, 200, 300, 400, 500, 600, 700]
+  - name: maze-32-32-4
+    agent_counts: [100, 200, 300, 400, 500]
+  - name: random-64-64-20
+    agent_counts: [200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000, 3000]
+  - name: room-64-64-8
+    agent_counts: [200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000, 3000]
+  - name: warehouse-10-20-10-2-1
+    agent_counts: [200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000, 3000]
+  - name: warehouse-10-20-10-2-2
+    agent_counts: [200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000, 3000]

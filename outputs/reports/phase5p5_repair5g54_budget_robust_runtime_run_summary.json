@@ -1,0 +1,24 @@
+{
+  "aaai_ready": false,
+  "agent_counts": [
+    100
+  ],
+  "budgets_sec": [
+    3.0,
+    5.0,
+    10.0
+  ],
+  "diagnostic_only": true,
+  "instance_ids": [
+    146
+  ],
+  "maps": [
+    "warehouse-10-20-10-2-1"
+  ],
+  "observed_ids_only": true,
+  "output_jsonl": "C:\\PROGRAMING\\czr004\\outputs\\logs\\phase5p5_repair5g54_budget_protocol\\phase5p5_repair5g54_budget_protocol_runs.jsonl",
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "row_count": 18,
+  "schema_version": "phase5p5_repair5g54_budget_robust_runtime_run_summary_v1"
+}

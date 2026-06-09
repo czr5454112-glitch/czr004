@@ -1,0 +1,29 @@
+{
+  "aaai_ready": false,
+  "candidate_count": 44,
+  "context_budget_pairs": 120,
+  "contexts": 60,
+  "decision": "expanded_context_panel_created_with_observed_data_shortfall",
+  "expected_candidate_budget_rows": 5280,
+  "ids_166_205_untouched": true,
+  "learned_runtime_policy_validated": false,
+  "observed_ids_only": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g529_expanded_context_panel_summary_v1",
+  "source_data_shortfall_reported": true,
+  "target_gates": {
+    "a50_and_a100_represented": true,
+    "abstain_due_risk_ge_15": false,
+    "context_budget_pairs_ge_minimum_160": false,
+    "context_budget_pairs_ge_target_240": false,
+    "contexts_ge_minimum_80": false,
+    "contexts_ge_target_120": false,
+    "maze_ge_40": true,
+    "old14_or_g518_fallback_ge_50": false,
+    "random_ge_40": true,
+    "safe_g522_teacher_select_ge_50": false,
+    "warehouse_ge_30": true
+  }
+}

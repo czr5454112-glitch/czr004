@@ -1,0 +1,4 @@
+map,agents,method,runs,successes,success_rate,sum_of_loss_ratio_mean,expanded_nodes_mean,time_to_first_solution_ms_mean,returned_solutions_count_mean,low_level_pibt_calls_mean,laur_overhead_ms_mean,laur_inference_count_mean,laur_additive_fallback_count_mean,laur_safety_disabled_count_mean,fallback_defer_rate,non_additive_update_rate,selected_harmful_update_rate,selected_rules,ratio_delta_vs_ltm,expanded_delta_vs_ltm,ttfs_delta_vs_ltm
+random-32-32-20,50,always_additive_defer,1,1,1.0,1.13415710503,328.0,170.0,1.0,28657.0,0.0,0.0,1.0,0.0,0.25,0.0,,"{""additive_ltm"": 3}",0.0,0.0,3.0
+random-32-32-20,50,lacam_star_ltm,1,1,1.0,1.13415710503,328.0,167.0,1.0,28657.0,0.0,0.0,0.0,0.0,,,,{},,,
+random-32-32-20,50,oracle_teacher_forced_best_safe_update_static_proxy,1,1,1.0,1.13415710503,221.0,159.0,1.0,10846.0,0.0,0.0,1.0,0.0,0.25,0.75,,"{""wait_light"": 3}",0.0,-107.0,-8.0

@@ -1,0 +1,5 @@
+"name","dropped","hidden","epochs","top1","top3","recall","precision","mean_delta","neutral_rate"
+"drop_map_shape_h64","map_width,map_height,free_cells,obstacle_ratio","64","500","0.21179039301310043","0.517467248908297","0.9337016574585635","0.45675675675675675","-0.013825548810562619","0.18995633187772926"
+"drop_map_static_h64","map_width,map_height,free_cells,obstacle_ratio,density","64","500","0.18995633187772926","0.5458515283842795","0.9668508287292817","0.4227053140096618","0.00998740883050523","0.29912663755458513"
+"drop_top_drift_h64","map_width,map_height,free_cells,obstacle_ratio,local_degree_mean_topk,nonzero_edges_before,new_nonzero_edges_count,topk_blocked_edge_concentration,density,blocked_per_agent,blocked_count,mean_topk_raw_before","64","500","0.2292576419213974","0.574235807860262","0.9668508287292817","0.42475728155339804","0.001529828114378434","0.3034934497816594"
+"drop_map_shape_h32","map_width,map_height,free_cells,obstacle_ratio","32","400","0.1943231441048035","0.5480349344978166","0.9613259668508287","0.4306930693069307","0.0058548960825574","0.18995633187772926"

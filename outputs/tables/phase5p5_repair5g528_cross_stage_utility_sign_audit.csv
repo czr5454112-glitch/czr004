@@ -1,0 +1,6 @@
+stage,utility_field,better_direction,teacher_value,sign_consistent,notes
+G5.26 bandit,selected_policy_utility,lower_is_better,-0.011588397798,True,
+G5.27 teacher,target_bandit_selected_policy_utility,lower_is_better,-0.011588397798,True,
+G5.27 distillation,selected_policy_utility,lower_is_better,0.039188132663,True,
+G5.27 calibration,selected_policy_utility,lower_is_better,0.0,True,
+G5.27 offline RL direct teacher,selected_policy_utility,lower_is_better,0.039188132663,False,The direct-teacher row copied the failed distillation aggregate rather than the conservative-teacher decision aggregate.

@@ -1,0 +1,18 @@
+{
+  "aaai_ready": false,
+  "decision": "fold_safe_distillation_dataset_created",
+  "feature_count": 148,
+  "fold_count": 9,
+  "forbidden_feature_count": 0,
+  "gates": {
+    "fold_count_ge_required": true,
+    "forbidden_feature_count_eq_0": true,
+    "no_dev_target_used_in_train_priors": true,
+    "teacher_label_columns_not_in_features": true
+  },
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g528_fold_safe_distillation_dataset_summary_v1"
+}

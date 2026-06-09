@@ -216,6 +216,26 @@ std::string propagation_kind(const czr004::ltm::TraceEvent& event)
   return event.at_goal ? "goal_wait_ignored" : "wait_propagated";
 }
 
+std::string blocked_reason_category_string(
+    czr004::ltm::BlockedReasonCategory reason)
+{
+  switch (reason) {
+    case czr004::ltm::BlockedReasonCategory::None:
+      return "none";
+    case czr004::ltm::BlockedReasonCategory::VertexConflict:
+      return "vertex_conflict";
+    case czr004::ltm::BlockedReasonCategory::EdgeSwap:
+      return "edge_swap";
+    case czr004::ltm::BlockedReasonCategory::PriorityBlock:
+      return "priority_block";
+    case czr004::ltm::BlockedReasonCategory::BacktrackOrInheritance:
+      return "backtrack_or_inheritance";
+    case czr004::ltm::BlockedReasonCategory::Unknown:
+      return "unknown";
+  }
+  return "unknown";
+}
+
 void write_raw_topk(std::ostream& out,
                     const std::vector<czr004::ltm::TrafficEdgeSnapshot>& edges)
 {
@@ -384,6 +404,70 @@ void write_trace_rows(std::ostream& out, const Args& args,
   }
 }
 
+void write_pibt_failure_audit(
+    std::ostream& out,
+    const std::vector<czr004::ltm::PibtFailureAudit>& audits)
+{
+  out << "[";
+  for (std::size_t index = 0; index < audits.size(); ++index) {
+    const auto& audit = audits[index];
+    if (index > 0) out << ",";
+    auto reason_histogram = std::map<std::string, uint>();
+    auto rank_histogram = std::map<uint, uint>();
+    auto reasons = std::vector<std::string>();
+    auto exact_subreason = std::string();
+    for (const auto& failed : audit.failed_candidates) {
+      const auto reason = blocked_reason_category_string(failed.reason);
+      reasons.push_back(reason);
+      ++reason_histogram[reason];
+      ++rank_histogram[failed.candidate_rank];
+      if (exact_subreason.empty() &&
+          !failed.exact_priority_block_subreason.empty()) {
+        exact_subreason = failed.exact_priority_block_subreason;
+      }
+    }
+
+    out << "{";
+    out << "\"audit_precision\":" << json_string(audit.audit_precision);
+    out << ",\"pibt_return_false_agent_id\":" << audit.agent_id;
+    out << ",\"pibt_return_false_from_id\":" << audit.from_id;
+    out << ",\"pibt_return_false_at_goal\":"
+        << (audit.at_goal ? "true" : "false");
+    out << ",\"pibt_return_false_candidate_count\":"
+        << audit.failed_candidates.size();
+    out << ",\"exact_priority_block_subreason\":"
+        << json_string(exact_subreason);
+    out << ",\"all_failed_candidate_reasons_when_pibt_returns_false\":[";
+    for (std::size_t i = 0; i < reasons.size(); ++i) {
+      if (i > 0) out << ",";
+      out << json_string(reasons[i]);
+    }
+    out << "]";
+    out << ",\"failed_candidate_rank_histogram_when_pibt_returns_false\":{";
+    auto first_rank = true;
+    for (const auto& [rank, count] : rank_histogram) {
+      if (!first_rank) out << ",";
+      first_rank = false;
+      out << json_string(std::to_string(rank)) << ":" << count;
+    }
+    out << "}";
+    out << ",\"failed_candidate_reason_histogram_when_pibt_returns_false\":{";
+    auto first_reason = true;
+    for (const auto& [reason, count] : reason_histogram) {
+      if (!first_reason) out << ",";
+      first_reason = false;
+      out << json_string(reason) << ":" << count;
+    }
+    out << "}";
+    out << ",\"first_failed_candidate_reason\":"
+        << json_string(reasons.empty() ? "" : reasons.front());
+    out << ",\"last_failed_candidate_reason\":"
+        << json_string(reasons.empty() ? "" : reasons.back());
+    out << "}";
+  }
+  out << "]";
+}
+
 void write_checkpoint_row(
     std::ostream& out, const Args& args, const std::string& run_id,
     const std::string& checkpoint_id, const std::filesystem::path& snapshot_path,
@@ -422,6 +506,8 @@ void write_checkpoint_row(
   out << ",\"low_level_pibt_calls_this_iteration\":"
       << checkpoint.low_level_pibt_calls_this_iteration;
   out << ",\"trace_event_count\":" << checkpoint.trace_events.size();
+  out << ",\"pibt_failure_audit\":";
+  write_pibt_failure_audit(out, checkpoint.pibt_failure_audits);
   out << ",\"committed_count\":" << counts.committed;
   out << ",\"blocked_count\":" << counts.blocked;
   out << ",\"wait_event_count\":" << counts.wait;

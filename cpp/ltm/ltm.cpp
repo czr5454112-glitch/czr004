@@ -44,7 +44,11 @@ uint info_uint_value(const std::string& info, const std::string& key)
 
 }  // namespace
 
-void PibtTraceCollector::clear() { events_.clear(); }
+void PibtTraceCollector::clear()
+{
+  events_.clear();
+  failure_audits_.clear();
+}
 
 void PibtTraceCollector::record_committed(uint agent_id, const Vertex* from,
                                           const Vertex* to, const Vertex* goal)
@@ -75,6 +79,19 @@ void PibtTraceCollector::record_blocked(uint agent_id, const Vertex* from,
 {
   events_.push_back(TraceEvent{TraceEventKind::Blocked, agent_id, from->id,
                                to->id, from == goal && to == goal, audit});
+}
+
+void PibtTraceCollector::record_pibt_failure(
+    uint agent_id, const Vertex* from, const Vertex* goal,
+    const std::vector<PibtFailedCandidateAudit>& failed_candidates)
+{
+  PibtFailureAudit audit;
+  audit.agent_id = agent_id;
+  audit.from_id = from == nullptr ? std::numeric_limits<uint>::max() : from->id;
+  audit.at_goal = from != nullptr && from == goal;
+  audit.audit_precision = "partial";
+  audit.failed_candidates = failed_candidates;
+  failure_audits_.push_back(std::move(audit));
 }
 
 TraceSummary PibtTraceCollector::summary() const
@@ -952,6 +969,32 @@ class OneShotLtmPlanner {
 
     occupied_next[ai->v_now->id] = ai;
     ai->v_next = ai->v_now;
+    auto failure_audit = std::vector<PibtFailedCandidateAudit>();
+    failure_audit.reserve(rejected_better.size());
+    for (const auto& [candidate, reason] : rejected_better) {
+      const auto rank_audit =
+          make_rank_audit(i, ai->v_now, candidate, ai->v_now, reason);
+      PibtFailedCandidateAudit item;
+      item.candidate_rank =
+          rank_audit.blocked_neighbor_rank_by_base_distance < 0
+              ? 0
+              : static_cast<uint>(
+                    rank_audit.blocked_neighbor_rank_by_base_distance);
+      item.vertex_id =
+          candidate == nullptr ? std::numeric_limits<uint>::max() :
+                                 candidate->id;
+      item.reason = reason;
+      if (reason == BlockedReasonCategory::BacktrackOrInheritance) {
+        item.exact_priority_block_subreason =
+            "recursive_pibt_child_return_false";
+      } else if (reason == BlockedReasonCategory::PriorityBlock) {
+        item.exact_priority_block_subreason =
+            "priority_order_blocked_candidate";
+      }
+      failure_audit.push_back(std::move(item));
+    }
+    collector->record_pibt_failure(i, ai->v_now, ins->goals[i],
+                                   failure_audit);
     return false;
   }
 
@@ -1355,6 +1398,7 @@ LtmRunResult solve_with_ltm(const Instance& instance, const LtmOptions& options)
           std::max(0.0, options.time_limit_ms - checkpoint.elapsed_ms) / 1000.0;
       checkpoint.update_params = update_params;
       checkpoint.trace_events = collector.events();
+      checkpoint.pibt_failure_audits = collector.failure_audits();
       checkpoint.traffic_before = traffic_before;
       checkpoint.traffic_after = traffic_after;
       checkpoint.traffic_before_map = traffic_before_map;

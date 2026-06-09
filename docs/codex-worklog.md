@@ -4107,3 +4107,18 @@
 - Decision:
   - Final G5.24 decision: `g524_candidate_space_positive_learning_still_blocked_collect_richer_trace`.
   - `phase5p5_allowed=false`, `phase6_allowed=false`, `runtime_claim_allowed=false`, `learned_runtime_policy_validated=false`, and `aaai_ready=false` remain closed.
+## 2026-06-09 - Repair5G.5.28 exact failure audit distillation
+
+- Request:
+  Finish `czr004_g528_after_g527_exact_failure_audit_distillation_prompt.md` completely, using `deep-research-report.md` and `phase4_6_laur_ltm_codex_execution_plan.md` as project constraints, then push to GitHub.
+- Planned files:
+  - `czr004_repair5g528_exact_failure_audit_distillation_plan.md`
+  - `scripts/repair5g528_common.py`
+  - G5.28 verification, teacher-audit, exact-failure logging/probe, feature, fold, model, calibration, offline-CPI, residual-teacher, synthesis, and decision scripts
+  - `outputs/reports/phase5p5_repair5g528_*`
+  - `outputs/tables/phase5p5_repair5g528_*`
+  - `outputs/logs/phase5p5_repair5g528_*`
+- Constraints:
+  No `external/lacam2/lacam2/**` edits, no PIBT/LaCAM*/search/rewrite/pruning/restart/candidate-deletion/h-value/action/priority semantic changes, no IDs `166..205`, no new candidate lattice wave, and all runtime/Phase5.5/Phase6/learned-runtime/AAAI claims remain closed.
+- Pre-probe worklog:
+  This entry is written before any G5.28 smoke or exact-failure trace probe. G5.28 will first verify G5.27 artifacts and teacher consistency, then add audit-only PIBT-return-false logging under separate JSON keys so UpdateLTM event semantics remain unchanged.

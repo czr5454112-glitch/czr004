@@ -1,0 +1,22 @@
+{
+  "aaai_ready": false,
+  "calibration_best": "teacher_action_class_then_risk_guard",
+  "cpi_best": "learned_q_conservative_policy",
+  "decision": "g528_teacher_valid_distillation_still_blocked_need_state_representation_redesign",
+  "exact_failure_audit_still_insufficient": true,
+  "exact_failure_features_present": true,
+  "heldout_family_no_collapse": true,
+  "learned_policy_preserves_teacher_safety": false,
+  "learned_runtime_policy_validated": false,
+  "model_best": "pairwise_teacher_preference_ranker",
+  "next_step": "offline neural state representation redesign",
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "real_models_backend": "sklearn_fold_trained_models",
+  "real_models_improved_over_surrogates": true,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g528_distillation_failure_or_success_summary_v1",
+  "teacher_consistency_verified": true,
+  "teacher_distillable_with_runtime_safe_features": false,
+  "warehouse_safety_passed": false
+}

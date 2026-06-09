@@ -8,6 +8,7 @@
 #include <memory>
 #include <string>
 #include <unordered_map>
+#include <utility>
 #include <vector>
 
 namespace czr004::ltm {
@@ -44,6 +45,21 @@ struct TraceEvent {
   uint to_id;
   bool at_goal;
   TraceRankAudit audit;
+};
+
+struct PibtFailedCandidateAudit {
+  uint candidate_rank = 0;
+  uint vertex_id = 0;
+  BlockedReasonCategory reason = BlockedReasonCategory::Unknown;
+  std::string exact_priority_block_subreason;
+};
+
+struct PibtFailureAudit {
+  uint agent_id = 0;
+  uint from_id = 0;
+  bool at_goal = false;
+  std::string audit_precision = "partial";
+  std::vector<PibtFailedCandidateAudit> failed_candidates;
 };
 
 struct TraceSummary {
@@ -144,12 +160,20 @@ class PibtTraceCollector {
                       const Vertex* goal);
   void record_blocked(uint agent_id, const Vertex* from, const Vertex* to,
                       const Vertex* goal, const TraceRankAudit& audit);
+  void record_pibt_failure(
+      uint agent_id, const Vertex* from, const Vertex* goal,
+      const std::vector<PibtFailedCandidateAudit>& failed_candidates);
 
   const std::vector<TraceEvent>& events() const { return events_; }
+  const std::vector<PibtFailureAudit>& failure_audits() const
+  {
+    return failure_audits_;
+  }
   TraceSummary summary() const;
 
  private:
   std::vector<TraceEvent> events_;
+  std::vector<PibtFailureAudit> failure_audits_;
 };
 
 class DirectedTrafficMap {
@@ -278,6 +302,7 @@ struct LtmIterationCheckpoint {
   double time_remaining_sec = 0.0;
   UpdateParams update_params = UpdateParams::additive();
   std::vector<TraceEvent> trace_events;
+  std::vector<PibtFailureAudit> pibt_failure_audits;
   TrafficSnapshot traffic_before;
   TrafficSnapshot traffic_after;
   std::shared_ptr<const DirectedTrafficMap> traffic_before_map;

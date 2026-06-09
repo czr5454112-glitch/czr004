@@ -1,0 +1,29 @@
+{
+  "aaai_ready": false,
+  "candidate_budget_rows": 5280,
+  "decision": "exact_failure_features_created",
+  "dropped_inherited_forbidden_features": [
+    "feature_blocked_progress_edge_relief_score",
+    "feature_goal_progress_edge_relief_score",
+    "feature_policy_prior_rank_shortlist_score",
+    "feature_policy_prior_safe_positive_rate",
+    "feature_rank_effect_region_prior_score",
+    "feature_wait_nonprogress_penalty_score"
+  ],
+  "exact_failure_feature_count": 19,
+  "feature_count": 148,
+  "forbidden_feature_count": 0,
+  "forbidden_features": [],
+  "gates": {
+    "candidate_budget_rows_ge_1440": true,
+    "exact_failure_features_present": true,
+    "fold_safe_priors_marked": true,
+    "forbidden_feature_count_eq_0": true,
+    "teacher_labels_not_features": true
+  },
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g528_exact_failure_features_summary_v1"
+}

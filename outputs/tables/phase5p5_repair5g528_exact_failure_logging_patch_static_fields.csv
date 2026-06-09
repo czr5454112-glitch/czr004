@@ -1,0 +1,11 @@
+field,present
+PibtFailureAudit,True
+pibt_failure_audit,True
+exact_priority_block_subreason,True
+all_failed_candidate_reasons_when_pibt_returns_false,True
+failed_candidate_rank_histogram_when_pibt_returns_false,True
+failed_candidate_reason_histogram_when_pibt_returns_false,True
+first_failed_candidate_reason,True
+last_failed_candidate_reason,True
+pibt_return_false_agent_id,True
+pibt_return_false_candidate_count,True

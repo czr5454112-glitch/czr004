@@ -2191,6 +2191,71 @@ void append_trace_events_json(
   out << "]";
 }
 
+void append_pibt_failure_audit_json(
+    std::ostream& out,
+    const std::vector<czr004::ltm::PibtFailureAudit>& audits)
+{
+  out << "[";
+  for (std::size_t index = 0; index < audits.size(); ++index) {
+    const auto& audit = audits[index];
+    if (index > 0) out << ",";
+
+    auto reason_histogram = std::map<std::string, uint>();
+    auto rank_histogram = std::map<uint, uint>();
+    auto reasons = std::vector<std::string>();
+    auto exact_subreason = std::string();
+    for (const auto& failed : audit.failed_candidates) {
+      const auto reason = blocked_reason_category_string(failed.reason);
+      reasons.push_back(reason);
+      ++reason_histogram[reason];
+      ++rank_histogram[failed.candidate_rank];
+      if (exact_subreason.empty() &&
+          !failed.exact_priority_block_subreason.empty()) {
+        exact_subreason = failed.exact_priority_block_subreason;
+      }
+    }
+
+    out << "{";
+    out << "\"audit_precision\":" << json_string(audit.audit_precision);
+    out << ",\"pibt_return_false_agent_id\":" << audit.agent_id;
+    out << ",\"pibt_return_false_from_id\":" << audit.from_id;
+    out << ",\"pibt_return_false_at_goal\":"
+        << (audit.at_goal ? "true" : "false");
+    out << ",\"pibt_return_false_candidate_count\":"
+        << audit.failed_candidates.size();
+    out << ",\"exact_priority_block_subreason\":"
+        << json_string(exact_subreason);
+    out << ",\"all_failed_candidate_reasons_when_pibt_returns_false\":[";
+    for (std::size_t r = 0; r < reasons.size(); ++r) {
+      if (r > 0) out << ",";
+      out << json_string(reasons[r]);
+    }
+    out << "]";
+    out << ",\"failed_candidate_rank_histogram_when_pibt_returns_false\":{";
+    auto first_rank = true;
+    for (const auto& [rank, count] : rank_histogram) {
+      if (!first_rank) out << ",";
+      first_rank = false;
+      out << json_string(std::to_string(rank)) << ":" << count;
+    }
+    out << "}";
+    out << ",\"failed_candidate_reason_histogram_when_pibt_returns_false\":{";
+    auto first_reason = true;
+    for (const auto& [reason, count] : reason_histogram) {
+      if (!first_reason) out << ",";
+      first_reason = false;
+      out << json_string(reason) << ":" << count;
+    }
+    out << "}";
+    out << ",\"first_failed_candidate_reason\":"
+        << json_string(reasons.empty() ? "" : reasons.front());
+    out << ",\"last_failed_candidate_reason\":"
+        << json_string(reasons.empty() ? "" : reasons.back());
+    out << "}";
+  }
+  out << "]";
+}
+
 struct Repair5G525TraceSummary {
   uint vertex_conflict = 0;
   uint edge_swap = 0;
@@ -2646,6 +2711,8 @@ void append_repair5g_update_checkpoint_jsonl(
   out << ",\"trace_event_count\":" << checkpoint.trace_events.size();
   out << ",\"trace_events\":";
   append_trace_events_json(out, checkpoint.trace_events);
+  out << ",\"pibt_failure_audit\":";
+  append_pibt_failure_audit_json(out, checkpoint.pibt_failure_audits);
   out << ",\"blocked_reason_category\":\"aggregate\"";
   out << ",\"blocked_reason_vertex_conflict_count\":"
       << g525_trace_summary.vertex_conflict;

@@ -1,0 +1,4 @@
+rank,recommendation,reason,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+1,collect_more_observed_context_budget_pairs_before_more_model_capacity,G5.29 local panel remains 60 contexts/120 pairs,False,False,False,False,False
+2,add_exact_dependency_chain_and_corridor_cut_trace_fields,warehouse false positives remain concentrated around bottleneck-like contexts,False,False,False,False,False
+3,test_graph_event_neural_model_after_data_expansion,topology features are diagnostic but not enough for promotion,False,False,False,False,False

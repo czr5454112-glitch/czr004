@@ -1,0 +1,9 @@
+model,selected_policy_utility,candidate_induced_no_solution_count,action_class_accuracy,region_match_rate,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+pairwise_teacher_preference_ranker_topology,0.024904466809,39,0.432786885246,0.65737704918,False,False,False,False,False
+no_topology_ablation,0.024904466809,39,0.432786885246,0.65737704918,False,False,False,False,False
+no_exact_failure_ablation,0.024904466809,39,0.432786885246,0.65737704918,False,False,False,False,False
+param_only_control,0.01323932914,35,0.513114754098,0.65737704918,False,False,False,False,False
+trace_only_control,0.014466849097,36,0.518032786885,0.65737704918,False,False,False,False,False
+source_blind_control,0.024904466809,39,0.432786885246,0.65737704918,False,False,False,False,False
+random_feature_control,0.025071639149,39,0.275409836066,0.22131147541,False,False,False,False,False
+teacher_label_shuffled_control,0.051168956851,35,0.313114754098,0.34262295082,False,False,False,False,False

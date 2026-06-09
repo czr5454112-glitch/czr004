@@ -4122,3 +4122,18 @@
   No `external/lacam2/lacam2/**` edits, no PIBT/LaCAM*/search/rewrite/pruning/restart/candidate-deletion/h-value/action/priority semantic changes, no IDs `166..205`, no new candidate lattice wave, and all runtime/Phase5.5/Phase6/learned-runtime/AAAI claims remain closed.
 - Pre-probe worklog:
   This entry is written before any G5.28 smoke or exact-failure trace probe. G5.28 will first verify G5.27 artifacts and teacher consistency, then add audit-only PIBT-return-false logging under separate JSON keys so UpdateLTM event semantics remain unchanged.
+## 2026-06-09 - Repair5G.5.29 topology/event-state distillation
+
+- Request:
+  Finish `czr004_g529_after_g528_topology_event_state_distillation_prompt.md` completely, using `deep-research-report.md` and `phase4_6_laur_ltm_codex_execution_plan.md` as project constraints, then push to GitHub.
+- Planned files:
+  - `czr004_repair5g529_topology_event_state_distillation_plan.md`
+  - `scripts/repair5g529_common.py`
+  - G5.29 verification, blocker decomposition, expanded panel/probe/oracle, topology-event feature, hierarchical teacher, fold-safe dataset, model, safe arbitration, ablation, neural-readiness, residual, and decision scripts
+  - `outputs/reports/phase5p5_repair5g529_*`
+  - `outputs/tables/phase5p5_repair5g529_*`
+  - `outputs/logs/phase5p5_repair5g529_*`
+- Constraints:
+  No `external/lacam2/lacam2/**` edits, no PIBT/LaCAM*/search/rewrite/pruning/restart/candidate-deletion/h-value/action/priority semantic changes, no IDs `166..205`, no new candidate lattice wave, and all runtime/Phase5.5/Phase6/learned-runtime/AAAI claims remain closed.
+- Pre-probe worklog:
+  This entry is written before any G5.29 expanded exact-failure probe. G5.29 will first verify the G5.28 teacher and exact-failure artifacts, then derive topology/event features and hierarchical labels from observed, unreserved local data. If the local observed corpus cannot meet the requested expansion minimum, the panel stage will report the shortfall honestly rather than fabricating contexts.

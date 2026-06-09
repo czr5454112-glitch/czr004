@@ -1,0 +1,12 @@
+dimension,value,context_budget_pairs,teacher_safe_g522_select_labels,teacher_fallback_labels,teacher_selected_policy_utility,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+map_family,maze,40,24,16,-0.0097867130345,False,False,False,False,False
+map_family,random,40,16,20,-0.014143682199,False,False,False,False,False
+map_family,warehouse,40,0,9,-0.00098466003325,False,False,False,False,False
+map_agent_group,maze-32-32-4|a100,20,14,6,-0.012062479229,False,False,False,False,False
+map_agent_group,maze-32-32-4|a50,20,10,10,-0.00751094684,False,False,False,False,False
+map_agent_group,random-32-32-20|a100,20,10,10,-0.017378930843,False,False,False,False,False
+map_agent_group,random-32-32-20|a50,20,6,10,-0.010908433555,False,False,False,False,False
+map_agent_group,warehouse-10-20-10-2-1|a100,20,0,0,0,False,False,False,False,False
+map_agent_group,warehouse-10-20-10-2-1|a50,20,0,9,-0.0019693200665,False,False,False,False,False
+short_budget_ms,1000,60,20,20,-0.00797679841117,False,False,False,False,False
+short_budget_ms,2000,60,20,25,-0.00863323843333,False,False,False,False,False

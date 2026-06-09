@@ -1,0 +1,25 @@
+{
+  "aaai_ready": false,
+  "answers": {
+    "best_next_step": "more_data_then_graph_event_neural_model",
+    "dominant_failure_causes": [
+      "insufficient_data",
+      "missing_state",
+      "risk_calibration",
+      "candidate_set_label_complexity"
+    ],
+    "exact_failure_features_helped": true,
+    "hierarchical_labels_helped": true,
+    "more_data_helped": false,
+    "topology_features_helped": true,
+    "warehouse_remains_blocker": true
+  },
+  "decision": "state_representation_ablation_completed",
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g529_state_representation_ablation_summary_v1",
+  "teacher_model_disagreement_rows_sampled": 200,
+  "warehouse_failure_rows": 33
+}

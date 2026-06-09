@@ -1,0 +1,28 @@
+{
+  "aaai_ready": false,
+  "action_class_counts": {
+    "abstain_due_risk": 9,
+    "old14_g518_fallback": 36,
+    "old14_select": 35,
+    "safe_g522_select": 40
+  },
+  "candidate_budget_rows": 5280,
+  "context_budget_pairs": 120,
+  "decision": "hierarchical_teacher_created",
+  "g528_safe_g522_select_count": 41,
+  "hard_gates": {
+    "action_class_rows_eq_context_budget_pairs": true,
+    "candidate_rows_eq_candidate_budget_rows": true,
+    "safe_g522_select_count_gt_g528_or_shortfall_reported": true,
+    "teacher_induced_no_solution_count_eq_0": true
+  },
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "region_rows": 720,
+  "runtime_claim_allowed": false,
+  "safe_g522_select_count": 40,
+  "safe_g522_select_shortfall_vs_g528_reported": true,
+  "schema_version": "phase5p5_repair5g529_hierarchical_teacher_summary_v1",
+  "teacher_induced_no_solution_count": 0
+}

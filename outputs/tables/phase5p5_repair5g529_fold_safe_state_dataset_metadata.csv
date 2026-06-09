@@ -1,0 +1,17 @@
+fold_id,split_kind,train_context_budget_keys,dev_context_budget_keys,train_rows,dev_rows,feature_columns,action_class_imbalance_metadata,no_dev_target_used_in_train_priors,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+seed_oof,seed_oof,120,120,5280,5280,210,"{""abstain_due_risk"": 9, ""old14_g518_fallback"": 36, ""old14_select"": 35, ""safe_g522_select"": 40}",True,False,False,False,False,False
+fixed_train_dev,fixed_train_dev,82,38,3608,1672,210,"{""abstain_due_risk"": 2, ""old14_g518_fallback"": 25, ""old14_select"": 25, ""safe_g522_select"": 30}",True,False,False,False,False,False
+leave_map_family_maze,leave_one_map_family_out,80,40,3520,1760,210,"{""abstain_due_risk"": 9, ""old14_g518_fallback"": 20, ""old14_select"": 35, ""safe_g522_select"": 16}",True,False,False,False,False,False
+leave_map_family_random,leave_one_map_family_out,80,40,3520,1760,210,"{""abstain_due_risk"": 9, ""old14_g518_fallback"": 16, ""old14_select"": 31, ""safe_g522_select"": 24}",True,False,False,False,False,False
+leave_map_family_warehouse,leave_one_map_family_out,80,40,3520,1760,210,"{""old14_g518_fallback"": 36, ""old14_select"": 4, ""safe_g522_select"": 40}",True,False,False,False,False,False
+leave_map_agent_group_34,leave_one_map_agent_group_out,100,20,4400,880,210,"{""abstain_due_risk"": 9, ""old14_g518_fallback"": 30, ""old14_select"": 35, ""safe_g522_select"": 26}",True,False,False,False,False,False
+leave_map_agent_group_204,leave_one_map_agent_group_out,100,20,4400,880,210,"{""abstain_due_risk"": 9, ""old14_g518_fallback"": 26, ""old14_select"": 35, ""safe_g522_select"": 30}",True,False,False,False,False,False
+leave_map_agent_group_434,leave_one_map_agent_group_out,100,20,4400,880,210,"{""abstain_due_risk"": 9, ""old14_g518_fallback"": 26, ""old14_select"": 35, ""safe_g522_select"": 30}",True,False,False,False,False,False
+leave_map_agent_group_644,leave_one_map_agent_group_out,100,20,4400,880,210,"{""abstain_due_risk"": 9, ""old14_g518_fallback"": 26, ""old14_select"": 31, ""safe_g522_select"": 34}",True,False,False,False,False,False
+leave_map_agent_group_40,leave_one_map_agent_group_out,100,20,4400,880,210,"{""abstain_due_risk"": 9, ""old14_g518_fallback"": 36, ""old14_select"": 15, ""safe_g522_select"": 40}",True,False,False,False,False,False
+leave_map_agent_group_380,leave_one_map_agent_group_out,100,20,4400,880,210,"{""old14_g518_fallback"": 36, ""old14_select"": 24, ""safe_g522_select"": 40}",True,False,False,False,False,False
+budget_holdout_1000,budget_holdout,60,60,2640,2640,210,"{""abstain_due_risk"": 7, ""old14_g518_fallback"": 18, ""old14_select"": 15, ""safe_g522_select"": 20}",True,False,False,False,False,False
+budget_holdout_2000,budget_holdout,60,60,2640,2640,210,"{""abstain_due_risk"": 2, ""old14_g518_fallback"": 18, ""old14_select"": 20, ""safe_g522_select"": 20}",True,False,False,False,False,False
+warehouse_holdout,warehouse_holdout,80,40,3520,1760,210,"{""old14_g518_fallback"": 36, ""old14_select"": 4, ""safe_g522_select"": 40}",True,False,False,False,False,False
+map_family_balanced_bootstrap_0,map_family_balanced_bootstrap,94,26,4136,1144,210,"{""abstain_due_risk"": 8, ""old14_g518_fallback"": 29, ""old14_select"": 26, ""safe_g522_select"": 31}",True,False,False,False,False,False
+map_family_balanced_bootstrap_1,map_family_balanced_bootstrap,94,26,4136,1144,210,"{""abstain_due_risk"": 9, ""old14_g518_fallback"": 30, ""old14_select"": 26, ""safe_g522_select"": 29}",True,False,False,False,False,False

@@ -1,0 +1,32 @@
+{
+  "aaai_ready": false,
+  "candidate_budget_rows": 5280,
+  "decision": "expanded_teacher_oracle_reconstructed_with_label_shortfall",
+  "expanded_context_budget_pairs": 120,
+  "hard_gates": {
+    "fallback_labels_ge_target_or_shortfall_reported": true,
+    "safe_g522_select_labels_ge_target_or_shortfall_reported": true,
+    "teacher_candidate_induced_no_solution_count_eq_0": true,
+    "teacher_selected_policy_utility_lt_0": true
+  },
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g529_expanded_teacher_oracle_summary_v1",
+  "shortfalls": {
+    "fallback_labels_shortfall_vs_50": 5,
+    "safe_g522_select_labels_shortfall_vs_50": 10
+  },
+  "teacher_action_class_counts": {
+    "abstain_due_risk": 9,
+    "old14_g518_fallback": 36,
+    "old14_select": 35,
+    "safe_g522_select": 40
+  },
+  "teacher_budget_sensitive_failure_count": 9,
+  "teacher_candidate_induced_no_solution_count": 0,
+  "teacher_fallback_rate": 0.375,
+  "teacher_safe_positive_selected_count": 40,
+  "teacher_selected_policy_utility": -0.008305018422
+}

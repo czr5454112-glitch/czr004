@@ -1392,3 +1392,803 @@ MAPF reviewer taste:
 ML top-venue taste:
   real learned update dynamics, not static hand-tuning
 ```
+
+## 2026-06-09 G5.30 dataset-route strategy addendum
+
+The following strategy note is incorporated into the project master plan as the G5.30 planning/documentation route for learned goal-aware dual-channel UpdateLTM datasets. It is a planning addendum only: it does not authorize runtime claims, Phase5.5, Phase6, AAAI-ready status, solver semantic changes, or large solver/data runs in this round.
+
+# czr004 Strategy Note: Alternative Dataset Routes for Learned Goal-Aware Dual-Channel UpdateLTM
+
+Date: 2026-06-09  
+Project: `czr004` / `goal_aware_dual_channel_ltm`  
+Purpose: Give Codex a strategy document to integrate optional dataset-generation and learning routes into the project master plan. This is not an implementation prompt for runtime claims.
+
+## 0. Executive Summary
+
+Recent czr004 G5.20–G5.28 work established three important facts:
+
+1. **Candidate-space evidence is real.**  
+   Goal-aware / dual-channel response-surface UpdateLTM candidates can outperform the old14/G5.18 baseline under offline oracle analysis.
+
+2. **Manual counterfactual-teacher distillation is becoming a bottleneck.**  
+   We spent many rounds building small counterfactual tables, conservative teachers, failure audits, and distillation labels. This was useful, but it is now too small, too hand-shaped, and too brittle to be the only training source.
+
+3. **The next learning step needs a richer dataset style.**  
+   Recent learning-MAPF work typically generates large trajectory/slice datasets from strong solvers or rule-based planners, then trains neural models by imitation, pretrain/fine-tune, shielding, or world-model auxiliary prediction.
+
+Therefore, czr004 should keep the counterfactual teacher table as a **validation/calibration set**, but add a new major optional route:
+
+```text
+large-scale solver trace slice dataset
+  -> learned UpdateLTM residual / dual-channel update model
+  -> safety/risk/fallback head
+  -> counterfactual holdout validation
+```
+
+This avoids remaining stuck in manual teacher design while preserving czr004's hard boundary:
+
+```text
+learning may update LTM guidance;
+learning must not control MAPF actions, PIBT priority, LaCAM* search, candidate deletion, or solver semantics.
+```
+
+## 1. What Recent Learning-MAPF Work Does for Data
+
+This section is a practical literature scan of 2024–2026 learning-MAPF trends. It is not exhaustive, but it covers the patterns that matter for czr004.
+
+### 1.1 MAPF-GPT: Huge expert-solution imitation dataset
+
+MAPF-GPT builds a foundation-style imitation model from expert MAPF solutions. The relevant pipeline is:
+
+```text
+generate many MAPF scenarios
+  -> solve them with a strong solver
+  -> convert solution trajectories into local observation/action pairs
+  -> train a transformer with cross-entropy
+```
+
+Important data details:
+
+- It uses POGEMA to generate maze-like and random maps.
+- It reports generating 10K maze-like maps, 2.5K random maps, and 3.75M problem instances.
+- It solves those with a LaCAM variant and converts individual plans into local observation/action pairs.
+- It reports a 1B observation/action-pair dataset.
+- It removes some duplicate observations and filters wait-at-target imbalance.
+
+Source: MAPF-GPT, arXiv 2409.00134.  
+URL: https://arxiv.org/abs/2409.00134
+
+### 1.2 Work Smarter Not Harder: timestep graph examples + strong collision shield
+
+This work tested large-scale imitation on EECBS-generated MAPF solutions and found that large imitation alone is not enough. The key contribution is the insight that learned local policies should be paired with CS-PIBT collision shielding.
+
+Relevant data details:
+
+- It splits MovingAI benchmark maps into train/test maps.
+- It collects expert data by running EECBS on training maps with 20–1000 agents.
+- Each timestep of each MAPF solution becomes a graph training example.
+- The largest dataset has 712,751 full-graph timestep examples.
+- 64 parallel EECBS solvers collected the 128-scene dataset in about 90 minutes.
+- It emphasizes that CS-PIBT shielding and PIBT baselines are essential.
+
+Source: Work Smarter Not Harder, arXiv 2409.14491.  
+URL: https://arxiv.org/abs/2409.14491
+
+### 1.3 SILLM / L-PIBT: iterative expert-improved first-action data
+
+SILLM, accepted by ICRA 2025, uses imitation learning for lifelong MAPF. It does not merely collect one-shot expert paths. It runs a planning/improvement loop:
+
+```text
+current learnable PIBT generates short-horizon paths
+  -> W-MAPF-LNS improves them
+  -> collect first actions from refined paths
+  -> train supervised policy
+  -> repeat self-bootstrapping
+```
+
+Important data details:
+
+- It chooses imitation because MARL exploration is hard in the huge joint action space.
+- It imitates W-MAPF-LNS, an anytime search-based planner.
+- It collects first actions from improved K-step paths.
+- It can repeat the data-collection/training loop iteratively.
+- It reports million-scale action-observation pairs per iteration and 12 iterations.
+- It pairs neural policy with collision resolution and guidance.
+
+Source: SILLM, arXiv 2410.21415, ICRA 2025.  
+URL: https://arxiv.org/abs/2410.21415
+
+### 1.4 LaGAT: pretrain on many solver trajectories, then map-wise fine-tune
+
+LaGAT integrates a learned MAGAT-like policy into LaCAM as learned guidance. The relevant data idea is:
+
+```text
+general pretraining on generated instances
+  -> expert trajectories from lacam3
+  -> cross-entropy policy training
+  -> target-map fine-tuning at higher densities
+  -> safeguard/fallback/deadlock handling
+```
+
+Important data details:
+
+- It uses POGEMA to generate 21K instances.
+- The data mix is 80% maze-like and 20% random-obstacle environments.
+- It collects expert trajectories using lacam3.
+- It pretrains with cross-entropy, then map-wise fine-tunes on target maps.
+- It uses safeguards because neural policies alone can deadlock or produce invalid decisions.
+- It uses DAgger-like/on-demand data aggregation for failures.
+
+Source: Graph Attention-Guided Search for Dense Multi-Agent Pathfinding, arXiv 2510.17382.  
+URL: https://arxiv.org/abs/2510.17382
+
+### 1.5 RAILGUN: centralized map-based supervised policy
+
+RAILGUN, IROS 2025, differs from many decentralized action policies. It frames the learned policy as a map-based CNN policy rather than an agent-only policy.
+
+Relevant data idea:
+
+```text
+collect trajectories from rule-based methods
+  -> train centralized map-based policy in supervised fashion
+  -> generalize across maps, task variants, and agent counts
+```
+
+Source: RAILGUN, arXiv 2503.02992, IROS 2025.  
+URL: https://arxiv.org/abs/2503.02992
+
+### 1.6 MAPF-World: temporal dynamics / future prediction
+
+MAPF-World moves beyond reactive policies by training an action world model that predicts future states/actions and uses those predictions for decision-making.
+
+Relevant data idea:
+
+```text
+dataset should encode temporal dynamics, not just one-step labels
+world-model auxiliary labels:
+  future occupancy
+  future actions
+  future conflicts/failures
+  future congestion
+```
+
+It also introduces an automatic map generator grounded in practical layouts and reports strong data efficiency compared with larger models.
+
+Source: MAPF-World, arXiv 2508.12087.  
+URL: https://arxiv.org/abs/2508.12087
+
+### 1.7 HMAGAT / hypergraph direction
+
+A 2026 MAPF learning paper argues that pairwise GNN message passing is insufficient in dense MAPF and proposes hypergraph attention to capture group interactions.
+
+Relevance to czr004:
+
+```text
+PIBT failures and congestion are often group-level motifs, not pairwise-only events.
+A future UpdateLTM model may need event-hypergraph or group interaction encoders.
+```
+
+Source: Pairwise is Not Enough: Hypergraph Neural Networks for Multi-Agent Pathfinding, arXiv 2602.06733.  
+URL: https://arxiv.org/abs/2602.06733
+
+## 2. What czr004 Should Borrow and What It Must Not Borrow
+
+### Borrow
+
+```text
+large solver-trace datasets
+trajectory-to-slice conversion
+pretrain then map-family/map-specific fine-tune
+self-bootstrapping from model failure states
+collision/fallback shields
+temporal/world-model auxiliary prediction
+topology-aware and event-graph state representation
+heldout map-family and warehouse-specific validation
+```
+
+### Do Not Borrow
+
+```text
+learning MAPF actions
+learning PIBT priority
+learning candidate generation/deletion
+learning h-values
+learning restart/search control
+replacing LaCAM*/PIBT semantics
+treating learned policy as solver controller
+```
+
+czr004's unique research target remains:
+
+```text
+learned goal-aware dual-channel UpdateLTM
+```
+
+The learning target should be:
+
+```text
+traffic-map update residuals
+dual-channel c/f update
+risk/fallback head
+safe parameter region
+edge/event-level update targets
+```
+
+not:
+
+```text
+agent action logits
+next move imitation
+priority imitation
+search control
+```
+
+## 3. Why the Current Manual Counterfactual Teacher Route Should Be Downgraded
+
+The G5.20–G5.28 counterfactual-teacher line is not wasted. It gave us:
+
+```text
+positive candidate-space evidence
+clean target semantics
+exact failure audit infrastructure
+safe conservative teacher
+important negative distillation results
+```
+
+But as the main training-data strategy it has problems:
+
+```text
+too few context-budget labels
+too much manual candidate design
+too much iteration on teacher/risk semantics
+too expensive to expand by hand
+brittle exact-candidate imitation
+warehouse safety remains hard
+```
+
+New role for counterfactual tables:
+
+```text
+validation/calibration benchmark
+risk/fallback evaluation set
+teacher sanity checker
+small high-quality heldout suite
+```
+
+New main data source:
+
+```text
+large-scale trace slices generated by running solvers
+```
+
+## 4. Proposed New Dataset Routes for the Project Master Plan
+
+Codex should add the following optional routes to the project master plan as selectable research paths.
+
+---
+
+## Route A: Solver Trace Slice Dataset for Neural UpdateLTM
+
+### Goal
+
+Create a large dataset from solver runs:
+
+```text
+solver checkpoint / iteration / local PIBT event / edge slice
+  -> UpdateLTM residual / dual-channel update target / risk label
+```
+
+### Data generation
+
+Run many solver configurations:
+
+```text
+LaCAM*
+LaCAM* + paper LTM
+LaCAM* + old14
+LaCAM* + G5.22/G5.23 conservative teacher
+```
+
+Collect per checkpoint:
+
+```text
+map topology
+agent positions and goals
+current traffic map c/f channels
+traffic before/after
+PIBT committed/blocked events
+exact failure audit
+edge c/f snapshots
+local rank margins
+goal-progress / wait / nonprogress events
+future local congestion/failure labels
+```
+
+### Labels
+
+Do not use action labels. Use UpdateLTM labels:
+
+```text
+target_edge_congestion_delta
+target_edge_flow_delta
+target_dual_channel_update
+target_residual_vs_additive_LTM
+target_risk_of_candidate_induced_failure
+target_should_fallback
+target_safe_region
+target_static_recovery_opportunity
+```
+
+### Why this helps
+
+One solver run yields many dense samples:
+
+```text
+checkpoint samples
+edge samples
+event samples
+failure samples
+update residual samples
+```
+
+This is closer to neural learning than 120 context-budget decisions.
+
+### Resource plan with 2×4090
+
+```text
+CPU:
+  parallel solver trace collection
+GPU 0:
+  train edge/event UpdateLTM residual model
+GPU 1:
+  train risk/fallback/topology model or run batch inference
+Storage:
+  compressed parquet/npz/jsonl shards with SHA manifests
+```
+
+### Success criterion
+
+```text
+millions of edge/event/update slices
+zero forbidden target leakage
+residual model beats additive baseline on heldout map families
+risk head improves candidate-induced failure prediction
+counterfactual G5.23/G5.26 validation correlation is positive
+```
+
+---
+
+## Route B: LaGAT-Style Pretrain Then Map-Family Fine-Tune for UpdateLTM
+
+### Goal
+
+Use LaGAT's data schedule but change the target.
+
+LaGAT target:
+
+```text
+neural MAPF action/guidance policy
+```
+
+czr004 target:
+
+```text
+neural UpdateLTM residual / parameter region / safety head
+```
+
+### Pipeline
+
+```text
+pretrain:
+  generated maze/random/warehouse-like maps
+  moderate densities
+  many solver trace slices
+
+fine-tune:
+  target map families:
+    maze-32-32-4
+    random-32-32-20
+    warehouse-10-20-10-2-1
+  higher densities
+  exact failure audits
+  conservative teacher labels
+```
+
+### Inputs
+
+```text
+map/topology encoder
+traffic c/f channels
+agent density
+PIBT failure event features
+candidate/update params
+edge-local features
+```
+
+### Outputs
+
+```text
+region distribution
+UpdateParams residual
+edge c/f residual
+risk/fallback probability
+```
+
+### Success criterion
+
+```text
+pretrained model > no-pretrain on heldout maps
+map-family fine-tune improves warehouse safety
+no runtime claims until offline gates pass
+```
+
+---
+
+## Route C: Self-Bootstrapped Slice Aggregation
+
+### Goal
+
+Use a DAgger-like loop, inspired by SILLM and LaGAT data aggregation, but only for UpdateLTM.
+
+### Loop
+
+```text
+1. Train provisional UpdateLTM residual/risk model.
+2. Run solver offline with model in audit-only or shadow mode.
+3. Collect failure / disagreement / high-risk checkpoints.
+4. Ask strong solver or conservative teacher for labels.
+5. Add those slices to dataset.
+6. Retrain.
+```
+
+### Critical boundary
+
+Initially run in **shadow mode**:
+
+```text
+model predicts update
+solver still uses baseline update
+record what model would have done
+```
+
+Only after strong offline evidence consider local smoke.
+
+### Labels
+
+```text
+teacher residual
+teacher fallback
+teacher safety decision
+failure correction label
+```
+
+### Success criterion
+
+```text
+model-specific failure slices improve heldout risk prediction
+warehouse false positives decrease
+safe-positive capture improves without increasing induced no-solution
+```
+
+---
+
+## Route D: World-Model Auxiliary Prediction for UpdateLTM
+
+### Goal
+
+Use MAPF-World-style temporal prediction, but not action prediction.
+
+### Auxiliary tasks
+
+Given current trace/traffic/topology:
+
+```text
+predict future congestion channel
+predict future flow channel
+predict future blocked-event density
+predict future no-solution risk
+predict next-iteration exact failure reason distribution
+predict future static-recovery opportunity
+```
+
+### Why
+
+Current models struggle because the outcome of an UpdateLTM change is delayed. Predicting future traffic/failure dynamics may build a better representation.
+
+### Model
+
+```text
+event encoder
+topology encoder
+traffic-map encoder
+temporal transformer or GRU
+edge/update decoder
+risk head
+```
+
+### Success criterion
+
+```text
+future-failure prediction improves risk calibration
+world-model representation improves teacher distillation
+heldout warehouse safety improves
+```
+
+---
+
+## Route E: Graph / Hypergraph Event Encoder
+
+### Goal
+
+Represent group interactions, not only pairwise features.
+
+### Motivation
+
+Dense MAPF failures often involve:
+
+```text
+multiple agents blocked by a bottleneck
+priority inheritance chains
+same corridor conflict group
+warehouse intersection congestion
+agent group wavefronts
+```
+
+### Hypergraph objects
+
+```text
+failure event hyperedge:
+  agents involved in a dependency chain
+
+bottleneck hyperedge:
+  agents whose paths share a local corridor/cut
+
+traffic hyperedge:
+  edges with correlated c/f updates
+
+goal-progress hyperedge:
+  agents competing for progress through same region
+```
+
+### Outputs
+
+```text
+risk head
+teacher action-class head
+region head
+UpdateLTM residual head
+```
+
+### Success criterion
+
+```text
+hypergraph/event encoder beats flat feature model
+warehouse induced failures decrease
+region/action-class accuracy improves
+```
+
+---
+
+## Route F: Conservative Teacher as Validation, Not Main Training
+
+### Goal
+
+Keep the existing conservative teacher and counterfactual table but change its role.
+
+### New role
+
+Use it to validate:
+
+```text
+does residual model choose safe update?
+does risk head predict candidate-induced failure?
+does learned UpdateLTM correlate with counterfactual utility?
+does model avoid warehouse unsafe updates?
+```
+
+### Do not rely on it as sole training source
+
+Reason:
+
+```text
+too few labels
+too hand-shaped
+too brittle for neural learning
+```
+
+---
+
+## 5. Proposed Near-Term Plan
+
+Codex should add this as a selectable path to the tổng纲:
+
+```text
+G5.30 / Route-Slice:
+  Build Neural UpdateLTM Slice Dataset Plan
+```
+
+This should be a planning/docs round first, not a huge solver round.
+
+### G5.30 candidate deliverables
+
+```text
+czr004_neural_update_ltm_slice_dataset_strategy.md
+docs/goal_aware_dual_channel_ltm_routes.md
+outputs/reports/neural_update_ltm_slice_dataset_schema.md
+scripts/plan_neural_update_ltm_slice_dataset.py
+```
+
+### G5.30 should define schemas
+
+#### Context slice
+
+```text
+map_id
+map_family
+agent_count
+seed
+budget
+iteration
+solver_config
+traffic_before_hash
+traffic_after_hash
+```
+
+#### Edge slice
+
+```text
+from_id
+to_id
+topology features
+c_before
+f_before
+c_after_additive
+f_after_additive
+teacher_c_after
+teacher_f_after
+target_c_residual
+target_f_residual
+```
+
+#### Event slice
+
+```text
+agent_id
+event_kind
+from_id
+to_id
+goal_progress
+wait_nonprogress
+blocked_reason
+rank_margin
+failed_candidate_reason_histogram
+```
+
+#### Failure slice
+
+```text
+pibt_return_false_agent
+failed_candidate_count
+failed_reason_entropy
+dependency_chain_proxy
+candidate-induced risk label
+```
+
+#### Teacher / residual labels
+
+```text
+target_update_region
+target_update_param_vector
+target_edge_residual_vs_additive
+target_flow_component
+target_congestion_component
+target_risk
+target_fallback
+```
+
+### G5.30 should also define training routes
+
+```text
+small MLP baseline
+edge CNN/UNet over grid maps
+graph neural network over map graph
+event DeepSets encoder
+topology-event transformer
+hypergraph encoder
+world-model auxiliary head
+```
+
+### G5.30 should define evaluation
+
+```text
+heldout map family
+heldout warehouse
+heldout density
+counterfactual G5.23/G5.26 validation
+risk calibration
+induced no-solution prediction
+teacher residual MAE
+solver-level offline correlation
+```
+
+## 6. Compute Plan with Two RTX 4090 GPUs
+
+### Phase 1: data generation
+
+Mostly CPU-bound:
+
+```text
+run solver traces with exact audit logging
+write compressed shards
+keep raw logs out of git
+commit manifests and summaries only
+```
+
+### Phase 2: preprocessing
+
+CPU + GPU optional:
+
+```text
+convert jsonl -> parquet/npz
+build topology features
+build edge/event tensors
+deduplicate identical slices
+```
+
+### Phase 3: training
+
+Use both 4090s:
+
+```text
+GPU 0:
+  residual/update model
+
+GPU 1:
+  risk/fallback model or auxiliary world-model
+
+or DDP:
+  event/topology neural model
+```
+
+### Suggested scale
+
+Start local but larger than current G5 tables:
+
+```text
+pilot:
+  500-1000 solver runs
+  50k-200k checkpoints/events
+  1M+ edge/event slices
+
+expanded:
+  5k-20k solver runs
+  10M+ edge/event slices
+```
+
+Do not commit raw data. Commit schemas, manifests, small samples, and summary statistics.
+
+## 7. Changes to the Project Master Plan
+
+Codex should update the master plan with these strategic points:
+
+1. **Counterfactual teacher route remains valid but is no longer the only route.**
+2. **New primary data route: solver trace slice dataset for learned UpdateLTM.**
+3. **Learning target remains UpdateLTM guidance, not MAPF actions.**
+4. **Adopt LaGAT/MAPF-GPT/SILLM-style data scale and pretrain/fine-tune strategy, adapted to UpdateLTM.**
+5. **Use conservative teacher as validation/calibration, not only training label.**
+6. **Add neural state encoders: topology, edge/event, traffic c/f, failure interaction motifs.**
+7. **Add optional later offline RL/safe fine-tuning only after supervised residual/risk heads work.**
+8. **Keep all runtime/Phase5.5/Phase6/AAAI claims closed until offline gates pass.**
+
+## 8. Recommended Codex Task
+
+Codex should not implement the full dataset yet. It should first update the project tổng纲 and route docs.
+
+### Short Codex prompt
+
+Continue `czr004` after the current branch head. This is a planning/documentation round, not a solver/runtime round. Update the project tổng纲 to add alternative dataset routes for `goal_aware_dual_channel_ltm`, based on recent learning-MAPF trends such as MAPF-GPT, CS-PIBT imitation, SILLM, LaGAT, RAILGUN, MAPF-World, and hypergraph MAPF models.
+
+The key strategic change is: do not rely only on manually designed offline counterfactual candidate-teacher tables. Keep those tables as validation/calibration, but add a new primary optional route: large-scale solver trace slice dataset for neural UpdateLTM. The learning target must remain UpdateLTM residual / dual-channel c/f update / risk-fallback head, not MAPF action logits, PIBT priority, h-values, candidate deletion, restart, or search control.
+
+Add route descriptions for: solver trace slice dataset, LaGAT-style pretrain then map-family fine-tune for UpdateLTM, self-bootstrapped slice aggregation, world-model auxiliary prediction, graph/hypergraph event encoder, and conservative teacher as validation. Include two-RTX-4090 compute plan, raw-data manifest policy, schema definitions, evaluation gates, and closed-claim guardrails. Do not modify `external/lacam2/lacam2/**`, do not open Phase5.5/Phase6/runtime/AAAI claims, and do not implement a large solver run in this round.
+

@@ -1,0 +1,21 @@
+{
+  "aaai_ready": false,
+  "budgets": [
+    1000,
+    2000
+  ],
+  "contexts_limit": 12,
+  "decision": "trace_enrichment_probe_skipped_existing_pre_choice_fields_sufficient",
+  "learned_runtime_policy_validated": false,
+  "max_workers": 1,
+  "missing_required_fields": [
+    "blocked_reason_and_competing_neighbor_rank"
+  ],
+  "overwrite_requested": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "reason": "G5.23 raw checkpoint inventory has enough pre-choice trace/event/channel fields for this offline G5.24 round.",
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g524_trace_enrichment_probe_if_needed_summary_v1",
+  "solver_probe_ran": false
+}

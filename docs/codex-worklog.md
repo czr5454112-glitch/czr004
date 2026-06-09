@@ -3969,3 +3969,61 @@
 - Decision:
   - Final G5.23 decision: `g523_candidate_space_positive_but_learning_blocked_continue_trace_features`.
   - `phase5p5_allowed=false`, `phase6_allowed=false`, `runtime_claim_allowed=false`, `learned_runtime_policy_validated=false`, and `aaai_ready=false` remain closed.
+## 2026-06-09 - Repair5G.5.24 trace-enriched learning
+
+- Request:
+  Finish `czr004_g524_after_g523_trace_enriched_learning_prompt.md` completely, using the research context docs as needed, then push to GitHub.
+- Planned files:
+  - `czr004_repair5g524_trace_enriched_learning_plan.md`
+  - `scripts/repair5g524_common.py`
+  - `scripts/verify_repair5g524_g523_artifacts.py`
+  - `scripts/analyze_repair5g524_learning_blocker_autopsy.py`
+  - `scripts/inventory_repair5g524_checkpoint_trace_fields.py`
+  - `scripts/create_repair5g524_budget_pair_teacher_tables.py`
+  - `scripts/create_repair5g524_trace_enriched_feature_matrix.py`
+  - `scripts/run_repair5g524_trace_enrichment_probe_if_needed.py`
+  - `scripts/create_repair5g524_region_parameter_teacher.py`
+  - `scripts/train_eval_repair5g524_region_to_parameter_models.py`
+  - `scripts/train_eval_repair5g524_edge_update_surrogates.py`
+  - `scripts/analyze_repair5g524_model_failure_and_next_trace_fields.py`
+  - `scripts/write_repair5g524_decision.py`
+  - `outputs/reports/phase5p5_repair5g524_*`
+  - `outputs/tables/phase5p5_repair5g524_*`
+  - `outputs/logs/phase5p5_repair5g524_*`
+- Constraints:
+  Local PC execution only, `max_workers=1` for any solver probe, observed IDs only, no IDs `166..205`, no `external/lacam2/lacam2/**` edits, no LaCAM*/PIBT/search/rewrite/pruning/restart/candidate-deletion/h-value/action/priority semantic changes, and no runtime/Phase5.5/Phase6/learned-runtime/AAAI claim.
+- Pre-probe worklog:
+  This entry is written before any G5.24 trace-enrichment probe. The probe entrypoint will first consume the G5.23 raw checkpoint inventory and will skip solver execution when the committed/local pre-choice trace fields are sufficient for the offline G5.24 learning round.
+- Commands completed:
+  - `python -m py_compile scripts\repair5g524_common.py ... scripts\write_repair5g524_decision.py`
+  - `python scripts\verify_repair5g524_g523_artifacts.py`
+  - `python scripts\analyze_repair5g524_learning_blocker_autopsy.py`
+  - `python scripts\inventory_repair5g524_checkpoint_trace_fields.py`
+  - `python scripts\create_repair5g524_budget_pair_teacher_tables.py`
+  - `python scripts\create_repair5g524_trace_enriched_feature_matrix.py`
+  - `python scripts\run_repair5g524_trace_enrichment_probe_if_needed.py --overwrite --max-workers 1`
+  - `python scripts\create_repair5g524_region_parameter_teacher.py`
+  - `python scripts\train_eval_repair5g524_region_to_parameter_models.py --bootstrap-samples 300`
+  - `python scripts\train_eval_repair5g524_edge_update_surrogates.py --bootstrap-samples 300`
+  - `python scripts\analyze_repair5g524_model_failure_and_next_trace_fields.py`
+  - `python scripts\write_repair5g524_decision.py`
+- Observations:
+  - G5.23 verification passed for decision `g523_candidate_space_positive_but_learning_blocked_continue_trace_features`, full-primary rows `5280`, contexts `60`, candidates `44`, selected G5.22 candidates `22`, safe G5.22 win contexts `39`, safe G5.22 win budget pairs `74`, clean teacher v2, clean runtime-safe trace matrix, and closed claims.
+  - Learning-blocker autopsy confirmed the G5.23 best model remains `region_prior_baseline` with top3 safe oracle capture stuck at `0.13333333333333333`.
+  - Raw checkpoint inventory streamed the local G5.23 checkpoint JSONL and found available pre-choice trace/event/channel fields; `blocked_reason_and_competing_neighbor_rank` remains missing and is the next logging priority.
+  - Budget-pair teacher tables were created with `120` context-budget rows, `5280` candidate-budget rows, and `113520` pairwise budget rows.
+  - Trace-enriched feature matrices were created with `73` clean runtime-safe feature columns and `0` forbidden feature columns.
+  - The optional trace-enrichment probe script skipped solver execution because existing checkpoint fields are sufficient for the offline G5.24 round.
+  - Region-to-parameter teacher tables were created with `720` context-budget-region rows and `5280` candidate-budget-region rows.
+  - The region-to-parameter suite evaluated all required models. Best model was `agent_density_specialist_mixture`, but top3 safe oracle capture remained `0.13333333333333333`; the main target gate failed on top3, region top2, candidate-induced no-solution count, and leave-one-map-family stability.
+  - Edge/update surrogate evaluation completed, but edge labels remain proxy-only, so the result is neural-readiness evidence only and not a solver-policy claim.
+- Validation:
+  - G5.24 script `py_compile` passed.
+  - All `outputs/reports/phase5p5_repair5g524_*summary.json` files parse as JSON.
+  - Reserved-ID negative guard rejects `166` with `reserved_id_guard_rejected`.
+  - CSV row counts were checked for every `outputs/tables/phase5p5_repair5g524_*.csv`.
+  - `git diff --check` passed with line-ending warnings only.
+  - `git status --short -- external/lacam2/lacam2` returned clean.
+- Decision:
+  - Final G5.24 decision: `g524_candidate_space_positive_learning_still_blocked_collect_richer_trace`.
+  - `phase5p5_allowed=false`, `phase6_allowed=false`, `runtime_claim_allowed=false`, `learned_runtime_policy_validated=false`, and `aaai_ready=false` remain closed.

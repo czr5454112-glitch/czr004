@@ -1,0 +1,19 @@
+{
+  "aaai_ready": false,
+  "candidate_budget_region_rows": 5280,
+  "context_budget_region_rows": 720,
+  "decision": "region_parameter_teacher_created",
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "regions": [
+    "A_g518_winner_neighborhood",
+    "B_static_recovery_feasibility",
+    "C_risk_boundary",
+    "D_fractional_coverage",
+    "old14",
+    "g518_retained"
+  ],
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g524_region_parameter_teacher_summary_v1"
+}

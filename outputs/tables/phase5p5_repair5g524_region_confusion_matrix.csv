@@ -1,0 +1,5 @@
+actual_region,predicted_region,count,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+,C_risk_boundary,53,False,False,False,False,False
+B_static_recovery_feasibility,C_risk_boundary,10,False,False,False,False,False
+C_risk_boundary,C_risk_boundary,16,False,False,False,False,False
+D_fractional_coverage,C_risk_boundary,41,False,False,False,False,False

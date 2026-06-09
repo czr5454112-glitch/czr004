@@ -1,0 +1,21 @@
+{
+  "aaai_ready": false,
+  "candidate_budget_rows": 5280,
+  "context_budget_rows": 120,
+  "decision": "budget_pair_teacher_tables_created",
+  "forbidden_feature_count": 0,
+  "forbidden_features": [],
+  "gates": {
+    "candidate_budget_rows_eq_5280": true,
+    "context_budget_rows_eq_120": true,
+    "forbidden_feature_count_eq_0": true,
+    "pairwise_budget_rows_gt_pairwise_context_rows": true
+  },
+  "learned_runtime_policy_validated": false,
+  "pairwise_budget_rows": 113520,
+  "pairwise_context_rows": 3060,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g524_budget_pair_teacher_tables_summary_v1"
+}

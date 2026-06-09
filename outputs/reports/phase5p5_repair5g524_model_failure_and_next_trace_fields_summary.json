@@ -1,0 +1,28 @@
+{
+  "aaai_ready": false,
+  "candidate_induced_failures_predictable_before_apply": true,
+  "decision": "model_failure_and_next_trace_fields_completed",
+  "did_budget_pair_labels_improve_learnability": false,
+  "did_region_to_parameter_beat_region_prior": true,
+  "did_trace_enriched_features_improve_top3_capture": false,
+  "learned_runtime_policy_validated": false,
+  "main_target_gates": {
+    "avoidable_risk_ece_le_baseline": true,
+    "candidate_induced_no_solution_count_le_baseline": false,
+    "controls_do_not_match": true,
+    "forbidden_feature_count_eq_0": true,
+    "leave_one_map_family_does_not_collapse": false,
+    "region_top2_capture_rate_ge_0p50": false,
+    "safe_policy_sim_utility_beats_region_prior_baseline": true,
+    "top3_safe_oracle_capture_rate_ge_0p25": false
+  },
+  "missing_trace_fields": [
+    "blocked_reason_and_competing_neighbor_rank"
+  ],
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g524_model_failure_and_next_trace_fields_summary_v1",
+  "static_recovery_cases_learnable": true,
+  "wins_concentrated_in_fractional_coverage": true
+}

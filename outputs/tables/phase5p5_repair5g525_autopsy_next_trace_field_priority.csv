@@ -1,0 +1,4 @@
+priority,trace_field,why_needed,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+1,exact_priority_block_subreason,Priority block is still only partially classified.,False,False,False,False,False
+2,all_failed_candidate_reasons_when_pibt_returns_false,Current semantic-preserving trace avoids adding failed-event rows to UpdateLTM.,False,False,False,False,False
+3,same_checkpoint_exact_counterfactual_edge_labels,Update surrogates remain proxy-only.,False,False,False,False,False

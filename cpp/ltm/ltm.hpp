@@ -14,7 +14,28 @@ namespace czr004::ltm {
 
 enum class TraceEventKind { Committed, Blocked };
 
+enum class BlockedReasonCategory {
+  None,
+  VertexConflict,
+  EdgeSwap,
+  PriorityBlock,
+  BacktrackOrInheritance,
+  Unknown,
+};
+
 enum class GoalProjectionMode { None, AgentProgress, FlowShield };
+
+struct TraceRankAudit {
+  BlockedReasonCategory blocked_reason_category = BlockedReasonCategory::None;
+  uint competing_neighbor_count = 0;
+  int committed_neighbor_rank_by_base_distance = -1;
+  int blocked_neighbor_rank_by_base_distance = -1;
+  int wait_neighbor_rank_by_base_distance = -1;
+  int goal_progress_neighbor_rank = -1;
+  double rank_margin_top1_top2 = std::numeric_limits<double>::quiet_NaN();
+  double rank_margin_committed_vs_best = std::numeric_limits<double>::quiet_NaN();
+  double rank_margin_blocked_vs_committed = std::numeric_limits<double>::quiet_NaN();
+};
 
 struct TraceEvent {
   TraceEventKind kind;
@@ -22,6 +43,7 @@ struct TraceEvent {
   uint from_id;
   uint to_id;
   bool at_goal;
+  TraceRankAudit audit;
 };
 
 struct TraceSummary {
@@ -116,8 +138,12 @@ class PibtTraceCollector {
   void clear();
   void record_committed(uint agent_id, const Vertex* from, const Vertex* to,
                         const Vertex* goal);
+  void record_committed(uint agent_id, const Vertex* from, const Vertex* to,
+                        const Vertex* goal, const TraceRankAudit& audit);
   void record_blocked(uint agent_id, const Vertex* from, const Vertex* to,
                       const Vertex* goal);
+  void record_blocked(uint agent_id, const Vertex* from, const Vertex* to,
+                      const Vertex* goal, const TraceRankAudit& audit);
 
   const std::vector<TraceEvent>& events() const { return events_; }
   TraceSummary summary() const;

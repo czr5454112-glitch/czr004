@@ -133,6 +133,26 @@ std::string json_number_or_null(double value)
   return out.str();
 }
 
+std::string blocked_reason_category_string(
+    czr004::ltm::BlockedReasonCategory category)
+{
+  switch (category) {
+    case czr004::ltm::BlockedReasonCategory::None:
+      return "none";
+    case czr004::ltm::BlockedReasonCategory::VertexConflict:
+      return "vertex_conflict";
+    case czr004::ltm::BlockedReasonCategory::EdgeSwap:
+      return "edge_swap";
+    case czr004::ltm::BlockedReasonCategory::PriorityBlock:
+      return "priority_block";
+    case czr004::ltm::BlockedReasonCategory::BacktrackOrInheritance:
+      return "backtrack_or_inheritance";
+    case czr004::ltm::BlockedReasonCategory::Unknown:
+      return "unknown";
+  }
+  return "unknown";
+}
+
 std::string goal_projection_mode_name(czr004::ltm::GoalProjectionMode mode);
 
 std::string stable_hex_hash(const std::string& value)
@@ -2147,9 +2167,159 @@ void append_trace_events_json(
     out << ",\"from_id\":" << event.from_id;
     out << ",\"to_id\":" << event.to_id;
     out << ",\"at_goal\":" << (event.at_goal ? "true" : "false");
+    out << ",\"blocked_reason_category\":"
+        << json_string(blocked_reason_category_string(
+               event.audit.blocked_reason_category));
+    out << ",\"competing_neighbor_count\":"
+        << event.audit.competing_neighbor_count;
+    out << ",\"committed_neighbor_rank_by_base_distance\":"
+        << event.audit.committed_neighbor_rank_by_base_distance;
+    out << ",\"blocked_neighbor_rank_by_base_distance\":"
+        << event.audit.blocked_neighbor_rank_by_base_distance;
+    out << ",\"wait_neighbor_rank_by_base_distance\":"
+        << event.audit.wait_neighbor_rank_by_base_distance;
+    out << ",\"goal_progress_neighbor_rank\":"
+        << event.audit.goal_progress_neighbor_rank;
+    out << ",\"rank_margin_top1_top2\":"
+        << json_number_or_null(event.audit.rank_margin_top1_top2);
+    out << ",\"rank_margin_committed_vs_best\":"
+        << json_number_or_null(event.audit.rank_margin_committed_vs_best);
+    out << ",\"rank_margin_blocked_vs_committed\":"
+        << json_number_or_null(event.audit.rank_margin_blocked_vs_committed);
     out << "}";
   }
   out << "]";
+}
+
+struct Repair5G525TraceSummary {
+  uint vertex_conflict = 0;
+  uint edge_swap = 0;
+  uint priority_block = 0;
+  uint backtrack_or_inheritance = 0;
+  uint unknown = 0;
+  uint local_decision_event_count = 0;
+  uint local_goal_progress_event_count = 0;
+  uint local_wait_nonprogress_event_count = 0;
+  uint local_blocked_progress_event_count = 0;
+  uint competing_neighbor_count_max = 0;
+  double competing_neighbor_count_mean = 0.0;
+  double committed_rank_mean = 0.0;
+  double blocked_rank_mean = 0.0;
+  double wait_rank_mean = 0.0;
+  double goal_progress_rank_mean = 0.0;
+  double rank_margin_top1_top2_mean = 0.0;
+  double rank_margin_committed_vs_best_mean = 0.0;
+  double rank_margin_blocked_vs_committed_mean = 0.0;
+};
+
+Repair5G525TraceSummary repair5g525_trace_summary(
+    const std::vector<czr004::ltm::TraceEvent>& events)
+{
+  auto summary = Repair5G525TraceSummary();
+  auto add = [](double value, double* sum, uint* count) {
+    if (std::isfinite(value)) {
+      *sum += value;
+      ++(*count);
+    }
+  };
+  double competing_sum = 0.0;
+  double committed_rank_sum = 0.0;
+  double blocked_rank_sum = 0.0;
+  double wait_rank_sum = 0.0;
+  double goal_progress_rank_sum = 0.0;
+  double margin_top_sum = 0.0;
+  double margin_committed_sum = 0.0;
+  double margin_blocked_sum = 0.0;
+  uint competing_count = 0;
+  uint committed_rank_count = 0;
+  uint blocked_rank_count = 0;
+  uint wait_rank_count = 0;
+  uint goal_progress_rank_count = 0;
+  uint margin_top_count = 0;
+  uint margin_committed_count = 0;
+  uint margin_blocked_count = 0;
+
+  for (const auto& event : events) {
+    ++summary.local_decision_event_count;
+    switch (event.audit.blocked_reason_category) {
+      case czr004::ltm::BlockedReasonCategory::VertexConflict:
+        ++summary.vertex_conflict;
+        break;
+      case czr004::ltm::BlockedReasonCategory::EdgeSwap:
+        ++summary.edge_swap;
+        break;
+      case czr004::ltm::BlockedReasonCategory::PriorityBlock:
+        ++summary.priority_block;
+        break;
+      case czr004::ltm::BlockedReasonCategory::BacktrackOrInheritance:
+        ++summary.backtrack_or_inheritance;
+        break;
+      case czr004::ltm::BlockedReasonCategory::Unknown:
+        ++summary.unknown;
+        break;
+      case czr004::ltm::BlockedReasonCategory::None:
+        break;
+    }
+    if (event.kind == czr004::ltm::TraceEventKind::Committed &&
+        event.from_id != event.to_id && !event.at_goal) {
+      ++summary.local_goal_progress_event_count;
+    }
+    if (event.kind == czr004::ltm::TraceEventKind::Committed &&
+        event.from_id == event.to_id && !event.at_goal) {
+      ++summary.local_wait_nonprogress_event_count;
+    }
+    if (event.kind == czr004::ltm::TraceEventKind::Blocked &&
+        event.from_id != event.to_id && !event.at_goal) {
+      ++summary.local_blocked_progress_event_count;
+    }
+    summary.competing_neighbor_count_max =
+        std::max(summary.competing_neighbor_count_max,
+                 event.audit.competing_neighbor_count);
+    if (event.audit.competing_neighbor_count > 0) {
+      competing_sum += event.audit.competing_neighbor_count;
+      ++competing_count;
+    }
+    if (event.audit.committed_neighbor_rank_by_base_distance > 0) {
+      committed_rank_sum += event.audit.committed_neighbor_rank_by_base_distance;
+      ++committed_rank_count;
+    }
+    if (event.audit.blocked_neighbor_rank_by_base_distance > 0) {
+      blocked_rank_sum += event.audit.blocked_neighbor_rank_by_base_distance;
+      ++blocked_rank_count;
+    }
+    if (event.audit.wait_neighbor_rank_by_base_distance > 0) {
+      wait_rank_sum += event.audit.wait_neighbor_rank_by_base_distance;
+      ++wait_rank_count;
+    }
+    if (event.audit.goal_progress_neighbor_rank > 0) {
+      goal_progress_rank_sum += event.audit.goal_progress_neighbor_rank;
+      ++goal_progress_rank_count;
+    }
+    add(event.audit.rank_margin_top1_top2, &margin_top_sum, &margin_top_count);
+    add(event.audit.rank_margin_committed_vs_best, &margin_committed_sum,
+        &margin_committed_count);
+    add(event.audit.rank_margin_blocked_vs_committed, &margin_blocked_sum,
+        &margin_blocked_count);
+  }
+  auto mean_or_zero = [](double sum, uint count) {
+    return count == 0 ? 0.0 : sum / static_cast<double>(count);
+  };
+  summary.competing_neighbor_count_mean =
+      mean_or_zero(competing_sum, competing_count);
+  summary.committed_rank_mean =
+      mean_or_zero(committed_rank_sum, committed_rank_count);
+  summary.blocked_rank_mean =
+      mean_or_zero(blocked_rank_sum, blocked_rank_count);
+  summary.wait_rank_mean = mean_or_zero(wait_rank_sum, wait_rank_count);
+  summary.goal_progress_rank_mean =
+      mean_or_zero(goal_progress_rank_sum, goal_progress_rank_count);
+  summary.rank_margin_top1_top2_mean =
+      mean_or_zero(margin_top_sum, margin_top_count);
+  summary.rank_margin_committed_vs_best_mean =
+      mean_or_zero(margin_committed_sum, margin_committed_count);
+  summary.rank_margin_blocked_vs_committed_mean =
+      mean_or_zero(margin_blocked_sum, margin_blocked_count);
+  return summary;
 }
 
 void append_snapshot_edges_json(
@@ -2420,6 +2590,8 @@ void append_repair5g_update_checkpoint_jsonl(
       checkpoint.traffic_after_map == nullptr
           ? czr004::ltm::TrafficCostAudit()
           : checkpoint.traffic_after_map->cost_audit(&instance);
+  const auto g525_trace_summary =
+      repair5g525_trace_summary(checkpoint.trace_events);
   auto replay_traffic_after_hash = std::string();
   auto replay_stats = czr004::ltm::DualChannelUpdateStats();
   auto replay_transform_match = false;
@@ -2474,6 +2646,67 @@ void append_repair5g_update_checkpoint_jsonl(
   out << ",\"trace_event_count\":" << checkpoint.trace_events.size();
   out << ",\"trace_events\":";
   append_trace_events_json(out, checkpoint.trace_events);
+  out << ",\"blocked_reason_category\":\"aggregate\"";
+  out << ",\"blocked_reason_vertex_conflict_count\":"
+      << g525_trace_summary.vertex_conflict;
+  out << ",\"blocked_reason_edge_swap_count\":"
+      << g525_trace_summary.edge_swap;
+  out << ",\"blocked_reason_priority_block_count\":"
+      << g525_trace_summary.priority_block;
+  out << ",\"blocked_reason_backtrack_or_inheritance_count\":"
+      << g525_trace_summary.backtrack_or_inheritance;
+  out << ",\"blocked_reason_unknown_count\":"
+      << g525_trace_summary.unknown;
+  out << ",\"competing_neighbor_count\":"
+      << json_number_or_null(g525_trace_summary.competing_neighbor_count_mean);
+  out << ",\"competing_neighbor_count_max\":"
+      << g525_trace_summary.competing_neighbor_count_max;
+  out << ",\"committed_neighbor_rank_by_base_distance\":"
+      << json_number_or_null(g525_trace_summary.committed_rank_mean);
+  out << ",\"blocked_neighbor_rank_by_base_distance\":"
+      << json_number_or_null(g525_trace_summary.blocked_rank_mean);
+  out << ",\"wait_neighbor_rank_by_base_distance\":"
+      << json_number_or_null(g525_trace_summary.wait_rank_mean);
+  out << ",\"goal_progress_neighbor_rank\":"
+      << json_number_or_null(g525_trace_summary.goal_progress_rank_mean);
+  out << ",\"rank_margin_top1_top2\":"
+      << json_number_or_null(g525_trace_summary.rank_margin_top1_top2_mean);
+  out << ",\"rank_margin_committed_vs_best\":"
+      << json_number_or_null(
+             g525_trace_summary.rank_margin_committed_vs_best_mean);
+  out << ",\"rank_margin_blocked_vs_committed\":"
+      << json_number_or_null(
+             g525_trace_summary.rank_margin_blocked_vs_committed_mean);
+  out << ",\"pre_update_edge_c_channel_summary\":{\"nonzero_edges\":"
+      << checkpoint.traffic_before.nonzero_edges
+      << ",\"max_raw\":"
+      << json_number_or_null(checkpoint.traffic_before.max_raw)
+      << ",\"max_normalized\":"
+      << json_number_or_null(checkpoint.traffic_before.max_normalized) << "}";
+  out << ",\"pre_update_edge_f_channel_summary\":{\"nonzero_edges\":"
+      << checkpoint.traffic_before.flow_nonzero_edges
+      << ",\"max_raw\":"
+      << json_number_or_null(checkpoint.traffic_before.max_flow_raw)
+      << ",\"max_normalized\":"
+      << json_number_or_null(checkpoint.traffic_before.max_normalized_flow)
+      << "}";
+  out << ",\"pre_update_edge_cf_alignment_summary\":{\"c_nonzero_edges\":"
+      << checkpoint.traffic_before.nonzero_edges
+      << ",\"f_nonzero_edges\":"
+      << checkpoint.traffic_before.flow_nonzero_edges
+      << ",\"f_to_c_nonzero_ratio\":"
+      << json_number_or_null(safe_ratio(
+             static_cast<double>(checkpoint.traffic_before.flow_nonzero_edges),
+             static_cast<double>(checkpoint.traffic_before.nonzero_edges)))
+      << "}";
+  out << ",\"local_decision_event_count\":"
+      << g525_trace_summary.local_decision_event_count;
+  out << ",\"local_goal_progress_event_count\":"
+      << g525_trace_summary.local_goal_progress_event_count;
+  out << ",\"local_wait_nonprogress_event_count\":"
+      << g525_trace_summary.local_wait_nonprogress_event_count;
+  out << ",\"local_blocked_progress_event_count\":"
+      << g525_trace_summary.local_blocked_progress_event_count;
   out << ",\"traffic_before_hash\":"
       << json_string(snapshot_hash(checkpoint.traffic_before));
   out << ",\"traffic_after_hash\":"

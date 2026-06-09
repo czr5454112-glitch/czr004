@@ -1,0 +1,32 @@
+{
+  "aaai_ready": false,
+  "best_surrogate": {
+    "aaai_ready": false,
+    "blocked_edge_update_error": 7.600401789413051e-16,
+    "context_aggregate_update_error": 1.5265566588595902e-16,
+    "dev_rows": 480,
+    "edge_residual_mae": 7.600401789413051e-16,
+    "edge_residual_rank_correlation": NaN,
+    "goal_progress_edge_update_error": 1.0,
+    "heldout_map_family_update_error": "",
+    "learned_runtime_policy_validated": false,
+    "model": "small_mlp_if_torch_available",
+    "phase5p5_allowed": false,
+    "phase6_allowed": false,
+    "region_conditioned_update_error": "",
+    "runtime_claim_allowed": false,
+    "target": "target_region_best_param_residual",
+    "wait_edge_update_error": 1.0
+  },
+  "bootstrap_samples_requested": 300,
+  "candidate_budget_rows": 2160,
+  "decision": "goal_aware_update_surrogates_evaluated",
+  "dev_rows": 480,
+  "edge_update_teacher_proxy_only": true,
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g525_goal_aware_update_surrogates_summary_v1",
+  "train_rows": 1680
+}

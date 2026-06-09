@@ -1,0 +1,21 @@
+# Repair5G.5.25 Rank-Effect Models
+
+- schema_version: `phase5p5_repair5g525_rank_effect_models_summary_v1`
+- decision: `rank_effect_models_evaluated`
+- required_models: `['g524_best_agent_density_reproduced', 'region_prior_reproduced', 'blocked_reason_only_model', 'competing_rank_only_model', 'candidate_specific_rank_effect_model', 'goal_aware_dual_channel_rank_effect_model', 'trace_plus_rank_effect_two_head_model', 'region_then_rank_effect_candidate_ranker', 'budget_aware_rank_effect_ranker', 'static_recovery_rank_effect_specialist', 'candidate_induced_failure_rank_effect_specialist', 'map_family_specialist_rank_effect_mixture', 'agent_density_specialist_rank_effect_mixture', 'param_only_control', 'trace_without_rank_effect_ablation', 'rank_effect_without_trace_ablation', 'source_blind_control', 'region_label_shuffled_control', 'candidate_label_shuffled_control', 'blocked_reason_shuffled_control', 'random_feature_control', 'oracle_upper_bound_diagnostic_not_for_promotion']`
+- models_present: `['agent_density_specialist_rank_effect_mixture', 'blocked_reason_only_model', 'blocked_reason_shuffled_control', 'budget_aware_rank_effect_ranker', 'candidate_induced_failure_rank_effect_specialist', 'candidate_label_shuffled_control', 'candidate_specific_rank_effect_model', 'competing_rank_only_model', 'g524_best_agent_density_reproduced', 'goal_aware_dual_channel_rank_effect_model', 'map_family_specialist_rank_effect_mixture', 'oracle_upper_bound_diagnostic_not_for_promotion', 'param_only_control', 'random_feature_control', 'rank_effect_without_trace_ablation', 'region_label_shuffled_control', 'region_prior_reproduced', 'region_then_rank_effect_candidate_ranker', 'source_blind_control', 'static_recovery_rank_effect_specialist', 'trace_plus_rank_effect_two_head_model', 'trace_without_rank_effect_ablation']`
+- candidate_budget_rows: `2160`
+- eval_rows: `132`
+- context_budget_decision_rows: `1584`
+- bootstrap_rows: `6600`
+- calibration_rows: `88`
+- best_model: `trace_plus_rank_effect_two_head_model`
+- best_model_summary: `{'row_type': 'model_aggregate', 'model': 'trace_plus_rank_effect_two_head_model', 'eval_scope': 'seed_oof', 'fold_id': 'all', 'context_budget_pairs': 72, 'top1_safe_oracle_capture_rate': 0.08333333333333333, 'top3_safe_oracle_capture_rate': 0.3055555555555556, 'top5_safe_oracle_capture_rate': 0.3888888888888889, 'region_top1_capture_rate': 0.5, 'region_top2_capture_rate': 0.7083333333333334, 'safe_policy_sim_utility': 0.023052887525833326, 'candidate_induced_no_solution_count': 6, 'static_recovery_capture_count': 1, 'avoidable_risk_ece': 0.07882110228042145, 'phase5p5_allowed': False, 'phase6_allowed': False, 'runtime_claim_allowed': False, 'learned_runtime_policy_validated': False, 'aaai_ready': False}`
+- best_control_summary: `{'row_type': 'model_aggregate', 'model': 'candidate_label_shuffled_control', 'eval_scope': 'seed_oof', 'fold_id': 'all', 'context_budget_pairs': 72, 'top1_safe_oracle_capture_rate': 0.06944444444444445, 'top3_safe_oracle_capture_rate': 0.09722222222222222, 'top5_safe_oracle_capture_rate': 0.1111111111111111, 'region_top1_capture_rate': 0.2361111111111111, 'region_top2_capture_rate': 0.4861111111111111, 'safe_policy_sim_utility': 0.025512501171020413, 'candidate_induced_no_solution_count': 5, 'static_recovery_capture_count': 1, 'avoidable_risk_ece': 0.06281272598524458, 'phase5p5_allowed': False, 'phase6_allowed': False, 'runtime_claim_allowed': False, 'learned_runtime_policy_validated': False, 'aaai_ready': False}`
+- main_target_gates: `{'top3_safe_oracle_capture_rate_ge_0p25': True, 'region_top2_capture_rate_ge_0p50': True, 'safe_policy_sim_utility_beats_g524_best': False, 'candidate_induced_no_solution_count_le_g524': True, 'avoidable_risk_ece_le_g524': False, 'controls_do_not_match': True, 'leave_one_map_family_does_not_collapse': True, 'forbidden_feature_count_eq_0': True}`
+- promising_rank_effect_model: `False`
+- phase5p5_allowed: `False`
+- phase6_allowed: `False`
+- runtime_claim_allowed: `False`
+- learned_runtime_policy_validated: `False`
+- aaai_ready: `False`

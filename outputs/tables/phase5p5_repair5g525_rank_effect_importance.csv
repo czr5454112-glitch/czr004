@@ -1,0 +1,5 @@
+feature_group,importance,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+blocked_reason,0.21,False,False,False,False,False
+competing_local_position,0.18,False,False,False,False,False
+candidate_specific_rank_effect,0.31,False,False,False,False,False
+goal_aware_dual_channel,0.24,False,False,False,False,False

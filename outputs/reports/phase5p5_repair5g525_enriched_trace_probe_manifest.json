@@ -1,0 +1,19 @@
+{
+  "aaai_ready": false,
+  "learned_runtime_policy_validated": false,
+  "logs": [
+    {
+      "bytes": 266109471,
+      "line_count": 133,
+      "logging_patch_hash": "1af7c0753448071f2761ef9ab7c83b883326de50e78825626582da559eef02a4",
+      "path": "outputs/logs/phase5p5_repair5g525_enriched_trace_probe/phase5p5_repair5g525_enriched_trace_probe_checkpoints.jsonl",
+      "schema_version": "phase5p5_repair5g54_update_checkpoint_v1",
+      "sha256": "56b2a6818b1a6bce24baf47463379393e70201da0d6db98a3edb287643f18a9b"
+    }
+  ],
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "probe_mode": "fresh_trace_only_with_committed_g523_candidate_budget_outcomes",
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g525_enriched_trace_probe_manifest_v1"
+}

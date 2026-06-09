@@ -1,0 +1,39 @@
+{
+  "aaai_ready": false,
+  "budgets": [
+    1000,
+    2000
+  ],
+  "candidate_budget_rows": 2160,
+  "candidate_recognition": {
+    "recognized": 30,
+    "source": "g523_committed_integrity_plus_g525_smoke",
+    "unrecognized": 0
+  },
+  "candidates": 30,
+  "contexts": 36,
+  "decision": "enriched_trace_probe_passed_continue_features",
+  "expected_rows": 2160,
+  "gates": {
+    "all_selected_candidates_recognized": true,
+    "candidate_budget_rows_match_expected": true,
+    "duplicate_context_candidate_budget_rows_eq_0": true,
+    "external_lacam2_untouched": true,
+    "ids_166_205_untouched": true,
+    "minimum_candidates": true,
+    "minimum_contexts": true,
+    "new_trace_keys_present": true,
+    "observed_ids_only": true,
+    "raw_log_sha256_verified": true
+  },
+  "ids_166_205_untouched": true,
+  "learned_runtime_policy_validated": false,
+  "observed_ids_only": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "probe_mode": "fresh_trace_only_with_committed_g523_candidate_budget_outcomes",
+  "reduction_reason": "deterministic minimum acceptable fresh-trace subset to avoid another large raw counterfactual log",
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g525_enriched_trace_probe_summary_v1",
+  "trace_context_budget_rows": 133
+}

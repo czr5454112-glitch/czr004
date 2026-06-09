@@ -1,5 +1,34 @@
 # Codex Worklog
 
+## 2026-06-09 - Repair5G.5.25 blocked-rank trace learning
+
+- Request:
+  Finish `czr004_g525_after_g524_blocked_rank_trace_learning_prompt.md` completely, using the project context docs as needed, then push to GitHub.
+- Planned files:
+  - `czr004_repair5g525_blocked_rank_trace_learning_plan.md`
+  - `scripts/repair5g525_common.py`
+  - `scripts/verify_repair5g525_g524_artifacts.py`
+  - `scripts/analyze_repair5g525_trace_provenance_and_blocker.py`
+  - `scripts/verify_repair5g525_logging_patch_static.py`
+  - `scripts/run_repair5g525_trace_logging_smoke.py`
+  - `scripts/run_repair5g525_enriched_trace_probe.py`
+  - `scripts/create_repair5g525_candidate_rank_effect_features.py`
+  - `scripts/create_repair5g525_blocked_rank_teacher_tables.py`
+  - `scripts/train_eval_repair5g525_rank_effect_models.py`
+  - `scripts/train_eval_repair5g525_goal_aware_update_surrogates.py`
+  - `scripts/analyze_repair5g525_learning_failure_or_success.py`
+  - `scripts/write_repair5g525_decision.py`
+  - `cpp/ltm/ltm.hpp`
+  - `cpp/ltm/ltm.cpp`
+  - `cpp/tools/phase1a_batch.cpp`
+  - G5.25 reports/tables under `outputs/`
+- Constraints:
+  Project-owned trace logging only, no solver semantic changes, no `external/lacam2/lacam2/**` edits, no IDs `166..205`, no runtime/Phase5.5/Phase6/learned-runtime/AAAI claim, and no outcome/oracle/delta labels in `feature_*`.
+- Pre-probe note:
+  This entry is written before any G5.25 smoke or enriched trace probe. The old G5.23 raw checkpoint SHA mismatch remains a provenance warning, so model-facing G5.25 rank-effect features will use fresh G5.25 trace logs.
+- Completion note:
+  G5.25 finished with `g525_rank_effect_partial_gain_continue_trace_feature_design`. The best diagnostic model was `trace_plus_rank_effect_two_head_model` with top3 safe oracle capture `0.3055555555555556`, region top2 capture `0.7083333333333334`, and candidate-induced no-solution count `6`; utility and calibration gates remained blocked. All closed-claim flags stayed false.
+
 ## 2026-06-08 - Repair5G.5.21 second-wave lattice and split selector
 
 - Request:

@@ -1,0 +1,13 @@
+{
+  "aaai_ready": false,
+  "audit_label_rows": 2160,
+  "candidate_budget_rows": 2160,
+  "context_budget_rows": 72,
+  "decision": "blocked_rank_teacher_tables_created",
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g525_blocked_rank_teacher_tables_summary_v1",
+  "target_candidate_top3_positive_rows": 185
+}

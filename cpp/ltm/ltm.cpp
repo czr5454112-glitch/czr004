@@ -49,15 +49,32 @@ void PibtTraceCollector::clear() { events_.clear(); }
 void PibtTraceCollector::record_committed(uint agent_id, const Vertex* from,
                                           const Vertex* to, const Vertex* goal)
 {
+  auto audit = TraceRankAudit();
+  record_committed(agent_id, from, to, goal, audit);
+}
+
+void PibtTraceCollector::record_committed(uint agent_id, const Vertex* from,
+                                          const Vertex* to, const Vertex* goal,
+                                          const TraceRankAudit& audit)
+{
   events_.push_back(TraceEvent{TraceEventKind::Committed, agent_id, from->id,
-                               to->id, from == goal && to == goal});
+                               to->id, from == goal && to == goal, audit});
 }
 
 void PibtTraceCollector::record_blocked(uint agent_id, const Vertex* from,
                                         const Vertex* to, const Vertex* goal)
 {
+  auto audit = TraceRankAudit();
+  audit.blocked_reason_category = BlockedReasonCategory::Unknown;
+  record_blocked(agent_id, from, to, goal, audit);
+}
+
+void PibtTraceCollector::record_blocked(uint agent_id, const Vertex* from,
+                                        const Vertex* to, const Vertex* goal,
+                                        const TraceRankAudit& audit)
+{
   events_.push_back(TraceEvent{TraceEventKind::Blocked, agent_id, from->id,
-                               to->id, from == goal && to == goal});
+                               to->id, from == goal && to == goal, audit});
 }
 
 TraceSummary PibtTraceCollector::summary() const
@@ -749,7 +766,10 @@ class OneShotLtmPlanner {
 
       for (auto* agent : A) c_new[agent->id] = agent->v_next;
       for (uint i = 0; i < N; ++i) {
-        collector->record_committed(i, h->C[i], c_new[i], ins->goals[i]);
+        collector->record_committed(
+            i, h->C[i], c_new[i], ins->goals[i],
+            make_rank_audit(i, h->C[i], c_new[i], c_new[i],
+                            BlockedReasonCategory::None));
       }
 
       const auto iter = explored.find(c_new);
@@ -890,18 +910,19 @@ class OneShotLtmPlanner {
       std::reverse(C_next[i].begin(), C_next[i].begin() + k_size + 1);
     }
 
-    auto rejected_better = std::vector<Vertex*>();
+    auto rejected_better =
+        std::vector<std::pair<Vertex*, BlockedReasonCategory>>();
     for (uint k = 0; k < k_size + 1; ++k) {
       auto* u = C_next[i][k];
 
       if (occupied_next[u->id] != nullptr) {
-        rejected_better.push_back(u);
+        rejected_better.emplace_back(u, BlockedReasonCategory::VertexConflict);
         continue;
       }
 
       auto*& ak = occupied_now[u->id];
       if (ak != nullptr && ak->v_next == ai->v_now) {
-        rejected_better.push_back(u);
+        rejected_better.emplace_back(u, BlockedReasonCategory::EdgeSwap);
         continue;
       }
 
@@ -910,12 +931,15 @@ class OneShotLtmPlanner {
 
       if (ak != nullptr && ak != ai && ak->v_next == nullptr &&
           !funcPIBT(ak)) {
-        rejected_better.push_back(u);
+        rejected_better.emplace_back(
+            u, BlockedReasonCategory::BacktrackOrInheritance);
         continue;
       }
 
-      for (const auto* blocked : rejected_better) {
-        collector->record_blocked(i, ai->v_now, blocked, ins->goals[i]);
+      for (const auto& [blocked, reason] : rejected_better) {
+        collector->record_blocked(
+            i, ai->v_now, blocked, ins->goals[i],
+            make_rank_audit(i, ai->v_now, blocked, u, reason));
       }
 
       if (k == 0 && swap_agent != nullptr && swap_agent->v_next == nullptr &&
@@ -929,6 +953,63 @@ class OneShotLtmPlanner {
     occupied_next[ai->v_now->id] = ai;
     ai->v_next = ai->v_now;
     return false;
+  }
+
+  TraceRankAudit make_rank_audit(uint agent_id, Vertex* from, Vertex* candidate,
+                                 Vertex* committed,
+                                 BlockedReasonCategory reason)
+  {
+    auto audit = TraceRankAudit();
+    audit.blocked_reason_category = reason;
+    if (from == nullptr) return audit;
+
+    auto ordered = from->neighbor;
+    ordered.push_back(from);
+    std::sort(ordered.begin(), ordered.end(), [&](Vertex* const left,
+                                                  Vertex* const right) {
+      const auto left_distance = D.get(agent_id, left);
+      const auto right_distance = D.get(agent_id, right);
+      if (left_distance != right_distance) return left_distance < right_distance;
+      return left->id < right->id;
+    });
+    audit.competing_neighbor_count = static_cast<uint>(ordered.size());
+
+    auto rank_of = [&](const Vertex* vertex) {
+      if (vertex == nullptr) return -1;
+      for (std::size_t index = 0; index < ordered.size(); ++index) {
+        if (ordered[index] == vertex) return static_cast<int>(index + 1);
+      }
+      return -1;
+    };
+    auto distance_of = [&](const Vertex* vertex) {
+      return vertex == nullptr ? std::numeric_limits<double>::quiet_NaN()
+                               : D.get(agent_id, vertex->id);
+    };
+
+    const auto* best = ordered.empty() ? nullptr : ordered.front();
+    audit.committed_neighbor_rank_by_base_distance = rank_of(committed);
+    audit.blocked_neighbor_rank_by_base_distance = rank_of(candidate);
+    audit.wait_neighbor_rank_by_base_distance = rank_of(from);
+    const auto from_distance = distance_of(from);
+    for (const auto* vertex : ordered) {
+      if (distance_of(vertex) < from_distance) {
+        audit.goal_progress_neighbor_rank = rank_of(vertex);
+        break;
+      }
+    }
+    if (ordered.size() >= 2) {
+      audit.rank_margin_top1_top2 =
+          distance_of(ordered[1]) - distance_of(ordered[0]);
+    }
+    audit.rank_margin_committed_vs_best = distance_of(committed) - distance_of(best);
+    audit.rank_margin_blocked_vs_committed =
+        distance_of(candidate) - distance_of(committed);
+    if (reason == BlockedReasonCategory::None) {
+      audit.blocked_neighbor_rank_by_base_distance = -1;
+      audit.rank_margin_blocked_vs_committed =
+          std::numeric_limits<double>::quiet_NaN();
+    }
+    return audit;
   }
 
   Agent* swap_possible_and_required(Agent* ai)

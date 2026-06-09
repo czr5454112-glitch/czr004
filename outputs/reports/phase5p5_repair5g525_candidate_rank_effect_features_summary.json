@@ -1,0 +1,23 @@
+{
+  "aaai_ready": false,
+  "candidate_budget_rows": 2160,
+  "context_budget_rows": 72,
+  "decision": "candidate_rank_effect_features_created",
+  "feature_count": 81,
+  "forbidden_feature_count": 0,
+  "forbidden_features": [],
+  "gates": {
+    "blocked_reason_features_present": true,
+    "candidate_budget_rows_match_enriched_probe_rows": true,
+    "candidate_specific_rank_effect_features_present": true,
+    "competing_rank_features_present": true,
+    "feature_count_gt_g524": true,
+    "forbidden_feature_count_eq_0": true,
+    "goal_aware_dual_channel_features_present": true
+  },
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g525_candidate_rank_effect_features_summary_v1"
+}

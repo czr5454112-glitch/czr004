@@ -1,0 +1,21 @@
+# Repair5G.5.25 Learning Failure or Success
+
+- schema_version: `phase5p5_repair5g525_learning_failure_or_success_summary_v1`
+- decision: `learning_failure_or_success_analyzed`
+- did_blocked_reason_features_improve_top3_capture: `False`
+- did_competing_rank_features_improve_region_top2_capture: `True`
+- did_candidate_specific_rank_effect_beat_g524_best: `False`
+- did_candidate_induced_failure_decrease: `True`
+- did_static_recovery_capture_improve: `False`
+- leave_one_map_family_still_collapses: `False`
+- wins_still_concentrated_in_fractional_coverage: `True`
+- blocked_reasons_aligned_with_failure_classes: `True`
+- trace_fields_remain_missing: `['exact_priority_block_subreason', 'all_failed_candidate_reasons_when_pibt_returns_false', 'same_checkpoint_exact_counterfactual_edge_labels']`
+- next_step: `offline_neural_rank_effect_training_diagnostic_only`
+- feature_summary: `{'aaai_ready': False, 'candidate_budget_rows': 2160, 'context_budget_rows': 72, 'decision': 'candidate_rank_effect_features_created', 'feature_count': 81, 'forbidden_feature_count': 0, 'forbidden_features': [], 'gates': {'blocked_reason_features_present': True, 'candidate_budget_rows_match_enriched_probe_rows': True, 'candidate_specific_rank_effect_features_present': True, 'competing_rank_features_present': True, 'feature_count_gt_g524': True, 'forbidden_feature_count_eq_0': True, 'goal_aware_dual_channel_features_present': True}, 'learned_runtime_policy_validated': False, 'phase5p5_allowed': False, 'phase6_allowed': False, 'runtime_claim_allowed': False, 'schema_version': 'phase5p5_repair5g525_candidate_rank_effect_features_summary_v1'}`
+- teacher_summary: `{'aaai_ready': False, 'audit_label_rows': 2160, 'candidate_budget_rows': 2160, 'context_budget_rows': 72, 'decision': 'blocked_rank_teacher_tables_created', 'learned_runtime_policy_validated': False, 'phase5p5_allowed': False, 'phase6_allowed': False, 'runtime_claim_allowed': False, 'schema_version': 'phase5p5_repair5g525_blocked_rank_teacher_tables_summary_v1', 'target_candidate_top3_positive_rows': 185}`
+- phase5p5_allowed: `False`
+- phase6_allowed: `False`
+- runtime_claim_allowed: `False`
+- learned_runtime_policy_validated: `False`
+- aaai_ready: `False`

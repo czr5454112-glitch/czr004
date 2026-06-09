@@ -1,0 +1,7 @@
+feature_group,feature_count,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+feature_blocked_reason_,5,False,False,False,False,False
+feature_competing_,2,False,False,False,False,False
+feature_candidate_predicted_,15,False,False,False,False,False
+feature_goal_aware_,6,False,False,False,False,False
+feature_param_,9,False,False,False,False,False
+feature_mix_,36,False,False,False,False,False

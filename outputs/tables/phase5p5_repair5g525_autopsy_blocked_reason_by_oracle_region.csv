@@ -1,0 +1,6 @@
+target_oracle_region,rows,vertex_conflict_rate,edge_swap_rate,backtrack_rate,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+B_static_recovery_feasibility,180,0.6740346589945646,0.3214559054738114,0.004509435531622548,False,False,False,False,False
+C_risk_boundary,240,0.7058706708685686,0.27848656418159157,0.015642764949842927,False,False,False,False,False
+D_fractional_coverage,1020,0.7292671719292815,0.2674381597133302,0.0032946683573878907,False,False,False,False,False
+g518_retained,510,0.4116312752509019,0.3520471314366024,0.0010274756654369503,False,False,False,False,False
+old14,210,0.6167929366204925,0.38232493856837474,0.0008821248111333797,False,False,False,False,False

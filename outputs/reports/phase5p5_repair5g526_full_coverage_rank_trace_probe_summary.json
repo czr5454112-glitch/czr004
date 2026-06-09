@@ -1,0 +1,38 @@
+{
+  "aaai_ready": false,
+  "budgets": [
+    1000,
+    2000
+  ],
+  "candidate_budget_rows": 5280,
+  "candidate_outcome_source": "committed_g523_full_primary_response_surface",
+  "candidates": 44,
+  "context_budget_pairs": 120,
+  "contexts": 60,
+  "decision": "full_coverage_rank_trace_probe_passed_continue_features",
+  "duplicate_context_candidate_budget_rows": 0,
+  "expected_candidate_budget_rows": 5280,
+  "external_lacam2_solver_status": "",
+  "fresh_trace_source": "C:\\PROGRAMING\\czr004\\outputs\\logs\\phase5p5_repair5g526_full_coverage_rank_trace_probe\\phase5p5_repair5g526_full_coverage_rank_trace_probe_checkpoints.jsonl",
+  "gates": {
+    "all_selected_candidates_recognized": true,
+    "candidate_budget_rows_ge_3600": true,
+    "candidates_eq_44": true,
+    "context_budget_pairs_eq_120": true,
+    "contexts_eq_60": true,
+    "duplicate_context_candidate_budget_rows_eq_0": true,
+    "external_lacam2_untouched": true,
+    "ids_166_205_untouched": true,
+    "new_trace_keys_present": true,
+    "observed_ids_only": true,
+    "raw_log_sha256_verified": true
+  },
+  "ids_166_205_untouched": true,
+  "learned_runtime_policy_validated": false,
+  "observed_ids_only": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "raw_trace_rows_all_iterations": 255,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g526_full_coverage_rank_trace_probe_summary_v1"
+}

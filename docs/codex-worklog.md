@@ -1,5 +1,30 @@
 # Codex Worklog
 
+## 2026-06-09 - Repair5G.5.26 full-coverage top-k policy
+
+- Request:
+  Finish `czr004_g526_after_g525_full_coverage_topk_policy_prompt.md` completely, using the project context docs as needed, then push to GitHub.
+- Planned files:
+  - `czr004_repair5g526_full_coverage_rank_effect_policy_plan.md`
+  - `scripts/repair5g526_common.py`
+  - `scripts/verify_repair5g526_g525_artifacts.py`
+  - `scripts/analyze_repair5g526_g525_partial_gain_autopsy.py`
+  - `scripts/verify_repair5g526_logging_patch_v2_static.py`
+  - `scripts/run_repair5g526_full_coverage_rank_trace_probe.py`
+  - `scripts/create_repair5g526_rank_effect_v2_features.py`
+  - `scripts/create_repair5g526_topk_policy_teacher.py`
+  - `scripts/train_eval_repair5g526_topk_risk_calibrated_policies.py`
+  - `scripts/train_eval_repair5g526_neural_rank_effect_models.py`
+  - `scripts/train_eval_repair5g526_constrained_contextual_bandit.py`
+  - `scripts/train_eval_repair5g526_goal_aware_update_residuals.py`
+  - `scripts/analyze_repair5g526_policy_gap_and_trace_needs.py`
+  - `scripts/write_repair5g526_decision.py`
+  - G5.26 reports/tables under `outputs/`
+- Constraints:
+  Full 60-context coverage has priority over more candidates, `max_workers=1` for any local solver probe, no IDs `166..205`, no `external/lacam2/lacam2/**` edits, no solver semantic changes, no runtime/Phase5.5/Phase6/learned-runtime/AAAI claim, and no outcome/oracle labels in model-facing `feature_*` columns.
+- Pre-probe note:
+  This entry is written before any G5.26 full-coverage trace probe. G5.26 will reuse committed G5.23/G5.24 counterfactual candidate outcomes while collecting fresh full-coverage trace context logs, then separate top-k ranker recall from calibrated safe selection.
+
 ## 2026-06-09 - Repair5G.5.25 blocked-rank trace learning
 
 - Request:

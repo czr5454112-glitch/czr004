@@ -1,0 +1,31 @@
+{
+  "aaai_ready": false,
+  "best_residual_model": {
+    "aaai_ready": false,
+    "blocked_edge_update_error": 1.2296561075772568e-15,
+    "context_aggregate_update_error": 4.440892098500626e-16,
+    "dev_rows": 1056,
+    "edge_residual_mae": 1.2296561075772568e-15,
+    "goal_progress_update_error": 1.0000000000000002,
+    "heldout_family_update_error": "",
+    "learned_runtime_policy_validated": false,
+    "model": "small_mlp_if_available",
+    "phase5p5_allowed": false,
+    "phase6_allowed": false,
+    "rank_correlation": NaN,
+    "runtime_claim_allowed": false,
+    "target": "context_aggregate_update_error",
+    "wait_edge_update_error": 1.0000000000000002
+  },
+  "bootstrap_samples_requested": 300,
+  "candidate_budget_rows": 5280,
+  "decision": "goal_aware_update_residuals_evaluated",
+  "dev_rows": 1056,
+  "edge_update_teacher_proxy_only": true,
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g526_goal_aware_update_residuals_summary_v1",
+  "train_rows": 4224
+}

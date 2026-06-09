@@ -1,0 +1,15 @@
+# Repair5G.5.26 G5.25 Partial-Gain Autopsy
+
+- schema_version: `phase5p5_repair5g526_g525_partial_gain_autopsy_summary_v1`
+- decision: `g525_partial_gain_autopsy_completed`
+- feature_group_causing_top3_jump: `trace_plus_rank_effect_two_head`
+- feature_group_scores: `[{'feature_group': 'blocked_reason_only', 'model': 'blocked_reason_only_model', 'top3_safe_oracle_capture_rate': '0.041666666666666664', 'region_top2_capture_rate': '0.2916666666666667', 'safe_policy_sim_utility': '0.05491115858411765', 'phase5p5_allowed': False, 'phase6_allowed': False, 'runtime_claim_allowed': False, 'learned_runtime_policy_validated': False, 'aaai_ready': False}, {'feature_group': 'competing_rank_only', 'model': 'competing_rank_only_model', 'top3_safe_oracle_capture_rate': '0.1111111111111111', 'region_top2_capture_rate': '0.5694444444444444', 'safe_policy_sim_utility': '0.046789783380000005', 'phase5p5_allowed': False, 'phase6_allowed': False, 'runtime_claim_allowed': False, 'learned_runtime_policy_validated': False, 'aaai_ready': False}, {'feature_group': 'candidate_specific_rank_effect', 'model': 'candidate_specific_rank_effect_model', 'top3_safe_oracle_capture_rate': '0.2222222222222222', 'region_top2_capture_rate': '0.6388888888888888', 'safe_policy_sim_utility': '0.02529353290000001', 'phase5p5_allowed': False, 'phase6_allowed': False, 'runtime_claim_allowed': False, 'learned_runtime_policy_validated': False, 'aaai_ready': False}, {'feature_group': 'goal_aware_dual_channel_rank_effect', 'model': 'goal_aware_dual_channel_rank_effect_model', 'top3_safe_oracle_capture_rate': '0.19444444444444445', 'region_top2_capture_rate': '0.6666666666666666', 'safe_policy_sim_utility': '0.023795304622916662', 'phase5p5_allowed': False, 'phase6_allowed': False, 'runtime_claim_allowed': False, 'learned_runtime_policy_validated': False, 'aaai_ready': False}, {'feature_group': 'trace_plus_rank_effect_two_head', 'model': 'trace_plus_rank_effect_two_head_model', 'top3_safe_oracle_capture_rate': '0.3055555555555556', 'region_top2_capture_rate': '0.7083333333333334', 'safe_policy_sim_utility': '0.023052887525833326', 'phase5p5_allowed': False, 'phase6_allowed': False, 'runtime_claim_allowed': False, 'learned_runtime_policy_validated': False, 'aaai_ready': False}]`
+- safe_policy_utility_failure_reasons: `{'wrong_top1_within_top3_context_budget_pairs': 16, 'safe_oracle_not_in_top3_context_budget_pairs': 50, 'risk_gate_underestimates_candidate_induced_no_solution_count': 6, 'top5_adds_safe_oracle_candidates': 6, 'fallback_threshold_wrong': True}`
+- subset_coverage: `{'full_contexts': 60, 'g525_subset_contexts': 36, 'missing_contexts': 24, 'full_candidates': 44, 'g525_subset_candidates': 30, 'missing_candidates': 14, 'safe_oracle_rows_removed_by_g525_candidate_reduction': 15}`
+- failure_concentration_questions_answered: `{'by_region_rows': 5, 'by_map_family_rows': 3, 'by_budget_rows': 2}`
+- recommended_first_g526_policy: `top5_then_calibrated_risk_utility`
+- phase5p5_allowed: `False`
+- phase6_allowed: `False`
+- runtime_claim_allowed: `False`
+- learned_runtime_policy_validated: `False`
+- aaai_ready: `False`

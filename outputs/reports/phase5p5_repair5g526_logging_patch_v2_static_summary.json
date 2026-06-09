@@ -1,0 +1,75 @@
+{
+  "aaai_ready": false,
+  "audit_key_status": [
+    {
+      "aaai_ready": false,
+      "audit_key": "exact_priority_block_subreason",
+      "learned_runtime_policy_validated": false,
+      "model_use": "not_used_as_feature_when_exact_unavailable",
+      "phase5p5_allowed": false,
+      "phase6_allowed": false,
+      "present_in_project_owned_logging": false,
+      "runtime_claim_allowed": false,
+      "status": "explicitly_unavailable_exact_v2_audit_not_in_current_logging"
+    },
+    {
+      "aaai_ready": false,
+      "audit_key": "all_failed_candidate_reasons_when_pibt_returns_false",
+      "learned_runtime_policy_validated": false,
+      "model_use": "not_used_as_feature_when_exact_unavailable",
+      "phase5p5_allowed": false,
+      "phase6_allowed": false,
+      "present_in_project_owned_logging": false,
+      "runtime_claim_allowed": false,
+      "status": "explicitly_unavailable_exact_v2_audit_not_in_current_logging"
+    },
+    {
+      "aaai_ready": false,
+      "audit_key": "failed_candidate_rank_histogram_when_pibt_returns_false",
+      "learned_runtime_policy_validated": false,
+      "model_use": "not_used_as_feature_when_exact_unavailable",
+      "phase5p5_allowed": false,
+      "phase6_allowed": false,
+      "present_in_project_owned_logging": false,
+      "runtime_claim_allowed": false,
+      "status": "explicitly_unavailable_exact_v2_audit_not_in_current_logging"
+    },
+    {
+      "aaai_ready": false,
+      "audit_key": "same_checkpoint_counterfactual_edge_label_manifest_or_proxy_status",
+      "learned_runtime_policy_validated": false,
+      "model_use": "not_used_as_feature_when_exact_unavailable",
+      "phase5p5_allowed": false,
+      "phase6_allowed": false,
+      "present_in_project_owned_logging": false,
+      "runtime_claim_allowed": false,
+      "status": "explicitly_unavailable_exact_v2_audit_not_in_current_logging"
+    }
+  ],
+  "decision": "logging_patch_v2_noop_verified_continue_full_coverage_probe",
+  "exact_failed_candidate_audit_unavailable": true,
+  "external_lacam2_solver_status": "",
+  "failed_candidate_audit_feature_status": "aggregate_proxy_only_until_exact_v2_audit_exists",
+  "gates": {
+    "candidate_parser_fingerprints_unchanged": true,
+    "external_lacam2_untouched": true,
+    "legacy_g525_trace_fields_unchanged": true,
+    "new_audit_keys_present_or_explicitly_unavailable": true,
+    "old14_g518_g522_candidate_fingerprints_unchanged": true,
+    "project_owned_logging_files_touched_only": true,
+    "trace_event_sequence_preserved_for_committed_and_blocked_events": true
+  },
+  "learned_runtime_policy_validated": false,
+  "logging_patch_hash": "1af7c0753448071f2761ef9ab7c83b883326de50e78825626582da559eef02a4",
+  "no_cpp_edit_needed": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "requested_v2_audit_keys": [
+    "exact_priority_block_subreason",
+    "all_failed_candidate_reasons_when_pibt_returns_false",
+    "failed_candidate_rank_histogram_when_pibt_returns_false",
+    "same_checkpoint_counterfactual_edge_label_manifest_or_proxy_status"
+  ],
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g526_logging_patch_v2_static_summary_v1"
+}

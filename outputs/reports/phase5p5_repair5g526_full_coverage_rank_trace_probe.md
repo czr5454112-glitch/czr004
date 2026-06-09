@@ -1,0 +1,23 @@
+# Repair5G.5.26 Full-Coverage Rank-Trace Probe
+
+- schema_version: `phase5p5_repair5g526_full_coverage_rank_trace_probe_summary_v1`
+- decision: `full_coverage_rank_trace_probe_passed_continue_features`
+- contexts: `60`
+- candidates: `44`
+- budgets: `[1000, 2000]`
+- expected_candidate_budget_rows: `5280`
+- candidate_budget_rows: `5280`
+- raw_trace_rows_all_iterations: `255`
+- context_budget_pairs: `120`
+- candidate_outcome_source: `committed_g523_full_primary_response_surface`
+- fresh_trace_source: `C:\PROGRAMING\czr004\outputs\logs\phase5p5_repair5g526_full_coverage_rank_trace_probe\phase5p5_repair5g526_full_coverage_rank_trace_probe_checkpoints.jsonl`
+- duplicate_context_candidate_budget_rows: `0`
+- external_lacam2_solver_status: ``
+- gates: `{'observed_ids_only': True, 'ids_166_205_untouched': True, 'duplicate_context_candidate_budget_rows_eq_0': True, 'all_selected_candidates_recognized': True, 'new_trace_keys_present': True, 'raw_log_sha256_verified': True, 'external_lacam2_untouched': True, 'candidate_budget_rows_ge_3600': True, 'context_budget_pairs_eq_120': True, 'contexts_eq_60': True, 'candidates_eq_44': True}`
+- observed_ids_only: `True`
+- ids_166_205_untouched: `True`
+- phase5p5_allowed: `False`
+- phase6_allowed: `False`
+- runtime_claim_allowed: `False`
+- learned_runtime_policy_validated: `False`
+- aaai_ready: `False`

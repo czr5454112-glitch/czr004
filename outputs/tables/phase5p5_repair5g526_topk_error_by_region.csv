@@ -1,0 +1,6 @@
+actual_safe_oracle_region,error_context_budget_pairs,top3_but_selected_wrong,not_in_top3,candidate_induced_after_selection,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+C_risk_boundary,8,2,6,1,False,False,False,False,False
+D_fractional_coverage,28,8,20,0,False,False,False,False,False
+old14,7,4,3,3,False,False,False,False,False
+B_static_recovery_feasibility,6,0,6,0,False,False,False,False,False
+g518_retained,17,2,15,2,False,False,False,False,False

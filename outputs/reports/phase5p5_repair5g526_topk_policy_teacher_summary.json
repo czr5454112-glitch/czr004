@@ -1,0 +1,15 @@
+{
+  "aaai_ready": false,
+  "audit_label_rows": 5280,
+  "candidate_budget_rows": 5280,
+  "context_budget_rows": 120,
+  "decision": "topk_policy_teacher_created",
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g526_topk_policy_teacher_summary_v1",
+  "top1_safe_oracle_membership_rows": 0,
+  "top3_safe_oracle_membership_rows": 0,
+  "top5_safe_oracle_membership_rows": 14
+}

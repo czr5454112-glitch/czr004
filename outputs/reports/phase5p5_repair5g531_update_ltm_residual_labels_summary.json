@@ -1,0 +1,21 @@
+{
+  "aaai_ready": false,
+  "decision": "update_ltm_residual_labels_created",
+  "evidence_strength_distribution": {
+    "additive_proxy": 14400,
+    "imitation_slice": 28800,
+    "teacher_proxy": 28800
+  },
+  "hard_gates": {
+    "evidence_strength_column_present": true,
+    "gold_labels_separated_from_training_proxy": true,
+    "labels_created": true,
+    "no_gold_label_used_as_feature": true
+  },
+  "label_rows": 72000,
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g531_update_ltm_residual_labels_summary_v1"
+}

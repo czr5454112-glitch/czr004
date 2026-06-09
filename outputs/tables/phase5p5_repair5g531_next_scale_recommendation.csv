@@ -1,0 +1,2 @@
+recommendation,g532_context_target,g532_expected_edge_event_slices,preferred_route,reason,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+continue_slice_dataset_route_scale_to_500_1000_contexts,500,500000,hybrid_slice_dataset_plus_counterfactual_gold_validation,pilot slice labels substantially exceed 120 context-budget labels and residual/risk diagnostics beat controls,False,False,False,False,False

@@ -1,0 +1,24 @@
+{
+  "aaai_ready": false,
+  "decision": "slice_schemas_created",
+  "evidence_strength_classes": [
+    "imitation_slice",
+    "additive_proxy",
+    "teacher_proxy",
+    "local_checkpoint_replay",
+    "solver_level_counterfactual_gold"
+  ],
+  "field_count": 72,
+  "hard_gates": {
+    "closed_claims_present": true,
+    "no_action_label_target": true,
+    "no_priority_label_target": true,
+    "schemas_written": true
+  },
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_count": 5,
+  "schema_version": "phase5p5_repair5g531_slice_schema_summary_v1"
+}

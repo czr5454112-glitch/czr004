@@ -1,0 +1,2 @@
+torch_available,cuda_available,cuda_device_count,residual_model_device,risk_model_device,torch_unavailable,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+False,False,0,cpu,cpu,True,False,False,False,False,False

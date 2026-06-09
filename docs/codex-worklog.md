@@ -4137,3 +4137,53 @@
   No `external/lacam2/lacam2/**` edits, no PIBT/LaCAM*/search/rewrite/pruning/restart/candidate-deletion/h-value/action/priority semantic changes, no IDs `166..205`, no new candidate lattice wave, and all runtime/Phase5.5/Phase6/learned-runtime/AAAI claims remain closed.
 - Pre-probe worklog:
   This entry is written before any G5.29 expanded exact-failure probe. G5.29 will first verify the G5.28 teacher and exact-failure artifacts, then derive topology/event features and hierarchical labels from observed, unreserved local data. If the local observed corpus cannot meet the requested expansion minimum, the panel stage will report the shortfall honestly rather than fabricating contexts.
+## 2026-06-09 - Repair5G.5.31 neural UpdateLTM slice dataset pilot
+
+- Request:
+  Finish `czr004_g531_neural_update_ltm_slice_dataset_pilot_prompt.md` completely, using `deep-research-report.md` and `phase4_6_laur_ltm_codex_execution_plan.md` as project constraints, then push to GitHub.
+- Planned files:
+  - `czr004_g531_neural_update_ltm_slice_dataset_pilot_plan.md`
+  - `scripts/repair5g531_common.py`
+  - G5.31 verification, slice schema, pilot context source, solver trace slice pilot, raw-to-slice conversion, residual label, risk/fallback label, counterfactual gold join, residual model, risk model, world-model auxiliary, dataset quality, and decision scripts
+  - `outputs/reports/phase5p5_repair5g531_*`
+  - `outputs/tables/phase5p5_repair5g531_*`
+  - `outputs/logs/phase5p5_repair5g531_*`
+  - `outputs/datasets/phase5p5_repair5g531_*`
+- Constraints:
+  No `external/lacam2/lacam2/**` edits, no PIBT/LaCAM*/search/rewrite/pruning/restart/candidate-deletion/h-value/action/priority semantic changes, no IDs `166..205`, no new counterfactual candidate lattice, and all runtime/Phase5.5/Phase6/learned-runtime/AAAI claims remain closed.
+- Pre-probe worklog:
+  This entry is written before any G5.31 solver trace slice pilot. G5.31 will verify the G5.29/G5.30 route change, build schemas and a context source with observed gold anchors plus generated `generated_g531_*` contexts, then run an artifact-backed trace-slice pilot that preserves solver semantics and uses existing counterfactual tables only as validation/calibration.
+- Commands completed:
+  - `python -m py_compile scripts\repair5g531_common.py ... scripts\write_repair5g531_decision.py`
+  - `python scripts\verify_repair5g531_g529_g530_artifacts.py`
+  - `python scripts\create_repair5g531_slice_schema.py`
+  - `python scripts\create_repair5g531_pilot_context_source.py`
+  - `python scripts\run_repair5g531_solver_trace_slice_pilot.py --overwrite --max-workers 1`
+  - `python scripts\convert_repair5g531_raw_logs_to_slices.py`
+  - `python scripts\create_repair5g531_update_ltm_residual_labels.py`
+  - `python scripts\create_repair5g531_risk_fallback_labels.py`
+  - `python scripts\create_repair5g531_counterfactual_gold_join.py`
+  - `python scripts\train_eval_repair5g531_slice_residual_models.py --bootstrap-samples 300`
+  - `python scripts\train_eval_repair5g531_slice_risk_models.py --bootstrap-samples 300`
+  - `python scripts\train_eval_repair5g531_world_model_auxiliary.py --bootstrap-samples 300`
+  - `python scripts\analyze_repair5g531_slice_dataset_quality.py`
+  - `python scripts\write_repair5g531_decision.py`
+- Observations:
+  - G5.29/G5.30 verification passed with G5.29 decision `g529_expanded_data_blocker_stop`, G5.29 feature count `196`, forbidden feature count `0`, and the G5.30 solver-trace-slice route present in `deep-research-report.md`.
+  - Pilot context source contains `120` contexts and `240` context-budget rows: `60` original gold-anchor contexts plus `60` generated `generated_g531_*` contexts outside reserved IDs.
+  - The trace-slice pilot produced `1200` artifact-backed trace tasks with exact failure-audit objects and C/F traffic snapshot hashes. Raw JSONL remains under ignored `outputs/logs`.
+  - Raw-to-slice conversion produced `1200` context slices, `72000` edge slices, `9600` event slices, `1200` failure slices, and `1200` update slices.
+  - Residual labels total `72000`; risk/fallback labels total `84000`; gold validation join found `120` context-budget rows and `5280` candidate-budget rows.
+  - Residual model best was `mlp_edge_residual_model_if_available` with positive gold-delta correlation `0.408359102492`.
+  - Risk model best was `context_risk_logistic` with balanced metric `0.725288831836`, gold ECE `0.147597667399`, and warehouse risk recall `0.62`.
+  - Torch/CUDA was unavailable in this environment, so training used sklearn/numpy and recorded `torch_unavailable=true`.
+- Validation:
+  - G5.31 script `py_compile` passed.
+  - All `outputs/reports/phase5p5_repair5g531_*summary.json` files parse as JSON.
+  - Reserved-ID negative guard rejects `166` with `reserved_id_guard_rejected`.
+  - CSV row counts were checked for every `outputs/tables/phase5p5_repair5g531_*.csv`.
+  - `git diff --check` passed with line-ending warnings only.
+  - `git status --short -- external/lacam2/lacam2` returned clean.
+- Decision:
+  - Final G5.31 decision: `g531_slice_dataset_pilot_promising_continue_scaleup`.
+  - `phase5p5_allowed=false`, `phase6_allowed=false`, `runtime_claim_allowed=false`, `learned_runtime_policy_validated=false`, and `aaai_ready=false` remain closed.

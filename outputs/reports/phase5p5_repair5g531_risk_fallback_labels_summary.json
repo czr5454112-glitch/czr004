@@ -1,0 +1,21 @@
+{
+  "aaai_ready": false,
+  "decision": "risk_fallback_labels_created",
+  "hard_gates": {
+    "fallback_labels_created": true,
+    "gold_validation_labels_not_features": true,
+    "risk_labels_created": true
+  },
+  "label_rows": 84000,
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g531_risk_fallback_labels_summary_v1",
+  "slice_granularity_distribution": {
+    "context": 1200,
+    "edge": 72000,
+    "event": 9600,
+    "failure": 1200
+  }
+}

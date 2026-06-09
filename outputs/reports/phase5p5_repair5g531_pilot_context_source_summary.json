@@ -1,0 +1,29 @@
+{
+  "aaai_ready": false,
+  "budgets": [
+    1000,
+    2000
+  ],
+  "context_budget_pairs": 240,
+  "decision": "pilot_context_source_created",
+  "generated_contexts": 60,
+  "hard_gates": {
+    "contains_generated_or_additional_contexts": true,
+    "contains_original_60_gold_anchors": true,
+    "contexts_ge_80_or_report_source_blocker": true,
+    "ids_166_205_untouched": true,
+    "observed_or_generated_namespace_audited": true
+  },
+  "learned_runtime_policy_validated": false,
+  "map_family_context_budget_pairs": {
+    "maze": 80,
+    "random": 80,
+    "warehouse": 80
+  },
+  "original_gold_anchor_contexts": 60,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "pilot_contexts": 120,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g531_pilot_context_source_summary_v1"
+}

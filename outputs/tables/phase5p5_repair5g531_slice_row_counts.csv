@@ -1,0 +1,10 @@
+table,rows,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+context_slices,1200,False,False,False,False,False
+edge_slices,72000,False,False,False,False,False
+event_slices,9600,False,False,False,False,False
+failure_slices,1200,False,False,False,False,False
+update_slices,1200,False,False,False,False,False
+residual_labels,72000,False,False,False,False,False
+risk_labels,84000,False,False,False,False,False
+gold_context_budget_rows,120,False,False,False,False,False
+gold_candidate_budget_rows,5280,False,False,False,False,False

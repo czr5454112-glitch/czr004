@@ -1,0 +1,32 @@
+{
+  "aaai_ready": false,
+  "decision": "g529_g530_artifacts_verified_continue_g531",
+  "g529_context_budget_pairs": 120,
+  "g529_contexts": 60,
+  "g529_decision": "g529_expanded_data_blocker_stop",
+  "g529_feature_count": 196,
+  "g529_forbidden_feature_count": 0,
+  "gates": {
+    "external_lacam2_clean": true,
+    "g529_candidate_topology_interactions_present": true,
+    "g529_claims_closed": true,
+    "g529_decision_is_blocker_stop": true,
+    "g529_event_graph_features_present": true,
+    "g529_feature_count_ge_196": true,
+    "g529_forbidden_feature_count_eq_0": true,
+    "g529_source_data_shortfall_reported": true,
+    "g529_topology_features_present": true,
+    "g530_counterfactual_tables_validation_calibration": true,
+    "g530_dataset_route_strategy_exists": true,
+    "g530_slice_dataset_primary_route": true,
+    "g530_target_update_not_action_control": true,
+    "g531_worklog_entry_present": true,
+    "ids_166_205_untouched": true,
+    "phase_plan_claims_closed": true
+  },
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g531_g529_g530_artifact_verification_summary_v1"
+}

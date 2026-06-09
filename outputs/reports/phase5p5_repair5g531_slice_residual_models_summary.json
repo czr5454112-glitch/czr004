@@ -1,0 +1,56 @@
+{
+  "aaai_ready": false,
+  "backend": "sklearn_numpy",
+  "best_model": "mlp_edge_residual_model_if_available",
+  "best_model_summary": {
+    "aaai_ready": false,
+    "congestion_residual_mae": "0.00944868121573",
+    "correlation_with_gold_delta": "0.408359102492",
+    "edge_residual_mae": "0.00624169612493",
+    "flow_residual_mae": "0.00303471103412",
+    "gold_induced_failure_correlation": "0.245015461495",
+    "gold_safe_positive_correlation": "0.326687281994",
+    "heldout_map_family_error": "0.0124833922499",
+    "learned_runtime_policy_validated": false,
+    "model": "mlp_edge_residual_model_if_available",
+    "phase5p5_allowed": false,
+    "phase6_allowed": false,
+    "runtime_claim_allowed": false,
+    "warehouse_error": "0.0131075618623"
+  },
+  "bootstrap_samples_requested": 300,
+  "decision": "slice_residual_models_evaluated",
+  "gpu_status": {
+    "cuda_available": false,
+    "cuda_device_count": 0,
+    "residual_model_device": "cpu",
+    "risk_model_device": "cpu",
+    "torch_available": false,
+    "torch_unavailable": true
+  },
+  "hard_gates": {
+    "beats_additive_proxy_baseline": true,
+    "controls_do_not_match": true,
+    "gold_validation_correlation_positive": true,
+    "heldout_map_family_not_collapse": true
+  },
+  "learned_runtime_policy_validated": false,
+  "models_present": [
+    "additive_proxy_baseline",
+    "linear_edge_residual_model",
+    "mlp_edge_residual_model_if_available",
+    "topology_event_residual_model",
+    "dual_channel_c_f_residual_model",
+    "teacher_region_residual_model",
+    "map_family_mixture_residual_model",
+    "no_topology_ablation",
+    "no_failure_audit_ablation",
+    "shuffled_label_control",
+    "random_feature_control"
+  ],
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "positive_diagnostic_gate": true,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g531_slice_residual_models_summary_v1"
+}

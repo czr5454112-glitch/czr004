@@ -1,0 +1,59 @@
+{
+  "aaai_ready": false,
+  "best_residual_model": "mlp_edge_residual_model_if_available",
+  "best_risk_model": "context_risk_logistic",
+  "claims_remain_closed": true,
+  "component_decisions": {
+    "context_source": "pilot_context_source_created",
+    "gold_join": "counterfactual_gold_validation_join_created",
+    "quality": "slice_dataset_quality_analyzed",
+    "residual_labels": "update_ltm_residual_labels_created",
+    "residual_models": "slice_residual_models_evaluated",
+    "risk_labels": "risk_fallback_labels_created",
+    "risk_models": "slice_risk_models_evaluated",
+    "schema": "slice_schemas_created",
+    "slice_conversion": "raw_logs_converted_to_slice_tables",
+    "trace_pilot": "solver_trace_slice_pilot_completed",
+    "verify": "g529_g530_artifacts_verified_continue_g531",
+    "world_model": "world_model_auxiliary_diagnostic_evaluated"
+  },
+  "decision": "g531_slice_dataset_pilot_promising_continue_scaleup",
+  "learned_runtime_policy_validated": false,
+  "next_scale_recommendation": {
+    "aaai_ready": false,
+    "g532_context_target": 500,
+    "g532_expected_edge_event_slices": 500000,
+    "learned_runtime_policy_validated": false,
+    "phase5p5_allowed": false,
+    "phase6_allowed": false,
+    "preferred_route": "hybrid_slice_dataset_plus_counterfactual_gold_validation",
+    "reason": "pilot slice labels substantially exceed 120 context-budget labels and residual/risk diagnostics beat controls",
+    "recommendation": "continue_slice_dataset_route_scale_to_500_1000_contexts",
+    "runtime_claim_allowed": false
+  },
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "positive_decision_requirements": {
+    "at_least_one_residual_or_risk_model_beats_baseline_control": true,
+    "claims_remain_closed": true,
+    "context_slices_ge_100": true,
+    "edge_or_event_slices_substantially_exceed_120": true,
+    "forbidden_feature_count_eq_0": true,
+    "gold_validation_overlap_exists": true,
+    "no_action_priority_search_targets": true,
+    "slice_tables_created": true
+  },
+  "row_counts": {
+    "context_slices": 1200,
+    "edge_slices": 72000,
+    "event_slices": 9600,
+    "failure_slices": 1200,
+    "gold_candidate_budget_rows": 5280,
+    "gold_context_budget_rows": 120,
+    "residual_labels": 72000,
+    "risk_labels": 84000,
+    "update_slices": 1200
+  },
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g531_decision_summary_v1"
+}

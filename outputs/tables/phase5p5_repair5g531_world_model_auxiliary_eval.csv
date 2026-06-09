@@ -1,0 +1,6 @@
+auxiliary_task,model,mae_or_ce,improves_shared_representation,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+future_blocked_event_density,ridge_or_tiny_mlp,0.117,True,False,False,False,False,False
+future_failure_reason_distribution,logistic_or_tiny_mlp,0.284,True,False,False,False,False,False
+future_c_channel_change,ridge_or_tiny_mlp,0.061,True,False,False,False,False,False
+future_f_channel_change,ridge_or_tiny_mlp,0.049,True,False,False,False,False,False
+future_static_recovery_opportunity_proxy,logistic_or_tiny_mlp,0.192,False,False,False,False,False,False

@@ -1,0 +1,22 @@
+{
+  "aaai_ready": false,
+  "decision": "counterfactual_gold_validation_join_created",
+  "gold_candidate_budget_rows": 5280,
+  "gold_candidate_induced_count": 277,
+  "gold_edge_or_event_slice_link_rows": 600,
+  "gold_overlap_context_budget_pairs": 120,
+  "gold_overlap_contexts": 60,
+  "gold_safe_positive_count": 308,
+  "gold_set_validation_only": true,
+  "gold_teacher_actions": {
+    "abstain_due_risk": 9,
+    "old14_g518_fallback": 36,
+    "old14_select": 35,
+    "safe_g522_select": 40
+  },
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g531_counterfactual_gold_join_summary_v1"
+}

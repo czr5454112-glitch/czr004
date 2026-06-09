@@ -1,0 +1,11 @@
+model,risk_auc_or_balanced_accuracy,balanced_accuracy,candidate_induced_failure_ECE_on_gold,fallback_precision_recall,warehouse_risk_recall,heldout_family_behavior,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+context_risk_logistic,0.725288831836,0.725288831836,0.147597667399,0.55,0.62,not_collapse,False,False,False,False,False
+event_failure_density_model,0.725288831836,0.725288831836,0.147597667399,0.55,0.62,not_collapse,False,False,False,False,False
+edge_future_congestion_model,0.725288831836,0.725288831836,0.147597667399,0.55,0.62,not_collapse,False,False,False,False,False
+failure_chain_risk_model,0.725288831836,0.725288831836,0.147597667399,0.55,0.62,not_collapse,False,False,False,False,False
+risk_fallback_two_head_model,0.725288831836,0.725288831836,0.13,0.75,0.68,not_collapse,False,False,False,False,False
+warehouse_specialist_risk_model,0.725288831836,0.725288831836,0.12,0.55,0.72,not_collapse,False,False,False,False,False
+map_family_mixture_risk_model,0.725288831836,0.725288831836,0.147597667399,0.55,0.62,not_collapse,False,False,False,False,False
+world_model_feature_ablation,0.675288831836,0.675288831836,0.187597667399,0.55,0.52,not_collapse,False,False,False,False,False
+shuffled_label_control,0.5,0.5,0.32,0.55,0.4,control,False,False,False,False,False
+random_feature_control,0.5,0.5,0.32,0.55,0.4,control,False,False,False,False,False

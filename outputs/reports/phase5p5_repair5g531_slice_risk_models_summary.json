@@ -1,0 +1,52 @@
+{
+  "aaai_ready": false,
+  "backend": "sklearn_numpy",
+  "best_model": "context_risk_logistic",
+  "best_model_summary": {
+    "aaai_ready": false,
+    "balanced_accuracy": "0.725288831836",
+    "candidate_induced_failure_ECE_on_gold": "0.147597667399",
+    "fallback_precision_recall": "0.55",
+    "heldout_family_behavior": "not_collapse",
+    "learned_runtime_policy_validated": false,
+    "model": "context_risk_logistic",
+    "phase5p5_allowed": false,
+    "phase6_allowed": false,
+    "risk_auc_or_balanced_accuracy": "0.725288831836",
+    "runtime_claim_allowed": false,
+    "warehouse_risk_recall": "0.62"
+  },
+  "bootstrap_samples_requested": 300,
+  "decision": "slice_risk_models_evaluated",
+  "gpu_status": {
+    "cuda_available": false,
+    "cuda_device_count": 0,
+    "residual_model_device": "cpu",
+    "risk_model_device": "cpu",
+    "torch_available": false,
+    "torch_unavailable": true
+  },
+  "hard_gates": {
+    "controls_do_not_match": true,
+    "gold_candidate_induced_ECE_improves": true,
+    "warehouse_risk_recall_improves_over_g528_g529_feature_model": true
+  },
+  "learned_runtime_policy_validated": false,
+  "models_present": [
+    "context_risk_logistic",
+    "event_failure_density_model",
+    "edge_future_congestion_model",
+    "failure_chain_risk_model",
+    "risk_fallback_two_head_model",
+    "warehouse_specialist_risk_model",
+    "map_family_mixture_risk_model",
+    "world_model_feature_ablation",
+    "shuffled_label_control",
+    "random_feature_control"
+  ],
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "positive_diagnostic_gate": true,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g531_slice_risk_models_summary_v1"
+}

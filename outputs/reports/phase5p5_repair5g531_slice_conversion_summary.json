@@ -1,0 +1,25 @@
+{
+  "aaai_ready": false,
+  "context_slices": 1200,
+  "decision": "raw_logs_converted_to_slice_tables",
+  "edge_slices": 72000,
+  "event_slices": 9600,
+  "failure_slices": 1200,
+  "hard_gates": {
+    "closed_claims_present": true,
+    "context_slices_ge_100": true,
+    "edge_slices_ge_50000": true,
+    "event_slices_ge_5000": true,
+    "failure_slices_ge_500": true,
+    "no_action_policy_targets": true,
+    "no_priority_targets": true,
+    "raw_to_slice_join_integrity_passed": true,
+    "slice_tables_created": true
+  },
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g531_slice_conversion_summary_v1",
+  "update_slices": 1200
+}

@@ -1,0 +1,20 @@
+{
+  "raw_log": "outputs/logs/phase5p5_repair5g531_solver_trace_slice_pilot/solver_trace_slice_pilot.jsonl",
+  "raw_log_sha256": "b3ce81d600ca7a7a1fe1b6fb0a1e7f2007cdfe147210bc6b71c4f7ca2f813ba1",
+  "raw_logs_commit_policy": "raw JSONL is ignored/local; manifest and tables are committed",
+  "schema_version": "phase5p5_repair5g531_slice_dataset_manifest_v1",
+  "sha256": {
+    "context_slices": "660955e5716d8ac35f831238dce5a81113c1c08220e089d713d9d7120436e468",
+    "edge_slices": "03ad5e5ca02499153febc02532729a8c88d01828e16757474895a08d417f7552",
+    "event_slices": "04451383f416ec0dfb9bbc7c909b0405a542c2bb3e38f37d3acda5cba0a0cdfe",
+    "failure_slices": "461e4a9c77e2080927fd55ed38c95a999095396155e1bde58d98448a251b952d",
+    "update_slices": "ae64613a9259c089bc8b8c8b2172506bdd50dc4f9a80592de5a62122aba14029"
+  },
+  "tables": {
+    "context_slices": "outputs/tables/phase5p5_repair5g531_context_slices.csv",
+    "edge_slices": "outputs/tables/phase5p5_repair5g531_edge_slices.csv",
+    "event_slices": "outputs/tables/phase5p5_repair5g531_event_slices.csv",
+    "failure_slices": "outputs/tables/phase5p5_repair5g531_failure_slices.csv",
+    "update_slices": "outputs/tables/phase5p5_repair5g531_update_slices.csv"
+  }
+}

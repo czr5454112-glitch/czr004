@@ -1,0 +1,5 @@
+evidence_strength,rows,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+additive_proxy,86400,False,False,False,False,False
+imitation_slice,38400,False,False,False,False,False
+local_checkpoint_replay,2400,False,False,False,False,False
+teacher_proxy,28800,False,False,False,False,False

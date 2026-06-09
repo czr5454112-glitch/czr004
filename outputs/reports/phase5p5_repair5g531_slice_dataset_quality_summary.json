@@ -1,0 +1,78 @@
+{
+  "aaai_ready": false,
+  "answers": {
+    "exact_failure_slices_informative": true,
+    "g532_scale_recommendation": "continue_slice_dataset_route_scale_to_500_1000_contexts",
+    "labels_dense_enough_for_neural_training": true,
+    "model_learns_beyond_map_family_density": true,
+    "more_useful_training_labels_than_120_context_budget_table": true,
+    "proxy_residual_labels_correlate_with_counterfactual_gold": true,
+    "route_decision": "continue_slice_dataset_route_with_counterfactual_gold_validation",
+    "two_4090s_useful_next_scale": false,
+    "underrepresented_map_families": [],
+    "warehouse_risky_cases_represented_enough_for_pilot": true
+  },
+  "decision": "slice_dataset_quality_analyzed",
+  "gold_validation_correlation": [
+    {
+      "aaai_ready": false,
+      "learned_runtime_policy_validated": false,
+      "metric": "residual_gold_delta_correlation",
+      "phase5p5_allowed": false,
+      "phase6_allowed": false,
+      "runtime_claim_allowed": false,
+      "value": "0.408359102492"
+    },
+    {
+      "aaai_ready": false,
+      "learned_runtime_policy_validated": false,
+      "metric": "risk_gold_ece",
+      "phase5p5_allowed": false,
+      "phase6_allowed": false,
+      "runtime_claim_allowed": false,
+      "value": "0.147597667399"
+    }
+  ],
+  "gpu_status": {
+    "cuda_available": false,
+    "cuda_device_count": 0,
+    "residual_model_device": "cpu",
+    "risk_model_device": "cpu",
+    "torch_available": false,
+    "torch_unavailable": true
+  },
+  "label_source_distribution": {
+    "additive_proxy": 86400,
+    "imitation_slice": 38400,
+    "local_checkpoint_replay": 2400,
+    "teacher_proxy": 28800
+  },
+  "learned_runtime_policy_validated": false,
+  "next_scale_recommendation": {
+    "aaai_ready": false,
+    "g532_context_target": 500,
+    "g532_expected_edge_event_slices": 500000,
+    "learned_runtime_policy_validated": false,
+    "phase5p5_allowed": false,
+    "phase6_allowed": false,
+    "preferred_route": "hybrid_slice_dataset_plus_counterfactual_gold_validation",
+    "reason": "pilot slice labels substantially exceed 120 context-budget labels and residual/risk diagnostics beat controls",
+    "recommendation": "continue_slice_dataset_route_scale_to_500_1000_contexts",
+    "runtime_claim_allowed": false
+  },
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "row_counts": {
+    "context_slices": 1200,
+    "edge_slices": 72000,
+    "event_slices": 9600,
+    "failure_slices": 1200,
+    "gold_candidate_budget_rows": 5280,
+    "gold_context_budget_rows": 120,
+    "residual_labels": 72000,
+    "risk_labels": 84000,
+    "update_slices": 1200
+  },
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g531_slice_dataset_quality_summary_v1"
+}

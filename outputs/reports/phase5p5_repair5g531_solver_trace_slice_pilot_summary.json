@@ -1,0 +1,34 @@
+{
+  "aaai_ready": false,
+  "configs": [
+    "static_flow_shield",
+    "additive_ltm",
+    "old14_representative",
+    "g522_teacher_representative_or_top_region",
+    "g523_conservative_teacher_proxy"
+  ],
+  "context_budget_pairs": 240,
+  "decision": "solver_trace_slice_pilot_completed",
+  "hard_gates": {
+    "exact_failure_audit_present": true,
+    "external_lacam2_clean": true,
+    "ids_166_205_untouched": true,
+    "raw_log_sha256_verified": true,
+    "solver_tasks_completed_gt_0": true,
+    "solver_tasks_le_1200": true,
+    "traffic_cf_snapshots_present": true
+  },
+  "learned_runtime_policy_validated": false,
+  "max_workers": 1,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "raw_log": "outputs/logs/phase5p5_repair5g531_solver_trace_slice_pilot/solver_trace_slice_pilot.jsonl",
+  "raw_log_bytes": 2516939,
+  "raw_log_line_count": 1200,
+  "raw_log_sha256": "b3ce81d600ca7a7a1fe1b6fb0a1e7f2007cdfe147210bc6b71c4f7ca2f813ba1",
+  "raw_logs_commit_policy": "raw log is local/ignored; commit manifest and tiny sample only",
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g531_solver_trace_slice_pilot_manifest_v1",
+  "solver_tasks_completed": 1200,
+  "trace_events_declared": 48291
+}

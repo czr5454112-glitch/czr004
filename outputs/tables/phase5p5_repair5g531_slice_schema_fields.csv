@@ -1,0 +1,73 @@
+schema_name,field_order,field,type,description,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+context_slice,0,schema_version,string,Schema version.,False,False,False,False,False
+context_slice,1,slice_id,string,Unique checkpoint slice id.,False,False,False,False,False
+context_slice,2,run_id,string,Pilot run id.,False,False,False,False,False
+context_slice,3,map,string,Map id/name.,False,False,False,False,False
+context_slice,4,map_family,string,maze/random/warehouse/etc.,False,False,False,False,False
+context_slice,5,map_topology_hash,string,Stable topology hash.,False,False,False,False,False
+context_slice,6,agents,integer,Agent count.,False,False,False,False,False
+context_slice,7,seed,integer,Scenario seed/id outside reserved range.,False,False,False,False,False
+context_slice,8,budget_ms,integer,Budget in milliseconds.,False,False,False,False,False
+context_slice,9,iteration,integer,Solver/update iteration checkpoint.,False,False,False,False,False
+context_slice,10,solver_config,string,Trace-producing solver/update config.,False,False,False,False,False
+context_slice,11,candidate_or_method,string,Config/candidate name.,False,False,False,False,False
+context_slice,12,traffic_before_hash,string,C/F traffic snapshot before hash.,False,False,False,False,False
+context_slice,13,traffic_after_hash,string,C/F traffic snapshot after hash.,False,False,False,False,False
+context_slice,14,trace_event_count,integer,Trace event count.,False,False,False,False,False
+context_slice,15,pibt_failure_audit_count,integer,Audit item count.,False,False,False,False,False
+context_slice,16,raw_log_pointer,string,Raw JSONL pointer.,False,False,False,False,False
+edge_slice,0,slice_id,mixed,Required edge snapshot field.,False,False,False,False,False
+edge_slice,1,edge_id,mixed,Required edge snapshot field.,False,False,False,False,False
+edge_slice,2,from_id,mixed,Required edge snapshot field.,False,False,False,False,False
+edge_slice,3,to_id,mixed,Required edge snapshot field.,False,False,False,False,False
+edge_slice,4,degree_from,mixed,Required edge snapshot field.,False,False,False,False,False
+edge_slice,5,degree_to,mixed,Required edge snapshot field.,False,False,False,False,False
+edge_slice,6,edge_topology_class,mixed,Required edge snapshot field.,False,False,False,False,False
+edge_slice,7,is_corridor_edge,mixed,Required edge snapshot field.,False,False,False,False,False
+edge_slice,8,is_junction_edge,mixed,Required edge snapshot field.,False,False,False,False,False
+edge_slice,9,c_before,mixed,Required edge snapshot field.,False,False,False,False,False
+edge_slice,10,f_before,mixed,Required edge snapshot field.,False,False,False,False,False
+edge_slice,11,c_after_additive_proxy,mixed,Required edge snapshot field.,False,False,False,False,False
+edge_slice,12,f_after_additive_proxy,mixed,Required edge snapshot field.,False,False,False,False,False
+edge_slice,13,c_after_observed,mixed,Required edge snapshot field.,False,False,False,False,False
+edge_slice,14,f_after_observed,mixed,Required edge snapshot field.,False,False,False,False,False
+edge_slice,15,target_c_residual_vs_additive,mixed,Required edge snapshot field.,False,False,False,False,False
+edge_slice,16,target_f_residual_vs_additive,mixed,Required edge snapshot field.,False,False,False,False,False
+event_slice,0,slice_id,mixed,Required trace-event field.,False,False,False,False,False
+event_slice,1,agent_id,mixed,Required trace-event field.,False,False,False,False,False
+event_slice,2,event_kind,mixed,Required trace-event field.,False,False,False,False,False
+event_slice,3,from_id,mixed,Required trace-event field.,False,False,False,False,False
+event_slice,4,to_id,mixed,Required trace-event field.,False,False,False,False,False
+event_slice,5,at_goal,mixed,Required trace-event field.,False,False,False,False,False
+event_slice,6,goal_progress,mixed,Required trace-event field.,False,False,False,False,False
+event_slice,7,wait_nonprogress,mixed,Required trace-event field.,False,False,False,False,False
+event_slice,8,blocked_reason_category,mixed,Required trace-event field.,False,False,False,False,False
+event_slice,9,competing_neighbor_count,mixed,Required trace-event field.,False,False,False,False,False
+event_slice,10,committed_rank,mixed,Required trace-event field.,False,False,False,False,False
+event_slice,11,blocked_rank,mixed,Required trace-event field.,False,False,False,False,False
+event_slice,12,wait_rank,mixed,Required trace-event field.,False,False,False,False,False
+event_slice,13,goal_progress_rank,mixed,Required trace-event field.,False,False,False,False,False
+event_slice,14,rank_margins,mixed,Required trace-event field.,False,False,False,False,False
+failure_slice,0,slice_id,mixed,Required failure-audit field.,False,False,False,False,False
+failure_slice,1,agent_id,mixed,Required failure-audit field.,False,False,False,False,False
+failure_slice,2,from_id,mixed,Required failure-audit field.,False,False,False,False,False
+failure_slice,3,candidate_count,mixed,Required failure-audit field.,False,False,False,False,False
+failure_slice,4,failed_reason_histogram,mixed,Required failure-audit field.,False,False,False,False,False
+failure_slice,5,failed_rank_histogram,mixed,Required failure-audit field.,False,False,False,False,False
+failure_slice,6,reason_entropy,mixed,Required failure-audit field.,False,False,False,False,False
+failure_slice,7,rank_entropy,mixed,Required failure-audit field.,False,False,False,False,False
+failure_slice,8,dependency_chain_proxy,mixed,Required failure-audit field.,False,False,False,False,False
+failure_slice,9,first_failed_reason,mixed,Required failure-audit field.,False,False,False,False,False
+failure_slice,10,last_failed_reason,mixed,Required failure-audit field.,False,False,False,False,False
+failure_slice,11,exact_priority_block_subreason,mixed,Required failure-audit field.,False,False,False,False,False
+update_label,0,target_update_region,mixed,Required update/residual teacher field.,False,False,False,False,False
+update_label,1,target_update_param_vector,mixed,Required update/residual teacher field.,False,False,False,False,False
+update_label,2,target_edge_congestion_delta,mixed,Required update/residual teacher field.,False,False,False,False,False
+update_label,3,target_edge_flow_delta,mixed,Required update/residual teacher field.,False,False,False,False,False
+update_label,4,target_dual_channel_update,mixed,Required update/residual teacher field.,False,False,False,False,False
+update_label,5,target_residual_vs_additive_ltm,mixed,Required update/residual teacher field.,False,False,False,False,False
+update_label,6,target_should_fallback,mixed,Required update/residual teacher field.,False,False,False,False,False
+update_label,7,target_risk_candidate_induced_failure,mixed,Required update/residual teacher field.,False,False,False,False,False
+update_label,8,target_static_recovery_opportunity,mixed,Required update/residual teacher field.,False,False,False,False,False
+update_label,9,label_source,mixed,Required update/residual teacher field.,False,False,False,False,False
+update_label,10,evidence_strength,mixed,Required update/residual teacher field.,False,False,False,False,False

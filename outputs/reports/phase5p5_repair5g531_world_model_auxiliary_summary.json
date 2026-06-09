@@ -1,0 +1,27 @@
+{
+  "aaai_ready": false,
+  "auxiliary_representation_improves_residual_or_risk_models": true,
+  "auxiliary_tasks": [
+    "future_blocked_event_density",
+    "future_failure_reason_distribution",
+    "future_c_channel_change",
+    "future_f_channel_change",
+    "future_static_recovery_opportunity_proxy"
+  ],
+  "backend": "sklearn_numpy",
+  "bootstrap_samples_requested": 300,
+  "decision": "world_model_auxiliary_diagnostic_evaluated",
+  "gpu_status": {
+    "cuda_available": false,
+    "cuda_device_count": 0,
+    "residual_model_device": "cpu",
+    "risk_model_device": "cpu",
+    "torch_available": false,
+    "torch_unavailable": true
+  },
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g531_world_model_auxiliary_summary_v1"
+}

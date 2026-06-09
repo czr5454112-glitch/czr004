@@ -1,0 +1,389 @@
+{
+  "closed_claims": {
+    "aaai_ready": false,
+    "learned_runtime_policy_validated": false,
+    "phase5p5_allowed": false,
+    "phase6_allowed": false,
+    "runtime_claim_allowed": false
+  },
+  "evidence_strength_classes": [
+    "imitation_slice",
+    "additive_proxy",
+    "teacher_proxy",
+    "local_checkpoint_replay",
+    "solver_level_counterfactual_gold"
+  ],
+  "schema_version": "phase5p5_repair5g531_slice_schema_bundle_v1",
+  "schemas": {
+    "context_slice": [
+      {
+        "description": "Schema version.",
+        "field": "schema_version",
+        "type": "string"
+      },
+      {
+        "description": "Unique checkpoint slice id.",
+        "field": "slice_id",
+        "type": "string"
+      },
+      {
+        "description": "Pilot run id.",
+        "field": "run_id",
+        "type": "string"
+      },
+      {
+        "description": "Map id/name.",
+        "field": "map",
+        "type": "string"
+      },
+      {
+        "description": "maze/random/warehouse/etc.",
+        "field": "map_family",
+        "type": "string"
+      },
+      {
+        "description": "Stable topology hash.",
+        "field": "map_topology_hash",
+        "type": "string"
+      },
+      {
+        "description": "Agent count.",
+        "field": "agents",
+        "type": "integer"
+      },
+      {
+        "description": "Scenario seed/id outside reserved range.",
+        "field": "seed",
+        "type": "integer"
+      },
+      {
+        "description": "Budget in milliseconds.",
+        "field": "budget_ms",
+        "type": "integer"
+      },
+      {
+        "description": "Solver/update iteration checkpoint.",
+        "field": "iteration",
+        "type": "integer"
+      },
+      {
+        "description": "Trace-producing solver/update config.",
+        "field": "solver_config",
+        "type": "string"
+      },
+      {
+        "description": "Config/candidate name.",
+        "field": "candidate_or_method",
+        "type": "string"
+      },
+      {
+        "description": "C/F traffic snapshot before hash.",
+        "field": "traffic_before_hash",
+        "type": "string"
+      },
+      {
+        "description": "C/F traffic snapshot after hash.",
+        "field": "traffic_after_hash",
+        "type": "string"
+      },
+      {
+        "description": "Trace event count.",
+        "field": "trace_event_count",
+        "type": "integer"
+      },
+      {
+        "description": "Audit item count.",
+        "field": "pibt_failure_audit_count",
+        "type": "integer"
+      },
+      {
+        "description": "Raw JSONL pointer.",
+        "field": "raw_log_pointer",
+        "type": "string"
+      }
+    ],
+    "edge_slice": [
+      {
+        "description": "Required edge snapshot field.",
+        "field": "slice_id",
+        "type": "mixed"
+      },
+      {
+        "description": "Required edge snapshot field.",
+        "field": "edge_id",
+        "type": "mixed"
+      },
+      {
+        "description": "Required edge snapshot field.",
+        "field": "from_id",
+        "type": "mixed"
+      },
+      {
+        "description": "Required edge snapshot field.",
+        "field": "to_id",
+        "type": "mixed"
+      },
+      {
+        "description": "Required edge snapshot field.",
+        "field": "degree_from",
+        "type": "mixed"
+      },
+      {
+        "description": "Required edge snapshot field.",
+        "field": "degree_to",
+        "type": "mixed"
+      },
+      {
+        "description": "Required edge snapshot field.",
+        "field": "edge_topology_class",
+        "type": "mixed"
+      },
+      {
+        "description": "Required edge snapshot field.",
+        "field": "is_corridor_edge",
+        "type": "mixed"
+      },
+      {
+        "description": "Required edge snapshot field.",
+        "field": "is_junction_edge",
+        "type": "mixed"
+      },
+      {
+        "description": "Required edge snapshot field.",
+        "field": "c_before",
+        "type": "mixed"
+      },
+      {
+        "description": "Required edge snapshot field.",
+        "field": "f_before",
+        "type": "mixed"
+      },
+      {
+        "description": "Required edge snapshot field.",
+        "field": "c_after_additive_proxy",
+        "type": "mixed"
+      },
+      {
+        "description": "Required edge snapshot field.",
+        "field": "f_after_additive_proxy",
+        "type": "mixed"
+      },
+      {
+        "description": "Required edge snapshot field.",
+        "field": "c_after_observed",
+        "type": "mixed"
+      },
+      {
+        "description": "Required edge snapshot field.",
+        "field": "f_after_observed",
+        "type": "mixed"
+      },
+      {
+        "description": "Required edge snapshot field.",
+        "field": "target_c_residual_vs_additive",
+        "type": "mixed"
+      },
+      {
+        "description": "Required edge snapshot field.",
+        "field": "target_f_residual_vs_additive",
+        "type": "mixed"
+      }
+    ],
+    "event_slice": [
+      {
+        "description": "Required trace-event field.",
+        "field": "slice_id",
+        "type": "mixed"
+      },
+      {
+        "description": "Required trace-event field.",
+        "field": "agent_id",
+        "type": "mixed"
+      },
+      {
+        "description": "Required trace-event field.",
+        "field": "event_kind",
+        "type": "mixed"
+      },
+      {
+        "description": "Required trace-event field.",
+        "field": "from_id",
+        "type": "mixed"
+      },
+      {
+        "description": "Required trace-event field.",
+        "field": "to_id",
+        "type": "mixed"
+      },
+      {
+        "description": "Required trace-event field.",
+        "field": "at_goal",
+        "type": "mixed"
+      },
+      {
+        "description": "Required trace-event field.",
+        "field": "goal_progress",
+        "type": "mixed"
+      },
+      {
+        "description": "Required trace-event field.",
+        "field": "wait_nonprogress",
+        "type": "mixed"
+      },
+      {
+        "description": "Required trace-event field.",
+        "field": "blocked_reason_category",
+        "type": "mixed"
+      },
+      {
+        "description": "Required trace-event field.",
+        "field": "competing_neighbor_count",
+        "type": "mixed"
+      },
+      {
+        "description": "Required trace-event field.",
+        "field": "committed_rank",
+        "type": "mixed"
+      },
+      {
+        "description": "Required trace-event field.",
+        "field": "blocked_rank",
+        "type": "mixed"
+      },
+      {
+        "description": "Required trace-event field.",
+        "field": "wait_rank",
+        "type": "mixed"
+      },
+      {
+        "description": "Required trace-event field.",
+        "field": "goal_progress_rank",
+        "type": "mixed"
+      },
+      {
+        "description": "Required trace-event field.",
+        "field": "rank_margins",
+        "type": "mixed"
+      }
+    ],
+    "failure_slice": [
+      {
+        "description": "Required failure-audit field.",
+        "field": "slice_id",
+        "type": "mixed"
+      },
+      {
+        "description": "Required failure-audit field.",
+        "field": "agent_id",
+        "type": "mixed"
+      },
+      {
+        "description": "Required failure-audit field.",
+        "field": "from_id",
+        "type": "mixed"
+      },
+      {
+        "description": "Required failure-audit field.",
+        "field": "candidate_count",
+        "type": "mixed"
+      },
+      {
+        "description": "Required failure-audit field.",
+        "field": "failed_reason_histogram",
+        "type": "mixed"
+      },
+      {
+        "description": "Required failure-audit field.",
+        "field": "failed_rank_histogram",
+        "type": "mixed"
+      },
+      {
+        "description": "Required failure-audit field.",
+        "field": "reason_entropy",
+        "type": "mixed"
+      },
+      {
+        "description": "Required failure-audit field.",
+        "field": "rank_entropy",
+        "type": "mixed"
+      },
+      {
+        "description": "Required failure-audit field.",
+        "field": "dependency_chain_proxy",
+        "type": "mixed"
+      },
+      {
+        "description": "Required failure-audit field.",
+        "field": "first_failed_reason",
+        "type": "mixed"
+      },
+      {
+        "description": "Required failure-audit field.",
+        "field": "last_failed_reason",
+        "type": "mixed"
+      },
+      {
+        "description": "Required failure-audit field.",
+        "field": "exact_priority_block_subreason",
+        "type": "mixed"
+      }
+    ],
+    "update_label": [
+      {
+        "description": "Required update/residual teacher field.",
+        "field": "target_update_region",
+        "type": "mixed"
+      },
+      {
+        "description": "Required update/residual teacher field.",
+        "field": "target_update_param_vector",
+        "type": "mixed"
+      },
+      {
+        "description": "Required update/residual teacher field.",
+        "field": "target_edge_congestion_delta",
+        "type": "mixed"
+      },
+      {
+        "description": "Required update/residual teacher field.",
+        "field": "target_edge_flow_delta",
+        "type": "mixed"
+      },
+      {
+        "description": "Required update/residual teacher field.",
+        "field": "target_dual_channel_update",
+        "type": "mixed"
+      },
+      {
+        "description": "Required update/residual teacher field.",
+        "field": "target_residual_vs_additive_ltm",
+        "type": "mixed"
+      },
+      {
+        "description": "Required update/residual teacher field.",
+        "field": "target_should_fallback",
+        "type": "mixed"
+      },
+      {
+        "description": "Required update/residual teacher field.",
+        "field": "target_risk_candidate_induced_failure",
+        "type": "mixed"
+      },
+      {
+        "description": "Required update/residual teacher field.",
+        "field": "target_static_recovery_opportunity",
+        "type": "mixed"
+      },
+      {
+        "description": "Required update/residual teacher field.",
+        "field": "label_source",
+        "type": "mixed"
+      },
+      {
+        "description": "Required update/residual teacher field.",
+        "field": "evidence_strength",
+        "type": "mixed"
+      }
+    ]
+  }
+}

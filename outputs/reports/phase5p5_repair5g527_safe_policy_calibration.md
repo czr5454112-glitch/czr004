@@ -1,0 +1,21 @@
+# Repair5G.5.27 Safe Policy Calibration
+
+- schema_version: `phase5p5_repair5g527_safe_policy_calibration_summary_v1`
+- decision: `safe_policy_calibration_evaluated`
+- policies_present: `['calibrated_bandit_distilled_policy', 'isotonic_risk_calibrated_selector', 'platt_risk_calibrated_selector', 'conformal_risk_abstention_selector', 'quantile_utility_lower_bound_selector', 'risk_first_then_utility_selector', 'utility_first_then_risk_selector', 'budget_sensitive_failure_guard', 'candidate_induced_failure_guard', 'static_recovery_priority_selector', 'fallback_heavy_safe_selector', 'fallback_light_aggressive_selector', 'old14_g518_fallback_selector', 'static_fallback_selector', 'bandit_teacher_oracle_diagnostic_not_for_promotion']`
+- candidate_budget_rows: `5280`
+- context_budget_decision_rows: `1800`
+- eval_rows: `195`
+- bootstrap_rows: `4500`
+- calibration_rows: `75`
+- bootstrap_samples_requested: `300`
+- best_policy: `old14_g518_fallback_selector`
+- best_policy_summary: `{'row_type': 'model_aggregate', 'policy': 'old14_g518_fallback_selector', 'model': 'old14_g518_fallback_selector', 'eval_scope': 'seed_oof', 'fold_id': 'all', 'context_budget_pairs': 120, 'selected_policy_utility': 0.0, 'safe_policy_sim_utility': 0.0, 'candidate_induced_no_solution_count': 0, 'budget_sensitive_failure_count': 6, 'safe_positive_selected_count': 0, 'static_recovery_capture_count': 7, 'fallback_rate': 1.0, 'top1_safe_oracle_capture_rate': 0.383333333333, 'top3_safe_oracle_capture_rate': 0.383333333333, 'top5_safe_oracle_capture_rate': 0.383333333333, 'region_top1_capture_rate': 0.383333333333, 'region_top2_capture_rate': 0.383333333333, 'action_class_accuracy': 0.35, 'selected_candidate_match_rate': 0.341666666667, 'region_match_rate': 0.341666666667, 'avoidable_risk_ece': 0.5776118382, 'phase5p5_allowed': False, 'phase6_allowed': False, 'runtime_claim_allowed': False, 'learned_runtime_policy_validated': False, 'aaai_ready': False}`
+- best_calibration_metrics: `{'candidate_induced_failure_ECE': 0.5776118382, 'budget_sensitive_failure_ECE': 0.46208947056, 'safe_positive_ECE': 0.182474870108, 'utility_calibration_error': 0.002316781426, 'abstention_calibration_error': 0.4223881618}`
+- hard_gates: `{'candidate_induced_no_solution_count_le_teacher': True, 'selected_policy_utility_lt_g525_best': True, 'candidate_induced_failure_ECE_le_g526_bandit': False, 'fallback_rate_le_0p50_unless_utility_improves': True, 'controls_do_not_match': True}`
+- positive_safe_policy_calibration: `False`
+- phase5p5_allowed: `False`
+- phase6_allowed: `False`
+- runtime_claim_allowed: `False`
+- learned_runtime_policy_validated: `False`
+- aaai_ready: `False`

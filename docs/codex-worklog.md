@@ -1,5 +1,31 @@
 # Codex Worklog
 
+## 2026-06-09 - Repair5G.5.27 conservative bandit teacher distillation
+
+- Request:
+  Finish `czr004_g527_after_g526_bandit_teacher_distillation_prompt.md` completely, using the project context docs as needed, then push to GitHub.
+- Planned files:
+  - `czr004_repair5g527_bandit_teacher_distillation_plan.md`
+  - `scripts/repair5g527_common.py`
+  - `scripts/verify_repair5g527_g526_artifacts.py`
+  - `scripts/analyze_repair5g527_decision_arbitration_audit.py`
+  - `scripts/audit_repair5g527_bandit_teacher_leakage.py`
+  - `scripts/create_repair5g527_conservative_policy_teacher.py`
+  - `scripts/create_repair5g527_policy_distillation_features.py`
+  - `scripts/train_eval_repair5g527_bandit_teacher_distillation.py`
+  - `scripts/train_eval_repair5g527_safe_policy_calibration.py`
+  - `scripts/verify_repair5g527_exact_failure_audit_logging_static.py`
+  - `scripts/run_repair5g527_exact_failure_audit_probe_if_needed.py`
+  - `scripts/train_eval_repair5g527_offline_rl_cql_diagnostic.py`
+  - `scripts/train_eval_repair5g527_goal_aware_residual_teacher_refinement.py`
+  - `scripts/analyze_repair5g527_teacher_distillation_failure_or_success.py`
+  - `scripts/write_repair5g527_decision.py`
+  - G5.27 reports/tables/logs under `outputs/`
+- Constraints:
+  Treat the G5.26 conservative contextual bandit as an offline teacher only, keep counterfactual/oracle/risk labels out of model-facing `feature_*` columns, avoid IDs `166..205`, do not edit `external/lacam2/lacam2/**`, and keep runtime/Phase5.5/Phase6/learned-runtime/AAAI claims closed.
+- Pre-probe note:
+  This entry is written before any optional G5.27 exact failure-audit probe. G5.27 will first verify the G5.26 artifacts, then audit teacher leakage and run runtime-safe distillation/calibration diagnostics before deciding whether a bounded audit probe is needed.
+
 ## 2026-06-09 - Repair5G.5.26 full-coverage top-k policy
 
 - Request:

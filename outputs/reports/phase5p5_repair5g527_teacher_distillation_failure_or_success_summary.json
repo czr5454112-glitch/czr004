@@ -1,0 +1,33 @@
+{
+  "aaai_ready": false,
+  "answers": {
+    "calibration_improves": false,
+    "can_be_distilled_into_runtime_safe_features": false,
+    "conservative_bandit_teacher_valid_non_leaky": true,
+    "distilled_policy_beats_g525_by_lookup": false,
+    "exact_failure_audit_logging_still_needed": true,
+    "generalizes_to_heldout_map_families": false,
+    "keeps_candidate_induced_no_solution_at_teacher": false,
+    "next_step": "exact_failure_audit_or_more_trace_logging",
+    "remains_safe_on_warehouse": false
+  },
+  "counterfactual_policy_exists_runtime_safe_features_still_insufficient": true,
+  "decision": "teacher_distillation_synthesis_completed",
+  "decision_hint": "g527_bandit_teacher_valid_but_distillation_blocked_need_exact_failure_audit",
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "positive_decision_gates": {
+    "bandit_teacher_valid_non_leaky_as_teacher": true,
+    "candidate_induced_no_solution_count_le_teacher": false,
+    "claims_remain_closed": true,
+    "controls_do_not_match": false,
+    "distilled_policy_uses_runtime_safe_features_only": true,
+    "forbidden_feature_count_eq_0": true,
+    "heldout_family_no_collapse": false,
+    "safe_positive_selected_count_ge_25": false,
+    "selected_policy_utility_lt_g525_best": false
+  },
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g527_teacher_distillation_failure_or_success_summary_v1"
+}

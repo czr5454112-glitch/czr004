@@ -1,0 +1,18 @@
+{
+  "aaai_ready": false,
+  "allowed_logging_additions_audit_only": [
+    "exact_priority_block_subreason",
+    "all_failed_candidate_reasons_when_pibt_returns_false",
+    "failed_candidate_rank_histogram_when_pibt_returns_false"
+  ],
+  "decision": "exact_failure_audit_logging_missing_continue_without_solver_changes",
+  "exact_failure_audit_logging_available": false,
+  "external_lacam2_modified": false,
+  "field_rows": 3,
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g527_exact_failure_audit_logging_static_summary_v1",
+  "solver_semantics_changed": false
+}

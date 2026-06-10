@@ -1,0 +1,15 @@
+{
+  "aaai_ready": false,
+  "additive_vs_goal_aware_paired_rows": 1836,
+  "at_least_one_goal_aware_candidate_nonzero_paired_advantage": true,
+  "best_goal_aware_candidate": "repair5g59_high_beta_cap_safe",
+  "best_mean_delta_ratio": "-0.0104519130793",
+  "decision": "closed_loop_rule_evidence_analyzed",
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "rule_leaderboard_rows": 10,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g533_closed_loop_rule_evidence_summary_v1",
+  "static_flow_shield_vs_goal_aware_paired_rows": 1648
+}

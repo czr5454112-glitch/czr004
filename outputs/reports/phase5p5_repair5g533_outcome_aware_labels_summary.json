@@ -1,0 +1,21 @@
+{
+  "aaai_ready": false,
+  "context_candidate_utility_rows": 2046,
+  "decision": "outcome_aware_labels_created",
+  "high_margin_safe_opportunity_count": 183,
+  "learned_runtime_policy_validated": false,
+  "not_enough_solver_facing_opportunities": false,
+  "pairwise_candidate_dominance_rows": 10183,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "residual_target_rows": 45240,
+  "runtime_claim_allowed": false,
+  "safety_fallback_target_rows": 198,
+  "schema_version": "phase5p5_repair5g533_outcome_aware_labels_summary_v1",
+  "utility_terms_available": {
+    "expanded_nodes": true,
+    "success": true,
+    "sum_of_loss_ratio": true,
+    "time_to_first_solution": false
+  }
+}

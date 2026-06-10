@@ -1,0 +1,27 @@
+{
+  "aaai_ready": false,
+  "decision": "g532_models_partly_inflated_continue_with_stricter_g533",
+  "forbidden_or_leaky_feature_count": 3,
+  "g532_reported_zero_count_anomaly": {
+    "cause": "summary looked for gold_* aliases while committed columns are target_gold_*",
+    "g532_reported_gold_candidate_induced_count": 0,
+    "g532_reported_gold_safe_positive_count": 0,
+    "g532_reported_gold_teacher_actions": 0
+  },
+  "gates": {
+    "external_lacam2_clean": true,
+    "g533_corrected_join_outputs_written": true,
+    "gold_alias_anomaly_identified": true,
+    "leakage_audit_completed": true,
+    "table_materialization_audited": true
+  },
+  "gold_candidate_budget_rows": 5280,
+  "gold_candidate_induced_count_corrected": 277,
+  "gold_safe_positive_count_corrected": 308,
+  "gold_teacher_actions_corrected": 120,
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g533_g532_leakage_gold_audit_summary_v1"
+}

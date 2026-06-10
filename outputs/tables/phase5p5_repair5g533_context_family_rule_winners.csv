@@ -1,0 +1,4 @@
+map_family,winning_candidate,mean_utility,rows,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+maze,repair5g59_flow_decay,0.00690072065718,71,False,False,False,False,False
+random,repair5g59_additive_fallback,0,89,False,False,False,False,False
+warehouse,repair5g59_wait_conservative,0.0376923076923,26,False,False,False,False,False

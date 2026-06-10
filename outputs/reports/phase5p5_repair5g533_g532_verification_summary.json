@@ -1,0 +1,21 @@
+{
+  "aaai_ready": false,
+  "decision": "g532_verified_continue_g533",
+  "g532_component_decision": "g532_real_solver_slice_dataset_promising_continue_scaleup",
+  "gates": {
+    "all_expected_g532_summary_files_present": true,
+    "artifact_replay_count_zero": true,
+    "claims_remain_closed": true,
+    "context_slices_ge_300": true,
+    "dual_channel_code_paths_present": true,
+    "edge_event_slices_present": true,
+    "external_lacam2_clean": true,
+    "g532_decision_promising": true,
+    "real_solver_runner_used": true
+  },
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g533_g532_verification_summary_v1"
+}

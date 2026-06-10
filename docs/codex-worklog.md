@@ -4247,3 +4247,58 @@
 - Decision:
   - Final G5.32 decision: `g532_real_solver_slice_dataset_promising_continue_scaleup`.
   - `phase5p5_allowed=false`, `phase6_allowed=false`, `runtime_claim_allowed=false`, `learned_runtime_policy_validated=false`, and `aaai_ready=false` remain closed.
+## 2026-06-10 - Repair5G.5.33 goal-aware dual-channel LTM exploration
+
+- Request:
+  Continue after G5.32 commit ee4bd6e. G5.32 proved real solver trace slice collection, but not learned UpdateLTM benefit. Explore goal-aware dual-channel LTM update rules and outcome-aware labels using real solver probes, strict leakage audits, and bounded local-PC-scale experiments.
+- Planned files:
+  - `czr004_g533_goal_aware_dual_channel_ltm_deep_exploration_plan.md`
+  - `scripts/repair5g533_common.py`
+  - `scripts/verify_repair5g533_g532_artifacts.py`
+  - `scripts/audit_repair5g533_g532_leakage_and_gold_join.py`
+  - `scripts/create_repair5g533_goal_aware_features.py`
+  - `scripts/create_repair5g533_candidate_rule_family.py`
+  - `scripts/run_repair5g533_goal_aware_real_probe.py`
+  - `scripts/create_repair5g533_outcome_aware_labels.py`
+  - `scripts/train_eval_repair5g533_goal_aware_models.py`
+  - `scripts/analyze_repair5g533_closed_loop_rule_evidence.py`
+  - `scripts/write_repair5g533_decision.py`
+  - `outputs/reports/phase5p5_repair5g533_*`
+  - `outputs/tables/phase5p5_repair5g533_*`
+  - `outputs/logs/phase5p5_repair5g533_*` local/ignored raw logs
+- Constraints:
+  No external/lacam2/lacam2 edits, no action/priority/search/restart/candidate deletion/h-value target, no reserved IDs 166..205, no Phase5.5/Phase6/runtime/AAAI claims.
+- Pre-experiment statement:
+  This round must be a real exploration round, not a short prompt-only handoff. It should first red-team G5.32, then run goal-aware dual-channel candidate probes and strict leakage-safe model diagnostics.
+- Commands completed:
+  - `python -m py_compile scripts\repair5g533_common.py ... scripts\write_repair5g533_decision.py`
+  - `python scripts\verify_repair5g533_g532_artifacts.py`
+  - `python scripts\audit_repair5g533_g532_leakage_and_gold_join.py`
+  - `python scripts\create_repair5g533_candidate_rule_family.py`
+  - `python scripts\create_repair5g533_goal_aware_features.py`
+  - `powershell -ExecutionPolicy Bypass -File scripts\build_phase1a_batch.ps1`
+  - `python scripts\run_repair5g533_goal_aware_real_probe.py --overwrite --max-workers 1`
+  - `python scripts\run_repair5g533_goal_aware_real_probe.py --max-workers 1`
+  - `python scripts\create_repair5g533_outcome_aware_labels.py`
+  - `python scripts\train_eval_repair5g533_goal_aware_models.py --bootstrap-samples 300`
+  - `python scripts\analyze_repair5g533_closed_loop_rule_evidence.py`
+  - `python scripts\write_repair5g533_decision.py`
+  - `C:\Users\38908\.conda\envs\czr004\python.exe scripts\train_eval_repair5g533_goal_aware_models.py --bootstrap-samples 300`
+  - `C:\Users\38908\.conda\envs\czr004\python.exe scripts\write_repair5g533_decision.py`
+- Observations:
+  - G5.32 forensic reading verified real solver trace collection, zero artifact-backed replay rows, real trace/event/failure/traffic snapshot materialization, and reusable dual-channel `UpdateParams` / `FlowShield` code paths.
+  - G5.32 leakage/gold audit found the expected alias issue: G5.32 counted `gold_*` fields, while the committed table uses `target_gold_*` fields. G5.33 corrected counts are `308` safe-positive rows, `277` candidate-induced rows, and `120` teacher-selection rows.
+  - Goal-aware feature generation produced `45,240` edge feature rows, `504` context feature rows, and `7,540` event feature rows with feature strength recorded as `bounded_committed_slice_only`.
+  - Candidate family contains `11` bounded existing `repair5g59_*` project-owned aliases; no new adapter or external solver edit was required.
+  - Real solver probe produced `2,046` slim probe rows from `1,617` solver tasks, `50` unique contexts, budgets `500/1000/2000`, LTM iterations `2` plus a small `4`-iteration subset, `10,555,440` trace events, and `7,570` exact failure-audit rows. Raw checkpoint logs remain local under ignored `outputs/logs/phase5p5_repair5g533_goal_aware_real_probe/`.
+  - Outcome-aware labels produced `2,046` context-candidate utility rows, `10,183` pairwise dominance rows, and `183` high-margin safe opportunities.
+  - Best paired static goal-aware candidate was `repair5g59_high_beta_cap_safe`.
+  - Conda `czr004` Python sees `torch 2.5.1+cu124`, CUDA available, and `1` CUDA device.
+  - Final decision: `g533_goal_aware_dual_channel_promising_continue_neural_training`.
+  - Claims remain closed: `phase5p5_allowed=false`, `phase6_allowed=false`, `runtime_claim_allowed=false`, `learned_runtime_policy_validated=false`, and `aaai_ready=false`.
+- Validation:
+  - G5.33 scripts compile under both default Python and `C:\Users\38908\.conda\envs\czr004\python.exe`.
+  - All `outputs/reports/phase5p5_repair5g533_*summary.json` files parse as JSON.
+  - `git diff --check` passed with line-ending warnings only.
+  - `git status --short -- external/lacam2/lacam2` returned clean.
+  - `C:\Users\38908\.conda\envs\czr004\python.exe -m pytest tests\test_repair5g_dual_channel_ltm.py tests\test_repair5g5_runtime_selector_policy.py tests\test_repair5g5_contextual_selector_export.py tests\test_repair5g5_aaai_quality_gates.py tests\test_repair5g52_checkpoint_schema.py` passed: `11 passed`.

@@ -1,0 +1,70 @@
+{
+  "aaai_ready": false,
+  "best_goal_aware_candidate": "repair5g59_high_beta_cap_safe",
+  "best_strict_split": {
+    "aaai_ready": false,
+    "budget_sensitive_failure_recall": "0.5",
+    "calibration_ece": "0.2",
+    "candidate_top1_accuracy": "0.95652173913",
+    "candidate_top3_accuracy": "0.961956521739",
+    "fallback_precision": "0.5",
+    "fallback_recall": "0.5",
+    "harmful_selection_rate": "0.054347826087",
+    "high_margin_opportunity_capture_rate": "0.65",
+    "learned_runtime_policy_validated": false,
+    "mean_selected_vs_additive_utility_delta": "-0.00731813280283",
+    "median_selected_vs_additive_utility_delta": "0",
+    "model_family": "edge_aggregate_goal_aware_selector",
+    "pairwise_auc": "0.98097826087",
+    "phase5p5_allowed": false,
+    "phase6_allowed": false,
+    "runtime_claim_allowed": false,
+    "safe_positive_capture_rate": "0.65",
+    "split_regime": "random_row_split",
+    "test_predictions": 184,
+    "warehouse_high_risk_recall": "0.5"
+  },
+  "component_decisions": {
+    "candidate_family": "bounded_candidate_rule_family_created",
+    "features": "goal_aware_features_created",
+    "labels": "outcome_aware_labels_created",
+    "leakage_gold_audit": "g532_models_partly_inflated_continue_with_stricter_g533",
+    "models": "goal_aware_models_evaluated",
+    "real_probe": "goal_aware_real_probe_completed",
+    "rule_evidence": "closed_loop_rule_evidence_analyzed",
+    "verify": "g532_verified_continue_g533"
+  },
+  "decision": "g533_goal_aware_dual_channel_promising_continue_neural_training",
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "positive_continuation_requirements": {
+    "claims_remain_closed": true,
+    "goal_aware_candidate_nonzero_paired_advantage": true,
+    "gold_join_audited_or_corrected": true,
+    "leakage_audit_completed": true,
+    "model_or_selector_emulation_beats_additive": true,
+    "negative_controls_reported": true,
+    "no_external_lacam2_edits": true,
+    "no_reserved_ids": true,
+    "real_solver_probe_rows_ge_1500": true,
+    "strict_split_results_reported": true,
+    "trace_backend_real_solver_only": true
+  },
+  "row_counts": {
+    "context_candidate_utility_rows": 2046,
+    "high_margin_safe_opportunity_count": 183,
+    "pairwise_candidate_dominance_rows": 10183,
+    "real_solver_probe_rows": 2046
+  },
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g533_decision_summary_v1",
+  "stronger_positive_requirements": {
+    "config_only_control_not_explanatory": true,
+    "harmful_selection_rate_le_0p10": true,
+    "high_margin_capture_rate_ge_0p35": true,
+    "high_margin_safe_opportunity_count_ge_50": true,
+    "mean_selected_vs_additive_delta_lt_0": true,
+    "warehouse_not_worse_than_additive": true
+  }
+}

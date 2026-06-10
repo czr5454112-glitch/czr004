@@ -1,0 +1,51 @@
+{
+  "aaai_ready": false,
+  "decision": "g532_forensic_reading_completed",
+  "g532_limitations": {
+    "configs": [
+      "static_flow_shield",
+      "additive_ltm",
+      "old14_representative"
+    ],
+    "gold_zero_count_anomaly": "G5.32 summary used non-existent gold_* aliases instead of target_gold_* fields",
+    "ltm_iterations": "G5.32 checkpoint export used ltm_max_iterations=1",
+    "residual_label_semantics": "observed traffic before/after deltas, not utility-selected solver-improving updates",
+    "risk_label_semantics": "context-level failure/outcome proxy with direct leakage risk",
+    "torch_cuda_visible": false,
+    "unique_contexts": "84 from G5.32 context source"
+  },
+  "g532_positive": {
+    "artifact_backed_replay_count": 0,
+    "context_slices": 504,
+    "edge_slices": 45240,
+    "event_slices": 7540,
+    "failure_slices": 504,
+    "pibt_failure_audit_rows": 1799,
+    "real_solver_runner_used": true,
+    "trace_events": 2708684
+  },
+  "gates": {
+    "all_expected_g532_summary_files_present": true,
+    "artifact_replay_count_zero": true,
+    "claims_remain_closed": true,
+    "context_slices_ge_300": true,
+    "dual_channel_code_paths_present": true,
+    "edge_event_slices_present": true,
+    "external_lacam2_clean": true,
+    "g532_decision_promising": true,
+    "real_solver_runner_used": true
+  },
+  "learned_runtime_policy_validated": false,
+  "micro_counterfactual_replay_assessment": "G5.32 selected existing real-solver slices for a solver-level micro-counterfactual view; it did not rerun new counterfactual update rules from checkpoints.",
+  "missing_files": [],
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "reusable_code_paths": [
+    "cpp/ltm/ltm.hpp UpdateParams dual channel fields",
+    "cpp/ltm/ltm.cpp DirectedTrafficMap::update_from_trace and FlowShield traversal cost",
+    "cpp/tools/phase1a_batch.cpp repair5g59 bounded UpdateParams aliases",
+    "scripts/repair5g532_common.py checkpoint export and slice conversion helpers"
+  ],
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g533_g532_forensic_reading_summary_v1"
+}

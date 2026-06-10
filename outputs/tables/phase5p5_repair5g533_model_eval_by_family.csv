@@ -1,0 +1,4 @@
+map_family,candidate_top1_accuracy,candidate_top3_accuracy,pairwise_auc,mean_selected_vs_additive_utility_delta,median_selected_vs_additive_utility_delta,safe_positive_capture_rate,high_margin_opportunity_capture_rate,harmful_selection_rate,fallback_precision,fallback_recall,warehouse_high_risk_recall,budget_sensitive_failure_recall,calibration_ece,rows,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+maze,0.879518072289,0.879518072289,0.939759036145,0,0,0,0,0,0.5,0.5,0.5,0.5,0.2,799,False,False,False,False,False
+random,0.820224719101,0.876404494382,0.938202247191,0,0,0,0,0,0.5,0.5,0.5,0.5,0.2,961,False,False,False,False,False
+warehouse,0.961538461538,0.961538461538,0.980769230769,0,0,0,0,0,0.5,0.5,0.5,0.5,0.2,286,False,False,False,False,False

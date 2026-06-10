@@ -1,0 +1,93 @@
+{
+  "aaai_ready": false,
+  "budgets": [
+    500,
+    1000,
+    2000
+  ],
+  "candidate_count": 11,
+  "context_plan": [
+    [
+      "core_easy",
+      [
+        "maze-32-32-4",
+        "random-32-32-20"
+      ],
+      [
+        50,
+        100
+      ],
+      [
+        146,
+        147,
+        148,
+        149,
+        150,
+        151,
+        152,
+        153,
+        154,
+        155
+      ],
+      [
+        500,
+        1000,
+        2000
+      ],
+      2
+    ],
+    [
+      "warehouse50",
+      [
+        "warehouse-10-20-10-2-1"
+      ],
+      [
+        50
+      ],
+      [
+        146,
+        147,
+        148,
+        149,
+        150,
+        151,
+        152,
+        153
+      ],
+      [
+        500,
+        1000,
+        2000
+      ],
+      2
+    ],
+    [
+      "warehouse100_smoke",
+      [
+        "warehouse-10-20-10-2-1"
+      ],
+      [
+        100
+      ],
+      [
+        146,
+        147
+      ],
+      [
+        500
+      ],
+      2
+    ]
+  ],
+  "expansion_seeds_used": [],
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "raw_checkpoint_bytes": 4903491291,
+  "raw_checkpoint_line_count": 2046,
+  "raw_checkpoint_path": "outputs/logs/phase5p5_repair5g533_goal_aware_real_probe/phase5p5_repair5g533_goal_aware_checkpoints.jsonl",
+  "raw_checkpoint_sha256": "0dc6096f760f8e2843f43c5142f0708c77a08d588661201e6e816b9d82ef8689",
+  "raw_logs_large_not_for_commit": true,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g533_goal_aware_real_probe_manifest_v1"
+}

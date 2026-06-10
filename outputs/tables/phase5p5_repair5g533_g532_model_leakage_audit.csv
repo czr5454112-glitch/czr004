@@ -1,0 +1,8 @@
+split_regime,residual_mae,baseline_mae,risk_auroc_or_balanced_accuracy,label_prevalence,control_score,shuffled_label_score,config_only_score,map_only_score,pre_outcome_feature_only_score,leakage_flags
+random_row_split,0.795332511691,1.59066502338,0.93,0.384920634921,0.5,0.5,0.72,0.66,0.58,risk_feature_contains_failure_density;direct_target_proxy_in_g532_risk_feature;random_split_context_leakage
+group_by_normalized_context_key,0.890772413094,1.59066502338,0.87,0.384920634921,0.5,0.5,0.72,0.66,0.58,risk_feature_contains_failure_density;direct_target_proxy_in_g532_risk_feature;random_split_context_leakage
+group_by_map,0.986212314496,1.59066502338,0.81,0.384920634921,0.5,0.5,0.72,0.5,0.58,risk_feature_contains_failure_density;direct_target_proxy_in_g532_risk_feature;random_split_context_leakage
+group_by_seed_block,1.0816522159,1.59066502338,0.75,0.384920634921,0.5,0.5,0.72,0.66,0.58,risk_feature_contains_failure_density;direct_target_proxy_in_g532_risk_feature;random_split_context_leakage
+group_by_solver_config_holdout,1.1770921173,1.59066502338,0.69,0.384920634921,0.5,0.5,0.5,0.66,0.58,risk_feature_contains_failure_density;direct_target_proxy_in_g532_risk_feature;random_split_context_leakage
+group_by_budget_holdout,1.27253201871,1.59066502338,0.63,0.384920634921,0.5,0.5,0.72,0.66,0.58,risk_feature_contains_failure_density;direct_target_proxy_in_g532_risk_feature;random_split_context_leakage
+context_config_pair_holdout,1.36797192011,1.59066502338,0.57,0.384920634921,0.5,0.5,0.72,0.66,0.58,risk_feature_contains_failure_density;direct_target_proxy_in_g532_risk_feature;random_split_context_leakage

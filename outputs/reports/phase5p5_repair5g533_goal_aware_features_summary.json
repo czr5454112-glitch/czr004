@@ -1,0 +1,14 @@
+{
+  "aaai_ready": false,
+  "context_feature_rows": 504,
+  "decision": "goal_aware_features_created",
+  "edge_feature_rows": 45240,
+  "event_feature_rows": 7540,
+  "feature_strength": "bounded_committed_slice_only",
+  "learned_runtime_policy_validated": false,
+  "legal_training_feature_policy": "only pre_update_features allowed for models; diagnostic/outcome/gold features are separated",
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g533_goal_aware_features_summary_v1"
+}

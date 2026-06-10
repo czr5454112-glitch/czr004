@@ -1,0 +1,9 @@
+control,score,beats_real_model,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+shuffled_label_within_context,0.5,False,False,False,False,False,False
+shuffled_label_global,0.5,False,False,False,False,False,False
+random_feature_control,0.5,False,False,False,False,False,False
+map_family_only_control,0.55,False,False,False,False,False,False
+config_only_control,0.56,False,False,False,False,False,False
+budget_only_control,0.51,False,False,False,False,False,False
+post_outcome_feature_leakage_control,0.9,True,False,False,False,False,False
+gold_label_feature_leakage_control,0.88,True,False,False,False,False,False

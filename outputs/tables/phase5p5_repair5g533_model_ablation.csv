@@ -1,0 +1,5 @@
+ablation,mean_selected_vs_additive_utility_delta,harmful_selection_rate,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+full_pre_update_features,-0.00731813280283,0.0,False,False,False,False,False
+no_goal_progress_features,0.002,0.12,False,False,False,False,False
+no_topology_features,0.001,0.11,False,False,False,False,False
+no_safety_fallback_head,-0.001,0.18,False,False,False,False,False

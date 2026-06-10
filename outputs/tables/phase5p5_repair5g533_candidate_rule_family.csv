@@ -1,0 +1,12 @@
+candidate_index,candidate_id,method,alpha_cong_committed,alpha_cong_blocked,alpha_flow_progress,alpha_wait_or_nonprogress,rho_cong,rho_flow,flow_shield_beta,max_flow_shield,c_only,goal_projection_mode,min_edge_cost,max_edge_cost,intended_hypothesis,existing_project_owned_alias,new_g533_adapter_added,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+0,repair5g59_additive_fallback,repair5g59_additive_fallback,1.0,1.0,0.0,1.0,1.0,1.0,0.0,0.0,True,none,0.25,10.0,additive LTM baseline,True,False,False,False,False,False,False
+1,repair5g59_static_flow_shield,repair5g59_static_flow_shield,1.25,1.25,1.0,0.75,0.95,1.0,0.35,0.75,False,flow_shield,1.0,11.0,validated static flow-shield baseline,True,False,False,False,False,False,False
+2,repair5g59_c_only_f_disabled,repair5g59_c_only_f_disabled,1.25,1.25,0.0,0.75,0.95,1.0,0.0,0.0,True,none,0.25,11.0,C-channel-only control,True,False,False,False,False,False,False
+3,repair5g59_light_cong_light_flow,repair5g59_light_cong_light_flow,1.0,1.0,0.75,0.75,0.98,1.0,0.25,0.5,False,flow_shield,1.0,11.0,light C/F pressure,True,False,False,False,False,False,False
+4,repair5g59_block_heavy_flow_guard,repair5g59_block_heavy_flow_guard,1.0,1.5,1.0,0.5,0.95,1.0,0.35,0.75,False,flow_shield,1.0,11.0,blockage-heavy guard,True,False,False,False,False,False,False
+5,repair5g59_commit_heavy_flow_guard,repair5g59_commit_heavy_flow_guard,1.5,1.0,1.0,0.75,0.95,1.0,0.35,0.75,False,flow_shield,1.0,11.0,committed-flow emphasis,True,False,False,False,False,False,False
+6,repair5g59_wait_conservative,repair5g59_wait_conservative,1.25,1.25,1.0,0.5,0.95,1.0,0.35,0.75,False,flow_shield,1.0,11.0,suppresses nonprogress waits,True,False,False,False,False,False,False
+7,repair5g59_wait_aggressive,repair5g59_wait_aggressive,1.25,1.25,1.0,1.0,0.95,1.0,0.35,0.75,False,flow_shield,1.0,11.0,penalizes waits aggressively,True,False,False,False,False,False,False
+8,repair5g59_flow_decay,repair5g59_flow_decay,1.25,1.25,1.0,0.75,0.95,0.95,0.35,0.75,False,flow_shield,1.0,11.0,decays F-channel demand,True,False,False,False,False,False,False
+9,repair5g59_high_beta_cap_safe,repair5g59_high_beta_cap_safe,1.25,1.25,1.0,0.75,0.95,1.0,0.6,0.75,False,flow_shield,1.0,11.0,stronger bounded flow shield,True,False,False,False,False,False,False
+10,repair5g59_low_beta_high_cap,repair5g59_low_beta_high_cap,1.25,1.25,1.0,0.75,0.95,1.0,0.2,1.25,False,flow_shield,1.0,11.0,lower beta with higher cap,True,False,False,False,False,False,False

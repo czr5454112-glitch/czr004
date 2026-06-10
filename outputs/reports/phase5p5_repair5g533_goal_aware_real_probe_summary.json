@@ -1,0 +1,39 @@
+{
+  "aaai_ready": false,
+  "budgets": [
+    500,
+    1000,
+    2000
+  ],
+  "candidate_count": 11,
+  "decision": "goal_aware_real_probe_completed",
+  "gates": {
+    "artifact_backed_deterministic_trace_replay_count_is_zero": true,
+    "candidate_count_between_8_and_14": true,
+    "external_lacam2_clean": true,
+    "minimum_solver_run_rows": true,
+    "multiple_budgets": true,
+    "no_reserved_ids": true,
+    "primary_ltm_iterations_2_present": true,
+    "raw_log_sha256_verified": true,
+    "real_solver_runner_used": true,
+    "secondary_ltm_iterations_4_present": true,
+    "trace_backend_real_solver_only": true,
+    "traffic_hashes_present": true
+  },
+  "learned_runtime_policy_validated": false,
+  "ltm_iterations_seen": [
+    2,
+    4
+  ],
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "pibt_failure_audit_count": 7570,
+  "raw_sha256": "0dc6096f760f8e2843f43c5142f0708c77a08d588661201e6e816b9d82ef8689",
+  "real_solver_probe_rows": 2046,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g533_goal_aware_real_probe_summary_v1",
+  "solver_task_rows": 1617,
+  "trace_event_count": 10555440,
+  "unique_contexts": 50
+}

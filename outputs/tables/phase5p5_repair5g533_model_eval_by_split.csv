@@ -1,0 +1,10 @@
+split_regime,model_family,candidate_top1_accuracy,candidate_top3_accuracy,pairwise_auc,mean_selected_vs_additive_utility_delta,median_selected_vs_additive_utility_delta,safe_positive_capture_rate,high_margin_opportunity_capture_rate,harmful_selection_rate,fallback_precision,fallback_recall,warehouse_high_risk_recall,budget_sensitive_failure_recall,calibration_ece,test_predictions,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+random_row_split,edge_aggregate_goal_aware_selector,0.95652173913,0.961956521739,0.98097826087,-0.00731813280283,0,0.65,0.65,0.054347826087,0.5,0.5,0.5,0.5,0.2,184,False,False,False,False,False
+group_by_context,edge_aggregate_goal_aware_selector,0.782608695652,0.826086956522,0.913043478261,0,0,0,0,0,0.5,0.5,0.5,0.5,0.2,46,False,False,False,False,False
+group_by_seed,edge_aggregate_goal_aware_selector,0.858585858586,0.878787878788,0.939393939394,0,0,0,0,0,0.5,0.5,0.5,0.5,0.2,99,False,False,False,False,False
+group_by_map_family,edge_aggregate_goal_aware_selector,0.820224719101,0.876404494382,0.938202247191,0,0,0,0,0,0.5,0.5,0.5,0.5,0.2,89,False,False,False,False,False
+leave_one_map_out,edge_aggregate_goal_aware_selector,0.820224719101,0.876404494382,0.938202247191,0,0,0,0,0,0.5,0.5,0.5,0.5,0.2,89,False,False,False,False,False
+leave_one_candidate_config_out,edge_aggregate_goal_aware_selector,0.863636363636,0.888888888889,0.944444444444,0,0,0,0,0,0.5,0.5,0.5,0.5,0.2,198,False,False,False,False,False
+leave_one_budget_out,edge_aggregate_goal_aware_selector,0.719512195122,0.743902439024,0.871951219512,0,0,0,0,0,0.5,0.5,0.5,0.5,0.2,82,False,False,False,False,False
+warehouse_holdout,edge_aggregate_goal_aware_selector,0.961538461538,0.961538461538,0.980769230769,0,0,0,0,0,0.5,0.5,0.5,0.5,0.2,26,False,False,False,False,False
+maze_random_train_warehouse_test,edge_aggregate_goal_aware_selector,0.961538461538,0.961538461538,0.980769230769,0,0,0,0,0,0.5,0.5,0.5,0.5,0.2,26,False,False,False,False,False

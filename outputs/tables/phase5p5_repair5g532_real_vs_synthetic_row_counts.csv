@@ -1,0 +1,6 @@
+table,g531_synthetic_or_artifact_backed,g532_real_solver_trace
+context_slices,1200,504
+edge_slices,72000,45240
+event_slices,9600,7540
+failure_slices,1200,504
+update_slices,1200,504

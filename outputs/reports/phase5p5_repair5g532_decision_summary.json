@@ -1,0 +1,44 @@
+{
+  "aaai_ready": false,
+  "best_residual_model": "linear_real_edge_residual_model",
+  "best_risk_model": "context_risk_logistic_real",
+  "component_decisions": {
+    "gold_join": "gold_validation_join_created",
+    "materialization": "g531_materialization_audited_continue_real_solver_g532",
+    "quality": "real_vs_synthetic_slice_quality_analyzed",
+    "residual_models": "gpu_residual_models_evaluated",
+    "risk_models": "gpu_risk_models_evaluated",
+    "runner_discovery": "real_trace_runner_found_continue_collection",
+    "slice_conversion": "real_logs_converted_to_slice_tables",
+    "trace_collection": "real_solver_trace_collection_completed"
+  },
+  "decision": "g532_real_solver_slice_dataset_promising_continue_scaleup",
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "positive_decision_requirements": {
+    "G5.31 materialization audited": true,
+    "at_least_one_real_residual_or_risk_model_beats_baseline_control": true,
+    "claims_remain_closed": true,
+    "context_slices_ge_300": true,
+    "edge_or_event_slices_substantially_exceed_120": true,
+    "forbidden_feature_count_eq_0": true,
+    "gold_validation_overlap_exists": true,
+    "no_action_priority_search_targets": true,
+    "real_solver_runner_used": true,
+    "trace_backend_real_solver_only": true
+  },
+  "row_counts": {
+    "context_slices": 504,
+    "edge_slices": 45240,
+    "event_slices": 7540,
+    "failure_slices": 504,
+    "gold_candidate_budget_rows": 5280,
+    "gold_context_budget_rows": 120,
+    "residual_labels": 45240,
+    "risk_labels": 504,
+    "update_slices": 504
+  },
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g532_decision_summary_v1"
+}

@@ -1,0 +1,19 @@
+{
+  "aaai_ready": false,
+  "decision": "real_update_ltm_residual_labels_created",
+  "evidence_strength_counts": {
+    "real_trace_observed_update": 45240
+  },
+  "gates": {
+    "evidence_strength_column_present": true,
+    "gold_labels_separated_from_training_proxy": true,
+    "no_gold_label_used_as_feature": true,
+    "real_trace_observed_update_labels_present": true
+  },
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "residual_labels": 45240,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g532_update_ltm_residual_labels_summary_v1"
+}

@@ -1,0 +1,24 @@
+{
+  "aaai_ready": false,
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "raw_log": "outputs/logs/phase5p5_repair5g532_real_solver_trace_collection/phase5p5_repair5g532_real_solver_checkpoints.jsonl",
+  "raw_sha256": "c5a0fc6106c4388c275a07b8fddaf38a431d5834fe251a81a216f18c8509b604",
+  "row_counts": {
+    "context_slices": 504,
+    "edge_slices": 45240,
+    "event_slices": 7540,
+    "failure_slices": 504,
+    "update_slices": 504
+  },
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g532_slice_dataset_manifest_v1",
+  "tables": {
+    "context_slices": "outputs/tables/phase5p5_repair5g532_context_slices.csv",
+    "edge_slices": "outputs/tables/phase5p5_repair5g532_edge_slices.csv",
+    "event_slices": "outputs/tables/phase5p5_repair5g532_event_slices.csv",
+    "failure_slices": "outputs/tables/phase5p5_repair5g532_failure_slices.csv",
+    "update_slices": "outputs/tables/phase5p5_repair5g532_update_slices.csv"
+  }
+}

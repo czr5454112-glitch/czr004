@@ -1,0 +1,17 @@
+{
+  "aaai_ready": false,
+  "decision": "gold_validation_join_created",
+  "gold_candidate_budget_rows": 5280,
+  "gold_candidate_induced_count": 0,
+  "gold_overlap_context_budget_pairs": 120,
+  "gold_overlap_contexts": 60,
+  "gold_safe_positive_count": 0,
+  "gold_teacher_actions": 0,
+  "gold_validation_only": true,
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "real_slice_to_gold_link_rows": 360,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g532_gold_validation_join_summary_v1"
+}

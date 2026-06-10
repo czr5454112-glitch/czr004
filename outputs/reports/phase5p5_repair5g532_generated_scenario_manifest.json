@@ -1,0 +1,682 @@
+{
+  "aaai_ready": false,
+  "contexts": [
+    {
+      "agents": 50,
+      "map": "maze-32-32-4",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/maze-32-32-4-random-146.scen",
+      "scenario_sha256": "184bb082a326b2347a4365376f61517de7e1b5ec4c62b8cf9587d32f4d982c8b",
+      "seed": 146,
+      "solver_executable": true
+    },
+    {
+      "agents": 50,
+      "map": "maze-32-32-4",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/maze-32-32-4-random-147.scen",
+      "scenario_sha256": "cf06f1b04b1ca220d227549b95d3fb7b593c0e3d2565e895bda54b2ab655c602",
+      "seed": 147,
+      "solver_executable": true
+    },
+    {
+      "agents": 50,
+      "map": "maze-32-32-4",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/maze-32-32-4-random-148.scen",
+      "scenario_sha256": "db8f0c529b5a2c659595e8f6c78e07779f643831e06aafbe266a1afff7fe9cd2",
+      "seed": 148,
+      "solver_executable": true
+    },
+    {
+      "agents": 50,
+      "map": "maze-32-32-4",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/maze-32-32-4-random-149.scen",
+      "scenario_sha256": "fdd459868255ff48996c5879108430b1b2cf041032b11249a8e05fa1dee06e60",
+      "seed": 149,
+      "solver_executable": true
+    },
+    {
+      "agents": 50,
+      "map": "maze-32-32-4",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/maze-32-32-4-random-150.scen",
+      "scenario_sha256": "7c51e90dc9f751f12e065f6d43516c5675302e09307c26d3d4c60f2214957290",
+      "seed": 150,
+      "solver_executable": true
+    },
+    {
+      "agents": 50,
+      "map": "maze-32-32-4",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/maze-32-32-4-random-151.scen",
+      "scenario_sha256": "d83d4855d3f7ac53dcb33a17b72c25ad63566946554cc88ac2075220d82ee53d",
+      "seed": 151,
+      "solver_executable": true
+    },
+    {
+      "agents": 50,
+      "map": "maze-32-32-4",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/maze-32-32-4-random-152.scen",
+      "scenario_sha256": "7442e1a6ef062478850d521d9d636dfd825ec24ab5217ea2279a322fb2f0e003",
+      "seed": 152,
+      "solver_executable": true
+    },
+    {
+      "agents": 50,
+      "map": "maze-32-32-4",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/maze-32-32-4-random-153.scen",
+      "scenario_sha256": "d517d62c08bc500539c1c12b5ea558267cce6b2177c7b98b4c3df9f3861564e1",
+      "seed": 153,
+      "solver_executable": true
+    },
+    {
+      "agents": 50,
+      "map": "maze-32-32-4",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/maze-32-32-4-random-154.scen",
+      "scenario_sha256": "21ac292f5d350d3c2f94685e88cfd9f9fd154cc8d1f0dd08be08744c8b0e451c",
+      "seed": 154,
+      "solver_executable": true
+    },
+    {
+      "agents": 50,
+      "map": "maze-32-32-4",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/maze-32-32-4-random-155.scen",
+      "scenario_sha256": "e33ad6090c6994e15b8fa6dd4113903cdff360dccf23335857e0bd99785e71fd",
+      "seed": 155,
+      "solver_executable": true
+    },
+    {
+      "agents": 50,
+      "map": "maze-32-32-4",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/maze-32-32-4-random-156.scen",
+      "scenario_sha256": "482511e5eeb2c61f3b9d0cb532a378486c06dacb32345c9ee9cb8433670373c5",
+      "seed": 156,
+      "solver_executable": true
+    },
+    {
+      "agents": 50,
+      "map": "maze-32-32-4",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/maze-32-32-4-random-157.scen",
+      "scenario_sha256": "6a0a06ecf950176063447e3b91ce893c5b8e36b3eb3b8fbe7e1a00c095de06b4",
+      "seed": 157,
+      "solver_executable": true
+    },
+    {
+      "agents": 50,
+      "map": "maze-32-32-4",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/maze-32-32-4-random-158.scen",
+      "scenario_sha256": "e1e7870b77737900685abb118743429af20bb6fef79eb6a1a804c05839a4d03d",
+      "seed": 158,
+      "solver_executable": true
+    },
+    {
+      "agents": 50,
+      "map": "maze-32-32-4",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/maze-32-32-4-random-159.scen",
+      "scenario_sha256": "6a90b805d7f3a1e1d951c642e829ebcc7b2c8668b4091ba73244fb802ff4800e",
+      "seed": 159,
+      "solver_executable": true
+    },
+    {
+      "agents": 100,
+      "map": "maze-32-32-4",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/maze-32-32-4-random-146.scen",
+      "scenario_sha256": "184bb082a326b2347a4365376f61517de7e1b5ec4c62b8cf9587d32f4d982c8b",
+      "seed": 146,
+      "solver_executable": true
+    },
+    {
+      "agents": 100,
+      "map": "maze-32-32-4",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/maze-32-32-4-random-147.scen",
+      "scenario_sha256": "cf06f1b04b1ca220d227549b95d3fb7b593c0e3d2565e895bda54b2ab655c602",
+      "seed": 147,
+      "solver_executable": true
+    },
+    {
+      "agents": 100,
+      "map": "maze-32-32-4",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/maze-32-32-4-random-148.scen",
+      "scenario_sha256": "db8f0c529b5a2c659595e8f6c78e07779f643831e06aafbe266a1afff7fe9cd2",
+      "seed": 148,
+      "solver_executable": true
+    },
+    {
+      "agents": 100,
+      "map": "maze-32-32-4",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/maze-32-32-4-random-149.scen",
+      "scenario_sha256": "fdd459868255ff48996c5879108430b1b2cf041032b11249a8e05fa1dee06e60",
+      "seed": 149,
+      "solver_executable": true
+    },
+    {
+      "agents": 100,
+      "map": "maze-32-32-4",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/maze-32-32-4-random-150.scen",
+      "scenario_sha256": "7c51e90dc9f751f12e065f6d43516c5675302e09307c26d3d4c60f2214957290",
+      "seed": 150,
+      "solver_executable": true
+    },
+    {
+      "agents": 100,
+      "map": "maze-32-32-4",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/maze-32-32-4-random-151.scen",
+      "scenario_sha256": "d83d4855d3f7ac53dcb33a17b72c25ad63566946554cc88ac2075220d82ee53d",
+      "seed": 151,
+      "solver_executable": true
+    },
+    {
+      "agents": 100,
+      "map": "maze-32-32-4",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/maze-32-32-4-random-152.scen",
+      "scenario_sha256": "7442e1a6ef062478850d521d9d636dfd825ec24ab5217ea2279a322fb2f0e003",
+      "seed": 152,
+      "solver_executable": true
+    },
+    {
+      "agents": 100,
+      "map": "maze-32-32-4",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/maze-32-32-4-random-153.scen",
+      "scenario_sha256": "d517d62c08bc500539c1c12b5ea558267cce6b2177c7b98b4c3df9f3861564e1",
+      "seed": 153,
+      "solver_executable": true
+    },
+    {
+      "agents": 100,
+      "map": "maze-32-32-4",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/maze-32-32-4-random-154.scen",
+      "scenario_sha256": "21ac292f5d350d3c2f94685e88cfd9f9fd154cc8d1f0dd08be08744c8b0e451c",
+      "seed": 154,
+      "solver_executable": true
+    },
+    {
+      "agents": 100,
+      "map": "maze-32-32-4",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/maze-32-32-4-random-155.scen",
+      "scenario_sha256": "e33ad6090c6994e15b8fa6dd4113903cdff360dccf23335857e0bd99785e71fd",
+      "seed": 155,
+      "solver_executable": true
+    },
+    {
+      "agents": 100,
+      "map": "maze-32-32-4",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/maze-32-32-4-random-156.scen",
+      "scenario_sha256": "482511e5eeb2c61f3b9d0cb532a378486c06dacb32345c9ee9cb8433670373c5",
+      "seed": 156,
+      "solver_executable": true
+    },
+    {
+      "agents": 100,
+      "map": "maze-32-32-4",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/maze-32-32-4-random-157.scen",
+      "scenario_sha256": "6a0a06ecf950176063447e3b91ce893c5b8e36b3eb3b8fbe7e1a00c095de06b4",
+      "seed": 157,
+      "solver_executable": true
+    },
+    {
+      "agents": 100,
+      "map": "maze-32-32-4",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/maze-32-32-4-random-158.scen",
+      "scenario_sha256": "e1e7870b77737900685abb118743429af20bb6fef79eb6a1a804c05839a4d03d",
+      "seed": 158,
+      "solver_executable": true
+    },
+    {
+      "agents": 100,
+      "map": "maze-32-32-4",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/maze-32-32-4-random-159.scen",
+      "scenario_sha256": "6a90b805d7f3a1e1d951c642e829ebcc7b2c8668b4091ba73244fb802ff4800e",
+      "seed": 159,
+      "solver_executable": true
+    },
+    {
+      "agents": 50,
+      "map": "random-32-32-20",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/random-32-32-20-random-146.scen",
+      "scenario_sha256": "f867772a7f505e66f73b338cb9865ee319886f4db31d37550c8118da54716605",
+      "seed": 146,
+      "solver_executable": true
+    },
+    {
+      "agents": 50,
+      "map": "random-32-32-20",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/random-32-32-20-random-147.scen",
+      "scenario_sha256": "db1d87228d7a4d3cd740accb453752358aa9faed97f7a84dae716bef37854b98",
+      "seed": 147,
+      "solver_executable": true
+    },
+    {
+      "agents": 50,
+      "map": "random-32-32-20",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/random-32-32-20-random-148.scen",
+      "scenario_sha256": "f1f577a69a1581c555c81c89f9e6f9317d2e93301bf7fef61d662dbeb73865db",
+      "seed": 148,
+      "solver_executable": true
+    },
+    {
+      "agents": 50,
+      "map": "random-32-32-20",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/random-32-32-20-random-149.scen",
+      "scenario_sha256": "2cb23d1ed2d6fa06e67f505a4b5db021046eac50dcde66acd7e074207a6e197f",
+      "seed": 149,
+      "solver_executable": true
+    },
+    {
+      "agents": 50,
+      "map": "random-32-32-20",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/random-32-32-20-random-150.scen",
+      "scenario_sha256": "82adeae981c45f81342ed6bf4402249fb5fcdaa7c7e6a2a088df529c89441edb",
+      "seed": 150,
+      "solver_executable": true
+    },
+    {
+      "agents": 50,
+      "map": "random-32-32-20",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/random-32-32-20-random-151.scen",
+      "scenario_sha256": "dfc893a2f3d470543e11f7af34347b11cbaf5a2f6b7784bd08dbd5edfdd7644f",
+      "seed": 151,
+      "solver_executable": true
+    },
+    {
+      "agents": 50,
+      "map": "random-32-32-20",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/random-32-32-20-random-152.scen",
+      "scenario_sha256": "86800bf05b830554a1e65a58a3d5d4f7cdfae200d71257cc618be5ae08417684",
+      "seed": 152,
+      "solver_executable": true
+    },
+    {
+      "agents": 50,
+      "map": "random-32-32-20",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/random-32-32-20-random-153.scen",
+      "scenario_sha256": "b30daddf4a4e40ff33b5e52456a5c4c525ccf489cfa02326ca56c3607a1c6452",
+      "seed": 153,
+      "solver_executable": true
+    },
+    {
+      "agents": 50,
+      "map": "random-32-32-20",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/random-32-32-20-random-154.scen",
+      "scenario_sha256": "4419841082685e32a9a852801e3fe1ba4e5c9503b7eedcd88aefc71bb799e597",
+      "seed": 154,
+      "solver_executable": true
+    },
+    {
+      "agents": 50,
+      "map": "random-32-32-20",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/random-32-32-20-random-155.scen",
+      "scenario_sha256": "5046a1e7ea57b973278b693260cd55f550e45039a1e4e9e6eec1b98fc16b4231",
+      "seed": 155,
+      "solver_executable": true
+    },
+    {
+      "agents": 50,
+      "map": "random-32-32-20",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/random-32-32-20-random-156.scen",
+      "scenario_sha256": "d0d6f9eaec860a8ae23b32ef0060a73e8681f32520b9114992e940beaa6659ac",
+      "seed": 156,
+      "solver_executable": true
+    },
+    {
+      "agents": 50,
+      "map": "random-32-32-20",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/random-32-32-20-random-157.scen",
+      "scenario_sha256": "497bd945b0c9298bf3cc4c07a33477214d6b71258e4ab9476a75fb2c4152ee49",
+      "seed": 157,
+      "solver_executable": true
+    },
+    {
+      "agents": 50,
+      "map": "random-32-32-20",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/random-32-32-20-random-158.scen",
+      "scenario_sha256": "4b5e6b37b8916ffeb70257b1c5024f750d9cb9f5f3751e1cd5cf435611ca5483",
+      "seed": 158,
+      "solver_executable": true
+    },
+    {
+      "agents": 50,
+      "map": "random-32-32-20",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/random-32-32-20-random-159.scen",
+      "scenario_sha256": "1fca986b748201415f0729ad404abe389b9d338c3aaff03180c50104764442c5",
+      "seed": 159,
+      "solver_executable": true
+    },
+    {
+      "agents": 100,
+      "map": "random-32-32-20",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/random-32-32-20-random-146.scen",
+      "scenario_sha256": "f867772a7f505e66f73b338cb9865ee319886f4db31d37550c8118da54716605",
+      "seed": 146,
+      "solver_executable": true
+    },
+    {
+      "agents": 100,
+      "map": "random-32-32-20",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/random-32-32-20-random-147.scen",
+      "scenario_sha256": "db1d87228d7a4d3cd740accb453752358aa9faed97f7a84dae716bef37854b98",
+      "seed": 147,
+      "solver_executable": true
+    },
+    {
+      "agents": 100,
+      "map": "random-32-32-20",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/random-32-32-20-random-148.scen",
+      "scenario_sha256": "f1f577a69a1581c555c81c89f9e6f9317d2e93301bf7fef61d662dbeb73865db",
+      "seed": 148,
+      "solver_executable": true
+    },
+    {
+      "agents": 100,
+      "map": "random-32-32-20",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/random-32-32-20-random-149.scen",
+      "scenario_sha256": "2cb23d1ed2d6fa06e67f505a4b5db021046eac50dcde66acd7e074207a6e197f",
+      "seed": 149,
+      "solver_executable": true
+    },
+    {
+      "agents": 100,
+      "map": "random-32-32-20",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/random-32-32-20-random-150.scen",
+      "scenario_sha256": "82adeae981c45f81342ed6bf4402249fb5fcdaa7c7e6a2a088df529c89441edb",
+      "seed": 150,
+      "solver_executable": true
+    },
+    {
+      "agents": 100,
+      "map": "random-32-32-20",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/random-32-32-20-random-151.scen",
+      "scenario_sha256": "dfc893a2f3d470543e11f7af34347b11cbaf5a2f6b7784bd08dbd5edfdd7644f",
+      "seed": 151,
+      "solver_executable": true
+    },
+    {
+      "agents": 100,
+      "map": "random-32-32-20",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/random-32-32-20-random-152.scen",
+      "scenario_sha256": "86800bf05b830554a1e65a58a3d5d4f7cdfae200d71257cc618be5ae08417684",
+      "seed": 152,
+      "solver_executable": true
+    },
+    {
+      "agents": 100,
+      "map": "random-32-32-20",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/random-32-32-20-random-153.scen",
+      "scenario_sha256": "b30daddf4a4e40ff33b5e52456a5c4c525ccf489cfa02326ca56c3607a1c6452",
+      "seed": 153,
+      "solver_executable": true
+    },
+    {
+      "agents": 100,
+      "map": "random-32-32-20",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/random-32-32-20-random-154.scen",
+      "scenario_sha256": "4419841082685e32a9a852801e3fe1ba4e5c9503b7eedcd88aefc71bb799e597",
+      "seed": 154,
+      "solver_executable": true
+    },
+    {
+      "agents": 100,
+      "map": "random-32-32-20",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/random-32-32-20-random-155.scen",
+      "scenario_sha256": "5046a1e7ea57b973278b693260cd55f550e45039a1e4e9e6eec1b98fc16b4231",
+      "seed": 155,
+      "solver_executable": true
+    },
+    {
+      "agents": 100,
+      "map": "random-32-32-20",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/random-32-32-20-random-156.scen",
+      "scenario_sha256": "d0d6f9eaec860a8ae23b32ef0060a73e8681f32520b9114992e940beaa6659ac",
+      "seed": 156,
+      "solver_executable": true
+    },
+    {
+      "agents": 100,
+      "map": "random-32-32-20",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/random-32-32-20-random-157.scen",
+      "scenario_sha256": "497bd945b0c9298bf3cc4c07a33477214d6b71258e4ab9476a75fb2c4152ee49",
+      "seed": 157,
+      "solver_executable": true
+    },
+    {
+      "agents": 100,
+      "map": "random-32-32-20",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/random-32-32-20-random-158.scen",
+      "scenario_sha256": "4b5e6b37b8916ffeb70257b1c5024f750d9cb9f5f3751e1cd5cf435611ca5483",
+      "seed": 158,
+      "solver_executable": true
+    },
+    {
+      "agents": 100,
+      "map": "random-32-32-20",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/random-32-32-20-random-159.scen",
+      "scenario_sha256": "1fca986b748201415f0729ad404abe389b9d338c3aaff03180c50104764442c5",
+      "seed": 159,
+      "solver_executable": true
+    },
+    {
+      "agents": 50,
+      "map": "warehouse-10-20-10-2-1",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/warehouse-10-20-10-2-1-random-146.scen",
+      "scenario_sha256": "3307c657158e6f8d05b996021c3b36300acb7e27c357ec786de13674a4855e8b",
+      "seed": 146,
+      "solver_executable": true
+    },
+    {
+      "agents": 50,
+      "map": "warehouse-10-20-10-2-1",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/warehouse-10-20-10-2-1-random-147.scen",
+      "scenario_sha256": "9abc0e498c34aad5efd92a01ab7f7572b07b4d2309592d0f4b3d71273f8bd34c",
+      "seed": 147,
+      "solver_executable": true
+    },
+    {
+      "agents": 50,
+      "map": "warehouse-10-20-10-2-1",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/warehouse-10-20-10-2-1-random-148.scen",
+      "scenario_sha256": "93a137d59208771c0d71d261123255bb5528d7b9d7f34cd1f7f9cecde0762946",
+      "seed": 148,
+      "solver_executable": true
+    },
+    {
+      "agents": 50,
+      "map": "warehouse-10-20-10-2-1",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/warehouse-10-20-10-2-1-random-149.scen",
+      "scenario_sha256": "aaf363c83265a02a4b82b4fdeeb13ceeb37d5c702e24f7fb38843bafc994fc2c",
+      "seed": 149,
+      "solver_executable": true
+    },
+    {
+      "agents": 50,
+      "map": "warehouse-10-20-10-2-1",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/warehouse-10-20-10-2-1-random-150.scen",
+      "scenario_sha256": "5c16832d38e9603923fd87c59bec3aff61715fc13f3bb647c45928800da1247f",
+      "seed": 150,
+      "solver_executable": true
+    },
+    {
+      "agents": 50,
+      "map": "warehouse-10-20-10-2-1",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/warehouse-10-20-10-2-1-random-151.scen",
+      "scenario_sha256": "2f1f530b222b6f2570af6ac167e44cb66b409c3cd2a93fc6355f3760d3477175",
+      "seed": 151,
+      "solver_executable": true
+    },
+    {
+      "agents": 50,
+      "map": "warehouse-10-20-10-2-1",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/warehouse-10-20-10-2-1-random-152.scen",
+      "scenario_sha256": "e518c9108428be302eb93fe9b40456689759dcb2535b052e31dde7b466d66af8",
+      "seed": 152,
+      "solver_executable": true
+    },
+    {
+      "agents": 50,
+      "map": "warehouse-10-20-10-2-1",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/warehouse-10-20-10-2-1-random-153.scen",
+      "scenario_sha256": "d120509d25bb2d9fd9f4f710f8a5f2eb4ede2cdb1cce10a2d982b1ee8d839eb2",
+      "seed": 153,
+      "solver_executable": true
+    },
+    {
+      "agents": 50,
+      "map": "warehouse-10-20-10-2-1",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/warehouse-10-20-10-2-1-random-154.scen",
+      "scenario_sha256": "9d2ca1b359e0e8f458c7fb112bc919f9fc10d22387cbcc3b71d254cef50271d1",
+      "seed": 154,
+      "solver_executable": true
+    },
+    {
+      "agents": 50,
+      "map": "warehouse-10-20-10-2-1",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/warehouse-10-20-10-2-1-random-155.scen",
+      "scenario_sha256": "46759ce21cbd34f6cb862817ee8a55cc7d31b90e5b3549473d2d44f05156bbd9",
+      "seed": 155,
+      "solver_executable": true
+    },
+    {
+      "agents": 50,
+      "map": "warehouse-10-20-10-2-1",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/warehouse-10-20-10-2-1-random-156.scen",
+      "scenario_sha256": "a147abce6099732e65b86d3156b2a6202d34208093621390d55789265c1c97b1",
+      "seed": 156,
+      "solver_executable": true
+    },
+    {
+      "agents": 50,
+      "map": "warehouse-10-20-10-2-1",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/warehouse-10-20-10-2-1-random-157.scen",
+      "scenario_sha256": "fc8fc1bd9798722b1ca2b1e3553d080e2a5ba1bc50d011901c7c8418cbcf7c79",
+      "seed": 157,
+      "solver_executable": true
+    },
+    {
+      "agents": 50,
+      "map": "warehouse-10-20-10-2-1",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/warehouse-10-20-10-2-1-random-158.scen",
+      "scenario_sha256": "16086a0f999de6ce06a5feb1b308bad4c8f580d4d3eafdbf80a7ac04642d2acb",
+      "seed": 158,
+      "solver_executable": true
+    },
+    {
+      "agents": 50,
+      "map": "warehouse-10-20-10-2-1",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/warehouse-10-20-10-2-1-random-159.scen",
+      "scenario_sha256": "967f70496804d00fae7d7140744f3848e3d031ca531bee08854624d76e4660c6",
+      "seed": 159,
+      "solver_executable": true
+    },
+    {
+      "agents": 100,
+      "map": "warehouse-10-20-10-2-1",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/warehouse-10-20-10-2-1-random-146.scen",
+      "scenario_sha256": "3307c657158e6f8d05b996021c3b36300acb7e27c357ec786de13674a4855e8b",
+      "seed": 146,
+      "solver_executable": true
+    },
+    {
+      "agents": 100,
+      "map": "warehouse-10-20-10-2-1",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/warehouse-10-20-10-2-1-random-147.scen",
+      "scenario_sha256": "9abc0e498c34aad5efd92a01ab7f7572b07b4d2309592d0f4b3d71273f8bd34c",
+      "seed": 147,
+      "solver_executable": true
+    },
+    {
+      "agents": 100,
+      "map": "warehouse-10-20-10-2-1",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/warehouse-10-20-10-2-1-random-148.scen",
+      "scenario_sha256": "93a137d59208771c0d71d261123255bb5528d7b9d7f34cd1f7f9cecde0762946",
+      "seed": 148,
+      "solver_executable": true
+    },
+    {
+      "agents": 100,
+      "map": "warehouse-10-20-10-2-1",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/warehouse-10-20-10-2-1-random-149.scen",
+      "scenario_sha256": "aaf363c83265a02a4b82b4fdeeb13ceeb37d5c702e24f7fb38843bafc994fc2c",
+      "seed": 149,
+      "solver_executable": true
+    },
+    {
+      "agents": 100,
+      "map": "warehouse-10-20-10-2-1",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/warehouse-10-20-10-2-1-random-150.scen",
+      "scenario_sha256": "5c16832d38e9603923fd87c59bec3aff61715fc13f3bb647c45928800da1247f",
+      "seed": 150,
+      "solver_executable": true
+    },
+    {
+      "agents": 100,
+      "map": "warehouse-10-20-10-2-1",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/warehouse-10-20-10-2-1-random-151.scen",
+      "scenario_sha256": "2f1f530b222b6f2570af6ac167e44cb66b409c3cd2a93fc6355f3760d3477175",
+      "seed": 151,
+      "solver_executable": true
+    },
+    {
+      "agents": 100,
+      "map": "warehouse-10-20-10-2-1",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/warehouse-10-20-10-2-1-random-152.scen",
+      "scenario_sha256": "e518c9108428be302eb93fe9b40456689759dcb2535b052e31dde7b466d66af8",
+      "seed": 152,
+      "solver_executable": true
+    },
+    {
+      "agents": 100,
+      "map": "warehouse-10-20-10-2-1",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/warehouse-10-20-10-2-1-random-153.scen",
+      "scenario_sha256": "d120509d25bb2d9fd9f4f710f8a5f2eb4ede2cdb1cce10a2d982b1ee8d839eb2",
+      "seed": 153,
+      "solver_executable": true
+    },
+    {
+      "agents": 100,
+      "map": "warehouse-10-20-10-2-1",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/warehouse-10-20-10-2-1-random-154.scen",
+      "scenario_sha256": "9d2ca1b359e0e8f458c7fb112bc919f9fc10d22387cbcc3b71d254cef50271d1",
+      "seed": 154,
+      "solver_executable": true
+    },
+    {
+      "agents": 100,
+      "map": "warehouse-10-20-10-2-1",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/warehouse-10-20-10-2-1-random-155.scen",
+      "scenario_sha256": "46759ce21cbd34f6cb862817ee8a55cc7d31b90e5b3549473d2d44f05156bbd9",
+      "seed": 155,
+      "solver_executable": true
+    },
+    {
+      "agents": 100,
+      "map": "warehouse-10-20-10-2-1",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/warehouse-10-20-10-2-1-random-156.scen",
+      "scenario_sha256": "a147abce6099732e65b86d3156b2a6202d34208093621390d55789265c1c97b1",
+      "seed": 156,
+      "solver_executable": true
+    },
+    {
+      "agents": 100,
+      "map": "warehouse-10-20-10-2-1",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/warehouse-10-20-10-2-1-random-157.scen",
+      "scenario_sha256": "fc8fc1bd9798722b1ca2b1e3553d080e2a5ba1bc50d011901c7c8418cbcf7c79",
+      "seed": 157,
+      "solver_executable": true
+    },
+    {
+      "agents": 100,
+      "map": "warehouse-10-20-10-2-1",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/warehouse-10-20-10-2-1-random-158.scen",
+      "scenario_sha256": "16086a0f999de6ce06a5feb1b308bad4c8f580d4d3eafdbf80a7ac04642d2acb",
+      "seed": 158,
+      "solver_executable": true
+    },
+    {
+      "agents": 100,
+      "map": "warehouse-10-20-10-2-1",
+      "scenario_path": "outputs/tmp/phase5p5_repair5g532_real_context_scenarios/warehouse-10-20-10-2-1-random-159.scen",
+      "scenario_sha256": "967f70496804d00fae7d7140744f3848e3d031ca531bee08854624d76e4660c6",
+      "seed": 159,
+      "solver_executable": true
+    }
+  ],
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g532_generated_scenario_manifest_v1"
+}

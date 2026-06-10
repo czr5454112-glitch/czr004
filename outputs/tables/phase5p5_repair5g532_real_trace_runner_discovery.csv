@@ -1,0 +1,4 @@
+runner_name,source_path,command_example,supports_exact_failure_audit,supports_traffic_cf_snapshot,supports_method_candidate_selection,supports_budget,supports_context_selection,writes_jsonl,semantic_risk,external_lacam2_touched
+phase1a_batch_repair5g_checkpoint_export,cpp/tools/phase1a_batch.cpp,build\phase1a-batch\phase1a_batch.exe --method repair5g59_static_flow_shield --repair5g-export-update-checkpoints-jsonl ...,True,True,True,True,False,True,none_or_logging_only,False
+phase4_laur_record,cpp/tools/phase4_laur_record.cpp,build\phase4-laur-ltm\phase4_laur_record.exe --checkpoint-jsonl ... --trace-jsonl ...,True,True,False,True,False,True,none_or_logging_only,False
+run_repair5g54_checkpoint_export_observed,scripts/run_repair5g54_checkpoint_export_observed.py,python scripts\run_repair5g54_checkpoint_export_observed.py --overwrite --max-workers 1,False,False,False,True,True,True,none_or_logging_only,False

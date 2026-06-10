@@ -1,0 +1,27 @@
+{
+  "aaai_ready": false,
+  "budgets": [
+    1000,
+    2000
+  ],
+  "context_budget_rows": 168,
+  "decision": "real_context_source_created",
+  "gates": {
+    "all_contexts_solver_executable": true,
+    "contexts_ge_80_or_report_blocker": true,
+    "ids_166_205_untouched": true,
+    "map_family_balance_reported": true,
+    "original_gold_anchors_included": true
+  },
+  "learned_runtime_policy_validated": false,
+  "map_family_counts": {
+    "maze": 28,
+    "random": 28,
+    "warehouse": 28
+  },
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g532_real_context_source_summary_v1",
+  "unique_contexts": 84
+}

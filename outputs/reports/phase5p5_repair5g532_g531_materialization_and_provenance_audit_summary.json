@@ -1,0 +1,17 @@
+{
+  "aaai_ready": false,
+  "decision": "g531_materialization_audited_continue_real_solver_g532",
+  "gates": {
+    "all_required_tables_materialized_or_rebuildable": true,
+    "g531_backend_classified": true,
+    "row_count_mismatch_reported": false,
+    "synthetic_backend_not_promoted_to_scientific_evidence": true
+  },
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "row_count_mismatches": [],
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g532_g531_materialization_and_provenance_audit_summary_v1",
+  "table_count": 10
+}

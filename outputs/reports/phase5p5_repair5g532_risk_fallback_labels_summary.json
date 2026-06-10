@@ -1,0 +1,22 @@
+{
+  "aaai_ready": false,
+  "bucket_counts": {
+    "high": 8,
+    "low": 273,
+    "medium": 60,
+    "none": 163
+  },
+  "decision": "real_risk_fallback_labels_created",
+  "gates": {
+    "fallback_labels_created": true,
+    "gold_validation_labels_not_features": true,
+    "real_failure_audit_labels_present": true,
+    "solver_outcome_labels_present": true
+  },
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "risk_labels": 504,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g532_risk_fallback_labels_summary_v1"
+}

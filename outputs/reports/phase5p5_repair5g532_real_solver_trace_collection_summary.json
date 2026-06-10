@@ -1,0 +1,35 @@
+{
+  "aaai_ready": false,
+  "artifact_backed_deterministic_trace_replay_count": 0,
+  "budgets": [
+    1000,
+    2000
+  ],
+  "checkpoint_rows": 504,
+  "configs": [
+    "static_flow_shield",
+    "additive_ltm",
+    "old14_representative"
+  ],
+  "decision": "real_solver_trace_collection_completed",
+  "gates": {
+    "artifact_backed_deterministic_trace_replay_count_is_zero": true,
+    "exact_failure_audit_present": true,
+    "external_lacam2_clean": true,
+    "no_ids_166_205": true,
+    "raw_log_sha256_verified": true,
+    "real_solver_runner_used": true,
+    "solver_outcomes_present": true,
+    "solver_tasks_completed_gt_0": true,
+    "trace_events_present": true,
+    "traffic_cf_snapshots_present": true
+  },
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "pibt_failure_audit_rows_observed": 1799,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g532_real_solver_trace_collection_summary_v1",
+  "solver_run_rows": 504,
+  "trace_event_rows_observed": 2708684
+}

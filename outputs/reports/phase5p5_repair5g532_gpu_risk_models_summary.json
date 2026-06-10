@@ -1,0 +1,25 @@
+{
+  "aaai_ready": false,
+  "baseline_score": 0.6150793650793651,
+  "best_model": "context_risk_logistic_real",
+  "best_score": 1.0,
+  "decision": "gpu_risk_models_evaluated",
+  "gates": {
+    "controls_do_not_match": true,
+    "gold_candidate_induced_ECE_improves_or_competitive": true,
+    "warehouse_risk_recall_improves_over_g531": true
+  },
+  "gpu_status": {
+    "cuda_available": false,
+    "cuda_device_count": 0,
+    "residual_model_device": "cpu",
+    "risk_model_device": "cpu",
+    "torch_available": false,
+    "torch_unavailable": true
+  },
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g532_gpu_risk_models_summary_v1"
+}

@@ -1,0 +1,16 @@
+{
+  "aaai_ready": false,
+  "decision": "real_trace_runner_found_continue_collection",
+  "gates": {
+    "at_least_one_real_trace_runner_found": true,
+    "external_lacam2_clean": true,
+    "semantic_risk_none_or_logging_only": true
+  },
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runner_count": 3,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g532_real_trace_runner_discovery_summary_v1",
+  "selected_runner": "phase1a_batch_repair5g_checkpoint_export"
+}

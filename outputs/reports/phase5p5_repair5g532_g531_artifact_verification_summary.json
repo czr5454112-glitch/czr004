@@ -1,0 +1,42 @@
+{
+  "aaai_ready": false,
+  "decision": "g531_artifacts_verified_continue_g532",
+  "expected_row_counts": {
+    "context_slices": 1200,
+    "edge_slices": 72000,
+    "event_slices": 9600,
+    "failure_slices": 1200,
+    "gold_candidate_budget_rows": 5280,
+    "gold_context_budget_rows": 120,
+    "residual_labels": 72000,
+    "risk_labels": 84000
+  },
+  "gates": {
+    "external_lacam2_clean": true,
+    "g530_counterfactual_tables_validation": true,
+    "g530_route_addendum_exists": true,
+    "g530_solver_trace_primary_route": true,
+    "g530_update_ltm_target_only": true,
+    "g531_claims_remain_closed": true,
+    "g531_decision_expected": true,
+    "g531_row_counts_expected": true,
+    "g532_worklog_entry_present": true,
+    "ids_166_205_untouched": true
+  },
+  "learned_runtime_policy_validated": false,
+  "observed_row_counts": {
+    "context_slices": 1200,
+    "edge_slices": 72000,
+    "event_slices": 9600,
+    "failure_slices": 1200,
+    "gold_candidate_budget_rows": 5280,
+    "gold_context_budget_rows": 120,
+    "residual_labels": 72000,
+    "risk_labels": 84000,
+    "update_slices": 1200
+  },
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g532_g531_artifact_verification_summary_v1"
+}

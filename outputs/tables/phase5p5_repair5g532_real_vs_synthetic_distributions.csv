@@ -1,0 +1,5 @@
+metric,value
+real_trace_event_mean,5374.37301587
+real_failure_reason_entropy_mean,0.296167555729
+real_contexts_executable,84
+synthetic_backend_promoted,False

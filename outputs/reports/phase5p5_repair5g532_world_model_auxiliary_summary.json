@@ -1,0 +1,19 @@
+{
+  "aaai_ready": false,
+  "decision": "world_model_auxiliary_evaluated",
+  "gpu_setup_recommendation": "CUDA not visible to Python; run sklearn/numpy diagnostics only and configure torch CUDA for the 2x4090 host before large training.",
+  "gpu_status": {
+    "cuda_available": false,
+    "cuda_device_count": 0,
+    "residual_model_device": "cpu",
+    "risk_model_device": "cpu",
+    "torch_available": false,
+    "torch_unavailable": true
+  },
+  "learned_runtime_policy_validated": false,
+  "mean_failure_density": 0.006164479140554891,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g532_world_model_auxiliary_summary_v1"
+}

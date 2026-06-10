@@ -1,0 +1,8 @@
+metric,count
+pilot_execution_backend.artifact_backed_deterministic_trace_replay,1200
+pilot_execution_backend.real_solver_trace,0
+context_source.generated_g531,120
+context_source.observed_gold_anchor,120
+context_slices.backend.artifact_backed_deterministic_trace_replay,1200
+context_slices.backend.real_solver_trace,0
+gold_validation.overlap_rows,600

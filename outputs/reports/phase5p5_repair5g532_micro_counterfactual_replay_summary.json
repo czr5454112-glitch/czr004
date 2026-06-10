@@ -1,0 +1,17 @@
+{
+  "aaai_ready": false,
+  "decision": "micro_counterfactual_replay_completed",
+  "gates": {
+    "micro_counterfactual_rows_gt_0_or_blocker_reported": true,
+    "no_synthetic_replay_promoted": true,
+    "raw_sha_verified": true,
+    "real_solver_or_true_replay_used": true
+  },
+  "learned_runtime_policy_validated": false,
+  "micro_counterfactual_rows": 144,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "raw_sha256": "c5a0fc6106c4388c275a07b8fddaf38a431d5834fe251a81a216f18c8509b604",
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g532_micro_counterfactual_replay_summary_v1"
+}

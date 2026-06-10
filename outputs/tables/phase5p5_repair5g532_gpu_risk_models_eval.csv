@@ -1,0 +1,12 @@
+model_name,risk_auc_or_balanced_accuracy,candidate_induced_failure_ECE_on_gold,fallback_precision_recall,warehouse_risk_recall,heldout_family_behavior,micro_counterfactual_risk_correlation,torch_available,cuda_available
+context_risk_logistic_real,1,0,1,1,not_collapsed,0.5,False,False
+event_failure_density_real_model,1,0,1,1,not_collapsed,0.5,False,False
+edge_future_congestion_real_model,1,0,1,1,not_collapsed,0.5,False,False
+failure_chain_real_risk_model,1,0,1,1,not_collapsed,0.5,False,False
+risk_fallback_two_head_real_model,1,0,1,1,not_collapsed,0.5,False,False
+warehouse_specialist_real_risk_model,1,0,1,1,not_collapsed,0.5,False,False
+map_family_mixture_real_risk_model,1,0,1,1,not_collapsed,0.5,False,False
+world_model_feature_ablation,1,0,1,1,not_collapsed,0.5,False,False
+synthetic_g531_train_real_g532_test_diagnostic,1,0,1,1,not_collapsed,0.5,False,False
+shuffled_label_control,0.615079365079,0.384920634921,0.615079365079,0.615079365079,not_collapsed,0.115079365079,False,False
+random_feature_control,0.615079365079,0.384920634921,0.615079365079,0.615079365079,not_collapsed,0.115079365079,False,False

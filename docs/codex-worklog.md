@@ -4187,3 +4187,63 @@
 - Decision:
   - Final G5.31 decision: `g531_slice_dataset_pilot_promising_continue_scaleup`.
   - `phase5p5_allowed=false`, `phase6_allowed=false`, `runtime_claim_allowed=false`, `learned_runtime_policy_validated=false`, and `aaai_ready=false` remain closed.
+## 2026-06-10 - Repair5G.5.32 real solver trace slice scale-up
+
+- Request:
+  Finish `czr004_g532_real_solver_slice_dataset_scaleup_prompt.md` completely, using `deep-research-report.md` and `phase4_6_laur_ltm_codex_execution_plan.md` as project constraints, then push to GitHub.
+- Planned files:
+  - `czr004_g532_real_solver_slice_dataset_scaleup_plan.md`
+  - `scripts/repair5g532_common.py`
+  - G5.32 verification, materialization/provenance audit, runner discovery, executable context source, real solver trace collection, slice conversion, residual/risk labels, micro-counterfactual replay, gold validation join, residual/risk/world-model diagnostics, real-vs-synthetic quality audit, and decision scripts
+  - `outputs/reports/phase5p5_repair5g532_*`
+  - `outputs/tables/phase5p5_repair5g532_*`
+  - `outputs/logs/phase5p5_repair5g532_*`
+  - `outputs/datasets/phase5p5_repair5g532_*`
+- Constraints:
+  No `external/lacam2/lacam2/**` edits, no PIBT/LaCAM*/search/rewrite/pruning/restart/candidate-deletion/h-value/action/priority semantic changes, no reserved IDs `166..205`, no new response-surface candidate lattice, no prompt-only handoff, and all runtime/Phase5.5/Phase6/learned-runtime/AAAI claims remain closed.
+- Pre-collection worklog:
+  This entry is written before any G5.32 real solver trace collection. G5.32 will first verify and audit G5.31 materialization, then use project-owned real solver checkpoint export logs to build real trace slices; gold counterfactual rows remain validation-only.
+- Commands completed:
+  - `python -m py_compile scripts\repair5g532_common.py ... scripts\write_repair5g532_decision.py`
+  - `python scripts\verify_repair5g532_g531_artifacts.py`
+  - `python scripts\audit_repair5g532_g531_materialization_and_provenance.py`
+  - `python scripts\discover_repair5g532_real_trace_runners.py`
+  - `python scripts\create_repair5g532_real_context_source.py`
+  - `powershell -ExecutionPolicy Bypass -File scripts\build_phase1a_batch.ps1`
+  - `python scripts\run_repair5g532_real_solver_trace_collection.py --overwrite --max-workers 1`
+  - `python scripts\run_repair5g532_real_solver_trace_collection.py --max-workers 1`
+  - `python scripts\convert_repair5g532_real_logs_to_slices.py`
+  - `python scripts\create_repair5g532_real_update_residual_labels.py`
+  - `python scripts\create_repair5g532_real_risk_fallback_labels.py`
+  - `python scripts\create_repair5g532_micro_counterfactual_replay_set.py`
+  - `python scripts\run_repair5g532_micro_counterfactual_replay.py --overwrite --max-workers 1`
+  - `python scripts\create_repair5g532_gold_validation_join.py`
+  - `python scripts\train_eval_repair5g532_gpu_residual_models.py --bootstrap-samples 300`
+  - `python scripts\train_eval_repair5g532_gpu_risk_models.py --bootstrap-samples 300`
+  - `python scripts\train_eval_repair5g532_world_model_auxiliary.py --bootstrap-samples 300`
+  - `python scripts\analyze_repair5g532_real_vs_synthetic_slice_quality.py`
+  - `python scripts\write_repair5g532_decision.py`
+- Observations:
+  - G5.31 materialization/provenance audit passed with `0` row-count mismatches.
+  - Runner discovery selected `phase1a_batch_repair5g_checkpoint_export` as the real solver trace runner.
+  - Context source contains `84` unique executable contexts and `168` context-budget rows using maps `maze-32-32-4`, `random-32-32-20`, and `warehouse-10-20-10-2-1`, agents `50/100`, seeds `146..159`, and budgets `1000/2000`, with reserved IDs excluded.
+  - Real solver trace collection completed `504` solver tasks/checkpoints across three configurations and two budgets, with `2,708,684` trace events observed, `1,799` exact failure-audit rows observed, traffic before/after hashes present, and raw SHA `c5a0fc6106c4...`.
+  - Raw checkpoint logs remain under ignored `outputs/logs/phase5p5_repair5g532_real_solver_trace_collection/` and are represented by committed manifests/samples/summaries.
+  - Raw-to-slice conversion produced `504` context slices, `45,240` edge slices, `7,540` event slices, `504` failure slices, and `504` update slices, all with `trace_backend=real_solver_trace`.
+  - Residual labels total `45,240`; risk/fallback labels total `504`.
+  - Micro-counterfactual replay produced `144` validation rows from a `48` row replay set over `25` unique contexts.
+  - Gold validation join produced `360` real slice-to-gold links, `120` gold context-budget rows, and `5,280` gold candidate-budget rows.
+  - Residual best model was `linear_real_edge_residual_model`, MAE `0.808558400642` versus baseline MAE `1.590665023381`.
+  - Risk best model was `context_risk_logistic_real`, score `1.0` versus baseline score `0.615079365079`.
+  - Torch/CUDA was unavailable in this environment, so diagnostics used CPU sklearn/numpy fallback and recorded `torch_unavailable=true`.
+  - Real-vs-synthetic quality audit recommends `continue_real_solver_trace_scaleup_to_500_1000_contexts`.
+- Validation:
+  - G5.32 script `py_compile` passed.
+  - All `outputs/reports/phase5p5_repair5g532_*summary.json` files parse as JSON.
+  - Reserved-ID negative guard rejects `166` with `reserved_id_guard_rejected`.
+  - CSV row counts were checked for every `outputs/tables/phase5p5_repair5g532_*.csv`.
+  - `git diff --check` passed with line-ending warnings only.
+  - `git status --short -- external/lacam2/lacam2` returned clean.
+- Decision:
+  - Final G5.32 decision: `g532_real_solver_slice_dataset_promising_continue_scaleup`.
+  - `phase5p5_allowed=false`, `phase6_allowed=false`, `runtime_claim_allowed=false`, `learned_runtime_policy_validated=false`, and `aaai_ready=false` remain closed.

@@ -1,0 +1,26 @@
+{
+  "aaai_ready": false,
+  "baseline_mae": 1.5906650233814197,
+  "best_model": "linear_real_edge_residual_model",
+  "best_real_edge_residual_mae": 0.8085584006417282,
+  "decision": "gpu_residual_models_evaluated",
+  "gates": {
+    "beats_real_additive_proxy_baseline": true,
+    "controls_do_not_match": true,
+    "gold_validation_correlation_positive": true,
+    "heldout_map_family_not_collapse": true
+  },
+  "gpu_status": {
+    "cuda_available": false,
+    "cuda_device_count": 0,
+    "residual_model_device": "cpu",
+    "risk_model_device": "cpu",
+    "torch_available": false,
+    "torch_unavailable": true
+  },
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g532_gpu_residual_models_summary_v1"
+}

@@ -1,0 +1,29 @@
+{
+  "aaai_ready": false,
+  "decision": "real_vs_synthetic_slice_quality_analyzed",
+  "g531_synthetic_overestimated_learnability": "diagnostic_only",
+  "gpu_status": {
+    "cuda_available": false,
+    "cuda_device_count": 0,
+    "residual_model_device": "cpu",
+    "risk_model_device": "cpu",
+    "torch_available": false,
+    "torch_unavailable": true
+  },
+  "learned_runtime_policy_validated": false,
+  "next_scale_recommendation": {
+    "aaai_ready": false,
+    "learned_runtime_policy_validated": false,
+    "phase5p5_allowed": false,
+    "phase6_allowed": false,
+    "reason": "real traces materialized and gold overlap exists",
+    "recommendation": "continue_real_solver_trace_scaleup_to_500_1000_contexts",
+    "runtime_claim_allowed": false
+  },
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "raw_logs_slices_materialized_correctly": true,
+  "real_vs_synthetic_distribution_tables_written": true,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g532_real_vs_synthetic_slice_quality_summary_v1"
+}

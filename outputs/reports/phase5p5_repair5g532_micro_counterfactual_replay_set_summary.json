@@ -1,0 +1,16 @@
+{
+  "aaai_ready": false,
+  "budgets": [
+    1000,
+    2000
+  ],
+  "configs_or_candidates_limit": 3,
+  "decision": "micro_counterfactual_replay_set_created",
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "rows": 48,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g532_micro_counterfactual_replay_set_summary_v1",
+  "unique_contexts": 25
+}

@@ -1,0 +1,18 @@
+{
+  "aaai_ready": false,
+  "budget_count": 2,
+  "bytes": 1235438006,
+  "command_template": "phase1a_batch.exe --method <Repair5G UpdateParams method> --repair5g-export-update-checkpoints-jsonl <path>",
+  "config_count": 3,
+  "context_count": 84,
+  "learned_runtime_policy_validated": false,
+  "line_count": 504,
+  "path": "outputs/logs/phase5p5_repair5g532_real_solver_trace_collection/phase5p5_repair5g532_real_solver_checkpoints.jsonl",
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "raw_logs_large_not_for_commit": true,
+  "runner_name": "phase1a_batch_repair5g_checkpoint_export",
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g532_real_solver_trace_collection_manifest_v1",
+  "sha256": "c5a0fc6106c4388c275a07b8fddaf38a431d5834fe251a81a216f18c8509b604"
+}

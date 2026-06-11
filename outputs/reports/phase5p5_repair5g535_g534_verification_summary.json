@@ -1,0 +1,21 @@
+{
+  "aaai_ready": false,
+  "artifact_count": 9,
+  "decision": "g534_verified_metric_correction_required_continue_g535",
+  "g534_success_regression_count": 4,
+  "learned_runtime_policy_validated": false,
+  "missing_artifacts": [],
+  "no_external_lacam2_edits": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "required_csv_rows": {
+    "broad_probe_results": 8329,
+    "prospective_safety_audit": 195,
+    "prospective_selected_vs_additive": 179,
+    "prospective_selected_vs_static": 177,
+    "success_regression_audit": 366,
+    "torch_model_eval_by_split": 110
+  },
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g535_g534_verification_summary_v1"
+}

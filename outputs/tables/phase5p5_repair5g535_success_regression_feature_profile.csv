@@ -1,0 +1,5 @@
+case_id,traffic_before_hash,traffic_after_hash,selected_trace_event_count,selected_candidate_family,map_family,budget_ms,agents,candidate_update_profile,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+g535_success_regression_000,14650fb0739d0383,6132cefbcabd1ee7,8482,wait_conservative,warehouse,2000,50,repair5g59_wait_conservative,False,False,False,False,False
+g535_success_regression_001,,,8482,wait_conservative,warehouse,2000,50,repair5g59_wait_conservative,False,False,False,False,False
+g535_success_regression_002,,,6262,wait_conservative,warehouse,2000,50,repair5g59_wait_conservative,False,False,False,False,False
+g535_success_regression_003,,,8506,wait_conservative,warehouse,2000,50,repair5g59_wait_conservative,False,False,False,False,False

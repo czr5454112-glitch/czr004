@@ -1,0 +1,4 @@
+condition,action,reason,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+map_family == random,fallback_to_additive,feature-only gate high risk,False,False,False,False,False
+warehouse and agents <= 50 and budget >= 2000,fallback_to_additive_or_static_flow,captures G5.34 success regressions,False,False,False,False,False
+maze and budget >= 2000,fallback_to_static_flow,broad-probe risk,False,False,False,False,False

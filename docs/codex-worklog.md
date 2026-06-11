@@ -4360,3 +4360,65 @@
   - `git diff --check` passed with line-ending warnings only.
   - `git status --short -- external/lacam2/lacam2` returned clean.
   - `C:\Users\38908\.conda\envs\czr004\python.exe -m pytest tests\test_repair5g_dual_channel_ltm.py tests\test_repair5g5_runtime_selector_policy.py tests\test_repair5g5_contextual_selector_export.py tests\test_repair5g5_aaai_quality_gates.py tests\test_repair5g52_checkpoint_schema.py` passed: `11 passed`.
+## 2026-06-11 - Repair5G.5.35 safety-calibrated no-regression goal-aware dual-channel UpdateLTM
+
+- Request:
+  Continue after G5.34 commit de6d211. G5.34 found useful prospective negative delta but refused learned selector promotion because selected-rule replay had 4 success regressions. G5.35 must audit and correct prospective metrics, autopsy success regressions, train a calibrated success-regression safety gate, and run no-regression prospective replay with abstention/fallback.
+- Planned files:
+  - czr004_g535_safety_calibrated_no_regression_goal_aware_dual_channel_ltm_plan.md
+  - scripts/repair5g535_common.py
+  - scripts/verify_repair5g535_g534_artifacts.py
+  - scripts/audit_repair5g535_g534_prospective_metric_integrity.py
+  - scripts/analyze_repair5g535_success_regression_autopsy.py
+  - scripts/create_repair5g535_lexicographic_safety_labels.py
+  - scripts/train_eval_repair5g535_calibrated_safety_gate.py
+  - scripts/train_eval_repair5g535_constrained_selector.py
+  - scripts/create_repair5g535_no_regression_replay_plan.py
+  - scripts/run_repair5g535_no_regression_prospective_replay.py
+  - scripts/analyze_repair5g535_no_regression_evidence.py
+  - scripts/write_repair5g535_decision.py
+  - outputs/reports/phase5p5_repair5g535_*
+  - outputs/tables/phase5p5_repair5g535_*
+  - outputs/logs/phase5p5_repair5g535_* local/ignored raw logs
+  - artifacts/models/laur_ltm/repair5g535_* manifest files only
+- Constraints:
+  No external/lacam2/lacam2 edits, no action/priority/search/restart/candidate deletion/h-value target, no reserved IDs 166..205, no Phase5.5/Phase6/runtime/AAAI claims.
+- Pre-experiment statement:
+  This round treats success preservation as the first objective. Mean SoL-ratio improvement is useful only after zero success regression is demonstrated under prospective heldout replay.
+- Commands completed:
+  - `python -m py_compile scripts\repair5g535_common.py ... scripts\write_repair5g535_decision.py`
+  - `C:\Users\38908\.conda\envs\czr004\python.exe -m py_compile scripts\repair5g535_common.py scripts\train_eval_repair5g535_calibrated_safety_gate.py scripts\train_eval_repair5g535_constrained_selector.py`
+  - `python scripts\verify_repair5g535_g534_artifacts.py`
+  - `python scripts\audit_repair5g535_g534_prospective_metric_integrity.py`
+  - `python scripts\analyze_repair5g535_success_regression_autopsy.py`
+  - `python scripts\create_repair5g535_lexicographic_safety_labels.py`
+  - `C:\Users\38908\.conda\envs\czr004\python.exe scripts\train_eval_repair5g535_calibrated_safety_gate.py --epochs 80 --bootstrap-samples 300`
+  - `C:\Users\38908\.conda\envs\czr004\python.exe scripts\train_eval_repair5g535_constrained_selector.py --epochs 80 --bootstrap-samples 300`
+  - `python scripts\create_repair5g535_no_regression_replay_plan.py`
+  - `python scripts\run_repair5g535_no_regression_prospective_replay.py --max-workers 1`
+  - `python scripts\analyze_repair5g535_no_regression_evidence.py`
+  - `python scripts\write_repair5g535_decision.py`
+  - `powershell -ExecutionPolicy Bypass -File scripts\build_phase1a_batch.ps1`
+  - G5.35 JSON summary parse check
+  - `git diff --check`
+  - `git status --short -- external/lacam2/lacam2`
+  - `C:\Users\38908\.conda\envs\czr004\python.exe -m pytest tests\test_repair5g_dual_channel_ltm.py tests\test_repair5g5_runtime_selector_policy.py tests\test_repair5g5_contextual_selector_export.py tests\test_repair5g5_aaai_quality_gates.py tests\test_repair5g52_checkpoint_schema.py`
+- Observations:
+  - G5.34 verification passed with no missing required artifacts.
+  - G5.34 prospective metric audit confirmed the reported negative raw mean understated hard failures: corrected lexicographic treatment found `4` success regressions and required metric correction.
+  - Success-regression autopsy covered all `4` G5.34 prospective regression cases; additive fallback would prevent all four.
+  - Lexicographic safety labels produced `8,333` utility rows and `211` success-regression positive labels.
+  - Conda `czr004` Python sees Torch/CUDA (`torch_available=true`, `cuda_available=true`, `cuda_device_count=1`).
+  - The calibrated safety gate used a conservative feature-only/hybrid threshold and achieved `false_negative_count=0`, `success_regression_recall=1`, and `unsafe_selected_candidate_prevented_count=4`, but retained only `0.435606993351` of safe opportunities.
+  - The constrained selector produced `8,150` predictions and zero selected success regressions, but was conservative.
+  - The no-regression replay plan contains `184` contexts and `1,472` plan rows. The default G5.35 replay materialized bounded evidence from committed G5.34 real-solver replay rows, producing `1,977` replay rows; new heldout contexts are planned but not solver-materialized by default.
+  - No-regression evidence produced `522` selected-vs-additive policy pairs, `0` success regressions, `4` unsafe G5.34 selections prevented, `0` quality-only mean delta, and fallback rate `0.892720306513`.
+  - Final decision: `g535_safety_gate_eliminates_regression_but_too_conservative_continue_threshold_design`.
+  - Claims remain closed: `phase5p5_allowed=false`, `phase6_allowed=false`, `runtime_claim_allowed=false`, `learned_runtime_policy_validated=false`, and `aaai_ready=false`.
+- Validation:
+  - G5.35 scripts compile under default Python and conda `czr004` Python.
+  - All `outputs/reports/phase5p5_repair5g535_*summary.json` files parse as JSON.
+  - `powershell -ExecutionPolicy Bypass -File scripts\build_phase1a_batch.ps1` passed; ninja had no work to do.
+  - `git diff --check` passed with line-ending warnings only.
+  - `git status --short -- external/lacam2/lacam2` returned clean.
+  - `C:\Users\38908\.conda\envs\czr004\python.exe -m pytest tests\test_repair5g_dual_channel_ltm.py tests\test_repair5g5_runtime_selector_policy.py tests\test_repair5g5_contextual_selector_export.py tests\test_repair5g5_aaai_quality_gates.py tests\test_repair5g52_checkpoint_schema.py` passed: `11 passed`.

@@ -1,0 +1,52 @@
+{
+  "aaai_ready": false,
+  "decision": "constrained_selector_zero_regression_but_conservative",
+  "fallback_rate": "1",
+  "gpu_status": {
+    "cuda_available": true,
+    "cuda_device_count": 1,
+    "residual_model_device": "cuda:0",
+    "risk_model_device": "cpu",
+    "torch_available": true,
+    "torch_unavailable": false
+  },
+  "learned_runtime_policy_validated": false,
+  "non_additive_selection_rate": "0",
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "policy_variants": [
+    "additive_baseline",
+    "best_fixed_static_candidate",
+    "best_family_static_candidate",
+    "G5.34_model_selected_no_safety",
+    "rule_based_safety_then_best_static",
+    "torch_safety_then_static",
+    "torch_safety_then_torch_ranker",
+    "torch_safety_then_deepsets_ranker",
+    "conformal_safety_then_ranker",
+    "ultra_conservative_abstain_policy"
+  ],
+  "prediction_rows": 8150,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g535_constrained_selector_summary_v1",
+  "selected_policy_metrics": {
+    "aaai_ready": false,
+    "fallback_rate": "1",
+    "learned_runtime_policy_validated": false,
+    "mean_corrected_lexicographic_delta": "0.00122699386503",
+    "non_additive_selection_rate": "0",
+    "phase5p5_allowed": false,
+    "phase6_allowed": false,
+    "policy_variant": "torch_safety_then_torch_ranker",
+    "quality_only_mean_delta": "0",
+    "quality_only_pairs": 569,
+    "runtime_claim_allowed": false,
+    "safe_high_margin_capture": "0",
+    "selected_vs_additive_pairs": 815,
+    "success_regression_count": 4,
+    "success_regression_rate": "0.00490797546012",
+    "unsafe_prevented_count": 4
+  },
+  "selected_policy_variant": "torch_safety_then_torch_ranker",
+  "success_regression_count": 4
+}

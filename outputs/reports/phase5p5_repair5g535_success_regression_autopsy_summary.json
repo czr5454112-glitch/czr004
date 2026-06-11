@@ -1,0 +1,22 @@
+{
+  "aaai_ready": false,
+  "additive_fallback_would_prevent_every_regression": true,
+  "blank_selected_ratio_cases": 4,
+  "budget_distribution": {
+    "2000": 4
+  },
+  "decision": "success_regression_autopsy_completed",
+  "evidence_strength": "committed_g534_prospective_real_solver_replay",
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "regressions_concentrated_in_warehouse": true,
+  "runtime_claim_allowed": false,
+  "safe_alternative_rows": 19,
+  "schema_version": "phase5p5_repair5g535_success_regression_autopsy_summary_v1",
+  "selected_candidate_distribution": {
+    "repair5g59_wait_conservative": 4
+  },
+  "static_flow_shield_would_prevent_every_regression": false,
+  "success_regression_cases": 4
+}

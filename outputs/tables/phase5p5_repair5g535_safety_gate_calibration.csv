@@ -1,0 +1,5 @@
+risk_bin,rows,mean_predicted_risk,observed_success_regression_rate,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+"[0.00,0.10)",3538,0.0236489542114,0,False,False,False,False,False
+"[0.10,0.50)",30,0.35,0,False,False,False,False,False
+"[0.50,0.80)",0,0,0,False,False,False,False,False
+"[0.80,1.01)",4765,0.891441762854,0.0442812172088,False,False,False,False,False

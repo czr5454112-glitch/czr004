@@ -1,0 +1,4 @@
+policy_variant,selected_vs_additive_pairs,mean_corrected_lexicographic_delta,quality_only_mean_delta,quality_only_pairs,success_regression_count,success_regression_rate,fallback_rate,non_additive_selection_rate,safe_high_margin_capture,unsafe_prevented_count,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready,ablation
+G5.34_model_selected_no_safety,815,0.00122699386503,0,569,4,0.00490797546012,0,0.00490797546012,0,0,False,False,False,False,False,no_safety_gate
+rule_based_safety_then_best_static,815,0.00122699386503,0,569,4,0.00490797546012,1,0,0,4,False,False,False,False,False,feature_rule_gate
+ultra_conservative_abstain_policy,815,0.00122699386503,0,569,4,0.00490797546012,1,0,0,4,False,False,False,False,False,always_abstain

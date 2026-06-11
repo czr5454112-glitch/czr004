@@ -1,0 +1,28 @@
+{
+  "aaai_ready": false,
+  "calibration_ece": "0.495726629065",
+  "decision": "calibrated_safety_gate_zero_false_negative_feature_rule",
+  "fallback_rate": "0.575423016921",
+  "false_negative_count": 0,
+  "feature_policy": "allowed_pre_update_context_candidate_params_only",
+  "gpu_status": {
+    "cuda_available": true,
+    "cuda_device_count": 1,
+    "residual_model_device": "cuda:0",
+    "risk_model_device": "cpu",
+    "torch_available": true,
+    "torch_unavailable": false
+  },
+  "high_margin_safe_opportunity_retention_rate": "0",
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "prospective_regression_false_negative_count": 0,
+  "runtime_claim_allowed": false,
+  "safe_opportunity_retention_rate": "0.435606993351",
+  "schema_version": "phase5p5_repair5g535_calibrated_safety_gate_summary_v1",
+  "selected_model_family": "hybrid_rule_plus_torch_safety_gate",
+  "selected_threshold": "0.10",
+  "success_regression_recall": "1",
+  "unsafe_selected_candidate_prevented_count": 4
+}

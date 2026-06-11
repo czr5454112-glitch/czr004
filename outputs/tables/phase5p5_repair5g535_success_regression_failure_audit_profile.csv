@@ -1,0 +1,5 @@
+case_id,additive_failure_audit_count,selected_failure_audit_count,static_failure_audit_count,selected_no_solution_blank_ratio,additive_succeeded_by_margin,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+g535_success_regression_000,0,0,0,True,robust_or_unknown,False,False,False,False,False
+g535_success_regression_001,,,,True,robust_or_unknown,False,False,False,False,False
+g535_success_regression_002,,,,True,robust_or_unknown,False,False,False,False,False
+g535_success_regression_003,,,,True,robust_or_unknown,False,False,False,False,False

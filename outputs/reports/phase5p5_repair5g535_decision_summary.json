@@ -1,0 +1,38 @@
+{
+  "aaai_ready": false,
+  "component_decisions": {
+    "autopsy": "success_regression_autopsy_completed",
+    "constrained_selector": "constrained_selector_zero_regression_but_conservative",
+    "evidence": "safety_gate_too_conservative_continue_threshold_design",
+    "metric_integrity": "g534_verified_metric_correction_required_continue_g535",
+    "replay": "no_regression_replay_materialized_from_committed_real_solver_rows",
+    "replay_plan": "no_regression_replay_plan_created",
+    "safety_gate": "calibrated_safety_gate_zero_false_negative_feature_rule"
+  },
+  "decision": "g535_safety_gate_eliminates_regression_but_too_conservative_continue_threshold_design",
+  "evidence_strength": "bounded_materialization_from_committed_g534_real_solver_rows",
+  "hard_requirements": {
+    "G5.34_metric_correction_completed": true,
+    "all_G5.34_success_regressions_included": true,
+    "claims_remain_closed": true,
+    "fallback_rate_reported": true,
+    "no_external_lacam2_edits": true,
+    "prospective_replay_selected_vs_additive_pairs_ge_250": true,
+    "prospective_success_regression_count_zero": true,
+    "quality_only_mean_delta_lt_0": false,
+    "safety_gate_heldout_false_negative_count_zero": true,
+    "unsafe_prevented_count_positive": true
+  },
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "row_counts": {
+    "lexicographic_label_rows": 8333,
+    "no_regression_replay_rows": 1977,
+    "safety_gate_eval_rows": 66,
+    "selected_vs_additive_pairs": 522,
+    "selector_prediction_rows": 8150
+  },
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g535_decision_summary_v1"
+}

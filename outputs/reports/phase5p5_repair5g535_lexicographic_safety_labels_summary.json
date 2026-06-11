@@ -1,0 +1,14 @@
+{
+  "aaai_ready": false,
+  "abstention_or_fallback_contexts": 82,
+  "candidate_lexicographic_utility_rows": 8333,
+  "decision": "lexicographic_safety_labels_created",
+  "learned_runtime_policy_validated": false,
+  "pairwise_safe_dominance_rows": 57965,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "safe_candidate_set_contexts": 815,
+  "schema_version": "phase5p5_repair5g535_lexicographic_safety_labels_summary_v1",
+  "success_regression_positive_labels": 211
+}

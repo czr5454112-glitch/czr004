@@ -1,0 +1,10 @@
+artifact,path,exists,row_count,sha256,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+decision_summary,outputs/reports/phase5p5_repair5g534_decision_summary.json,True,,ea7321574982e6e1,False,False,False,False,False
+prospective_evidence_summary,outputs/reports/phase5p5_repair5g534_prospective_evidence_summary.json,True,,3450595e5d95d962,False,False,False,False,False
+prospective_selected_vs_additive,outputs/tables/phase5p5_repair5g534_prospective_selected_vs_additive_paired.csv,True,179,662a801b01ef15cb,False,False,False,False,False
+prospective_selected_vs_static,outputs/tables/phase5p5_repair5g534_prospective_selected_vs_static_paired.csv,True,177,971042b7c7dc9ba5,False,False,False,False,False
+prospective_safety_audit,outputs/tables/phase5p5_repair5g534_prospective_safety_audit.csv,True,195,af06d8c8fe179b37,False,False,False,False,False
+torch_model_eval_by_split,outputs/tables/phase5p5_repair5g534_torch_model_eval_by_split.csv,True,110,30c541dbd8414ac6,False,False,False,False,False
+success_regression_audit,outputs/tables/phase5p5_repair5g534_success_regression_audit.csv,True,366,3005c06d34d6a3ee,False,False,False,False,False
+broad_probe_results,outputs/tables/phase5p5_repair5g534_broad_probe_results.csv,True,8329,912f0e1aadeda928,False,False,False,False,False
+repair5g534_common,scripts/repair5g534_common.py,True,,9bf908dc9782b8f5,False,False,False,False,False

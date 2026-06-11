@@ -1,0 +1,8 @@
+policy_variant,selected_vs_additive_pairs,mean_corrected_lexicographic_delta,quality_only_mean_delta,quality_only_pairs,success_regression_count,success_regression_rate,fallback_rate,non_additive_selection_rate,safe_high_margin_capture,unsafe_prevented_count,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready,threshold
+threshold_0.01,815,0,0,569,4,0.00490797546012,1,0,0,0,False,False,False,False,False,0.01
+threshold_0.02,815,0,0,569,4,0.00490797546012,1,0,0,0,False,False,False,False,False,0.02
+threshold_0.05,815,0,0,569,4,0.00490797546012,1,0,0,0,False,False,False,False,False,0.05
+threshold_0.1,815,0,0,569,4,0.00490797546012,1,0,0,0,False,False,False,False,False,0.1
+threshold_0.2,815,0,0,569,4,0.00490797546012,1,0,0,0,False,False,False,False,False,0.2
+threshold_0.3,815,0,0,569,4,0.00490797546012,1,0,0,0,False,False,False,False,False,0.3
+threshold_0.5,815,0,0,569,4,0.00490797546012,1,0,0,0,False,False,False,False,False,0.5

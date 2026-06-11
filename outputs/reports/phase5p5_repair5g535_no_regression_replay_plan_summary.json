@@ -1,0 +1,17 @@
+{
+  "aaai_ready": false,
+  "bounded_default_note": "new contexts are planned; default materialization reuses committed G5.34 real-solver rows",
+  "decision": "no_regression_replay_plan_created",
+  "learned_runtime_policy_validated": false,
+  "minimum_no_regression_contexts_met": true,
+  "must_include_all_G5.34_success_regression_contexts": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "plan_rows": 1472,
+  "replay_new_contexts_planned": 16,
+  "replay_same_contexts": 168,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g535_no_regression_replay_plan_summary_v1",
+  "target_no_regression_contexts_met": false,
+  "total_contexts": 184
+}

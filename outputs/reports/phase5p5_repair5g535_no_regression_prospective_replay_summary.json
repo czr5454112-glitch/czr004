@@ -1,0 +1,14 @@
+{
+  "aaai_ready": false,
+  "decision": "no_regression_replay_materialized_from_committed_real_solver_rows",
+  "execution_mode": "bounded_materialization_from_g534_real_solver_replay",
+  "learned_runtime_policy_validated": false,
+  "max_workers": 1,
+  "missing_materializations": 2055,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "replay_rows": 1977,
+  "runtime_claim_allowed": false,
+  "sample_rows": 250,
+  "schema_version": "phase5p5_repair5g535_no_regression_prospective_replay_summary_v1"
+}

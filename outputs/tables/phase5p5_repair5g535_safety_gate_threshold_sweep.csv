@@ -1,0 +1,8 @@
+model_family,threshold,rows,unsafe_positive_rows,true_positive_count,false_negative_count,false_positive_count,true_negative_count,success_regression_recall,safe_opportunity_retention_rate,high_margin_safe_opportunity_retention_rate,fallback_rate,calibration_ece,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready,selected_threshold_candidate
+hybrid_rule_plus_torch_safety_gate,0.01,8333,211,211,0,7373,749,1,0.0922186653534,0,0.910116404656,0.495726629065,False,False,False,False,False,False
+hybrid_rule_plus_torch_safety_gate,0.02,8333,211,211,0,7373,749,1,0.0922186653534,0,0.910116404656,0.495726629065,False,False,False,False,False,False
+hybrid_rule_plus_torch_safety_gate,0.05,8333,211,211,0,4584,3538,1,0.435606993351,0,0.575423016921,0.495726629065,False,False,False,False,False,False
+hybrid_rule_plus_torch_safety_gate,0.1,8333,211,211,0,4584,3538,1,0.435606993351,0,0.575423016921,0.495726629065,False,False,False,False,False,True
+hybrid_rule_plus_torch_safety_gate,0.2,8333,211,211,0,4584,3538,1,0.435606993351,0,0.575423016921,0.495726629065,False,False,False,False,False,False
+hybrid_rule_plus_torch_safety_gate,0.3,8333,211,211,0,4584,3538,1,0.435606993351,0,0.575423016921,0.495726629065,False,False,False,False,False,False
+hybrid_rule_plus_torch_safety_gate,0.5,8333,211,211,0,4554,3568,1,0.439300664861,0,0.571822872915,0.495726629065,False,False,False,False,False,False

@@ -1,0 +1,5 @@
+negative_control,expected_behavior,false_negative_count,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+shuffled_labels,worse_than_feature_gate,52,False,False,False,False,False
+random_features,worse_than_feature_gate,70,False,False,False,False,False
+candidate_id_only,worse_than_feature_gate,42,False,False,False,False,False
+map_family_only,worse_than_feature_gate,35,False,False,False,False,False

@@ -1,0 +1,4 @@
+negative_control,success_regression_count,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+shuffled_safety_scores,12,False,False,False,False,False
+random_candidate_after_gate,9,False,False,False,False,False
+no_abstention_margin,4,False,False,False,False,False

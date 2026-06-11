@@ -1,0 +1,20 @@
+{
+  "aaai_ready": false,
+  "both_fail_count": 88,
+  "corrected_lexicographic_delta_mean": "-0.00262459106412",
+  "corrected_quality_delta_mean": "-0.00268050976193",
+  "decision": "g534_verified_metric_correction_required_continue_g535",
+  "failure_penalty_ratio": "0.25",
+  "learned_runtime_policy_validated": false,
+  "metric_bug_rows": 97,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "quality_only_pairs": 82,
+  "raw_g534_delta_mean": "-0.00122794301943",
+  "runtime_claim_allowed": false,
+  "safety_fallback_activation_count": 0,
+  "safety_fallback_noop": true,
+  "schema_version": "phase5p5_repair5g535_g534_prospective_metric_integrity_summary_v1",
+  "success_gain_count": 5,
+  "success_regression_count": 4
+}

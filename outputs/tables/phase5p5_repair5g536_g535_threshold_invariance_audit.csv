@@ -1,0 +1,3 @@
+audit,threshold_count,false_negative_values,safe_retention_values,high_margin_retention_values,non_additive_selection_values,invariant_enough_to_require_score_redesign,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+safety_gate_threshold_sweep,7,1,3,1,,True,False,False,False,False,False
+selector_threshold_sweep,7,,,1,1,True,False,False,False,False,False

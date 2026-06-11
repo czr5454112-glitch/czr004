@@ -1,0 +1,9 @@
+{
+  "aaai_ready": false,
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g536_safe_candidate_design_suggestions_summary_v1",
+  "suggestions": 2
+}

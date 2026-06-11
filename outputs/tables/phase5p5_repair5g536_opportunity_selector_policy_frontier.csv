@@ -1,0 +1,11 @@
+policy_variant,selected_vs_additive_pairs,success_regression_count,corrected_lexicographic_delta_mean,quality_only_mean_delta,quality_only_pairs,safe_high_margin_capture,safe_low_margin_capture,non_additive_selection_rate,fallback_rate,unsafe_prevented_count,oracle_safe_gap_closed,static_bridge_gap_closed,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+additive_baseline,815,0,0,0,642,0,0,0,1,4,,,False,False,False,False,False
+G5.35_conservative_safety_gate,815,0,0,0,642,0,0,0,1,4,,,False,False,False,False,False
+static_safe_bridge,815,0,0,0,642,0,0,0.107975460123,0.892024539877,4,,,False,False,False,False,False
+candidate_whitelist_then_best_static,815,0,0,0,642,0,0,0.107975460123,0.892024539877,4,,,False,False,False,False,False
+candidate_whitelist_then_ranker,815,0,-0.00194514170308,-0.00246929982556,642,0.537313432836,0,0.0441717791411,0.955828220859,4,,,False,False,False,False,False
+pareto_safety_gate_then_ranker,1630,0,-0.00193653457542,-0.00254560593382,1240,0.537313432836,0,0.678527607362,0.321472392638,8,,,False,False,False,False,False
+pareto_safety_gate_then_ranker_with_margin,815,0,-0.00194514170308,-0.00246929982556,642,0.537313432836,0,0.0441717791411,0.955828220859,4,,,False,False,False,False,False
+pareto_safety_gate_then_ranker,1630,0,-0.00193653457542,-0.00254560593382,1240,0.537313432836,0,0.678527607362,0.321472392638,8,,,False,False,False,False,False
+ultra_conservative_abstain_policy,815,0,0,0,642,0,0,0,1,4,,,False,False,False,False,False
+oracle_safe_candidate_upper_bound,815,0,-0.00511495291332,-0.0072751948069,573,1,0.00122699386503,0.957055214724,0.0429447852761,4,,,False,False,False,False,False

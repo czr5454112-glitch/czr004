@@ -1,0 +1,4 @@
+model_family,threshold,rows,unsafe_positive_rows,true_positive_count,false_negative_count,false_positive_count,true_negative_count,success_regression_recall,safe_opportunity_retention_rate,high_margin_safe_opportunity_retention_rate,fallback_rate,non_additive_allowed_rate,unsafe_prevented_count,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready,map_family
+candidate_stratum_rule_plus_torch_score,0.001,3153,9,9,0,497,2647,1,0.824133050248,0.47191011236,0.160482080558,0.738661592134,9,False,False,False,False,False,maze
+candidate_stratum_rule_plus_torch_score,0.001,3541,177,177,0,2530,834,1,0.163636363636,0.0194805194805,0.764473312624,0.139791019486,177,False,False,False,False,False,random
+candidate_stratum_rule_plus_torch_score,0.001,1639,25,25,0,283,1331,1,0.814060446781,0,0.187919463087,0.755948749237,25,False,False,False,False,False,warehouse

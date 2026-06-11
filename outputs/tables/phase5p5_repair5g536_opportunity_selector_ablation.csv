@@ -1,0 +1,4 @@
+policy_variant,selected_vs_additive_pairs,success_regression_count,corrected_lexicographic_delta_mean,quality_only_mean_delta,quality_only_pairs,safe_high_margin_capture,safe_low_margin_capture,non_additive_selection_rate,fallback_rate,unsafe_prevented_count,oracle_safe_gap_closed,static_bridge_gap_closed,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready,ablation
+pareto_safety_gate_then_ranker,1630,0,-0.00193653457542,-0.00254560593382,1240,0.537313432836,0,0.678527607362,0.321472392638,8,,,False,False,False,False,False,no_family_specific_rules
+pareto_safety_gate_then_ranker_with_margin,815,0,-0.00194514170308,-0.00246929982556,642,0.537313432836,0,0.0441717791411,0.955828220859,4,,,False,False,False,False,False,high_margin_only
+ultra_conservative_abstain_policy,815,0,0,0,642,0,0,0,1,4,,,False,False,False,False,False,always_abstain

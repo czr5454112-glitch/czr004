@@ -1,0 +1,2 @@
+artifact,execution_mode,replay_rows,missing_materializations,audit_result,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+G5.35 no-regression replay,bounded_materialization_from_g534_real_solver_replay,1977,2055,new_solver_replay_required,False,False,False,False,False

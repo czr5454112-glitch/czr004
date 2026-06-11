@@ -1,0 +1,46 @@
+{
+  "aaai_ready": false,
+  "abstain_required_count": 2673,
+  "budget_imbalance": {
+    "1000": 3046,
+    "2000": 2480,
+    "500": 2807
+  },
+  "candidate_imbalance_top10": {
+    "repair5g518_grid_c1p25_b1p25_f1p00_w0p75_dc0p95_df1p00_beta0p7_max1p00_c0": 556,
+    "repair5g59_additive_fallback": 749,
+    "repair5g59_block_heavy_flow_guard": 373,
+    "repair5g59_c_only_f_disabled": 372,
+    "repair5g59_flow_decay": 733,
+    "repair5g59_high_beta_cap_safe": 729,
+    "repair5g59_low_beta_high_cap": 372,
+    "repair5g59_static_flow_shield": 742,
+    "repair5g59_wait_aggressive": 372,
+    "repair5g59_wait_conservative": 735
+  },
+  "class_counts": {
+    "A_unsafe_success_regression": 211,
+    "B_safe_high_margin_gain": 332,
+    "C_safe_low_margin_gain": 21,
+    "D_safe_equal": 5329,
+    "E_safe_worse": 18,
+    "F_both_fail": 2265,
+    "G_selected_success_gain": 157
+  },
+  "decision": "safe_opportunity_dataset_created",
+  "examples": 8333,
+  "hard_negative_count": 2318,
+  "learned_runtime_policy_validated": false,
+  "map_family_imbalance": {
+    "maze": 3153,
+    "random": 3541,
+    "warehouse": 1639
+  },
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "safe_gain_to_unsafe_ratio": "2.41706161137",
+  "safe_high_margin_count": 332,
+  "schema_version": "phase5p5_repair5g536_safe_opportunity_dataset_summary_v1",
+  "unsafe_success_regression_count": 211
+}

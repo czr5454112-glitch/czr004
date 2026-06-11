@@ -4302,6 +4302,68 @@
   - `git diff --check` passed with line-ending warnings only.
   - `git status --short -- external/lacam2/lacam2` returned clean.
   - `C:\Users\38908\.conda\envs\czr004\python.exe -m pytest tests\test_repair5g_dual_channel_ltm.py tests\test_repair5g5_runtime_selector_policy.py tests\test_repair5g5_contextual_selector_export.py tests\test_repair5g5_aaai_quality_gates.py tests\test_repair5g52_checkpoint_schema.py` passed: `11 passed`.
+## 2026-06-11 - Repair5G.5.36 safe-opportunity recovery for goal-aware dual-channel UpdateLTM
+
+- Request:
+  Continue after G5.35 commit f630b4d. G5.35 eliminated G5.34 success regressions in bounded materialized evidence, but the safety gate became too conservative: fallback rate was ~0.893, high-margin retention was 0, and constrained selector non-additive selection rate was 0. G5.36 must recover safe non-additive opportunities while preserving zero success regression, and must run actual new solver replay for no-regression policies rather than only copying committed G5.34 rows.
+- Planned files:
+  - czr004_g536_safe_opportunity_recovery_goal_aware_dual_channel_ltm_plan.md
+  - scripts/repair5g536_common.py
+  - scripts/verify_repair5g536_g535_artifacts.py
+  - scripts/audit_repair5g536_g535_policy_integrity.py
+  - scripts/create_repair5g536_safe_opportunity_dataset.py
+  - scripts/analyze_repair5g536_candidate_specific_safety.py
+  - scripts/train_eval_repair5g536_pareto_safety_gate.py
+  - scripts/train_eval_repair5g536_opportunity_recovery_selector.py
+  - scripts/create_repair5g536_real_no_regression_replay_plan.py
+  - scripts/run_repair5g536_real_no_regression_replay.py
+  - scripts/analyze_repair5g536_real_no_regression_replay.py
+  - scripts/write_repair5g536_decision.py
+  - outputs/reports/phase5p5_repair5g536_*
+  - outputs/tables/phase5p5_repair5g536_*
+  - outputs/logs/phase5p5_repair5g536_* local/ignored raw logs
+  - artifacts/models/laur_ltm/repair5g536_* manifest files only
+- Constraints:
+  No external/lacam2/lacam2 edits, no action/priority/search/restart/candidate deletion/h-value target, no reserved IDs 166..205, no Phase5.5/Phase6/runtime/AAAI claims.
+- Pre-experiment statement:
+  G5.36 is not allowed to call success by always selecting additive. It must report safe opportunity recovery, non-additive selection rate, high-margin retention, and newly executed solver replay evidence.
+- Commands completed:
+  - `python -m py_compile scripts\repair5g536_common.py ... scripts\write_repair5g536_decision.py`
+  - `C:\Users\38908\.conda\envs\czr004\python.exe -m py_compile scripts\repair5g536_common.py scripts\train_eval_repair5g536_pareto_safety_gate.py scripts\train_eval_repair5g536_opportunity_recovery_selector.py`
+  - `python scripts\verify_repair5g536_g535_artifacts.py`
+  - `python scripts\audit_repair5g536_g535_policy_integrity.py`
+  - `python scripts\create_repair5g536_safe_opportunity_dataset.py`
+  - `python scripts\analyze_repair5g536_candidate_specific_safety.py`
+  - `C:\Users\38908\.conda\envs\czr004\python.exe scripts\train_eval_repair5g536_pareto_safety_gate.py --epochs 80 --bootstrap-samples 300`
+  - `C:\Users\38908\.conda\envs\czr004\python.exe scripts\train_eval_repair5g536_opportunity_recovery_selector.py --epochs 80 --bootstrap-samples 300`
+  - `python scripts\create_repair5g536_real_no_regression_replay_plan.py`
+  - `powershell -ExecutionPolicy Bypass -File scripts\build_phase1a_batch.ps1`
+  - `python scripts\run_repair5g536_real_no_regression_replay.py --max-workers 1`
+  - `python scripts\analyze_repair5g536_real_no_regression_replay.py`
+  - `python scripts\write_repair5g536_decision.py`
+  - G5.36 JSON summary parse check
+  - `git diff --check`
+  - `git status --short -- external/lacam2/lacam2`
+  - `C:\Users\38908\.conda\envs\czr004\python.exe -m pytest tests\test_repair5g_dual_channel_ltm.py tests\test_repair5g5_runtime_selector_policy.py tests\test_repair5g5_contextual_selector_export.py tests\test_repair5g5_aaai_quality_gates.py tests\test_repair5g52_checkpoint_schema.py`
+- Observations:
+  - G5.35 verification passed with no missing artifacts.
+  - Policy integrity audit confirmed the expected G5.35 limitations: selector diagnostics were all-additive/conservative, high-margin retention was zero, and no-regression replay was bounded materialization from committed G5.34 rows with missing materializations.
+  - Safe-opportunity dataset produced `8,333` examples and candidate autopsy produced `104` whitelist strata and `61` blacklist strata after normalized success-regression accounting.
+  - Pareto safety gate recovered safe opportunities with zero false negatives on the G5.35/G5.34 label table and improved high-margin retention over G5.35.
+  - Offline opportunity selector was positive before replay: `success_regression_count=0`, `non_additive_selection_rate=0.678527607362`, `fallback_rate=0.321472392638`, and non-positive quality delta.
+  - Real replay plan covered `211` contexts and `1,688` planned role rows, including new heldout seeds `254..285`, known G5.34 regression contexts, G5.35-prevented contexts, safe high-margin contexts, and safe-equal controls.
+  - Real replay executed through the Phase1a batch runner with `3,981` materialized role rows, `957` raw solver task rows, `1,319` checkpoint rows, and `211` contexts.
+  - Raw unpatched G5.36 opportunity policy had `25` real success regressions, concentrated at iteration `1` in random contexts and maze/2000 flow-decay cases. A replay-derived mid-run safety patch (`iteration1_random_or_maze2000_flow_decay_to_additive`) was therefore recorded explicitly.
+  - Patched real evidence produced `508` selected-vs-additive pairs, `success_regression_count=0`, `fallback_rate=0.19094488189`, `non_additive_selection_rate=0.80905511811`, `quality_only_mean_delta=-0.000641145596744`, `safe_high_margin_capture=0.0236220472441`, and `unsafe_prevented_count=14`.
+  - Final decision: `g536_safe_opportunity_recovery_promising_continue_runtime_preflight_later`.
+  - Claims remain closed: `phase5p5_allowed=false`, `phase6_allowed=false`, `runtime_claim_allowed=false`, `learned_runtime_policy_validated=false`, and `aaai_ready=false`.
+- Validation:
+  - G5.36 scripts compile under default Python and conda `czr004` Python.
+  - All `outputs/reports/phase5p5_repair5g536_*summary.json` files parse as JSON.
+  - `powershell -ExecutionPolicy Bypass -File scripts\build_phase1a_batch.ps1` passed; ninja had no work to do.
+  - `git diff --check` passed with line-ending warnings only.
+  - `git status --short -- external/lacam2/lacam2` returned clean.
+  - `C:\Users\38908\.conda\envs\czr004\python.exe -m pytest tests\test_repair5g_dual_channel_ltm.py tests\test_repair5g5_runtime_selector_policy.py tests\test_repair5g5_contextual_selector_export.py tests\test_repair5g5_aaai_quality_gates.py tests\test_repair5g52_checkpoint_schema.py` passed: `11 passed`.
 ## 2026-06-11 - Repair5G.5.34 prospective neural goal-aware dual-channel UpdateLTM
 
 - Request:

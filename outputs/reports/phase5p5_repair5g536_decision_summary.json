@@ -1,0 +1,43 @@
+{
+  "aaai_ready": false,
+  "component_decisions": {
+    "candidate_specific_safety": "candidate_specific_whitelist_blacklist_created",
+    "dataset": "safe_opportunity_dataset_created",
+    "opportunity_selector": "opportunity_recovery_selector_positive_offline",
+    "pareto_safety_gate": "pareto_safety_gate_recovers_safe_opportunities_zero_fn",
+    "policy_integrity": "g535_verified_continue_safe_opportunity_recovery",
+    "real_evidence": "real_replay_success_zero_regression_safe_recovery",
+    "real_replay": "real_replay_executed",
+    "real_replay_plan": "real_no_regression_replay_plan_created",
+    "verification": "g535_verified_continue_safe_opportunity_recovery"
+  },
+  "decision": "g536_safe_opportunity_recovery_promising_continue_runtime_preflight_later",
+  "hard_requirements": {
+    "G5.35_policy_integrity_audited": true,
+    "all_claims_closed": true,
+    "external_lacam2_clean": true,
+    "fallback_rate_lt_0p85": true,
+    "new_solver_rows_ge_1200": true,
+    "non_additive_selection_rate_gt_0p05": true,
+    "policy_pairs_ge_500": true,
+    "quality_only_mean_delta_le_0": true,
+    "real_new_solver_replay_executed": true,
+    "reserved_ids_untouched": true,
+    "safe_high_margin_capture_gt_0": true,
+    "success_regression_count_zero": true
+  },
+  "key_metrics": {
+    "fallback_rate": "0.19094488189",
+    "new_solver_rows": 3981,
+    "non_additive_selection_rate": "0.80905511811",
+    "policy_pairs": 508,
+    "quality_only_mean_delta": "-0.000641145596744",
+    "safe_high_margin_capture": "0.0236220472441",
+    "success_regression_count": 0
+  },
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g536_decision_summary_v1"
+}

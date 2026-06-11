@@ -1,0 +1,21 @@
+{
+  "aaai_ready": false,
+  "artifact_count": 12,
+  "consistency_checks": {
+    "g535_gate_high_margin_retention_zero": true,
+    "g535_replay_materialized_not_real_new": true,
+    "g535_selector_non_additive_zero": true,
+    "g535_success_regression_count_zero": true
+  },
+  "decision": "g535_verified_continue_safe_opportunity_recovery",
+  "g535_constrained_selector_non_additive_selection_rate": "0",
+  "g535_no_regression_fallback_rate": "0.892720306513",
+  "g535_safety_gate_safe_retention": "0.435606993351",
+  "learned_runtime_policy_validated": false,
+  "missing_artifacts": [],
+  "no_external_lacam2_edits": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g536_g535_verification_summary_v1"
+}

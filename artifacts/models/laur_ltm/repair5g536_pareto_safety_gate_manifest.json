@@ -1,0 +1,32 @@
+{
+  "aaai_ready": false,
+  "beats_g535_high_margin_retention": true,
+  "beats_g535_safe_retention": true,
+  "decision": "pareto_safety_gate_recovers_safe_opportunities_zero_fn",
+  "fallback_rate": "0.388935557422",
+  "false_negative_count": 0,
+  "forbidden_features_excluded": true,
+  "gpu_status": {
+    "cuda_available": true,
+    "cuda_device_count": 1,
+    "residual_model_device": "cuda:0",
+    "risk_model_device": "cpu",
+    "torch_available": true,
+    "torch_unavailable": false
+  },
+  "high_margin_safe_opportunity_retention_rate": "0.313253012048",
+  "learned_runtime_policy_validated": false,
+  "manifest_type": "repair5g536_pareto_safety_gate_manifest",
+  "model_form": "candidate_stratum_rule_plus_torch_score_diagnostic",
+  "non_additive_allowed_rate": "0.521180847234",
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "prospective_regression_false_negative_count": 0,
+  "runtime_claim_allowed": false,
+  "safe_opportunity_retention_rate": "0.58904109589",
+  "schema_version": "phase5p5_repair5g536_pareto_safety_gate_summary_v1",
+  "selected_model_family": "candidate_stratum_rule_plus_torch_score",
+  "selected_threshold": "0.8",
+  "success_regression_recall": "1",
+  "unsafe_prevented_count": 211
+}

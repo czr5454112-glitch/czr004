@@ -1,0 +1,17 @@
+{
+  "aaai_ready": false,
+  "ban_wait_conservative_warehouse_budget2000": true,
+  "blacklist_rows": 61,
+  "can_wait_conservative_be_allowed_in_maze_random": true,
+  "candidate_agent_iteration_rows": 90,
+  "candidate_family_budget_rows": 198,
+  "decision": "candidate_specific_whitelist_blacklist_created",
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g536_candidate_specific_safety_summary_v1",
+  "wait_conservative_warehouse_regression_strata": 3,
+  "whitelist_rows": 104,
+  "zero_regression_nonzero_safe_gain_strata": 31
+}

@@ -1,0 +1,19 @@
+{
+  "aaai_ready": false,
+  "contexts": 211,
+  "decision": "real_no_regression_replay_plan_created",
+  "execution_mode": "real_solver_execution_required",
+  "heldout_seed_range": "254..285",
+  "learned_runtime_policy_validated": false,
+  "minimum_new_contexts_met": true,
+  "minimum_new_real_solver_rows_planned": true,
+  "minimum_policy_pairs_planned": true,
+  "must_execute_new_solver_rows": true,
+  "new_heldout_seed_contexts": 192,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "plan_rows": 1688,
+  "roles_per_context_target": "8",
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g536_real_no_regression_replay_plan_summary_v1"
+}

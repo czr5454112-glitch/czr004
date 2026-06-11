@@ -1,0 +1,4 @@
+negative_control,success_regression_count,non_additive_selection_rate,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+shuffled_whitelist,17,0.31,False,False,False,False,False
+random_allowed_candidate,13,0.45,False,False,False,False,False
+no_success_gate_ranker,4,0.30,False,False,False,False,False

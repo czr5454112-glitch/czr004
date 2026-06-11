@@ -1,0 +1,18 @@
+{
+  "aaai_ready": false,
+  "classifications": [
+    "new_solver_replay_required",
+    "no_regression_evidence_bounded_materialization_only",
+    "safety_gate_too_conservative",
+    "selector_training_diagnostic_only"
+  ],
+  "contradiction_count": 7,
+  "decision": "g535_verified_continue_safe_opportunity_recovery",
+  "learned_runtime_policy_validated": false,
+  "new_solver_replay_required": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g536_g535_policy_integrity_audit_summary_v1",
+  "threshold_invariance_requires_score_redesign": true
+}

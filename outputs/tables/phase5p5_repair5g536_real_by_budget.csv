@@ -1,0 +1,4 @@
+budget_ms,pairs,success_regression_count,quality_only_pairs,quality_only_mean_delta,fallback_rate,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+1000,224,0,146,0,0.142857142857,False,False,False,False,False
+2000,272,0,232,-0.00107778785659,0.238970588235,False,False,False,False,False
+500,12,0,12,0,0,False,False,False,False,False

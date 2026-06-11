@@ -1,0 +1,4 @@
+map_family,pairs,success_regression_count,quality_only_pairs,quality_only_mean_delta,fallback_rate,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+maze,189,0,177,-0.00104940331379,0.179894179894,False,False,False,False,False
+random,185,0,175,-0.000367442263943,0.308108108108,False,False,False,False,False
+warehouse,134,0,38,0,0.044776119403,False,False,False,False,False

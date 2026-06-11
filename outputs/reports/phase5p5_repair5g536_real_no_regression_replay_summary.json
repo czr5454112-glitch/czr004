@@ -1,0 +1,28 @@
+{
+  "aaai_ready": false,
+  "decision": "real_replay_executed",
+  "execution_mode": "real_solver_execution",
+  "learned_runtime_policy_validated": false,
+  "max_workers": 1,
+  "missing_materializations": 1083,
+  "new_checkpoint_rows": 1319,
+  "new_contexts": 211,
+  "new_raw_solver_task_rows": 957,
+  "new_solver_run_rows": 3981,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "raw_sha256": "fee61eb335cc3944db71711e17c7e9f8993e77941e683f4e6d687a941b1f8840",
+  "roles_executed": [
+    "G5.34_selected_candidate",
+    "G5.35_conservative_candidate",
+    "G5.36_opportunity_recovery_candidate",
+    "G5.36_opportunity_recovery_with_ultra_safety",
+    "additive_ltm",
+    "best_fixed_static_candidate",
+    "safe_static_bridge_candidate",
+    "static_flow_shield"
+  ],
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g536_real_no_regression_replay_summary_v1",
+  "trace_backend_real_solver_only": true
+}

@@ -1,0 +1,5 @@
+ablation,feature_policy,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+full_pre_update_features,allowed,False,False,False,False,False
+no_candidate_params,candidate numeric fields removed diagnostic,False,False,False,False,False
+map_family_only,negative control,False,False,False,False,False
+random_features,negative control,False,False,False,False,False

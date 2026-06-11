@@ -1,0 +1,41 @@
+{
+  "aaai_ready": false,
+  "budgets": [
+    500,
+    1000,
+    2000
+  ],
+  "candidate_count": 22,
+  "complete_groups_with_additive_and_static": 709,
+  "decision": "broad_goal_aware_probe_completed",
+  "g534_new_checkpoint_rows": 2571,
+  "gates": {
+    "candidate_count_18_to_22": true,
+    "external_lacam2_clean": true,
+    "minimum_complete_groups_with_additive_and_static_500": true,
+    "minimum_solver_rows_6000": true,
+    "minimum_unique_contexts_180": true,
+    "multiple_iterations_present": true,
+    "no_reserved_ids": true,
+    "post_reserved_holdout_seeds_present": true,
+    "target_solver_rows_not_exceeded": true,
+    "trace_backend_real_solver_only": true
+  },
+  "group_complete_all_candidates": 0,
+  "inherited_g533_rows": 2046,
+  "learned_runtime_policy_validated": false,
+  "ltm_iterations_seen": [
+    2,
+    4
+  ],
+  "minimum_high_margin_safe_opportunities_reference_g533": 2046,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "raw_sha256": "d899837d0a970fded8e5b8d4b22122bf781d28f55e8b074ec9ec755061e2bac0",
+  "real_solver_probe_rows": 8329,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g534_broad_goal_aware_probe_summary_v1",
+  "solver_task_rows": 6072,
+  "unique_contexts": 811,
+  "unique_map_agent_seed_contexts": 234
+}

@@ -1,0 +1,21 @@
+{
+  "aaai_ready": false,
+  "commit": "cae93fe",
+  "created_by": "scripts/train_eval_repair5g534_torch_selector.py",
+  "gpu_status": {
+    "cuda_available": true,
+    "cuda_device_count": 1,
+    "residual_model_device": "cuda:0",
+    "risk_model_device": "cpu",
+    "torch_available": true,
+    "torch_unavailable": false
+  },
+  "learned_runtime_policy_validated": false,
+  "model_artifact_policy": "manifest only; no large checkpoint committed",
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "prediction_table": "outputs/tables/phase5p5_repair5g534_torch_predictions_heldout.csv",
+  "runtime_claim_allowed": false,
+  "schema_version": "repair5g534_torch_selector_manifest_v1",
+  "torch_available": true
+}

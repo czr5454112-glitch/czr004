@@ -1,0 +1,42 @@
+{
+  "aaai_ready": false,
+  "component_decisions": {
+    "audit": "g533_model_claims_overstated_but_rule_signal_valid_continue_g534",
+    "broad_probe": "broad_goal_aware_probe_completed",
+    "candidate_family": "expanded_candidate_family_created",
+    "exact_features": "exact_goal_distance_features_created",
+    "labels": "outcome_aware_labels_created",
+    "prospective": "prospective_evidence_analyzed",
+    "static": "static_rule_stability_analyzed",
+    "torch": "torch_selector_evaluated",
+    "verify": "g533_artifacts_verified_continue_g534"
+  },
+  "decision": "g534_neural_selector_not_better_than_static_continue_label_or_feature_design",
+  "hard_requirements": {
+    "broad_probe_rows_ge_6000": true,
+    "complete_add_static_groups_ge_500": true,
+    "exact_goal_distance_reported": true,
+    "g533_audit_completed": true,
+    "negative_controls_reported": true,
+    "no_external_lacam2_edits": true,
+    "prospective_ci_upper_le_0": true,
+    "prospective_completed": true,
+    "prospective_mean_delta_lt_0": true,
+    "strict_holdout_reported": true,
+    "success_regression_clean": false,
+    "torch_status_recorded": true,
+    "unique_contexts_ge_180": true
+  },
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "row_counts": {
+    "broad_probe_rows": 8329,
+    "complete_add_static_groups": 709,
+    "prospective_pairs": 179,
+    "unique_contexts": 811,
+    "utility_rows": 8329
+  },
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g534_decision_summary_v1"
+}

@@ -1,0 +1,10 @@
+split_regime,train_rows,test_rows,train_context_keys,test_context_keys,overlap_context_keys,train_candidate_ids,test_candidate_ids,candidate_holdout_actually_held_out,budget_holdout_actually_held_out,map_family_holdout_actually_held_out,mean_selected_vs_additive_delta,safe_positive_capture,high_margin_capture,harmful_selection_rate,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+random_row_split,1526,520,193,184,179,11,11,False,False,False,-0.0888603361887,54,54,0.0692307692308,False,False,False,False,False
+group_by_context,1543,503,152,46,0,11,11,False,False,False,-0.078361266102,70,70,0.0675944333996,False,False,False,False,False
+group_by_seed,1022,1024,99,99,0,11,11,False,False,False,-0.0835109315059,92,92,0.09375,False,False,False,False,False
+group_by_map_family,1085,961,109,89,0,11,11,False,False,True,-0.113160851546,99,99,0.145681581686,False,False,False,False,False
+leave_one_map_out,1085,961,109,89,0,11,11,False,False,False,-0.113160851546,99,99,0.145681581686,False,False,False,False,False
+leave_one_candidate_config_out,2046,2046,198,198,198,11,11,False,False,False,-0.0845277852105,183,183,0.0772238514174,False,False,False,False,False
+leave_one_budget_out,1198,848,116,82,0,11,11,False,True,False,-0.0854175337578,180,180,0.0978773584906,False,False,False,False,False
+warehouse_holdout,1760,286,172,26,0,11,11,False,False,True,0,0,0,0.027972027972,False,False,False,False,False
+maze_random_train_warehouse_test,1760,286,172,26,0,11,11,False,False,True,0,0,0,0.027972027972,False,False,False,False,False

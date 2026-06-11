@@ -1,0 +1,13 @@
+{
+  "aaai_ready": false,
+  "decision": "prospective_heldout_plan_created",
+  "heldout_seed_range": "212..253",
+  "learned_runtime_policy_validated": false,
+  "minimum_prospective_contexts_met": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "plan_rows": 1008,
+  "prospective_contexts": 168,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g534_prospective_heldout_plan_summary_v1"
+}

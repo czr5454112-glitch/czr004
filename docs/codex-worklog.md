@@ -4302,3 +4302,61 @@
   - `git diff --check` passed with line-ending warnings only.
   - `git status --short -- external/lacam2/lacam2` returned clean.
   - `C:\Users\38908\.conda\envs\czr004\python.exe -m pytest tests\test_repair5g_dual_channel_ltm.py tests\test_repair5g5_runtime_selector_policy.py tests\test_repair5g5_contextual_selector_export.py tests\test_repair5g5_aaai_quality_gates.py tests\test_repair5g52_checkpoint_schema.py` passed: `11 passed`.
+## 2026-06-11 - Repair5G.5.34 prospective neural goal-aware dual-channel UpdateLTM
+
+- Request:
+  Continue after G5.33 commit cae93fe. G5.33 produced real solver-facing goal-aware dual-channel opportunities, but the best selector evidence was random-row split and the selector was mostly family-majority emulation. G5.34 must expand real solver probes, compute true goal-distance features, train real PyTorch selector/ranker/safety models in the czr004 conda environment, and run prospective heldout selected-rule replay.
+- Planned files:
+  - czr004_g534_prospective_neural_goal_aware_dual_channel_ltm_plan.md
+  - scripts/repair5g534_common.py
+  - scripts/verify_repair5g534_g533_artifacts.py
+  - scripts/audit_repair5g534_g533_model_and_gate_integrity.py
+  - scripts/create_repair5g534_exact_goal_distance_features.py
+  - scripts/create_repair5g534_expanded_candidate_family.py
+  - scripts/run_repair5g534_broad_goal_aware_probe.py
+  - scripts/analyze_repair5g534_static_rule_stability.py
+  - scripts/create_repair5g534_outcome_aware_labels.py
+  - scripts/train_eval_repair5g534_torch_selector.py
+  - scripts/create_repair5g534_prospective_heldout_plan.py
+  - scripts/run_repair5g534_prospective_selected_replay.py
+  - scripts/analyze_repair5g534_prospective_evidence.py
+  - scripts/write_repair5g534_decision.py
+  - outputs/reports/phase5p5_repair5g534_*
+  - outputs/tables/phase5p5_repair5g534_*
+  - outputs/logs/phase5p5_repair5g534_* local/ignored raw logs
+  - artifacts/models/laur_ltm/repair5g534_* local or small committed manifests only
+- Constraints:
+  No external/lacam2/lacam2 edits, no action/priority/search/restart/candidate deletion/h-value target, no reserved IDs 166..205, no Phase5.5/Phase6/runtime/AAAI claims.
+- Pre-experiment statement:
+  This round is not allowed to conclude from random-row split alone. It must red-team G5.33, run a broader real solver probe, train actual Torch models if CUDA is visible, and perform prospective heldout selected-rule replay.
+- Commands completed:
+  - `python -m py_compile scripts\repair5g534_common.py ... scripts\write_repair5g534_decision.py`
+  - `python scripts\verify_repair5g534_g533_artifacts.py`
+  - `python scripts\audit_repair5g534_g533_model_and_gate_integrity.py`
+  - `python scripts\create_repair5g534_exact_goal_distance_features.py`
+  - `python scripts\create_repair5g534_expanded_candidate_family.py`
+  - `powershell -ExecutionPolicy Bypass -File scripts\build_phase1a_batch.ps1`
+  - `python scripts\run_repair5g534_broad_goal_aware_probe.py --max-workers 1`
+  - `python scripts\create_repair5g534_outcome_aware_labels.py`
+  - `python scripts\analyze_repair5g534_static_rule_stability.py`
+  - `C:\Users\38908\.conda\envs\czr004\python.exe scripts\train_eval_repair5g534_torch_selector.py --epochs 80 --batch-size 256 --bootstrap-samples 300`
+  - `python scripts\create_repair5g534_prospective_heldout_plan.py`
+  - `python scripts\run_repair5g534_prospective_selected_replay.py --max-workers 1`
+  - `python scripts\analyze_repair5g534_prospective_evidence.py`
+  - `python scripts\write_repair5g534_decision.py`
+- Observations:
+  - G5.33 verification passed and G5.33 model/gate audit found the expected overclaim risk: G5.33 selector evidence was mostly map-family majority emulation, `leave_one_candidate_config_out` was leaky, and three stronger gates were hard-coded diagnostics.
+  - Exact goal-distance diagnostics recovered `4,910` exact event rows and reported `2,630` missing rows.
+  - Expanded candidate family contains `22` bounded project-owned candidates using existing `repair5g59_*` aliases and existing `repair5g518_grid_*` parser grammar; no `external/lacam2/lacam2` edits were made.
+  - Broad real solver probe produced `8,329` solver/probe rows, `811` context-budget-iteration groups, `709` additive/static complete groups, and `321` high-margin safe opportunities after de-duplicated run-level solver rows were included for no-checkpoint tasks.
+  - Conda `czr004` Python sees `torch 2.5.1+cu124`, CUDA available, and `1` CUDA device (`NVIDIA GeForce RTX 4070 Laptop GPU`).
+  - Torch selector/ranker/safety diagnostics reported strict holdout splits and negative controls, but prospective safety was not clean enough for a learned runtime claim.
+  - Prospective selected-rule replay produced `179` selected-vs-additive paired groups. Selected-vs-additive mean delta was `-0.00122794301943` with CI upper `-0.000237726824342`, but there were `4` success regressions.
+  - Final decision: `g534_neural_selector_not_better_than_static_continue_label_or_feature_design`.
+  - Claims remain closed: `phase5p5_allowed=false`, `phase6_allowed=false`, `runtime_claim_allowed=false`, `learned_runtime_policy_validated=false`, and `aaai_ready=false`.
+- Validation:
+  - G5.34 scripts compile under default Python and conda `czr004` Python.
+  - G5.34 JSON summaries parse.
+  - `git diff --check` passed with line-ending warnings only.
+  - `git status --short -- external/lacam2/lacam2` returned clean.
+  - `C:\Users\38908\.conda\envs\czr004\python.exe -m pytest tests\test_repair5g_dual_channel_ltm.py tests\test_repair5g5_runtime_selector_policy.py tests\test_repair5g5_contextual_selector_export.py tests\test_repair5g5_aaai_quality_gates.py tests\test_repair5g52_checkpoint_schema.py` passed: `11 passed`.

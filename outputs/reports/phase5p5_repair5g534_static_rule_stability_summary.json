@@ -1,0 +1,20 @@
+{
+  "aaai_ready": false,
+  "best_candidate": "repair5g59_low_beta_high_cap",
+  "best_mean_delta_ratio": "-0.00524884075801",
+  "decision": "static_rule_stability_analyzed",
+  "hard_questions": {
+    "flow_channel_beats_c_only": true,
+    "flow_decay_maze_specific": true,
+    "high_beta_cap_safe_remains_best": false,
+    "random_prefers_additive": true,
+    "wait_conservative_warehouse_specific": false
+  },
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g534_static_rule_stability_summary_v1",
+  "success_regression_audit_rows": 366,
+  "utility_rows": 8329
+}

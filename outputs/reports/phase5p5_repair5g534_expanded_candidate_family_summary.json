@@ -1,0 +1,27 @@
+{
+  "aaai_ready": false,
+  "candidate_count": 22,
+  "decision": "expanded_candidate_family_created",
+  "gates": {
+    "additive_present": true,
+    "best_g533_present": true,
+    "hard_cap_24": true,
+    "minimum_14": true,
+    "no_external_lacam2_edits_needed": true,
+    "project_owned_parser_only": true,
+    "static_flow_present": true,
+    "target_18_to_22": true
+  },
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g534_expanded_candidate_family_summary_v1",
+  "source_counts": {
+    "base": 11,
+    "control": 2,
+    "second_ring_decay": 2,
+    "second_ring_high_beta": 5,
+    "second_ring_wait": 2
+  }
+}

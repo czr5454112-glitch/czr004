@@ -1,0 +1,20 @@
+{
+  "aaai_ready": false,
+  "audited_artifacts": 11,
+  "decision": "g533_artifacts_verified_continue_g534",
+  "g533_high_margin_opportunities": 183,
+  "g533_probe_rows": 2046,
+  "gates": {
+    "claims_remain_closed": true,
+    "external_lacam2_clean": true,
+    "g533_decision_promising": true,
+    "g533_probe_rows_ge_2000": true,
+    "g533_summaries_present": true,
+    "g533_tables_present": true
+  },
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g534_g533_verification_summary_v1"
+}

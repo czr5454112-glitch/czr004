@@ -1,0 +1,14 @@
+{
+  "aaai_ready": false,
+  "actual_torch_training_in_g533": false,
+  "decision": "g533_model_claims_overstated_but_rule_signal_valid_continue_g534",
+  "hard_coded_gate_count": 3,
+  "learned_runtime_policy_validated": false,
+  "leave_one_candidate_config_out_leaky": true,
+  "model_integrity_finding": "G5.33 listed model families, but train_selector is mostly map-family most-frequent best-candidate emulation plus fallback.",
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "rule_signal_rows": 10,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g534_g533_model_gate_audit_summary_v1"
+}

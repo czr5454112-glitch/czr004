@@ -1,0 +1,7 @@
+split_regime,model_family,candidate_top1_accuracy,candidate_top3_accuracy,pairwise_auc,ndcg,mrr,mean_selected_vs_additive_delta,median_selected_vs_additive_delta,safe_positive_capture_rate,high_margin_opportunity_capture_rate,harmful_selection_rate,actual_success_regression_rate,fallback_precision,fallback_recall,oracle_gap_closed,ece,test_groups,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+family_maze,oracle_candidate_upper_bound,1,1,1,1,1,-0.0055494154622,0,1,1,0.00925925925926,0,,,1,,324,False,False,False,False,False
+family_maze,torch_pairwise_ranker,0.25,0.648148148148,0.824074074074,0.93813624367,0.459052418775,-0.00328752915213,0,0.78125,0.78125,0.0185185185185,0,,,0.7177325896,,324,False,False,False,False,False
+family_random,oracle_candidate_upper_bound,1,1,1,1,1,-0.00646785873476,0,1,1,0.0075,0,,,1,,400,False,False,False,False,False
+family_random,torch_pairwise_ranker,0.18,0.3275,0.66375,0.90389732231,0.343358450577,-0.00105359949619,0,0.333333333333,0.333333333333,0.025,0.015,,,0.266735972179,,400,False,False,False,False,False
+family_warehouse,oracle_candidate_upper_bound,1,1,1,1,1,0,0,0,0,0.0344827586207,0,,,1,,87,False,False,False,False,False
+family_warehouse,torch_pairwise_ranker,0.275862068966,0.689655172414,0.844827586207,0.977011494253,0.459590659216,0,0,0,0,0.0574712643678,0.0229885057471,,,0.319727891156,,87,False,False,False,False,False

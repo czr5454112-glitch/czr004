@@ -1,0 +1,158 @@
+{
+  "aaai_ready": false,
+  "batch_plan": [
+    {
+      "agents": [
+        50,
+        100
+      ],
+      "budgets": [
+        500,
+        1000,
+        2000
+      ],
+      "candidate_count": 22,
+      "label": "loop1_broad_base_160_165",
+      "ltm_iterations": 2,
+      "maps": [
+        "maze-32-32-4",
+        "random-32-32-20",
+        "warehouse-10-20-10-2-1"
+      ],
+      "seeds": [
+        160,
+        161,
+        162,
+        163,
+        164,
+        165
+      ]
+    },
+    {
+      "agents": [
+        50,
+        100
+      ],
+      "budgets": [
+        500,
+        1000
+      ],
+      "candidate_count": 22,
+      "label": "loop2_post_reserved_206_211",
+      "ltm_iterations": 2,
+      "maps": [
+        "maze-32-32-4",
+        "random-32-32-20",
+        "warehouse-10-20-10-2-1"
+      ],
+      "seeds": [
+        206,
+        207,
+        208,
+        209,
+        210,
+        211
+      ]
+    },
+    {
+      "agents": [
+        50,
+        100
+      ],
+      "budgets": [
+        500,
+        1000,
+        2000
+      ],
+      "candidate_count": 6,
+      "label": "loop5_maze_random_expansion_218_245",
+      "ltm_iterations": 2,
+      "maps": [
+        "maze-32-32-4",
+        "random-32-32-20"
+      ],
+      "seeds": [
+        218,
+        219,
+        220,
+        221,
+        222,
+        223,
+        224,
+        225,
+        226,
+        227,
+        228,
+        229,
+        230,
+        231,
+        232,
+        233,
+        234,
+        235,
+        236,
+        237,
+        238,
+        239,
+        240,
+        241,
+        242,
+        243,
+        244,
+        245
+      ]
+    },
+    {
+      "agents": [
+        50
+      ],
+      "budgets": [
+        1000,
+        2000
+      ],
+      "candidate_count": 6,
+      "label": "loop3_iteration_depth_subset",
+      "ltm_iterations": 4,
+      "maps": [
+        "maze-32-32-4",
+        "random-32-32-20",
+        "warehouse-10-20-10-2-1"
+      ],
+      "seeds": [
+        160,
+        206
+      ]
+    },
+    {
+      "agents": [
+        50
+      ],
+      "budgets": [
+        1000
+      ],
+      "candidate_count": 4,
+      "label": "loop4_reproducibility_subset",
+      "ltm_iterations": 2,
+      "maps": [
+        "maze-32-32-4",
+        "random-32-32-20",
+        "warehouse-10-20-10-2-1"
+      ],
+      "seeds": [
+        161,
+        207
+      ]
+    }
+  ],
+  "g534_new_checkpoint_rows": 2571,
+  "inherited_g533_rows": 2046,
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "raw_checkpoint_line_count": 2571,
+  "raw_checkpoint_path": "outputs/logs/phase5p5_repair5g534_broad_goal_aware_probe/phase5p5_repair5g534_broad_goal_aware_checkpoints.jsonl",
+  "raw_checkpoint_sha256": "d899837d0a970fded8e5b8d4b22122bf781d28f55e8b074ec9ec755061e2bac0",
+  "raw_logs_large_not_for_commit": true,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g534_broad_goal_aware_probe_manifest_v1"
+}

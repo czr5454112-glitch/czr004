@@ -1,0 +1,5 @@
+gate,present_in_g533_decision,derived_from_table,hard_coded,verdict,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+warehouse_not_worse_than_additive,True,False,True,diagnostic_only_not_decisive,False,False,False,False,False
+config_only_control_not_explanatory,True,False,True,diagnostic_only_not_decisive,False,False,False,False,False
+leakage_controls_exceed_real_model,True,False,True,diagnostic_only_not_decisive,False,False,False,False,False
+model_or_selector_emulation_beats_additive_under_one_strict_split,True,True,False,derived_or_not_present,False,False,False,False,False

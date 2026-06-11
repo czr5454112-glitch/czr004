@@ -1,0 +1,17 @@
+{
+  "aaai_ready": false,
+  "context_feature_rows": 504,
+  "decision": "exact_goal_distance_features_created",
+  "edge_feature_rows": 45240,
+  "event_feature_rows": 7540,
+  "exact_goal_distance_available_count": 4910,
+  "exact_goal_distance_missing_count": 2630,
+  "fallback_to_rank_proxy_count": 2630,
+  "feature_strength": "exact_goal_distance_real_trace",
+  "learned_runtime_policy_validated": false,
+  "percent_event_rows_with_exact_goal_progress": "0.651193633952",
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g534_exact_goal_distance_features_summary_v1"
+}

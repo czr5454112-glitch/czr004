@@ -1,0 +1,16 @@
+{
+  "aaai_ready": false,
+  "context_candidate_utility_rows": 8329,
+  "decision": "outcome_aware_labels_created",
+  "grouped_training_examples": 811,
+  "high_margin_safe_opportunities": 321,
+  "learned_runtime_policy_validated": false,
+  "pairwise_dominance_rows": 57965,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "safety_target_rows": 811,
+  "schema_version": "phase5p5_repair5g534_outcome_aware_labels_summary_v1",
+  "ttfs_available": true,
+  "ttfs_unavailable_reported": false
+}

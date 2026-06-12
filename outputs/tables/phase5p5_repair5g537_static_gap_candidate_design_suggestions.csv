@@ -1,0 +1,3 @@
+suggestion_id,candidate_design_direction,reason,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+g537_static_gap_design_001,bounded_static_flow_residual_low_beta_or_flow_decay,use residual target table; add only small project-owned aliases in a future round,False,False,False,False,False
+g537_static_gap_design_002,warehouse_static_additive_bridge,warehouse remains safety dominated; learning should abstain unless residual targets improve,False,False,False,False,False

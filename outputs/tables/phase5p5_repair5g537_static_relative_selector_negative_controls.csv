@@ -1,0 +1,9 @@
+negative_control,expected_failure_mode,reported,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+random candidate among whitelist,does_not_establish_static_relative_learning,True,False,False,False,False,False
+map-family-only rule,does_not_establish_static_relative_learning,True,False,False,False,False,False
+candidate-family-only rule,does_not_establish_static_relative_learning,True,False,False,False,False,False
+no static baseline awareness,does_not_establish_static_relative_learning,True,False,False,False,False,False
+additive-relative-only selector,does_not_establish_static_relative_learning,True,False,False,False,False,False
+no safety gate,does_not_establish_static_relative_learning,True,False,False,False,False,False
+always static_flow,does_not_establish_static_relative_learning,True,False,False,False,False,False
+always best_family_static,does_not_establish_static_relative_learning,True,False,False,False,False,False

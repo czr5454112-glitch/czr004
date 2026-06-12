@@ -1,0 +1,21 @@
+{
+  "aaai_ready": false,
+  "decision": "static_relative_selector_offline_positive",
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "policies": {
+    "static_relative_selector": {
+      "random|2000|50": "repair5g518_grid_c1p25_b1p25_f1p00_w0p75_dc0p95_df1p00_beta0p6_max1p00_c0"
+    },
+    "static_relative_selector_with_margin": {
+      "random|2000|50": "repair5g518_grid_c1p25_b1p25_f1p00_w0p75_dc0p95_df1p00_beta0p6_max1p00_c0"
+    },
+    "static_relative_selector_with_safety": {
+      "random|2000|50": "repair5g518_grid_c1p25_b1p25_f1p00_w0p75_dc0p95_df1p00_beta0p6_max1p00_c0"
+    }
+  },
+  "policy_frozen_before_g537_blind_replay": true,
+  "runtime_claim_allowed": false,
+  "schema_version": "repair5g537_static_relative_selector_manifest_v1"
+}

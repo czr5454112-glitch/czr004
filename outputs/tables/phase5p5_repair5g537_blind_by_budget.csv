@@ -1,0 +1,4 @@
+budget_ms,pairs,success_regression_count,success_gain_count,both_fail_count,quality_only_pairs,quality_only_mean_delta,quality_only_median_delta,quality_ci_low,quality_ci_high,mean_corrected_delta,better_count,equal_count,worse_count,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+1000,350,0,0,124,226,0,0,0,0,0,0,226,0,False,False,False,False,False
+2000,413,10,0,72,331,0.00344505441053,0,0.00344505441053,0.00344505441053,0.00881431721522,0,296,35,False,False,False,False,False
+500,350,6,0,184,160,0,0,0,0,0.00428571428571,0,160,0,False,False,False,False,False

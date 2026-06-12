@@ -1,0 +1,26 @@
+{
+  "aaai_ready": false,
+  "baseline_eval_rows": 5705,
+  "baseline_levels": [
+    "additive_ltm",
+    "best_budget_static_goal_aware",
+    "best_family_budget_static_goal_aware",
+    "best_family_static_goal_aware",
+    "best_fixed_static_goal_aware",
+    "best_safe_static_oracle_upper_bound",
+    "static_flow_shield"
+  ],
+  "decision": "g536_static_baseline_audit_shows_learning_not_above_static_continue_static_relative_training",
+  "g536_beat_additive": true,
+  "g536_beat_best_family_static": false,
+  "g536_beat_best_fixed_static": false,
+  "g536_beat_static_flow": false,
+  "g536_decision_if_primary_static_flow": "would_not_succeed_if_primary_baseline_were_static_flow",
+  "g536_patch_replay_derived_or_frozen": "replay_derived",
+  "label_rows": 8333,
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g537_static_baseline_ladder_summary_v1"
+}

@@ -1,0 +1,3 @@
+agents,support_rows,candidate_families,mean_delta_vs_static_flow,mean_delta_vs_primary_static,static_flow_better_or_equal_count,static_relative_gain_count,static_regression_count,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+100,3858,additive;block_heavy;c_only;commit_heavy;flow_decay;high_beta;low_beta;other_flow;static_flow_shield;wait_aggressive;wait_conservative,0,0,3784,11,63,False,False,False,False,False
+50,4440,additive;block_heavy;c_only;commit_heavy;flow_decay;high_beta;low_beta;other_flow;static_flow_shield;wait_aggressive;wait_conservative,0.00146420069841,0.00369392563095,4309,92,39,False,False,False,False,False

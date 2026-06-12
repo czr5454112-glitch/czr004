@@ -1,0 +1,7 @@
+suggested_alias,basis,implemented_now,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+staticflow_resid_low_beta_safe,bounded negative beta residual where low-beta candidates safely beat primary static,False,False,False,False,False,False
+staticflow_resid_flow_decay_safe,flow-decay residual appears in safe static-relative targets,False,False,False,False,False,False
+staticflow_resid_wait_damped,wait dampening remains bounded and should be tested only after safety replay,False,False,False,False,False,False
+staticflow_resid_warehouse_additive_bridge,warehouse strata prefer conservative static/additive fallback,False,False,False,False,False,False
+staticflow_resid_maze_flow_decay_bridge,maze strata show the clearest flow/decay residual opportunity,False,False,False,False,False,False
+staticflow_resid_random_static_bridge,random strata often remain static-dominated,False,False,False,False,False,False

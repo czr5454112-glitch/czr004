@@ -1,0 +1,17 @@
+{
+  "aaai_ready": false,
+  "decision": "failure_and_static_gap_autopsy_completed",
+  "design_suggestions": 2,
+  "failure_rows": 51,
+  "learned_runtime_policy_validated": false,
+  "missed_opportunity_rows": 757,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "reason_counts": {
+    "selector_picks_non_static_but_no_quality_gain": 35,
+    "success_regression_vs_static_returns": 16
+  },
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g537_failure_and_static_gap_autopsy_summary_v1",
+  "success_gain_rows": 0
+}

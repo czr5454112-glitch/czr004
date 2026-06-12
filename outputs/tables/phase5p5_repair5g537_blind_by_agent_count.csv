@@ -1,0 +1,3 @@
+agents,pairs,success_regression_count,success_gain_count,both_fail_count,quality_only_pairs,quality_only_mean_delta,quality_only_median_delta,quality_ci_low,quality_ci_high,mean_corrected_delta,better_count,equal_count,worse_count,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+100,514,6,0,250,258,0,0,0,0,0.00291828793774,0,258,0,False,False,False,False,False
+50,599,10,0,130,459,0.00248434206947,0,0.00248434206947,0.00248434206947,0.00607731721183,0,424,35,False,False,False,False,False

@@ -1,0 +1,23 @@
+{
+  "aaai_ready": false,
+  "decision": "static_flow_gap_analyzed",
+  "dominant_map_families": [
+    "warehouse"
+  ],
+  "failure_rows": 2784,
+  "hypotheses": [
+    "maze has bounded static-relative flow/decay opportunities",
+    "warehouse still needs conservative static/additive bridge behavior"
+  ],
+  "improvement_target_rows": 103,
+  "label_rows": 8298,
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g537_static_flow_gap_summary_v1",
+  "target_map_families": [
+    "maze",
+    "random"
+  ]
+}

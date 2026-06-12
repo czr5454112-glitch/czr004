@@ -1,0 +1,15 @@
+{
+  "aaai_ready": false,
+  "decision": "g536_static_baseline_audit_shows_learning_not_above_static_continue_static_relative_training",
+  "g536_decision": "g536_safe_opportunity_recovery_promising_continue_runtime_preflight_later",
+  "g536_real_solver_execution": true,
+  "g536_selected_vs_static_better": 4,
+  "g536_selected_vs_static_worse": 41,
+  "learned_runtime_policy_validated": false,
+  "missing_artifacts": [],
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "required_artifacts": 14,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g537_g536_verification_summary_v1"
+}

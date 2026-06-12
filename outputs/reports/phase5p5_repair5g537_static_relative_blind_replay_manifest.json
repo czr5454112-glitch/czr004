@@ -1,0 +1,29 @@
+{
+  "aaai_ready": false,
+  "decision": "static_relative_blind_replay_executed",
+  "execution_mode": "real_solver_execution",
+  "learned_runtime_policy_validated": false,
+  "manifest_type": "repair5g537_static_relative_blind_replay_manifest",
+  "max_workers": 1,
+  "missing_materializations": 3082,
+  "new_checkpoint_rows": 2436,
+  "new_contexts": 500,
+  "new_raw_solver_task_rows": 1944,
+  "new_solver_rows": 8918,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "raw_sha256": "c0b7ab06a57473b2829f7ac41edbd2d7f7ee9a31afb0ca879aa046513e32fc58",
+  "roles_executed": [
+    "G5.36_patched_selector_or_run_level_equivalent",
+    "G5.37_static_relative_selector",
+    "G5.37_static_relative_selector_abstain_to_best_static",
+    "G5.37_static_relative_selector_with_safety",
+    "additive_ltm",
+    "best_family_static_goal_aware",
+    "best_fixed_static_goal_aware",
+    "static_flow_shield"
+  ],
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g537_static_relative_blind_replay_summary_v1",
+  "trace_backend_real_solver_only": true
+}

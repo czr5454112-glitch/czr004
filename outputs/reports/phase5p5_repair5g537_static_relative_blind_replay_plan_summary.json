@@ -1,0 +1,20 @@
+{
+  "aaai_ready": false,
+  "blind_replay": true,
+  "contexts": 500,
+  "decision": "static_relative_blind_replay_plan_created",
+  "fresh_seed_range": "286..365",
+  "learned_runtime_policy_validated": false,
+  "minimum_contexts_met": true,
+  "minimum_new_solver_rows_planned": true,
+  "minimum_static_relative_policy_pairs_planned": true,
+  "no_G5.37_outcomes_used_in_policy": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "plan_rows": 4000,
+  "real_solver_execution_required": true,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g537_static_relative_blind_replay_plan_summary_v1",
+  "static_relative_primary_baseline": true,
+  "target_contexts_met": true
+}

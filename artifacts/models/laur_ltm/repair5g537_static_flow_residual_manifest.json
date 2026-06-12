@@ -1,0 +1,21 @@
+{
+  "aaai_ready": false,
+  "bootstrap_samples": 300,
+  "decision": "static_flow_residual_targets_ready_for_future_candidate_design",
+  "epochs_requested": 80,
+  "implemented_new_aliases": false,
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "residual_target_rows": 103,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g537_static_flow_residual_model_summary_v1",
+  "suggested_candidate_aliases": [
+    "staticflow_resid_low_beta_safe",
+    "staticflow_resid_flow_decay_safe",
+    "staticflow_resid_wait_damped",
+    "staticflow_resid_warehouse_additive_bridge",
+    "staticflow_resid_maze_flow_decay_bridge",
+    "staticflow_resid_random_static_bridge"
+  ]
+}

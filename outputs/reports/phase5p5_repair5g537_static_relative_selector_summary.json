@@ -1,0 +1,37 @@
+{
+  "aaai_ready": false,
+  "bootstrap_samples": 300,
+  "decision": "static_relative_selector_offline_positive",
+  "epochs_requested": 80,
+  "eval_rows": 100,
+  "gpu_status": {
+    "cuda_available": true,
+    "cuda_device_count": 1,
+    "residual_model_device": "cuda:0",
+    "risk_model_device": "cpu",
+    "torch_available": true,
+    "torch_unavailable": false
+  },
+  "learned_runtime_policy_validated": false,
+  "negative_controls_reported": 8,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "prediction_rows": 61260,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g537_static_relative_selector_summary_v1",
+  "strict_policy_mean_delta_vs_primary_static": "0",
+  "strict_policy_non_static_selection_rate": "0.00736196319018",
+  "strict_policy_success_regression_vs_primary_static": 0,
+  "strict_splits_reported": [
+    "random_diagnostic",
+    "group_by_context",
+    "group_by_seed_block",
+    "post_reserved_seed_holdout",
+    "leave_one_map_family_out",
+    "warehouse_holdout",
+    "leave_one_budget_out",
+    "leave_one_agent_count_out",
+    "leave_one_candidate_family_out",
+    "strict_all_holdout"
+  ]
+}

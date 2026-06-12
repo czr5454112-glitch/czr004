@@ -1,0 +1,4 @@
+map_family,support_rows,candidate_families,mean_delta_vs_static_flow,mean_delta_vs_primary_static,static_flow_better_or_equal_count,static_relative_gain_count,static_regression_count,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+maze,3141,additive;block_heavy;c_only;commit_heavy;flow_decay;high_beta;low_beta;other_flow;static_flow_shield;wait_aggressive;wait_conservative,0.000752116278641,0.00260767906249,3096,36,9,False,False,False,False,False
+random,3541,additive;block_heavy;c_only;commit_heavy;flow_decay;high_beta;low_beta;other_flow;static_flow_shield;wait_aggressive;wait_conservative,0.00102529136199,0.00198011236919,3412,67,62,False,False,False,False,False
+warehouse,1616,additive;block_heavy;c_only;commit_heavy;flow_decay;high_beta;low_beta;other_flow;static_flow_shield;wait_aggressive;wait_conservative,0,0,1585,0,31,False,False,False,False,False

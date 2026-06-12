@@ -1,0 +1,30 @@
+{
+  "aaai_ready": false,
+  "additive_only_gain_count": 186,
+  "candidate_families_with_static_relative_gain": [
+    "additive",
+    "block_heavy",
+    "c_only",
+    "commit_heavy",
+    "flow_decay",
+    "high_beta",
+    "low_beta",
+    "other_flow",
+    "wait_aggressive",
+    "wait_conservative"
+  ],
+  "context_candidate_utility_rows": 8298,
+  "decision": "static_relative_labels_created",
+  "learned_runtime_policy_validated": false,
+  "pairwise_rows": 41490,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "safe_static_oracle_gap": 755,
+  "schema_version": "phase5p5_repair5g537_static_relative_labels_summary_v1",
+  "static_regression_count": 102,
+  "static_safe_high_margin_count": 47,
+  "static_safe_low_margin_count": 9,
+  "static_success_gain_count": 47,
+  "training_groups": 815
+}

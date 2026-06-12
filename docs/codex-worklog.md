@@ -4302,6 +4302,69 @@
   - `git diff --check` passed with line-ending warnings only.
   - `git status --short -- external/lacam2/lacam2` returned clean.
   - `C:\Users\38908\.conda\envs\czr004\python.exe -m pytest tests\test_repair5g_dual_channel_ltm.py tests\test_repair5g5_runtime_selector_policy.py tests\test_repair5g5_contextual_selector_export.py tests\test_repair5g5_aaai_quality_gates.py tests\test_repair5g52_checkpoint_schema.py` passed: `11 passed`.
+
+## 2026-06-11 - Repair5G.5.37 static-flow-relative learned UpdateLTM preflight
+
+- Request:
+  Continue after G5.36 commit c755bbf. G5.36 showed safe opportunity recovery vs additive after a replay-derived safety patch, but selected-vs-static evidence was not yet strong. G5.37 must change the main baseline from additive to static_flow / strong static goal-aware UpdateParams. The goal is now learning over static_flow: train/evaluate learned selectors or learned residual/parameter adjustments that improve beyond static_flow and best static baselines while preserving zero success regression.
+- Planned files:
+  - czr004_g537_static_flow_relative_learning_goal_aware_dual_channel_ltm_plan.md
+  - scripts/repair5g537_common.py
+  - scripts/verify_repair5g537_g536_artifacts.py
+  - scripts/audit_repair5g537_static_baseline_ladder.py
+  - scripts/create_repair5g537_static_relative_labels.py
+  - scripts/analyze_repair5g537_static_flow_gap.py
+  - scripts/train_eval_repair5g537_static_relative_selector.py
+  - scripts/train_eval_repair5g537_static_flow_residual_model.py
+  - scripts/create_repair5g537_static_relative_blind_replay_plan.py
+  - scripts/run_repair5g537_static_relative_blind_replay.py
+  - scripts/analyze_repair5g537_static_relative_blind_evidence.py
+  - scripts/analyze_repair5g537_failure_and_static_gap_autopsy.py
+  - scripts/write_repair5g537_decision.py
+  - outputs/reports/phase5p5_repair5g537_*
+  - outputs/tables/phase5p5_repair5g537_*
+  - outputs/logs/phase5p5_repair5g537_* local/ignored raw logs
+  - artifacts/models/laur_ltm/repair5g537_* manifest files only
+- Constraints:
+  No external/lacam2/lacam2 edits, no solver semantics changes, no action/priority/search/restart/candidate deletion/h-value target, no reserved IDs 166..205, no Phase5.5/Phase6/runtime/AAAI claims.
+- Pre-experiment statement:
+  G5.37 does not count beating additive as sufficient. The main question is whether learning can improve over static_flow / best safe static goal-aware baselines with zero success regression.
+- Commands completed:
+  - `python -m py_compile scripts\repair5g537_common.py scripts\verify_repair5g537_g536_artifacts.py scripts\audit_repair5g537_static_baseline_ladder.py scripts\create_repair5g537_static_relative_labels.py scripts\analyze_repair5g537_static_flow_gap.py scripts\train_eval_repair5g537_static_relative_selector.py scripts\train_eval_repair5g537_static_flow_residual_model.py scripts\create_repair5g537_static_relative_blind_replay_plan.py scripts\run_repair5g537_static_relative_blind_replay.py scripts\analyze_repair5g537_static_relative_blind_evidence.py scripts\analyze_repair5g537_failure_and_static_gap_autopsy.py scripts\write_repair5g537_decision.py`
+  - `C:\Users\38908\.conda\envs\czr004\python.exe -m py_compile scripts\repair5g537_common.py scripts\train_eval_repair5g537_static_relative_selector.py scripts\train_eval_repair5g537_static_flow_residual_model.py`
+  - `python scripts\verify_repair5g537_g536_artifacts.py`
+  - `python scripts\audit_repair5g537_static_baseline_ladder.py`
+  - `python scripts\create_repair5g537_static_relative_labels.py`
+  - `python scripts\analyze_repair5g537_static_flow_gap.py`
+  - `C:\Users\38908\.conda\envs\czr004\python.exe scripts\train_eval_repair5g537_static_relative_selector.py --epochs 80 --bootstrap-samples 300`
+  - `C:\Users\38908\.conda\envs\czr004\python.exe scripts\train_eval_repair5g537_static_flow_residual_model.py --epochs 80 --bootstrap-samples 300`
+  - `python scripts\create_repair5g537_static_relative_blind_replay_plan.py`
+  - `powershell -ExecutionPolicy Bypass -File scripts\build_phase1a_batch.ps1`
+  - `python scripts\run_repair5g537_static_relative_blind_replay.py --max-workers 1`
+  - `python scripts\analyze_repair5g537_static_relative_blind_evidence.py`
+  - `python scripts\analyze_repair5g537_failure_and_static_gap_autopsy.py`
+  - `python scripts\write_repair5g537_decision.py`
+  - G5.37 JSON summary parse check
+  - `git diff --check`
+  - `git status --short -- external/lacam2/lacam2`
+  - `C:\Users\38908\.conda\envs\czr004\python.exe -m pytest tests\test_repair5g_dual_channel_ltm.py tests\test_repair5g5_runtime_selector_policy.py tests\test_repair5g5_contextual_selector_export.py tests\test_repair5g5_aaai_quality_gates.py tests\test_repair5g52_checkpoint_schema.py`
+- Observations:
+  - G5.36 artifact verification passed with no missing required files.
+  - The static baseline ladder audit reinterpreted G5.36 as additive-safe but not static-relative positive; the G5.36 safety patch remains replay-derived.
+  - Static-relative labels produced `8,298` context-candidate rows and `103` static-relative target rows.
+  - Offline selector diagnostics were positive under historical labels, but this was not treated as blind evidence.
+  - The static-flow residual diagnostic produced `103` bounded residual targets and six future candidate-alias suggestions; no new adapter alias was implemented in G5.37.
+  - The blind real solver replay used fresh seeds `286..365`, expanded to `500` contexts to satisfy the pair-count gate, and produced `8,918` role-materialized solver rows with `1,113` selected-vs-primary-static pairs.
+  - Blind evidence was negative for the learned static-relative selector: success regressions were `40` vs additive, `8` vs static_flow, `4` vs best-family static, and `16` vs primary static; mean quality delta vs primary static was `0.00159039471393` with `0` better and `35` worse quality-only cases.
+  - Final decision: `g537_static_relative_success_regression_blocks_learning`.
+  - Claims remain closed: `phase5p5_allowed=false`, `phase6_allowed=false`, `runtime_claim_allowed=false`, `learned_runtime_policy_validated=false`, and `aaai_ready=false`.
+- Validation:
+  - G5.37 scripts compile under default Python and conda `czr004` Python.
+  - All `outputs/reports/phase5p5_repair5g537_*summary.json` files parse as JSON.
+  - `powershell -ExecutionPolicy Bypass -File scripts\build_phase1a_batch.ps1` passed; ninja had no work to do.
+  - `git diff --check` passed with line-ending warnings only.
+  - `git status --short -- external/lacam2/lacam2` returned clean.
+  - `C:\Users\38908\.conda\envs\czr004\python.exe -m pytest tests\test_repair5g_dual_channel_ltm.py tests\test_repair5g5_runtime_selector_policy.py tests\test_repair5g5_contextual_selector_export.py tests\test_repair5g5_aaai_quality_gates.py tests\test_repair5g52_checkpoint_schema.py` passed: `11 passed`.
 ## 2026-06-11 - Repair5G.5.36 safe-opportunity recovery for goal-aware dual-channel UpdateLTM
 
 - Request:

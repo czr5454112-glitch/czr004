@@ -1,0 +1,4 @@
+budget_ms,support_rows,candidate_families,mean_delta_vs_static_flow,mean_delta_vs_primary_static,static_flow_better_or_equal_count,static_relative_gain_count,static_regression_count,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+1000,3014,additive;block_heavy;c_only;commit_heavy;flow_decay;high_beta;low_beta;other_flow;static_flow_shield;wait_aggressive;wait_conservative,-3.23710615598e-06,-3.23710615598e-06,2999,14,1,False,False,False,False,False
+2000,2478,additive;block_heavy;c_only;commit_heavy;flow_decay;high_beta;low_beta;other_flow;static_flow_shield;wait_aggressive;wait_conservative,0.00243898285909,0.00608091776095,2351,88,39,False,False,False,False,False
+500,2806,additive;block_heavy;c_only;commit_heavy;flow_decay;high_beta;low_beta;other_flow;static_flow_shield;wait_aggressive;wait_conservative,0,0,2743,1,62,False,False,False,False,False

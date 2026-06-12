@@ -1,0 +1,5 @@
+map_family,budget_ms,support_targets,mean_delta_flow_shield_beta,mean_delta_max_flow_shield,predict_static_flow_unchanged,predict_lower_beta,predict_higher_cap,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+maze,2000,36,-0.158333333333,-0.340277777778,False,True,False,False,False,False,False,False
+random,1000,14,-0.35,-0.75,False,True,False,False,False,False,False,False
+random,2000,52,-0.226923076923,-0.423076923077,False,True,False,False,False,False,False,False
+random,500,1,-0.35,-0.75,False,True,False,False,False,False,False,False

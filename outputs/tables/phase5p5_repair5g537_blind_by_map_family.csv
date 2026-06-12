@@ -1,0 +1,4 @@
+map_family,pairs,success_regression_count,success_gain_count,both_fail_count,quality_only_pairs,quality_only_mean_delta,quality_only_median_delta,quality_ci_low,quality_ci_high,mean_corrected_delta,better_count,equal_count,worse_count,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+maze,353,0,0,60,293,0.00162482601287,0,0.00162482601287,0.00162482601287,0.00134865161975,0,280,13,False,False,False,False,False
+random,444,6,0,60,378,0.00175724600031,0,0.00175724600031,0.00175724600031,0.0048744121354,0,356,22,False,False,False,False,False
+warehouse,316,10,0,260,46,0,0,0,0,0.00791139240506,0,46,0,False,False,False,False,False

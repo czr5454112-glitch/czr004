@@ -1,0 +1,47 @@
+{
+  "aaai_ready": false,
+  "component_decisions": {
+    "autopsy": "failure_and_static_gap_autopsy_completed",
+    "baseline_ladder": "g536_static_baseline_audit_shows_learning_not_above_static_continue_static_relative_training",
+    "blind_evidence": "static_relative_learning_not_above_static_blind",
+    "blind_plan": "static_relative_blind_replay_plan_created",
+    "blind_replay": "static_relative_blind_replay_executed",
+    "labels": "static_relative_labels_created",
+    "residual": "static_flow_residual_targets_ready_for_future_candidate_design",
+    "selector": "static_relative_selector_offline_positive",
+    "static_flow_gap": "static_flow_gap_analyzed",
+    "verification": "g536_static_baseline_audit_shows_learning_not_above_static_continue_static_relative_training"
+  },
+  "decision": "g537_static_relative_success_regression_blocks_learning",
+  "hard_requirements": {
+    "all_claims_closed": true,
+    "better_count_vs_primary_static_ge_worse": false,
+    "external_lacam2_clean": true,
+    "new_solver_rows_ge_3000": true,
+    "non_static_selection_rate_ge_0p10": true,
+    "policy_pairs_vs_primary_static_ge_1000": true,
+    "quality_only_mean_delta_vs_primary_static_lt_0": false,
+    "real_blind_solver_replay_executed": true,
+    "reserved_ids_untouched": true,
+    "success_regression_vs_additive_zero": false,
+    "success_regression_vs_best_static_zero": false,
+    "success_regression_vs_static_flow_zero": false
+  },
+  "key_metrics": {
+    "better_vs_primary_static": 0,
+    "fallback_to_static_rate": "0.690925426774",
+    "new_solver_rows": 8918,
+    "non_static_selection_rate": "0.309074573226",
+    "policy_pairs_vs_primary_static": 1113,
+    "quality_only_mean_delta_vs_primary_static": "0.00159039471393",
+    "success_regression_vs_additive": 40,
+    "success_regression_vs_best_static": 4,
+    "success_regression_vs_static_flow": 8,
+    "worse_vs_primary_static": 35
+  },
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g537_decision_summary_v1"
+}

@@ -1,0 +1,19 @@
+{
+  "aaai_ready": false,
+  "contexts": 800,
+  "decision": "residual_blind_replay_plan_created",
+  "fresh_seed_range": "406..485",
+  "learned_runtime_policy_validated": false,
+  "minimum_contexts_met": true,
+  "minimum_new_solver_rows_planned": true,
+  "minimum_policy_pairs_vs_static_flow_planned": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "plan_rows": 5600,
+  "residual_candidates": [
+    "repair5g538_random_bridge_c_light"
+  ],
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g538_residual_blind_replay_plan_summary_v1",
+  "selector_included": true
+}

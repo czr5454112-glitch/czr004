@@ -1,0 +1,5 @@
+source,row_count,used_by_g537_label_source_rows,direct_real_replay_source,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+G5.35_lexicographic_labels,8333,True,False,False,False,False,False,False
+G5.36_safe_opportunity_examples,8333,False,False,False,False,False,False,False
+G5.36_real_replay_rows,3981,False,True,False,False,False,False,False
+G5.37_blind_replay_rows,8918,False,True,False,False,False,False,False

@@ -1,0 +1,36 @@
+{
+  "aaai_ready": false,
+  "decision": "residual_selector_trained_diagnostic_only",
+  "fallback_candidate": "repair5g59_static_flow_shield",
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "policies": {
+    "screening_static_flow_safe_policy": {
+      "maze|1000|100": "repair5g538_random_bridge_c_light",
+      "maze|1000|50": "repair5g538_random_bridge_c_light",
+      "maze|2000|100": "repair5g538_random_bridge_c_light",
+      "maze|2000|50": "repair5g538_random_bridge_c_light",
+      "maze|500|100": "repair5g538_random_bridge_c_light",
+      "maze|500|50": "repair5g538_random_bridge_c_light",
+      "random|1000|100": "repair5g538_random_bridge_c_light",
+      "random|1000|50": "repair5g538_random_bridge_c_light",
+      "random|2000|100": "repair5g538_random_bridge_c_light",
+      "random|2000|50": "repair5g538_random_bridge_c_light",
+      "random|500|100": "repair5g538_random_bridge_c_light",
+      "random|500|50": "repair5g538_random_bridge_c_light",
+      "warehouse|1000|100": "repair5g538_random_bridge_c_light",
+      "warehouse|1000|50": "repair5g538_random_bridge_c_light",
+      "warehouse|2000|100": "repair5g538_random_bridge_c_light",
+      "warehouse|2000|50": "repair5g538_random_bridge_c_light",
+      "warehouse|500|100": "repair5g538_random_bridge_c_light",
+      "warehouse|500|50": "repair5g538_random_bridge_c_light"
+    }
+  },
+  "positive_residual_candidate_ids": [
+    "repair5g538_random_bridge_c_light"
+  ],
+  "runtime_claim_allowed": false,
+  "schema_version": "repair5g538_residual_selector_manifest_v1",
+  "selector_trained": true
+}

@@ -1,0 +1,309 @@
+{
+  "agent_counts": [
+    50,
+    100
+  ],
+  "created_at": "2026-06-12T20:43:44.729613",
+  "effective_instance_ids": [
+    406,
+    407,
+    408,
+    409,
+    410,
+    411,
+    412,
+    413,
+    414,
+    415,
+    416,
+    417,
+    418,
+    419,
+    420,
+    421,
+    422,
+    423,
+    424,
+    425,
+    426,
+    427,
+    428,
+    429,
+    430,
+    431,
+    432,
+    433,
+    434,
+    435,
+    436,
+    437,
+    438,
+    439,
+    440,
+    441,
+    442,
+    443,
+    444,
+    445,
+    446,
+    447,
+    448,
+    449,
+    450
+  ],
+  "final_missing_count": 0,
+  "final_missing_examples": [],
+  "generated_count": 135,
+  "generated_examples": [
+    {
+      "instance_id": 406,
+      "map": "maze-32-32-4",
+      "path": "outputs\\tmp\\phase5p5_repair5g538_residual_blind_scenarios\\maze-32-32-4-random-406.scen"
+    },
+    {
+      "instance_id": 407,
+      "map": "maze-32-32-4",
+      "path": "outputs\\tmp\\phase5p5_repair5g538_residual_blind_scenarios\\maze-32-32-4-random-407.scen"
+    },
+    {
+      "instance_id": 408,
+      "map": "maze-32-32-4",
+      "path": "outputs\\tmp\\phase5p5_repair5g538_residual_blind_scenarios\\maze-32-32-4-random-408.scen"
+    },
+    {
+      "instance_id": 409,
+      "map": "maze-32-32-4",
+      "path": "outputs\\tmp\\phase5p5_repair5g538_residual_blind_scenarios\\maze-32-32-4-random-409.scen"
+    },
+    {
+      "instance_id": 410,
+      "map": "maze-32-32-4",
+      "path": "outputs\\tmp\\phase5p5_repair5g538_residual_blind_scenarios\\maze-32-32-4-random-410.scen"
+    },
+    {
+      "instance_id": 411,
+      "map": "maze-32-32-4",
+      "path": "outputs\\tmp\\phase5p5_repair5g538_residual_blind_scenarios\\maze-32-32-4-random-411.scen"
+    },
+    {
+      "instance_id": 412,
+      "map": "maze-32-32-4",
+      "path": "outputs\\tmp\\phase5p5_repair5g538_residual_blind_scenarios\\maze-32-32-4-random-412.scen"
+    },
+    {
+      "instance_id": 413,
+      "map": "maze-32-32-4",
+      "path": "outputs\\tmp\\phase5p5_repair5g538_residual_blind_scenarios\\maze-32-32-4-random-413.scen"
+    },
+    {
+      "instance_id": 414,
+      "map": "maze-32-32-4",
+      "path": "outputs\\tmp\\phase5p5_repair5g538_residual_blind_scenarios\\maze-32-32-4-random-414.scen"
+    },
+    {
+      "instance_id": 415,
+      "map": "maze-32-32-4",
+      "path": "outputs\\tmp\\phase5p5_repair5g538_residual_blind_scenarios\\maze-32-32-4-random-415.scen"
+    },
+    {
+      "instance_id": 416,
+      "map": "maze-32-32-4",
+      "path": "outputs\\tmp\\phase5p5_repair5g538_residual_blind_scenarios\\maze-32-32-4-random-416.scen"
+    },
+    {
+      "instance_id": 417,
+      "map": "maze-32-32-4",
+      "path": "outputs\\tmp\\phase5p5_repair5g538_residual_blind_scenarios\\maze-32-32-4-random-417.scen"
+    },
+    {
+      "instance_id": 418,
+      "map": "maze-32-32-4",
+      "path": "outputs\\tmp\\phase5p5_repair5g538_residual_blind_scenarios\\maze-32-32-4-random-418.scen"
+    },
+    {
+      "instance_id": 419,
+      "map": "maze-32-32-4",
+      "path": "outputs\\tmp\\phase5p5_repair5g538_residual_blind_scenarios\\maze-32-32-4-random-419.scen"
+    },
+    {
+      "instance_id": 420,
+      "map": "maze-32-32-4",
+      "path": "outputs\\tmp\\phase5p5_repair5g538_residual_blind_scenarios\\maze-32-32-4-random-420.scen"
+    },
+    {
+      "instance_id": 421,
+      "map": "maze-32-32-4",
+      "path": "outputs\\tmp\\phase5p5_repair5g538_residual_blind_scenarios\\maze-32-32-4-random-421.scen"
+    },
+    {
+      "instance_id": 422,
+      "map": "maze-32-32-4",
+      "path": "outputs\\tmp\\phase5p5_repair5g538_residual_blind_scenarios\\maze-32-32-4-random-422.scen"
+    },
+    {
+      "instance_id": 423,
+      "map": "maze-32-32-4",
+      "path": "outputs\\tmp\\phase5p5_repair5g538_residual_blind_scenarios\\maze-32-32-4-random-423.scen"
+    },
+    {
+      "instance_id": 424,
+      "map": "maze-32-32-4",
+      "path": "outputs\\tmp\\phase5p5_repair5g538_residual_blind_scenarios\\maze-32-32-4-random-424.scen"
+    },
+    {
+      "instance_id": 425,
+      "map": "maze-32-32-4",
+      "path": "outputs\\tmp\\phase5p5_repair5g538_residual_blind_scenarios\\maze-32-32-4-random-425.scen"
+    }
+  ],
+  "generated_missing_scenarios": true,
+  "generator_policy": {
+    "base_seed": 20260522,
+    "equivalent_command": "python scripts/generate_phase1a_scenarios.py --manifest <f4 maps with instances 26..45> --output-dir outputs\\tmp\\phase5p5_repair5g538_residual_blind_scenarios --base-seed 20260522",
+    "script_version": "phase1a-scenario-generator-v1",
+    "seed_function": "sha256(script_version|base_seed|map_name|instance_id)",
+    "source": "scripts/generate_phase1a_scenarios.py functions"
+  },
+  "initial_missing_count": 0,
+  "initial_missing_examples": [],
+  "reduced_scope_reason": "",
+  "requested_instance_ids": [
+    406,
+    407,
+    408,
+    409,
+    410,
+    411,
+    412,
+    413,
+    414,
+    415,
+    416,
+    417,
+    418,
+    419,
+    420,
+    421,
+    422,
+    423,
+    424,
+    425,
+    426,
+    427,
+    428,
+    429,
+    430,
+    431,
+    432,
+    433,
+    434,
+    435,
+    436,
+    437,
+    438,
+    439,
+    440,
+    441,
+    442,
+    443,
+    444,
+    445,
+    446,
+    447,
+    448,
+    449,
+    450
+  ],
+  "requested_maps": [
+    "maze-32-32-4",
+    "random-32-32-20",
+    "warehouse-10-20-10-2-1"
+  ],
+  "scenario_dir": "outputs\\tmp\\phase5p5_repair5g538_residual_blind_scenarios",
+  "scenario_metadata": "outputs\\reports\\phase5p5_repair5g538_residual_blind_scenario_generation.json",
+  "schema_version": "phase5p5_repair5f4_scenario_generation_v1",
+  "source_missing_count": 135,
+  "source_missing_examples": [
+    {
+      "instance_id": 406,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 407,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 408,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 409,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 410,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 411,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 412,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 413,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 414,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 415,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 416,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 417,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 418,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 419,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 420,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 421,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 422,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 423,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 424,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 425,
+      "map": "maze-32-32-4"
+    }
+  ],
+  "source_scenario_dir": "outputs\\tmp\\phase1a\\generated\\phase1a-generated-random"
+}

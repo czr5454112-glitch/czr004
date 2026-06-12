@@ -1,0 +1,8 @@
+split,decision,policy_entries,positive_candidate_count,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+group_by_context,selector_trained_screening_policy_diagnostic,18,1,False,False,False,False,False
+group_by_seed,selector_trained_screening_policy_diagnostic,18,1,False,False,False,False,False
+leave_one_map_family_out,selector_trained_screening_policy_diagnostic,18,1,False,False,False,False,False
+warehouse_holdout,selector_trained_screening_policy_diagnostic,18,1,False,False,False,False,False
+leave_one_budget_out,selector_trained_screening_policy_diagnostic,18,1,False,False,False,False,False
+leave_one_agent_count_out,selector_trained_screening_policy_diagnostic,18,1,False,False,False,False,False
+strict_all_holdout,selector_trained_screening_policy_diagnostic,18,1,False,False,False,False,False

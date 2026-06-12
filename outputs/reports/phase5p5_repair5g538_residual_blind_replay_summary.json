@@ -1,0 +1,17 @@
+{
+  "aaai_ready": false,
+  "contexts": 800,
+  "decision": "residual_blind_replay_executed",
+  "execution_mode": "real_solver_execution",
+  "learned_runtime_policy_validated": false,
+  "missing_materializations": 0,
+  "new_checkpoint_rows": 1275,
+  "new_raw_solver_task_rows": 3736,
+  "new_solver_rows": 7718,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "raw_sha256": "3309d0845832232dc38da1612c0e03666d5c121db77d97d8da6c8e312706dcde",
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g538_residual_blind_replay_summary_v1",
+  "trace_backend": "real_solver_trace"
+}

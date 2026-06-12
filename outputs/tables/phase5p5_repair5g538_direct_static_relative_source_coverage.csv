@@ -1,0 +1,5 @@
+source_round,direct_outcome_rows,real_solver_execution_rows,contexts,context_budget_iteration_groups,candidate_count,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+G5.34_broad_probe,8329,8329,665,811,22,False,False,False,False,False
+G5.34_prospective_selected_replay,2051,2051,168,372,8,False,False,False,False,False
+G5.36_real_no_regression_replay,3981,3981,211,508,8,False,False,False,False,False
+G5.37_static_relative_blind_replay,8918,8918,500,1126,6,False,False,False,False,False

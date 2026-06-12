@@ -1,0 +1,44 @@
+{
+  "aaai_ready": false,
+  "component_decisions": {
+    "blind_evidence": "residual_blind_negative_or_regressed",
+    "blind_replay": "residual_blind_replay_executed",
+    "candidate_family": "static_flow_residual_candidate_family_created",
+    "direct_labels": "direct_static_relative_labels_rebuilt_from_real_replay_rows",
+    "g537_failure_audit": "g537_failure_due_to_label_source_and_policy_sparsity_continue_rebuild",
+    "probe": "static_flow_residual_probe_executed",
+    "residual_evidence": "residual_candidate_screen_positive",
+    "selector": "residual_selector_trained_diagnostic_only"
+  },
+  "decision": "g538_success_regression_blocks_residual",
+  "hard_requirements": {
+    "all_claims_closed": true,
+    "better_count_vs_static_flow_gt_worse": false,
+    "blind_residual_replay_executed": true,
+    "direct_static_relative_labels_rebuilt": true,
+    "external_lacam2_clean": true,
+    "g537_failure_audit_completed": true,
+    "new_solver_rows_ge_3000": true,
+    "quality_only_mean_delta_vs_static_flow_lt_0": true,
+    "real_residual_candidate_probe_executed": true,
+    "reserved_ids_untouched": true,
+    "residual_candidate_family_created": true,
+    "success_regression_vs_best_static_zero": false,
+    "success_regression_vs_static_flow_zero": false
+  },
+  "key_metrics": {
+    "better_vs_static_flow": 13,
+    "new_solver_rows": 7718,
+    "non_static_residual_selection_rate": "1",
+    "policy_pairs_vs_static_flow": 1037,
+    "quality_only_mean_delta_vs_static_flow": "-4.2049961406e-05",
+    "success_regression_vs_best_static": 5,
+    "success_regression_vs_static_flow": 2,
+    "worse_vs_static_flow": 13
+  },
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g538_decision_summary_v1"
+}

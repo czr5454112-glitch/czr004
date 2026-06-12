@@ -1,0 +1,13 @@
+{
+  "aaai_ready": false,
+  "all_required_present": true,
+  "decision": "g537_artifacts_verified",
+  "g537_decision": "g537_static_relative_success_regression_blocks_learning",
+  "learned_runtime_policy_validated": false,
+  "missing_artifacts": [],
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "required_artifacts": 15,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g538_g537_verification_summary_v1"
+}

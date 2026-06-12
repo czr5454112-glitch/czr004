@@ -1,0 +1,26 @@
+{
+  "aaai_ready": false,
+  "candidate_count": 24,
+  "candidate_sources": {
+    "maze_bridge": 3,
+    "random_bridge": 3,
+    "residual_flow_decay": 3,
+    "residual_low_beta": 4,
+    "residual_wait_damped": 3,
+    "static_anchor": 5,
+    "warehouse_bridge": 3
+  },
+  "decision": "static_flow_residual_candidate_family_created",
+  "external_lacam2_clean": true,
+  "hard_cap_met": true,
+  "implemented_new_aliases": false,
+  "learned_runtime_policy_validated": false,
+  "minimum_candidates_met": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "project_owned_adapter_only": true,
+  "residual_candidate_count": 19,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g538_static_flow_residual_candidate_family_summary_v1",
+  "target_candidate_range_met": true
+}

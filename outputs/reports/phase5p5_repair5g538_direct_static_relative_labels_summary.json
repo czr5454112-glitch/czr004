@@ -1,0 +1,25 @@
+{
+  "aaai_ready": false,
+  "best_fixed_relative_safe_high_margin_count": 552,
+  "candidate_count": 22,
+  "context_budget_iteration_groups": 2817,
+  "contexts": 1525,
+  "decision": "direct_static_relative_labels_rebuilt_from_real_replay_rows",
+  "direct_outcome_rows": 23279,
+  "family_static_relative_safe_high_margin_count": 517,
+  "label_source_coverage_by_round": {
+    "G5.34_broad_probe": 8329,
+    "G5.34_prospective_selected_replay": 2051,
+    "G5.36_real_no_regression_replay": 3981,
+    "G5.37_static_relative_blind_replay": 8918
+  },
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "posthoc_oracle_gap_count": 1113,
+  "real_solver_execution_rows": 23279,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g538_direct_static_relative_labels_summary_v1",
+  "static_flow_relative_safe_high_margin_count": 522,
+  "target_improve_over_deployable_static_count": 520
+}

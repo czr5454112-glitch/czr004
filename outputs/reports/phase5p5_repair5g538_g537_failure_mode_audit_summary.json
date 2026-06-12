@@ -1,0 +1,43 @@
+{
+  "aaai_ready": false,
+  "covered_agents": [
+    "50"
+  ],
+  "covered_budgets": [
+    "2000"
+  ],
+  "covered_map_families": [
+    "random"
+  ],
+  "covered_strata": 1,
+  "decision": "g537_failure_due_to_label_source_and_policy_sparsity_continue_rebuild",
+  "failure_rows": 129,
+  "frozen_learned_policy_entries": 3,
+  "g537_label_source_prefers_g535_lexicographic_when_present": true,
+  "label_source_counts": {
+    "G5.35_lexicographic_labels": 8333,
+    "G5.36_real_replay_rows": 3981,
+    "G5.36_safe_opportunity_examples": 8333,
+    "G5.37_blind_replay_rows": 8918
+  },
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "policy_covers_only_one_stratum": true,
+  "primary_static_baseline_is_posthoc_oracle_diagnostic": true,
+  "primary_static_pairs": 1113,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g538_g537_failure_mode_audit_summary_v1",
+  "top_failure_clusters": [
+    "additive|random|50|1000|1:17",
+    "additive|random|100|2000|1:17",
+    "primary_static|random|50|2000|1:16",
+    "best_family_static|random|50|2000|1:9",
+    "primary_static|maze|50|2000|1:8",
+    "static_flow|maze|50|2000|1:7",
+    "primary_static|random|50|2000|final:6",
+    "static_flow|maze|50|2000|final:5",
+    "primary_static|warehouse|50|2000|0:5",
+    "primary_static|warehouse|50|2000|final:5"
+  ]
+}

@@ -1,5 +1,32 @@
 # Codex Worklog
 
+## 2026-06-12 - Repair5G.5.38 static-flow residual candidate design and label rebuild
+
+- Request:
+  Continue after G5.37 commit f94c7d6. G5.37 failed the static-flow-relative blind replay: the learned selector had success regressions vs additive/static baselines and lost to primary static. This does not prove no learning space exists: G5.37 reported static-relative opportunities and residual targets, but did not implement new residual aliases and may have trained labels from older G5.35 lexicographic rows rather than direct G5.36/G5.37 real replay outcomes. G5.38 must audit the failure, rebuild direct paired static-relative labels, implement a small bounded static-flow residual candidate family, and run real solver candidate probes before any new selector claim.
+- Planned files:
+  - czr004_g538_static_flow_residual_candidate_design_and_label_rebuild_plan.md
+  - scripts/repair5g538_common.py
+  - scripts/verify_repair5g538_g537_artifacts.py
+  - scripts/audit_repair5g538_g537_failure_modes.py
+  - scripts/create_repair5g538_direct_static_relative_labels.py
+  - scripts/create_repair5g538_static_flow_residual_candidate_family.py
+  - scripts/run_repair5g538_static_flow_residual_candidate_probe.py
+  - scripts/analyze_repair5g538_residual_candidate_evidence.py
+  - scripts/train_eval_repair5g538_residual_selector_if_warranted.py
+  - scripts/create_repair5g538_residual_blind_replay_plan.py
+  - scripts/run_repair5g538_residual_blind_replay.py
+  - scripts/analyze_repair5g538_residual_blind_evidence.py
+  - scripts/write_repair5g538_decision.py
+  - outputs/reports/phase5p5_repair5g538_*
+  - outputs/tables/phase5p5_repair5g538_*
+  - outputs/logs/phase5p5_repair5g538_* local/ignored raw logs
+  - artifacts/models/laur_ltm/repair5g538_* manifest files only
+- Constraints:
+  No external/lacam2/lacam2 edits, no solver semantic changes, no action/priority/search/restart/candidate deletion/h-value target, no reserved IDs 166..205, no Phase5.5/Phase6/runtime/AAAI claims.
+- Pre-experiment statement:
+  G5.38 must not start by training another selector over the same old candidates. It must first test whether executable static-flow residual candidates actually create safe static-relative gains.
+
 ## 2026-06-09 - Repair5G.5.27 conservative bandit teacher distillation
 
 - Request:

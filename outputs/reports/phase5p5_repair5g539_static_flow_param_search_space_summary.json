@@ -1,0 +1,18 @@
+{
+  "aaai_ready": false,
+  "adapter_alias_added": false,
+  "decision": "static_flow_param_search_space_created",
+  "existing_repair5g518_grid_grammar_used": true,
+  "hard_cap_respected": true,
+  "learned_runtime_policy_validated": false,
+  "max_parameter_candidates": 128,
+  "parameter_candidate_count": 128,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g539_static_flow_param_search_space_summary_v1",
+  "stage1_candidate_count": 80,
+  "stage2_candidate_count": 32,
+  "stage3_candidate_count": 16,
+  "strata_count": 54
+}

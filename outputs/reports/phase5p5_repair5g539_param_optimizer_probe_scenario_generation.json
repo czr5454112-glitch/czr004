@@ -1,0 +1,76 @@
+{
+  "agent_counts": [
+    50,
+    100
+  ],
+  "created_at": "2026-06-13T08:54:56.781912",
+  "effective_instance_ids": [
+    486
+  ],
+  "final_missing_count": 0,
+  "final_missing_examples": [],
+  "generated_count": 2,
+  "generated_examples": [
+    {
+      "instance_id": 486,
+      "map": "maze-32-32-4",
+      "pairs": 100,
+      "path": "outputs\\tmp\\phase5p5_repair5g539_param_optimizer_probe_scenarios\\maze-32-32-4-random-486.scen",
+      "sha256": "b0111cee3503b7ba5869643ab8ddbf37daa60e2648bc89be2dd1cf56db8d5d82"
+    },
+    {
+      "instance_id": 486,
+      "map": "warehouse-10-20-10-2-1",
+      "pairs": 100,
+      "path": "outputs\\tmp\\phase5p5_repair5g539_param_optimizer_probe_scenarios\\warehouse-10-20-10-2-1-random-486.scen",
+      "sha256": "984fcbe78f22df03b6c6cfc305646e758fa6e7545d4963bec5f2c101fdbd73f2"
+    }
+  ],
+  "generated_missing_scenarios": true,
+  "generator_policy": {
+    "base_seed": 20260522,
+    "equivalent_command": "python scripts/generate_phase1a_scenarios.py --manifest <f4 maps with instances 26..45> --output-dir outputs\\tmp\\phase5p5_repair5g539_param_optimizer_probe_scenarios --base-seed 20260522",
+    "script_version": "phase1a-scenario-generator-v1",
+    "seed_function": "sha256(script_version|base_seed|map_name|instance_id)",
+    "source": "scripts/generate_phase1a_scenarios.py functions"
+  },
+  "initial_missing_count": 2,
+  "initial_missing_examples": [
+    {
+      "instance_id": 486,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 486,
+      "map": "warehouse-10-20-10-2-1"
+    }
+  ],
+  "reduced_scope_reason": "",
+  "requested_instance_ids": [
+    486
+  ],
+  "requested_maps": [
+    "maze-32-32-4",
+    "random-32-32-20",
+    "warehouse-10-20-10-2-1"
+  ],
+  "scenario_dir": "outputs\\tmp\\phase5p5_repair5g539_param_optimizer_probe_scenarios",
+  "scenario_metadata": "outputs\\reports\\phase5p5_repair5g539_param_optimizer_probe_scenario_generation.json",
+  "schema_version": "phase5p5_repair5f4_scenario_generation_v1",
+  "source_missing_count": 3,
+  "source_missing_examples": [
+    {
+      "instance_id": 486,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 486,
+      "map": "random-32-32-20"
+    },
+    {
+      "instance_id": 486,
+      "map": "warehouse-10-20-10-2-1"
+    }
+  ],
+  "source_scenario_dir": "outputs\\tmp\\phase1a\\generated\\phase1a-generated-random"
+}

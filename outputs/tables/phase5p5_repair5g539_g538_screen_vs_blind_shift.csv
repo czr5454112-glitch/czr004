@@ -1,0 +1,5 @@
+metric,screening_value,blind_value,diagnosis,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+decision,residual_candidate_screen_positive,residual_blind_negative_or_regressed,screening positive did not generalize to blind replay,False,False,False,False,False
+selected_candidates,repair5g538_random_bridge_c_light,repair5g538_random_bridge_c_light,blind policy collapsed to one global residual candidate,False,False,False,False,False
+success_regression_vs_static_flow,0,2,zero-regression screening signal did not survive fresh blind seeds,False,False,False,False,False
+quality_only_mean_delta_vs_static_flow,-0.000544132968039,-4.2049961406e-05,mean quality effect was tiny relative to safety regressions,False,False,False,False,False

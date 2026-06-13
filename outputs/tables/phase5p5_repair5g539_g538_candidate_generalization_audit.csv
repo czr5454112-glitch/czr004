@@ -1,0 +1,5 @@
+question,answer,evidence,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+"Was the blind policy global, stratum-specific, or model-generated?",global residual selector/fallback policy,selector_trained=True; selected_candidates=['repair5g538_random_bridge_c_light'],False,False,False,False,False
+Did the blind selector choose only repair5g538_random_bridge_c_light for all strata?,True,repair5g538_random_bridge_c_light,False,False,False,False,False
+Was the mean gain driven by a tiny number of successes while failures were severe?,yes,better/worse vs static_flow=13/13; success regressions=2,False,False,False,False,False
+Did best_static/posthoc static dominate the residual candidate?,"yes, best-static diagnostic had 5 residual success regressions and more worse than better quality pairs",best_static regressions=5; better/worse=5/29,False,False,False,False,False

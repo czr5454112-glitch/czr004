@@ -1,0 +1,20 @@
+{
+  "aaai_ready": false,
+  "contexts": 8,
+  "decision": "frozen_param_blind_replay_partial_runtime_limited",
+  "execution_mode": "real_solver_execution",
+  "learned_runtime_policy_validated": false,
+  "minimum_contexts_met": false,
+  "minimum_solver_rows_met": false,
+  "missing_materializations": 0,
+  "new_checkpoint_rows": 58,
+  "new_raw_solver_task_rows": 46,
+  "new_solver_rows": 144,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "plan_rows": 64,
+  "raw_sha256": "eeed77e205d53773cf85341778a3a8eabee6b9b851f4b96244c9867c1f353917",
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g539_frozen_param_blind_replay_summary_v1",
+  "trace_backend": "real_solver_trace"
+}

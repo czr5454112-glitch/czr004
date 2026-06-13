@@ -1,0 +1,8 @@
+split,decision,safe_region_top1,safe_region_top3,success_regression_false_negative_count,fallback_to_static_rate,policy_entries,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+group_by_context,param_generator_diagnostic_policy_created,1.0,1.0,0,0.944444444444,1,False,False,False,False,False
+group_by_seed_block,param_generator_diagnostic_policy_created,1.0,1.0,0,0.944444444444,1,False,False,False,False,False
+leave_one_map_family_out,param_generator_diagnostic_policy_created,1.0,1.0,0,0.944444444444,1,False,False,False,False,False
+warehouse_holdout,param_generator_diagnostic_policy_created,1.0,1.0,0,0.944444444444,1,False,False,False,False,False
+leave_one_budget_out,param_generator_diagnostic_policy_created,1.0,1.0,0,0.944444444444,1,False,False,False,False,False
+leave_one_agent_count_out,param_generator_diagnostic_policy_created,1.0,1.0,0,0.944444444444,1,False,False,False,False,False
+strict_all_holdout,param_generator_diagnostic_policy_created,1.0,1.0,0,0.944444444444,1,False,False,False,False,False

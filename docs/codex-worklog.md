@@ -4574,3 +4574,65 @@
   - `git diff --check` passed with line-ending warnings only.
   - `git status --short -- external/lacam2/lacam2` returned clean.
   - `C:\Users\38908\.conda\envs\czr004\python.exe -m pytest tests\test_repair5g_dual_channel_ltm.py tests\test_repair5g5_runtime_selector_policy.py tests\test_repair5g5_contextual_selector_export.py tests\test_repair5g5_aaai_quality_gates.py tests\test_repair5g52_checkpoint_schema.py` passed: `11 passed`.
+
+## 2026-06-12 - Repair5G.5.39 GGO-style static-flow parameter optimization
+
+- Request:
+  Continue after G5.38 commit 837c137. G5.38 rebuilt direct labels and created residual candidates, but blind replay failed because the single globally selected residual candidate had success regressions vs static_flow/best_static. G5.39 must shift from candidate-ID selector to GGO-style static-flow-relative UpdateParams optimization: update the project grand plan, optimize residual parameters per stratum, map safe parameter regions, and only then train a parameter generator / safe-region predictor.
+- Planned files:
+  - czr004_g539_ggo_style_static_flow_parameter_optimization_plan.md
+  - scripts/repair5g539_common.py
+  - scripts/verify_repair5g539_g538_artifacts.py
+  - scripts/audit_repair5g539_g538_residual_failure.py
+  - scripts/update_repair5g539_project_strategy_docs.py
+  - scripts/create_repair5g539_static_flow_param_search_space.py
+  - scripts/run_repair5g539_static_flow_param_optimizer_probe.py
+  - scripts/analyze_repair5g539_param_safe_regions.py
+  - scripts/train_eval_repair5g539_param_generator.py
+  - scripts/create_repair5g539_frozen_param_policy.py
+  - scripts/run_repair5g539_frozen_param_blind_replay.py
+  - scripts/analyze_repair5g539_frozen_param_blind_evidence.py
+  - scripts/write_repair5g539_decision.py
+  - outputs/reports/phase5p5_repair5g539_*
+  - outputs/tables/phase5p5_repair5g539_*
+  - outputs/logs/phase5p5_repair5g539_* local/ignored raw logs
+  - artifacts/models/laur_ltm/repair5g539_* manifest files only
+- Constraints:
+  No external/lacam2/lacam2 edits, no solver semantic changes, no action/priority/search/restart/candidate deletion/h-value target, no reserved IDs 166..205, no Phase5.5/Phase6/runtime/AAAI claims.
+- Pre-experiment statement:
+  G5.39 does not train another selector over stale candidates. It first performs static-flow-relative parameter optimization and safe-region mapping, then trains a model only if safe parameter regions with static-relative gains exist.
+- Commands completed:
+  - `python -m py_compile scripts\repair5g539_common.py ... scripts\write_repair5g539_decision.py`
+  - `python scripts\verify_repair5g539_g538_artifacts.py`
+  - `python scripts\audit_repair5g539_g538_residual_failure.py`
+  - `python scripts\update_repair5g539_project_strategy_docs.py`
+  - `python scripts\create_repair5g539_static_flow_param_search_space.py`
+  - `powershell -ExecutionPolicy Bypass -File scripts\build_phase1a_batch.ps1`
+  - `python scripts\run_repair5g539_static_flow_param_optimizer_probe.py --max-workers 1`
+  - `python scripts\analyze_repair5g539_param_safe_regions.py`
+  - `C:\Users\38908\.conda\envs\czr004\python.exe scripts\train_eval_repair5g539_param_generator.py --epochs 80 --bootstrap-samples 300`
+  - `python scripts\create_repair5g539_frozen_param_policy.py`
+  - `python scripts\run_repair5g539_frozen_param_blind_replay.py --max-workers 1`
+  - `python scripts\analyze_repair5g539_frozen_param_blind_evidence.py`
+  - `python scripts\write_repair5g539_decision.py`
+  - G5.39 JSON summary parse check
+  - `git diff --check`
+  - `git status --short -- external/lacam2/lacam2`
+  - `C:\Users\38908\.conda\envs\czr004\python.exe -m pytest tests\test_repair5g_dual_channel_ltm.py tests\test_repair5g5_runtime_selector_policy.py tests\test_repair5g5_contextual_selector_export.py tests\test_repair5g5_aaai_quality_gates.py tests\test_repair5g52_checkpoint_schema.py`
+- Observations:
+  - G5.38 verification passed with all required artifacts present.
+  - G5.38 residual failure audit confirmed the expected diagnosis: screening found a residual signal, but blind replay collapsed to one global residual candidate, `repair5g538_random_bridge_c_light`, with `2` success regressions vs `static_flow` and `5` vs best static.
+  - Strategy docs now record the shift from stale candidate-ID selection to static-flow-relative bounded UpdateParams parameter/residual generation.
+  - The G5.39 search space contains `128` bounded parameter candidates and `54` strata, using existing `repair5g518_grid_*` grammar with no adapter or `external/lacam2/lacam2` edits.
+  - Runtime was constrained on the local machine, so solver runs used prioritized contexts. The optimizer probe materialized `216` real-solver rows across `8` contexts. Safe-region analysis found `15` safe regions and `2` useful safe regions.
+  - The diagnostic parameter generator produced a one-entry safe-region lookup with static fallback. The frozen policy had `1` non-static stratum.
+  - Frozen blind replay materialized `144` real-solver rows across `8` fresh contexts. It had `0` success regressions vs `static_flow` and `0` vs best static, but quality-only mean delta vs `static_flow` was positive (`0.00634986368462`) with `0` better and `2` worse pairs.
+  - Final decision: `g539_param_regions_safe_but_no_quality_gain_continue_search`.
+  - Claims remain closed: `phase5p5_allowed=false`, `phase6_allowed=false`, `runtime_claim_allowed=false`, `learned_runtime_policy_validated=false`, and `aaai_ready=false`.
+- Validation:
+  - G5.39 scripts compile under default Python and conda `czr004` Python.
+  - All `outputs/reports/phase5p5_repair5g539_*summary.json` files parse as JSON.
+  - `powershell -ExecutionPolicy Bypass -File scripts\build_phase1a_batch.ps1` passed; ninja had no work to do.
+  - `git diff --check` passed with line-ending warnings only.
+  - `git status --short -- external/lacam2/lacam2` returned clean.
+  - `C:\Users\38908\.conda\envs\czr004\python.exe -m pytest tests\test_repair5g_dual_channel_ltm.py tests\test_repair5g5_runtime_selector_policy.py tests\test_repair5g5_contextual_selector_export.py tests\test_repair5g5_aaai_quality_gates.py tests\test_repair5g52_checkpoint_schema.py` passed: `11 passed`.

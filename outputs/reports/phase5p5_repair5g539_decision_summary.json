@@ -1,0 +1,49 @@
+{
+  "aaai_ready": false,
+  "component_decisions": {
+    "blind_evidence": "frozen_param_blind_medium_zero_regression",
+    "blind_replay": "frozen_param_blind_replay_partial_runtime_limited",
+    "doc_update": "project_strategy_docs_updated",
+    "frozen_policy": "frozen_param_policy_created",
+    "g538_audit": "g538_verified_global_residual_failed_continue_param_optimization",
+    "optimizer_probe": "static_flow_param_optimizer_probe_partial_runtime_limited",
+    "param_generator": "param_generator_diagnostic_policy_created",
+    "safe_regions": "param_safe_regions_with_quality_signal",
+    "search_space": "static_flow_param_search_space_created"
+  },
+  "decision": "g539_param_regions_safe_but_no_quality_gain_continue_search",
+  "hard_requirements": {
+    "all_claims_closed": true,
+    "better_count_vs_static_flow_gt_worse": false,
+    "external_lacam2_clean": true,
+    "frozen_blind_replay_executed": true,
+    "g538_failure_audited": true,
+    "new_solver_rows_ge_4000": false,
+    "parameter_search_space_created": true,
+    "project_strategy_docs_updated": true,
+    "quality_only_mean_delta_vs_static_flow_lt_0": false,
+    "real_optimizer_probe_executed": true,
+    "reserved_ids_untouched": true,
+    "safe_regions_analyzed": true,
+    "success_regression_vs_family_static_zero": true,
+    "success_regression_vs_static_flow_zero": true
+  },
+  "key_metrics": {
+    "better_vs_static_flow": 0,
+    "blind_new_solver_rows": 144,
+    "non_static_param_selection_rate": "0.166666666667",
+    "optimizer_probe_rows": 216,
+    "policy_pairs_vs_static_flow": 18,
+    "quality_only_mean_delta_vs_static_flow": "0.00634986368462",
+    "safe_region_count": 15,
+    "success_regression_vs_best_static": 0,
+    "success_regression_vs_static_flow": 0,
+    "useful_safe_region_count": 2,
+    "worse_vs_static_flow": 2
+  },
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g539_decision_summary_v1"
+}

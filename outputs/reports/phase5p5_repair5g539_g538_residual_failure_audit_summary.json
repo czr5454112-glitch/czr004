@@ -1,0 +1,31 @@
+{
+  "aaai_ready": false,
+  "blind_decision": "residual_blind_negative_or_regressed",
+  "blind_policy_type": "global_residual_candidate",
+  "blind_selected_only_random_bridge_c_light": true,
+  "decision": "g538_verified_global_residual_failed_continue_param_optimization",
+  "expected_diagnosis_confirmed": true,
+  "learned_runtime_policy_validated": false,
+  "likely_failure_cluster": {
+    "aaai_ready": false,
+    "agents": "100",
+    "budget_ms": "500",
+    "failure_rows": 3,
+    "learned_runtime_policy_validated": false,
+    "map_family": "random",
+    "mean_quality_delta": "0",
+    "paired_against_role": "best_static_posthoc_diagnostic",
+    "phase5p5_allowed": false,
+    "phase6_allowed": false,
+    "quality_worse_rows": 0,
+    "runtime_claim_allowed": false,
+    "success_regressions": 3
+  },
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g539_g538_residual_failure_audit_summary_v1",
+  "screening_decision": "residual_candidate_screen_positive",
+  "vs_best_static_success_regression_count": 5,
+  "vs_static_flow_success_regression_count": 2
+}

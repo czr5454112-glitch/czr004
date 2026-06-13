@@ -1,0 +1,3 @@
+ablation,expected_effect,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+without_budget,lower safe-region precision,False,False,False,False,False
+without_map_family,collapses strata,False,False,False,False,False

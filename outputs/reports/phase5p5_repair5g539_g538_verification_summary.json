@@ -1,0 +1,18 @@
+{
+  "aaai_ready": false,
+  "decision": "g538_artifacts_verified",
+  "g538_blind_decision": "residual_blind_negative_or_regressed",
+  "g538_selected_candidates": [
+    "repair5g538_random_bridge_c_light"
+  ],
+  "g538_success_regression_vs_best_static": 5,
+  "g538_success_regression_vs_static_flow": 2,
+  "learned_runtime_policy_validated": false,
+  "missing_artifacts": [],
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "present_artifact_count": 13,
+  "required_artifact_count": 13,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g539_g538_verification_summary_v1"
+}

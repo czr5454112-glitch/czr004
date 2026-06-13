@@ -2192,3 +2192,28 @@ The key strategic change is: do not rely only on manually designed offline count
 
 Add route descriptions for: solver trace slice dataset, LaGAT-style pretrain then map-family fine-tune for UpdateLTM, self-bootstrapped slice aggregation, world-model auxiliary prediction, graph/hypergraph event encoder, and conservative teacher as validation. Include two-RTX-4090 compute plan, raw-data manifest policy, schema definitions, evaluation gates, and closed-claim guardrails. Do not modify `external/lacam2/lacam2/**`, do not open Phase5.5/Phase6/runtime/AAAI claims, and do not implement a large solver run in this round.
 
+## 2026-06-12 - G5.39 strategic update: from selector to static-flow parameter optimization
+
+1. Additive LTM is now only a floor baseline.
+2. The main baseline ladder is:
+   additive_ltm
+   static_flow_shield
+   best_fixed_static_goal_aware
+   frozen_family_static_goal_aware
+   posthoc/oracle static diagnostic only
+3. G5.37 showed old selector over old candidates does not beat static baselines.
+4. G5.38 rebuilt direct labels and found residual opportunity, but one global residual candidate failed blind safety.
+5. Therefore the next learning target is not candidate-ID selection.
+6. The next learning target is static-flow-relative UpdateParams optimization:
+   learn safe residual parameters around static_flow / best static.
+7. A GGO-style workflow is adopted:
+   search / optimize guidance parameters first,
+   identify safe regions,
+   then train a model to predict/generate those parameters.
+8. Runtime / Phase5.5 / Phase6 / AAAI claims remain closed.
+
+The learned component is not allowed to claim progress by merely selecting among stale hand-written candidates. From G5.39 onward, the learning target is static-flow-relative parameter/residual generation: use real solver outcomes to discover safe UpdateParams regions around static_flow and train models to predict those bounded residual parameters under zero-regression constraints.
+
+G5.37/G5.38 show that additive-relative success is not enough. Static_flow and best deployable static are now the
+main baselines. Selector over stale candidates is insufficient. The G5.39 route is GGO-style static-flow parameter
+optimization with bounded residual UpdateParams generation.

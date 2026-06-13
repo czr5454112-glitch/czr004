@@ -1,0 +1,55 @@
+stratum_id,map_family,agents,budget_ms,risk_stage,implementation,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+maze|50|500|early / iteration0,maze,50,500,early / iteration0,run-level schedule / method alias,False,False,False,False,False
+maze|50|500|iteration1,maze,50,500,iteration1,run-level schedule / method alias,False,False,False,False,False
+maze|50|500|final,maze,50,500,final,run-level schedule / method alias,False,False,False,False,False
+maze|50|1000|early / iteration0,maze,50,1000,early / iteration0,run-level schedule / method alias,False,False,False,False,False
+maze|50|1000|iteration1,maze,50,1000,iteration1,run-level schedule / method alias,False,False,False,False,False
+maze|50|1000|final,maze,50,1000,final,run-level schedule / method alias,False,False,False,False,False
+maze|50|2000|early / iteration0,maze,50,2000,early / iteration0,run-level schedule / method alias,False,False,False,False,False
+maze|50|2000|iteration1,maze,50,2000,iteration1,run-level schedule / method alias,False,False,False,False,False
+maze|50|2000|final,maze,50,2000,final,run-level schedule / method alias,False,False,False,False,False
+maze|100|500|early / iteration0,maze,100,500,early / iteration0,run-level schedule / method alias,False,False,False,False,False
+maze|100|500|iteration1,maze,100,500,iteration1,run-level schedule / method alias,False,False,False,False,False
+maze|100|500|final,maze,100,500,final,run-level schedule / method alias,False,False,False,False,False
+maze|100|1000|early / iteration0,maze,100,1000,early / iteration0,run-level schedule / method alias,False,False,False,False,False
+maze|100|1000|iteration1,maze,100,1000,iteration1,run-level schedule / method alias,False,False,False,False,False
+maze|100|1000|final,maze,100,1000,final,run-level schedule / method alias,False,False,False,False,False
+maze|100|2000|early / iteration0,maze,100,2000,early / iteration0,run-level schedule / method alias,False,False,False,False,False
+maze|100|2000|iteration1,maze,100,2000,iteration1,run-level schedule / method alias,False,False,False,False,False
+maze|100|2000|final,maze,100,2000,final,run-level schedule / method alias,False,False,False,False,False
+random|50|500|early / iteration0,random,50,500,early / iteration0,run-level schedule / method alias,False,False,False,False,False
+random|50|500|iteration1,random,50,500,iteration1,run-level schedule / method alias,False,False,False,False,False
+random|50|500|final,random,50,500,final,run-level schedule / method alias,False,False,False,False,False
+random|50|1000|early / iteration0,random,50,1000,early / iteration0,run-level schedule / method alias,False,False,False,False,False
+random|50|1000|iteration1,random,50,1000,iteration1,run-level schedule / method alias,False,False,False,False,False
+random|50|1000|final,random,50,1000,final,run-level schedule / method alias,False,False,False,False,False
+random|50|2000|early / iteration0,random,50,2000,early / iteration0,run-level schedule / method alias,False,False,False,False,False
+random|50|2000|iteration1,random,50,2000,iteration1,run-level schedule / method alias,False,False,False,False,False
+random|50|2000|final,random,50,2000,final,run-level schedule / method alias,False,False,False,False,False
+random|100|500|early / iteration0,random,100,500,early / iteration0,run-level schedule / method alias,False,False,False,False,False
+random|100|500|iteration1,random,100,500,iteration1,run-level schedule / method alias,False,False,False,False,False
+random|100|500|final,random,100,500,final,run-level schedule / method alias,False,False,False,False,False
+random|100|1000|early / iteration0,random,100,1000,early / iteration0,run-level schedule / method alias,False,False,False,False,False
+random|100|1000|iteration1,random,100,1000,iteration1,run-level schedule / method alias,False,False,False,False,False
+random|100|1000|final,random,100,1000,final,run-level schedule / method alias,False,False,False,False,False
+random|100|2000|early / iteration0,random,100,2000,early / iteration0,run-level schedule / method alias,False,False,False,False,False
+random|100|2000|iteration1,random,100,2000,iteration1,run-level schedule / method alias,False,False,False,False,False
+random|100|2000|final,random,100,2000,final,run-level schedule / method alias,False,False,False,False,False
+warehouse|50|500|early / iteration0,warehouse,50,500,early / iteration0,run-level schedule / method alias,False,False,False,False,False
+warehouse|50|500|iteration1,warehouse,50,500,iteration1,run-level schedule / method alias,False,False,False,False,False
+warehouse|50|500|final,warehouse,50,500,final,run-level schedule / method alias,False,False,False,False,False
+warehouse|50|1000|early / iteration0,warehouse,50,1000,early / iteration0,run-level schedule / method alias,False,False,False,False,False
+warehouse|50|1000|iteration1,warehouse,50,1000,iteration1,run-level schedule / method alias,False,False,False,False,False
+warehouse|50|1000|final,warehouse,50,1000,final,run-level schedule / method alias,False,False,False,False,False
+warehouse|50|2000|early / iteration0,warehouse,50,2000,early / iteration0,run-level schedule / method alias,False,False,False,False,False
+warehouse|50|2000|iteration1,warehouse,50,2000,iteration1,run-level schedule / method alias,False,False,False,False,False
+warehouse|50|2000|final,warehouse,50,2000,final,run-level schedule / method alias,False,False,False,False,False
+warehouse|100|500|early / iteration0,warehouse,100,500,early / iteration0,run-level schedule / method alias,False,False,False,False,False
+warehouse|100|500|iteration1,warehouse,100,500,iteration1,run-level schedule / method alias,False,False,False,False,False
+warehouse|100|500|final,warehouse,100,500,final,run-level schedule / method alias,False,False,False,False,False
+warehouse|100|1000|early / iteration0,warehouse,100,1000,early / iteration0,run-level schedule / method alias,False,False,False,False,False
+warehouse|100|1000|iteration1,warehouse,100,1000,iteration1,run-level schedule / method alias,False,False,False,False,False
+warehouse|100|1000|final,warehouse,100,1000,final,run-level schedule / method alias,False,False,False,False,False
+warehouse|100|2000|early / iteration0,warehouse,100,2000,early / iteration0,run-level schedule / method alias,False,False,False,False,False
+warehouse|100|2000|iteration1,warehouse,100,2000,iteration1,run-level schedule / method alias,False,False,False,False,False
+warehouse|100|2000|final,warehouse,100,2000,final,run-level schedule / method alias,False,False,False,False,False

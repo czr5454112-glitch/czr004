@@ -1,0 +1,8 @@
+paired_against_role,map_family,agents,budget_ms,failure_rows,success_regressions,quality_worse_rows,mean_quality_delta,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+best_static_posthoc_diagnostic,random,100,500,3,3,0,0,False,False,False,False,False
+static_flow_shield,random,100,500,2,2,0,0,False,False,False,False,False
+best_static_posthoc_diagnostic,warehouse,50,2000,2,2,0,0,False,False,False,False,False
+best_static_posthoc_diagnostic,maze,50,2000,19,0,19,0.0197284692494,False,False,False,False,False
+best_static_posthoc_diagnostic,random,50,2000,10,0,10,0.016639608962,False,False,False,False,False
+static_flow_shield,maze,50,2000,7,0,7,0.0126623521869,False,False,False,False,False
+static_flow_shield,random,50,2000,6,0,6,0.0150530369583,False,False,False,False,False

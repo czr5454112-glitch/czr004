@@ -1,0 +1,4 @@
+budget_ms,vs_static_flow_pairs,vs_static_flow_success_regression_count,vs_static_flow_success_gain_count,vs_static_flow_both_fail_count,vs_static_flow_quality_only_pairs,vs_static_flow_quality_only_mean_delta,vs_static_flow_quality_only_median_delta,vs_static_flow_quality_ci_low,vs_static_flow_quality_ci_high,vs_static_flow_mean_corrected_delta,vs_static_flow_better_count,vs_static_flow_equal_count,vs_static_flow_worse_count,vs_static_flow_safe_high_margin_count,vs_static_flow_safe_low_margin_count,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+1000,16,0,0,0,16,0,0,0,0,0,0,16,0,0,0,False,False,False,False,False
+2000,79,0,0,23,56,-0.00193813036339,0,-0.00193813036339,-0.00193813036339,-0.00137386456139,3,50,3,3,2,False,False,False,False,False
+500,48,0,0,16,32,0,0,0,0,0,0,32,0,0,0,False,False,False,False,False

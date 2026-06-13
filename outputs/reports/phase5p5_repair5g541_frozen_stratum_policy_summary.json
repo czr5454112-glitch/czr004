@@ -1,0 +1,13 @@
+{
+  "aaai_ready": false,
+  "decision": "frozen_stratum_policy_created",
+  "fallback_candidate": "repair5g59_static_flow_shield",
+  "learned_runtime_policy_validated": false,
+  "non_static_policy_entries": 1,
+  "non_static_policy_entry_rate": "0.0555555555556",
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "policy_entries": 18,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g541_frozen_stratum_policy_summary_v1"
+}

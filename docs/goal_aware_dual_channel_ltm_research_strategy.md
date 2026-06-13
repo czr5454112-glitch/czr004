@@ -38,3 +38,20 @@ From G5.40 onward, parameter optimization rounds must report:
 - whether the result is underpowered
 
 No generator, frozen policy, runtime, Phase5.5, Phase6, or AAAI claim is allowed until the safe-region support thresholds are met.
+
+## 2026-06-12 - G5.41 strategic update: safe regions are per-stratum, not global candidates
+
+G5.40 showed that no parameter candidate was globally supported safe/useful under the initial thresholds.
+This does not prove the absence of learnable parameter regions.
+Static-flow residuals may be safe only in specific strata:
+  map family
+  agent count
+  budget
+  iteration/final behavior
+Therefore G5.41 changes the safe-region unit from candidate-level to candidate-stratum-level.
+Learning target becomes:
+  context/trace -> safe parameter region or static fallback
+rather than:
+  one global parameter candidate.
+
+From G5.41 onward, a static-flow parameter region is evaluated at the deployable stratum level. A candidate that is unsafe globally may still be valuable if a frozen pre-replay policy can restrict it to strata where it has zero regression and nontrivial static-relative gain.

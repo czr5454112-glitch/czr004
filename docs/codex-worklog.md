@@ -4676,3 +4676,34 @@
   - G5.40 validation commands passed through final decision writing; JSON summaries parse.
   - `git diff --check` passed with only existing line-ending warnings, and `git status --short -- external/lacam2/lacam2` returned clean.
   - `C:\Users\38908\.conda\envs\czr004\python.exe -m pytest tests\test_repair5g_dual_channel_ltm.py tests\test_repair5g5_runtime_selector_policy.py tests\test_repair5g5_contextual_selector_export.py tests\test_repair5g5_aaai_quality_gates.py tests\test_repair5g52_checkpoint_schema.py` passed: `11 passed`.
+
+## 2026-06-12 - Repair5G.5.41 balanced per-stratum static-flow safe-region mining
+
+- Request:
+  Continue after G5.40 commit 8ec7f9c. G5.40 covered all 128 parameter candidates and ran a larger Stage 2, but no globally supported safe/useful region was found. The next hypothesis is that useful static-flow parameter regions are per-stratum, not global: a candidate may be unsafe overall but safe in specific map/budget/agent strata. G5.41 must reclassify G5.40 evidence at candidate-stratum level, fix seed-block support, extend boundary and near-miss candidates with balanced seeds, and only then decide whether per-stratum parameter learning is viable.
+- Planned files:
+  - czr004_g541_balanced_per_stratum_static_flow_safe_region_mining_plan.md
+  - scripts/repair5g541_common.py
+  - scripts/verify_repair5g541_g540_artifacts.py
+  - scripts/audit_repair5g541_g540_global_vs_stratum_regions.py
+  - scripts/update_repair5g541_strategy_docs.py
+  - scripts/create_repair5g541_per_stratum_region_labels.py
+  - scripts/create_repair5g541_balanced_support_extension_plan.py
+  - scripts/run_repair5g541_balanced_support_extension.py
+  - scripts/analyze_repair5g541_balanced_per_stratum_regions.py
+  - scripts/create_repair5g541_stratum_local_refinement_space.py
+  - scripts/run_repair5g541_stratum_local_refinement.py
+  - scripts/analyze_repair5g541_final_stratum_regions.py
+  - scripts/train_eval_repair5g541_region_predictor_if_warranted.py
+  - scripts/create_repair5g541_frozen_stratum_policy.py
+  - scripts/run_repair5g541_frozen_stratum_blind_replay.py
+  - scripts/analyze_repair5g541_frozen_stratum_blind_evidence.py
+  - scripts/write_repair5g541_decision.py
+  - outputs/reports/phase5p5_repair5g541_*
+  - outputs/tables/phase5p5_repair5g541_*
+  - outputs/logs/phase5p5_repair5g541_* local/ignored raw logs
+  - artifacts/models/laur_ltm/repair5g541_* manifest files only
+- Constraints:
+  No external/lacam2/lacam2 edits, no solver semantic changes, no action/priority/search/restart/candidate deletion/h-value target, no reserved IDs 166..205, no Phase5.5/Phase6/runtime/AAAI claims.
+- Pre-experiment statement:
+  G5.41 does not search for one globally safe parameter candidate. It searches for frozen deployable per-stratum safe parameter regions and static fallback rules.

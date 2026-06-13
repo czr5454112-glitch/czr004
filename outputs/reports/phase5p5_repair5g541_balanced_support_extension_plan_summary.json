@@ -1,0 +1,21 @@
+{
+  "aaai_ready": false,
+  "decision": "balanced_support_extension_plan_created",
+  "fresh_seed_end": 905,
+  "fresh_seed_start": 826,
+  "hard_cap_pairs": 72,
+  "learned_runtime_policy_validated": false,
+  "minimum_pairs": 24,
+  "minimum_solver_rows": 6000,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "plan_meets_minimum_solver_rows": true,
+  "planned_solver_rows": 9600,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g541_balanced_support_extension_plan_summary_v1",
+  "seed_blocks_per_priority_pair": 5,
+  "selected_candidate_stratum_pairs": 48,
+  "target_solver_rows_high": 30000,
+  "target_solver_rows_low": 12000,
+  "unique_strata": 18
+}

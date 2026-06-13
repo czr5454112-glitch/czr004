@@ -1,0 +1,5 @@
+from repair5g541_common import main_verify_g540_artifacts
+
+
+if __name__ == "__main__":
+    raise SystemExit(main_verify_g540_artifacts())

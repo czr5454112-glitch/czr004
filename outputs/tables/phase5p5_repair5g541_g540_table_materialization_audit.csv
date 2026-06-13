@@ -1,0 +1,14 @@
+artifact,path,exists,row_count,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+decision_summary,outputs/reports/phase5p5_repair5g540_decision_summary.json,True,1,False,False,False,False,False
+stage1_param_coverage_summary,outputs/reports/phase5p5_repair5g540_stage1_param_coverage_summary.json,True,1,False,False,False,False,False
+stage2_safe_regions_summary,outputs/reports/phase5p5_repair5g540_stage2_safe_regions_summary.json,True,1,False,False,False,False,False
+final_safe_regions_summary,outputs/reports/phase5p5_repair5g540_final_safe_regions_summary.json,True,1,False,False,False,False,False
+param_generator_summary,outputs/reports/phase5p5_repair5g540_param_generator_summary.json,True,1,False,False,False,False,False
+frozen_region_policy_summary,outputs/reports/phase5p5_repair5g540_frozen_region_policy_summary.json,True,1,False,False,False,False,False
+stage1_param_search_results,outputs/tables/phase5p5_repair5g540_stage1_param_search_results.csv,True,3168,False,False,False,False,False
+stage2_topk_results,outputs/tables/phase5p5_repair5g540_stage2_topk_results.csv,True,6120,False,False,False,False,False
+stage2_safe_regions,outputs/tables/phase5p5_repair5g540_stage2_safe_regions.csv,True,0,False,False,False,False,False
+stage2_unsafe_regions,outputs/tables/phase5p5_repair5g540_stage2_unsafe_regions.csv,True,28,False,False,False,False,False
+stage2_boundary_regions,outputs/tables/phase5p5_repair5g540_stage2_boundary_regions.csv,True,4,False,False,False,False,False
+stage1_candidate_leaderboard,outputs/tables/phase5p5_repair5g540_stage1_candidate_leaderboard.csv,True,128,False,False,False,False,False
+repair5g540_common,scripts/repair5g540_common.py,True,1,False,False,False,False,False

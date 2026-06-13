@@ -1,0 +1,5 @@
+split,decision,safe_region_top1,fallback_to_static_rate,policy_entries,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+group_by_seed_block,region_predictor_diagnostic_lookup_created,1.0,0.944444444444,1,False,False,False,False,False
+leave_one_map_family_out,region_predictor_diagnostic_lookup_created,1.0,0.944444444444,1,False,False,False,False,False
+leave_one_budget_out,region_predictor_diagnostic_lookup_created,1.0,0.944444444444,1,False,False,False,False,False
+strict_all_holdout,region_predictor_diagnostic_lookup_created,1.0,0.944444444444,1,False,False,False,False,False

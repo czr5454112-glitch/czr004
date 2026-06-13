@@ -1,0 +1,2 @@
+control,expected_candidate,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+static_fallback,repair5g59_static_flow_shield,False,False,False,False,False

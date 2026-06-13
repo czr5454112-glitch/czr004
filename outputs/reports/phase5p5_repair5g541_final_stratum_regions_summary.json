@@ -1,0 +1,17 @@
+{
+  "aaai_ready": false,
+  "contexts": 120,
+  "decision": "final_supported_stratum_regions_found",
+  "final_region_policy_candidate_rows": 24,
+  "final_supported_stratum_region_count": 24,
+  "learned_runtime_policy_validated": false,
+  "minimum_pairs_per_region": 120,
+  "minimum_seed_blocks": 3,
+  "new_solver_rows": 3360,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "refinement_candidate_count": 24,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g541_final_stratum_regions_summary_v1",
+  "underpowered": false
+}

@@ -1,0 +1,18 @@
+{
+  "aaai_ready": false,
+  "candidate_stratum_label_rows": 576,
+  "decision": "per_stratum_region_labels_created",
+  "deployable_region_rows": 18,
+  "diagnostic_min_support_pairs": 20,
+  "final_min_seed_blocks": 3,
+  "final_min_support_pairs": 80,
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "region_key": "candidate_id,map_family,agents,budget_ms,iteration_bucket",
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g541_per_stratum_region_labels_summary_v1",
+  "strong_min_support_pairs": 60,
+  "useful_signal_candidate_stratum_rows": 443,
+  "zero_regression_candidate_stratum_rows": 532
+}

@@ -1,0 +1,17 @@
+{
+  "aaai_ready": false,
+  "candidate_stratum_rows": 576,
+  "decision": "g540_global_no_region_but_stratum_regions_exist_continue_g541",
+  "diagnostic_safe_or_useful_stratum_rows": 0,
+  "g540_global_region_rows": 32,
+  "learned_runtime_policy_validated": false,
+  "near_miss_rows": 532,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g541_g540_global_vs_stratum_audit_summary_v1",
+  "seed_block_only_failure_rows": 532,
+  "unsafe_global_but_zero_regression_stratum_rows": 460,
+  "useful_stratum_signal_rows": 443,
+  "zero_regression_candidate_stratum_rows": 532
+}

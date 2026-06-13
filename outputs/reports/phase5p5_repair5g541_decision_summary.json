@@ -1,0 +1,44 @@
+{
+  "aaai_ready": false,
+  "component_decisions": {
+    "audit_g540_global_vs_stratum": "g540_global_no_region_but_stratum_regions_exist_continue_g541",
+    "balanced_extension": "g541_supported_stratum_regions_found_continue_refinement",
+    "balanced_extension_plan": "balanced_support_extension_plan_created",
+    "blind_evidence": "blind_stratum_policy_not_positive",
+    "final_stratum_regions": "final_supported_stratum_regions_found",
+    "frozen_stratum_policy": "frozen_stratum_policy_created",
+    "per_stratum_labels": "per_stratum_region_labels_created",
+    "region_predictor": "region_predictor_diagnostic_lookup_created",
+    "strategy_docs": "g541_strategy_docs_updated",
+    "verify_g540": "g540_artifacts_verified"
+  },
+  "decision": "g541_supported_stratum_regions_found_continue_refinement",
+  "hard_requirements": {
+    "all_claims_closed": true,
+    "balanced_extension_executed": true,
+    "balanced_extension_min_rows_planned": true,
+    "downstream_skipped_or_executed_by_gate": true,
+    "external_lacam2_clean": true,
+    "g540_artifacts_verified": true,
+    "global_vs_stratum_audited": true,
+    "per_stratum_labels_created": true,
+    "reserved_ids_untouched": true,
+    "strategy_docs_updated": true
+  },
+  "key_metrics": {
+    "blind_pairs_vs_static_flow": 1440,
+    "blind_quality_delta_vs_static_flow": "-0.000348460056495",
+    "blind_rows": 7200,
+    "extension_rows": 9600,
+    "extension_supported_safe_region_count": 39,
+    "extension_supported_useful_region_count": 33,
+    "final_supported_stratum_region_count": 24,
+    "g540_useful_stratum_signal_rows": 443,
+    "selected_extension_pairs": 48
+  },
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g541_decision_summary_v1"
+}

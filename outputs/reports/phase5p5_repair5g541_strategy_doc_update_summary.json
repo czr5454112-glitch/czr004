@@ -1,0 +1,46 @@
+{
+  "aaai_ready": false,
+  "decision": "g541_strategy_docs_updated",
+  "doc_rows": [
+    {
+      "aaai_ready": false,
+      "changed": false,
+      "learned_runtime_policy_validated": false,
+      "path": "deep-research-report.md",
+      "phase5p5_allowed": false,
+      "phase6_allowed": false,
+      "runtime_claim_allowed": false,
+      "updated_or_already_current": true
+    },
+    {
+      "aaai_ready": false,
+      "changed": false,
+      "learned_runtime_policy_validated": false,
+      "path": "phase4_6_laur_ltm_codex_execution_plan.md",
+      "phase5p5_allowed": false,
+      "phase6_allowed": false,
+      "runtime_claim_allowed": false,
+      "updated_or_already_current": true
+    },
+    {
+      "aaai_ready": false,
+      "changed": false,
+      "learned_runtime_policy_validated": false,
+      "path": "docs/goal_aware_dual_channel_ltm_research_strategy.md",
+      "phase5p5_allowed": false,
+      "phase6_allowed": false,
+      "runtime_claim_allowed": false,
+      "updated_or_already_current": true
+    }
+  ],
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g541_strategy_doc_update_summary_v1",
+  "updated_paths": [
+    "deep-research-report.md",
+    "phase4_6_laur_ltm_codex_execution_plan.md",
+    "docs/goal_aware_dual_channel_ltm_research_strategy.md"
+  ]
+}

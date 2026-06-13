@@ -1,0 +1,21 @@
+{
+  "aaai_ready": false,
+  "bootstrap_samples": 300,
+  "decision": "generator_skipped_no_supported_safe_regions",
+  "epochs_requested": 80,
+  "generator_trained": false,
+  "gpu_status": {
+    "cuda_available": true,
+    "cuda_device_count": 1,
+    "residual_model_device": "cuda:0",
+    "risk_model_device": "cpu",
+    "torch_available": true,
+    "torch_unavailable": false
+  },
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "policy_entries": 0,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g540_param_generator_summary_v1"
+}

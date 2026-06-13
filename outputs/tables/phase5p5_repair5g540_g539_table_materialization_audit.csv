@@ -1,0 +1,15 @@
+artifact,path,exists,row_count,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+decision_summary,outputs/reports/phase5p5_repair5g539_decision_summary.json,True,1,False,False,False,False,False
+static_flow_param_search_space_summary,outputs/reports/phase5p5_repair5g539_static_flow_param_search_space_summary.json,True,1,False,False,False,False,False
+param_optimizer_probe_summary,outputs/reports/phase5p5_repair5g539_param_optimizer_probe_summary.json,True,1,False,False,False,False,False
+param_safe_regions_summary,outputs/reports/phase5p5_repair5g539_param_safe_regions_summary.json,True,1,False,False,False,False,False
+param_generator_summary,outputs/reports/phase5p5_repair5g539_param_generator_summary.json,True,1,False,False,False,False,False
+frozen_param_policy_summary,outputs/reports/phase5p5_repair5g539_frozen_param_policy_summary.json,True,1,False,False,False,False,False
+frozen_param_blind_evidence_summary,outputs/reports/phase5p5_repair5g539_frozen_param_blind_evidence_summary.json,True,1,False,False,False,False,False
+project_strategy_doc_update_summary,outputs/reports/phase5p5_repair5g539_project_strategy_doc_update_summary.json,True,1,False,False,False,False,False
+static_flow_param_search_space,outputs/tables/phase5p5_repair5g539_static_flow_param_search_space.csv,True,128,False,False,False,False,False
+param_optimizer_probe_results,outputs/tables/phase5p5_repair5g539_param_optimizer_probe_results.csv,True,216,False,False,False,False,False
+param_safe_regions,outputs/tables/phase5p5_repair5g539_param_safe_regions.csv,True,15,False,False,False,False,False
+frozen_param_policy,outputs/tables/phase5p5_repair5g539_frozen_param_policy.csv,True,18,False,False,False,False,False
+frozen_param_blind_replay_results,outputs/tables/phase5p5_repair5g539_frozen_param_blind_replay_results.csv,True,144,False,False,False,False,False
+repair5g539_common,scripts/repair5g539_common.py,True,1,False,False,False,False,False

@@ -4636,3 +4636,43 @@
   - `git diff --check` passed with line-ending warnings only.
   - `git status --short -- external/lacam2/lacam2` returned clean.
   - `C:\Users\38908\.conda\envs\czr004\python.exe -m pytest tests\test_repair5g_dual_channel_ltm.py tests\test_repair5g5_runtime_selector_policy.py tests\test_repair5g5_contextual_selector_export.py tests\test_repair5g5_aaai_quality_gates.py tests\test_repair5g52_checkpoint_schema.py` passed: `11 passed`.
+
+## 2026-06-12 - Repair5G.5.40 full-scale GGO-style static-flow parameter optimization
+
+- Request:
+  Continue after G5.39 commit 8d552fc. G5.39 correctly shifted strategy to static-flow-relative parameter optimization, but the actual run was underpowered: 128 candidates were created, only 8 were run, and blind evidence had only 18 static-flow pairs. G5.40 must run a staged, sufficiently powered GGO-style parameter search before any generator or policy claim. It should produce enough candidate/stratum/seed coverage to decide whether safe static-flow-relative parameter regions exist.
+- Planned files:
+  - czr004_g540_full_scale_ggo_static_flow_parameter_optimization_plan.md
+  - scripts/repair5g540_common.py
+  - scripts/verify_repair5g540_g539_artifacts.py
+  - scripts/audit_repair5g540_g539_underpowering.py
+  - scripts/update_repair5g540_strategy_docs.py
+  - scripts/create_repair5g540_successive_halving_param_plan.py
+  - scripts/run_repair5g540_param_search_stage1.py
+  - scripts/analyze_repair5g540_stage1_param_coverage.py
+  - scripts/run_repair5g540_param_search_stage2_topk.py
+  - scripts/analyze_repair5g540_stage2_safe_regions.py
+  - scripts/create_repair5g540_local_refinement_space.py
+  - scripts/run_repair5g540_param_search_stage3_refine.py
+  - scripts/analyze_repair5g540_final_safe_regions.py
+  - scripts/train_eval_repair5g540_param_generator_if_warranted.py
+  - scripts/create_repair5g540_frozen_region_policy.py
+  - scripts/run_repair5g540_frozen_region_blind_replay.py
+  - scripts/analyze_repair5g540_blind_region_evidence.py
+  - scripts/write_repair5g540_decision.py
+  - outputs/reports/phase5p5_repair5g540_*
+  - outputs/tables/phase5p5_repair5g540_*
+  - outputs/logs/phase5p5_repair5g540_* local/ignored raw logs
+  - artifacts/models/laur_ltm/repair5g540_* manifest files only
+- Constraints:
+  No external/lacam2/lacam2 edits, no solver semantic changes, no action/priority/search/restart/candidate deletion/h-value target, no reserved IDs 166..205, no Phase5.5/Phase6/runtime/AAAI claims.
+- Pre-experiment statement:
+  G5.40 treats G5.39 as an underpowered pilot. The purpose is staged parameter optimization with enough coverage to evaluate safe regions, not another quick selector/generator run.
+- Result:
+  Final decision is `g540_no_supported_safe_param_region_continue_design` with `underpowered=false`. G5.39 artifacts verified, G5.39 underpowering audited, strategy docs updated, Stage 1 covered `128 / 128` candidates with `3168` rows over `24` contexts, and Stage 2 evaluated the top `32` candidates with `6120` rows over `170` contexts. Stage 2 found `0` supported safe/useful regions, so Stage 3, generator training, and blind replay were explicitly not warranted; the frozen policy is static-fallback only.
+- Validation:
+  - `python -m py_compile` passed for all G5.40 scripts.
+  - `C:\Users\38908\.conda\envs\czr004\python.exe -m py_compile scripts\repair5g540_common.py scripts\train_eval_repair5g540_param_generator_if_warranted.py` passed.
+  - G5.40 validation commands passed through final decision writing; JSON summaries parse.
+  - `git diff --check` passed with only existing line-ending warnings, and `git status --short -- external/lacam2/lacam2` returned clean.
+  - `C:\Users\38908\.conda\envs\czr004\python.exe -m pytest tests\test_repair5g_dual_channel_ltm.py tests\test_repair5g5_runtime_selector_policy.py tests\test_repair5g5_contextual_selector_export.py tests\test_repair5g5_aaai_quality_gates.py tests\test_repair5g52_checkpoint_schema.py` passed: `11 passed`.

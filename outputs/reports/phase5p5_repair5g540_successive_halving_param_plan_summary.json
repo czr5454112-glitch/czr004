@@ -1,0 +1,20 @@
+{
+  "aaai_ready": false,
+  "candidate_source": "G5.39 128 candidate search space",
+  "decision": "successive_halving_param_plan_created",
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g540_successive_halving_param_plan_summary_v1",
+  "stage1_candidate_coverage_target_met": true,
+  "stage1_candidates": 128,
+  "stage1_contexts": 24,
+  "stage1_plan_rows": 3072,
+  "stage2_candidates_planned": 32,
+  "stage2_contexts": 170,
+  "stage2_plan_rows": 5440,
+  "stage3_contexts": 120,
+  "stage3_hard_cap": 64,
+  "stage3_refinement_candidates": 0
+}

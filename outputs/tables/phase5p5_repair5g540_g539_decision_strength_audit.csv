@@ -1,0 +1,6 @@
+metric,value,threshold,passed,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+optimizer_contexts,8,24,False,False,False,False,False,False
+optimizer_solver_rows,216,3000,False,False,False,False,False,False
+static_flow_pairs,143,100,True,False,False,False,False,False
+safe_regions_lt_30_pairs,15,0,False,False,False,False,False,False
+blind_pairs_vs_static_flow,18,100,False,False,False,False,False,False

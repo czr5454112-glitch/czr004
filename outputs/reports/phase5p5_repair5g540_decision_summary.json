@@ -1,0 +1,42 @@
+{
+  "aaai_ready": false,
+  "component_decisions": {
+    "audit_g539_underpowering": "g539_underpowered_parameter_pilot_not_decisive_continue_full_search",
+    "blind_evidence": "blind_region_replay_skipped_no_non_static_policy",
+    "final_safe_regions": "final_no_supported_safe_regions_continue_design",
+    "frozen_policy": "frozen_region_policy_static_fallback_only",
+    "param_generator": "generator_skipped_no_supported_safe_regions",
+    "stage1": "stage1_full_candidate_coverage_ready_for_stage2",
+    "stage2": "g540_no_supported_safe_param_region_continue_design",
+    "strategy_docs": "g540_strategy_docs_updated",
+    "successive_halving_plan": "successive_halving_param_plan_created",
+    "verify_g539": "g539_artifacts_verified"
+  },
+  "decision": "g540_no_supported_safe_param_region_continue_design",
+  "hard_requirements": {
+    "all_claims_closed": true,
+    "blind_replay_executed_or_not_warranted": true,
+    "external_lacam2_clean": true,
+    "g539_underpowering_audited": true,
+    "reserved_ids_untouched": true,
+    "stage1_all_128_candidates_covered": true,
+    "stage2_support_thresholds_met": false,
+    "stage3_completed_or_not_warranted": true,
+    "strategy_docs_updated": true
+  },
+  "key_metrics": {
+    "blind_pairs_vs_static_flow": 0,
+    "blind_quality_delta_vs_static_flow": "0",
+    "blind_rows": 0,
+    "final_safe_region_count": 0,
+    "stage1_candidate_coverage_rate": "1",
+    "stage1_rows": 3168,
+    "stage2_rows": 6120,
+    "stage2_safe_region_count": 0
+  },
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g540_decision_summary_v1"
+}

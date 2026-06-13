@@ -2217,3 +2217,20 @@ The learned component is not allowed to claim progress by merely selecting among
 G5.37/G5.38 show that additive-relative success is not enough. Static_flow and best deployable static are now the
 main baselines. Selector over stale candidates is insufficient. The G5.39 route is GGO-style static-flow parameter
 optimization with bounded residual UpdateParams generation.
+
+## 2026-06-12 - G5.40 strategic update: underpowered parameter search is not evidence
+
+G5.39 established the GGO-style direction but was underpowered: only 8 contexts and 8 parameter candidates were run in the optimizer probe. Therefore G5.40 requires staged, sufficiently powered parameter search before model training or frozen policy claims.
+
+A safe region must have support across multiple seeds and at least one nontrivial map/budget/agent stratum. The project will treat underpowered runs as continuation artifacts, not positive or negative scientific conclusions.
+
+From G5.40 onward, parameter optimization rounds must report:
+
+- candidate coverage
+- stratum coverage
+- seed-block coverage
+- safe-region support
+- blind support
+- whether the result is underpowered
+
+No generator, frozen policy, runtime, Phase5.5, Phase6, or AAAI claim is allowed until the safe-region support thresholds are met.

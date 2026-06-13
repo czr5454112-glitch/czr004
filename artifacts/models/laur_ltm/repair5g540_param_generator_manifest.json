@@ -1,0 +1,12 @@
+{
+  "aaai_ready": false,
+  "decision": "generator_skipped_no_supported_safe_regions",
+  "fallback_candidate": "repair5g59_static_flow_shield",
+  "generator_trained": false,
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "policy": {},
+  "runtime_claim_allowed": false,
+  "schema_version": "repair5g540_param_generator_manifest_v1"
+}

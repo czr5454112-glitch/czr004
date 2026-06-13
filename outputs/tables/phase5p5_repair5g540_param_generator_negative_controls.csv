@@ -1,0 +1,2 @@
+control,reason,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+generator_skipped,no supported final safe regions,False,False,False,False,False

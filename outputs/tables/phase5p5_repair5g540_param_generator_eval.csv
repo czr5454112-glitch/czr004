@@ -1,0 +1,5 @@
+split,decision,safe_region_top1,fallback_to_static_rate,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+group_by_seed_block,generator_skipped_no_supported_safe_regions,0,1.0,False,False,False,False,False
+leave_one_map_family_out,generator_skipped_no_supported_safe_regions,0,1.0,False,False,False,False,False
+leave_one_budget_out,generator_skipped_no_supported_safe_regions,0,1.0,False,False,False,False,False
+strict_all_holdout,generator_skipped_no_supported_safe_regions,0,1.0,False,False,False,False,False

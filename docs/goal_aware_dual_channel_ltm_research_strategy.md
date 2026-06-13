@@ -21,3 +21,20 @@
 8. Runtime / Phase5.5 / Phase6 / AAAI claims remain closed.
 
 The learned component is not allowed to claim progress by merely selecting among stale hand-written candidates. From G5.39 onward, the learning target is static-flow-relative parameter/residual generation: use real solver outcomes to discover safe UpdateParams regions around static_flow and train models to predict those bounded residual parameters under zero-regression constraints.
+
+## 2026-06-12 - G5.40 strategic update: underpowered parameter search is not evidence
+
+G5.39 established the GGO-style direction but was underpowered: only 8 contexts and 8 parameter candidates were run in the optimizer probe. Therefore G5.40 requires staged, sufficiently powered parameter search before model training or frozen policy claims.
+
+A safe region must have support across multiple seeds and at least one nontrivial map/budget/agent stratum. The project will treat underpowered runs as continuation artifacts, not positive or negative scientific conclusions.
+
+From G5.40 onward, parameter optimization rounds must report:
+
+- candidate coverage
+- stratum coverage
+- seed-block coverage
+- safe-region support
+- blind support
+- whether the result is underpowered
+
+No generator, frozen policy, runtime, Phase5.5, Phase6, or AAAI claim is allowed until the safe-region support thresholds are met.

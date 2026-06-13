@@ -1,0 +1,21 @@
+{
+  "aaai_ready": false,
+  "best_candidate": "repair5g539_s2_110",
+  "boundary_region_count": 4,
+  "contexts": 170,
+  "decision": "g540_no_supported_safe_param_region_continue_design",
+  "learned_runtime_policy_validated": false,
+  "minimum_map_budget_agent_support": 3,
+  "minimum_pairs_per_candidate_vs_static_flow": 100,
+  "minimum_seed_blocks": 2,
+  "new_solver_rows": 6120,
+  "parameter_candidates_evaluated": 32,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "safe_region_count": 0,
+  "schema_version": "phase5p5_repair5g540_stage2_safe_regions_summary_v1",
+  "underpowered": false,
+  "unsafe_region_count": 28,
+  "useful_safe_region_count": 0
+}

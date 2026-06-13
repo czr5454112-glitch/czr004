@@ -1,0 +1,4 @@
+metric,value,threshold,passed,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+parameter_candidate_count,128,128,True,False,False,False,False,False
+parameter_candidates_run,8,128,False,False,False,False,False,False
+candidate_coverage_rate,0.0625,1.0,False,False,False,False,False,False

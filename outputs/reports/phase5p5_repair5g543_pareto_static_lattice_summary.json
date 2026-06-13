@@ -1,0 +1,23 @@
+{
+  "aaai_ready": false,
+  "decision": "no_nontrivial_zero_regression_static_lattice_freeze_static_flow_only",
+  "fallback_distribution": {
+    "static_flow_shield": 18
+  },
+  "historical_pairs_vs_static_flow": 0,
+  "historical_success_regression_vs_additive": 103,
+  "historical_success_regression_vs_best_fixed": 43,
+  "historical_success_regression_vs_family_static": 44,
+  "historical_success_regression_vs_static_flow": 0,
+  "lattice_variant_count": 12,
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "quality_delta_vs_family_static": "-0.00138234208004",
+  "quality_delta_vs_static_flow": "0",
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g543_pareto_static_lattice_summary_v1",
+  "selected_pareto_lattice": "S0_static_flow_only",
+  "selected_pareto_lattice_non_static": false,
+  "underpowered_strata": 0
+}

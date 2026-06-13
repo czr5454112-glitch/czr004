@@ -1,0 +1,19 @@
+{
+  "aaai_ready": false,
+  "critical_contradiction_reproduced": true,
+  "decision": "g542_artifacts_verified",
+  "g542_decision": "g542_ladder_overlay_matches_static_but_no_gain_continue_refinement",
+  "g542_g541_residual_caused_regressions": 0,
+  "g542_policy_p2_staticflow_regressions": 2,
+  "g542_policy_p3_family_regressions": 0,
+  "g542_policy_p3_ladder_regressions": 0,
+  "g542_policy_p3_staticflow_regressions": 2,
+  "g542_targeted_probe_rows": 7560,
+  "learned_runtime_policy_validated": false,
+  "missing_artifact_count": 0,
+  "missing_artifacts": [],
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g543_g542_verification_summary_v1"
+}

@@ -1,0 +1,2 @@
+feature_blocker,severity,mitigation,requires_cpp_patch,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+existing_g542_light_logs_do_not_include_full_trace_events_array,nonblocking,use project-owned full checkpoint export for future slice generation; no C++ semantic change required,False,False,False,False,False,False

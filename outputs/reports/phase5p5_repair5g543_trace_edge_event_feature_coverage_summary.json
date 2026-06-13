@@ -1,0 +1,14 @@
+{
+  "aaai_ready": false,
+  "decision": "existing_project_owned_exporter_sufficient_create_aliases_without_cpp_changes",
+  "existing_light_log_supported_features": 2,
+  "feature_rows": 13,
+  "g542_run_rows_audited": 4080,
+  "learned_runtime_policy_validated": false,
+  "missing_feature_blockers": 1,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "project_owned_exporter_supported_features": 13,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g543_trace_edge_event_feature_coverage_summary_v1"
+}

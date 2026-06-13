@@ -1,0 +1,15 @@
+{
+  "aaai_ready": false,
+  "candidate_aliases_checked": 108,
+  "cost_bounds_static_range_check": true,
+  "decision": "edge_event_adapter_static_check_passed",
+  "edge_class_conditioning_false_preserves_previous_behavior": true,
+  "force_additive_preserved_by_no_cpp_change": true,
+  "learned_runtime_policy_validated": false,
+  "passed_count": 108,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g543_edge_event_adapter_static_check_summary_v1",
+  "solver_semantics_changed": false
+}

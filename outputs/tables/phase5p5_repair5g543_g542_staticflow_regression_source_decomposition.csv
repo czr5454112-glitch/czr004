@@ -1,0 +1,6 @@
+source_class,p2_case_count,p3_case_count,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+static_ladder_caused,2,2,False,False,False,False,False
+overlay_caused,0,0,False,False,False,False,False
+shared_non_static_overlay_caused,0,0,False,False,False,False,False
+baseline_materialization_mismatch,0,0,False,False,False,False,False
+ambiguous_insufficient_rows,0,0,False,False,False,False,False

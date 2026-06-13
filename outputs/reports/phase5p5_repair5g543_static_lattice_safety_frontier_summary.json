@@ -1,0 +1,12 @@
+{
+  "aaai_ready": false,
+  "best_frontier_variant": "S2_g542_static_ladder_reproduced",
+  "decision": "static_lattice_frontier_has_no_all_baseline_zero_regression_variant",
+  "frontier_variant_count": 12,
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g543_static_lattice_safety_frontier_summary_v1",
+  "zero_regression_variant_count": 0
+}

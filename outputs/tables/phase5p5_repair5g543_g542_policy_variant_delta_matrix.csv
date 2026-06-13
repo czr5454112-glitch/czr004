@@ -1,0 +1,6 @@
+policy_name,non_static_selection_rate,vs_static_flow_success_regression_count,vs_family_static_success_regression_count,vs_ladder_success_regression_count,vs_ladder_quality_only_mean_delta,vs_ladder_better_count,vs_ladder_worse_count,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+G5.41_frozen_stratum_policy,0.0555555555556,0,3,3,-0.00431934708956,133,66,False,False,False,False,False
+P0_static_flow_only,0,0,3,3,-0.00390169968755,128,66,False,False,False,False,False
+P1_frozen_family_static_only,0,3,0,1,-0.00265293904497,61,18,False,False,False,False,False
+P2_deployable_static_ladder_only,0,2,0,0,0,0,0,False,False,False,False,False
+P3_ladder_plus_overlay_high_margin_only,0.0555555555556,2,0,0,-0.00304882128503,44,0,False,False,False,False,False

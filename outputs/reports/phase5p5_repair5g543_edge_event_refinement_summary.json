@@ -1,0 +1,14 @@
+{
+  "aaai_ready": false,
+  "candidate_aliases": 32,
+  "decision": "refinement_no_supported_edge_event_region",
+  "final_supported_edge_event_region_count": 0,
+  "final_unsafe_edge_event_region_count": 32,
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "refinement_rows": 15120,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g543_edge_event_refinement_summary_v1",
+  "underpowered": false
+}

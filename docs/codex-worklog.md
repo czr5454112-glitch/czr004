@@ -4746,3 +4746,45 @@
   - `git diff --check` passed with line-ending warnings only.
   - `git status --short -- external/lacam2/lacam2` returned clean.
   - `C:\Users\38908\.conda\envs\czr004\python.exe -m pytest tests\test_repair5g_dual_channel_ltm.py tests\test_repair5g5_runtime_selector_policy.py tests\test_repair5g5_contextual_selector_export.py tests\test_repair5g5_aaai_quality_gates.py tests\test_repair5g52_checkpoint_schema.py` passed: `11 passed`.
+
+## 2026-06-13 - Repair5G.5.43 Pareto-safe static lattice plus edge/event-conditioned UpdateLTM residual exploration
+
+- Request:
+  Continue after G5.42 commit 8ae6ae7. G5.42 proved that all 15 G5.41 family-static regressions were static_flow fallback-caused and not residual-caused. However, G5.42 froze a static-ladder-only policy because the best overlay variant still had 2 success regressions versus static_flow. Since static-ladder-only also had the same 2 static_flow regressions in the targeted evidence, G5.43 must first autopsy whether the static_flow failures are ladder-caused rather than overlay-caused. Then it must build a Pareto-safe static lattice and explore edge-class/event-conditioned UpdateLTM residuals rather than another run-level scalar residual sweep.
+- Planned files:
+  - czr004_g543_pareto_safe_ladder_edge_event_update_residual_exploration_plan.md
+  - scripts/repair5g543_common.py
+  - scripts/verify_repair5g543_g542_artifacts.py
+  - scripts/audit_repair5g543_g542_staticflow_regression_sources.py
+  - scripts/create_repair5g543_pareto_safe_static_lattice.py
+  - scripts/analyze_repair5g543_static_lattice_safety_frontier.py
+  - scripts/audit_repair5g543_trace_edge_event_feature_coverage.py
+  - scripts/create_repair5g543_edge_event_candidate_family.py
+  - scripts/verify_repair5g543_edge_event_adapter_static.py
+  - scripts/create_repair5g543_successive_halving_probe_plan.py
+  - scripts/run_repair5g543_edge_event_probe_stage1.py
+  - scripts/analyze_repair5g543_edge_event_probe_stage1.py
+  - scripts/create_repair5g543_refinement_probe_plan.py
+  - scripts/run_repair5g543_edge_event_refinement_probe.py
+  - scripts/analyze_repair5g543_edge_event_refinement.py
+  - scripts/train_eval_repair5g543_abstaining_policy_if_warranted.py
+  - scripts/create_repair5g543_frozen_policy_if_warranted.py
+  - scripts/run_repair5g543_frozen_policy_blind_replay_if_warranted.py
+  - scripts/analyze_repair5g543_blind_evidence.py
+  - scripts/write_repair5g543_decision.py
+  - outputs/reports/phase5p5_repair5g543_*
+  - outputs/tables/phase5p5_repair5g543_*
+  - outputs/logs/phase5p5_repair5g543_* local/ignored raw logs
+  - artifacts/models/laur_ltm/repair5g543_* manifest files only when warranted
+- Constraints:
+  No external/lacam2/lacam2 edits, no solver semantic changes, no action/priority/search/restart/candidate deletion/h-value target, no reserved IDs 166..205, no Phase5.5/Phase6/runtime/AAAI claims.
+- Pre-experiment statement:
+  G5.43 is not another quick scalar candidate sweep. It is a two-track safety-and-learning exploration: first deconfound static-ladder versus residual failures, then test whether edge/event-conditioned UpdateLTM residuals produce safe solver-level gains over a Pareto-safe static lattice.
+- Result:
+  Final decision is `g543_static_ladder_confounded_g542_overlay_continue_repair`. G5.42 verification reproduced the targeted contradiction exactly: P2 static-ladder-only and P3 ladder-plus-overlay both had `2` success regressions versus `static_flow`, while P3 had `0` regressions versus the G5.42 ladder and family static. The autopsy classified both P3 static-flow regressions as `static_ladder_caused` and `0` as overlay-caused. The stricter static-lattice search found no nontrivial all-baseline zero-regression static lattice in the historical construction evidence, so G5.43 froze `S0_static_flow_only` as the conservative anchor. Existing project-owned checkpoint export support was sufficient for edge/event features without C++ changes, and G5.43 created `108` executable edge/event aliases over existing bounded dual-channel `UpdateParams`. Stage 1 executed `12960` real solver rows across `720` contexts and `101` aliases, finding `19` safe/useful regions. Refinement executed `15120` real solver rows over `32` local candidates and found `0` final supported edge/event regions, so abstaining policy, frozen policy, and blind replay were skipped by gate.
+- Validation:
+  - `python -m py_compile` passed for all G5.43 scripts.
+  - G5.43 stage commands reran successfully, including the required single-worker materialization commands; Stage 1 rematerialized `12960` rows with `0` missing rows and refinement rematerialized `15120` rows with `0` missing rows from completed raw solver logs.
+  - All `outputs/reports/phase5p5_repair5g543_*summary.json` files parse as JSON.
+  - `git diff --check` passed with line-ending warnings only.
+  - `git status --short -- external/lacam2/lacam2` returned clean.

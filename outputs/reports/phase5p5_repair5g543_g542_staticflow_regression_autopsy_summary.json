@@ -1,0 +1,17 @@
+{
+  "aaai_ready": false,
+  "ambiguous_insufficient_rows": 0,
+  "baseline_materialization_mismatch_count": 0,
+  "decision": "g542_staticflow_failures_static_ladder_caused_repair_static_lattice_first",
+  "learned_runtime_policy_validated": false,
+  "overlay_caused_count": 0,
+  "p2_staticflow_regressions": 2,
+  "p3_staticflow_regressions": 2,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "same_failure_set_p2_p3": true,
+  "schema_version": "phase5p5_repair5g543_g542_staticflow_regression_autopsy_summary_v1",
+  "shared_non_static_overlay_caused_count": 0,
+  "static_ladder_caused_count": 2
+}

@@ -1,0 +1,10 @@
+candidate_group,candidate_count,event_conditions,edge_classes,negative_control_group,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+blocked_bottleneck_suppressors,12,blocked_bottleneck,bottleneck,False,False,False,False,False,False
+blocked_open_area_penalizers,12,blocked_open_area,junction,False,False,False,False,False,False
+committed_progress_flow_boosters,12,committed_progress,goal_progress,False,False,False,False,False,False
+flow_shield_conservative,12,committed_progress,corridor,False,False,False,False,False,False
+negative_controls,12,negative_control,none,True,False,False,False,False,False
+nonprogress_commit_penalizers,12,committed_nonprogress,lateral,False,False,False,False,False,False
+pareto_static_residual_overlays,12,pareto_static_overlay,junction,False,False,False,False,False,False
+wait_in_traffic_penalizers,12,wait_in_traffic,corridor,False,False,False,False,False,False
+wait_near_goal_suppressors,12,wait_near_goal,goal_progress,False,False,False,False,False,False

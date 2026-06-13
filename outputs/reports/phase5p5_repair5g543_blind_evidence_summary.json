@@ -1,0 +1,15 @@
+{
+  "aaai_ready": false,
+  "blind_quality_delta_vs_pareto_lattice": "0",
+  "blind_rows": 0,
+  "blind_success_regression_vs_family_static": 0,
+  "blind_success_regression_vs_pareto_lattice": 0,
+  "blind_success_regression_vs_static_flow": 0,
+  "decision": "blind_replay_skipped_by_gate",
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g543_blind_evidence_summary_v1",
+  "underpowered": false
+}

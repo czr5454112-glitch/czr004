@@ -1,0 +1,50 @@
+{
+  "aaai_ready": false,
+  "component_decisions": {
+    "abstaining_policy": "abstaining_policy_skipped_no_supported_refinement_regions",
+    "blind_evidence": "blind_replay_skipped_by_gate",
+    "edge_event_candidate_family": "edge_event_candidate_family_created_without_cpp_changes",
+    "frozen_policy": "frozen_policy_skipped_abstaining_policy_gate_not_passed",
+    "g542_staticflow_regression_autopsy": "g542_staticflow_failures_static_ladder_caused_repair_static_lattice_first",
+    "pareto_static_lattice": "no_nontrivial_zero_regression_static_lattice_freeze_static_flow_only",
+    "refinement": "refinement_no_supported_edge_event_region",
+    "stage1_probe": "stage1_safe_useful_regions_found",
+    "trace_edge_event_feature_coverage": "existing_project_owned_exporter_sufficient_create_aliases_without_cpp_changes",
+    "verify_g542": "g542_artifacts_verified"
+  },
+  "decision": "g543_static_ladder_confounded_g542_overlay_continue_repair",
+  "hard_requirements": {
+    "all_claims_closed": true,
+    "blind_replay_executed_or_skipped_by_gate": true,
+    "edge_event_feature_coverage_audited": true,
+    "external_lacam2_clean": true,
+    "g542_staticflow_regression_autopsy_completed": true,
+    "pareto_static_lattice_created": true,
+    "real_solver_probe_executed_or_blocked_with_reason": true,
+    "reserved_ids_untouched": true
+  },
+  "key_metrics": {
+    "blind_quality_delta_vs_pareto_lattice": "0",
+    "blind_rows": 0,
+    "blind_success_regression_vs_family_static": 0,
+    "blind_success_regression_vs_pareto_lattice": 0,
+    "blind_success_regression_vs_static_flow": 0,
+    "final_supported_edge_event_region_count": 0,
+    "frozen_non_static_selection_rate": "0",
+    "g542_overlay_caused_regressions": 0,
+    "g542_p2_staticflow_regressions": 2,
+    "g542_p3_staticflow_regressions": 2,
+    "g542_static_ladder_caused_regressions": 2,
+    "pareto_lattice_success_regression_vs_family_static": 44,
+    "pareto_lattice_success_regression_vs_static_flow": 0,
+    "refinement_rows": 15120,
+    "stage1_candidate_aliases": 101,
+    "stage1_probe_rows": 12960,
+    "stage1_safe_useful_region_count": 19
+  },
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g543_decision_summary_v1"
+}

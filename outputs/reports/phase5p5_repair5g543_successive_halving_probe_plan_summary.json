@@ -1,0 +1,16 @@
+{
+  "aaai_ready": false,
+  "blind_seed_range": "1186..1265",
+  "decision": "successive_halving_stage1_plan_created",
+  "fresh_seed_policy": "uses clean post-G5.42 contiguous ranges",
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g543_successive_halving_probe_plan_summary_v1",
+  "stage1_candidate_aliases": 101,
+  "stage1_contexts": 720,
+  "stage1_plan_rows": 12960,
+  "stage1_seed_range": "1106..1145",
+  "stage2_seed_range": "1146..1185"
+}

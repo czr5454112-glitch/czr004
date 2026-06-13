@@ -1,0 +1,13 @@
+lattice_variant,total_success_regression_count,static_flow_regressions,family_static_regressions,additive_regressions,best_fixed_regressions,quality_delta_vs_static_flow,quality_delta_vs_family_static,frontier_status,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+S2_g542_static_ladder_reproduced,92,33,22,18,19,0.00335311182765,0.0032319124715,safety_frontier_tradeoff,False,False,False,False,False
+S5_additive_family_static_safe_mix,100,14,25,16,45,0.00167547275485,0.000165851339846,safety_frontier_tradeoff,False,False,False,False,False
+S7_minimax_success_first_quality_second,105,19,40,30,16,0.00171737392344,0.000164095635681,safety_frontier_tradeoff,False,False,False,False,False
+S10_map_family_pareto_ladder,110,20,25,16,49,0.00167100482751,0.000178028283994,safety_frontier_tradeoff,False,False,False,False,False
+S9_budget_sensitive_pareto_ladder,110,20,25,16,49,0.00167100482751,0.000178028283994,safety_frontier_tradeoff,False,False,False,False,False
+S11_all_baseline_zero_regression_ladder,113,0,43,28,42,0.00179292363466,0.000164281966835,safety_frontier_tradeoff,False,False,False,False,False
+S6_tri_baseline_pareto_staticflow_family_additive,113,0,43,28,42,0.00179292363466,0.000164281966835,safety_frontier_tradeoff,False,False,False,False,False
+S8_per_stratum_conservative_veto_ladder,113,0,43,28,42,0.00375089638437,0.00319071775865,safety_frontier_tradeoff,False,False,False,False,False
+S3_family_static_with_staticflow_veto,161,0,43,76,42,0.00152367769656,0,safety_frontier_tradeoff,False,False,False,False,False
+S1_frozen_family_static_only,172,47,0,71,54,0.00138234208004,0,safety_frontier_tradeoff,False,False,False,False,False
+S0_static_flow_only,190,0,44,103,43,0,-0.00138234208004,safety_frontier_tradeoff,False,False,False,False,False
+S4_staticflow_with_family_static_veto,199,47,0,98,54,0,-0.00167922091602,safety_frontier_tradeoff,False,False,False,False,False

@@ -1,0 +1,15 @@
+{
+  "aaai_ready": false,
+  "candidate_alias_count": 108,
+  "candidate_group_count": 9,
+  "cpp_edge_class_params_added": false,
+  "decision": "edge_event_candidate_family_created_without_cpp_changes",
+  "distinct_executable_candidate_aliases": 108,
+  "learned_runtime_policy_validated": false,
+  "negative_control_count": 12,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g543_edge_event_candidate_family_summary_v1",
+  "uses_existing_dual_channel_update_params": true
+}

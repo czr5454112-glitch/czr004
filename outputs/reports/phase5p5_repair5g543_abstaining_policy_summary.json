@@ -1,0 +1,11 @@
+{
+  "aaai_ready": false,
+  "decision": "abstaining_policy_skipped_no_supported_refinement_regions",
+  "learned_runtime_policy_validated": false,
+  "non_static_selection_rate": "0",
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "policy_trained": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g543_abstaining_policy_summary_v1"
+}

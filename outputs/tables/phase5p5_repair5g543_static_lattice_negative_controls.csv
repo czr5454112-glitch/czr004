@@ -1,0 +1,5 @@
+control,passed,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+allowed_static_roles_only,True,False,False,False,False,False
+no_posthoc_oracle_static_used,True,False,False,False,False,False
+construction_uses_pre_g543_rows_only,True,False,False,False,False,False
+selected_lattice_zero_regression_all_baselines,False,False,False,False,False,False

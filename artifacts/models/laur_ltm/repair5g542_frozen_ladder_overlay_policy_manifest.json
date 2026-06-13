@@ -1,0 +1,21 @@
+{
+  "aaai_ready": false,
+  "allowed_static_baselines": [
+    "additive_ltm",
+    "static_flow_shield",
+    "best_fixed_static_goal_aware",
+    "frozen_family_static_goal_aware"
+  ],
+  "candidate_scope": "UpdateLTM parameters only; no solver semantic changes",
+  "decision": "frozen_static_ladder_only_policy_created",
+  "learned_runtime_policy_validated": false,
+  "non_static_overlay_entries": 0,
+  "non_static_overlay_entry_rate": "0",
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "policy_csv": "outputs/tables/phase5p5_repair5g542_frozen_ladder_overlay_policy.csv",
+  "policy_entries": 18,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g542_frozen_ladder_overlay_policy_summary_v1",
+  "source_policy": "P2_deployable_static_ladder_only"
+}

@@ -1,0 +1,17 @@
+{
+  "aaai_ready": false,
+  "decision": "residual_overlay_labels_created",
+  "g541_final_regions_evaluated": 24,
+  "g541_regions_fail_vs_family_static": 0,
+  "g541_regions_only_good_vs_static_flow": 0,
+  "learned_runtime_policy_validated": false,
+  "overlay_boundary_region_count": 0,
+  "overlay_safe_region_count": 24,
+  "overlay_safe_useful_count": 24,
+  "overlay_unsafe_region_count": 0,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g542_residual_overlay_labels_summary_v1",
+  "true_ladder_relative_improvements": 24
+}

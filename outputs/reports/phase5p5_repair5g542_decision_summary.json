@@ -1,0 +1,42 @@
+{
+  "aaai_ready": false,
+  "component_decisions": {
+    "blind_evidence": "frozen_ladder_overlay_blind_replay_skipped_static_ladder_only",
+    "deployable_static_ladder": "deployable_static_ladder_created",
+    "edge_design": "g542_edge_class_design_created_after_blocked_overlay",
+    "failure_source_audit": "g541_positive_vs_staticflow_blocked_by_fallback_ladder_continue_g542",
+    "frozen_policy": "frozen_static_ladder_only_policy_created",
+    "overlay_labels": "residual_overlay_labels_created",
+    "policy_candidates": "ladder_overlay_policy_candidates_created",
+    "strategy_docs": "g542_strategy_docs_updated",
+    "targeted_probe": "targeted_probe_static_ladder_only_zero_family_regression",
+    "verify_g541": "g541_artifacts_verified"
+  },
+  "decision": "g542_ladder_overlay_matches_static_but_no_gain_continue_refinement",
+  "hard_requirements": {
+    "all_claims_closed": true,
+    "deployable_static_ladder_created": true,
+    "external_lacam2_clean": true,
+    "frozen_blind_replay_executed_or_skipped_by_gate": true,
+    "g541_failure_source_audit_completed": true,
+    "overlay_labels_created": true,
+    "reserved_ids_untouched": true,
+    "targeted_ladder_overlay_probe_executed": true
+  },
+  "key_metrics": {
+    "blind_rows": 0,
+    "frozen_non_static_overlay_entries": 0,
+    "g541_family_regressions": 15,
+    "g541_residual_caused": 0,
+    "g541_static_flow_fallback_caused": 15,
+    "ladder_vs_family_static_regressions": 22,
+    "overlay_safe_useful_count": 24,
+    "selected_overlay_policy": "",
+    "targeted_probe_rows": 7560
+  },
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g542_decision_summary_v1"
+}

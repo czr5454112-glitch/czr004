@@ -1,0 +1,15 @@
+{
+  "aaai_ready": false,
+  "blind_replay_warranted": false,
+  "contexts": 0,
+  "decision": "frozen_ladder_overlay_blind_replay_skipped_static_ladder_only",
+  "learned_runtime_policy_validated": false,
+  "new_solver_rows": 0,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "policy_pairs_vs_ladder": 0,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g542_frozen_ladder_overlay_blind_evidence_summary_v1",
+  "support_thresholds_met": true,
+  "underpowered": false
+}

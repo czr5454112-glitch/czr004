@@ -1,0 +1,4 @@
+control,passed,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+allowed_static_roles_only,True,False,False,False,False,False
+no_posthoc_context_oracle,True,False,False,False,False,False
+uses_pre_g542_sources_only,True,False,False,False,False,False

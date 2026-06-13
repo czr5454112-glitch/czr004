@@ -1,0 +1,25 @@
+{
+  "aaai_ready": false,
+  "aliases_used": [
+    {
+      "actual": "outputs/tables/phase5p5_repair5g541_frozen_stratum_blind_selected_vs_static_flow.csv",
+      "expected": "outputs/tables/phase5p5_repair5g541_frozen_stratum_selected_vs_static_flow.csv"
+    },
+    {
+      "actual": "outputs/tables/phase5p5_repair5g541_frozen_stratum_blind_selected_vs_frozen_family_static.csv",
+      "expected": "outputs/tables/phase5p5_repair5g541_frozen_stratum_selected_vs_family_static.csv"
+    }
+  ],
+  "artifact_rows_checked": 13,
+  "decision": "g541_artifacts_verified",
+  "family_static_regression_rows": 15,
+  "g541_blind_decision": "blind_stratum_policy_not_positive",
+  "g541_positive_vs_static_flow_confirmed": true,
+  "learned_runtime_policy_validated": false,
+  "missing_artifact_count": 0,
+  "missing_artifacts": [],
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g542_g541_verification_summary_v1"
+}

@@ -1,0 +1,5 @@
+event_condition,recommended_update_target,solver_semantics_changed,priority,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+blocked_bottleneck,event_conditioned_update_ltm_residual,False,1,False,False,False,False,False
+blocked_open_area,event_conditioned_update_ltm_residual,False,1,False,False,False,False,False
+wait_near_goal,event_conditioned_update_ltm_residual,False,2,False,False,False,False,False
+wait_in_traffic,event_conditioned_update_ltm_residual,False,2,False,False,False,False,False

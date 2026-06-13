@@ -1,0 +1,13 @@
+{
+  "aaai_ready": false,
+  "decision": "ladder_overlay_policy_candidates_created",
+  "distinct_policy_signatures": 4,
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "policies_with_non_static_regions": 4,
+  "policy_candidate_rows": 126,
+  "policy_variant_count": 7,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g542_ladder_overlay_policy_candidates_summary_v1"
+}

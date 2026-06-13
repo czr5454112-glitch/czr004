@@ -6839,3 +6839,16 @@ rather than:
   one global parameter candidate.
 
 From G5.41 onward, a static-flow parameter region is evaluated at the deployable stratum level. A candidate that is unsafe globally may still be valuable if a frozen pre-replay policy can restrict it to strata where it has zero regression and nontrivial static-relative gain.
+
+## 2026-06-12 - G5.42 strategic update: residual overlay must sit on a deployable static fallback ladder
+
+G5.41 found per-stratum residual regions and achieved zero success regression versus static_flow in blind replay, but failed versus frozen_family_static.
+This indicates that static_flow alone is not the correct fallback baseline in all strata.
+From G5.42 onward, learned/static-flow residuals are evaluated as an overlay on a deployable static fallback ladder:
+  additive_ltm
+  static_flow_shield
+  best_fixed_static_goal_aware
+  frozen_family_static_goal_aware
+Residual parameters are only allowed in supported strata where they beat the selected deployable static baseline with zero regression.
+
+The learned residual component is not a replacement for the strongest deployable static baseline; it is a conditional overlay. The first decision is which deployable static baseline is safest for the stratum, and the second decision is whether a supported residual region can safely improve over that baseline.

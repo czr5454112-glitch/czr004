@@ -4707,3 +4707,42 @@
   No external/lacam2/lacam2 edits, no solver semantic changes, no action/priority/search/restart/candidate deletion/h-value target, no reserved IDs 166..205, no Phase5.5/Phase6/runtime/AAAI claims.
 - Pre-experiment statement:
   G5.41 does not search for one globally safe parameter candidate. It searches for frozen deployable per-stratum safe parameter regions and static fallback rules.
+
+## 2026-06-12 - Repair5G.5.42 deployable static-fallback ladder with residual overlay
+
+- Request:
+  Continue after G5.41 commit f06bfca. G5.41 found 24 final supported stratum regions and blind replay showed zero regression and slight quality gain vs static_flow, but failed against frozen_family_static with 15 success regressions. G5.42 must determine whether those regressions were caused by residual parameters or by using static_flow as the fallback baseline. Build a deployable static baseline ladder and evaluate residuals as an overlay on the selected deployable static baseline.
+- Planned files:
+  - czr004_g542_deployable_static_fallback_ladder_residual_overlay_plan.md
+  - scripts/repair5g542_common.py
+  - scripts/verify_repair5g542_g541_artifacts.py
+  - scripts/audit_repair5g542_g541_blind_failure_sources.py
+  - scripts/update_repair5g542_strategy_docs.py
+  - scripts/create_repair5g542_deployable_static_ladder.py
+  - scripts/create_repair5g542_residual_overlay_labels.py
+  - scripts/create_repair5g542_ladder_overlay_policy_candidates.py
+  - scripts/run_repair5g542_ladder_overlay_probe.py
+  - scripts/analyze_repair5g542_ladder_overlay_evidence.py
+  - scripts/create_repair5g542_frozen_ladder_overlay_policy.py
+  - scripts/run_repair5g542_frozen_ladder_overlay_blind_replay.py
+  - scripts/analyze_repair5g542_frozen_ladder_overlay_blind_evidence.py
+  - scripts/analyze_repair5g542_next_edge_class_design_if_blocked.py
+  - scripts/write_repair5g542_decision.py
+  - outputs/reports/phase5p5_repair5g542_*
+  - outputs/tables/phase5p5_repair5g542_*
+  - outputs/logs/phase5p5_repair5g542_* local/ignored raw logs
+  - artifacts/models/laur_ltm/repair5g542_* manifest files only
+- Constraints:
+  No external/lacam2/lacam2 edits, no solver semantic changes, no action/priority/search/restart/candidate deletion/h-value target, no reserved IDs 166..205, no Phase5.5/Phase6/runtime/AAAI claims.
+- Pre-experiment statement:
+  G5.42 treats G5.41 as positive against static_flow but blocked by stronger static fallback comparison. It tests a hierarchical deployable static ladder plus residual overlay, not a residual-only or static_flow-only fallback policy.
+- Result:
+  Final decision is `g542_ladder_overlay_matches_static_but_no_gain_continue_refinement`. The G5.41 failure-source audit found all `15` frozen-family-static regressions were `static_flow` fallback caused and `0` were residual caused. G5.42 built an 18-entry deployable static ladder and confirmed all 24 G5.41 final residual regions remain safe/useful on refinement evidence, but the fresh-seed targeted probe did not pass the full overlay gate: the non-static overlay variant had zero regressions versus family static and ladder, but had `2` success regressions versus static_flow. The frozen G5.42 policy is therefore static-ladder-only, blind replay was skipped by gate, and the next design target is edge-class/event-conditioned UpdateLTM residuals.
+- Validation:
+  - `python -m py_compile` passed for all G5.42 scripts.
+  - G5.42 stage commands reran successfully; `run_repair5g542_ladder_overlay_probe.py --max-workers 1` reused the completed `7560`-row probe table.
+  - All `outputs/reports/phase5p5_repair5g542_*summary.json` files parse as JSON.
+  - `powershell -ExecutionPolicy Bypass -File scripts\build_phase1a_batch.ps1` passed; ninja had no work to do.
+  - `git diff --check` passed with line-ending warnings only.
+  - `git status --short -- external/lacam2/lacam2` returned clean.
+  - `C:\Users\38908\.conda\envs\czr004\python.exe -m pytest tests\test_repair5g_dual_channel_ltm.py tests\test_repair5g5_runtime_selector_policy.py tests\test_repair5g5_contextual_selector_export.py tests\test_repair5g5_aaai_quality_gates.py tests\test_repair5g52_checkpoint_schema.py` passed: `11 passed`.

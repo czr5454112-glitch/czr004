@@ -1,0 +1,20 @@
+{
+  "aaai_ready": false,
+  "decision": "g541_positive_vs_staticflow_blocked_by_fallback_ladder_continue_g542",
+  "family_static_regressions_total": 15,
+  "learned_runtime_policy_validated": false,
+  "non_static_selection_rate": "0.0555555555556",
+  "other_fallback_caused_count": 0,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "residual_caused_count": 0,
+  "role_mismatch_count": 0,
+  "runtime_claim_allowed": false,
+  "safe_high_margin_count": 35,
+  "schema_version": "phase5p5_repair5g542_g541_blind_failure_source_audit_summary_v1",
+  "static_flow_fallback_caused_count": 15,
+  "vs_static_flow_better_count": 35,
+  "vs_static_flow_quality_only_mean_delta": "-0.000348460056495",
+  "vs_static_flow_success_regression_count": 0,
+  "vs_static_flow_worse_count": 26
+}

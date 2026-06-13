@@ -1,0 +1,13 @@
+{
+  "aaai_ready": false,
+  "decision": "g542_edge_class_design_created_after_blocked_overlay",
+  "edge_class_targets": 18,
+  "event_condition_targets": 4,
+  "g542_failed_because_residual_overlay_cannot_beat_static_ladder": true,
+  "g542_failed_because_run_level_scalar_params_too_coarse": true,
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g542_next_edge_class_design_if_blocked_summary_v1"
+}

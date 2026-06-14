@@ -1,0 +1,18 @@
+{
+  "aaai_ready": false,
+  "calibrated_evaluable_strata": 0,
+  "decision": "g547_budget_calibration_blocked_no_evaluable_quality_horizon",
+  "finite_ratio_rate_overall": "0",
+  "finite_ratio_rows": 0,
+  "hard_gate_calibrated_evaluable_strata_met": false,
+  "hard_gate_finite_ratio_rate_met": false,
+  "hard_gate_quality_horizon_contexts_met": false,
+  "learned_runtime_policy_validated": false,
+  "non_evaluable_strata": 18,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "quality_horizon_contexts": 0,
+  "reason": "G5.46 and G5.47 local smoke produced no finite paired quality outcomes; large calibrated replay is blocked rather than interpreted as no-signal.",
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g547_budget_calibration_summary_v1"
+}

@@ -1,0 +1,5 @@
+round,old_decision,new_tiered_decision,would_exploration_continue,would_refinement_continue,would_targeted_replay_run,would_blind_replay_run,reason,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+G5.41,blocked_by_family_static_runtime_promotion,research_positive_vs_static_flow_runtime_blocked,True,True,False,False,family-static gap is diagnostic before runtime claim,False,False,False,False,False
+G5.42,residual_overlay_failed_static_ladder,residual_not_guilty_static_ladder_failure,True,False,False,False,static ladder caused the key regression,False,False,False,False,False
+G5.43,hand_alias_unstable,hand_alias_unstable_not_learned_updateltm_death,True,False,False,False,not a neural fulltheta generator result,False,False,False,False,False
+G5.46,no_stable_continuous_signal,non_decisive_materialization_and_evaluability_confounded,True,False,False,False,finite_ratio_rows=0 and fulltheta not faithfully materialized,False,False,False,False,False

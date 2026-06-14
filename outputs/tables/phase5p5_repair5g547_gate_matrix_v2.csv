@@ -1,0 +1,9 @@
+tier,tier_name,gate_name,definition,hard_blocker,failure_decision,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+I,Invariant safety,external_lacam2_clean,external/lacam2/lacam2 unchanged,True,stop_do_not_interpret,False,False,False,False,False
+I,Invariant safety,candidate_recognized_all,all solver-facing candidates recognized by adapter/registry,True,materialization_blocked,False,False,False,False,False
+I,Invariant safety,fulltheta_fingerprint_match_rate,fulltheta fingerprint match rate equals 1.0,True,materialization_blocked,False,False,False,False,False
+E,Evaluability,finite_ratio_rate,finite_ratio_rate >= 0.20 and finite_ratio_rows >= 3000 for large probes,True,non_evaluable_replay_continue_evaluability_repair,False,False,False,False,False
+X,Exploration,unsafe_theta_allowed,unsafe theta may be collected as risk data but cannot support positive/runtime claims,False,risk_dataset_created,False,False,False,False,False
+R,Refinement,strict_primary_zero_regression,"support_pairs >= 120, seed blocks >= 3, zero regression vs primary, mean quality delta < 0",True,continue_refinement,False,False,False,False,False
+P,Targeted policy,risk_utility_offline_gate,"non_static usage, false-safe control, offline utility, diversity, and R-profile pass",True,continue_model_design,False,False,False,False,False
+B,Blind/runtime/paper,blind_zero_regression_primary,"strict blind rows, zero primary regression, positive quality, overhead acceptable",True,continue_design_no_runtime_claim,False,False,False,False,False

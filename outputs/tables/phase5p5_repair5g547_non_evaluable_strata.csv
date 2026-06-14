@@ -1,0 +1,19 @@
+map_family,agents,nominal_budget_ms,reason,best_finite_ratio_rate,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+maze,100,1000,no materialized calibration horizon reached finite_ratio_rate >= 0.25 in local sentinel,0,False,False,False,False,False
+maze,100,2000,no materialized calibration horizon reached finite_ratio_rate >= 0.25 in local sentinel,0,False,False,False,False,False
+maze,100,500,no materialized calibration horizon reached finite_ratio_rate >= 0.25 in local sentinel,0,False,False,False,False,False
+maze,50,1000,no materialized calibration horizon reached finite_ratio_rate >= 0.25 in local sentinel,0,False,False,False,False,False
+maze,50,2000,no materialized calibration horizon reached finite_ratio_rate >= 0.25 in local sentinel,0,False,False,False,False,False
+maze,50,500,no materialized calibration horizon reached finite_ratio_rate >= 0.25 in local sentinel,0,False,False,False,False,False
+random,100,1000,no materialized calibration horizon reached finite_ratio_rate >= 0.25 in local sentinel,0,False,False,False,False,False
+random,100,2000,no materialized calibration horizon reached finite_ratio_rate >= 0.25 in local sentinel,0,False,False,False,False,False
+random,100,500,no materialized calibration horizon reached finite_ratio_rate >= 0.25 in local sentinel,0,False,False,False,False,False
+random,50,1000,no materialized calibration horizon reached finite_ratio_rate >= 0.25 in local sentinel,0,False,False,False,False,False
+random,50,2000,no materialized calibration horizon reached finite_ratio_rate >= 0.25 in local sentinel,0,False,False,False,False,False
+random,50,500,no materialized calibration horizon reached finite_ratio_rate >= 0.25 in local sentinel,0,False,False,False,False,False
+warehouse,100,1000,no materialized calibration horizon reached finite_ratio_rate >= 0.25 in local sentinel,0,False,False,False,False,False
+warehouse,100,2000,no materialized calibration horizon reached finite_ratio_rate >= 0.25 in local sentinel,0,False,False,False,False,False
+warehouse,100,500,no materialized calibration horizon reached finite_ratio_rate >= 0.25 in local sentinel,0,False,False,False,False,False
+warehouse,50,1000,no materialized calibration horizon reached finite_ratio_rate >= 0.25 in local sentinel,0,False,False,False,False,False
+warehouse,50,2000,no materialized calibration horizon reached finite_ratio_rate >= 0.25 in local sentinel,0,False,False,False,False,False
+warehouse,50,500,no materialized calibration horizon reached finite_ratio_rate >= 0.25 in local sentinel,0,False,False,False,False,False

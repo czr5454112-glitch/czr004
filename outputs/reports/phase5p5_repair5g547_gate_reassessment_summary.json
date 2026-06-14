@@ -1,0 +1,15 @@
+{
+  "aaai_ready": false,
+  "decision": "g547_gate_v2_created_use_for_fulltheta_exploration",
+  "exploration_gate_relaxed": true,
+  "final_runtime_gate_relaxed": false,
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "primary_baseline_for_theta_generator": "static_flow_shield",
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g547_gate_reassessment_summary_v1",
+  "selector_epoch_gate_reuse_safe": false,
+  "strong_static_baselines_diagnostic_not_exploration_blockers": true,
+  "tiered_gate_matrix_created": true
+}

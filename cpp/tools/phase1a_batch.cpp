@@ -46,6 +46,7 @@ struct Args {
   std::string repair5g_checkpoint_edge_filter = "nonzero";
   std::string repair5g_counterfactual_update_probe_jsonl;
   std::string repair5g_counterfactual_candidates;
+  std::string repair5g_counterfactual_updateparams_registry;
   std::string method_alias;
   std::string repair5g5_selector_spec_path;
   std::string repair5g5_selector_mode = "disabled";
@@ -249,6 +250,25 @@ std::vector<std::string> split_token(const std::string& value, char delimiter)
   std::string cell;
   while (std::getline(stream, cell, delimiter)) out.push_back(cell);
   return out;
+}
+
+std::string trim_copy(const std::string& value)
+{
+  auto begin = std::size_t{0};
+  while (begin < value.size() &&
+         std::isspace(static_cast<unsigned char>(value[begin]))) {
+    ++begin;
+  }
+  auto end = value.size();
+  while (end > begin &&
+         std::isspace(static_cast<unsigned char>(value[end - 1]))) {
+    --end;
+  }
+  if (end > begin + 1 && value[begin] == '"' && value[end - 1] == '"') {
+    ++begin;
+    --end;
+  }
+  return value.substr(begin, end - begin);
 }
 
 czr004::ltm::UpdateParams update_params_for_logged_rule(
@@ -466,6 +486,16 @@ bool g518_in_range(double value, double lower, double upper)
 {
   constexpr double kEps = 1.0e-12;
   return value >= lower - kEps && value <= upper + kEps;
+}
+
+bool read_registry_number(const std::map<std::string, std::string>& row,
+                          const std::string& key, double lower,
+                          double upper, double* out)
+{
+  const auto it = row.find(key);
+  if (it == row.end()) return false;
+  if (!parse_double(trim_copy(it->second), out)) return false;
+  return std::isfinite(*out) && g518_in_range(*out, lower, upper);
 }
 
 std::string goal_projection_mode_name(czr004::ltm::GoalProjectionMode mode)
@@ -938,6 +968,129 @@ Repair5GMethodSpec repair5g_method_spec(const std::string& method)
   return spec;
 }
 
+Repair5GMethodSpec repair5g_registry_method_spec(
+    const std::string& method, const std::string& registry_path)
+{
+  auto spec = Repair5GMethodSpec();
+  if (registry_path.empty()) return spec;
+  auto input = std::ifstream(registry_path);
+  if (!input) return spec;
+
+  std::string header_line;
+  if (!std::getline(input, header_line)) return spec;
+  const auto headers = split_token(header_line, ',');
+
+  std::string line;
+  while (std::getline(input, line)) {
+    if (line.empty()) continue;
+    const auto cells = split_token(line, ',');
+    auto row = std::map<std::string, std::string>();
+    for (std::size_t index = 0; index < headers.size() && index < cells.size();
+         ++index) {
+      row[trim_copy(headers[index])] = trim_copy(cells[index]);
+    }
+    const auto id_it = row.find("candidate_id");
+    if (id_it == row.end() || trim_copy(id_it->second) != method) continue;
+
+    double alpha_cong_commit_progress = 0.0;
+    double alpha_cong_commit_nonprogress = 0.0;
+    double alpha_cong_block = 0.0;
+    double alpha_cong_wait_progress = 0.0;
+    double alpha_cong_wait_nonprogress = 0.0;
+    double alpha_flow_commit_progress = 0.0;
+    double alpha_flow_wait_progress = 0.0;
+    double rho_cong_decay = 0.0;
+    double rho_flow_decay = 0.0;
+    double lambda_cong = 0.0;
+    double lambda_flow = 0.0;
+    double flow_shield_beta = 0.0;
+    double max_flow_shield = 0.0;
+    double min_edge_cost = 0.0;
+    double max_edge_cost = 0.0;
+    double mode_flow_shield = 0.0;
+    double mode_agent_progress = 0.0;
+    double mode_none = 0.0;
+    if (!read_registry_number(row, "theta_alpha_cong_commit_progress", 0.0,
+                              1.50, &alpha_cong_commit_progress) ||
+        !read_registry_number(row, "theta_alpha_cong_commit_nonprogress", 0.50,
+                              1.75, &alpha_cong_commit_nonprogress) ||
+        !read_registry_number(row, "theta_alpha_cong_block", 0.50, 2.25,
+                              &alpha_cong_block) ||
+        !read_registry_number(row, "theta_alpha_cong_wait_progress", 0.0,
+                              1.25, &alpha_cong_wait_progress) ||
+        !read_registry_number(row, "theta_alpha_cong_wait_nonprogress", 0.0,
+                              1.75, &alpha_cong_wait_nonprogress) ||
+        !read_registry_number(row, "theta_alpha_flow_commit_progress", 0.0,
+                              1.50, &alpha_flow_commit_progress) ||
+        !read_registry_number(row, "theta_alpha_flow_wait_progress", 0.0,
+                              1.25, &alpha_flow_wait_progress) ||
+        !read_registry_number(row, "theta_rho_cong_decay", 0.90, 1.00,
+                              &rho_cong_decay) ||
+        !read_registry_number(row, "theta_rho_flow_decay", 0.90, 1.00,
+                              &rho_flow_decay) ||
+        !read_registry_number(row, "theta_lambda_cong", 0.50, 1.50,
+                              &lambda_cong) ||
+        !read_registry_number(row, "theta_lambda_flow", 0.0, 1.50,
+                              &lambda_flow) ||
+        !read_registry_number(row, "theta_flow_shield_beta", 0.0, 0.80,
+                              &flow_shield_beta) ||
+        !read_registry_number(row, "theta_max_flow_shield", 0.25, 1.50,
+                              &max_flow_shield) ||
+        !read_registry_number(row, "theta_min_edge_cost", 0.25, 1.00,
+                              &min_edge_cost) ||
+        !read_registry_number(row, "theta_max_edge_cost", 8.00, 12.00,
+                              &max_edge_cost) ||
+        !read_registry_number(row, "theta_goal_projection_mode_flow_shield",
+                              0.0, 1.0, &mode_flow_shield) ||
+        !read_registry_number(row, "theta_goal_projection_mode_agent_progress",
+                              0.0, 1.0, &mode_agent_progress) ||
+        !read_registry_number(row, "theta_goal_projection_mode_none", 0.0,
+                              1.0, &mode_none) ||
+        min_edge_cost > max_edge_cost) {
+      return Repair5GMethodSpec();
+    }
+
+    auto params = czr004::ltm::UpdateParams();
+    params.force_additive = false;
+    params.enable_dual_channel = true;
+    params.alpha_commit = alpha_cong_commit_nonprogress;
+    params.alpha_block = alpha_cong_block;
+    params.alpha_wait_spillover = alpha_cong_wait_nonprogress;
+    params.rho_decay = rho_cong_decay;
+    params.alpha_cong_commit_progress = alpha_cong_commit_progress;
+    params.alpha_cong_commit_nonprogress = alpha_cong_commit_nonprogress;
+    params.alpha_cong_block = alpha_cong_block;
+    params.alpha_cong_wait_progress = alpha_cong_wait_progress;
+    params.alpha_cong_wait_nonprogress = alpha_cong_wait_nonprogress;
+    params.alpha_flow_commit_progress = alpha_flow_commit_progress;
+    params.alpha_flow_wait_progress = alpha_flow_wait_progress;
+    params.rho_cong_decay = rho_cong_decay;
+    params.rho_flow_decay = rho_flow_decay;
+    params.lambda_cong = lambda_cong;
+    params.lambda_flow = lambda_flow;
+    params.flow_shield_beta = flow_shield_beta;
+    params.max_flow_shield = max_flow_shield;
+    params.min_edge_cost = min_edge_cost;
+    params.max_edge_cost = max_edge_cost;
+    if (mode_flow_shield >= mode_agent_progress &&
+        mode_flow_shield >= mode_none && mode_flow_shield >= 0.5) {
+      params.goal_projection_mode = czr004::ltm::GoalProjectionMode::FlowShield;
+    } else if (mode_agent_progress >= mode_none &&
+               mode_agent_progress >= 0.5) {
+      params.goal_projection_mode =
+          czr004::ltm::GoalProjectionMode::AgentProgress;
+    } else {
+      params.goal_projection_mode = czr004::ltm::GoalProjectionMode::None;
+    }
+    spec.recognized = true;
+    spec.candidate_id = method;
+    spec.params = params;
+    spec.update_mode = "g547_fulltheta_registry";
+    return spec;
+  }
+  return spec;
+}
+
 std::string repair5g5_selector_default_path()
 {
   return "artifacts/models/laur_ltm/repair5g5_contextual_flow_shield_selector/selector_spec.json";
@@ -974,6 +1127,15 @@ std::string repair5g5_resolve_candidate_alias(const std::string& candidate,
     return repair5g5_group_selector_candidate(args);
   }
   return candidate;
+}
+
+Repair5GMethodSpec repair5g_method_spec_with_registry(
+    const std::string& method, const Args& args)
+{
+  auto registry_spec = repair5g_registry_method_spec(
+      method, args.repair5g_counterfactual_updateparams_registry);
+  if (registry_spec.recognized) return registry_spec;
+  return repair5g_method_spec(method);
 }
 
 void load_repair5g5_selector_spec(Args* args)
@@ -1462,6 +1624,10 @@ Args parse_args(int argc, char** argv)
       values.count("repair5g-counterfactual-candidates")
           ? values["repair5g-counterfactual-candidates"]
           : "";
+  args.repair5g_counterfactual_updateparams_registry =
+      values.count("repair5g-counterfactual-updateparams-registry")
+          ? values["repair5g-counterfactual-updateparams-registry"]
+          : "";
   args.repair5g_transform_audit_candidate =
       values.count("repair5g-transform-audit-candidate")
           ? values["repair5g-transform-audit-candidate"]
@@ -1561,7 +1727,8 @@ Args parse_args(int argc, char** argv)
   }
 
   const auto requested_method = args.method;
-  const auto repair5g_spec = repair5g_method_spec(requested_method);
+  const auto repair5g_spec =
+      repair5g_method_spec_with_registry(requested_method, args);
   const auto use_repair5f_alias = [&](const std::string& default_model_path) {
     if (args.method_alias.empty()) args.method_alias = requested_method;
     args.method = "lacam_star_lau_ltm";
@@ -2493,7 +2660,7 @@ void append_repair5g53_transform_audit_jsonl(
                     resolved == "neutral_additive" || resolved.empty();
   auto expected_update_mode = std::string("additive_parity");
   if (!recognized) {
-    const auto spec = repair5g_method_spec(resolved);
+    const auto spec = repair5g_method_spec_with_registry(resolved, args);
     recognized = spec.recognized;
     if (recognized) {
       expected_params = spec.params;
@@ -2911,7 +3078,7 @@ czr004::ltm::UpdateParams repair5g54_params_for_candidate(
       resolved == "repair5g_dual_c_equiv_additive") {
     return czr004::ltm::UpdateParams::additive();
   }
-  auto spec = repair5g_method_spec(resolved);
+  auto spec = repair5g_method_spec_with_registry(resolved, args);
   if (!spec.recognized) {
     *recognized = false;
     return czr004::ltm::UpdateParams::additive();
@@ -3212,7 +3379,8 @@ RunStats run_lacam_star_ltm(const Instance& instance, const Args& args)
   if (args.repair5g_enabled && args.repair5g53_hook_enabled) {
     const auto fixed_resolved =
         repair5g5_resolve_candidate_alias(args.repair5g53_fixed_candidate, args);
-    const auto fixed_spec = repair5g_method_spec(fixed_resolved);
+    const auto fixed_spec =
+        repair5g_method_spec_with_registry(fixed_resolved, args);
     if (!fixed_spec.recognized) {
       throw std::runtime_error("unsupported Repair5G.5.3 fixed candidate " +
                                fixed_resolved);
@@ -3449,7 +3617,7 @@ RunStats run_lacam_star_ltm(const Instance& instance, const Args& args)
             }
             return finish(additive);
           }
-          const auto spec = repair5g_method_spec(resolved);
+          const auto spec = repair5g_method_spec_with_registry(resolved, args);
           if (!spec.recognized) {
             ++stats.repair5g5_selector_fallback_count;
             ++stats.repair5g5_selected_candidates["additive_ltm"];

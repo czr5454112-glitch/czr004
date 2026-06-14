@@ -1,0 +1,15 @@
+{
+  "aaai_ready": false,
+  "decision": "g546_artifacts_verified_for_g547",
+  "external_lacam2_clean": true,
+  "g546_finite_ratio_rate": "0",
+  "g546_finite_ratio_rows": 0,
+  "g546_negative_conclusion_confounded": true,
+  "g546_real_probe_rows": 34286,
+  "learned_runtime_policy_validated": false,
+  "missing_artifacts": [],
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g547_g546_verification_summary_v1"
+}

@@ -1,0 +1,5 @@
+requirement,threshold,needed_before_positive_claim,needed_before_negative_claim,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+finite_ratio_rate,>= 0.20,True,True,False,False,False,False,False
+finite_ratio_rows_large_probe,>= 3000,True,True,False,False,False,False,False
+both_success_quality_pairs_vs_primary,>= 2000,True,True,False,False,False,False,False
+baseline_success_rate_primary,nontrivial,True,True,False,False,False,False,False

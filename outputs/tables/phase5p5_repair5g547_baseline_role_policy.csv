@@ -1,0 +1,6 @@
+baseline_name,role,hard_gate_tiers,diagnostic_tiers,reason,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+additive_ltm,paper/LTM parity floor,I/E/R/P/B where paired,all,must not break paper-faithful fallback,False,False,False,False,False
+static_flow_shield,primary fixed fallback baseline for theta generator,R/P/B hard primary,all,current generator is static-flow-relative,False,False,False,False,False
+frozen_family_static_goal_aware,strong diagnostic static baseline,B diagnostic; R hard only when claiming family-static dominance,all,avoid turning the method into a static selector,False,False,False,False,False
+best_fixed_static_goal_aware,diagnostic/legacy stronger static,diagnostic unless selected as primary,all,static selection gains are not learned UpdateLTM,False,False,False,False,False
+posthoc_oracle_static,diagnostic upper bound only,never,all,not deployable,False,False,False,False,False

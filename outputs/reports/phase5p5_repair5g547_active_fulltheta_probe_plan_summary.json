@@ -1,0 +1,9 @@
+{
+  "aaai_ready": false,
+  "decision": "active_fulltheta_probe_plan_skipped_budget_calibration_gate_failed",
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g547_active_fulltheta_probe_plan_summary_v1"
+}

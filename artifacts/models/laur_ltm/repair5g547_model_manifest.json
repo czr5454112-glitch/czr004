@@ -1,0 +1,13 @@
+{
+  "aaai_ready": false,
+  "decision": "generator_skipped_budget_calibration_blocked",
+  "false_safe_count": 0,
+  "generated_theta_rows": 0,
+  "learned_runtime_policy_validated": false,
+  "models_trained": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "risk_gate_pass_rate": "0",
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g547_risk_utility_generator_summary_v1"
+}

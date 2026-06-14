@@ -6858,3 +6858,60 @@ The learned residual component is not a replacement for the strongest deployable
 G5.45 built the neural continuous theta infrastructure but did not run new continuous-theta solver replay. From G5.46 onward, neural UpdateParams evidence requires real newly materialized continuous-theta solver rows. Retrospective rows may train diagnostic surrogates, but cannot satisfy generator or replay gates.
 
 G5.46 therefore treats dataset construction, retrospective surrogate training, generated aliases, and offline generator outputs as insufficient without newly materialized solver-facing theta rows. A local smoke can validate materialization, but generator or replay gates require the hard real-row profile or an explicit documented blocker.
+
+## 2026-06-14 - G5.47 strategic update: SafeGate v2 and full-theta evaluability
+
+G5.47 supersedes the old selector-era SafeGate interpretation for neural bounded continuous `UpdateParams` exploration. G5.46 executed real solver-facing replay, but its negative interpretation is confounded unless both conditions are repaired:
+
+```text
+1. full bounded theta is materialized directly, not compressed through repair5g518_grid aliases
+2. calibrated replay horizons produce finite paired quality outcomes
+```
+
+SafeGate is now a layered hierarchy:
+
+```text
+Tier I - invariant safety gates, never relax:
+  external_lacam2_clean
+  reserved_ids_untouched
+  force_additive_parity_passed
+  candidate_recognized_all
+  bounded_updateparams_all
+  no_nan_or_inf_updateparams
+  fulltheta_fingerprint_match_rate = 1.0
+  cost_audit_finite
+  configured_cost_bounds_respected
+  solver_semantics_changed = false
+
+Tier E - evaluability gates before positive or negative interpretation:
+  finite_ratio_rate >= 0.20
+  finite_ratio_rows >= 3000 for large probes
+  both_success_quality_pairs_vs_primary >= 2000
+  primary baseline success is nontrivial
+  paired baselines are materialized
+
+Tier X - exploration gates:
+  unsafe theta may be collected as risk-model data
+  unsafe exploration cannot create positive/runtime/Phase5.5/Phase6/AAAI claims
+
+Tier R/P - refinement and targeted generated-theta policy gates:
+  promote only supported regions or generated policies against the declared primary baseline
+  require controlled false-safe behavior, non-collapsed theta diversity, and primary-baseline utility evidence
+
+Tier B - blind/runtime/paper gate:
+  remains strict; G5.47 does not relax runtime or paper claims
+```
+
+The primary baseline for neural theta generation is `static_flow_shield`. `additive_ltm` remains the paper/LTM parity floor. Strong static variants such as `frozen_family_static_goal_aware`, `best_fixed_static_goal_aware`, and posthoc/oracle static policies are diagnostic stress tests unless a later experiment explicitly declares one of them as the primary baseline. Exploration must not be stopped merely because a continuous theta candidate loses to every hand-written static variant; conversely, static selector wins do not count as learned UpdateLTM progress.
+
+If finite paired outcomes are absent, the only valid conclusion is:
+
+```text
+non_evaluable_replay_continue_evaluability_repair
+```
+
+not:
+
+```text
+continuous theta has no signal
+```

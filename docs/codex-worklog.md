@@ -4868,3 +4868,63 @@
   - Materialization smoke passed: `g546_theta_materialization_smoke_passed`.
   - Real probe summary wrote `527` new solver-facing rows and clearly marked the hard 30000-row gate as not met.
   - Targeted and blind replay were skipped by offline gate; no runtime/Phase5.5/Phase6/AAAI claim was opened.
+
+## 2026-06-14 - Repair5G.5.47 full-theta materialization and budget-calibrated neural UpdateParams exploration
+
+- Request:
+  Continue after G5.46 commit c9ab4bb. G5.46 finally ran real continuous-theta solver replay, but the evidence is confounded: finite_ratio_rate was zero, quality deltas were blank, and generated theta was materialized through the old repair5g518_grid alias grammar that only executes a subset of the 18 theta fields. G5.47 must first make full theta executable, then calibrate replay budgets so paired finite outcomes exist, and only then test neural / active continuous UpdateParams generation.
+- Planned files:
+  - `czr004_g547_fulltheta_budget_calibrated_neural_updateparams_plan.md`
+  - `scripts/repair5g547_common.py`
+  - `scripts/verify_repair5g547_g546_artifacts.py`
+  - `scripts/audit_repair5g547_g546_probe_confounds.py`
+  - `scripts/create_repair5g547_fulltheta_registry.py`
+  - `scripts/verify_repair5g547_fulltheta_materialization.py`
+  - `scripts/run_repair5g547_budget_calibration_sentinel.py`
+  - `scripts/analyze_repair5g547_budget_calibration.py`
+  - `scripts/create_repair5g547_active_fulltheta_probe_plan.py`
+  - `scripts/run_repair5g547_fulltheta_real_probe.py`
+  - `scripts/analyze_repair5g547_fulltheta_real_evidence.py`
+  - `scripts/train_eval_repair5g547_risk_utility_generator.py`
+  - `scripts/materialize_repair5g547_generated_theta.py`
+  - `scripts/run_repair5g547_generated_theta_targeted_replay.py`
+  - `scripts/analyze_repair5g547_generated_theta_targeted_evidence.py`
+  - `scripts/run_repair5g547_generated_theta_blind_if_warranted.py`
+  - `scripts/analyze_repair5g547_blind_evidence.py`
+  - `scripts/write_repair5g547_decision.py`
+  - project-owned `cpp/ltm` or `phase1a_batch` adapter files only if full-theta registry requires it
+  - `outputs/reports/phase5p5_repair5g547_*`
+  - `outputs/tables/phase5p5_repair5g547_*`
+  - `outputs/logs/phase5p5_repair5g547_*` local/ignored raw logs
+  - `artifacts/models/laur_ltm/repair5g547_*` manifest/model files only when warranted
+- Constraints:
+  No external/lacam2/lacam2 edits, no solver semantic changes, no static selector as learned method, no reserved IDs 166..205, all Phase5.5/Phase6/runtime/AAAI claims closed.
+- Pre-experiment statement:
+  G5.47 is not allowed to conclude "continuous theta has no signal" unless full theta is actually executed and paired finite solver outcomes exist at calibrated budgets.
+- Result:
+  Final decision is `g547_budget_calibration_blocked_no_evaluable_quality_horizon`. G5.47 verified G5.46 artifacts and audited the G5.46 negative as materialization/evaluability-confounded: G5.46 had `34286` real probe rows but `finite_ratio_rows=0`, real-probe `candidate_recognized_all=false`, and the old `repair5g518_grid_*` path ignored or collapsed full-theta fields including `theta_lambda_flow`, `theta_lambda_cong`, `theta_alpha_flow_wait_progress`, edge-cost bounds, and full goal-projection mode. G5.47 added a project-owned full-theta registry path through `--repair5g-counterfactual-updateparams-registry`, created `18` bounded fulltheta candidates, and passed the fulltheta materialization smoke with `456` solver-facing rows, `24` contexts, `72` baseline rows, `384` generated fulltheta rows, `candidate_recognized_all=true`, and `fulltheta_fingerprint_match_rate=1`. Budget calibration then remained non-evaluable (`calibrated_evaluable_strata=0`, `finite_ratio_rate_overall=0`), so active fulltheta replay, generator training, targeted replay, and blind replay were skipped by gate rather than interpreted as no-signal.
+- Validation:
+  - `python -m py_compile` passed for all G5.47 scripts.
+  - `cmake --build build\phase1a-batch --target phase1a_batch --config Release` passed after initializing the local Visual Studio environment.
+  - `python scripts\write_repair5g547_gate_reassessment.py`, G5.46 verification/audit, fulltheta registry, fulltheta smoke, budget calibration, skip-gated replay/generator scripts, and final decision all completed.
+  - All `outputs/reports/phase5p5_repair5g547_*summary.json` files parse as JSON and keep `phase5p5_allowed=false`, `phase6_allowed=false`, `runtime_claim_allowed=false`, `learned_runtime_policy_validated=false`, and `aaai_ready=false`.
+  - `git diff --check` passed with line-ending warnings only.
+  - `git status --short -- external/lacam2/lacam2` returned clean.
+  - Base Python lacks pytest; `C:\Users\38908\.conda\envs\czr004\python.exe -m pytest tests\test_repair5f_updateparams.py tests\test_repair5g_dual_channel_ltm.py -q` passed: `16 passed`.
+
+## 2026-06-14 - Repair5G.5.47 safety gate reassessment addendum
+
+- Request:
+  Audit whether selector-era safety gates remain appropriate after shifting to neural bounded continuous UpdateParams generation. G5.46 ran real continuous-theta replay but was confounded by full-theta materialization and evaluability. Before drawing stronger conclusions or relaxing/keeping gates, G5.47 must define a layered gate hierarchy: invariant safety, evaluability, exploration, refinement/promotion, and blind/runtime gates.
+- Planned outputs:
+  - `outputs/reports/phase5p5_repair5g547_gate_reassessment.md`
+  - `outputs/reports/phase5p5_repair5g547_gate_reassessment_summary.json`
+  - `outputs/tables/phase5p5_repair5g547_selector_vs_generator_gate_diff.csv`
+  - `outputs/tables/phase5p5_repair5g547_gate_matrix_v2.csv`
+  - `outputs/tables/phase5p5_repair5g547_baseline_role_policy.csv`
+  - `outputs/tables/phase5p5_repair5g547_evaluability_requirements.csv`
+  - `outputs/tables/phase5p5_repair5g547_gate_backtest_on_g539_g546.csv`
+- Constraints:
+  No solver semantic changes, no external/lacam2/lacam2 edits, no static selector method, no Phase5.5/Phase6/runtime/AAAI claims.
+- Result:
+  Gate reassessment decision is `g547_gate_v2_created_use_for_fulltheta_exploration`. Selector-era gates are no longer reused wholesale for neural continuous UpdateParams. G5.47 wrote a tiered gate matrix with invariant safety gates, evaluability gates, permissive exploration gates, refinement/promotion gates, and strict blind/runtime gates. The final runtime gate was not relaxed; exploration was relaxed only for collecting unsafe theta as risk-model data. `static_flow_shield` is the primary theta-generator baseline, while stronger static baselines remain diagnostic unless explicitly declared primary.

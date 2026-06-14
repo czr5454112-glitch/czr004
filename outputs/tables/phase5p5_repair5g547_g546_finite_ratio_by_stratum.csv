@@ -1,0 +1,13 @@
+map_family,agents,budget_ms,rows,finite_ratio_rows,finite_ratio_rate,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+maze,100,1000,2883,0,0,False,False,False,False,False
+maze,100,2000,2759,0,0,False,False,False,False,False
+maze,100,500,2790,0,0,False,False,False,False,False
+maze,50,1000,2821,0,0,False,False,False,False,False
+maze,50,2000,2945,0,0,False,False,False,False,False
+maze,50,500,2821,0,0,False,False,False,False,False
+random,100,1000,2759,0,0,False,False,False,False,False
+random,100,2000,3162,0,0,False,False,False,False,False
+random,100,500,2945,0,0,False,False,False,False,False
+random,50,1000,2759,0,0,False,False,False,False,False
+random,50,2000,2883,0,0,False,False,False,False,False
+random,50,500,2759,0,0,False,False,False,False,False

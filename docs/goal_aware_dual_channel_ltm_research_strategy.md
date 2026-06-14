@@ -74,3 +74,17 @@ The learned residual component is not a replacement for the strongest deployable
 G5.45 built the neural continuous theta infrastructure but did not run new continuous-theta solver replay. From G5.46 onward, neural UpdateParams evidence requires real newly materialized continuous-theta solver rows. Retrospective rows may train diagnostic surrogates, but cannot satisfy generator or replay gates.
 
 The active learning loop is now theta proposal, real solver-facing replay, calibrated risk/utility modeling, and then generated-theta replay if gates pass. Static selector gains remain diagnostic baselines, not LAUR progress.
+
+## 2026-06-14 - G5.47 strategic update: SafeGate v2 for neural continuous UpdateParams
+
+G5.46 evidence is now treated as materialization/evaluability-confounded unless full theta is executed and finite paired quality outcomes exist. The old selector-era zero-regression gate is no longer reused as a single blanket blocker for neural continuous theta exploration.
+
+SafeGate v2 is layered:
+
+- Tier I invariant safety gates are never relaxed: external solver code clean, reserved IDs untouched, candidate recognition, bounded finite UpdateParams, fulltheta fingerprint match, force-additive parity, cost bounds, and no solver semantic change.
+- Tier E evaluability gates are required before positive or negative interpretation: finite ratio rate, finite paired rows, nontrivial primary baseline success, and paired baseline materialization.
+- Tier X exploration gates intentionally allow unsafe theta as risk-model data. Unsafe exploration cannot support positive, blind, runtime, Phase5.5, Phase6, or AAAI claims.
+- Tier R/P gates promote only supported regions or generated-theta policies against the declared primary baseline, currently `static_flow_shield`.
+- Tier B blind/runtime/paper gates remain strict and are not relaxed in G5.47.
+
+Strong static baselines such as `frozen_family_static_goal_aware`, `best_fixed_static_goal_aware`, and posthoc/oracle static variants are diagnostic stress tests unless a later experiment explicitly declares one as the primary baseline. During exploration, losing to every strong hand-written static variant is not by itself a learned UpdateLTM failure; static selector wins remain diagnostic, not LAUR progress.

@@ -1,0 +1,12 @@
+artifact,path,exists,rows_or_file,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+decision_summary,C:\PROGRAMING\czr004\outputs\reports\phase5p5_repair5g546_decision_summary.json,True,1,False,False,False,False,False
+real_continuous_theta_evidence_summary,C:\PROGRAMING\czr004\outputs\reports\phase5p5_repair5g546_real_continuous_theta_evidence_summary.json,True,1,False,False,False,False,False
+theta_materialization_smoke_summary,C:\PROGRAMING\czr004\outputs\reports\phase5p5_repair5g546_theta_materialization_smoke_summary.json,True,1,False,False,False,False,False
+risk_utility_surrogates_summary,C:\PROGRAMING\czr004\outputs\reports\phase5p5_repair5g546_risk_utility_surrogates_summary.json,True,1,False,False,False,False,False
+generator_summary,C:\PROGRAMING\czr004\outputs\reports\phase5p5_repair5g546_generator_summary.json,True,1,False,False,False,False,False
+real_probe_results,C:\PROGRAMING\czr004\outputs\tables\phase5p5_repair5g546_real_continuous_theta_probe_results.csv,True,34286,False,False,False,False,False
+theta_materialization_smoke_results,C:\PROGRAMING\czr004\outputs\tables\phase5p5_repair5g546_theta_materialization_smoke_results.csv,True,112,False,False,False,False,False
+theta_safety_frontier,C:\PROGRAMING\czr004\outputs\tables\phase5p5_repair5g546_theta_safety_frontier.csv,True,2,False,False,False,False,False
+theta_region_leaderboard,C:\PROGRAMING\czr004\outputs\tables\phase5p5_repair5g546_theta_region_leaderboard.csv,True,1927,False,False,False,False,False
+g546_common,C:\PROGRAMING\czr004\scripts\repair5g546_common.py,True,1,False,False,False,False,False
+g545_common,C:\PROGRAMING\czr004\scripts\repair5g545_common.py,True,1,False,False,False,False,False

@@ -1,0 +1,43 @@
+{
+  "aaai_ready": false,
+  "answers": {
+    "bottleneck": "budget/evaluability",
+    "did_active_search_find_true_safe_gain_regions": false,
+    "did_fulltheta_execution_create_finite_paired_outcomes": false,
+    "did_g546_negative_remain_valid_after_fixing_materialization_and_budget": false,
+    "did_neural_generator_outperform_random_local_staticflow": false,
+    "next_round": "run calibrated fulltheta replay on a longer local/server budget before negative or positive claims",
+    "which_theta_fields_actually_matter": "not interpretable until evaluable fulltheta replay exists"
+  },
+  "component_decisions": {
+    "blind": "blind_replay_skipped_targeted_gate_not_passed",
+    "budget_calibration": "g547_budget_calibration_blocked_no_evaluable_quality_horizon",
+    "fulltheta_registry": "g547_fulltheta_registry_created",
+    "fulltheta_smoke": "g547_fulltheta_materialization_passed",
+    "g546_confounds": "g546_negative_materialization_and_budget_confounded",
+    "g546_verification": "g546_artifacts_verified_for_g547",
+    "gate_reassessment": "g547_gate_v2_created_use_for_fulltheta_exploration",
+    "generator": "generator_skipped_budget_calibration_blocked",
+    "real_probe": "g547_budget_calibration_blocked_no_evaluable_quality_horizon",
+    "targeted": "targeted_replay_skipped_offline_gate_not_passed"
+  },
+  "decision": "g547_budget_calibration_blocked_no_evaluable_quality_horizon",
+  "hard_requirements": {
+    "budget_calibration_evaluable": false,
+    "claim_flags_closed": true,
+    "external_lacam2_clean": true,
+    "fulltheta_materialization_passed": true
+  },
+  "key_metrics": {
+    "calibrated_evaluable_strata": 0,
+    "finite_ratio_rate_overall": "0",
+    "fulltheta_fingerprint_match_rate": "1",
+    "fulltheta_smoke_rows": 456,
+    "new_fulltheta_solver_rows": 0
+  },
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g547_decision_summary_v1"
+}

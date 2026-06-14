@@ -83,23 +83,23 @@
     },
     {
       "artifact_label": "g550_raw_or_large_artifact",
-      "bytes": 65299,
+      "bytes": 6387296,
       "committed": false,
       "exists": true,
       "over_50mb": false,
       "path": "C:\\PROGRAMING\\czr004\\outputs\\logs\\phase5p5_repair5g550_iteration_counterfactual_label_probe\\iteration_counterfactual_label_probe_results.csv",
-      "rows": 38,
-      "sha256": "f653f32e4b0247114c3b3fa9f3b4fa3f05ec3cb046eb04bdb473faaede8f554a"
+      "rows": 3800,
+      "sha256": "a734a3d4597f3c87744936232951e825e39c62a6ec655fa80a71f440e0b528ca"
     },
     {
       "artifact_label": "g550_raw_or_large_artifact",
-      "bytes": 65299,
+      "bytes": 6387296,
       "committed": false,
       "exists": true,
       "over_50mb": false,
       "path": "C:\\PROGRAMING\\czr004\\outputs\\logs\\phase5p5_repair5g550_iteration_counterfactual_label_probe\\iteration_counterfactual_label_probe_results.raw.csv",
-      "rows": 38,
-      "sha256": "f653f32e4b0247114c3b3fa9f3b4fa3f05ec3cb046eb04bdb473faaede8f554a"
+      "rows": 3800,
+      "sha256": "a734a3d4597f3c87744936232951e825e39c62a6ec655fa80a71f440e0b528ca"
     }
   ],
   "decision": "g550_large_artifacts_redirected_to_ignored_logs",

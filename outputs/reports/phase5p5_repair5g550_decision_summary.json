@@ -10,13 +10,12 @@
     "E_policy_suite": "g550_generator_offline_failed_continue_model_design",
     "F_targeted": "g550_generated_theta_targeted_skipped_generator_gate_not_met",
     "G_blind": "g550_blind_replay_skipped_targeted_gate_not_met",
-    "H_iteration_counterfactual": "g550_iteration_counterfactual_labels_underpowered_resume"
+    "H_iteration_counterfactual": "g550_iteration_counterfactual_labels_preflight_complete"
   },
   "decision": "g550_blocked_with_exact_commands",
   "exact_resume_commands": [
     "python scripts/run_repair5g550_fulltheta_expansion.py --row-limit 60000 --max-workers 4",
-    "python scripts/run_repair5g550_active_theta_search.py --row-limit 50000 --max-workers 4",
-    "python scripts/run_repair5g550_iteration_counterfactual_label_probe.py --row-limit 32000 --max-workers 4"
+    "python scripts/run_repair5g550_active_theta_search.py --row-limit 50000 --max-workers 4"
   ],
   "g549_true_safe_gain_regions_replicated": false,
   "generated_non_static_theta_usage_rate": "0",

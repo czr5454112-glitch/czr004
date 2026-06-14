@@ -1,19 +1,30 @@
 {
   "aaai_ready": false,
   "candidate_theta_per_context": 16,
-  "counterfactual_contexts": 2,
-  "decision": "g550_iteration_counterfactual_labels_underpowered_resume",
+  "counterfactual_contexts": 200,
+  "decision": "g550_iteration_counterfactual_labels_preflight_complete",
   "exact_resume_command": "python scripts/run_repair5g550_iteration_counterfactual_label_probe.py --row-limit 32000 --max-workers 4",
-  "finite_ratio_rows": 38,
+  "finite_ratio_rows": 3680,
   "learned_runtime_policy_validated": false,
-  "local_budget_blocker": true,
+  "local_budget_blocker": false,
+  "mean_best_oracle_delta_vs_static_flow": "-0.0322337902086",
+  "oracle_gap_answer": "large_enough_to_justify_learned_policy_design",
   "oracle_gap_large_enough_for_policy_design": true,
   "phase5p5_allowed": false,
   "phase6_allowed": false,
   "raw_results_path": "C:\\PROGRAMING\\czr004\\outputs\\logs\\phase5p5_repair5g550_iteration_counterfactual_label_probe\\iteration_counterfactual_label_probe_results.csv",
-  "raw_results_sha256": "f653f32e4b0247114c3b3fa9f3b4fa3f05ec3cb046eb04bdb473faaede8f554a",
+  "raw_results_sha256": "a734a3d4597f3c87744936232951e825e39c62a6ec655fa80a71f440e0b528ca",
   "runtime_claim_allowed": false,
-  "safe_useful_contexts": 2,
+  "runtime_feature_predictiveness_answer": "diagnostic_signal_present_not_model_validated",
+  "safe_useful_context_rate": "0.825",
+  "safe_useful_contexts": 165,
+  "safe_useful_rate_by_map_agent": {
+    "maze_100": "0.575757575758",
+    "maze_50": "0.970588235294",
+    "random_100": "0.746268656716",
+    "random_50": "0.954545454545"
+  },
   "schema_version": "phase5p5_repair5g550_iteration_counterfactual_label_summary_v1",
-  "solver_rows": 38
+  "solver_rows": 3800,
+  "true_region_trace_state_answer": "context_level_labels_vary_across_fresh_trace_checkpoints_formal_feature_model_pending"
 }

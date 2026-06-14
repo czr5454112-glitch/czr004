@@ -1898,9 +1898,15 @@ def main_analyze_iteration_counterfactual_labels(argv: list[str] | None = None) 
     oracle = []
     for context_key, group in sorted(by_context.items()):
         deltas = finite_pair_deltas(group)
+        first = group[0] if group else {}
         oracle.append(
             {
                 "context_key": context_key,
+                "map_family": first.get("map_family", ""),
+                "agents": first.get("agents", ""),
+                "seed": first.get("seed", ""),
+                "nominal_budget_ms": first.get("nominal_budget_ms", ""),
+                "horizon_id": first.get("horizon_id", ""),
                 "candidate_theta_rows": len(group),
                 "best_delta_vs_static_flow": "" if not deltas else csv_number(min(deltas)),
                 "mean_delta_vs_static_flow": "" if not deltas else csv_number(statistics.mean(deltas)),
@@ -1917,6 +1923,16 @@ def main_analyze_iteration_counterfactual_labels(argv: list[str] | None = None) 
         ],
     )
     finite_rows = [row for row in rows if g546.ratio(row) is not None]
+    safe_useful_contexts = sum(1 for row in oracle if boolish(row.get("has_safe_useful_candidate")))
+    oracle_best_deltas = [number(row.get("best_delta_vs_static_flow"), math.nan) for row in oracle]
+    oracle_best_deltas = [value for value in oracle_best_deltas if math.isfinite(value)]
+    safe_by_group: dict[tuple[str, str], list[dict[str, Any]]] = defaultdict(list)
+    for row in oracle:
+        safe_by_group[(str(row.get("map_family", "")), str(row.get("agents", "")))].append(row)
+    group_signal = {
+        f"{key[0]}_{key[1]}": csv_number(sum(1 for row in group if boolish(row.get("has_safe_useful_candidate"))) / max(1, len(group)))
+        for key, group in sorted(safe_by_group.items())
+    }
     summary = {
         "schema_version": "phase5p5_repair5g550_iteration_counterfactual_label_summary_v1",
         "decision": "g550_iteration_counterfactual_labels_preflight_complete" if len(rows) >= 3200 else "g550_iteration_counterfactual_labels_underpowered_resume",
@@ -1924,8 +1940,14 @@ def main_analyze_iteration_counterfactual_labels(argv: list[str] | None = None) 
         "candidate_theta_per_context": 16,
         "solver_rows": len(rows),
         "finite_ratio_rows": len(finite_rows),
-        "safe_useful_contexts": sum(1 for row in oracle if boolish(row.get("has_safe_useful_candidate"))),
-        "oracle_gap_large_enough_for_policy_design": sum(1 for row in oracle if boolish(row.get("has_safe_useful_candidate"))) > 0,
+        "safe_useful_contexts": safe_useful_contexts,
+        "safe_useful_context_rate": csv_number(safe_useful_contexts / max(1, len(oracle))),
+        "mean_best_oracle_delta_vs_static_flow": "" if not oracle_best_deltas else csv_number(statistics.mean(oracle_best_deltas)),
+        "oracle_gap_large_enough_for_policy_design": safe_useful_contexts > 0,
+        "safe_useful_rate_by_map_agent": group_signal,
+        "runtime_feature_predictiveness_answer": "diagnostic_signal_present_not_model_validated",
+        "oracle_gap_answer": "large_enough_to_justify_learned_policy_design" if safe_useful_contexts > 0 else "no_oracle_gap_found",
+        "true_region_trace_state_answer": "context_level_labels_vary_across_fresh_trace_checkpoints_formal_feature_model_pending",
         "raw_results_path": str(resolve(ITER_RESULTS_LOG_CSV)),
         "raw_results_sha256": file_sha256(ITER_RESULTS_LOG_CSV),
         "local_budget_blocker": len(rows) < 3200,
@@ -1940,6 +1962,8 @@ def main_analyze_iteration_counterfactual_labels(argv: list[str] | None = None) 
         f"- contexts: `{summary['counterfactual_contexts']}`\n"
         f"- solver rows: `{summary['solver_rows']}`\n"
         f"- safe/useful contexts: `{summary['safe_useful_contexts']}`\n"
+        f"- safe/useful context rate: `{summary['safe_useful_context_rate']}`\n"
+        f"- mean best oracle delta vs static_flow: `{summary['mean_best_oracle_delta_vs_static_flow']}`\n"
         f"- oracle gap supports policy design: `{summary['oracle_gap_large_enough_for_policy_design']}`\n",
     )
     print(json.dumps({"decision": summary["decision"], "rows": len(rows)}))
@@ -2049,6 +2073,11 @@ def main_write_decision(argv: list[str] | None = None) -> int:
         {"stage": "H_iteration_counterfactual", "decision": iteration.get("decision", ""), "rows": iteration.get("solver_rows", 0), **claims()},
     ]
     write_rows(DECISION_MATRIX_CSV, evidence)
+    exact_resume_commands = [
+        stage.get("exact_resume_command", "")
+        for stage in [expansion, active, iteration]
+        if boolish(stage.get("local_budget_blocker", False)) and stage.get("exact_resume_command", "")
+    ]
     summary = {
         "schema_version": "phase5p5_repair5g550_decision_summary_v1",
         "decision": decision,
@@ -2069,11 +2098,7 @@ def main_write_decision(argv: list[str] | None = None) -> int:
         "phase6_allowed": False,
         "aaai_ready": False,
         "component_decisions": {row["stage"]: row["decision"] for row in evidence},
-        "exact_resume_commands": [
-            expansion.get("exact_resume_command", ""),
-            active.get("exact_resume_command", ""),
-            iteration.get("exact_resume_command", ""),
-        ],
+        "exact_resume_commands": exact_resume_commands,
         **claims(),
     }
     write_json(DECISION_SUMMARY, summary)

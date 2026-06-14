@@ -1,0 +1,23 @@
+{
+  "aaai_ready": false,
+  "both_success_quality_pairs_vs_static_flow": 283,
+  "budget_calibration_solver_rows": 3654,
+  "checks": {
+    "both_success_quality_pairs_vs_static_flow_is_283": true,
+    "budget_calibration_solver_rows_ge_3000": true,
+    "decision_underpowered_continue": true,
+    "finite_ratio_rows_is_1604": true,
+    "fulltheta_fingerprint_match_rate_is_1": true
+  },
+  "decision": "g548_verified_for_g549",
+  "external_lacam2_clean": true,
+  "finite_ratio_rows": 1604,
+  "fulltheta_fingerprint_match_rate": "1",
+  "g548_decision": "g548_budget_calibration_underpowered_continue_calibration",
+  "learned_runtime_policy_validated": false,
+  "missing_artifacts": [],
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g549_g548_verification_summary_v1"
+}

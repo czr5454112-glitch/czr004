@@ -11,6 +11,23 @@ AAAI-ready learning claims require a learned runtime UpdateLTM selector, clean h
 - aaai_ready: `false`
 - Phase5.5 and Phase6 remain closed until paper-grade gates pass.
 
+## 2026-06-14 G5.49 AAAI gate note
+
+G5.49 found calibrated-core fulltheta safe-gain regions versus `static_flow_shield`, but this is not AAAI-ready evidence. The result is limited to `4` unique evaluable strata, warehouse remains non-evaluable locally, and the generator/targeted/blind chain did not pass. Do not count selected horizon rows as unique-stratum coverage, and do not promote replay-region hindsight to a learned generator claim.
+
+AAAI-facing status remains:
+
+```text
+primary baseline: static_flow_shield
+additive_ltm: paper-faithful floor
+strong static variants: diagnostic only
+SafeGate: calibrated_core_subset_development_only
+runtime_claim_allowed: false
+phase5p5_allowed: false
+phase6_allowed: false
+aaai_ready: false
+```
+
 ## 2026-06 Repair5G learning-insertion strategy for top-tier AI / MAPF venues
 
 Repair5G has now established an important scientific fact:

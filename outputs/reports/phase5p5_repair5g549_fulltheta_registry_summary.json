@@ -1,0 +1,13 @@
+{
+  "aaai_ready": false,
+  "decision": "g549_fulltheta_registry_created",
+  "distinct_fulltheta_rows": 2040,
+  "full_only_field_varied_rate": "1",
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "registry_rows": 2040,
+  "reserved_ids_166_205_used": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g549_fulltheta_registry_summary_v1"
+}

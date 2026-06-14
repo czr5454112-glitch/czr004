@@ -1,0 +1,4 @@
+nominal_budget_ms,solver_rows,finite_ratio_rows,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+500,1225,533,False,False,False,False,False
+1000,1204,535,False,False,False,False,False
+2000,9445,8712,False,False,False,False,False

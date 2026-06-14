@@ -1,5 +1,11 @@
 # LAU/LAUR-LTM Phase4–Phase6 Codex 执行计划
 
+## 2026-06-14 Repair5G.5.49 calibration/fulltheta update
+
+G5.49 does not change LaCAM*/PIBT/search semantics and does not open runtime, Phase5.5, Phase6, or AAAI claims. It keeps `static_flow_shield` as the primary learned/fulltheta UpdateParams baseline; `additive_ltm` is the paper-faithful floor; stronger static variants are diagnostics.
+
+The round produced calibrated-core development evidence: `8220` new calibration rows, `9780` cumulative finite-ratio rows, `30282` fulltheta replay rows, `18514` both-success pairs versus static_flow, and `10` true safe-gain regions. Coverage remains narrow (`4` unique evaluable strata, warehouse non-evaluable locally), so SafeGate status is `calibrated_core_subset_development_only`. The next valid step is generator model design / server-scale replay, not targeted/blind/runtime promotion.
+
 生成日期：2026-05-26  
 目标仓库：`https://github.com/czr5454112-glitch/czr004.git`  
 正确分支：`phase1a-ltm-paper-parity`  

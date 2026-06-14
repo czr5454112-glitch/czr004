@@ -1,0 +1,16 @@
+{
+  "aaai_ready": false,
+  "core_route_rows": 36000,
+  "decision": "g549_calibration_topup_plan_created",
+  "hard_recovery_rows": 3360,
+  "learned_runtime_policy_validated": false,
+  "minimum_plan_gate_passed": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "planned_contexts": 1312,
+  "planned_fulltheta_smoke_rows": 35424,
+  "planned_solver_rows": 39360,
+  "planned_static_flow_rows": 1312,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g549_calibration_topup_plan_summary_v1"
+}

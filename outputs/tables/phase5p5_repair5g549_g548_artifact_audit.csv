@@ -1,0 +1,7 @@
+artifact,path,exists,rows_or_file,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+g548_decision_summary,C:\PROGRAMING\czr004\outputs\reports\phase5p5_repair5g548_decision_summary.json,True,1,False,False,False,False,False
+g548_budget_calibration_summary,C:\PROGRAMING\czr004\outputs\reports\phase5p5_repair5g548_budget_calibration_summary.json,True,1,False,False,False,False,False
+g548_budget_calibration_results,C:\PROGRAMING\czr004\outputs\tables\phase5p5_repair5g548_budget_calibration_results.csv,True,3654,False,False,False,False,False
+g548_budget_horizon_selection,C:\PROGRAMING\czr004\outputs\tables\phase5p5_repair5g548_budget_horizon_selection.csv,True,12,False,False,False,False,False
+g548_fulltheta_registry,C:\PROGRAMING\czr004\outputs\tables\phase5p5_repair5g547_fulltheta_registry.csv,True,18,False,False,False,False,False
+g548_common,C:\PROGRAMING\czr004\scripts\repair5g548_common.py,True,1,False,False,False,False,False

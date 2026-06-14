@@ -1,0 +1,2 @@
+model,generated_theta_rows,generated_non_static_theta_usage_rate,negative_control_generator_beaten,offline_gate_component_passed,reason,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+no_deployable_generator_promoted,0,0,False,False,safe replay regions are not yet a learned generator policy,False,False,False,False,False

@@ -1,0 +1,5 @@
+map_family,agents,nominal_budget_ms,unique_evaluable_stratum,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+maze,100,2000,True,False,False,False,False,False
+maze,50,2000,True,False,False,False,False,False
+random,100,2000,True,False,False,False,False,False
+random,50,2000,True,False,False,False,False,False

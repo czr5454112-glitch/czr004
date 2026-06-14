@@ -1,0 +1,15 @@
+map_family,agents,nominal_budget_ms,reason,best_horizon_id,warehouse_non_evaluable,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+maze,100,1000,"no horizon met static_flow_success_rate>=0.20, finite_ratio_rate>=0.20, both_success_quality_pairs_vs_static_flow>=20",c0_short5000_t050_i2,False,False,False,False,False,False
+maze,100,500,"no horizon met static_flow_success_rate>=0.20, finite_ratio_rate>=0.20, both_success_quality_pairs_vs_static_flow>=20",c0_short2000_t050_i2,False,False,False,False,False,False
+maze,50,1000,"no horizon met static_flow_success_rate>=0.20, finite_ratio_rate>=0.20, both_success_quality_pairs_vs_static_flow>=20",c0_short1000_t050_i2,False,False,False,False,False,False
+maze,50,500,"no horizon met static_flow_success_rate>=0.20, finite_ratio_rate>=0.20, both_success_quality_pairs_vs_static_flow>=20",c0_short1000_t050_i2,False,False,False,False,False,False
+random,100,1000,"no horizon met static_flow_success_rate>=0.20, finite_ratio_rate>=0.20, both_success_quality_pairs_vs_static_flow>=20",c0_short2000_t050_i2,False,False,False,False,False,False
+random,100,500,"no horizon met static_flow_success_rate>=0.20, finite_ratio_rate>=0.20, both_success_quality_pairs_vs_static_flow>=20",c0_short2000_t050_i2,False,False,False,False,False,False
+random,50,1000,"no horizon met static_flow_success_rate>=0.20, finite_ratio_rate>=0.20, both_success_quality_pairs_vs_static_flow>=20",c0_short1000_t050_i2,False,False,False,False,False,False
+random,50,500,"no horizon met static_flow_success_rate>=0.20, finite_ratio_rate>=0.20, both_success_quality_pairs_vs_static_flow>=20",c0_short1000_t050_i2,False,False,False,False,False,False
+warehouse,100,1000,"no horizon met static_flow_success_rate>=0.20, finite_ratio_rate>=0.20, both_success_quality_pairs_vs_static_flow>=20",c0_short1000_t050_i2,True,False,False,False,False,False
+warehouse,100,2000,"no horizon met static_flow_success_rate>=0.20, finite_ratio_rate>=0.20, both_success_quality_pairs_vs_static_flow>=20",c0_short1000_t050_i2,True,False,False,False,False,False
+warehouse,100,500,"no horizon met static_flow_success_rate>=0.20, finite_ratio_rate>=0.20, both_success_quality_pairs_vs_static_flow>=20",c0_short1000_t050_i2,True,False,False,False,False,False
+warehouse,50,1000,"no horizon met static_flow_success_rate>=0.20, finite_ratio_rate>=0.20, both_success_quality_pairs_vs_static_flow>=20",c0_short1000_t050_i2,True,False,False,False,False,False
+warehouse,50,2000,"no horizon met static_flow_success_rate>=0.20, finite_ratio_rate>=0.20, both_success_quality_pairs_vs_static_flow>=20",c0_short1000_t050_i2,True,False,False,False,False,False
+warehouse,50,500,"no horizon met static_flow_success_rate>=0.20, finite_ratio_rate>=0.20, both_success_quality_pairs_vs_static_flow>=20",c0_short1000_t050_i2,True,False,False,False,False,False

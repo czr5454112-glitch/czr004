@@ -96,3 +96,11 @@ From G5.48 onward, `static_flow_shield` is the primary fixed baseline for neural
 G5.48 also establishes that a declared calibration grid is not evidence. Real solver-facing horizon calibration must report materialized rows, context-horizons, static_flow rows, finite-ratio rows, both-success pairs versus static_flow, and no-probe/no-solution diagnostic rows separately. Underpowered calibration is a continuation result, not an algorithmic negative.
 
 The G5.48 local calibration produced real rows and found some evaluable stratum-horizons, but it did not reach the finite-row gate required for fulltheta replay. Therefore fulltheta replay, generator training, targeted replay, blind replay, runtime, Phase5.5, Phase6, and AAAI claims remain closed.
+
+## 2026-06-14 - G5.49 strategic update: calibrated-core fulltheta signal, generator still gated
+
+G5.49 completed the local calibrated-core evaluability stage and ran a static_flow-primary fulltheta replay. The round produced `8220` new calibration rows, `9780` cumulative finite-ratio rows, `30282` fulltheta replay rows, `18514` both-success pairs versus `static_flow_shield`, and `10` true safe-gain fulltheta regions. The positive regions are real solver-facing development evidence against the declared primary baseline.
+
+This does not broaden the claim scope. The unique evaluable stratum count is `4`, while selected evaluable horizon rows are a separate metric. Warehouse remains non-evaluable on local budget. SafeGate v2 therefore keeps this as `calibrated_core_subset_development_only`: useful for generator design and server-scale replay, not for runtime, Phase5.5, Phase6, or AAAI claims.
+
+The baseline policy is unchanged: `static_flow_shield` remains the primary baseline for learned/fulltheta continuous `UpdateParams`; `additive_ltm` remains the paper-faithful floor; `frozen_family_static_goal_aware` and `best_fixed_static_goal_aware` remain diagnostics unless explicitly promoted in a later round. The generator/targeted/blind path stays closed until a learned generated-theta policy, not replay-region hindsight, passes the offline risk/utility gate.

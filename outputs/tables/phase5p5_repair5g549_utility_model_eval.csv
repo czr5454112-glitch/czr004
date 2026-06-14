@@ -1,0 +1,2 @@
+model,selected_pairs,quality_only_mean_delta_vs_static_flow,predicted_safe_utility_candidates,offline_gate_component_passed,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+region_mean_delta_utility,5800,-0.0133030677366,10,True,False,False,False,False,False

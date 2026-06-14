@@ -1,5 +1,36 @@
 # Codex Worklog
 
+## 2026-06-14 - Repair5G.5.49 calibration-completion staticflow-primary fulltheta replay
+
+- Request:
+  Continue after G5.48 commit cda1a9d. G5.48 passed fulltheta materialization and ran real budget calibration, but ended underpowered: finite_ratio_rows=1604 below the >=3000 gate, both_success_quality_pairs_vs_static_flow=283, and fulltheta replay/generator/targeted/blind were skipped. G5.49 must finish evaluability calibration and then run static_flow-primary fulltheta replay on calibrated horizons.
+- Primary baseline:
+  static_flow_shield is the primary learned-theta baseline because it is the manually designed static-flow method previously shown stronger than paper-faithful additive LTM. additive_ltm is a parity floor. family_static/best_fixed are diagnostics.
+- Planned work:
+  verify G5.48, audit calibration semantics, deduplicate evaluable strata/horizon rows, top up calibration to at least 3000 finite rows, run fulltheta replay on calibrated horizons, analyze true safe-gain vs static_flow, train generator only if replay has usable signal, and run targeted/blind only by gate.
+- Constraints:
+  No external/lacam2/lacam2 edits, no solver semantic changes, no static selector method, no IDs 166..205, no Phase5.5/Phase6/runtime/AAAI claims.
+- Implemented files:
+  - `scripts/repair5g549_common.py`
+  - `scripts/verify_repair5g549_g548_artifacts.py`
+  - `scripts/audit_repair5g549_g548_calibration_semantics.py`
+  - `scripts/create_repair5g549_calibration_topup_plan.py`
+  - `scripts/run_repair5g549_calibration_topup.py`
+  - `scripts/analyze_repair5g549_calibration_topup.py`
+  - `scripts/create_repair5g549_fulltheta_replay_plan.py`
+  - `scripts/run_repair5g549_fulltheta_replay.py`
+  - `scripts/analyze_repair5g549_fulltheta_replay.py`
+  - `scripts/train_eval_repair5g549_risk_utility_generator.py`
+  - `scripts/run_repair5g549_generated_theta_targeted.py`
+  - `scripts/analyze_repair5g549_generated_theta_targeted.py`
+  - `scripts/run_repair5g549_blind_if_warranted.py`
+  - `scripts/analyze_repair5g549_blind_evidence.py`
+  - `scripts/write_repair5g549_decision.py`
+- Result:
+  G5.49 verified G5.48, separated `12` selected horizon rows from `4` unique evaluable strata, ran `8220` new calibration top-up rows, reached `9780` cumulative finite-ratio rows and `7643` cumulative both-success pairs versus static_flow, then ran `30282` fulltheta replay rows with `18514` both-success pairs versus static_flow and `10` true safe-gain regions. Warehouse remained non-evaluable locally. The generator risk/utility stage did not promote a deployable generated-theta policy, so targeted and blind replay were skipped by gate.
+- Decision:
+  `g549_fulltheta_true_safe_gain_regions_found_continue_generator`.
+
 ## 2026-06-14 - Repair5G.5.48 evaluable-horizon fulltheta replay
 
 - Request:

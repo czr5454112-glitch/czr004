@@ -1,0 +1,2 @@
+model,risk_false_safe_count_on_validation,risk_gate_pass_rate,validation_pairs,selected_pairs,offline_gate_component_passed,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+conservative_region_horizon_gate,0,0.197278911565,1200,5800,True,False,False,False,False,False

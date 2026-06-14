@@ -1,0 +1,4 @@
+map_family,solver_rows,finite_ratio_rows,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+maze,4095,3616,False,False,False,False,False
+random,6540,6164,False,False,False,False,False
+warehouse,1239,0,False,False,False,False,False

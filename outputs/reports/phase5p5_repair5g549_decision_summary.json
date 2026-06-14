@@ -1,0 +1,41 @@
+{
+  "aaai_ready": false,
+  "additive_ltm_role": "paper-faithful floor",
+  "answers": {
+    "did_any_fulltheta_cluster_beat_static_flow_safely": true,
+    "did_family_static_disagreement_explain_gap": "diagnostic_only_not_primary",
+    "did_fulltheta_replay_run": true,
+    "did_g549_reach_3000_cumulative_finite_ratio_rows": true,
+    "did_generator_beat_random_or_local_static_flow_perturbations": false,
+    "next_step": "generator_model_design",
+    "unique_evaluable_stratum_count": 4,
+    "warehouse_non_evaluable": true,
+    "were_gains_over_additive_only_or_also_static_flow": "static_flow_true_safe_gain"
+  },
+  "component_decisions": {
+    "blind": "g549_blind_replay_skipped_targeted_gate_not_met",
+    "calibration_topup": "g549_calibration_evaluable_core_ready_fulltheta_replay_development_only",
+    "fulltheta_replay": "g549_fulltheta_true_safe_gain_regions_found_continue_generator",
+    "g548_calibration_semantics": "g548_calibration_semantics_audited_for_g549",
+    "g548_verification": "g548_verified_for_g549",
+    "generator": "g549_generator_offline_gate_failed_continue_model_design",
+    "targeted": "g549_generated_theta_targeted_skipped_generator_gate_not_met"
+  },
+  "decision": "g549_fulltheta_true_safe_gain_regions_found_continue_generator",
+  "key_metrics": {
+    "both_success_quality_pairs_vs_static_flow": 18514,
+    "cumulative_finite_ratio_rows": 9780,
+    "fulltheta_fingerprint_match_rate": "1",
+    "new_calibration_solver_rows": 8220,
+    "new_fulltheta_solver_rows": 30282,
+    "true_safe_gain_regions": 10,
+    "unique_evaluable_stratum_count": 4
+  },
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "primary_baseline": "static_flow_shield",
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g549_decision_summary_v1",
+  "strong_static_role": "diagnostic only"
+}

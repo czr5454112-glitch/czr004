@@ -1,4 +1,12 @@
-﻿## 2026-05-29 Repair5 layered gate research policy
+﻿## 2026-06-14 Repair5G.5.49 calibration/fulltheta governance update
+
+G5.49 keeps `static_flow_shield` as the primary baseline for learned/fulltheta continuous `UpdateParams`. `additive_ltm` is only the paper-faithful floor, and stronger static variants remain diagnostic unless a later round explicitly promotes one.
+
+The round completed calibrated-core evaluability (`8220` new calibration rows, `9780` cumulative finite-ratio rows) and ran a real fulltheta replay (`30282` rows, `18514` both-success pairs versus static_flow, `10` true safe-gain regions). This is development evidence for generator design, not a runtime or paper claim: only `4` unique evaluable strata are covered, warehouse remains non-evaluable locally, and generator/targeted/blind gates remain closed.
+
+SafeGate interpretation: do not count selected horizon rows as unique-stratum coverage, and do not treat replay-region hindsight as a learned generated-theta policy.
+
+## 2026-05-29 Repair5 layered gate research policy
 
 GPTPro's recommendation is incorporated as a Repair5 evaluation-policy update.
 It does not lower the final runtime or paper-claim gate.

@@ -1,0 +1,26 @@
+{
+  "aaai_ready": false,
+  "coverage": {
+    "agents": [
+      "100",
+      "50"
+    ],
+    "map_families": [
+      "maze",
+      "random"
+    ],
+    "nominal_budgets": [
+      "2000"
+    ],
+    "warehouse_entirely_non_evaluable": true
+  },
+  "decision": "g548_calibration_semantics_audited_for_g549",
+  "do_not_overcount_horizon_rows_as_unique_strata": true,
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g549_g548_calibration_semantics_summary_v1",
+  "selected_evaluable_horizon_rows": 12,
+  "unique_evaluable_stratum_count": 4
+}

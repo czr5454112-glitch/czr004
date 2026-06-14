@@ -1,0 +1,13 @@
+map_family,agents,nominal_budget_ms,horizon_id,short_budget_ms,selected_evaluable_horizon_row,unique_stratum_key,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+maze,100,2000,c0_short2000_t050_i2,2000,True,maze|100|2000,False,False,False,False,False
+maze,100,2000,c0_short5000_t050_i2,5000,True,maze|100|2000,False,False,False,False,False
+maze,50,2000,c0_short1000_t050_i2,1000,True,maze|50|2000,False,False,False,False,False
+maze,50,2000,c0_short2000_t050_i2,2000,True,maze|50|2000,False,False,False,False,False
+maze,50,2000,c0_short5000_t050_i2,5000,True,maze|50|2000,False,False,False,False,False
+random,100,2000,c0_short1000_t050_i2,1000,True,random|100|2000,False,False,False,False,False
+random,100,2000,c0_short2000_t050_i2,2000,True,random|100|2000,False,False,False,False,False
+random,100,2000,c0_short5000_t050_i2,5000,True,random|100|2000,False,False,False,False,False
+random,50,2000,c0_short1000_t050_i2,1000,True,random|50|2000,False,False,False,False,False
+random,50,2000,c0_short2000_t050_i2,2000,True,random|50|2000,False,False,False,False,False
+random,50,2000,c0_short5000_t050_i2,5000,True,random|50|2000,False,False,False,False,False
+random,50,2000,c0_short500_t050_i2,500,True,random|50|2000,False,False,False,False,False

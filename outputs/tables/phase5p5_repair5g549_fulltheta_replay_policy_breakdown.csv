@@ -1,0 +1,11 @@
+sampling_policy,planned_rows,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+alpha_cong_commit_nonprogress_sweep,14400,False,False,False,False,False
+alpha_flow_wait_progress_sweep,14400,False,False,False,False,False
+edge_cost_clamp_sweep,14400,False,False,False,False,False
+g543_true_near_signal_neighborhood,14400,False,False,False,False,False
+g546_g548_safe_no_gain_neighborhood,14400,False,False,False,False,False
+goal_projection_mode_ablation,14400,False,False,False,False,False
+lambda_flow_lambda_cong_sweep,14400,False,False,False,False,False
+negative_control,14400,False,False,False,False,False
+static_flow_local_perturbation_fulltheta,14400,False,False,False,False,False
+surrogate_guided_theta_if_model_exists,14400,False,False,False,False,False

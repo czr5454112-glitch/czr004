@@ -1,0 +1,12 @@
+theta_cluster,map_family,agents,nominal_budget_ms,horizon_id,support_pairs,pair_rows,seed_block_support,vs_static_flow_success_regression_count,vs_static_flow_success_regression_rate,vs_static_flow_quality_only_mean_delta,better_count_vs_static_flow,worse_count_vs_static_flow,development_near_miss_profile,region_status,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+alpha_cong_commit_nonprogress_sweep,random,100,2000,c0_short1000_t050_i2,86,580,3,64,0.110344827586,-0.0032750168507,42,33,False,unsafe_useful,False,False,False,False,False
+alpha_cong_commit_nonprogress_sweep,random,100,2000,c0_short2000_t050_i2,319,580,3,1,0.00172413793103,-0.0112557419928,183,105,True,unsafe_useful,False,False,False,False,False
+alpha_flow_wait_progress_sweep,random,100,2000,c0_short1000_t050_i2,91,580,3,59,0.101724137931,-0.000479020375714,36,42,False,unsafe_useful,False,False,False,False,False
+alpha_flow_wait_progress_sweep,random,100,2000,c0_short2000_t050_i2,317,580,3,3,0.0051724137931,-0.00728351779957,165,103,False,unsafe_useful,False,False,False,False,False
+g543_true_near_signal_neighborhood,random,100,2000,c0_short1000_t050_i2,88,580,3,62,0.106896551724,-0.00210616871784,41,36,False,unsafe_useful,False,False,False,False,False
+g543_true_near_signal_neighborhood,random,100,2000,c0_short2000_t050_i2,319,580,3,1,0.00172413793103,-0.0116206911846,176,113,True,unsafe_useful,False,False,False,False,False
+g543_true_near_signal_neighborhood,random,50,2000,c0_short1000_t050_i2,1185,1200,6,5,0.00416666666667,-0.00489747261891,563,505,True,unsafe_useful,False,False,False,False,False
+g546_g548_safe_no_gain_neighborhood,random,100,2000,c0_short2000_t050_i2,318,580,3,2,0.00344827586207,-0.00239239385546,149,132,True,unsafe_useful,False,False,False,False,False
+lambda_flow_lambda_cong_sweep,random,100,2000,c0_short1000_t050_i2,91,580,3,59,0.101724137931,-0.00554627820571,50,29,False,unsafe_useful,False,False,False,False,False
+lambda_flow_lambda_cong_sweep,random,100,2000,c0_short2000_t050_i2,317,580,3,3,0.0051724137931,-0.00785168947552,166,115,False,unsafe_useful,False,False,False,False,False
+surrogate_guided_theta_if_model_exists,random,100,2000,c0_short2000_t050_i2,319,580,3,1,0.00172413793103,-0.00606229549808,171,115,True,unsafe_useful,False,False,False,False,False

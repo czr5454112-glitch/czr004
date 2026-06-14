@@ -1,0 +1,16 @@
+{
+  "aaai_ready": false,
+  "decision": "g549_generator_offline_gate_failed_continue_model_design",
+  "generated_non_static_theta_usage_rate": "0",
+  "learned_runtime_policy_validated": false,
+  "model_family": "conservative_region_level_risk_utility_gate",
+  "models_trained": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "predicted_safe_utility_candidates": 10,
+  "reason": "true safe-gain replay regions exist, but no deployable generated-theta policy was promoted beyond replay-region hindsight",
+  "risk_false_safe_count_on_validation": 0,
+  "risk_gate_pass_rate": "0.197278911565",
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g549_risk_utility_generator_summary_v1"
+}

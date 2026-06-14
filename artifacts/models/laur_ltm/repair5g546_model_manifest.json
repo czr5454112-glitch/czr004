@@ -1,0 +1,23 @@
+{
+  "aaai_ready": false,
+  "decision": "g546_generator_offline_gate_failed_targeted_replay_not_warranted",
+  "distinct_theta_rows": 4003,
+  "generated_theta_rows": 5120,
+  "generator_model": "artifacts/models/laur_ltm/repair5g546_theta_generator.joblib",
+  "generator_trained": false,
+  "learned_runtime_policy_validated": false,
+  "non_static_theta_usage_rate": "1",
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "positive_offline_gate": false,
+  "proposal_mechanisms": [
+    "G1_supervised_theta",
+    "G2_conditional_topk",
+    "G3_surrogate_guided_cem"
+  ],
+  "risk_gate_pass_rate": "0",
+  "risk_model": "artifacts/models/laur_ltm/repair5g546_risk_model.joblib",
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g546_generator_summary_v1",
+  "utility_model": "artifacts/models/laur_ltm/repair5g546_utility_model.joblib"
+}

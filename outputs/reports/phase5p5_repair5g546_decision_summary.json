@@ -1,0 +1,41 @@
+{
+  "aaai_ready": false,
+  "answers": {
+    "continuous_updateparams_search_space_viable": false,
+    "did_g546_run_new_real_continuous_theta_solver_rows": true,
+    "failure_primary_cause": "no stable safe-gain region or generator gate not passed",
+    "neural_or_surrogate_generation_outperformed_sampling": false,
+    "project_still_learned_updateltm_not_static_selector": true
+  },
+  "component_decisions": {
+    "blind": "blind_replay_skipped_targeted_gate_not_passed",
+    "generator": "g546_generator_offline_gate_failed_targeted_replay_not_warranted",
+    "real_probe": "g546_real_probe_partial_runtime_limited",
+    "smoke": "g546_theta_materialization_smoke_passed",
+    "surrogates": "g546_surrogates_trained_on_real_probe_data",
+    "targeted": "targeted_replay_skipped_offline_gate_not_passed"
+  },
+  "decision": "g546_real_probe_executed_no_stable_continuous_signal",
+  "hard_requirements": {
+    "claim_flags_closed": true,
+    "external_lacam2_clean": true,
+    "feature_audit_written": true,
+    "materialization_smoke_passed": true,
+    "new_continuous_probe_rows_ge_30000": false
+  },
+  "key_metrics": {
+    "baseline_rows_materialized": 51,
+    "blind_rows": 0,
+    "candidate_theta_rows": 476,
+    "contexts": 17,
+    "distinct_theta_rows": 428,
+    "generated_theta_rows": 5120,
+    "new_continuous_probe_solver_rows": 527,
+    "targeted_rows": 0
+  },
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g546_decision_summary_v1"
+}

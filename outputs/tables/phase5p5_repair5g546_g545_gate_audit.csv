@@ -1,0 +1,7 @@
+question,answer,expected,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+Did G5.45 execute new continuous-probe solver rows?,False,False,False,False,False,False,False
+Did run_repair5g545_continuous_param_probe only write retrospective rows?,True,True,False,False,False,False,False
+Was the sampling plan executable?,True,True,False,False,False,False,False
+Were generated theta aliases executable by current adapter grammar?,True,True,False,False,False,False,False
+Why did risk_gate_pass_rate become 0?,not zero in current artifact; G5.45 was blocked by new-solver-row gate,diagnose,False,False,False,False,False
+Does the feature set include post-solver counters?,True,True,False,False,False,False,False

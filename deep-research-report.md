@@ -2264,3 +2264,9 @@ From G5.42 onward, learned/static-flow residuals are evaluated as an overlay on 
 Residual parameters are only allowed in supported strata where they beat the selected deployable static baseline with zero regression.
 
 The learned residual component is not a replacement for the strongest deployable static baseline; it is a conditional overlay. The first decision is which deployable static baseline is safest for the stratum, and the second decision is whether a supported residual region can safely improve over that baseline.
+
+## 2026-06-14 - G5.46 strategic update: real continuous-theta replay is mandatory
+
+G5.45 built the neural continuous theta infrastructure but did not run new continuous-theta solver replay. From G5.46 onward, neural UpdateParams evidence requires real newly materialized continuous-theta solver rows. Retrospective rows may train diagnostic surrogates, but cannot satisfy generator or replay gates.
+
+G5.46 adds a real solver-facing counterfactual UpdateLTM probe path for bounded continuous theta materialized through existing `repair5g518_grid_*` adapter grammar. The 2026-06-14 local run passed materialization smoke but remained under the hard 30000-row replay gate, so it is continuation evidence only and opens no runtime, Phase5.5, Phase6, or AAAI claim.

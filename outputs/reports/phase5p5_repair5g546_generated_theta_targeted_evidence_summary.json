@@ -1,0 +1,11 @@
+{
+  "aaai_ready": false,
+  "decision": "targeted_replay_skipped_offline_gate_not_passed",
+  "learned_runtime_policy_validated": false,
+  "new_solver_rows": 0,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "reason": "generator positive offline gate did not pass",
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g546_generated_theta_targeted_evidence_summary_v1"
+}

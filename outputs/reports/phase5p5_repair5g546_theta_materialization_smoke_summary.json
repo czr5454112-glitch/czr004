@@ -1,0 +1,26 @@
+{
+  "aaai_ready": false,
+  "baseline_rows_materialized": 48,
+  "baselines_per_context_required": [
+    "additive_ltm",
+    "frozen_family_static_goal_aware",
+    "static_flow_shield"
+  ],
+  "candidate_recognized_all": true,
+  "contexts": 16,
+  "decision": "g546_theta_materialization_smoke_passed",
+  "external_lacam2_clean": true,
+  "finite_ratio_rate": "0",
+  "finite_ratio_rows": 0,
+  "force_additive_parity_unaffected": true,
+  "generated_theta_rows": 64,
+  "learned_runtime_policy_validated": false,
+  "minimum_contexts_met": true,
+  "minimum_generated_rows_met": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "plan_rows": 126,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g546_theta_materialization_smoke_summary_v1",
+  "solver_rows": 112
+}

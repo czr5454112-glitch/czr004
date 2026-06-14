@@ -1,0 +1,38 @@
+{
+  "aaai_ready": false,
+  "decision": "g545_artifacts_verified_for_g546",
+  "external_lacam2_clean": true,
+  "feature_validity": {
+    "aaai_ready": false,
+    "decision": "g546_feature_audit_runtime_safe_sets_available",
+    "f0_features": 10,
+    "f1_features": 13,
+    "feature_class_counts": {
+      "post_solver_leakage": 4,
+      "pre_context_static": 10,
+      "pre_trace_from_fixed_fallback": 3
+    },
+    "g545_risk_gate_pass_rate": "",
+    "learned_runtime_policy_validated": false,
+    "phase5p5_allowed": false,
+    "phase6_allowed": false,
+    "post_solver_leakage_features": [
+      "feature_expanded_nodes",
+      "feature_high_level_expansions",
+      "feature_low_level_pibt_calls",
+      "feature_expansions_per_agent"
+    ],
+    "runtime_claim_allowed": false,
+    "schema_version": "phase5p5_repair5g546_feature_validity_summary_v1"
+  },
+  "g545_decision": "g545_dataset_or_materialization_blocked_continue_infrastructure",
+  "g545_new_continuous_probe_rows": 0,
+  "g545_planned_solver_rows": 46080,
+  "g545_retrospective_solver_rows": 64968,
+  "learned_runtime_policy_validated": false,
+  "missing_artifacts": [],
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g546_g545_failure_autopsy_summary_v1"
+}

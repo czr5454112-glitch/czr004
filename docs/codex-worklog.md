@@ -4826,3 +4826,45 @@
   - `git status --short -- external/lacam2/lacam2` returned clean.
   - Active Python lacks pytest (`No module named pytest`), so the project conda interpreter was used.
   - `C:\Users\38908\.conda\envs\czr004\python.exe -m pytest tests\test_repair5f_updateparams.py tests\test_repair5g_dual_channel_ltm.py -q` passed: `16 passed`.
+
+## 2026-06-14 10:35 - Repair5G.5.46 real continuous theta replay and neural generator closure
+
+- Request:
+  Finish `czr004_g546_real_continuous_theta_replay_neural_generator_closure_plan.md`, use `deep-research-report.md` and `phase4_6_laur_ltm_codex_execution_plan.md` as needed, complete the whole task set, then push to GitHub.
+- Strategic note:
+  G5.45 built the neural continuous theta infrastructure but did not run new continuous-theta solver replay. From G5.46 onward, neural UpdateParams evidence requires real newly materialized continuous-theta solver rows. Retrospective rows may train diagnostic surrogates, but cannot satisfy generator or replay gates.
+- Completion guard:
+  G5.46 is not allowed to finish as "done" unless either:
+  (1) real G5.46 continuous theta solver replay is executed, or
+  (2) a concrete binary/materialization blocker is found and documented with a failing command.
+- Planned files:
+  - `scripts/repair5g546_common.py`
+  - `scripts/verify_repair5g546_g545_artifacts.py`
+  - `scripts/audit_repair5g546_g545_feature_and_model_validity.py`
+  - `scripts/verify_repair5g546_theta_materialization_smoke.py`
+  - `scripts/create_repair5g546_active_theta_replay_plan.py`
+  - `scripts/run_repair5g546_real_continuous_theta_probe.py`
+  - `scripts/analyze_repair5g546_real_continuous_theta_evidence.py`
+  - `scripts/train_eval_repair5g546_risk_utility_surrogates.py`
+  - `scripts/train_eval_repair5g546_generator_and_cem_optimizer.py`
+  - `scripts/materialize_repair5g546_generated_theta_aliases.py`
+  - `scripts/run_repair5g546_generated_theta_targeted_replay.py`
+  - `scripts/analyze_repair5g546_generated_theta_targeted_evidence.py`
+  - `scripts/run_repair5g546_generated_theta_blind_replay_if_warranted.py`
+  - `scripts/analyze_repair5g546_blind_evidence.py`
+  - `scripts/write_repair5g546_decision.py`
+  - `outputs/reports/phase5p5_repair5g546_*`
+  - `outputs/tables/phase5p5_repair5g546_*`
+  - `outputs/logs/phase5p5_repair5g546_*`
+  - `artifacts/models/laur_ltm/repair5g546_*`
+- Constraints:
+  No `external/lacam2/lacam2/**` edits, no solver semantic changes, no action/priority/search/restart/candidate deletion/h-value target, no reserved IDs 166..205, no Phase5.5/Phase6/runtime/AAAI claims.
+- Result:
+  Final decision is `g546_real_probe_executed_no_stable_continuous_signal`. G5.46 verified all required G5.45 artifacts, audited G5.45's failure mode, and classified `4` G5.45 feature columns as post-solver leakage while preserving F0/F1 runtime-safe feature sets. The materialization smoke passed with `112` solver-facing rows, `16` probe contexts, and generated theta recognized by the existing `repair5g518_grid_*` adapter grammar. The local real continuous-theta probe executed `527` new G5.46 solver-facing counterfactual UpdateLTM rows before the small 20-context estimate timed out at five minutes; this is real newly materialized evidence but remains far below the hard `>=30000` G5.46 completion gate. No true safe-gain regions were found, surrogate risk pass rate was `0`, the generator wrote `5120` generated-theta candidates/aliases but failed the offline replay gate, and targeted/blind replay were skipped by gate.
+- Validation:
+  - `python -m py_compile` passed for all G5.46 scripts.
+  - G5.45 artifact verification passed with no missing artifacts.
+  - Feature audit wrote F0/F1/F2 validity tables and kept post-solver counters out of runtime-facing feature sets.
+  - Materialization smoke passed: `g546_theta_materialization_smoke_passed`.
+  - Real probe summary wrote `527` new solver-facing rows and clearly marked the hard 30000-row gate as not met.
+  - Targeted and blind replay were skipped by offline gate; no runtime/Phase5.5/Phase6/AAAI claim was opened.

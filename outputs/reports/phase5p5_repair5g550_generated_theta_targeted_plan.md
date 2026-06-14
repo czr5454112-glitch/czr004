@@ -1,4 +1,6 @@
 # G5.50 Generated Theta Targeted Plan
 
-- decision: `g550_generated_theta_targeted_skipped_generator_gate_not_met`
-- reason: offline learned-generator gate did not pass
+- decision: `g550_generated_theta_targeted_plan_created`
+- planned solver rows: `30600`
+- planned contexts: `1700`
+- generated candidate count: `128`

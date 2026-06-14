@@ -1,1 +1,15 @@
-
+theta_cluster,map_family,agents,nominal_budget_ms,horizon_id,support_pairs,pair_rows,seed_block_support,success_regression_count,success_regression_rate,quality_only_mean_delta_vs_static_flow,better_count_vs_static_flow,worse_count_vs_static_flow,region_status,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+conservative_shrinkage_25,random,100,2000,c0_short2000_t050_i2,32,42,4,0,0,-0.0121072786413,16,12,non_evaluable,False,False,False,False,False
+conservative_shrinkage_25,random,100,2000,c0_short5000_t050_i2,8,28,4,0,0,0.014779200335,3,3,non_evaluable,False,False,False,False,False
+conservative_shrinkage_50,random,100,2000,c0_short2000_t050_i2,32,42,4,0,0,-0.0153379986291,18,8,non_evaluable,False,False,False,False,False
+conservative_shrinkage_50,random,100,2000,c0_short5000_t050_i2,8,28,4,0,0,0.0123895781225,3,3,non_evaluable,False,False,False,False,False
+conservative_shrinkage_75,random,100,2000,c0_short2000_t050_i2,31,42,4,1,0.0238095238095,-0.0134635486465,13,8,unsafe_useful,False,False,False,False,False
+conservative_shrinkage_75,random,100,2000,c0_short5000_t050_i2,8,28,4,0,0,0.0077241252325,3,3,non_evaluable,False,False,False,False,False
+g549_true_region_best_examples,random,100,2000,c0_short2000_t050_i2,160,210,4,0,0,-0.0222862111201,113,26,true_safe_gain,False,False,False,False,False
+g549_true_region_best_examples,random,100,2000,c0_short5000_t050_i2,40,140,4,0,0,-0.00071528056725,19,9,non_evaluable,False,False,False,False,False
+g549_true_region_centroid,random,100,2000,c0_short2000_t050_i2,32,42,4,0,0,-0.0167551856456,21,6,non_evaluable,False,False,False,False,False
+g549_true_region_centroid,random,100,2000,c0_short5000_t050_i2,8,28,4,0,0,0.00448106651625,3,3,non_evaluable,False,False,False,False,False
+g549_true_region_dense_local_perturbation,random,100,2000,c0_short2000_t050_i2,737,996,4,9,0.00903614457831,-0.0218578721051,508,133,unsafe_useful,False,False,False,False,False
+g549_true_region_dense_local_perturbation,random,100,2000,c0_short5000_t050_i2,204,684,4,0,0,0.00954951718745,58,118,safe_but_no_gain,False,False,False,False,False
+negative_random_or_sobol_control,random,100,2000,c0_short2000_t050_i2,5695,23586,4,311,0.0131857881794,0.0613538837894,1767,3522,non_evaluable,False,False,False,False,False
+negative_random_or_sobol_control,random,100,2000,c0_short5000_t050_i2,8267,23704,4,97,0.0040921363483,0.0826034244749,2294,5428,non_evaluable,False,False,False,False,False

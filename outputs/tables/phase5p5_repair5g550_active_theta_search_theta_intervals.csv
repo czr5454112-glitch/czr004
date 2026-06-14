@@ -1,1 +1,15 @@
-
+theta_cluster,map_family,agents,nominal_budget_ms,horizon_id,region_status,support_pairs,quality_only_mean_delta_vs_static_flow,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+conservative_shrinkage_25,random,100,2000,c0_short2000_t050_i2,non_evaluable,32,-0.0121072786413,False,False,False,False,False
+conservative_shrinkage_25,random,100,2000,c0_short5000_t050_i2,non_evaluable,8,0.014779200335,False,False,False,False,False
+conservative_shrinkage_50,random,100,2000,c0_short2000_t050_i2,non_evaluable,32,-0.0153379986291,False,False,False,False,False
+conservative_shrinkage_50,random,100,2000,c0_short5000_t050_i2,non_evaluable,8,0.0123895781225,False,False,False,False,False
+conservative_shrinkage_75,random,100,2000,c0_short2000_t050_i2,unsafe_useful,31,-0.0134635486465,False,False,False,False,False
+conservative_shrinkage_75,random,100,2000,c0_short5000_t050_i2,non_evaluable,8,0.0077241252325,False,False,False,False,False
+g549_true_region_best_examples,random,100,2000,c0_short2000_t050_i2,true_safe_gain,160,-0.0222862111201,False,False,False,False,False
+g549_true_region_best_examples,random,100,2000,c0_short5000_t050_i2,non_evaluable,40,-0.00071528056725,False,False,False,False,False
+g549_true_region_centroid,random,100,2000,c0_short2000_t050_i2,non_evaluable,32,-0.0167551856456,False,False,False,False,False
+g549_true_region_centroid,random,100,2000,c0_short5000_t050_i2,non_evaluable,8,0.00448106651625,False,False,False,False,False
+g549_true_region_dense_local_perturbation,random,100,2000,c0_short2000_t050_i2,unsafe_useful,737,-0.0218578721051,False,False,False,False,False
+g549_true_region_dense_local_perturbation,random,100,2000,c0_short5000_t050_i2,safe_but_no_gain,204,0.00954951718745,False,False,False,False,False
+negative_random_or_sobol_control,random,100,2000,c0_short2000_t050_i2,non_evaluable,5695,0.0613538837894,False,False,False,False,False
+negative_random_or_sobol_control,random,100,2000,c0_short5000_t050_i2,non_evaluable,8267,0.0826034244749,False,False,False,False,False

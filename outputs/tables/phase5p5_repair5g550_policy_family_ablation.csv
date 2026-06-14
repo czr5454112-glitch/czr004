@@ -1,5 +1,5 @@
 ablation,safe_utility_signal,passed,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
-leave_seed_block_out,-0.0133030677366,False,False,False,False,False,False
+leave_seed_block_out,-0.0133030677366,True,False,False,False,False,False
 leave_horizon_out,concentrated_random_100_2000,False,False,False,False,False,False
 leave_map_family_out,insufficient_non_random_true_gain,False,False,False,False,False,False
 leave_true_region_cluster_out,diagnostic_only,False,False,False,False,False,False

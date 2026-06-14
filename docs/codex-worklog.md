@@ -33,9 +33,9 @@
   - `scripts/analyze_repair5g550_iteration_counterfactual_labels.py`
   - `scripts/write_repair5g550_decision.py`
 - Result:
-  G5.50 verified the G5.49 artifacts, audited signal semantics, wrote true-region forensic tables, created large fresh replay plans under ignored logs, built offline learned-UpdateParams policy diagnostics, and wrote targeted/blind skip artifacts. The local solver budget did not complete the large fresh replay row targets, so expansion, active search, and iteration-counterfactual stages are resumable with exact commands in the decision summary.
+  G5.50 verified the G5.49 artifacts, audited signal semantics, wrote true-region forensic tables, completed corrected fulltheta expansion replay (`68570` rows), completed active theta search (`50065` rows), built offline learned-UpdateParams policy diagnostics, ran fresh targeted generated-theta replay (`30006` rows), wrote blind skip artifacts by gate, and completed the iteration-counterfactual preflight (`3800` rows). The safe expert-mixture policy passed offline, but targeted replay failed SafeGate with `216` success regressions versus `static_flow_shield`; blind replay stayed closed.
 - Decision:
-  `g550_blocked_with_exact_commands`.
+  `g550_iteration_counterfactual_labels_needed_before_generator`.
 
 ## 2026-06-14 - Repair5G.5.49 calibration-completion staticflow-primary fulltheta replay
 

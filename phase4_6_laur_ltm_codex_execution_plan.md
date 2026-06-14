@@ -4,7 +4,7 @@
 
 G5.50 does not change LaCAM*/PIBT/search semantics and does not open runtime, Phase5.5, Phase6, or AAAI claims. It keeps `static_flow_shield` as the primary learned/fulltheta UpdateParams baseline; `additive_ltm` remains the paper-faithful floor; stronger static variants remain diagnostics.
 
-The round converts the G5.49 signal into a resumable region-to-policy workflow: G5.49 verification, signal semantics audit, true-region forensics, fulltheta expansion plan, active theta-search plan, learned policy-family suite, targeted/blind gate skips, iteration-counterfactual label preflight plan, and final decision writing. Local fresh replay row targets were blocked by solver budget, so the current decision is `g550_blocked_with_exact_commands`. The next valid action is to resume the exact replay commands recorded in `outputs/reports/phase5p5_repair5g550_decision_summary.json`, not to claim a learned runtime policy.
+The round converts the G5.49 signal into a completed local region-to-policy gate sequence: G5.49 verification, signal semantics audit, true-region forensics, corrected fulltheta expansion replay (`68570` rows), active theta search (`50065` rows), safe expert-mixture offline policy evaluation, fresh targeted generated-theta replay (`30006` rows), blind gate skip, iteration-counterfactual label preflight, and final decision writing. The offline generator gate passed, but targeted replay produced `216` success regressions versus `static_flow_shield`, so SafeGate blocks blind/runtime promotion. The current decision is `g550_iteration_counterfactual_labels_needed_before_generator`.
 
 ## 2026-06-14 Repair5G.5.49 calibration/fulltheta update
 

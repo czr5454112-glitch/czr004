@@ -2,9 +2,9 @@
 
 G5.50 keeps the G5.49 baseline/SafeGate interpretation unchanged. `static_flow_shield` remains the primary baseline for learned/fulltheta continuous `UpdateParams`; `additive_ltm` is the paper-faithful floor; stronger static variants remain diagnostics unless a later round explicitly promotes one.
 
-The G5.50 scripts audit the G5.49 true regions, write forensics, create fresh fulltheta expansion / active-search / iteration-counterfactual plans, evaluate multiple learned bounded UpdateParams policy routes, and gate targeted/blind replay. The local solver budget did not complete the large fresh row targets, so the decision is `g550_blocked_with_exact_commands`. This is a resumable engineering state, not a negative scientific conclusion and not a runtime or AAAI claim.
+G5.50 completed the local minimum fresh replay gates: `68570` fulltheta expansion rows, `50065` active theta-search rows, `30006` fresh targeted generated-theta rows, and the `3800` row iteration-counterfactual preflight. Full expansion satisfied the row targets but did not replicate the G5.49 core true-gain regions (`g549_true_safe_gain_regions_replicated=false`). Active search mapped a boundary, and the offline safe expert-mixture policy passed its offline gate, but targeted replay failed SafeGate with `216` success regressions versus `static_flow_shield` despite a small mean quality delta (`-0.00097632372215`). The final decision is `g550_iteration_counterfactual_labels_needed_before_generator`.
 
-SafeGate interpretation: replay-region hindsight is still not a learned generated-theta policy. A later round must finish the exact resume commands, then pass offline, targeted, and blind gates before any runtime, Phase5.5, Phase6, or paper claim can open.
+SafeGate interpretation: offline generated-theta success is not enough. Targeted replay is now the blocking evidence, and blind replay remains closed. A later round must use the iteration-level counterfactual labels to repair risk/safety prediction before any runtime, Phase5.5, Phase6, or paper claim can open.
 
 ## 2026-06-14 Repair5G.5.49 calibration/fulltheta governance update
 

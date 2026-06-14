@@ -142,10 +142,34 @@ TARGETED_VS_STATIC_CSV = "outputs/tables/phase5p5_repair5g550_generated_theta_ta
 TARGETED_VS_ADDITIVE_CSV = "outputs/tables/phase5p5_repair5g550_generated_theta_targeted_vs_additive.csv"
 TARGETED_VS_FAMILY_CSV = "outputs/tables/phase5p5_repair5g550_generated_theta_targeted_vs_family_static.csv"
 TARGETED_FAILURES_CSV = "outputs/tables/phase5p5_repair5g550_generated_theta_targeted_failure_cases.csv"
+TARGETED_LOG_DIR = "outputs/logs/phase5p5_repair5g550_generated_theta_targeted"
+TARGETED_PLAN_LOG_CSV = f"{TARGETED_LOG_DIR}/generated_theta_targeted_plan.csv"
+TARGETED_RESULTS_LOG_CSV = f"{TARGETED_LOG_DIR}/generated_theta_targeted_results.csv"
+TARGETED_RESULTS_RAW_LOG_CSV = f"{TARGETED_LOG_DIR}/generated_theta_targeted_results.raw.csv"
+TARGETED_RUN_JSONL = f"{TARGETED_LOG_DIR}/runs.jsonl"
+TARGETED_COMMAND_JSONL = f"{TARGETED_LOG_DIR}/commands.jsonl"
+TARGETED_UPDATE_JSONL = f"{TARGETED_LOG_DIR}/updates.jsonl"
+TARGETED_PROBE_JSONL = f"{TARGETED_LOG_DIR}/counterfactual_probes.jsonl"
+TARGETED_CHECKPOINT_JSONL = f"{TARGETED_LOG_DIR}/checkpoints.jsonl"
+TARGETED_STATUS_JSON = f"{TARGETED_LOG_DIR}/status.json"
+TARGETED_SCENARIO_DIR = "outputs/tmp/phase5p5_repair5g550_generated_theta_targeted_scenarios"
+TARGETED_SCENARIO_METADATA = "outputs/reports/phase5p5_repair5g550_generated_theta_targeted_scenario_generation.json"
 
 BLIND_PLAN_REPORT = "outputs/reports/phase5p5_repair5g550_blind_replay_plan.md"
 BLIND_SUMMARY = "outputs/reports/phase5p5_repair5g550_blind_replay_summary.json"
 BLIND_REPORT = "outputs/reports/phase5p5_repair5g550_blind_replay.md"
+BLIND_LOG_DIR = "outputs/logs/phase5p5_repair5g550_blind_replay"
+BLIND_PLAN_LOG_CSV = f"{BLIND_LOG_DIR}/blind_replay_plan.csv"
+BLIND_RESULTS_LOG_CSV = f"{BLIND_LOG_DIR}/blind_replay_results.csv"
+BLIND_RESULTS_RAW_LOG_CSV = f"{BLIND_LOG_DIR}/blind_replay_results.raw.csv"
+BLIND_RUN_JSONL = f"{BLIND_LOG_DIR}/runs.jsonl"
+BLIND_COMMAND_JSONL = f"{BLIND_LOG_DIR}/commands.jsonl"
+BLIND_UPDATE_JSONL = f"{BLIND_LOG_DIR}/updates.jsonl"
+BLIND_PROBE_JSONL = f"{BLIND_LOG_DIR}/counterfactual_probes.jsonl"
+BLIND_CHECKPOINT_JSONL = f"{BLIND_LOG_DIR}/checkpoints.jsonl"
+BLIND_STATUS_JSON = f"{BLIND_LOG_DIR}/status.json"
+BLIND_SCENARIO_DIR = "outputs/tmp/phase5p5_repair5g550_blind_replay_scenarios"
+BLIND_SCENARIO_METADATA = "outputs/reports/phase5p5_repair5g550_blind_replay_scenario_generation.json"
 
 ITER_LOG_DIR = "outputs/logs/phase5p5_repair5g550_iteration_counterfactual_label_probe"
 ITER_PLAN_LOG_CSV = f"{ITER_LOG_DIR}/iteration_counterfactual_label_plan.csv"
@@ -183,7 +207,7 @@ BASE_MAPS = list(g548.BASE_MAPS)
 CLAIM_KEYS = list(claims().keys())
 
 CORE_REPLICATION_SEEDS = list(range(1520, 1680))
-NEIGHBOR_TRANSFER_SEEDS = list(range(1680, 1740))
+NEIGHBOR_TRANSFER_SEEDS = list(range(1680, 1740)) + list(range(2220, 2255))
 ACTIVE_SEARCH_SEEDS = list(range(1740, 1820))
 TARGETED_SEEDS = list(range(1820, 1920))
 BLIND_SEEDS = list(range(1920, 2020))
@@ -599,6 +623,21 @@ def run_probe_plan_fast(
         for path in [result_csv, raw_csv, run_jsonl, command_jsonl, update_jsonl, probe_jsonl, checkpoint_jsonl]:
             resolve(path).unlink(missing_ok=True)
     groups = g549.probe_context_groups(plan_rows)
+    if manifest_prefix == "g550_fulltheta_expansion":
+        route_rank = {"C1_core_replication": 0, "C2_neighbor_transfer": 1, "C3_hard_stratum_diagnostic": 2}
+
+        def expansion_key(item: tuple[tuple[str, int, int, int, str], list[dict[str, Any]]]) -> tuple[Any, ...]:
+            key, rows = item
+            first = rows[0] if rows else {}
+            return (
+                route_rank.get(str(first.get("route", "")), 9),
+                str(first.get("map_family", "")),
+                int(number(first.get("agents"), key[1])),
+                int(number(first.get("seed"), key[2])),
+                str(first.get("horizon_id", key[4])),
+            )
+
+        groups = sorted(groups, key=expansion_key)
     completed = set() if overwrite else g549.completed_groups_from_results(plan_rows, result_csv)
     scheduled = []
     estimated_rows = table_count(result_csv)
@@ -629,15 +668,17 @@ def run_probe_plan_fast(
     all_probes = g549.read_jsonl_tolerant(probe_jsonl)
     all_checkpoints = g549.read_jsonl_tolerant(checkpoint_jsonl)
     done = len(completed)
+    flush_stride = 1
 
-    def flush(phase: str, last: dict[str, Any] | None = None) -> None:
-        write_rows(result_csv, all_results)
-        write_rows(raw_csv, all_results)
-        write_jsonl(run_jsonl, all_runs)
-        write_jsonl(command_jsonl, all_commands)
-        write_jsonl(update_jsonl, all_updates)
-        write_jsonl(probe_jsonl, all_probes)
-        write_jsonl(checkpoint_jsonl, all_checkpoints)
+    def flush(phase: str, last: dict[str, Any] | None = None, *, full: bool = True) -> None:
+        if full:
+            write_rows(result_csv, all_results)
+            write_rows(raw_csv, all_results)
+            write_jsonl(run_jsonl, all_runs)
+            write_jsonl(command_jsonl, all_commands)
+            write_jsonl(update_jsonl, all_updates)
+            write_jsonl(probe_jsonl, all_probes)
+            write_jsonl(checkpoint_jsonl, all_checkpoints)
         write_json(
             status_json,
             {
@@ -670,7 +711,7 @@ def run_probe_plan_fast(
         all_updates.extend(result["update_rows"])
         all_probes.extend(result["probe_rows"])
         all_checkpoints.extend(result["checkpoint_rows"])
-        flush("running", result["command_row"])
+        flush("running", result["command_row"], full=(done % flush_stride == 0))
 
     def run_one(index: int, key: tuple[str, int, int, int, str], group_rows: list[dict[str, Any]]) -> dict[str, Any]:
         return g549.run_context_task(
@@ -689,6 +730,7 @@ def run_probe_plan_fast(
 
     flush("running")
     workers = max(1, int(max_workers))
+    flush_stride = max(1, min(32, workers))
     if workers == 1:
         for index, key, group_rows in scheduled:
             merge_result(run_one(index, key, group_rows))
@@ -1278,9 +1320,9 @@ def analyze_replay_results(
         elif len(rows) >= 30000:
             decision = "g550_true_gain_failed_to_replicate_under_powered_or_negative"
     if stage_label == "fulltheta_expansion":
-        exact_resume_command = "python scripts/run_repair5g550_fulltheta_expansion.py --row-limit 60000 --max-workers 4"
+        exact_resume_command = "python scripts/run_repair5g550_fulltheta_expansion.py --row-limit 70000 --max-workers 16"
     elif stage_label == "active_theta_search":
-        exact_resume_command = "python scripts/run_repair5g550_active_theta_search.py --row-limit 50000 --max-workers 4"
+        exact_resume_command = "python scripts/run_repair5g550_active_theta_search.py --row-limit 50000 --max-workers 20"
     else:
         exact_resume_command = ""
     summary = {
@@ -1677,6 +1719,16 @@ def main_analyze_policy_failure_modes(argv: list[str] | None = None) -> int:
         main_train_eval_policy_family_suite([])
     summary = load_json(POLICY_SUMMARY, {})
     failure = summary.get("failure_decomposition", {})
+    if summary.get("decision") == "g550_generator_offline_passed_continue_targeted_replay":
+        conclusion = (
+            "The offline suite promotes a safe expert-mixture candidate family for fresh targeted replay. "
+            "Targeted and blind replay remain separate gates; offline success alone is not a runtime claim."
+        )
+    else:
+        conclusion = (
+            "The offline suite does not promote replay-region hindsight into a runtime learned policy. "
+            "Targeted and blind replay remain gated unless a later policy family passes."
+        )
     write_text(
         POLICY_FAILURE_REPORT,
         "# G5.50 Policy Failure Modes\n\n"
@@ -1686,8 +1738,7 @@ def main_analyze_policy_failure_modes(argv: list[str] | None = None) -> int:
         f"- label insufficient: `{failure.get('label_insufficient', False)}`\n"
         f"- signal too concentrated: `{failure.get('signal_too_concentrated', False)}`\n"
         f"- needs iteration-level counterfactual labels: `{failure.get('needs_iteration_level_counterfactual_labels', False)}`\n\n"
-        "The offline suite does not promote replay-region hindsight into a runtime learned policy. "
-        "Targeted and blind replay remain gated unless a later policy family passes.\n",
+        f"{conclusion}\n",
     )
     print(json.dumps({"decision": "g550_policy_failure_modes_written"}))
     return 0
@@ -1712,6 +1763,209 @@ def write_targeted_skip(reason: str) -> None:
     write_text(TARGETED_REPORT, f"# G5.50 Generated Theta Targeted Replay\n\n- decision: `{summary['decision']}`\n- reason: {reason}\n")
 
 
+def generated_policy_registry_rows() -> list[dict[str, Any]]:
+    if not resolve(GENERATED_THETA_CSV).exists():
+        main_train_eval_policy_family_suite([])
+    rows = read_rows(GENERATED_THETA_CSV)
+    out = []
+    for idx, row in enumerate(rows):
+        reg = {
+            "candidate_id": row.get("candidate_id", ""),
+            "candidate_group": row.get("policy_family", "generated_policy"),
+            "theta_cluster": row.get("policy_family", "generated_policy"),
+            "registry_label": row.get("mixture_weight_source", "generated_policy"),
+            "registry_row_id": f"generated_policy_{idx:06d}",
+        }
+        reg.update({col: row.get(col, "") for col in THETA_COLUMNS})
+        out.append(reg)
+    return [row for row in out if row.get("candidate_id")]
+
+
+def learned_replay_contexts(seeds: list[int], *, panel: str, stage_prefix: str, source: str, max_contexts: int = 0) -> list[dict[str, Any]]:
+    contexts: list[dict[str, Any]] = []
+    horizon_specs = [
+        ("short2000_t050_i2", 2000, 0.50, 2),
+        ("short2000_t100_i2", 2000, 1.00, 2),
+        ("short5000_t050_i2", 5000, 0.50, 2),
+        ("short5000_t100_i2", 5000, 1.00, 2),
+    ]
+    for seed in seeds:
+        for family, agents in [("random", 100), ("random", 50), ("maze", 50), ("maze", 100)]:
+            route = f"{stage_prefix}_core" if family == "random" and agents == 100 else f"{stage_prefix}_transfer"
+            for label, short_budget, base_sec, iters in horizon_specs:
+                contexts.append(
+                    {
+                        "panel": panel,
+                        "route": route,
+                        "context_id": f"{panel}|{family}|a{agents}|s{seed}|b2000|{label}",
+                        "map": map_for_family(family),
+                        "map_family": family,
+                        "agents": agents,
+                        "seed": seed,
+                        "budget_ms": 2000,
+                        "nominal_budget_ms": 2000,
+                        "horizon_id": f"{panel}_{label}",
+                        "short_budget_ms": short_budget,
+                        "base_time_limit_sec": csv_number(base_sec),
+                        "ltm_max_iterations": iters,
+                        "fresh_seed_block": seed_block(seed),
+                        "source": source,
+                    }
+                )
+        contexts.append(
+            {
+                "panel": panel,
+                "route": f"{stage_prefix}_hard_diagnostic",
+                "context_id": f"{panel}|warehouse|a50|s{seed}|b2000|hard_short5000_t100_i4",
+                "map": map_for_family("warehouse"),
+                "map_family": "warehouse",
+                "agents": 50,
+                "seed": seed,
+                "budget_ms": 2000,
+                "nominal_budget_ms": 2000,
+                "horizon_id": f"{panel}_warehouse_short5000_t100_i4",
+                "short_budget_ms": 5000,
+                "base_time_limit_sec": csv_number(1.00),
+                "ltm_max_iterations": 4,
+                "fresh_seed_block": seed_block(seed),
+                "source": source,
+            }
+        )
+    return contexts[:max_contexts] if max_contexts > 0 else contexts
+
+
+def write_learned_replay_plan(
+    *,
+    plan_csv: str,
+    plan_report: str,
+    summary_path: str,
+    summary_schema: str,
+    decision: str,
+    contexts: list[dict[str, Any]],
+) -> dict[str, Any]:
+    generated = generated_policy_registry_rows()
+    rows: list[dict[str, Any]] = []
+    for context_index, context in enumerate(contexts):
+        rows.extend(baseline_plan_rows(context, f"g550_{context['panel']}_{len(rows):08d}"))
+        if not generated:
+            continue
+        start = (context_index * 15) % len(generated)
+        for offset in range(15):
+            rows.append(plan_row_from_registry(context, generated[(start + offset) % len(generated)], len(rows)))
+    for idx, row in enumerate(rows):
+        row["plan_row_id"] = f"g550_{contexts[0]['panel'] if contexts else 'learned_replay'}_{idx:08d}"
+    write_rows(plan_csv, rows)
+    write_policy_breakdown(plan_csv.replace("_plan.csv", "_policy_breakdown.csv"), rows)
+    gen_rows = [row for row in rows if str(row.get("role", "")).startswith("generated_theta::")]
+    summary = {
+        "schema_version": summary_schema,
+        "decision": decision,
+        "planned_contexts": len({row.get("context_id", "") for row in rows}),
+        "planned_solver_rows": len(rows),
+        "planned_generated_theta_rows": len(gen_rows),
+        "planned_baseline_rows": len(rows) - len(gen_rows),
+        "generated_candidate_count": len(generated),
+        "raw_plan_path": str(resolve(plan_csv)),
+        "raw_plan_sha256": file_sha256(plan_csv),
+        **claims(),
+    }
+    write_json(summary_path, summary)
+    write_text(
+        plan_report,
+        f"# G5.50 {contexts[0]['panel'].replace('_', ' ').title() if contexts else 'Learned Replay'} Plan\n\n"
+        f"- decision: `{decision}`\n"
+        f"- planned solver rows: `{summary['planned_solver_rows']}`\n"
+        f"- planned contexts: `{summary['planned_contexts']}`\n"
+        f"- generated candidate count: `{summary['generated_candidate_count']}`\n",
+    )
+    return summary
+
+
+def analyze_learned_replay_results(
+    rows: list[dict[str, Any]],
+    *,
+    sample_csv: str,
+    vs_static_csv: str,
+    vs_additive_csv: str | None,
+    vs_family_csv: str | None,
+    failures_csv: str | None,
+    report: str,
+    summary_path: str,
+    summary_schema: str,
+    stage_label: str,
+    positive_decision: str,
+    negative_decision: str,
+    min_rows: int,
+    min_generated: int,
+    min_baseline: int,
+    min_both_success: int,
+    exact_resume_command: str,
+) -> dict[str, Any]:
+    write_rows(sample_csv, sample_rows(rows, 1000))
+    vs_static, vs_family, vs_additive, failures = g549.result_pairs(rows)
+    write_rows(vs_static_csv, vs_static)
+    if vs_additive_csv:
+        write_rows(vs_additive_csv, vs_additive)
+    if vs_family_csv:
+        write_rows(vs_family_csv, vs_family)
+    if failures_csv:
+        write_rows(failures_csv, failures)
+    stats = summarize_pair_group(vs_static)
+    generated = [row for row in rows if str(row.get("role", "")).startswith("generated_theta::")]
+    baseline_rows = len(rows) - len(generated)
+    match_rows = [row for row in generated if row.get("fulltheta_fingerprint_match") != ""]
+    match_rate = sum(1 for row in match_rows if boolish(row.get("fulltheta_fingerprint_match"))) / max(1, len(match_rows))
+    usage = len(generated) / max(1, len(rows))
+    mean_delta = number(stats.get("quality_only_mean_delta_vs_static_flow"), math.nan)
+    gate_passed = (
+        len(rows) >= min_rows
+        and len(generated) >= min_generated
+        and baseline_rows >= min_baseline
+        and int(number(stats.get("support_pairs"), 0)) >= min_both_success
+        and int(number(stats.get("success_regression_count"), 0)) == 0
+        and math.isfinite(mean_delta)
+        and mean_delta < 0
+        and int(number(stats.get("better_count_vs_static_flow"), 0)) > int(number(stats.get("worse_count_vs_static_flow"), 0))
+        and usage >= 0.05
+        and match_rate >= 1.0
+    )
+    decision = positive_decision if gate_passed else negative_decision
+    row_key = "new_targeted_solver_rows" if stage_label == "targeted" else "new_blind_solver_rows"
+    summary = {
+        "schema_version": summary_schema,
+        "decision": decision,
+        row_key: len(rows),
+        "generated_theta_rows": len(generated),
+        "baseline_rows": baseline_rows,
+        "both_success_quality_pairs_vs_static_flow": int(number(stats.get("support_pairs"), 0)),
+        "success_regression_count_vs_static_flow": int(number(stats.get("success_regression_count"), 0)),
+        "quality_only_mean_delta_vs_static_flow": stats.get("quality_only_mean_delta_vs_static_flow", ""),
+        "better_count_vs_static_flow": int(number(stats.get("better_count_vs_static_flow"), 0)),
+        "worse_count_vs_static_flow": int(number(stats.get("worse_count_vs_static_flow"), 0)),
+        "generated_non_static_theta_usage_rate": csv_number(usage),
+        "fulltheta_fingerprint_match_rate": csv_number(match_rate),
+        "targeted_replay_run": stage_label == "targeted" and bool(rows),
+        "blind_replay_run": stage_label == "blind" and bool(rows),
+        "gate_passed": gate_passed,
+        "local_budget_blocker": len(rows) < min_rows,
+        "exact_resume_command": exact_resume_command,
+        **claims(),
+    }
+    write_json(summary_path, summary)
+    write_text(
+        report,
+        f"# G5.50 {stage_label.title()} Learned Replay\n\n"
+        f"- decision: `{decision}`\n"
+        f"- solver rows: `{len(rows)}`\n"
+        f"- generated theta rows: `{len(generated)}`\n"
+        f"- baseline rows: `{baseline_rows}`\n"
+        f"- both-success pairs vs static_flow: `{summary['both_success_quality_pairs_vs_static_flow']}`\n"
+        f"- success regressions vs static_flow: `{summary['success_regression_count_vs_static_flow']}`\n"
+        f"- quality mean delta vs static_flow: `{summary['quality_only_mean_delta_vs_static_flow']}`\n",
+    )
+    return summary
+
+
 def main_create_generated_theta_targeted_plan(argv: list[str] | None = None) -> int:
     args = parser().parse_args(argv)
     validate_ids(args, "G5.50 generated theta targeted plan")
@@ -1722,19 +1976,83 @@ def main_create_generated_theta_targeted_plan(argv: list[str] | None = None) -> 
         write_targeted_skip("offline learned-generator gate did not pass")
         print(json.dumps({"decision": "g550_generated_theta_targeted_plan_skipped_generator_gate_not_met"}))
         return 0
-    write_targeted_skip("targeted runner scaffolded but not invoked in this conservative local pass")
+    summary = write_learned_replay_plan(
+        plan_csv=TARGETED_PLAN_LOG_CSV,
+        plan_report=TARGETED_PLAN_REPORT,
+        summary_path=TARGETED_SUMMARY,
+        summary_schema="phase5p5_repair5g550_generated_theta_targeted_plan_summary_v1",
+        decision="g550_generated_theta_targeted_plan_created",
+        contexts=learned_replay_contexts(TARGETED_SEEDS, panel="generated_theta_targeted", stage_prefix="F_targeted", source="g550_generated_theta_targeted_fresh"),
+    )
+    print(json.dumps({"decision": summary["decision"], "rows": summary["planned_solver_rows"]}))
     return 0
 
 
 def main_run_generated_theta_targeted(argv: list[str] | None = None) -> int:
-    if not resolve(TARGETED_SUMMARY).exists():
-        return main_create_generated_theta_targeted_plan(argv)
-    print(json.dumps({"decision": load_json(TARGETED_SUMMARY, {}).get("decision", "")}))
+    args = parser().parse_args(argv)
+    validate_ids(args, "G5.50 generated theta targeted run")
+    if not resolve(TARGETED_PLAN_LOG_CSV).exists() or args.overwrite:
+        main_create_generated_theta_targeted_plan([])
+    if load_json(TARGETED_SUMMARY, {}).get("decision") != "g550_generated_theta_targeted_plan_created":
+        print(json.dumps({"decision": load_json(TARGETED_SUMMARY, {}).get("decision", "")}))
+        return 0
+    binary = binary_path(args.binary)
+    if not binary.exists():
+        write_targeted_skip(f"missing binary: {binary}")
+        return 2
+    rows = run_probe_plan_fast(
+        read_rows(TARGETED_PLAN_LOG_CSV),
+        binary=binary,
+        overwrite=args.overwrite,
+        row_limit=max(0, args.row_limit),
+        max_workers=args.max_workers,
+        registry_path=REGISTRY_LOG_CSV,
+        result_csv=TARGETED_RESULTS_LOG_CSV,
+        raw_csv=TARGETED_RESULTS_RAW_LOG_CSV,
+        log_dir=TARGETED_LOG_DIR,
+        run_jsonl=TARGETED_RUN_JSONL,
+        command_jsonl=TARGETED_COMMAND_JSONL,
+        update_jsonl=TARGETED_UPDATE_JSONL,
+        probe_jsonl=TARGETED_PROBE_JSONL,
+        checkpoint_jsonl=TARGETED_CHECKPOINT_JSONL,
+        status_json=TARGETED_STATUS_JSON,
+        scenario_dir=TARGETED_SCENARIO_DIR,
+        scenario_metadata=TARGETED_SCENARIO_METADATA,
+        manifest_prefix="g550_generated_theta_targeted",
+        row_prefix="g550_targeted_probe",
+        execution_mode="new_g550_generated_theta_targeted_solver_row",
+    )
+    print(json.dumps({"decision": "g550_generated_theta_targeted_executed", "rows": len(rows)}))
     return 0
 
 
 def main_analyze_generated_theta_targeted(argv: list[str] | None = None) -> int:
-    return main_run_generated_theta_targeted(argv)
+    args = parser().parse_args(argv)
+    validate_ids(args, "G5.50 generated theta targeted analysis")
+    if not resolve(TARGETED_RESULTS_LOG_CSV).exists():
+        main_run_generated_theta_targeted([])
+    rows = read_rows(TARGETED_RESULTS_LOG_CSV)
+    summary = analyze_learned_replay_results(
+        rows,
+        sample_csv=TARGETED_RESULTS_SAMPLE_CSV,
+        vs_static_csv=TARGETED_VS_STATIC_CSV,
+        vs_additive_csv=TARGETED_VS_ADDITIVE_CSV,
+        vs_family_csv=TARGETED_VS_FAMILY_CSV,
+        failures_csv=TARGETED_FAILURES_CSV,
+        report=TARGETED_REPORT,
+        summary_path=TARGETED_SUMMARY,
+        summary_schema="phase5p5_repair5g550_generated_theta_targeted_summary_v1",
+        stage_label="targeted",
+        positive_decision="g550_generated_theta_targeted_positive_continue_blind",
+        negative_decision="g550_generated_theta_targeted_failed_gate_continue_policy_design",
+        min_rows=30000,
+        min_generated=20000,
+        min_baseline=4000,
+        min_both_success=8000,
+        exact_resume_command="python scripts/run_repair5g550_generated_theta_targeted.py --row-limit 30000 --max-workers 20",
+    )
+    print(json.dumps({"decision": summary["decision"], "rows": summary["new_targeted_solver_rows"]}))
+    return 0
 
 
 def write_blind_skip(reason: str) -> None:
@@ -1762,19 +2080,85 @@ def main_create_blind_replay_plan(argv: list[str] | None = None) -> int:
         write_blind_skip("targeted replay gate did not pass")
         print(json.dumps({"decision": "g550_blind_replay_plan_skipped_targeted_gate_not_met"}))
         return 0
-    write_blind_skip("blind replay scaffolded but gated")
+    summary = write_learned_replay_plan(
+        plan_csv=BLIND_PLAN_LOG_CSV,
+        plan_report=BLIND_PLAN_REPORT,
+        summary_path=BLIND_SUMMARY,
+        summary_schema="phase5p5_repair5g550_blind_replay_plan_summary_v1",
+        decision="g550_blind_replay_plan_created",
+        contexts=learned_replay_contexts(BLIND_SEEDS, panel="blind_replay", stage_prefix="G_blind", source="g550_blind_replay_fresh"),
+    )
+    print(json.dumps({"decision": summary["decision"], "rows": summary["planned_solver_rows"]}))
     return 0
 
 
 def main_run_blind_replay(argv: list[str] | None = None) -> int:
-    if not resolve(BLIND_SUMMARY).exists():
-        return main_create_blind_replay_plan(argv)
-    print(json.dumps({"decision": load_json(BLIND_SUMMARY, {}).get("decision", "")}))
+    args = parser().parse_args(argv)
+    validate_ids(args, "G5.50 blind replay run")
+    if not resolve(BLIND_PLAN_LOG_CSV).exists() or args.overwrite:
+        main_create_blind_replay_plan([])
+    if load_json(BLIND_SUMMARY, {}).get("decision") != "g550_blind_replay_plan_created":
+        print(json.dumps({"decision": load_json(BLIND_SUMMARY, {}).get("decision", "")}))
+        return 0
+    binary = binary_path(args.binary)
+    if not binary.exists():
+        write_blind_skip(f"missing binary: {binary}")
+        return 2
+    rows = run_probe_plan_fast(
+        read_rows(BLIND_PLAN_LOG_CSV),
+        binary=binary,
+        overwrite=args.overwrite,
+        row_limit=max(0, args.row_limit),
+        max_workers=args.max_workers,
+        registry_path=REGISTRY_LOG_CSV,
+        result_csv=BLIND_RESULTS_LOG_CSV,
+        raw_csv=BLIND_RESULTS_RAW_LOG_CSV,
+        log_dir=BLIND_LOG_DIR,
+        run_jsonl=BLIND_RUN_JSONL,
+        command_jsonl=BLIND_COMMAND_JSONL,
+        update_jsonl=BLIND_UPDATE_JSONL,
+        probe_jsonl=BLIND_PROBE_JSONL,
+        checkpoint_jsonl=BLIND_CHECKPOINT_JSONL,
+        status_json=BLIND_STATUS_JSON,
+        scenario_dir=BLIND_SCENARIO_DIR,
+        scenario_metadata=BLIND_SCENARIO_METADATA,
+        manifest_prefix="g550_blind_replay",
+        row_prefix="g550_blind_probe",
+        execution_mode="new_g550_blind_replay_solver_row",
+    )
+    print(json.dumps({"decision": "g550_blind_replay_executed", "rows": len(rows)}))
     return 0
 
 
 def main_analyze_blind_replay(argv: list[str] | None = None) -> int:
-    return main_run_blind_replay(argv)
+    args = parser().parse_args(argv)
+    validate_ids(args, "G5.50 blind replay analysis")
+    if not resolve(BLIND_RESULTS_LOG_CSV).exists():
+        main_run_blind_replay([])
+    if not resolve(BLIND_RESULTS_LOG_CSV).exists():
+        return 0
+    rows = read_rows(BLIND_RESULTS_LOG_CSV)
+    summary = analyze_learned_replay_results(
+        rows,
+        sample_csv=BLIND_RESULTS_RAW_LOG_CSV.replace(".raw.csv", ".sample.csv"),
+        vs_static_csv=BLIND_RESULTS_RAW_LOG_CSV.replace(".raw.csv", "_vs_static_flow.csv"),
+        vs_additive_csv=None,
+        vs_family_csv=None,
+        failures_csv=BLIND_RESULTS_RAW_LOG_CSV.replace(".raw.csv", "_failure_cases.csv"),
+        report=BLIND_REPORT,
+        summary_path=BLIND_SUMMARY,
+        summary_schema="phase5p5_repair5g550_blind_replay_summary_v1",
+        stage_label="blind",
+        positive_decision="g550_blind_true_safe_gain_development_success_continue_promotion_design",
+        negative_decision="g550_blind_replay_failed_gate_continue_policy_design",
+        min_rows=30000,
+        min_generated=20000,
+        min_baseline=4000,
+        min_both_success=8000,
+        exact_resume_command="python scripts/run_repair5g550_blind_replay.py --row-limit 30000 --max-workers 20",
+    )
+    print(json.dumps({"decision": summary["decision"], "rows": summary["new_blind_solver_rows"]}))
+    return 0
 
 
 def iteration_contexts(max_contexts: int = 0) -> list[dict[str, Any]]:
@@ -1979,6 +2363,12 @@ def write_large_artifact_policy_and_audit() -> None:
         ACTIVE_PLAN_LOG_CSV,
         ACTIVE_RESULTS_LOG_CSV,
         ACTIVE_RESULTS_RAW_LOG_CSV,
+        TARGETED_PLAN_LOG_CSV,
+        TARGETED_RESULTS_LOG_CSV,
+        TARGETED_RESULTS_RAW_LOG_CSV,
+        BLIND_PLAN_LOG_CSV,
+        BLIND_RESULTS_LOG_CSV,
+        BLIND_RESULTS_RAW_LOG_CSV,
         ITER_PLAN_LOG_CSV,
         ITER_RESULTS_LOG_CSV,
         ITER_RESULTS_RAW_LOG_CSV,
@@ -2048,10 +2438,21 @@ def main_write_decision(argv: list[str] | None = None) -> int:
     replay_blockers = [
         expansion.get("local_budget_blocker", False),
         active.get("local_budget_blocker", False),
+        targeted.get("local_budget_blocker", False),
+        blind.get("local_budget_blocker", False),
         iteration.get("local_budget_blocker", False),
     ]
     if any(boolish(value) for value in replay_blockers):
         decision = "g550_blocked_with_exact_commands"
+    elif blind.get("decision") == "g550_blind_true_safe_gain_development_success_continue_promotion_design":
+        decision = "g550_blind_true_safe_gain_development_success_continue_promotion_design"
+    elif targeted.get("decision") == "g550_generated_theta_targeted_positive_continue_blind":
+        decision = "g550_targeted_true_safe_gain_continue_blind_replay"
+    elif boolish(targeted.get("targeted_replay_run", False)) and targeted.get("decision") != "g550_generated_theta_targeted_positive_continue_blind":
+        if boolish(iteration.get("oracle_gap_large_enough_for_policy_design")):
+            decision = "g550_iteration_counterfactual_labels_needed_before_generator"
+        else:
+            decision = "g550_signal_core_only_continue_transfer_and_label_collection"
     elif policy.get("decision") == "g550_generator_offline_passed_continue_targeted_replay":
         decision = "g550_generator_offline_passed_continue_targeted_replay"
     elif int(number(expansion.get("true_safe_gain_regions"), 0)) > 0 and policy.get("decision") != "g550_generator_offline_passed_continue_targeted_replay":
@@ -2075,24 +2476,26 @@ def main_write_decision(argv: list[str] | None = None) -> int:
     write_rows(DECISION_MATRIX_CSV, evidence)
     exact_resume_commands = [
         stage.get("exact_resume_command", "")
-        for stage in [expansion, active, iteration]
+        for stage in [expansion, active, targeted, blind, iteration]
         if boolish(stage.get("local_budget_blocker", False)) and stage.get("exact_resume_command", "")
     ]
+    observed_success_regressions = targeted.get("success_regression_count_vs_static_flow", policy.get("risk_false_safe_count_on_validation", 0))
+    observed_quality_delta = targeted.get("quality_only_mean_delta_vs_static_flow", policy.get("predicted_safe_utility_mean_delta_vs_static_flow", ""))
     summary = {
         "schema_version": "phase5p5_repair5g550_decision_summary_v1",
         "decision": decision,
         "primary_baseline": "static_flow_shield",
         "additive_ltm_role": "paper-faithful floor",
         "strong_static_role": "diagnostic only",
-        "g549_true_safe_gain_regions_replicated": int(number(expansion.get("true_safe_gain_regions"), 0)) > 0 if expansion else None,
+        "g549_true_safe_gain_regions_replicated": expansion.get("decision") in {"g550_true_gain_core_only_no_transfer", "g550_true_gain_transfers_to_neighbor_strata"} if expansion else None,
         "generator_policy_family_best": policy.get("generator_policy_family_best", "none"),
         "generated_non_static_theta_usage_rate": policy.get("generated_non_static_theta_usage_rate", "0"),
         "targeted_replay_run": boolish(targeted.get("targeted_replay_run", False)),
         "blind_replay_run": boolish(blind.get("blind_replay_run", False)),
         "unique_evaluable_stratum_count": semantics.get("unique_evaluable_stratum_count", 0),
         "warehouse_non_evaluable": True,
-        "success_regression_count_vs_static_flow": 0,
-        "quality_delta_vs_static_flow": policy.get("predicted_safe_utility_mean_delta_vs_static_flow", ""),
+        "success_regression_count_vs_static_flow": observed_success_regressions,
+        "quality_delta_vs_static_flow": observed_quality_delta,
         "runtime_claim_allowed": False,
         "phase5p5_allowed": False,
         "phase6_allowed": False,

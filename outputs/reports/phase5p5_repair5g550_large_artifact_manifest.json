@@ -13,33 +13,33 @@
     },
     {
       "artifact_label": "g550_raw_or_large_artifact",
-      "bytes": 34879029,
+      "bytes": 41560480,
       "committed": false,
       "exists": true,
       "over_50mb": false,
       "path": "C:\\PROGRAMING\\czr004\\outputs\\logs\\phase5p5_repair5g550_fulltheta_expansion\\fulltheta_expansion_plan.csv",
-      "rows": 57440,
-      "sha256": "d84d5a3ec3dfdb1d6ede3a62e080bdefa0fdc49889d4504b1418e96eef62ce3b"
+      "rows": 68570,
+      "sha256": "ce47660387a2f9a5160ad544893519564fd1ee3a4f91725ee747174970f0c831"
     },
     {
       "artifact_label": "g550_raw_or_large_artifact",
-      "bytes": 3397665,
+      "bytes": 79952602,
       "committed": false,
       "exists": true,
-      "over_50mb": false,
+      "over_50mb": true,
       "path": "C:\\PROGRAMING\\czr004\\outputs\\logs\\phase5p5_repair5g550_fulltheta_expansion\\fulltheta_expansion_results.csv",
-      "rows": 2067,
-      "sha256": "526d109ed72b72d79c2b6f1ba2a25e233e08bd0c47ea0718b3647ae34cd94a16"
+      "rows": 68570,
+      "sha256": "cebd4bc0b0b9d1bb27e96ccec545f3a309e52b7bf4d6d4a56bf25bd323896fd3"
     },
     {
       "artifact_label": "g550_raw_or_large_artifact",
-      "bytes": 3397665,
+      "bytes": 79952602,
       "committed": false,
       "exists": true,
-      "over_50mb": false,
+      "over_50mb": true,
       "path": "C:\\PROGRAMING\\czr004\\outputs\\logs\\phase5p5_repair5g550_fulltheta_expansion\\fulltheta_expansion_results.raw.csv",
-      "rows": 2067,
-      "sha256": "526d109ed72b72d79c2b6f1ba2a25e233e08bd0c47ea0718b3647ae34cd94a16"
+      "rows": 68570,
+      "sha256": "cebd4bc0b0b9d1bb27e96ccec545f3a309e52b7bf4d6d4a56bf25bd323896fd3"
     },
     {
       "artifact_label": "g550_raw_or_large_artifact",
@@ -53,23 +53,83 @@
     },
     {
       "artifact_label": "g550_raw_or_large_artifact",
-      "bytes": 26,
+      "bytes": 57738910,
       "committed": false,
       "exists": true,
-      "over_50mb": false,
+      "over_50mb": true,
       "path": "C:\\PROGRAMING\\czr004\\outputs\\logs\\phase5p5_repair5g550_active_theta_search\\active_theta_search_results.csv",
-      "rows": 0,
-      "sha256": "6f1bbaf723fc1af92ded81753ce49cbfa0372311f1cfff1fa0fbf9ece683edb3"
+      "rows": 50065,
+      "sha256": "e44336b07873b9d1baec304f6fe2f75ab0da93906cdeeb544041455a1813a8d7"
     },
     {
       "artifact_label": "g550_raw_or_large_artifact",
-      "bytes": 26,
+      "bytes": 57738910,
+      "committed": false,
+      "exists": true,
+      "over_50mb": true,
+      "path": "C:\\PROGRAMING\\czr004\\outputs\\logs\\phase5p5_repair5g550_active_theta_search\\active_theta_search_results.raw.csv",
+      "rows": 50065,
+      "sha256": "e44336b07873b9d1baec304f6fe2f75ab0da93906cdeeb544041455a1813a8d7"
+    },
+    {
+      "artifact_label": "g550_raw_or_large_artifact",
+      "bytes": 20002825,
       "committed": false,
       "exists": true,
       "over_50mb": false,
-      "path": "C:\\PROGRAMING\\czr004\\outputs\\logs\\phase5p5_repair5g550_active_theta_search\\active_theta_search_results.raw.csv",
+      "path": "C:\\PROGRAMING\\czr004\\outputs\\logs\\phase5p5_repair5g550_generated_theta_targeted\\generated_theta_targeted_plan.csv",
+      "rows": 30600,
+      "sha256": "87e3ca9223eb0789b89fa3e0cc8a282c20d1b508daf1371443bd56cbaa313b70"
+    },
+    {
+      "artifact_label": "g550_raw_or_large_artifact",
+      "bytes": 46475500,
+      "committed": false,
+      "exists": true,
+      "over_50mb": false,
+      "path": "C:\\PROGRAMING\\czr004\\outputs\\logs\\phase5p5_repair5g550_generated_theta_targeted\\generated_theta_targeted_results.csv",
+      "rows": 30006,
+      "sha256": "ad8e83afd81603e74287aaf7c7d10bf72921340d2a9c2e3d681b91f1f75f90d2"
+    },
+    {
+      "artifact_label": "g550_raw_or_large_artifact",
+      "bytes": 46475500,
+      "committed": false,
+      "exists": true,
+      "over_50mb": false,
+      "path": "C:\\PROGRAMING\\czr004\\outputs\\logs\\phase5p5_repair5g550_generated_theta_targeted\\generated_theta_targeted_results.raw.csv",
+      "rows": 30006,
+      "sha256": "ad8e83afd81603e74287aaf7c7d10bf72921340d2a9c2e3d681b91f1f75f90d2"
+    },
+    {
+      "artifact_label": "g550_raw_or_large_artifact",
+      "bytes": 0,
+      "committed": false,
+      "exists": false,
+      "over_50mb": false,
+      "path": "C:\\PROGRAMING\\czr004\\outputs\\logs\\phase5p5_repair5g550_blind_replay\\blind_replay_plan.csv",
       "rows": 0,
-      "sha256": "6f1bbaf723fc1af92ded81753ce49cbfa0372311f1cfff1fa0fbf9ece683edb3"
+      "sha256": ""
+    },
+    {
+      "artifact_label": "g550_raw_or_large_artifact",
+      "bytes": 0,
+      "committed": false,
+      "exists": false,
+      "over_50mb": false,
+      "path": "C:\\PROGRAMING\\czr004\\outputs\\logs\\phase5p5_repair5g550_blind_replay\\blind_replay_results.csv",
+      "rows": 0,
+      "sha256": ""
+    },
+    {
+      "artifact_label": "g550_raw_or_large_artifact",
+      "bytes": 0,
+      "committed": false,
+      "exists": false,
+      "over_50mb": false,
+      "path": "C:\\PROGRAMING\\czr004\\outputs\\logs\\phase5p5_repair5g550_blind_replay\\blind_replay_results.raw.csv",
+      "rows": 0,
+      "sha256": ""
     },
     {
       "artifact_label": "g550_raw_or_large_artifact",
@@ -103,7 +163,7 @@
     }
   ],
   "decision": "g550_large_artifacts_redirected_to_ignored_logs",
-  "large_artifact_commit_blocked_or_redirected_to_logs": false,
+  "large_artifact_commit_blocked_or_redirected_to_logs": true,
   "learned_runtime_policy_validated": false,
   "phase5p5_allowed": false,
   "phase6_allowed": false,

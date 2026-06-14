@@ -1,1 +1,2 @@
-
+theta_cluster,map_family,agents,nominal_budget_ms,horizon_id,support_pairs,pair_rows,seed_block_support,success_regression_count,success_regression_rate,quality_only_mean_delta_vs_static_flow,better_count_vs_static_flow,worse_count_vs_static_flow,region_status,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+g549_true_region_dense_local_perturbation,random,50,2000,c0_short2000_t050_i2,105,144,4,0,0,-0.00900492537543,59,29,true_safe_gain,False,False,False,False,False

@@ -1,0 +1,9 @@
+route,sampling_policy,planned_rows,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+D_active_theta_boundary_search,baseline,480,False,False,False,False,False
+D_active_theta_boundary_search,conservative_shrinkage_25,70,False,False,False,False,False
+D_active_theta_boundary_search,conservative_shrinkage_50,70,False,False,False,False,False
+D_active_theta_boundary_search,conservative_shrinkage_75,70,False,False,False,False,False
+D_active_theta_boundary_search,g549_true_region_best_examples,350,False,False,False,False,False
+D_active_theta_boundary_search,g549_true_region_centroid,70,False,False,False,False,False
+D_active_theta_boundary_search,g549_true_region_dense_local_perturbation,1680,False,False,False,False,False
+D_active_theta_boundary_search,negative_random_or_sobol_control,48890,False,False,False,False,False

@@ -1,0 +1,3 @@
+check,passed,leakage_found,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+same_checkpoint_features_pre_update_only,True,False,False,False,False,False,False
+downstream_probe_outcome_only_label,True,False,False,False,False,False,False

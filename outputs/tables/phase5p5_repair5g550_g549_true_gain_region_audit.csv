@@ -1,0 +1,11 @@
+theta_cluster,map_family,agents,nominal_budget_ms,horizon_id,support_pairs,pair_rows,seed_block_support,success_regression_count,quality_delta_vs_static_flow,interpretation,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+alpha_cong_commit_nonprogress_sweep,random,100,2000,c0_short5000_t050_i2,260,580,3,0,-0.0153603269685,true_gain_exists_but_is_concentrated,False,False,False,False,False
+alpha_flow_wait_progress_sweep,random,100,2000,c0_short5000_t050_i2,260,580,3,0,-0.0137028294986,true_gain_exists_but_is_concentrated,False,False,False,False,False
+edge_cost_clamp_sweep,random,100,2000,c0_short2000_t050_i2,320,580,3,0,-0.0151610374828,true_gain_exists_but_is_concentrated,False,False,False,False,False
+edge_cost_clamp_sweep,random,100,2000,c0_short5000_t050_i2,260,580,3,0,-0.0158603070127,true_gain_exists_but_is_concentrated,False,False,False,False,False
+g543_true_near_signal_neighborhood,random,100,2000,c0_short5000_t050_i2,260,580,3,0,-0.0201653282088,true_gain_exists_but_is_concentrated,False,False,False,False,False
+g546_g548_safe_no_gain_neighborhood,random,100,2000,c0_short5000_t050_i2,260,580,3,0,-0.00753890898054,true_gain_exists_but_is_concentrated,False,False,False,False,False
+lambda_flow_lambda_cong_sweep,random,100,2000,c0_short5000_t050_i2,260,580,3,0,-0.017279850435,true_gain_exists_but_is_concentrated,False,False,False,False,False
+static_flow_local_perturbation_fulltheta,random,100,2000,c0_short2000_t050_i2,320,580,3,0,-0.00765812301948,true_gain_exists_but_is_concentrated,False,False,False,False,False
+static_flow_local_perturbation_fulltheta,random,100,2000,c0_short5000_t050_i2,260,580,3,0,-0.013276090149,true_gain_exists_but_is_concentrated,False,False,False,False,False
+surrogate_guided_theta_if_model_exists,random,100,2000,c0_short5000_t050_i2,260,580,3,0,-0.00790179291181,true_gain_exists_but_is_concentrated,False,False,False,False,False

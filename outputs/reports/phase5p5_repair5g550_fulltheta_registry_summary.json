@@ -1,0 +1,16 @@
+{
+  "aaai_ready": false,
+  "committed_preview_rows": 1000,
+  "decision": "g550_fulltheta_registry_created",
+  "full_only_field_variation_rate": "1",
+  "fulltheta_fingerprint_match_rate_expected": "1",
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "raw_registry_path": "C:\\PROGRAMING\\czr004\\outputs\\logs\\phase5p5_repair5g550_registry\\fulltheta_registry.csv",
+  "raw_registry_sha256": "cc8a380428b5a28f06e5387f56808a2410083ce0ba85c84ab8663fd2393792de",
+  "registry_rows": 8192,
+  "reserved_ids_166_205_used": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g550_fulltheta_registry_summary_v1"
+}

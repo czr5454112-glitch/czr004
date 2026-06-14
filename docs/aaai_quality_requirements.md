@@ -28,6 +28,23 @@ phase6_allowed: false
 aaai_ready: false
 ```
 
+## 2026-06-14 G5.50 AAAI gate note
+
+G5.50 does not promote the G5.49 fulltheta regions to an AAAI-ready learned method. The round adds audits, forensic tables, active replay plans, multiple offline policy-family diagnostics, skip artifacts for targeted/blind replay, and exact resume commands for the large local replay stages. The local result is `g550_blocked_with_exact_commands`: useful engineering progress, but not paper-grade validation.
+
+AAAI-facing status remains:
+
+```text
+primary baseline: static_flow_shield
+additive_ltm: paper-faithful floor
+strong static variants: diagnostic only
+SafeGate: calibrated_core_subset_development_only / large_replay_resume_required
+runtime_claim_allowed: false
+phase5p5_allowed: false
+phase6_allowed: false
+aaai_ready: false
+```
+
 ## 2026-06 Repair5G learning-insertion strategy for top-tier AI / MAPF venues
 
 Repair5G has now established an important scientific fact:

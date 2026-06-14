@@ -104,3 +104,9 @@ G5.49 completed the local calibrated-core evaluability stage and ran a static_fl
 This does not broaden the claim scope. The unique evaluable stratum count is `4`, while selected evaluable horizon rows are a separate metric. Warehouse remains non-evaluable on local budget. SafeGate v2 therefore keeps this as `calibrated_core_subset_development_only`: useful for generator design and server-scale replay, not for runtime, Phase5.5, Phase6, or AAAI claims.
 
 The baseline policy is unchanged: `static_flow_shield` remains the primary baseline for learned/fulltheta continuous `UpdateParams`; `additive_ltm` remains the paper-faithful floor; `frozen_family_static_goal_aware` and `best_fixed_static_goal_aware` remain diagnostics unless explicitly promoted in a later round. The generator/targeted/blind path stays closed until a learned generated-theta policy, not replay-region hindsight, passes the offline risk/utility gate.
+
+## 2026-06-14 - G5.50 strategic update: region-to-policy still gated
+
+G5.50 audits the G5.49 true safe-gain regions and treats them as concentrated development signal, not as a deployable learned policy. The baseline policy is unchanged: `static_flow_shield` remains the primary baseline for learned/fulltheta continuous `UpdateParams`; `additive_ltm` remains the paper-faithful floor; strong static variants remain diagnostics.
+
+SafeGate v2 is not relaxed. Replay-region hindsight must first become a runtime-available bounded `UpdateParams` generator, residual policy, or safe expert mixture with abstention. In the local G5.50 pass, the fresh expansion, active-search, and iteration-counterfactual replay stages are implemented as resumable scripts, but the local solver budget blocked completion of the large row targets. The decision label is therefore `g550_blocked_with_exact_commands`, and targeted/blind replay stay closed because no learned non-static theta policy passed the offline gate.

@@ -1,0 +1,24 @@
+{
+  "aaai_ready": false,
+  "decision": "g550_generator_offline_failed_continue_model_design",
+  "failure_decomposition": {
+    "feature_insufficient": true,
+    "label_insufficient": true,
+    "needs_iteration_level_counterfactual_labels": true,
+    "policy_family_too_weak": true,
+    "risk_gate_too_conservative_but_correct": true,
+    "signal_too_concentrated": true
+  },
+  "generated_non_static_theta_usage_rate": "0",
+  "generator_policy_family_best": "none_offline_gate_failed",
+  "learned_runtime_policy_validated": false,
+  "offline_gate_passed": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "policy_families_evaluated": 8,
+  "predicted_safe_utility_mean_delta_vs_static_flow": "-0.0133030677366",
+  "risk_false_safe_count_on_validation": 0,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g550_policy_family_suite_summary_v1",
+  "success_regression_rate_predicted_safe": "0"
+}

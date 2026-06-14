@@ -1,4 +1,12 @@
-﻿## 2026-06-14 Repair5G.5.49 calibration/fulltheta governance update
+﻿## 2026-06-14 Repair5G.5.50 region-to-policy governance update
+
+G5.50 keeps the G5.49 baseline/SafeGate interpretation unchanged. `static_flow_shield` remains the primary baseline for learned/fulltheta continuous `UpdateParams`; `additive_ltm` is the paper-faithful floor; stronger static variants remain diagnostics unless a later round explicitly promotes one.
+
+The G5.50 scripts audit the G5.49 true regions, write forensics, create fresh fulltheta expansion / active-search / iteration-counterfactual plans, evaluate multiple learned bounded UpdateParams policy routes, and gate targeted/blind replay. The local solver budget did not complete the large fresh row targets, so the decision is `g550_blocked_with_exact_commands`. This is a resumable engineering state, not a negative scientific conclusion and not a runtime or AAAI claim.
+
+SafeGate interpretation: replay-region hindsight is still not a learned generated-theta policy. A later round must finish the exact resume commands, then pass offline, targeted, and blind gates before any runtime, Phase5.5, Phase6, or paper claim can open.
+
+## 2026-06-14 Repair5G.5.49 calibration/fulltheta governance update
 
 G5.49 keeps `static_flow_shield` as the primary baseline for learned/fulltheta continuous `UpdateParams`. `additive_ltm` is only the paper-faithful floor, and stronger static variants remain diagnostic unless a later round explicitly promotes one.
 

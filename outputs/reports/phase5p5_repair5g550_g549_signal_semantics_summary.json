@@ -1,0 +1,28 @@
+{
+  "aaai_ready": false,
+  "concentration": {
+    "all_true_gain_random_100_2000": true,
+    "maze_safe_no_gain_without_true_gain": false,
+    "random_50_no_true_gain": true,
+    "warehouse_remained_non_evaluable": true
+  },
+  "decision": "g550_g549_signal_semantics_audited",
+  "g549_executed_rows": 30282,
+  "g549_fulltheta_plan_fully_consumed": false,
+  "g549_plan_rows": 148320,
+  "generator_decision": "g549_generator_offline_gate_failed_continue_model_design",
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "primary_baseline": "static_flow_shield",
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g550_g549_signal_semantics_summary_v1",
+  "selected_evaluable_horizon_rows": 18,
+  "true_gain_interpretation": "true_gain_exists_but_is_concentrated",
+  "true_safe_gain_region_count": 10,
+  "unique_evaluable_stratum_count": 4,
+  "unique_true_gain_candidate_rows": 5800,
+  "unique_true_gain_horizons": 2,
+  "unique_true_gain_strata": 1,
+  "unique_true_gain_theta_clusters": 8
+}

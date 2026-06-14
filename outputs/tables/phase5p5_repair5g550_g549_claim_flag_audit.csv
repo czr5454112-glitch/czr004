@@ -1,0 +1,6 @@
+claim_flag,g549_value,g550_required_value,closed,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+phase5p5_allowed,False,False,True,False,False,False,False,False
+phase6_allowed,False,False,True,False,False,False,False,False
+runtime_claim_allowed,False,False,True,False,False,False,False,False
+learned_runtime_policy_validated,False,False,True,False,False,False,False,False
+aaai_ready,False,False,True,False,False,False,False,False

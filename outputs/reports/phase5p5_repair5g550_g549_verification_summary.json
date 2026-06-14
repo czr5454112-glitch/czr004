@@ -1,0 +1,28 @@
+{
+  "aaai_ready": false,
+  "checks": {
+    "claim_flags_closed": true,
+    "commit_cfa36a3_exists": true,
+    "final_decision_expected": true,
+    "generator_gate_failed": true,
+    "new_fulltheta_solver_rows_30282": true,
+    "primary_baseline_static_flow": true,
+    "targeted_blind_new_rows_zero": true,
+    "true_safe_gain_regions_10": true
+  },
+  "current_head": "cfa36a3",
+  "decision": "g550_g549_verified",
+  "external_lacam2_clean": true,
+  "g549_decision": "g549_fulltheta_true_safe_gain_regions_found_continue_generator",
+  "generator_decision": "g549_generator_offline_gate_failed_continue_model_design",
+  "learned_runtime_policy_validated": false,
+  "missing_artifacts": [],
+  "new_fulltheta_solver_rows": 30282,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "primary_baseline": "static_flow_shield",
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g550_g549_verification_summary_v1",
+  "start_commit": "cfa36a3",
+  "true_safe_gain_regions": 10
+}

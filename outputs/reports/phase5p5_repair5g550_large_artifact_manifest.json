@@ -1,0 +1,112 @@
+{
+  "aaai_ready": false,
+  "artifacts": [
+    {
+      "artifact_label": "g550_raw_or_large_artifact",
+      "bytes": 2296831,
+      "committed": false,
+      "exists": true,
+      "over_50mb": false,
+      "path": "C:\\PROGRAMING\\czr004\\outputs\\logs\\phase5p5_repair5g550_registry\\fulltheta_registry.csv",
+      "rows": 8192,
+      "sha256": "cc8a380428b5a28f06e5387f56808a2410083ce0ba85c84ab8663fd2393792de"
+    },
+    {
+      "artifact_label": "g550_raw_or_large_artifact",
+      "bytes": 34879029,
+      "committed": false,
+      "exists": true,
+      "over_50mb": false,
+      "path": "C:\\PROGRAMING\\czr004\\outputs\\logs\\phase5p5_repair5g550_fulltheta_expansion\\fulltheta_expansion_plan.csv",
+      "rows": 57440,
+      "sha256": "d84d5a3ec3dfdb1d6ede3a62e080bdefa0fdc49889d4504b1418e96eef62ce3b"
+    },
+    {
+      "artifact_label": "g550_raw_or_large_artifact",
+      "bytes": 2,
+      "committed": false,
+      "exists": true,
+      "over_50mb": false,
+      "path": "C:\\PROGRAMING\\czr004\\outputs\\logs\\phase5p5_repair5g550_fulltheta_expansion\\fulltheta_expansion_results.csv",
+      "rows": 0,
+      "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6"
+    },
+    {
+      "artifact_label": "g550_raw_or_large_artifact",
+      "bytes": 2,
+      "committed": false,
+      "exists": true,
+      "over_50mb": false,
+      "path": "C:\\PROGRAMING\\czr004\\outputs\\logs\\phase5p5_repair5g550_fulltheta_expansion\\fulltheta_expansion_results.raw.csv",
+      "rows": 0,
+      "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6"
+    },
+    {
+      "artifact_label": "g550_raw_or_large_artifact",
+      "bytes": 32755768,
+      "committed": false,
+      "exists": true,
+      "over_50mb": false,
+      "path": "C:\\PROGRAMING\\czr004\\outputs\\logs\\phase5p5_repair5g550_active_theta_search\\active_theta_search_plan.csv",
+      "rows": 51680,
+      "sha256": "1198e7667d757e0892e721a7798b47d6f482c15f550dfd2112a6b92374abd905"
+    },
+    {
+      "artifact_label": "g550_raw_or_large_artifact",
+      "bytes": 26,
+      "committed": false,
+      "exists": true,
+      "over_50mb": false,
+      "path": "C:\\PROGRAMING\\czr004\\outputs\\logs\\phase5p5_repair5g550_active_theta_search\\active_theta_search_results.csv",
+      "rows": 0,
+      "sha256": "6f1bbaf723fc1af92ded81753ce49cbfa0372311f1cfff1fa0fbf9ece683edb3"
+    },
+    {
+      "artifact_label": "g550_raw_or_large_artifact",
+      "bytes": 26,
+      "committed": false,
+      "exists": true,
+      "over_50mb": false,
+      "path": "C:\\PROGRAMING\\czr004\\outputs\\logs\\phase5p5_repair5g550_active_theta_search\\active_theta_search_results.raw.csv",
+      "rows": 0,
+      "sha256": "6f1bbaf723fc1af92ded81753ce49cbfa0372311f1cfff1fa0fbf9ece683edb3"
+    },
+    {
+      "artifact_label": "g550_raw_or_large_artifact",
+      "bytes": 2495189,
+      "committed": false,
+      "exists": true,
+      "over_50mb": false,
+      "path": "C:\\PROGRAMING\\czr004\\outputs\\logs\\phase5p5_repair5g550_iteration_counterfactual_label_probe\\iteration_counterfactual_label_plan.csv",
+      "rows": 3800,
+      "sha256": "5e74d69a798f7b2309a31856bd07042973cb9d879b66d66925791eb42920fd4f"
+    },
+    {
+      "artifact_label": "g550_raw_or_large_artifact",
+      "bytes": 24,
+      "committed": false,
+      "exists": true,
+      "over_50mb": false,
+      "path": "C:\\PROGRAMING\\czr004\\outputs\\logs\\phase5p5_repair5g550_iteration_counterfactual_label_probe\\iteration_counterfactual_label_probe_results.csv",
+      "rows": 0,
+      "sha256": "97a4b374f8cada8a0f35946647dafd553f9d795936528187d2859eb3a51d68d2"
+    },
+    {
+      "artifact_label": "g550_raw_or_large_artifact",
+      "bytes": 24,
+      "committed": false,
+      "exists": true,
+      "over_50mb": false,
+      "path": "C:\\PROGRAMING\\czr004\\outputs\\logs\\phase5p5_repair5g550_iteration_counterfactual_label_probe\\iteration_counterfactual_label_probe_results.raw.csv",
+      "rows": 0,
+      "sha256": "97a4b374f8cada8a0f35946647dafd553f9d795936528187d2859eb3a51d68d2"
+    }
+  ],
+  "decision": "g550_large_artifacts_redirected_to_ignored_logs",
+  "large_artifact_commit_blocked_or_redirected_to_logs": false,
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g550_large_artifact_manifest_v1"
+}

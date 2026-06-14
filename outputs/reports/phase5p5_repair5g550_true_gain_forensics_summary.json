@@ -1,0 +1,17 @@
+{
+  "aaai_ready": false,
+  "decision": "g550_true_gain_forensics_complete",
+  "learned_runtime_policy_validated": false,
+  "non_evaluable_regions": 17,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "primary_baseline": "static_flow_shield",
+  "runtime_claim_allowed": false,
+  "safe_no_gain_regions": 2,
+  "schema_version": "phase5p5_repair5g550_true_gain_forensics_summary_v1",
+  "success_regression_count_true_regions": 0,
+  "support_pairs_total_true_regions": 2720,
+  "true_gain_exists_but_is_concentrated": true,
+  "true_safe_gain_regions": 10,
+  "unsafe_useful_regions": 11
+}

@@ -1,0 +1,11 @@
+theta_cluster,map_family,agents,nominal_budget_ms,horizon_id,mean_delta,ci_lower,ci_upper,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+alpha_cong_commit_nonprogress_sweep,random,100,2000,c0_short5000_t050_i2,-0.0153603269685,-0.0200842407032,-0.0106623240329,False,False,False,False,False
+alpha_flow_wait_progress_sweep,random,100,2000,c0_short5000_t050_i2,-0.0137028294986,-0.0172866097329,-0.0104925606412,False,False,False,False,False
+edge_cost_clamp_sweep,random,100,2000,c0_short2000_t050_i2,-0.0151610374828,-0.0182173560948,-0.0120255556425,False,False,False,False,False
+edge_cost_clamp_sweep,random,100,2000,c0_short5000_t050_i2,-0.0158603070127,-0.0193732099368,-0.0118233720739,False,False,False,False,False
+g543_true_near_signal_neighborhood,random,100,2000,c0_short5000_t050_i2,-0.0201653282088,-0.0249193544118,-0.0150829641162,False,False,False,False,False
+g546_g548_safe_no_gain_neighborhood,random,100,2000,c0_short5000_t050_i2,-0.00753890898054,-0.012610043754,-0.00292088565585,False,False,False,False,False
+lambda_flow_lambda_cong_sweep,random,100,2000,c0_short5000_t050_i2,-0.017279850435,-0.0223337144711,-0.0132017819548,False,False,False,False,False
+static_flow_local_perturbation_fulltheta,random,100,2000,c0_short2000_t050_i2,-0.00765812301948,-0.0126351119532,-0.00381107044689,False,False,False,False,False
+static_flow_local_perturbation_fulltheta,random,100,2000,c0_short5000_t050_i2,-0.013276090149,-0.0177071908585,-0.00887154553227,False,False,False,False,False
+surrogate_guided_theta_if_model_exists,random,100,2000,c0_short5000_t050_i2,-0.00790179291181,-0.0128940311641,-0.00364874356942,False,False,False,False,False

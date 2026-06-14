@@ -1,0 +1,4 @@
+metric,planned,executed,consumed_rate,interpretation,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+fulltheta_plan_rows,148320,30282,0.204166666667,partially_consumed,False,False,False,False,False
+fulltheta_contexts,1440,294,0.204166666667,resume_not_needed_regenerate_for_fresh_g550,False,False,False,False,False
+candidate_rows,144000,29400,0.204166666667,87mb_plan_consumed_by_g549_do_not_commit_g550_raw_plan,False,False,False,False,False

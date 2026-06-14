@@ -1,5 +1,42 @@
 # Codex Worklog
 
+## 2026-06-14 - Repair5G.5.50 region-to-policy active replay
+
+- Request:
+  Continue after G5.49 commit cfa36a3. G5.49 found 10 true safe-gain fulltheta regions versus static_flow_shield, but only in a calibrated-core development subset. The generator did not produce a deployable non-static theta policy, targeted/blind replay were skipped, unique evaluable strata stayed at 4, and warehouse remained non-evaluable locally. G5.50 must expand/replicate the signal, diagnose region concentration, build multiple learned UpdateParams generator routes, and run fresh targeted/blind replay only by gate.
+- Scientific target:
+  Convert fulltheta replay-region evidence into a learned bounded UpdateParams or safe expert-mixture policy that improves over static_flow_shield without changing solver semantics.
+- Constraints:
+  No external/lacam2/lacam2 edits, no solver semantic changes, no static selector method, no IDs 166..205, no Phase5.5/Phase6/runtime/AAAI claims.
+- Implemented files:
+  - `scripts/repair5g550_common.py`
+  - `scripts/verify_repair5g550_g549_artifacts.py`
+  - `scripts/audit_repair5g550_g549_signal_semantics.py`
+  - `scripts/analyze_repair5g550_true_gain_forensics.py`
+  - `scripts/create_repair5g550_fulltheta_expansion_plan.py`
+  - `scripts/run_repair5g550_fulltheta_expansion.py`
+  - `scripts/analyze_repair5g550_fulltheta_expansion.py`
+  - `scripts/create_repair5g550_active_theta_search_plan.py`
+  - `scripts/run_repair5g550_active_theta_search.py`
+  - `scripts/analyze_repair5g550_active_theta_search.py`
+  - `scripts/create_repair5g550_policy_features.py`
+  - `scripts/train_eval_repair5g550_policy_family_suite.py`
+  - `scripts/analyze_repair5g550_policy_failure_modes.py`
+  - `scripts/create_repair5g550_generated_theta_targeted_plan.py`
+  - `scripts/run_repair5g550_generated_theta_targeted.py`
+  - `scripts/analyze_repair5g550_generated_theta_targeted.py`
+  - `scripts/create_repair5g550_blind_replay_plan.py`
+  - `scripts/run_repair5g550_blind_replay.py`
+  - `scripts/analyze_repair5g550_blind_replay.py`
+  - `scripts/create_repair5g550_iteration_counterfactual_label_plan.py`
+  - `scripts/run_repair5g550_iteration_counterfactual_label_probe.py`
+  - `scripts/analyze_repair5g550_iteration_counterfactual_labels.py`
+  - `scripts/write_repair5g550_decision.py`
+- Result:
+  G5.50 verified the G5.49 artifacts, audited signal semantics, wrote true-region forensic tables, created large fresh replay plans under ignored logs, built offline learned-UpdateParams policy diagnostics, and wrote targeted/blind skip artifacts. The local solver budget did not complete the large fresh replay row targets, so expansion, active search, and iteration-counterfactual stages are resumable with exact commands in the decision summary.
+- Decision:
+  `g550_blocked_with_exact_commands`.
+
 ## 2026-06-14 - Repair5G.5.49 calibration-completion staticflow-primary fulltheta replay
 
 - Request:

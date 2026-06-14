@@ -1,0 +1,13 @@
+{
+  "aaai_ready": false,
+  "decision": "g548_generator_skipped_fulltheta_replay_gate_not_met",
+  "generated_theta_rows": 0,
+  "learned_runtime_policy_validated": false,
+  "models_trained": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "risk_false_safe_count": 0,
+  "risk_gate_pass_rate": "0",
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g548_risk_utility_generator_summary_v1"
+}

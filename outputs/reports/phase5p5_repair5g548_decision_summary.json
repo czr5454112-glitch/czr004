@@ -1,0 +1,32 @@
+{
+  "aaai_ready": false,
+  "additive_ltm_role": "paper-faithful floor",
+  "component_decisions": {
+    "blind": "g548_blind_replay_skipped_targeted_gate_not_met",
+    "budget_calibration": "g548_budget_calibration_underpowered_continue_calibration",
+    "fulltheta_replay": "fulltheta_replay_skipped_budget_calibration_gate_failed",
+    "g547_evaluability_blocker": "g547_budget_calibration_not_executed_continue_real_calibration",
+    "g547_verification": "g547_verified_for_g548",
+    "generator": "g548_generator_skipped_fulltheta_replay_gate_not_met",
+    "targeted": "g548_generated_theta_targeted_skipped_generator_gate_not_met"
+  },
+  "decision": "g548_budget_calibration_underpowered_continue_calibration",
+  "interpretation": "G5.48 ran real budget calibration; if the final decision is non-evaluable, it is a horizon design result and not an algorithmic negative for neural continuous UpdateParams.",
+  "key_metrics": {
+    "baseline_static_flow_rows": 522,
+    "both_success_quality_pairs_vs_static_flow": 283,
+    "budget_calibration_solver_rows": 3654,
+    "calibrated_evaluable_strata": 12,
+    "calibration_contexts": 522,
+    "finite_ratio_rate_overall": "0.438970990695",
+    "finite_ratio_rows": 1604,
+    "fulltheta_fingerprint_match_rate": "1"
+  },
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "primary_baseline": "static_flow_shield",
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g548_decision_summary_v1",
+  "strong_static_role": "diagnostic only unless explicitly promoted to primary in a later round"
+}

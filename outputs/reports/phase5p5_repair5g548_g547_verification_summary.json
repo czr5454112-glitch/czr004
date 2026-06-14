@@ -1,0 +1,18 @@
+{
+  "aaai_ready": false,
+  "decision": "g547_verified_for_g548",
+  "external_lacam2_clean": true,
+  "fulltheta_fingerprint_match_rate": "1",
+  "fulltheta_materialization_passed": true,
+  "g547_active_real_probe_executed": false,
+  "g547_decision": "g547_budget_calibration_blocked_no_evaluable_quality_horizon",
+  "g547_finite_ratio_rows": 0,
+  "g547_negative_is_not_algorithmic": true,
+  "g548_must_run_real_budget_calibration": true,
+  "learned_runtime_policy_validated": false,
+  "missing_artifacts": [],
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g548_g547_verification_summary_v1"
+}

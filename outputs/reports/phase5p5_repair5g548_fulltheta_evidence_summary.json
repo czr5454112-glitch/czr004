@@ -1,0 +1,19 @@
+{
+  "aaai_ready": false,
+  "baseline_rows": 0,
+  "both_success_quality_pairs_vs_static_flow": 0,
+  "candidate_recognized_all": false,
+  "contexts": 0,
+  "decision": "fulltheta_replay_skipped_budget_calibration_gate_failed",
+  "distinct_fulltheta_rows": 0,
+  "finite_ratio_rows": 0,
+  "fulltheta_candidate_rows": 0,
+  "fulltheta_fingerprint_match_rate": "0",
+  "learned_runtime_policy_validated": false,
+  "new_fulltheta_solver_rows": 0,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "reason": "budget calibration did not pass evaluability gates",
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g548_fulltheta_evidence_summary_v1"
+}

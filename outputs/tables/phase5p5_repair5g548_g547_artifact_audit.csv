@@ -1,0 +1,11 @@
+artifact,path,exists,rows_or_file,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+g547_decision_summary,C:\PROGRAMING\czr004\outputs\reports\phase5p5_repair5g547_decision_summary.json,True,1,False,False,False,False,False
+g547_fulltheta_materialization_smoke_summary,C:\PROGRAMING\czr004\outputs\reports\phase5p5_repair5g547_fulltheta_materialization_smoke_summary.json,True,1,False,False,False,False,False
+g547_budget_calibration_summary,C:\PROGRAMING\czr004\outputs\reports\phase5p5_repair5g547_budget_calibration_summary.json,True,1,False,False,False,False,False
+g547_gate_reassessment_summary,C:\PROGRAMING\czr004\outputs\reports\phase5p5_repair5g547_gate_reassessment_summary.json,True,1,False,False,False,False,False
+g547_g546_probe_confounds_summary,C:\PROGRAMING\czr004\outputs\reports\phase5p5_repair5g547_g546_probe_confounds_summary.json,True,1,False,False,False,False,False
+g547_fulltheta_registry,C:\PROGRAMING\czr004\outputs\tables\phase5p5_repair5g547_fulltheta_registry.csv,True,18,False,False,False,False,False
+g547_fulltheta_materialization_smoke_results,C:\PROGRAMING\czr004\outputs\tables\phase5p5_repair5g547_fulltheta_materialization_smoke_results.csv,True,456,False,False,False,False,False
+g547_baseline_role_policy,C:\PROGRAMING\czr004\outputs\tables\phase5p5_repair5g547_baseline_role_policy.csv,True,5,False,False,False,False,False
+phase1a_batch_cpp,C:\PROGRAMING\czr004\cpp\tools\phase1a_batch.cpp,True,1,False,False,False,False,False
+g547_common,C:\PROGRAMING\czr004\scripts\repair5g547_common.py,True,1,False,False,False,False,False

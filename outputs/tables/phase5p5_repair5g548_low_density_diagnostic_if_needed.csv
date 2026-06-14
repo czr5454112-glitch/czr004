@@ -1,0 +1,2 @@
+decision,reason,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+low_density_diagnostic_skipped_target_horizon_evaluable,primary 50/100-agent calibration found locally evaluable stratum-horizons; diagnostic panel is not needed for G5.48 decision,False,False,False,False,False

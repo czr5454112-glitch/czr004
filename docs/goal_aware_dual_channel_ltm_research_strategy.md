@@ -88,3 +88,11 @@ SafeGate v2 is layered:
 - Tier B blind/runtime/paper gates remain strict and are not relaxed in G5.47.
 
 Strong static baselines such as `frozen_family_static_goal_aware`, `best_fixed_static_goal_aware`, and posthoc/oracle static variants are diagnostic stress tests unless a later experiment explicitly declares one as the primary baseline. During exploration, losing to every strong hand-written static variant is not by itself a learned UpdateLTM failure; static selector wins remain diagnostic, not LAUR progress.
+
+## 2026-06-14 - G5.48 strategic update: static_flow primary and evaluable horizons
+
+From G5.48 onward, `static_flow_shield` is the primary fixed baseline for neural continuous `UpdateParams`. The gate asks whether learned/fulltheta UpdateLTM can safely improve over this hand-designed static-flow LTM variant. Additive LTM is a paper-faithful floor. Strong family/static variants are diagnostic baselines, not the primary target and not selector actions.
+
+G5.48 also establishes that a declared calibration grid is not evidence. Real solver-facing horizon calibration must report materialized rows, context-horizons, static_flow rows, finite-ratio rows, both-success pairs versus static_flow, and no-probe/no-solution diagnostic rows separately. Underpowered calibration is a continuation result, not an algorithmic negative.
+
+The G5.48 local calibration produced real rows and found some evaluable stratum-horizons, but it did not reach the finite-row gate required for fulltheta replay. Therefore fulltheta replay, generator training, targeted replay, blind replay, runtime, Phase5.5, Phase6, and AAAI claims remain closed.

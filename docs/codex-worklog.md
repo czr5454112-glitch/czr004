@@ -1,5 +1,32 @@
 # Codex Worklog
 
+## 2026-06-14 - Repair5G.5.48 evaluable-horizon fulltheta replay
+
+- Request:
+  Finish `czr004_g548_evaluable_horizon_fulltheta_neural_updateparams_replay_plan.md`, then push to GitHub. If the round changes baseline or SafeGate policy, also update the project-wide strategy docs.
+- Pre-experiment statement:
+  G5.47 fixed materialization but did not run an evaluable fulltheta experiment. The next round is not "try more neural models"; it is "make the replay horizon evaluable". A positive or negative claim about neural continuous UpdateParams requires finite paired quality outcomes versus static_flow_shield.
+- Implemented files:
+  - `scripts/repair5g548_common.py`
+  - `scripts/verify_repair5g548_g547_artifacts.py`
+  - `scripts/audit_repair5g548_g547_evaluability_blocker.py`
+  - `scripts/create_repair5g548_real_budget_calibration_plan.py`
+  - `scripts/run_repair5g548_real_budget_calibration.py`
+  - `scripts/analyze_repair5g548_real_budget_calibration.py`
+  - `scripts/create_repair5g548_staticflow_primary_fulltheta_probe_plan.py`
+  - `scripts/run_repair5g548_staticflow_primary_fulltheta_probe.py`
+  - `scripts/analyze_repair5g548_staticflow_primary_fulltheta_evidence.py`
+  - `scripts/train_eval_repair5g548_risk_utility_generator_if_warranted.py`
+  - `scripts/run_repair5g548_generated_theta_targeted_if_warranted.py`
+  - `scripts/analyze_repair5g548_generated_theta_targeted_evidence.py`
+  - `scripts/run_repair5g548_blind_if_warranted.py`
+  - `scripts/analyze_repair5g548_blind_evidence.py`
+  - `scripts/write_repair5g548_decision.py`
+- Result:
+  G5.48 replaced the G5.47 declared grid with real solver-facing calibration. The run recovered `3654` calibration solver/diagnostic rows over `522` context-horizons, `522` static_flow rows, `1604` finite-ratio rows, and `283` both-success pairs versus static_flow. It found `12` locally evaluable stratum-horizons, but finite rows stayed below the `3000` overall gate, so fulltheta replay, generator, targeted replay, blind replay, runtime, Phase5.5, Phase6, and AAAI claims remain closed.
+- Decision:
+  `g548_budget_calibration_underpowered_continue_calibration`.
+
 ## 2026-06-12 - Repair5G.5.38 static-flow residual candidate design and label rebuild
 
 - Request:

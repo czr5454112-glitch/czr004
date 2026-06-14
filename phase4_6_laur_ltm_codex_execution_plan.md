@@ -6915,3 +6915,11 @@ not:
 ```text
 continuous theta has no signal
 ```
+
+## 2026-06-14 - G5.48 strategic update: static_flow primary baseline, real calibration only
+
+From G5.48 onward, `static_flow_shield` is the primary fixed baseline for neural continuous `UpdateParams`. The gate asks whether learned/fulltheta UpdateLTM can safely improve over this hand-designed static-flow LTM variant. Additive LTM is a paper-faithful floor. Strong family/static variants are diagnostic baselines, not the primary target and not selector actions.
+
+G5.48 changes the project-wide rule for this route: a budget/horizon grid must be materialized by real solver commands before it can support any positive or negative conclusion. Declared calibration rows, copied rows, and static-baseline selector wins do not count as learned UpdateLTM progress.
+
+The G5.48 local run produced `3654` calibration solver/diagnostic rows over `522` context-horizons, with `522` static_flow rows, `1604` finite-ratio rows, `283` both-success pairs versus static_flow, and `12` locally evaluable stratum-horizons. This satisfies the real-calibration floor but not the `finite_ratio_rows >= 3000` full replay gate, so the decision is `g548_budget_calibration_underpowered_continue_calibration`. Fulltheta replay, generator training, targeted replay, blind replay, Phase5.5, Phase6, runtime, and AAAI claims remain closed.

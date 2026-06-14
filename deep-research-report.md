@@ -2270,3 +2270,11 @@ The learned residual component is not a replacement for the strongest deployable
 G5.45 built the neural continuous theta infrastructure but did not run new continuous-theta solver replay. From G5.46 onward, neural UpdateParams evidence requires real newly materialized continuous-theta solver rows. Retrospective rows may train diagnostic surrogates, but cannot satisfy generator or replay gates.
 
 G5.46 adds a real solver-facing counterfactual UpdateLTM probe path for bounded continuous theta materialized through existing `repair5g518_grid_*` adapter grammar. The 2026-06-14 local run passed materialization smoke but remained under the hard 30000-row replay gate, so it is continuation evidence only and opens no runtime, Phase5.5, Phase6, or AAAI claim.
+
+## 2026-06-14 - G5.48 strategic update: evaluable horizon before neural claims
+
+From G5.48 onward, `static_flow_shield` is the primary fixed baseline for neural continuous `UpdateParams`. The gate asks whether learned/fulltheta UpdateLTM can safely improve over this hand-designed static-flow LTM variant. Additive LTM is a paper-faithful floor. Strong family/static variants are diagnostic baselines, not the primary target and not selector actions.
+
+G5.47 fixed fulltheta materialization but did not run an evaluable fulltheta experiment. G5.48 therefore treats budget/horizon calibration as the bottleneck. A positive or negative claim about neural continuous UpdateParams requires finite paired quality outcomes versus static_flow_shield, not a declared grid and not a selector over static baselines.
+
+The G5.48 local calibration wrote real solver-facing rows: `3654` calibration solver/diagnostic rows, `522` context-horizons, `522` static_flow rows, `1604` finite-ratio rows, `283` both-success pairs versus static_flow, and `12` locally evaluable stratum-horizons. Because the finite-row gate remained below `3000`, the decision is `g548_budget_calibration_underpowered_continue_calibration`; fulltheta replay and all promotion/runtime/paper claims remain closed.

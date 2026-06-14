@@ -1,0 +1,19 @@
+{
+  "aaai_ready": false,
+  "better_count_vs_static_flow": 0,
+  "decision": "targeted_replay_skipped_offline_gate_not_passed",
+  "generated_theta_usage_rate": 0,
+  "learned_runtime_policy_validated": false,
+  "new_continuous_probe_rows": 0,
+  "offline_gate_passed": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "quality_only_mean_delta_vs_static_flow": "",
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g545_generated_theta_targeted_evidence_summary_v1",
+  "success_regression_vs_family_static": 0,
+  "success_regression_vs_static_flow": 0,
+  "targeted_rows": 0,
+  "validation_false_safe_count_at_tau": 0,
+  "worse_count_vs_static_flow": 0
+}

@@ -1,0 +1,20 @@
+{
+  "aaai_ready": false,
+  "decision": "g543_artifacts_verified_for_g545",
+  "final_supported_edge_event_region_count": 0,
+  "g543_decision": "g543_static_ladder_confounded_g542_overlay_continue_repair",
+  "g543_facts_match_g545_plan": true,
+  "learned_runtime_policy_validated": false,
+  "missing_artifact_count": 0,
+  "missing_artifacts": [],
+  "overlay_caused_count": 0,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "refinement_rows": 15120,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g545_g543_verification_summary_v1",
+  "stage1_candidate_aliases": 101,
+  "stage1_probe_rows": 12960,
+  "stage1_safe_useful_region_count": 19,
+  "static_ladder_caused_count": 2
+}

@@ -1,0 +1,148 @@
+{
+  "aaai_ready": false,
+  "calibration_threshold": "-9.14605462724e-13",
+  "claim_flags_closed": {
+    "aaai_ready": false,
+    "learned_runtime_policy_validated": false,
+    "phase5p5_allowed": false,
+    "phase6_allowed": false,
+    "runtime_claim_allowed": false
+  },
+  "decision": "generator_trained_diagnostic_replay_blocked_by_continuous_probe_gate",
+  "feature_columns": [
+    "feature_map_family_maze",
+    "feature_map_family_random",
+    "feature_map_family_warehouse",
+    "feature_agents",
+    "feature_budget_ms",
+    "feature_iteration_final",
+    "feature_obstacle_ratio_proxy",
+    "feature_corridor_proxy",
+    "feature_junction_proxy",
+    "feature_trace_event_count",
+    "feature_trace_events_per_agent",
+    "feature_pibt_failure_audit_count",
+    "feature_expanded_nodes",
+    "feature_high_level_expansions",
+    "feature_low_level_pibt_calls",
+    "feature_expansions_per_agent",
+    "feature_budget_per_agent"
+  ],
+  "learned_runtime_policy_validated": false,
+  "model_architecture": "sklearn_MLPRegressor context->bounded theta with K latent jitter samples",
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "random_seeds": {
+    "generator": 545,
+    "sampling": 545
+  },
+  "runtime_claim_allowed": false,
+  "schema_version": "repair5g545_model_manifest_v1",
+  "sklearn_artifacts": {
+    "risk_model": "artifacts/models/laur_ltm/repair5g545_risk_model.joblib",
+    "theta_generator": "artifacts/models/laur_ltm/repair5g545_theta_generator.joblib",
+    "utility_model": "artifacts/models/laur_ltm/repair5g545_utility_model.joblib"
+  },
+  "splits": "seed modulo strict split: train 0-5, validation 6-7, test 8-9",
+  "theta_bounds": {
+    "theta_alpha_cong_block": {
+      "hi": 2.25,
+      "lo": 0.5
+    },
+    "theta_alpha_cong_commit_nonprogress": {
+      "hi": 1.75,
+      "lo": 0.5
+    },
+    "theta_alpha_cong_commit_progress": {
+      "hi": 1.5,
+      "lo": 0.0
+    },
+    "theta_alpha_cong_wait_nonprogress": {
+      "hi": 1.75,
+      "lo": 0.0
+    },
+    "theta_alpha_cong_wait_progress": {
+      "hi": 1.25,
+      "lo": 0.0
+    },
+    "theta_alpha_flow_commit_progress": {
+      "hi": 1.5,
+      "lo": 0.0
+    },
+    "theta_alpha_flow_wait_progress": {
+      "hi": 1.25,
+      "lo": 0.0
+    },
+    "theta_flow_shield_beta": {
+      "hi": 0.8,
+      "lo": 0.0
+    },
+    "theta_goal_projection_mode_agent_progress": {
+      "hi": 1.0,
+      "lo": 0.0
+    },
+    "theta_goal_projection_mode_flow_shield": {
+      "hi": 1.0,
+      "lo": 0.0
+    },
+    "theta_goal_projection_mode_none": {
+      "hi": 1.0,
+      "lo": 0.0
+    },
+    "theta_lambda_cong": {
+      "hi": 1.5,
+      "lo": 0.5
+    },
+    "theta_lambda_flow": {
+      "hi": 1.5,
+      "lo": 0.0
+    },
+    "theta_max_edge_cost": {
+      "hi": 12.0,
+      "lo": 8.0
+    },
+    "theta_max_flow_shield": {
+      "hi": 1.5,
+      "lo": 0.25
+    },
+    "theta_min_edge_cost": {
+      "hi": 1.0,
+      "lo": 0.25
+    },
+    "theta_rho_cong_decay": {
+      "hi": 1.0,
+      "lo": 0.9
+    },
+    "theta_rho_flow_decay": {
+      "hi": 1.0,
+      "lo": 0.9
+    }
+  },
+  "theta_columns": [
+    "theta_alpha_cong_commit_progress",
+    "theta_alpha_cong_commit_nonprogress",
+    "theta_alpha_cong_block",
+    "theta_alpha_cong_wait_progress",
+    "theta_alpha_cong_wait_nonprogress",
+    "theta_alpha_flow_commit_progress",
+    "theta_alpha_flow_wait_progress",
+    "theta_rho_cong_decay",
+    "theta_rho_flow_decay",
+    "theta_lambda_cong",
+    "theta_lambda_flow",
+    "theta_flow_shield_beta",
+    "theta_max_flow_shield",
+    "theta_min_edge_cost",
+    "theta_max_edge_cost",
+    "theta_goal_projection_mode_flow_shield",
+    "theta_goal_projection_mode_agent_progress",
+    "theta_goal_projection_mode_none"
+  ],
+  "torch_pt_artifacts": {
+    "reason": "torch is not available in this environment; sklearn joblib artifacts were produced instead.",
+    "risk_model": "",
+    "theta_generator": "",
+    "utility_model": ""
+  },
+  "training_rows": 64968
+}

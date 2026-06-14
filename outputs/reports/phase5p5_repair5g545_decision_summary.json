@@ -1,0 +1,44 @@
+{
+  "aaai_ready": false,
+  "component_decisions": {
+    "blind": "blind_replay_skipped_targeted_gate_not_passed",
+    "continuous_probe": "continuous_probe_real_solver_replay_blocked_minimum_new_rows_not_met",
+    "dataset": "g545_param_replay_dataset_created",
+    "generator": "generator_trained_diagnostic_replay_blocked_by_continuous_probe_gate",
+    "surrogates": "surrogates_trained_diagnostic_prior_data_new_probe_gate_blocked",
+    "targeted": "targeted_replay_skipped_offline_gate_not_passed",
+    "verify_g543": "g543_artifacts_verified_for_g545"
+  },
+  "decision": "g545_dataset_or_materialization_blocked_continue_infrastructure",
+  "hard_requirements": {
+    "all_claims_closed": true,
+    "blind_replay_executed_or_skipped_by_gate": true,
+    "canonical_dataset_created": true,
+    "continuous_sampling_plan_written": true,
+    "external_lacam2_clean": true,
+    "feature_leakage_audit_written": true,
+    "g543_verified": true,
+    "g544_superseded_note_written": true,
+    "generated_alias_map_written": true,
+    "new_continuous_probe_rows_ge_30000": false,
+    "reserved_ids_untouched": true,
+    "risk_false_safe_zero": true,
+    "targeted_replay_executed_or_skipped_by_gate": true
+  },
+  "key_metrics": {
+    "blind_rows": 0,
+    "contexts": 5751,
+    "dataset_rows": 64968,
+    "distinct_theta_rows": 276,
+    "generated_theta_rows": 5760,
+    "new_continuous_probe_rows": 0,
+    "non_static_counterfactual_parameter_rate": "1",
+    "retrospective_solver_rows": 64968,
+    "targeted_rows": 0
+  },
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g545_decision_summary_v1"
+}

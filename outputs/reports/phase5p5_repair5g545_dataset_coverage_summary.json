@@ -1,0 +1,180 @@
+{
+  "aaai_ready": false,
+  "contexts": 5751,
+  "dataset_rows": 64968,
+  "decision": "g545_param_replay_dataset_created",
+  "distinct_theta_rows": 276,
+  "feature_columns": 17,
+  "forbidden_model_features_present": [],
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "raw_prior_solver_rows": 65448,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g545_dataset_coverage_summary_v1",
+  "source_audit": [
+    {
+      "aaai_ready": false,
+      "exists": true,
+      "learned_runtime_policy_validated": false,
+      "path": "outputs/tables/phase5p5_repair5g539_param_optimizer_probe_results.csv",
+      "phase5p5_allowed": false,
+      "phase6_allowed": false,
+      "row_count": 216,
+      "runtime_claim_allowed": false,
+      "source_label": "g539_param_optimizer_probe"
+    },
+    {
+      "aaai_ready": false,
+      "exists": true,
+      "learned_runtime_policy_validated": false,
+      "path": "outputs/tables/phase5p5_repair5g539_frozen_param_blind_replay_results.csv",
+      "phase5p5_allowed": false,
+      "phase6_allowed": false,
+      "row_count": 144,
+      "runtime_claim_allowed": false,
+      "source_label": "g539_frozen_param_blind"
+    },
+    {
+      "aaai_ready": false,
+      "exists": true,
+      "learned_runtime_policy_validated": false,
+      "path": "outputs/tables/phase5p5_repair5g540_stage1_param_search_results.csv",
+      "phase5p5_allowed": false,
+      "phase6_allowed": false,
+      "row_count": 3168,
+      "runtime_claim_allowed": false,
+      "source_label": "g540_stage1"
+    },
+    {
+      "aaai_ready": false,
+      "exists": true,
+      "learned_runtime_policy_validated": false,
+      "path": "outputs/tables/phase5p5_repair5g540_stage2_topk_results.csv",
+      "phase5p5_allowed": false,
+      "phase6_allowed": false,
+      "row_count": 6120,
+      "runtime_claim_allowed": false,
+      "source_label": "g540_stage2"
+    },
+    {
+      "aaai_ready": false,
+      "exists": true,
+      "learned_runtime_policy_validated": false,
+      "path": "outputs/tables/phase5p5_repair5g540_stage3_refine_results.csv",
+      "phase5p5_allowed": false,
+      "phase6_allowed": false,
+      "row_count": 0,
+      "runtime_claim_allowed": false,
+      "source_label": "g540_stage3"
+    },
+    {
+      "aaai_ready": false,
+      "exists": true,
+      "learned_runtime_policy_validated": false,
+      "path": "outputs/tables/phase5p5_repair5g540_blind_region_replay_results.csv",
+      "phase5p5_allowed": false,
+      "phase6_allowed": false,
+      "row_count": 0,
+      "runtime_claim_allowed": false,
+      "source_label": "g540_blind"
+    },
+    {
+      "aaai_ready": false,
+      "exists": true,
+      "learned_runtime_policy_validated": false,
+      "path": "outputs/tables/phase5p5_repair5g541_balanced_support_extension_results.csv",
+      "phase5p5_allowed": false,
+      "phase6_allowed": false,
+      "row_count": 9600,
+      "runtime_claim_allowed": false,
+      "source_label": "g541_balanced_extension"
+    },
+    {
+      "aaai_ready": false,
+      "exists": true,
+      "learned_runtime_policy_validated": false,
+      "path": "outputs/tables/phase5p5_repair5g541_stratum_local_refinement_results.csv",
+      "phase5p5_allowed": false,
+      "phase6_allowed": false,
+      "row_count": 3360,
+      "runtime_claim_allowed": false,
+      "source_label": "g541_stratum_refinement"
+    },
+    {
+      "aaai_ready": false,
+      "exists": true,
+      "learned_runtime_policy_validated": false,
+      "path": "outputs/tables/phase5p5_repair5g541_frozen_stratum_blind_replay_results.csv",
+      "phase5p5_allowed": false,
+      "phase6_allowed": false,
+      "row_count": 7200,
+      "runtime_claim_allowed": false,
+      "source_label": "g541_frozen_blind"
+    },
+    {
+      "aaai_ready": false,
+      "exists": true,
+      "learned_runtime_policy_validated": false,
+      "path": "outputs/tables/phase5p5_repair5g542_ladder_overlay_probe_results.csv",
+      "phase5p5_allowed": false,
+      "phase6_allowed": false,
+      "row_count": 7560,
+      "runtime_claim_allowed": false,
+      "source_label": "g542_ladder_overlay_probe"
+    },
+    {
+      "aaai_ready": false,
+      "exists": true,
+      "learned_runtime_policy_validated": false,
+      "path": "outputs/tables/phase5p5_repair5g542_frozen_ladder_overlay_blind_results.csv",
+      "phase5p5_allowed": false,
+      "phase6_allowed": false,
+      "row_count": 0,
+      "runtime_claim_allowed": false,
+      "source_label": "g542_frozen_blind"
+    },
+    {
+      "aaai_ready": false,
+      "exists": true,
+      "learned_runtime_policy_validated": false,
+      "path": "outputs/tables/phase5p5_repair5g543_probe_stage1_results.csv",
+      "phase5p5_allowed": false,
+      "phase6_allowed": false,
+      "row_count": 12960,
+      "runtime_claim_allowed": false,
+      "source_label": "g543_stage1"
+    },
+    {
+      "aaai_ready": false,
+      "exists": true,
+      "learned_runtime_policy_validated": false,
+      "path": "outputs/tables/phase5p5_repair5g543_refinement_results.csv",
+      "phase5p5_allowed": false,
+      "phase6_allowed": false,
+      "row_count": 15120,
+      "runtime_claim_allowed": false,
+      "source_label": "g543_refinement"
+    },
+    {
+      "aaai_ready": false,
+      "exists": true,
+      "learned_runtime_policy_validated": false,
+      "path": "outputs/tables/phase5p5_repair5g543_blind_results.csv",
+      "phase5p5_allowed": false,
+      "phase6_allowed": false,
+      "row_count": 0,
+      "runtime_claim_allowed": false,
+      "source_label": "g543_blind"
+    }
+  ],
+  "theta_columns": 18,
+  "theta_recovery_counts": {
+    "additive_baseline": 7205,
+    "grid_method": 36494,
+    "static_baseline_proxy": 10106,
+    "static_flow_baseline": 11163,
+    "unrecoverable": 480
+  },
+  "theta_rejected_rows": 480
+}

@@ -1,0 +1,2 @@
+model,split,train_rows,validation_rows,test_rows,harmful_positive_rows,tau_risk,harmful_recall,harmful_precision,auroc,auprc,brier,ece_proxy,false_safe_count_at_tau,validation_false_safe_count_at_tau,risk_gate_passed_zero_validation_false_safe,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+Pipeline,test_seed_block,36720,14832,13416,844,-9.14605462724e-13,1,0.0100626118068,0.967967048443,0.136937051577,0.0893925036905,0.134949475077,0,0,True,False,False,False,False,False

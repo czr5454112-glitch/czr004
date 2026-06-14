@@ -1,0 +1,32 @@
+{
+  "aaai_ready": false,
+  "decision": "g544_static_selector_or_envelope_direction_superseded_by_g545_neural_continuous_generator",
+  "g544_artifacts_checked": [
+    {
+      "aaai_ready": false,
+      "exists": true,
+      "learned_runtime_policy_validated": false,
+      "path": "czr004_g544_context_safety_envelope_mechanism_update_residual_prompt.md",
+      "phase5p5_allowed": false,
+      "phase6_allowed": false,
+      "row_count": 1,
+      "runtime_claim_allowed": false
+    },
+    {
+      "aaai_ready": false,
+      "exists": false,
+      "learned_runtime_policy_validated": false,
+      "path": "outputs/reports/phase5p5_repair5g544_decision_summary.json",
+      "phase5p5_allowed": false,
+      "phase6_allowed": false,
+      "row_count": 0,
+      "runtime_claim_allowed": false
+    }
+  ],
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g545_g544_superseded_note_summary_v1",
+  "supersede_reason": "G5.43 showed manual discrete aliases had Stage1 signal but zero supported refined regions."
+}

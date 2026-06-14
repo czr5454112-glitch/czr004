@@ -1,0 +1,2 @@
+model,contexts_generated,k_samples,generated_theta_rows,non_static_counterfactual_parameter_rate,risk_gate_pass_rate,top1_top3_top8_available,passes_offline_noncollapse_gate,replay_eligible,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+sklearn_MLPRegressor_theta_generator,720,8,5760,1,0,top1/top3/top8 materialized; solver replay blocked until new probe gate,True,False,False,False,False,False,False

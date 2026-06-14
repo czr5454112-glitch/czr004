@@ -1,0 +1,9 @@
+artifact_label,path,exists,row_count,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+g543_decision_summary,outputs/reports/phase5p5_repair5g543_decision_summary.json,True,1,False,False,False,False,False
+g543_stage1_summary,outputs/reports/phase5p5_repair5g543_edge_event_probe_stage1_summary.json,True,1,False,False,False,False,False
+g543_refinement_summary,outputs/reports/phase5p5_repair5g543_edge_event_refinement_summary.json,True,1,False,False,False,False,False
+g543_static_ladder_autopsy_summary,outputs/reports/phase5p5_repair5g543_g542_staticflow_regression_autopsy_summary.json,True,1,False,False,False,False,False
+g543_stage1_results,outputs/tables/phase5p5_repair5g543_probe_stage1_results.csv,True,12960,False,False,False,False,False
+g543_refinement_results,outputs/tables/phase5p5_repair5g543_refinement_results.csv,True,15120,False,False,False,False,False
+g543_candidate_family,outputs/tables/phase5p5_repair5g543_edge_event_candidate_family.csv,True,108,False,False,False,False,False
+repair5g543_common,scripts/repair5g543_common.py,True,1,False,False,False,False,False

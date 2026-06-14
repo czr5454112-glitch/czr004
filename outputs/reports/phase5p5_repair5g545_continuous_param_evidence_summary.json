@@ -1,0 +1,17 @@
+{
+  "aaai_ready": false,
+  "can_proceed_to_positive_generator_claims": false,
+  "contexts_planned": 1440,
+  "decision": "continuous_probe_real_solver_replay_blocked_minimum_new_rows_not_met",
+  "distinct_theta_rows_retrospective": 276,
+  "learned_runtime_policy_validated": false,
+  "minimum_contexts_met": false,
+  "minimum_new_solver_rows_met": false,
+  "new_solver_rows": 0,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "planned_solver_rows": 46080,
+  "retrospective_solver_rows": 64968,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g545_continuous_param_evidence_summary_v1"
+}

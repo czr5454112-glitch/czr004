@@ -3,60 +3,254 @@
     50,
     100
   ],
-  "created_at": "2026-06-14T10:19:01.131331",
+  "created_at": "2026-06-14T11:04:52.230897",
   "effective_instance_ids": [
     486,
     566,
-    646
+    646,
+    647,
+    648,
+    666,
+    667,
+    668,
+    669,
+    670,
+    671,
+    672,
+    673,
+    674,
+    675,
+    706,
+    707,
+    708,
+    709,
+    710,
+    711,
+    712,
+    826,
+    827,
+    828,
+    829,
+    830,
+    831,
+    832,
+    833,
+    834,
+    835,
+    836,
+    837,
+    838,
+    839,
+    840,
+    841,
+    842,
+    843,
+    844,
+    845,
+    846,
+    847,
+    848,
+    849,
+    850,
+    851,
+    852,
+    853,
+    854,
+    855,
+    856,
+    857,
+    858,
+    859,
+    860,
+    861,
+    862,
+    863,
+    864,
+    865,
+    866,
+    867,
+    868,
+    869,
+    870,
+    871,
+    872,
+    873,
+    874,
+    875,
+    876,
+    877,
+    878,
+    879,
+    880,
+    881,
+    882,
+    883,
+    884,
+    885,
+    886,
+    887,
+    888,
+    889,
+    890,
+    891,
+    892,
+    893,
+    894,
+    895,
+    896,
+    897,
+    898,
+    899,
+    900,
+    901,
+    902,
+    903,
+    904,
+    905
   ],
   "final_missing_count": 0,
   "final_missing_examples": [],
-  "generated_count": 9,
+  "generated_count": 21,
   "generated_examples": [
     {
-      "instance_id": 486,
+      "instance_id": 706,
       "map": "maze-32-32-4",
-      "path": "outputs\\tmp\\phase5p5_repair5g546_real_probe_scenarios\\maze-32-32-4-random-486.scen"
+      "pairs": 100,
+      "path": "outputs\\tmp\\phase5p5_repair5g546_real_probe_scenarios\\maze-32-32-4-random-706.scen",
+      "sha256": "dbf46f37886d86d7cdaf976d1b694219a39443b057b48c4420a50b1c8873552d"
     },
     {
-      "instance_id": 566,
+      "instance_id": 707,
       "map": "maze-32-32-4",
-      "path": "outputs\\tmp\\phase5p5_repair5g546_real_probe_scenarios\\maze-32-32-4-random-566.scen"
+      "pairs": 100,
+      "path": "outputs\\tmp\\phase5p5_repair5g546_real_probe_scenarios\\maze-32-32-4-random-707.scen",
+      "sha256": "c0def86930abc19af9915b073f689cc2fb589f76823b8f58aa531629a6c77e4f"
     },
     {
-      "instance_id": 646,
+      "instance_id": 708,
       "map": "maze-32-32-4",
-      "path": "outputs\\tmp\\phase5p5_repair5g546_real_probe_scenarios\\maze-32-32-4-random-646.scen"
+      "pairs": 100,
+      "path": "outputs\\tmp\\phase5p5_repair5g546_real_probe_scenarios\\maze-32-32-4-random-708.scen",
+      "sha256": "8e4a0c924bcfe9423b6ef3c2c948fffafcd3fa62531bd922af7eaefea8d9a12b"
     },
     {
-      "instance_id": 486,
+      "instance_id": 709,
+      "map": "maze-32-32-4",
+      "pairs": 100,
+      "path": "outputs\\tmp\\phase5p5_repair5g546_real_probe_scenarios\\maze-32-32-4-random-709.scen",
+      "sha256": "7f4db4cdf098787a07182a9abecfcdd4013564e117e3b932dff7bedf5b19823c"
+    },
+    {
+      "instance_id": 710,
+      "map": "maze-32-32-4",
+      "pairs": 100,
+      "path": "outputs\\tmp\\phase5p5_repair5g546_real_probe_scenarios\\maze-32-32-4-random-710.scen",
+      "sha256": "04261a7fe865b916769fca6d71b58d089fa33b9b910663b1d666c2fd39d3a5cf"
+    },
+    {
+      "instance_id": 711,
+      "map": "maze-32-32-4",
+      "pairs": 100,
+      "path": "outputs\\tmp\\phase5p5_repair5g546_real_probe_scenarios\\maze-32-32-4-random-711.scen",
+      "sha256": "19caf7759d22d84cd4e2f31ff239c6096538cb1a340fe40dfb8fdcb9b66ce1c5"
+    },
+    {
+      "instance_id": 712,
+      "map": "maze-32-32-4",
+      "pairs": 100,
+      "path": "outputs\\tmp\\phase5p5_repair5g546_real_probe_scenarios\\maze-32-32-4-random-712.scen",
+      "sha256": "8c10923eb7023d743a675068ad9c0dc5f02780cfc078902d1823d62c05d48b53"
+    },
+    {
+      "instance_id": 706,
       "map": "random-32-32-20",
-      "path": "outputs\\tmp\\phase5p5_repair5g546_real_probe_scenarios\\random-32-32-20-random-486.scen"
+      "pairs": 100,
+      "path": "outputs\\tmp\\phase5p5_repair5g546_real_probe_scenarios\\random-32-32-20-random-706.scen",
+      "sha256": "ab47dc6831243d1e8d237ac629b3ef1b649ff332b4634a3365f6cab113b244cb"
     },
     {
-      "instance_id": 566,
+      "instance_id": 707,
       "map": "random-32-32-20",
-      "path": "outputs\\tmp\\phase5p5_repair5g546_real_probe_scenarios\\random-32-32-20-random-566.scen"
+      "pairs": 100,
+      "path": "outputs\\tmp\\phase5p5_repair5g546_real_probe_scenarios\\random-32-32-20-random-707.scen",
+      "sha256": "1c9e853e4d3135efc336cb47d9f8bcb51c4747f0ce5aa1afe8f812e4438c8390"
     },
     {
-      "instance_id": 646,
+      "instance_id": 708,
       "map": "random-32-32-20",
-      "path": "outputs\\tmp\\phase5p5_repair5g546_real_probe_scenarios\\random-32-32-20-random-646.scen"
+      "pairs": 100,
+      "path": "outputs\\tmp\\phase5p5_repair5g546_real_probe_scenarios\\random-32-32-20-random-708.scen",
+      "sha256": "8a09f4d632a43a3441f7749edd05f0c0a1ea5fc0552f1c5b7560b5a8cd294ebd"
     },
     {
-      "instance_id": 486,
-      "map": "warehouse-10-20-10-2-1",
-      "path": "outputs\\tmp\\phase5p5_repair5g546_real_probe_scenarios\\warehouse-10-20-10-2-1-random-486.scen"
+      "instance_id": 709,
+      "map": "random-32-32-20",
+      "pairs": 100,
+      "path": "outputs\\tmp\\phase5p5_repair5g546_real_probe_scenarios\\random-32-32-20-random-709.scen",
+      "sha256": "8d14a1f96ba71862875377f16a471f478f6586549aaf305b1b2ea0698b2cb6d6"
     },
     {
-      "instance_id": 566,
-      "map": "warehouse-10-20-10-2-1",
-      "path": "outputs\\tmp\\phase5p5_repair5g546_real_probe_scenarios\\warehouse-10-20-10-2-1-random-566.scen"
+      "instance_id": 710,
+      "map": "random-32-32-20",
+      "pairs": 100,
+      "path": "outputs\\tmp\\phase5p5_repair5g546_real_probe_scenarios\\random-32-32-20-random-710.scen",
+      "sha256": "b03b5b1d67afa3ce8778d8af8e84a9b77beedb3d0a595bd226c0f8db549959cf"
     },
     {
-      "instance_id": 646,
+      "instance_id": 711,
+      "map": "random-32-32-20",
+      "pairs": 100,
+      "path": "outputs\\tmp\\phase5p5_repair5g546_real_probe_scenarios\\random-32-32-20-random-711.scen",
+      "sha256": "d08edda1223b867343192d37816ccabf6b07b1fdb291610e851c4921a718b868"
+    },
+    {
+      "instance_id": 712,
+      "map": "random-32-32-20",
+      "pairs": 100,
+      "path": "outputs\\tmp\\phase5p5_repair5g546_real_probe_scenarios\\random-32-32-20-random-712.scen",
+      "sha256": "3d8573c9f48a9514cdee957be63a8429fcc926e24cd31b8195ac48512eb8ee2a"
+    },
+    {
+      "instance_id": 706,
       "map": "warehouse-10-20-10-2-1",
-      "path": "outputs\\tmp\\phase5p5_repair5g546_real_probe_scenarios\\warehouse-10-20-10-2-1-random-646.scen"
+      "pairs": 100,
+      "path": "outputs\\tmp\\phase5p5_repair5g546_real_probe_scenarios\\warehouse-10-20-10-2-1-random-706.scen",
+      "sha256": "a0793916d080c2b8c2fe13266d2301f825784d237afb4009f1cc0c4c18862acb"
+    },
+    {
+      "instance_id": 707,
+      "map": "warehouse-10-20-10-2-1",
+      "pairs": 100,
+      "path": "outputs\\tmp\\phase5p5_repair5g546_real_probe_scenarios\\warehouse-10-20-10-2-1-random-707.scen",
+      "sha256": "6be1d063492d5d44df96ccea70b249523ef4eadd771147042bba1fd49cff86e4"
+    },
+    {
+      "instance_id": 708,
+      "map": "warehouse-10-20-10-2-1",
+      "pairs": 100,
+      "path": "outputs\\tmp\\phase5p5_repair5g546_real_probe_scenarios\\warehouse-10-20-10-2-1-random-708.scen",
+      "sha256": "c373e5b1cee07258dbe067f3556a7086ec2fbfcb32740c0afe670cb5c19db71c"
+    },
+    {
+      "instance_id": 709,
+      "map": "warehouse-10-20-10-2-1",
+      "pairs": 100,
+      "path": "outputs\\tmp\\phase5p5_repair5g546_real_probe_scenarios\\warehouse-10-20-10-2-1-random-709.scen",
+      "sha256": "89f2a8a6018b9e44fb8960b13328326a8569548ae25110da2e317f85e5cdb97d"
+    },
+    {
+      "instance_id": 710,
+      "map": "warehouse-10-20-10-2-1",
+      "pairs": 100,
+      "path": "outputs\\tmp\\phase5p5_repair5g546_real_probe_scenarios\\warehouse-10-20-10-2-1-random-710.scen",
+      "sha256": "02ce08ab3386284c174e720005ae66854b23168a969dff9b5186ca3bfff1d168"
+    },
+    {
+      "instance_id": 711,
+      "map": "warehouse-10-20-10-2-1",
+      "pairs": 100,
+      "path": "outputs\\tmp\\phase5p5_repair5g546_real_probe_scenarios\\warehouse-10-20-10-2-1-random-711.scen",
+      "sha256": "205c3c5b5849d4d462eac9e113b4808f568decd414fcdaa805032ef1192f9b4f"
     }
   ],
   "generated_missing_scenarios": true,
@@ -67,13 +261,193 @@
     "seed_function": "sha256(script_version|base_seed|map_name|instance_id)",
     "source": "scripts/generate_phase1a_scenarios.py functions"
   },
-  "initial_missing_count": 0,
-  "initial_missing_examples": [],
+  "initial_missing_count": 21,
+  "initial_missing_examples": [
+    {
+      "instance_id": 706,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 707,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 708,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 709,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 710,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 711,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 712,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 706,
+      "map": "random-32-32-20"
+    },
+    {
+      "instance_id": 707,
+      "map": "random-32-32-20"
+    },
+    {
+      "instance_id": 708,
+      "map": "random-32-32-20"
+    },
+    {
+      "instance_id": 709,
+      "map": "random-32-32-20"
+    },
+    {
+      "instance_id": 710,
+      "map": "random-32-32-20"
+    },
+    {
+      "instance_id": 711,
+      "map": "random-32-32-20"
+    },
+    {
+      "instance_id": 712,
+      "map": "random-32-32-20"
+    },
+    {
+      "instance_id": 706,
+      "map": "warehouse-10-20-10-2-1"
+    },
+    {
+      "instance_id": 707,
+      "map": "warehouse-10-20-10-2-1"
+    },
+    {
+      "instance_id": 708,
+      "map": "warehouse-10-20-10-2-1"
+    },
+    {
+      "instance_id": 709,
+      "map": "warehouse-10-20-10-2-1"
+    },
+    {
+      "instance_id": 710,
+      "map": "warehouse-10-20-10-2-1"
+    },
+    {
+      "instance_id": 711,
+      "map": "warehouse-10-20-10-2-1"
+    }
+  ],
   "reduced_scope_reason": "",
   "requested_instance_ids": [
     486,
     566,
-    646
+    646,
+    647,
+    648,
+    666,
+    667,
+    668,
+    669,
+    670,
+    671,
+    672,
+    673,
+    674,
+    675,
+    706,
+    707,
+    708,
+    709,
+    710,
+    711,
+    712,
+    826,
+    827,
+    828,
+    829,
+    830,
+    831,
+    832,
+    833,
+    834,
+    835,
+    836,
+    837,
+    838,
+    839,
+    840,
+    841,
+    842,
+    843,
+    844,
+    845,
+    846,
+    847,
+    848,
+    849,
+    850,
+    851,
+    852,
+    853,
+    854,
+    855,
+    856,
+    857,
+    858,
+    859,
+    860,
+    861,
+    862,
+    863,
+    864,
+    865,
+    866,
+    867,
+    868,
+    869,
+    870,
+    871,
+    872,
+    873,
+    874,
+    875,
+    876,
+    877,
+    878,
+    879,
+    880,
+    881,
+    882,
+    883,
+    884,
+    885,
+    886,
+    887,
+    888,
+    889,
+    890,
+    891,
+    892,
+    893,
+    894,
+    895,
+    896,
+    897,
+    898,
+    899,
+    900,
+    901,
+    902,
+    903,
+    904,
+    905
   ],
   "requested_maps": [
     "maze-32-32-4",
@@ -83,7 +457,7 @@
   "scenario_dir": "outputs\\tmp\\phase5p5_repair5g546_real_probe_scenarios",
   "scenario_metadata": "outputs\\reports\\phase5p5_repair5g546_real_probe_scenario_generation.json",
   "schema_version": "phase5p5_repair5f4_scenario_generation_v1",
-  "source_missing_count": 9,
+  "source_missing_count": 306,
   "source_missing_examples": [
     {
       "instance_id": 486,
@@ -98,28 +472,72 @@
       "map": "maze-32-32-4"
     },
     {
-      "instance_id": 486,
-      "map": "random-32-32-20"
+      "instance_id": 647,
+      "map": "maze-32-32-4"
     },
     {
-      "instance_id": 566,
-      "map": "random-32-32-20"
+      "instance_id": 648,
+      "map": "maze-32-32-4"
     },
     {
-      "instance_id": 646,
-      "map": "random-32-32-20"
+      "instance_id": 666,
+      "map": "maze-32-32-4"
     },
     {
-      "instance_id": 486,
-      "map": "warehouse-10-20-10-2-1"
+      "instance_id": 667,
+      "map": "maze-32-32-4"
     },
     {
-      "instance_id": 566,
-      "map": "warehouse-10-20-10-2-1"
+      "instance_id": 668,
+      "map": "maze-32-32-4"
     },
     {
-      "instance_id": 646,
-      "map": "warehouse-10-20-10-2-1"
+      "instance_id": 669,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 670,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 671,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 672,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 673,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 674,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 675,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 706,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 707,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 708,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 709,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 710,
+      "map": "maze-32-32-4"
     }
   ],
   "source_scenario_dir": "outputs\\tmp\\phase1a\\generated\\phase1a-generated-random"

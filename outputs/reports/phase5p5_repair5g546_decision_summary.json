@@ -10,27 +10,31 @@
   "component_decisions": {
     "blind": "blind_replay_skipped_targeted_gate_not_passed",
     "generator": "g546_generator_offline_gate_failed_targeted_replay_not_warranted",
-    "real_probe": "g546_real_probe_partial_runtime_limited",
+    "real_probe": "g546_real_probe_executed",
     "smoke": "g546_theta_materialization_smoke_passed",
     "surrogates": "g546_surrogates_trained_on_real_probe_data",
     "targeted": "targeted_replay_skipped_offline_gate_not_passed"
   },
   "decision": "g546_real_probe_executed_no_stable_continuous_signal",
   "hard_requirements": {
+    "baseline_rows_materialized_ge_3000": true,
+    "candidate_theta_rows_ge_25000": true,
     "claim_flags_closed": true,
+    "contexts_ge_1080": true,
+    "distinct_theta_rows_ge_1000": true,
     "external_lacam2_clean": true,
     "feature_audit_written": true,
     "materialization_smoke_passed": true,
-    "new_continuous_probe_rows_ge_30000": false
+    "new_continuous_probe_rows_ge_30000": true
   },
   "key_metrics": {
-    "baseline_rows_materialized": 51,
+    "baseline_rows_materialized": 3318,
     "blind_rows": 0,
-    "candidate_theta_rows": 476,
-    "contexts": 17,
-    "distinct_theta_rows": 428,
+    "candidate_theta_rows": 30968,
+    "contexts": 1106,
+    "distinct_theta_rows": 27653,
     "generated_theta_rows": 5120,
-    "new_continuous_probe_solver_rows": 527,
+    "new_continuous_probe_solver_rows": 34286,
     "targeted_rows": 0
   },
   "learned_runtime_policy_validated": false,

@@ -1,3 +1,3 @@
 split,rows,tau_risk,false_safe_count_at_tau,risk_gate_pass_rate,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
-valid,0,0,0,0,False,False,False,False,False
-test,0,0,0,0,False,False,False,False,False
+valid,511,0,0,1,False,False,False,False,False
+test,518,0,0,1,False,False,False,False,False

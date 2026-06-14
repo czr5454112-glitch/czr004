@@ -1,7 +1,12 @@
-question,answer,expected,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
-Did G5.45 execute new continuous-probe solver rows?,False,False,False,False,False,False,False
-Did run_repair5g545_continuous_param_probe only write retrospective rows?,True,True,False,False,False,False,False
-Was the sampling plan executable?,True,True,False,False,False,False,False
-Were generated theta aliases executable by current adapter grammar?,True,True,False,False,False,False,False
-Why did risk_gate_pass_rate become 0?,not zero in current artifact; G5.45 was blocked by new-solver-row gate,diagnose,False,False,False,False,False
-Does the feature set include post-solver counters?,True,True,False,False,False,False,False
+artifact,path,exists,rows_or_file,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+decision_summary,C:\PROGRAMING\czr004\outputs\reports\phase5p5_repair5g545_decision_summary.json,True,1,False,False,False,False,False
+dataset_coverage_summary,C:\PROGRAMING\czr004\outputs\reports\phase5p5_repair5g545_dataset_coverage_summary.json,True,1,False,False,False,False,False
+continuous_sampling_plan_summary,C:\PROGRAMING\czr004\outputs\reports\phase5p5_repair5g545_continuous_sampling_plan_summary.json,True,1,False,False,False,False,False
+continuous_param_evidence_summary,C:\PROGRAMING\czr004\outputs\reports\phase5p5_repair5g545_continuous_param_evidence_summary.json,True,1,False,False,False,False,False
+risk_utility_surrogates_summary,C:\PROGRAMING\czr004\outputs\reports\phase5p5_repair5g545_risk_utility_surrogates_summary.json,True,1,False,False,False,False,False
+neural_theta_generator_summary,C:\PROGRAMING\czr004\outputs\reports\phase5p5_repair5g545_neural_theta_generator_summary.json,True,1,False,False,False,False,False
+param_replay_dataset,C:\PROGRAMING\czr004\outputs\tables\phase5p5_repair5g545_param_replay_dataset.csv,True,64968,False,False,False,False,False
+continuous_param_sampling_plan,C:\PROGRAMING\czr004\outputs\tables\phase5p5_repair5g545_continuous_param_sampling_plan.csv,True,46080,False,False,False,False,False
+generated_theta_candidates,C:\PROGRAMING\czr004\outputs\tables\phase5p5_repair5g545_generated_theta_candidates.csv,True,5760,False,False,False,False,False
+generated_theta_alias_map,C:\PROGRAMING\czr004\outputs\tables\phase5p5_repair5g545_generated_theta_alias_map.csv,True,5760,False,False,False,False,False
+model_manifest,C:\PROGRAMING\czr004\artifacts\models\laur_ltm\repair5g545_model_manifest.json,True,1,False,False,False,False,False

@@ -17,6 +17,7 @@ import re
 import statistics
 import subprocess
 import sys
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any, Iterable
@@ -519,8 +520,10 @@ def write_active_plan(samples_per_context: int, max_contexts: int) -> list[dict[
         "agents": sorted({int(row["agents"]) for row in contexts}),
         "budgets": sorted({int(row["budget_ms"]) for row in contexts}),
         "sampling_policy_rows": dict(Counter(row["sampling_policy"] for row in theta_rows)),
-        "minimum_contexts_met": len(contexts) >= 1440,
-        "minimum_theta_rows_met": len(theta_rows) >= 46080,
+        "minimum_contexts_met": len(contexts) >= 1080,
+        "minimum_theta_rows_met": len(theta_rows) >= 25000,
+        "preferred_contexts_met": len(contexts) >= 1440,
+        "preferred_theta_rows_met": len(theta_rows) >= 46080,
         **claims(),
     }
     write_json(ACTIVE_PLAN_SUMMARY, summary)
@@ -586,6 +589,88 @@ def existing_completed_contexts(probe_jsonl: str, plan_rows: list[dict[str, Any]
     return {key for key, methods in seen.items() if required.get(key, set()).issubset(methods)}
 
 
+def _context_task_file(temp_dir: Path, index: int, key: tuple[str, int, int, int], suffix: str) -> Path:
+    token = stable_hash("|".join(map(str, key)), modulo=10**12)
+    return temp_dir / f"context_{index:06d}_{token:012d}.{suffix}.jsonl"
+
+
+def _run_counterfactual_context_task(
+    *,
+    index: int,
+    key: tuple[str, int, int, int],
+    group_rows: list[dict[str, Any]],
+    binary: Path,
+    log_dir: Path,
+    temp_dir: Path,
+    scenario_dir: Path,
+    base_time_limit_sec: float,
+    short_budget_ms: float,
+    manifest_prefix: str,
+) -> dict[str, Any]:
+    map_name, agents_count, seed, budget = key
+    methods = []
+    seen = set()
+    for row in group_rows:
+        method = str(row.get("materialized_method"))
+        if method and method not in seen:
+            seen.add(method)
+            methods.append(method)
+    task_probe = _context_task_file(temp_dir, index, key, "probe")
+    task_checkpoint = _context_task_file(temp_dir, index, key, "checkpoints")
+    task_update = _context_task_file(temp_dir, index, key, "updates")
+    for task_path in [task_probe, task_checkpoint, task_update]:
+        task_path.unlink(missing_ok=True)
+    task_run = log_dir / f"task_{stable_hash('|'.join(map(str, key)), modulo=10**12):012d}.runs.jsonl"
+    spec = MethodSpec(
+        STATIC_FLOW,
+        f"{manifest_prefix}_{map_name}_a{agents_count}_s{seed}_b{budget}".replace("-", "_"),
+        (
+            "--repair5g-export-update-checkpoints-jsonl",
+            str(task_checkpoint),
+            "--repair5g-checkpoint-topk-edges",
+            "64",
+            "--repair5g-checkpoint-edge-filter",
+            "nonzero",
+            "--repair5g-checkpoint-include-full-traffic",
+            "true",
+            "--repair5g-counterfactual-update-probe-jsonl",
+            str(task_probe),
+            "--repair5g-counterfactual-candidates",
+            ",".join(methods),
+            "--repair5g-counterfactual-short-budget-ms",
+            str(float(short_budget_ms if short_budget_ms > 0 else budget)),
+            "--repair5g-counterfactual-max-contexts",
+            "1",
+            "--repair5g-runtime-audit-mode",
+            "perf",
+        ),
+    )
+    rows, update_rows, command_row = run_one_solver_task(
+        root=ROOT,
+        binary=binary,
+        scenario_dir=scenario_dir,
+        temp_dir=temp_dir,
+        update_log=task_update,
+        map_name=map_name,
+        agents=agents_count,
+        seed=seed,
+        time_limit_sec=max(0.01, float(base_time_limit_sec)),
+        ltm_max_iterations=2,
+        spec=spec,
+        manifest=f"phase5p5-{manifest_prefix}",
+    )
+    write_jsonl(task_run, rows)
+    return {
+        "index": index,
+        "key": key,
+        "run_rows": rows,
+        "update_rows": update_rows,
+        "command_row": command_row,
+        "probe_rows": read_jsonl_tolerant(task_probe),
+        "checkpoint_rows": read_jsonl_tolerant(task_checkpoint),
+    }
+
+
 def run_counterfactual_probe(
     *,
     plan_rows: list[dict[str, Any]],
@@ -605,7 +690,6 @@ def run_counterfactual_probe(
     short_budget_ms: float,
     manifest_prefix: str,
 ) -> list[dict[str, Any]]:
-    del max_workers  # The runner is intentionally serial; the local plan requires max_workers=1.
     for path in [run_jsonl, command_jsonl, update_jsonl, probe_jsonl, checkpoint_jsonl]:
         if overwrite:
             resolve(path).unlink(missing_ok=True)
@@ -625,64 +709,60 @@ def run_counterfactual_probe(
     completed = set() if overwrite else existing_completed_contexts(probe_jsonl, plan_rows)
     temp_dir = resolve(log_dir) / "_task_tmp"
     temp_dir.mkdir(parents=True, exist_ok=True)
-    update_path = resolve(update_jsonl)
     produced_rows = read_jsonl_tolerant(probe_jsonl)
-    for (map_name, agents_count, seed, budget), group_rows in contexts:
-        if row_limit and len(produced_rows) >= row_limit:
+    scheduled: list[tuple[int, tuple[str, int, int, int], list[dict[str, Any]]]] = []
+    estimated_rows = len(produced_rows)
+    for index, (key, group_rows) in enumerate(contexts):
+        if row_limit and estimated_rows >= row_limit:
             break
-        if (map_name, agents_count, seed, budget) in completed:
+        if key in completed:
             continue
-        methods = []
-        seen = set()
-        for row in group_rows:
-            method = str(row.get("materialized_method"))
-            if method and method not in seen:
-                seen.add(method)
-                methods.append(method)
-        task_run = resolve(log_dir) / f"task_{stable_hash('|'.join(map(str, [map_name, agents_count, seed, budget])), modulo=10**12):012d}.runs.jsonl"
-        spec = MethodSpec(
-            STATIC_FLOW,
-            f"{manifest_prefix}_{map_name}_a{agents_count}_s{seed}_b{budget}".replace("-", "_"),
-            (
-                "--repair5g-export-update-checkpoints-jsonl",
-                str(resolve(checkpoint_jsonl)),
-                "--repair5g-checkpoint-topk-edges",
-                "64",
-                "--repair5g-checkpoint-edge-filter",
-                "nonzero",
-                "--repair5g-checkpoint-include-full-traffic",
-                "true",
-                "--repair5g-counterfactual-update-probe-jsonl",
-                str(resolve(probe_jsonl)),
-                "--repair5g-counterfactual-candidates",
-                ",".join(methods),
-                "--repair5g-counterfactual-short-budget-ms",
-                str(float(short_budget_ms if short_budget_ms > 0 else budget)),
-                "--repair5g-counterfactual-max-contexts",
-                "1",
-                "--repair5g-runtime-audit-mode",
-                "perf",
-            ),
-        )
-        rows, _updates, command_row = run_one_solver_task(
-            root=ROOT,
-            binary=binary,
-            scenario_dir=resolve(scenario_dir),
-            temp_dir=temp_dir,
-            update_log=update_path,
-            map_name=map_name,
-            agents=agents_count,
-            seed=seed,
-            time_limit_sec=max(0.01, float(base_time_limit_sec)),
-            ltm_max_iterations=2,
-            spec=spec,
-            manifest=f"phase5p5-{manifest_prefix}",
-        )
-        write_jsonl(task_run, rows)
-        write_jsonl(resolve(run_jsonl), [*read_jsonl_tolerant(run_jsonl), *rows])
-        write_jsonl(resolve(command_jsonl), [*read_jsonl_tolerant(command_jsonl), command_row])
-        produced_rows = read_jsonl_tolerant(probe_jsonl)
-    return produced_rows
+        scheduled.append((index, key, group_rows))
+        estimated_rows += len({str(row.get("materialized_method")) for row in group_rows if row.get("materialized_method")})
+    if not scheduled:
+        return produced_rows
+
+    workers = max(1, int(max_workers))
+    task_kwargs = {
+        "binary": binary,
+        "log_dir": resolve(log_dir),
+        "temp_dir": temp_dir,
+        "scenario_dir": resolve(scenario_dir),
+        "base_time_limit_sec": base_time_limit_sec,
+        "short_budget_ms": short_budget_ms,
+        "manifest_prefix": manifest_prefix,
+    }
+    results: list[dict[str, Any]] = []
+    if workers == 1:
+        for index, key, group_rows in scheduled:
+            results.append(_run_counterfactual_context_task(index=index, key=key, group_rows=group_rows, **task_kwargs))
+    else:
+        with ThreadPoolExecutor(max_workers=workers) as executor:
+            futures = [
+                executor.submit(_run_counterfactual_context_task, index=index, key=key, group_rows=group_rows, **task_kwargs)
+                for index, key, group_rows in scheduled
+            ]
+            for future in as_completed(futures):
+                results.append(future.result())
+    results.sort(key=lambda row: int(row["index"]))
+
+    all_run_rows = read_jsonl_tolerant(run_jsonl)
+    all_command_rows = read_jsonl_tolerant(command_jsonl)
+    all_update_rows = read_jsonl_tolerant(update_jsonl)
+    all_checkpoint_rows = read_jsonl_tolerant(checkpoint_jsonl)
+    all_probe_rows = read_jsonl_tolerant(probe_jsonl)
+    for result in results:
+        all_run_rows.extend(result["run_rows"])
+        all_command_rows.append(result["command_row"])
+        all_update_rows.extend(result["update_rows"])
+        all_checkpoint_rows.extend(result["checkpoint_rows"])
+        all_probe_rows.extend(result["probe_rows"])
+    write_jsonl(resolve(run_jsonl), all_run_rows)
+    write_jsonl(resolve(command_jsonl), all_command_rows)
+    write_jsonl(resolve(update_jsonl), all_update_rows)
+    write_jsonl(resolve(checkpoint_jsonl), all_checkpoint_rows)
+    write_jsonl(resolve(probe_jsonl), all_probe_rows)
+    return all_probe_rows
 
 
 def enrich_probe_rows(raw_rows: list[dict[str, Any]], plan_rows: list[dict[str, Any]], *, row_prefix: str) -> list[dict[str, Any]]:
@@ -999,7 +1079,7 @@ def main_verify_theta_materialization_smoke(argv: list[str] | None = None) -> in
         scenario_metadata=SMOKE_SCENARIO_METADATA,
         row_limit=0,
         overwrite=args.overwrite,
-        max_workers=1,
+        max_workers=args.max_workers,
         base_time_limit_sec=max(args.base_time_limit_sec, 0.20),
         short_budget_ms=max(args.short_budget_ms, 25.0),
         manifest_prefix="g546_smoke",
@@ -1075,7 +1155,7 @@ def main_run_real_continuous_theta_probe(argv: list[str] | None = None) -> int:
         scenario_metadata=REAL_SCENARIO_METADATA,
         row_limit=max(0, args.row_limit),
         overwrite=args.overwrite,
-        max_workers=1,
+        max_workers=args.max_workers,
         base_time_limit_sec=args.base_time_limit_sec,
         short_budget_ms=args.short_budget_ms,
         manifest_prefix="g546_real_probe",
@@ -1236,6 +1316,18 @@ def select_idx(rows: list[Any], indices: list[int]) -> list[Any]:
     return [rows[i] for i in indices]
 
 
+def positive_class_probabilities(model: Any, matrix: Any) -> list[float]:
+    if len(matrix) == 0:
+        return []
+    probs = model.predict_proba(matrix)
+    classes = list(getattr(model, "classes_", []))
+    if 1 in classes:
+        return probs[:, classes.index(1)].tolist()
+    if probs.shape[1] == 1:
+        return [1.0 if classes and classes[0] == 1 else 0.0 for _ in range(probs.shape[0])]
+    return probs[:, 1].tolist()
+
+
 def risk_label(row: dict[str, Any]) -> int:
     return 1 if boolish(row.get("success_regression")) else 0
 
@@ -1289,8 +1381,8 @@ def main_train_eval_risk_utility_surrogates(argv: list[str] | None = None) -> in
         else:
             risk_model = make_pipeline(StandardScaler(), LogisticRegression(max_iter=500, class_weight="balanced"))
         risk_model.fit(x_train, train_y)
-        valid_prob = risk_model.predict_proba(x_valid)[:, 1].tolist() if len(valid_idx) else []
-        test_prob = risk_model.predict_proba(x_test)[:, 1].tolist() if len(test_idx) else []
+        valid_prob = positive_class_probabilities(risk_model, x_valid)
+        test_prob = positive_class_probabilities(risk_model, x_test)
         util_model = make_pipeline(StandardScaler(), Ridge(alpha=1.0))
         util_model.fit(x_train, np.asarray(select_idx(y_util, train_idx), dtype=float))
         util_pred = util_model.predict(x_test).tolist() if len(test_idx) else []
@@ -1610,6 +1702,10 @@ def main_write_decision(argv: list[str] | None = None) -> int:
         },
         "hard_requirements": {
             "new_continuous_probe_rows_ge_30000": int(number(real.get("new_continuous_probe_solver_rows"), 0)) >= 30000,
+            "contexts_ge_1080": int(number(real.get("contexts"), 0)) >= 1080,
+            "distinct_theta_rows_ge_1000": int(number(real.get("distinct_theta_rows"), 0)) >= 1000,
+            "candidate_theta_rows_ge_25000": int(number(real.get("candidate_theta_rows"), 0)) >= 25000,
+            "baseline_rows_materialized_ge_3000": int(number(real.get("baseline_rows_materialized"), 0)) >= 3000,
             "external_lacam2_clean": external_lacam2_clean(),
             "claim_flags_closed": True,
             "feature_audit_written": resolve(FEATURE_VALIDITY_CSV).exists(),

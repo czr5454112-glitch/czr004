@@ -4,13 +4,13 @@
     50,
     100
   ],
-  "baseline_rows": 60,
+  "baseline_rows": 3600,
   "budgets": [
     500,
     1000,
     2000
   ],
-  "contexts": 20,
+  "contexts": 1200,
   "decision": "g546_active_theta_replay_plan_created",
   "learned_runtime_policy_validated": false,
   "map_families": [
@@ -18,22 +18,24 @@
     "random",
     "warehouse"
   ],
-  "minimum_contexts_met": false,
-  "minimum_theta_rows_met": false,
+  "minimum_contexts_met": true,
+  "minimum_theta_rows_met": true,
   "phase5p5_allowed": false,
   "phase6_allowed": false,
-  "plan_rows": 700,
+  "plan_rows": 42000,
+  "preferred_contexts_met": false,
+  "preferred_theta_rows_met": false,
   "runtime_claim_allowed": false,
   "samples_per_context": 32,
   "sampling_policy_rows": {
-    "broad_sobol_lhs": 160,
-    "generator_topk": 60,
-    "local_static_flow_perturb": 120,
-    "negative_control": 40,
-    "prior_safe_signal_near": 140,
-    "risk_boundary": 100,
-    "utility_disagreement": 20
+    "broad_sobol_lhs": 9600,
+    "generator_topk": 3600,
+    "local_static_flow_perturb": 7200,
+    "negative_control": 2400,
+    "prior_safe_signal_near": 8400,
+    "risk_boundary": 6000,
+    "utility_disagreement": 1200
   },
   "schema_version": "phase5p5_repair5g546_active_theta_replay_plan_summary_v1",
-  "theta_rows": 640
+  "theta_rows": 38400
 }

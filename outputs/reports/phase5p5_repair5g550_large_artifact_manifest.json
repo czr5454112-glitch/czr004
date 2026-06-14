@@ -23,23 +23,23 @@
     },
     {
       "artifact_label": "g550_raw_or_large_artifact",
-      "bytes": 2,
+      "bytes": 3397665,
       "committed": false,
       "exists": true,
       "over_50mb": false,
       "path": "C:\\PROGRAMING\\czr004\\outputs\\logs\\phase5p5_repair5g550_fulltheta_expansion\\fulltheta_expansion_results.csv",
-      "rows": 0,
-      "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6"
+      "rows": 2067,
+      "sha256": "526d109ed72b72d79c2b6f1ba2a25e233e08bd0c47ea0718b3647ae34cd94a16"
     },
     {
       "artifact_label": "g550_raw_or_large_artifact",
-      "bytes": 2,
+      "bytes": 3397665,
       "committed": false,
       "exists": true,
       "over_50mb": false,
       "path": "C:\\PROGRAMING\\czr004\\outputs\\logs\\phase5p5_repair5g550_fulltheta_expansion\\fulltheta_expansion_results.raw.csv",
-      "rows": 0,
-      "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6"
+      "rows": 2067,
+      "sha256": "526d109ed72b72d79c2b6f1ba2a25e233e08bd0c47ea0718b3647ae34cd94a16"
     },
     {
       "artifact_label": "g550_raw_or_large_artifact",

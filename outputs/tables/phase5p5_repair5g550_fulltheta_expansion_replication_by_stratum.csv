@@ -1,1 +1,3 @@
-
+map_family,agents,nominal_budget_ms,horizon_id,region_rows,true_safe_gain_regions,safe_no_gain_regions,unsafe_useful_regions,support_pairs_total,success_regression_count_total,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+random,50,2000,c0_short2000_t050_i2,7,0,1,0,1000,0,False,False,False,False,False
+random,50,2000,c0_short5000_t050_i2,7,0,1,0,950,0,False,False,False,False,False

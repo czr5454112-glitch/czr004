@@ -1,1 +1,15 @@
-
+theta_cluster,map_family,agents,nominal_budget_ms,horizon_id,support_pairs,pair_rows,seed_block_support,success_regression_count,success_regression_rate,quality_only_mean_delta_vs_static_flow,better_count_vs_static_flow,worse_count_vs_static_flow,region_status,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+conservative_shrinkage_25,random,50,2000,c0_short2000_t050_i2,2,2,1,0,0,-0.02446982055,2,0,non_evaluable,False,False,False,False,False
+conservative_shrinkage_25,random,50,2000,c0_short5000_t050_i2,2,2,1,0,0,0.00924726764,1,1,non_evaluable,False,False,False,False,False
+conservative_shrinkage_50,random,50,2000,c0_short2000_t050_i2,1,1,1,0,0,-0.02446982055,1,0,non_evaluable,False,False,False,False,False
+conservative_shrinkage_50,random,50,2000,c0_short5000_t050_i2,3,3,1,0,0,0.00154276788,2,1,non_evaluable,False,False,False,False,False
+conservative_shrinkage_75,random,50,2000,c0_short2000_t050_i2,1,1,1,0,0,-0.02446982055,1,0,non_evaluable,False,False,False,False,False
+conservative_shrinkage_75,random,50,2000,c0_short5000_t050_i2,3,3,1,0,0,0.00997126162667,1,2,non_evaluable,False,False,False,False,False
+g549_true_region_best_examples,random,50,2000,c0_short2000_t050_i2,5,5,1,0,0,-0.01076672104,4,1,non_evaluable,False,False,False,False,False
+g549_true_region_best_examples,random,50,2000,c0_short5000_t050_i2,15,15,1,0,0,0.009749785652,5,8,non_evaluable,False,False,False,False,False
+g549_true_region_centroid,random,50,2000,c0_short2000_t050_i2,2,2,1,0,0,-0.02446982055,2,0,non_evaluable,False,False,False,False,False
+g549_true_region_centroid,random,50,2000,c0_short5000_t050_i2,2,2,1,0,0,0.0308622758,0,2,non_evaluable,False,False,False,False,False
+g549_true_region_dense_local_perturbation,random,50,2000,c0_short2000_t050_i2,39,39,1,0,0,0.00978792822513,15,20,non_evaluable,False,False,False,False,False
+g549_true_region_dense_local_perturbation,random,50,2000,c0_short5000_t050_i2,41,41,1,0,0,0.0220966443276,13,25,non_evaluable,False,False,False,False,False
+negative_random_or_sobol_control,random,50,2000,c0_short2000_t050_i2,950,950,1,0,0,0.121321416623,194,716,safe_but_no_gain,False,False,False,False,False
+negative_random_or_sobol_control,random,50,2000,c0_short5000_t050_i2,884,884,1,0,0,0.135319266301,197,641,safe_but_no_gain,False,False,False,False,False

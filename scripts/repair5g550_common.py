@@ -18,6 +18,7 @@ import subprocess
 import sys
 import time
 from collections import Counter, defaultdict
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 from typing import Any, Iterable
 
@@ -577,6 +578,7 @@ def run_probe_plan_fast(
     binary: Path,
     overwrite: bool,
     row_limit: int,
+    max_workers: int,
     registry_path: str,
     result_csv: str,
     raw_csv: str,
@@ -607,6 +609,7 @@ def run_probe_plan_fast(
             continue
         scheduled.append((index, key, group_rows))
         estimated_rows += len({str(row.get("materialized_method")) for row in group_rows if row.get("materialized_method")})
+    deferred_due_row_limit = max(0, len(groups) - len(completed) - len(scheduled))
     g549.prepare_scenarios(
         root=ROOT,
         source_scenario_dir=resolve(g549.DEFAULT_SOURCE_SCENARIO_DIR),
@@ -625,7 +628,7 @@ def run_probe_plan_fast(
     all_updates = g549.read_jsonl_tolerant(update_jsonl)
     all_probes = g549.read_jsonl_tolerant(probe_jsonl)
     all_checkpoints = g549.read_jsonl_tolerant(checkpoint_jsonl)
-    done = len(groups) - len(scheduled)
+    done = len(completed)
 
     def flush(phase: str, last: dict[str, Any] | None = None) -> None:
         write_rows(result_csv, all_results)
@@ -642,27 +645,16 @@ def run_probe_plan_fast(
                 "phase": phase,
                 "total_context_horizon_tasks": len(groups),
                 "completed_context_horizon_tasks": done,
+                "deferred_context_horizon_tasks_due_row_limit": deferred_due_row_limit,
+                "scheduled_context_horizon_tasks_this_invocation": len(scheduled),
                 "completed_solver_rows": len(all_results),
                 "row_limit": row_limit,
                 "last_task": last or {},
             },
         )
 
-    flush("running")
-    for serial, (index, key, group_rows) in enumerate(scheduled, start=1):
-        result = g549.run_context_task(
-            index=index,
-            key=key,
-            group_rows=group_rows,
-            binary=binary,
-            log_dir=log_root,
-            temp_dir=temp_dir,
-            scenario_dir=resolve(scenario_dir),
-            registry_path=resolve(registry_path),
-            manifest_prefix=manifest_prefix,
-            row_prefix=row_prefix,
-            execution_mode=execution_mode,
-        )
+    def merge_result(result: dict[str, Any]) -> None:
+        nonlocal all_results, all_runs, all_commands, all_updates, all_probes, all_checkpoints, done
         done += 1
         enriched = result["enriched_rows"]
         for row in enriched:
@@ -679,6 +671,32 @@ def run_probe_plan_fast(
         all_probes.extend(result["probe_rows"])
         all_checkpoints.extend(result["checkpoint_rows"])
         flush("running", result["command_row"])
+
+    def run_one(index: int, key: tuple[str, int, int, int, str], group_rows: list[dict[str, Any]]) -> dict[str, Any]:
+        return g549.run_context_task(
+            index=index,
+            key=key,
+            group_rows=group_rows,
+            binary=binary,
+            log_dir=log_root,
+            temp_dir=temp_dir,
+            scenario_dir=resolve(scenario_dir),
+            registry_path=resolve(registry_path),
+            manifest_prefix=manifest_prefix,
+            row_prefix=row_prefix,
+            execution_mode=execution_mode,
+        )
+
+    flush("running")
+    workers = max(1, int(max_workers))
+    if workers == 1:
+        for index, key, group_rows in scheduled:
+            merge_result(run_one(index, key, group_rows))
+    else:
+        with ThreadPoolExecutor(max_workers=workers) as pool:
+            futures = [pool.submit(run_one, index, key, group_rows) for index, key, group_rows in scheduled]
+            for future in as_completed(futures):
+                merge_result(future.result())
     flush("solver_complete")
     return all_results
 
@@ -1152,6 +1170,7 @@ def main_run_fulltheta_expansion(argv: list[str] | None = None) -> int:
         binary=binary,
         overwrite=args.overwrite,
         row_limit=max(0, args.row_limit),
+        max_workers=args.max_workers,
         registry_path=REGISTRY_LOG_CSV,
         result_csv=EXP_RESULTS_LOG_CSV,
         raw_csv=EXP_RESULTS_RAW_LOG_CSV,
@@ -1259,9 +1278,9 @@ def analyze_replay_results(
         elif len(rows) >= 30000:
             decision = "g550_true_gain_failed_to_replicate_under_powered_or_negative"
     if stage_label == "fulltheta_expansion":
-        exact_resume_command = "python scripts/run_repair5g550_fulltheta_expansion.py --row-limit 60000 --max-workers 1"
+        exact_resume_command = "python scripts/run_repair5g550_fulltheta_expansion.py --row-limit 60000 --max-workers 4"
     elif stage_label == "active_theta_search":
-        exact_resume_command = "python scripts/run_repair5g550_active_theta_search.py --row-limit 50000 --max-workers 1"
+        exact_resume_command = "python scripts/run_repair5g550_active_theta_search.py --row-limit 50000 --max-workers 4"
     else:
         exact_resume_command = ""
     summary = {
@@ -1408,6 +1427,7 @@ def main_run_active_theta_search(argv: list[str] | None = None) -> int:
         binary=binary,
         overwrite=args.overwrite,
         row_limit=max(0, args.row_limit),
+        max_workers=args.max_workers,
         registry_path=REGISTRY_LOG_CSV,
         result_csv=ACTIVE_RESULTS_LOG_CSV,
         raw_csv=ACTIVE_RESULTS_RAW_LOG_CSV,
@@ -1842,6 +1862,7 @@ def main_run_iteration_counterfactual_label_probe(argv: list[str] | None = None)
         binary=binary,
         overwrite=args.overwrite,
         row_limit=max(0, args.row_limit),
+        max_workers=args.max_workers,
         registry_path=REGISTRY_LOG_CSV,
         result_csv=ITER_RESULTS_LOG_CSV,
         raw_csv=ITER_RESULTS_RAW_LOG_CSV,
@@ -1908,7 +1929,7 @@ def main_analyze_iteration_counterfactual_labels(argv: list[str] | None = None) 
         "raw_results_path": str(resolve(ITER_RESULTS_LOG_CSV)),
         "raw_results_sha256": file_sha256(ITER_RESULTS_LOG_CSV),
         "local_budget_blocker": len(rows) < 3200,
-        "exact_resume_command": "python scripts/run_repair5g550_iteration_counterfactual_label_probe.py --row-limit 32000 --max-workers 1",
+        "exact_resume_command": "python scripts/run_repair5g550_iteration_counterfactual_label_probe.py --row-limit 32000 --max-workers 4",
         **claims(),
     }
     write_json(ITER_SUMMARY, summary)

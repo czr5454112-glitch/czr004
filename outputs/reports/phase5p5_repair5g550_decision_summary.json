@@ -14,9 +14,9 @@
   },
   "decision": "g550_blocked_with_exact_commands",
   "exact_resume_commands": [
-    "python scripts/run_repair5g550_fulltheta_expansion.py --row-limit 60000 --max-workers 1",
-    "python scripts/run_repair5g550_active_theta_search.py --row-limit 50000 --max-workers 1",
-    "python scripts/run_repair5g550_iteration_counterfactual_label_probe.py --row-limit 32000 --max-workers 1"
+    "python scripts/run_repair5g550_fulltheta_expansion.py --row-limit 60000 --max-workers 4",
+    "python scripts/run_repair5g550_active_theta_search.py --row-limit 50000 --max-workers 4",
+    "python scripts/run_repair5g550_iteration_counterfactual_label_probe.py --row-limit 32000 --max-workers 4"
   ],
   "g549_true_safe_gain_regions_replicated": false,
   "generated_non_static_theta_usage_rate": "0",

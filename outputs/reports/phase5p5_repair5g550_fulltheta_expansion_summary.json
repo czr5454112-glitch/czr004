@@ -5,7 +5,7 @@
   "candidate_recognized_all": false,
   "core_replication_solver_rows": 0,
   "decision": "g550_signal_failed_to_replicate_underpowered_continue_replay",
-  "exact_resume_command": "python scripts/run_repair5g550_fulltheta_expansion.py --row-limit 60000 --max-workers 1",
+  "exact_resume_command": "python scripts/run_repair5g550_fulltheta_expansion.py --row-limit 60000 --max-workers 4",
   "finite_ratio_rows": 0,
   "fresh_replay_completed": false,
   "fulltheta_fingerprint_match_rate": "0",

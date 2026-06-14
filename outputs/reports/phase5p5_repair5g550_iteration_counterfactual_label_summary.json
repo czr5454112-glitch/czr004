@@ -1,19 +1,19 @@
 {
   "aaai_ready": false,
   "candidate_theta_per_context": 16,
-  "counterfactual_contexts": 0,
+  "counterfactual_contexts": 2,
   "decision": "g550_iteration_counterfactual_labels_underpowered_resume",
-  "exact_resume_command": "python scripts/run_repair5g550_iteration_counterfactual_label_probe.py --row-limit 32000 --max-workers 1",
-  "finite_ratio_rows": 0,
+  "exact_resume_command": "python scripts/run_repair5g550_iteration_counterfactual_label_probe.py --row-limit 32000 --max-workers 4",
+  "finite_ratio_rows": 38,
   "learned_runtime_policy_validated": false,
   "local_budget_blocker": true,
-  "oracle_gap_large_enough_for_policy_design": false,
+  "oracle_gap_large_enough_for_policy_design": true,
   "phase5p5_allowed": false,
   "phase6_allowed": false,
   "raw_results_path": "C:\\PROGRAMING\\czr004\\outputs\\logs\\phase5p5_repair5g550_iteration_counterfactual_label_probe\\iteration_counterfactual_label_probe_results.csv",
-  "raw_results_sha256": "97a4b374f8cada8a0f35946647dafd553f9d795936528187d2859eb3a51d68d2",
+  "raw_results_sha256": "f653f32e4b0247114c3b3fa9f3b4fa3f05ec3cb046eb04bdb473faaede8f554a",
   "runtime_claim_allowed": false,
-  "safe_useful_contexts": 0,
+  "safe_useful_contexts": 2,
   "schema_version": "phase5p5_repair5g550_iteration_counterfactual_label_summary_v1",
-  "solver_rows": 0
+  "solver_rows": 38
 }

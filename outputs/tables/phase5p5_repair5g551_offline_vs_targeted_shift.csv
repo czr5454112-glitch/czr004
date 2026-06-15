@@ -1,0 +1,4 @@
+metric,offline_value,targeted_value,targeted_exceeds_offline,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+generated_non_static_theta_usage_rate,0.197278911565,0.833333333333,True,False,False,False,False,False
+success_regression_count_vs_static_flow,0,216,True,False,False,False,False,False
+quality_delta_vs_static_flow,-0.0133030677366,-0.00097632372215,False,False,False,False,False,False

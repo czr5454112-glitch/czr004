@@ -1,0 +1,18 @@
+{
+  "aaai_ready": false,
+  "candidate_theta_per_context": "16",
+  "decision": "g551_iteration_label_expansion_plan_created",
+  "failure_focused_context_fraction": "0.25453125",
+  "fresh_seed_blocks": 49,
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "planned_baseline_rows": 19200,
+  "planned_contexts": 6400,
+  "planned_generated_theta_rows": 102400,
+  "planned_solver_rows": 121600,
+  "raw_plan_path": "C:\\PROGRAMING\\czr004\\outputs\\logs\\phase5p5_repair5g551_iteration_label_expansion\\iteration_label_expansion_plan.csv",
+  "raw_plan_sha256": "8fe963697eb2a848ea760d8297dadfd1e12ce2efa0e9e97f2e565efe3864df98",
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g551_iteration_label_expansion_plan_summary_v1"
+}

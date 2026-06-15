@@ -1,0 +1,14 @@
+candidate_group,candidate_rows,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+bounded_residual_around_static_flow,24,False,False,False,False,False
+checkpoint_residual_expansion,256,False,False,False,False,False
+conservative_shrinkage_10,18,False,False,False,False,False
+conservative_shrinkage_25,18,False,False,False,False,False
+conservative_shrinkage_50,18,False,False,False,False,False
+conservative_shrinkage_75,18,False,False,False,False,False
+force_additive_parity_control,1,False,False,False,False,False
+g550_safe_useful_positive,39,False,False,False,False,False
+no_op_static_parity_control,1,False,False,False,False,False
+non_evaluable,1,False,False,False,False,False
+risk_control_ablation,6,False,False,False,False,False
+safe_expert_mixture_lower_usage,48,False,False,False,False,False
+sobol_negative_control,64,False,False,False,False,False

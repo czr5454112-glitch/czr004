@@ -1,0 +1,22 @@
+{
+  "aaai_ready": false,
+  "counterfactual_contexts": 3367,
+  "decision": "g551_iteration_label_expansion_passed_train_policy",
+  "exact_resume_command": "python scripts/run_repair5g551_iteration_label_expansion.py --row-limit 64000 --max-workers 16",
+  "failure_reproduction_rows": 1689,
+  "finite_ratio_rows": 54471,
+  "hard_negative_success_regression_rows": 1689,
+  "learned_runtime_policy_validated": false,
+  "local_budget_blocker": false,
+  "mean_best_oracle_delta_vs_static_flow": "-0.0337898984235",
+  "new_iteration_counterfactual_solver_rows": 64011,
+  "oracle_gap_large_enough_for_policy_design": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "runtime_feature_leakage_found": false,
+  "safe_useful_context_rate": "0.658746658747",
+  "safe_useful_contexts": 2218,
+  "schema_version": "phase5p5_repair5g551_iteration_label_expansion_summary_v1",
+  "targeted_failure_theta_reproduced": true
+}

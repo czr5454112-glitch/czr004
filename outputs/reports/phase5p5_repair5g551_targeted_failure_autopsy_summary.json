@@ -1,0 +1,29 @@
+{
+  "aaai_ready": false,
+  "answers": {
+    "baseline_solved_theta_unsolved_hard_negative_contexts": 78,
+    "failure_cause": "distribution_shift_plus_target_plan_oversampling_and_missing_checkpoint_features",
+    "g549_region_replication_failure_cause": "narrow_region_fresh_seed_shift_and_policy_mixture_too_broad",
+    "hard_negative_success_regression_rows": 216,
+    "regression_concentration": {},
+    "safe_useful_contexts": 756,
+    "safe_useful_positive_rows": 9844,
+    "seed_block_concentration": {},
+    "targeted_non_static_usage_exceeded_offline": true,
+    "theta_concentration": {}
+  },
+  "decision": "g551_g550_targeted_failure_autopsy_complete",
+  "hard_negative_success_regression_rows": 216,
+  "learned_runtime_policy_validated": false,
+  "offline_non_static_usage": "0.197278911565",
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "safe_useful_positive_rows": 9844,
+  "schema_version": "phase5p5_repair5g551_targeted_failure_autopsy_summary_v1",
+  "targeted_non_static_usage": "0.833333333333",
+  "targeted_success_regression_count_vs_static_flow": 0,
+  "top_failure_seed_block": {},
+  "top_failure_stratum": {},
+  "top_failure_theta": {}
+}

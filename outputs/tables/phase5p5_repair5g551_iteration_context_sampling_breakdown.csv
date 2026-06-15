@@ -1,0 +1,11 @@
+route,map_family,agents,nominal_budget_ms,contexts,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+A_core_calibrated_evaluable,maze,50,2000,1050,False,False,False,False,False
+A_core_calibrated_evaluable,maze,100,2000,1050,False,False,False,False,False
+A_core_calibrated_evaluable,random,50,2000,1050,False,False,False,False,False
+A_core_calibrated_evaluable,random,100,2000,1050,False,False,False,False,False
+B_targeted_failure_analog,random,50,2000,1620,False,False,False,False,False
+B_targeted_failure_exact,random,50,2000,9,False,False,False,False,False
+E_horizon_variant_diagnostic,maze,50,2000,142,False,False,False,False,False
+E_horizon_variant_diagnostic,maze,100,2000,142,False,False,False,False,False
+E_horizon_variant_diagnostic,random,50,2000,143,False,False,False,False,False
+E_horizon_variant_diagnostic,random,100,2000,144,False,False,False,False,False

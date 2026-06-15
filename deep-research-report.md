@@ -2294,3 +2294,12 @@ From G5.48 onward, `static_flow_shield` is the primary fixed baseline for neural
 G5.47 fixed fulltheta materialization but did not run an evaluable fulltheta experiment. G5.48 therefore treats budget/horizon calibration as the bottleneck. A positive or negative claim about neural continuous UpdateParams requires finite paired quality outcomes versus static_flow_shield, not a declared grid and not a selector over static baselines.
 
 The G5.48 local calibration wrote real solver-facing rows: `3654` calibration solver/diagnostic rows, `522` context-horizons, `522` static_flow rows, `1604` finite-ratio rows, `283` both-success pairs versus static_flow, and `12` locally evaluable stratum-horizons. Because the finite-row gate remained below `3000`, the decision is `g548_budget_calibration_underpowered_continue_calibration`; fulltheta replay and all promotion/runtime/paper claims remain closed.
+
+## 2026-06-15 - G5.51 governance update: iteration-counterfactual SafeGate repair
+
+G5.51 keeps static_flow_shield as the primary baseline and tightens SafeGate after
+G5.50 targeted replay failures. Offline generator success is no longer sufficient
+for promotion. A learned bounded UpdateParams policy must pass fresh targeted
+replay with zero success regressions versus static_flow_shield before blind replay
+or runtime claims. The next valid learning signal is iteration/checkpoint-level
+counterfactual labels, not final full-run hindsight alone.

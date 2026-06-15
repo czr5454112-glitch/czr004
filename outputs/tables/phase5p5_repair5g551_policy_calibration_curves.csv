@@ -1,0 +1,3 @@
+bin,rows,empirical_success_regressions,mean_delta,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+predicted_safe_low_risk,539,0,-0.023971062781,False,False,False,False,False
+hard_negative_holdout,1689,0,,False,False,False,False,False

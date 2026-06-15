@@ -1,0 +1,5 @@
+route,solver_rows,distribution_shift_role,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+A_core_calibrated_evaluable,30343,coverage,False,False,False,False,False
+B_targeted_failure_analog,30780,failure_oversampling,False,False,False,False,False
+B_targeted_failure_exact,171,failure_oversampling,False,False,False,False,False
+E_horizon_variant_diagnostic,2717,coverage,False,False,False,False,False

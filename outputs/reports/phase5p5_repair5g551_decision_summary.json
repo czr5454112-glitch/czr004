@@ -1,0 +1,29 @@
+{
+  "aaai_ready": false,
+  "blind_success_regression_count_vs_static_flow": "",
+  "component_decisions": {
+    "A_failure_autopsy": "g551_g550_targeted_failure_autopsy_complete",
+    "A_g550_verification": "g551_g550_artifacts_verified",
+    "B_C_iteration_labels": "g551_iteration_label_expansion_passed_train_policy",
+    "D_checkpoint_policy": "g551_checkpoint_policy_offline_passed_continue_targeted_replay",
+    "E_targeted": "g551_targeted_regression_persists_continue_safety_training",
+    "F_blind": "g551_blind_replay_skipped_targeted_gate_not_met"
+  },
+  "decision": "g551_targeted_regression_persists_continue_safety_training",
+  "did_any_checkpoint_policy_pass_offline": true,
+  "did_blind_replay_run": false,
+  "did_g551_reproduce_g550_targeted_regressions_as_hard_negatives": true,
+  "did_g551_use_iteration_counterfactual_labels": true,
+  "did_targeted_replay_run": true,
+  "generated_non_static_theta_usage_rate": "0.833333333333",
+  "learned_runtime_policy_validated": false,
+  "next_step": "continue_safety_training_no_runtime_preflight",
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "primary_baseline": "static_flow_shield",
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g551_decision_summary_v1",
+  "targeted_quality_delta_vs_static_flow": "0.0054865163785",
+  "targeted_success_regression_count_vs_static_flow": 352,
+  "warehouse_non_evaluable_or_recovered": "warehouse_diagnostic_nonblocking_not_promotion_blocker"
+}

@@ -1,0 +1,31 @@
+{
+  "aaai_ready": false,
+  "checks": {
+    "active_theta_search_rows_50065": true,
+    "all_claim_flags_closed": true,
+    "all_required_artifacts_present": true,
+    "blind_replay_run_false": true,
+    "fulltheta_expansion_rows_68570": true,
+    "g550_decision_expected": true,
+    "generator_policy_family_best_safe_mixture": true,
+    "iteration_counterfactual_solver_rows_3800": true,
+    "iteration_safe_useful_context_rate_0825": true,
+    "mean_best_oracle_delta_expected": true,
+    "offline_gate_passed": true,
+    "targeted_new_solver_rows_30006": true,
+    "targeted_quality_delta_expected": true,
+    "targeted_replay_run": true,
+    "targeted_success_regression_count_216": true,
+    "warehouse_non_evaluable": true
+  },
+  "decision": "g551_g550_artifacts_verified",
+  "git_head": "a7779c5",
+  "learned_runtime_policy_validated": false,
+  "missing_artifacts": [],
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "primary_baseline": "static_flow_shield",
+  "runtime_claim_allowed": false,
+  "safegate_interpretation": "tighten_targeted_success_regression_blocking",
+  "schema_version": "phase5p5_repair5g551_g550_verification_summary_v1"
+}

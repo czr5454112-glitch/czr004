@@ -1,0 +1,14 @@
+theta_family,pair_rows,both_success_quality_pairs_vs_static_flow,success_regression_count,better_count,worse_count,mean_quality_delta_vs_static_flow,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+bounded_residual_around_static_flow,1749,1084,55,454,495,0.000242135235699,False,False,False,False,False
+checkpoint_residual_expansion,18073,12438,570,3755,7324,0.049896377721,False,False,False,False,False
+conservative_shrinkage_10,4587,3044,210,1233,1304,0.000989629745408,False,False,False,False,False
+conservative_shrinkage_25,4655,3114,190,1452,1164,-0.00210641133059,False,False,False,False,False
+conservative_shrinkage_50,1316,869,44,405,352,-0.00126517905295,False,False,False,False,False
+conservative_shrinkage_75,1329,894,34,488,305,-0.00744827198625,False,False,False,False,False
+force_additive_parity_control,71,47,3,7,38,0.0421244488217,False,False,False,False,False
+g550_safe_useful_positive,4865,3224,210,1808,975,-0.010250094686,False,False,False,False,False
+no_op_static_parity_control,71,47,4,18,21,0.00149120918804,False,False,False,False,False
+non_evaluable,76,43,1,26,13,-0.0138375587867,False,False,False,False,False
+risk_control_ablation,2591,1700,132,339,1152,0.018653381726,False,False,False,False,False
+safe_expert_mixture_lower_usage,3468,2510,73,915,1238,0.00585835138596,False,False,False,False,False
+sobol_negative_control,4360,2913,163,592,2118,0.107387060353,False,False,False,False,False

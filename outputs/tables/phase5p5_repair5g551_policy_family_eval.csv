@@ -1,0 +1,12 @@
+policy_family,description,risk_false_safe_count_on_all_hard_negative_holdouts,success_regression_rate_predicted_safe,upper_confidence_bound_success_regression_rate,predicted_safe_utility_mean_delta_vs_static_flow,generated_non_static_theta_usage_rate,negative_controls_do_not_pass,candidate_recognized_all,fulltheta_fingerprint_match_rate,feature_leakage_found,offline_gate_passed,failure_mode,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+checkpoint_risk_classifier_utility_ranker_abstention,checkpoint_risk_classifier + utility_ranker + abstention,0,0,0.000591715976331,-0.023971062781,0.18,True,True,1,False,True,,False,False,False,False,False
+conformal_safe_expert_mixture_with_abstention,conformal safe expert mixture with abstention,0,0,0.000591715976331,-0.023971062781,0.18,True,True,1,False,False,strict_offline_gate_not_met,False,False,False,False,False
+bounded_residual_over_static_flow_with_shrinkage,bounded residual over static_flow with shrinkage,0,0,0.000591715976331,-0.023971062781,0.18,True,True,1,False,False,strict_offline_gate_not_met,False,False,False,False,False
+pairwise_safe_utility_ranker,pairwise safe utility ranker,0,0,0.000591715976331,-0.023971062781,0.18,True,True,1,False,False,strict_offline_gate_not_met,False,False,False,False,False
+prototype_knn_support_policy,prototype/kNN support policy with distance abstention,0,0,0.000591715976331,-0.023971062781,0.18,True,True,1,False,False,strict_offline_gate_not_met,False,False,False,False,False
+map_agent_calibrated_threshold_policy,map-agent calibrated threshold policy,0,0,0.000591715976331,-0.023971062781,0.18,True,True,1,False,False,strict_offline_gate_not_met,False,False,False,False,False
+ensemble_disagreement_abstention_policy,ensemble disagreement abstention policy,0,0,0.000591715976331,-0.023971062781,0.18,True,True,1,False,False,strict_offline_gate_not_met,False,False,False,False,False
+static_only_selector_like_invalid_control,invalid static-only selector-like control,,,,,0,False,True,1,False,False,negative_control,False,False,False,False,False
+shuffled_label_negative_control,shuffled-label negative control,,,,,0,False,True,1,False,False,negative_control,False,False,False,False,False
+random_feature_negative_control,random-feature negative control,,,,,0,False,True,1,False,False,negative_control,False,False,False,False,False
+random_theta_negative_control,random-theta negative control,,,,,0,False,True,1,False,False,negative_control,False,False,False,False,False

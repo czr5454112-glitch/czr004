@@ -110,3 +110,12 @@ The baseline policy is unchanged: `static_flow_shield` remains the primary basel
 G5.50 audits the G5.49 true safe-gain regions and treats them as concentrated development signal, not as a deployable learned policy. The baseline policy is unchanged: `static_flow_shield` remains the primary baseline for learned/fulltheta continuous `UpdateParams`; `additive_ltm` remains the paper-faithful floor; strong static variants remain diagnostics.
 
 SafeGate v2 is not relaxed. Replay-region hindsight must first become a runtime-available bounded `UpdateParams` generator, residual policy, or safe expert mixture with abstention and then survive fresh replay. In the completed local G5.50 pass, expansion (`68570` rows) did not replicate the G5.49 core true-gain regions, active theta search mapped `50065` rows, and the safe expert-mixture policy passed offline. Fresh targeted replay then failed the safety gate with `216` success regressions versus `static_flow_shield`, so blind replay and all runtime/Phase5.5/Phase6/AAAI claims stay closed. The decision label is `g550_iteration_counterfactual_labels_needed_before_generator`.
+
+## 2026-06-15 - G5.51 strategic update: iteration/checkpoint labels before promotion
+
+G5.51 keeps static_flow_shield as the primary baseline and tightens SafeGate after
+G5.50 targeted replay failures. Offline generator success is no longer sufficient
+for promotion. A learned bounded UpdateParams policy must pass fresh targeted
+replay with zero success regressions versus static_flow_shield before blind replay
+or runtime claims. The next valid learning signal is iteration/checkpoint-level
+counterfactual labels, not final full-run hindsight alone.

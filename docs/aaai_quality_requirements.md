@@ -591,3 +591,12 @@ MAPF reviewer taste:
 ML top-venue taste:
   real learned update dynamics, not static hand-tuning
 ```
+
+## 2026-06-15 - G5.51 SafeGate tightening for paper-quality claims
+
+G5.51 keeps static_flow_shield as the primary baseline and tightens SafeGate after
+G5.50 targeted replay failures. Offline generator success is no longer sufficient
+for promotion. A learned bounded UpdateParams policy must pass fresh targeted
+replay with zero success regressions versus static_flow_shield before blind replay
+or runtime claims. The next valid learning signal is iteration/checkpoint-level
+counterfactual labels, not final full-run hindsight alone.

@@ -1,0 +1,17 @@
+map_family,agents,nominal_budget_ms,horizon_id,pair_rows,both_success_quality_pairs_vs_static_flow,success_regression_count,better_count,worse_count,mean_quality_delta_vs_static_flow,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+maze,100,2000,generated_theta_targeted_short2000_t050_i2,2390,561,53,225,280,0.0116553480978,False,False,False,False,False
+maze,100,2000,generated_theta_targeted_short2000_t100_i2,2582,2050,180,896,888,0.0052998605514,False,False,False,False,False
+maze,100,2000,generated_theta_targeted_short5000_t050_i2,2343,810,7,290,453,0.0104641525355,False,False,False,False,False
+maze,100,2000,generated_theta_targeted_short5000_t100_i4,2559,2476,38,1202,997,-0.00146817557106,False,False,False,False,False
+maze,50,2000,generated_theta_targeted_short2000_t050_i2,2668,2606,2,1059,1145,0.00229413672253,False,False,False,False,False
+maze,50,2000,generated_theta_targeted_short2000_t100_i2,3068,3060,8,1237,1374,0.0015005036626,False,False,False,False,False
+maze,50,2000,generated_theta_targeted_short5000_t050_i2,2712,2648,4,1133,1112,0.000447074898088,False,False,False,False,False
+maze,50,2000,generated_theta_targeted_short5000_t100_i4,3024,3022,2,1250,1326,0.000899407770425,False,False,False,False,False
+random,100,2000,generated_theta_targeted_short2000_t050_i2,2868,1426,17,489,818,0.0190887230808,False,False,False,False,False
+random,100,2000,generated_theta_targeted_short2000_t100_i2,3232,3158,29,1317,1481,0.00691656712945,False,False,False,False,False
+random,100,2000,generated_theta_targeted_short5000_t050_i2,2832,1510,2,492,877,0.0185233322221,False,False,False,False,False
+random,100,2000,generated_theta_targeted_short5000_t100_i4,3236,3185,10,1264,1563,0.00851420282811,False,False,False,False,False
+random,50,2000,generated_theta_targeted_short2000_t050_i2,2736,2661,0,1000,1284,0.00527160289708,False,False,False,False,False
+random,50,2000,generated_theta_targeted_short2000_t100_i2,3004,3004,0,1079,1505,0.00635501222694,False,False,False,False,False
+random,50,2000,generated_theta_targeted_short5000_t050_i2,2768,2693,0,1006,1315,0.00565358182094,False,False,False,False,False
+random,50,2000,generated_theta_targeted_short5000_t100_i4,2972,2972,0,1059,1487,0.00619461903422,False,False,False,False,False

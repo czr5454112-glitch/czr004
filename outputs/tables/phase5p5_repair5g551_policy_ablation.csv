@@ -1,0 +1,6 @@
+split,passed,safe_utility_signal,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+leave_seed_block_out,True,-0.023971062781,False,False,False,False,False
+leave_map_agent_stratum_out,True,-0.023971062781,False,False,False,False,False
+g550_targeted_failure_holdout,True,hard_negatives_blocked,False,False,False,False,False
+active_region_holdout,True,non_static_candidates_supported,False,False,False,False,False
+time_horizon_holdout,True,-0.023971062781,False,False,False,False,False

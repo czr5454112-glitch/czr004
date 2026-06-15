@@ -1,0 +1,6 @@
+feature_group,runtime_available,leakage_found,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+pre_update_checkpoint_traffic_snapshot,True,False,False,False,False,False,False
+trace_event_counts_before_candidate_theta,True,False,False,False,False,False,False
+candidate_theta_values,True,False,False,False,False,False,False
+selected_ratio_or_success_outcome,False,False,False,False,False,False,False
+seed_id_memorized_categorical,False,False,False,False,False,False,False

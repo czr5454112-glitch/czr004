@@ -5023,3 +5023,30 @@
   No solver semantic changes, no external/lacam2/lacam2 edits, no static selector method, no Phase5.5/Phase6/runtime/AAAI claims.
 - Result:
   Gate reassessment decision is `g547_gate_v2_created_use_for_fulltheta_exploration`. Selector-era gates are no longer reused wholesale for neural continuous UpdateParams. G5.47 wrote a tiered gate matrix with invariant safety gates, evaluability gates, permissive exploration gates, refinement/promotion gates, and strict blind/runtime gates. The final runtime gate was not relaxed; exploration was relaxed only for collecting unsafe theta as risk-model data. `static_flow_shield` is the primary theta-generator baseline, while stronger static baselines remain diagnostic unless explicitly declared primary.
+
+## 2026-06-15 - Repair5G.5.51 iteration-counterfactual SafeGate repair
+
+- Request:
+  Continue after G5.50 commit a7779c5. G5.50 completed the local replay chain:
+  68,570 fulltheta expansion rows, 50,065 active theta-search rows, offline
+  safe_expert_mixture_with_abstention gate pass, 30,006 fresh targeted
+  generated-theta rows, and 3,800 iteration-counterfactual preflight rows.
+- Interpretation:
+  G5.50 is not a deployable learned UpdateLTM success. The offline policy
+  passed but targeted replay failed SafeGate with 216 success regressions
+  versus static_flow_shield. Blind replay stayed closed. The current blocker is
+  not fulltheta materialization, not calibration, and not a lack of oracle signal.
+  The blocker is risk/abstention generalization from replay-region hindsight to
+  fresh targeted contexts.
+- Next scientific step:
+  Use iteration-level counterfactual labels to train and calibrate a checkpoint
+  risk/utility/abstention policy. Fresh targeted replay must be passed before any
+  blind/runtime/Phase5.5/Phase6/AAAI claim can open.
+- Baseline and SafeGate:
+  static_flow_shield remains the primary baseline. additive_ltm is only the
+  paper-faithful floor. strong static variants are diagnostics. SafeGate is
+  tightened around targeted success-regression blocking; it is not relaxed.
+- Constraints:
+  No external/lacam2/lacam2 edits, no solver semantic changes, no candidate or
+  PIBT conflict changes, no static selector as learned method, no IDs 166..205,
+  no runtime/Phase5.5/Phase6/AAAI claims.

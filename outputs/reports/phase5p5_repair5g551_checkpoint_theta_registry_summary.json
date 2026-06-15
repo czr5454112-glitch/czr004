@@ -1,0 +1,13 @@
+{
+  "aaai_ready": false,
+  "decision": "g551_checkpoint_theta_registry_created",
+  "important_field_variation_rate": "0.998046875",
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "raw_registry_path": "C:\\PROGRAMING\\czr004\\outputs\\logs\\phase5p5_repair5g551_registry\\checkpoint_theta_registry.csv",
+  "raw_registry_sha256": "edc950854db6a970f4d9de3ac0ac9c0f086b7767c4866c83ed29fe66a275bd70",
+  "registry_rows": 512,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g551_checkpoint_theta_registry_summary_v1"
+}

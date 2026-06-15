@@ -1,0 +1,22 @@
+{
+  "aaai_ready": false,
+  "candidate_recognized_all": true,
+  "decision": "g551_checkpoint_policy_offline_passed_continue_targeted_replay",
+  "feature_leakage_found": false,
+  "fulltheta_fingerprint_match_rate": "1",
+  "generated_candidate_count": 27,
+  "generated_non_static_theta_usage_rate": "0.18",
+  "generator_policy_family_best": "checkpoint_risk_classifier_utility_ranker_abstention",
+  "learned_runtime_policy_validated": false,
+  "negative_controls_do_not_pass": true,
+  "offline_gate_passed": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "policy_families_evaluated": 11,
+  "predicted_safe_utility_mean_delta_vs_static_flow": "-0.023971062781",
+  "risk_false_safe_count_on_all_hard_negative_holdouts": 0,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g551_checkpoint_policy_summary_v1",
+  "success_regression_rate_predicted_safe": "0",
+  "upper_confidence_bound_success_regression_rate": "0.000591715976331"
+}

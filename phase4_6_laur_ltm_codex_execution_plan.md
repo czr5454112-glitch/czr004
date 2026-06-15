@@ -6935,3 +6935,12 @@ From G5.48 onward, `static_flow_shield` is the primary fixed baseline for neural
 G5.48 changes the project-wide rule for this route: a budget/horizon grid must be materialized by real solver commands before it can support any positive or negative conclusion. Declared calibration rows, copied rows, and static-baseline selector wins do not count as learned UpdateLTM progress.
 
 The G5.48 local run produced `3654` calibration solver/diagnostic rows over `522` context-horizons, with `522` static_flow rows, `1604` finite-ratio rows, `283` both-success pairs versus static_flow, and `12` locally evaluable stratum-horizons. This satisfies the real-calibration floor but not the `finite_ratio_rows >= 3000` full replay gate, so the decision is `g548_budget_calibration_underpowered_continue_calibration`. Fulltheta replay, generator training, targeted replay, blind replay, Phase5.5, Phase6, runtime, and AAAI claims remain closed.
+
+## 2026-06-15 - G5.51 execution update: iteration-counterfactual SafeGate repair
+
+G5.51 keeps static_flow_shield as the primary baseline and tightens SafeGate after
+G5.50 targeted replay failures. Offline generator success is no longer sufficient
+for promotion. A learned bounded UpdateParams policy must pass fresh targeted
+replay with zero success regressions versus static_flow_shield before blind replay
+or runtime claims. The next valid learning signal is iteration/checkpoint-level
+counterfactual labels, not final full-run hindsight alone.

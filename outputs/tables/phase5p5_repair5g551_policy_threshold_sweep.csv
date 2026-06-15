@@ -1,0 +1,7 @@
+threshold,usage_rate,false_safe_count,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+0.05,0.005,0,False,False,False,False,False
+0.1,0.01,0,False,False,False,False,False
+0.15,0.015,0,False,False,False,False,False
+0.2,0.02,0,False,False,False,False,False
+0.25,0.025,0,False,False,False,False,False
+0.3,0.03,0,False,False,False,False,False

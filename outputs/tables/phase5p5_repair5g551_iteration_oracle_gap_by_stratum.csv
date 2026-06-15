@@ -1,0 +1,14 @@
+map_family,agents,nominal_budget_ms,horizon_id,contexts,safe_useful_contexts,hard_negative_contexts,mean_best_oracle_delta_vs_static_flow,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+random,100,2000,iteration_label_expansion_short1000_t050_i2,105,14,15,-0.0456021073329,False,False,False,False,False
+random,100,2000,iteration_label_expansion_short2000_t050_i2,104,19,5,-0.0293976357372,False,False,False,False,False
+random,100,2000,iteration_label_expansion_short2000_t100_i2,104,83,31,-0.0366982293164,False,False,False,False,False
+random,50,2000,iteration_label_expansion_failure_short1000_t050_i2,543,336,156,-0.0358225342991,False,False,False,False,False
+random,50,2000,iteration_label_expansion_failure_short2000_t050_i2,542,365,90,-0.0290961949138,False,False,False,False,False
+random,50,2000,iteration_label_expansion_failure_short2000_t100_i2,542,391,91,-0.0313891658206,False,False,False,False,False
+random,50,2000,iteration_label_expansion_short1000_t050_i2,397,240,117,-0.0367119255029,False,False,False,False,False
+random,50,2000,iteration_label_expansion_short2000_t050_i2,397,264,64,-0.0343799084658,False,False,False,False,False
+random,50,2000,iteration_label_expansion_short2000_t100_i2,396,290,78,-0.0358845448405,False,False,False,False,False
+random,50,2000,iteration_label_expansion_short5000_t050_i2,47,43,1,-0.0385278373201,False,False,False,False,False
+random,50,2000,iteration_label_expansion_short5000_t100_i4,47,44,2,-0.0387883508988,False,False,False,False,False
+random,50,2000,iteration_label_expansion_zz_short5000_t050_i2,72,65,2,-0.0336831595467,False,False,False,False,False
+random,50,2000,iteration_label_expansion_zz_short5000_t100_i4,71,64,2,-0.0322240308805,False,False,False,False,False

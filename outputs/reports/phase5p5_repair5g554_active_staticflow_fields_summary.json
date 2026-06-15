@@ -1,0 +1,25 @@
+{
+  "aaai_ready": false,
+  "decision": "g554_active_field_audit_ready",
+  "field_count": 18,
+  "goal_projection_mode": "flow_shield",
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "primary_active_search_fields": [
+    "theta_alpha_cong_commit_nonprogress",
+    "theta_alpha_flow_commit_progress",
+    "theta_alpha_flow_wait_progress",
+    "theta_lambda_cong",
+    "theta_flow_shield_beta",
+    "theta_max_flow_shield",
+    "theta_min_edge_cost",
+    "theta_max_edge_cost",
+    "theta_rho_cong_decay"
+  ],
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g554_active_staticflow_fields_summary_v1",
+  "theta_alpha_flow_wait_progress_current": "0",
+  "theta_lambda_flow_current": "0",
+  "theta_lambda_flow_primary": false
+}

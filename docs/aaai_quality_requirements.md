@@ -630,3 +630,9 @@ aaai_ready: false
 ## 2026-06-15 - G5.53 fixed-global coefficient pivot
 
 G5.53 pauses the dynamic learned UpdateParams policy direction and evaluates a simpler fixed-global coefficient optimization problem. The candidate is a single deterministic static_flow_shield coefficient vector shared across all maps, agents, seeds, budgets, and checkpoints. It is not a contextual selector, abstention policy, or runtime learned policy. It can only replace the hand-designed static_flow_shield coefficients if it wins paired replay with zero success regression versus the current static_flow_shield. If it fails, current hand static_flow_shield remains the primary baseline.
+
+## 2026-06-15 - G5.54 fixed-global coefficient optimization v2
+
+G5.54 continues fixed-global static_flow coefficient optimization. The candidate remains one deterministic global coefficient vector shared across all maps, agents, seeds, budgets, and checkpoints. It is not a dynamic learned policy. G5.53 did not promote a replacement because its Stage1 candidates either lacked support or regressed; G5.54 therefore runs fresh paired optimization and near-miss expansion. Current hand static_flow_shield remains the primary baseline unless a fixed global vector passes fresh validation/blind replay with zero success regression.
+
+G5.54 completed the server-scale fresh replay gate with `260096` Stage1 rows and `360013` Stage2 rows. Stage2 produced `0` validation shortlist candidates, so validation and blind replay were skipped by gate. The decision is `g554_no_fixed_global_candidate_after_fresh_search_keep_hand_baseline`: no fixed-global coefficient vector is promoted, `static_flow_shield` remains the primary baseline, and all runtime/Phase5.5/Phase6/AAAI claims stay closed.

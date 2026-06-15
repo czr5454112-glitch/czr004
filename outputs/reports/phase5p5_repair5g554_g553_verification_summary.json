@@ -1,0 +1,27 @@
+{
+  "aaai_ready": false,
+  "all_required_artifacts_exist": true,
+  "checks": {
+    "current_staticflow_materialized_baseline": true,
+    "g553_decision_no_promotion": true,
+    "stage0_fingerprint_match_rate_1": true,
+    "stage0_materialization_failures_0": true,
+    "stage1_high_support_regression_27": true,
+    "stage1_reused_g552_rows": true,
+    "stage1_zero_reg_low_support_1470": true,
+    "validation_not_run": true
+  },
+  "decision": "g554_g553_verified_screening_negative_not_final",
+  "g553_decision": "g553_no_fixed_coeff_candidate_beats_hand_staticflow_keep_baseline",
+  "global_support_with_regression_candidates": 27,
+  "learned_runtime_policy_validated": false,
+  "local_new_stage1_solver_rows": 0,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g554_g553_verification_summary_v1",
+  "stage0_solver_rows": 5075,
+  "stage1_source_reused_solver_rows": 128000,
+  "validation_run": false,
+  "zero_regression_low_support_candidates": 1470
+}

@@ -1,0 +1,21 @@
+{
+  "aaai_ready": false,
+  "candidate_object": "one deterministic global fixed coefficient vector",
+  "centroid_rows": 6,
+  "decision": "g554_nearmiss_candidate_pool_created",
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "pool_rows": 1531,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g554_nearmiss_candidate_pool_summary_v1",
+  "sources": {
+    "current_hand_static_flow_shield": 1,
+    "g553_high_quality_nearmiss": 164,
+    "g553_high_quality_nearmiss_shrinkage_to_hand": 164,
+    "g553_zero_regression_low_support": 600,
+    "g553_zero_regression_low_support_shrinkage_to_hand": 600,
+    "hand_legacy_midpoint": 1,
+    "legacy_helper_static_flow_reference": 1
+  }
+}

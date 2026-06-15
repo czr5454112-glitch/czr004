@@ -1,0 +1,19 @@
+{
+  "aaai_ready": false,
+  "baseline_static_flow_reference_rows": 1016,
+  "candidate_vectors_screened": 3000,
+  "contexts": 1016,
+  "decision": "g554_stage1_nearmisses_found_continue_expansion",
+  "learned_runtime_policy_validated": false,
+  "low_regression_high_gain_candidates": 1090,
+  "minimum_new_stage1_solver_rows_met": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "preferred_new_stage1_solver_rows_met": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g554_stage1_fresh_screening_summary_v1",
+  "search_phase_candidates_may_have_regressions": true,
+  "stage1_new_solver_rows": 260096,
+  "stage1_validation_ready_candidates": 0,
+  "zero_regression_candidates": 2933
+}

@@ -1,0 +1,18 @@
+candidate_family,candidate_vectors,allowed_for_promotion,generation_policy,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+hand_static_reference,1,True,deterministic trust-region and near-miss expansion,False,False,False,False,False
+legacy_helper_reference,1,True,deterministic trust-region and near-miss expansion,False,False,False,False,False
+hand_legacy_midpoints,5,True,deterministic trust-region and near-miss expansion,False,False,False,False,False
+one_factor_small_perturbation,1611,True,deterministic trust-region and near-miss expansion,False,False,False,False,False
+two_factor_interaction,1900,True,deterministic trust-region and near-miss expansion,False,False,False,False,False
+trust_region_sobol_around_hand,1953,True,deterministic trust-region and near-miss expansion,False,False,False,False,False
+trust_region_sobol_around_nearmiss,1953,True,deterministic trust-region and near-miss expansion,False,False,False,False,False
+cma_es_style_offline_candidates,1953,True,deterministic trust-region and near-miss expansion,False,False,False,False,False
+cross_entropy_elite_refits,1952,True,deterministic trust-region and near-miss expansion,False,False,False,False,False
+coordinate_descent_lines,38,True,deterministic trust-region and near-miss expansion,False,False,False,False,False
+flow_wait_progress_micro_sweep,48,True,deterministic trust-region and near-miss expansion,False,False,False,False,False
+lambda_cong_micro_sweep,97,True,deterministic trust-region and near-miss expansion,False,False,False,False,False
+flow_shield_beta_cap_sweep,11,True,deterministic trust-region and near-miss expansion,False,False,False,False,False
+cost_clamp_micro_sweep,139,True,deterministic trust-region and near-miss expansion,False,False,False,False,False
+rho_decay_micro_sweep,436,True,deterministic trust-region and near-miss expansion,False,False,False,False,False
+shrinkage_to_hand_from_risky,1950,True,deterministic trust-region and near-miss expansion,False,False,False,False,False
+negative_controls_wide_random,1952,False,deterministic trust-region and near-miss expansion,False,False,False,False,False

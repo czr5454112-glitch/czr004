@@ -1,0 +1,2 @@
+candidate_family,generated_rows,candidate_vectors,zero_regression_candidates,mean_quality_delta_vs_static_flow,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+,10000,1000,971,0.0171116245161,False,False,False,False,False

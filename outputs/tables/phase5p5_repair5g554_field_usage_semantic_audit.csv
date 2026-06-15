@@ -1,0 +1,19 @@
+theta_parameter,classification,search_budget_role,special_note,active_in_materialization,active_in_update,active_in_cost_projection,active_only_under_specific_goal_projection_mode,ignored_or_alias,requires_nonzero_flow_events,requires_nonzero_wait_progress_events,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+theta_alpha_cong_commit_progress,diagnostic_or_mode_field,ablation_diagnostic,,True,True,False,False,False,False,False,False,False,False,False,False
+theta_alpha_cong_commit_nonprogress,primary_active_search_field,main,,True,True,False,False,False,False,False,False,False,False,False,False
+theta_alpha_cong_block,diagnostic_or_mode_field,ablation_diagnostic,,True,True,False,False,False,False,False,False,False,False,False,False
+theta_alpha_cong_wait_progress,diagnostic_or_mode_field,ablation_diagnostic,,True,True,False,False,False,False,True,False,False,False,False,False
+theta_alpha_cong_wait_nonprogress,diagnostic_or_mode_field,ablation_diagnostic,,True,True,False,False,False,False,False,False,False,False,False,False
+theta_alpha_flow_commit_progress,primary_active_search_field,main,,True,True,False,False,False,True,False,False,False,False,False,False
+theta_alpha_flow_wait_progress,primary_active_search_field,main,wait-progress flow requires nonzero wait-progress events,True,True,False,False,False,True,True,False,False,False,False,False
+theta_rho_cong_decay,primary_active_search_field,main,,True,True,False,False,False,False,False,False,False,False,False,False
+theta_rho_flow_decay,diagnostic_or_mode_field,ablation_diagnostic,,True,True,False,False,False,True,False,False,False,False,False,False
+theta_lambda_cong,primary_active_search_field,main,,True,False,True,False,False,False,False,False,False,False,False,False
+theta_lambda_flow,diagnostic_or_mode_field,ablation_diagnostic,lambda_flow is treated as diagnostic unless Stage0B shows response under flow_shield,True,False,True,True,True,True,False,False,False,False,False,False
+theta_flow_shield_beta,primary_active_search_field,main,,True,False,True,True,False,True,False,False,False,False,False,False
+theta_max_flow_shield,primary_active_search_field,main,,True,False,True,True,False,True,False,False,False,False,False,False
+theta_min_edge_cost,primary_active_search_field,main,,True,False,True,False,False,False,False,False,False,False,False,False
+theta_max_edge_cost,primary_active_search_field,main,,True,False,True,False,False,False,False,False,False,False,False,False
+theta_goal_projection_mode_flow_shield,diagnostic_or_mode_field,ablation_diagnostic,,True,False,True,True,False,False,False,False,False,False,False,False
+theta_goal_projection_mode_agent_progress,diagnostic_or_mode_field,ablation_diagnostic,,True,False,True,True,False,False,False,False,False,False,False,False
+theta_goal_projection_mode_none,diagnostic_or_mode_field,ablation_diagnostic,,True,False,True,True,False,False,False,False,False,False,False,False

@@ -1,0 +1,40 @@
+{
+  "aaai_ready": false,
+  "answers": {
+    "baseline_is_current_cpp_staticflow_alias": true,
+    "did_g553_run_fresh_stage1_solver_rows": false,
+    "global_support_with_success_regressions": 0,
+    "is_final_negative": false,
+    "legacy_helper_diff_fields": [
+      "theta_alpha_flow_wait_progress",
+      "theta_lambda_flow"
+    ],
+    "near_miss_parameter_directions": {
+      "theta_alpha_cong_commit_nonprogress:down": 51,
+      "theta_alpha_cong_commit_nonprogress:up": 34,
+      "theta_alpha_flow_wait_progress:up": 400,
+      "theta_flow_shield_beta:down": 18,
+      "theta_flow_shield_beta:up": 47,
+      "theta_lambda_cong:down": 182,
+      "theta_lambda_cong:up": 57,
+      "theta_max_edge_cost:down": 90,
+      "theta_max_edge_cost:up": 36,
+      "theta_max_flow_shield:down": 7,
+      "theta_max_flow_shield:up": 58,
+      "theta_min_edge_cost:down": 85
+    },
+    "quality_gain_insufficient_support_candidates": 200,
+    "stage1_reused_g552_label_v2_rows": true,
+    "top_zero_regression_candidate_support": 200,
+    "validation_run": false,
+    "validation_skip_reason": "stage1_fixed_global_gate_not_met",
+    "zero_regression_candidates_rejected_for_low_support": 1000
+  },
+  "decision": "g553_first_pass_screening_negative_continue_g554",
+  "interpretation": "G5.53 is a conservative no-promotion screening negative, not a final fixed-global search closure.",
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g554_g553_negative_result_audit_summary_v1"
+}

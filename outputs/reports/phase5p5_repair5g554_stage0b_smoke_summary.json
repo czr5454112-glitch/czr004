@@ -1,0 +1,20 @@
+{
+  "aaai_ready": false,
+  "baseline_static_flow_rows": 50,
+  "candidate_recognized_all": true,
+  "cost_finite_all": true,
+  "current_hand_static_flow_reproduced": true,
+  "decision": "g554_stage0b_smoke_passed",
+  "fulltheta_fingerprint_match_rate": "1",
+  "learned_runtime_policy_validated": false,
+  "materialization_failure_rows": 0,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g554_stage0b_smoke_summary_v1",
+  "stage0b_candidate_vectors": 1000,
+  "stage0b_contexts": 50,
+  "stage0b_obvious_regressions": 29,
+  "stage0b_solver_rows": 10150,
+  "stage0b_surviving_candidates": 971
+}

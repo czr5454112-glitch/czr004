@@ -5100,3 +5100,22 @@
 
 - Constraints:
   No external/lacam2/lacam2 edits, no solver semantic changes, no contextual selector, no checkpoint policy, no dynamic UpdateParams policy, no abstention gate, no IDs 166..205, no runtime/Phase5.5/Phase6/AAAI claims.
+
+## 2026-06-15 - Repair5G.5.54 fixed-global static_flow coefficient optimization v2
+
+- Request:
+  Continue the fixed-global coefficient route after G5.53 commit f9fd4dd. Keep dynamic learned UpdateParams policy, contextual selector, checkpoint policy, and abstention policy paused. The objective remains: search one deterministic global static_flow_shield coefficient vector that can directly replace the current hand static_flow_shield baseline.
+
+- Interpretation:
+  G5.53 did not find a promotable fixed-global vector, but it was not a final negative result. Stage0 materialization passed with fingerprint=1 and 200 surviving candidates. Stage1 evaluated 128,000 solver-facing rows from the reused G5.52 Label-v2 dataset, not a large fresh fixed-coefficient optimization replay. It found 1,470 zero-regression low-support candidates and 27 high-support candidates with regressions, then skipped validation because no candidate passed the strict support gate.
+
+- G5.54 change:
+  Run a fresh paired fixed-coefficient search/validation pipeline. Expand zero-regression near-misses, use trust-region and derivative-free candidate generation around current hand static_flow and near-miss candidates, and validate top candidates on fresh heldout paired replay. Search-phase candidates may have regressions for diagnostic learning, but promotion candidates must have zero success regressions versus current hand static_flow_shield.
+
+- Baseline:
+  Primary baseline is the current C++-materialized hand static_flow_shield (`repair5g59_static_flow_shield`), not the older helper fulltheta reference. additive_ltm remains the paper/parity floor and diagnostic success floor.
+
+- Constraints:
+  No external/lacam2/lacam2 edits, no solver semantic changes, no dynamic policy, no selector, no checkpoint policy, no abstention gate, no per-context theta, no IDs 166..205, and no runtime/Phase5.5/Phase6/AAAI claims.
+- Result:
+  Server run completed under `tmux` on the KCS RTX4090 instance and compact data was retrieved locally. Stage0B passed materialization/fingerprint smoke. Stage1 executed `260096` fresh paired solver rows over `3000` candidate vectors and found `2933` zero-regression near-miss candidates but `0` validation-ready candidates. Stage2 expanded `170` candidates for `360013` fresh rows and produced `0` validation shortlist candidates; the best diagnostic row was `g554_c00894`, but it did not pass the full shortlist/materialization gate. Validation and blind replay were correctly skipped by gate. Final decision: `g554_no_fixed_global_candidate_after_fresh_search_keep_hand_baseline`; current hand `static_flow_shield` remains primary, dynamic learned policy remains paused, and all Phase5.5/Phase6/runtime/AAAI claim flags remain closed.

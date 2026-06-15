@@ -1,0 +1,11 @@
+{
+  "aaai_ready": false,
+  "decision": "g554_blind_plan_skipped_validation_gate_not_met",
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "planned_solver_rows": 0,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g554_blind_plan_summary_v1",
+  "skip_reason": "validation_gate_not_met"
+}

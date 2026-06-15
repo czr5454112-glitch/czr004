@@ -1,0 +1,18 @@
+{
+  "aaai_ready": false,
+  "best_candidate_id": "g554_c00894",
+  "best_candidate_quality_delta_vs_static_flow": "-0.0315924946469",
+  "best_candidate_success_regressions_vs_static_flow": 0,
+  "candidate_vectors_expanded": 170,
+  "contexts": 2081,
+  "decision": "g554_no_fixed_global_candidate_after_fresh_search_keep_hand_baseline",
+  "learned_runtime_policy_validated": false,
+  "minimum_stage2_new_solver_rows_met": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "preferred_stage2_new_solver_rows_met": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g554_stage2_nearmiss_expansion_summary_v1",
+  "stage2_new_solver_rows": 360013,
+  "stage2_validation_shortlist_count": 0
+}

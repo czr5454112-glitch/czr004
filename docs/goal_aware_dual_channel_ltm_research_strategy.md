@@ -143,3 +143,9 @@ fresh replay.
 ## 2026-06-15 - G5.53 fixed-global coefficient pivot
 
 G5.53 pauses the dynamic learned UpdateParams policy direction and evaluates a simpler fixed-global coefficient optimization problem. The candidate is a single deterministic static_flow_shield coefficient vector shared across all maps, agents, seeds, budgets, and checkpoints. It is not a contextual selector, abstention policy, or runtime learned policy. It can only replace the hand-designed static_flow_shield coefficients if it wins paired replay with zero success regression versus the current static_flow_shield. If it fails, current hand static_flow_shield remains the primary baseline.
+
+## 2026-06-15 - G5.54 fixed-global coefficient optimization v2
+
+G5.54 continues fixed-global static_flow coefficient optimization. The candidate remains one deterministic global coefficient vector shared across all maps, agents, seeds, budgets, and checkpoints. It is not a dynamic learned policy. G5.53 did not promote a replacement because its Stage1 candidates either lacked support or regressed; G5.54 therefore runs fresh paired optimization and near-miss expansion. Current hand static_flow_shield remains the primary baseline unless a fixed global vector passes fresh validation/blind replay with zero success regression.
+
+The completed server run keeps that governance unchanged. Stage1 produced `260096` fresh rows and Stage2 produced `360013` fresh rows, but Stage2 yielded `0` validation shortlist candidates. Validation and blind replay were skipped by gate. Therefore G5.54 does not promote a fixed replacement for hand `static_flow_shield`; the fixed-global route remains diagnostic unless a later round changes the design and passes fresh validation/blind gates.

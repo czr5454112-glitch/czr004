@@ -1,0 +1,15 @@
+{
+  "aaai_ready": false,
+  "baseline_candidate": "repair5g59_static_flow_shield",
+  "candidate_object": "one deterministic global fixed coefficient vector",
+  "candidate_vectors": 16000,
+  "decision": "g554_trust_region_search_space_created",
+  "distinct_candidate_vectors": 16000,
+  "learned_runtime_policy_validated": false,
+  "minimum_candidate_vectors_met": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "preferred_candidate_vectors_met": true,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g554_trust_region_search_space_summary_v1"
+}

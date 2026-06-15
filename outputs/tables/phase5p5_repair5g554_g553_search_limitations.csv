@@ -1,0 +1,5 @@
+limitation,evidence,g554_response,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+stage1_reused_prior_label_v2_rows,local_new_stage1_solver_rows=0,run fresh paired fixed-coefficient replay,False,False,False,False,False
+strict_global_support_dropped_zero_regression_nearmisses,zero_regression_low_support_candidates=1470,expand top low-support zero-regression candidates,False,False,False,False,False
+validation_skipped,validation_run=False,create validation only after fresh Stage2 shortlist,False,False,False,False,False
+current_cpp_staticflow_differs_from_helper,theta_alpha_flow_wait_progress;theta_lambda_flow,anchor baseline to current C++ materialized static_flow_shield,False,False,False,False,False

@@ -641,7 +641,10 @@ def run_context_task(
     task_run = log_dir / f"task_{stable_hash('|'.join(map(str, key)), modulo=10**12):012d}.runs.jsonl"
     write_jsonl(task_run, rows)
     raw_probe = read_jsonl_tolerant(task_probe)
+    checkpoint_rows = read_jsonl_tolerant(task_checkpoint)
     enriched = enrich_or_placeholder(raw_probe, group_rows, key, row_prefix=row_prefix, execution_mode=execution_mode)
+    for path in [task_probe, task_checkpoint, task_update]:
+        path.unlink(missing_ok=True)
     command_row.update(
         {
             "panel": first.get("panel", ""),
@@ -660,7 +663,7 @@ def run_context_task(
         "update_rows": update_rows,
         "command_row": command_row,
         "probe_rows": raw_probe,
-        "checkpoint_rows": read_jsonl_tolerant(task_checkpoint),
+        "checkpoint_rows": checkpoint_rows,
         "enriched_rows": enriched,
     }
 
@@ -736,9 +739,22 @@ def run_probe_plan(
     all_checkpoints = read_jsonl_tolerant(checkpoint_jsonl)
     done = len(groups) - len(scheduled)
     write_status(status_json, result_csv, len(groups), done, "running")
+    pending_flush = 0
+    flush_every = 100
+
+    def flush_logs(last: dict[str, Any] | None, phase: str) -> None:
+        write_rows_atomic(result_csv, all_results)
+        if phase == "solver_complete":
+            write_rows_atomic(raw_csv, all_results)
+            write_jsonl(run_jsonl, all_runs)
+            write_jsonl(command_jsonl, all_commands)
+            write_jsonl(update_jsonl, all_updates)
+            write_jsonl(probe_jsonl, all_probes)
+            write_jsonl(checkpoint_jsonl, all_checkpoints)
+        write_status(status_json, result_csv, len(groups), done, phase, last or {})
 
     def merge_result(result: dict[str, Any]) -> None:
-        nonlocal all_results, all_runs, all_commands, all_updates, all_probes, all_checkpoints, done
+        nonlocal all_results, all_runs, all_commands, all_updates, all_probes, all_checkpoints, done, pending_flush
         done += 1
         all_results = append_rows(
             all_results,
@@ -750,14 +766,10 @@ def run_probe_plan(
         all_updates.extend(result["update_rows"])
         all_probes.extend(result["probe_rows"])
         all_checkpoints.extend(result["checkpoint_rows"])
-        write_rows_atomic(result_csv, all_results)
-        write_rows_atomic(raw_csv, all_results)
-        write_jsonl(run_jsonl, all_runs)
-        write_jsonl(command_jsonl, all_commands)
-        write_jsonl(update_jsonl, all_updates)
-        write_jsonl(probe_jsonl, all_probes)
-        write_jsonl(checkpoint_jsonl, all_checkpoints)
-        write_status(status_json, result_csv, len(groups), done, "running", result["command_row"])
+        pending_flush += 1
+        if pending_flush >= flush_every:
+            flush_logs(result["command_row"], "running")
+            pending_flush = 0
 
     workers = max(1, int(max_workers))
     if workers == 1:
@@ -798,7 +810,7 @@ def run_probe_plan(
             ]
             for future in as_completed(futures):
                 merge_result(future.result())
-    write_status(status_json, result_csv, len(groups), done, "solver_complete")
+    flush_logs(None, "solver_complete")
     return all_results
 
 

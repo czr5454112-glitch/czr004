@@ -1,0 +1,16 @@
+{
+  "claim_flags": {
+    "aaai_ready": false,
+    "learned_runtime_policy_validated": false,
+    "phase5p5_allowed": false,
+    "phase6_allowed": false,
+    "runtime_claim_allowed": false
+  },
+  "forbidden_theta_count": 1213,
+  "generated_theta_candidates": "outputs/tables/phase5p5_repair5g552_policy_generated_theta_candidates.csv",
+  "model_type": "policy_as_executed_abstention_gate_manifest",
+  "policy_action_log": "outputs/tables/phase5p5_repair5g552_policy_action_log_offline.csv",
+  "round": "repair5g552",
+  "safe_theta_count": 25,
+  "schema_version": "phase5p5_repair5g552_model_manifest_v1"
+}

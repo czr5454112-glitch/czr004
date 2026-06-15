@@ -1,0 +1,29 @@
+{
+  "aaai_ready": false,
+  "absolute_delta_static_minus_additive": "-0.0958554793269",
+  "additive_success_rate": "0.785363408521",
+  "bootstrap_CI_95": [
+    "-0.0971569838384",
+    "-0.0945598422424"
+  ],
+  "both_success_rows": 7369,
+  "decision": "g552_static_flow_margin_audited_mixed_or_underpowered",
+  "is_margin_at_least_1pct": true,
+  "is_static_flow_stronger_than_additive": false,
+  "learned_runtime_policy_validated": false,
+  "mean_ratio_additive": "1.28936118566",
+  "mean_ratio_static_flow": "1.19350570633",
+  "median_delta": "-0.0916597853",
+  "paired_rows": 9975,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "relative_improvement_pct": "7.43433883353",
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g552_staticflow_vs_additive_margin_summary_v1",
+  "scientifically_meaningful_learned_theta_delta_vs_static_flow": "at least -0.001 absolute ratio with zero success regressions; >=1% relative improvement preferred for broad claims",
+  "source_breakdown_rows": 6,
+  "static_flow_success_rate": "0.753984962406",
+  "static_flow_weaker_strata_count": 0,
+  "success_gain_count_static_over_additive": 152,
+  "success_regression_count_static_vs_additive": 465
+}

@@ -1,5 +1,39 @@
 # Codex Worklog
 
+## 2026-06-15 - Repair5G.5.52 Label-v2 policy-as-executed SafeGate repair
+
+- Request:
+  Continue after G5.51 commit 0ab51f8. G5.51 scaled iteration labels and passed
+  an offline checkpoint policy gate, but fresh targeted replay failed:
+  60,012 targeted rows, 352 success regressions vs static_flow_shield, 300 vs
+  additive_ltm, positive/worse quality delta +0.0054865163785, and fingerprint
+  match rate only 0.967426514697.
+
+- Interpretation:
+  G5.51 is not a deployable learned UpdateLTM success. The likely blocker is not
+  absence of oracle signal but a selector-era label/replay mismatch. Offline usage
+  was 0.18, while targeted usage was 0.833333333333, suggesting targeted replay
+  evaluated a generated theta slate rather than a policy-as-executed action log.
+
+- Literature-grounded repair:
+  Recent guidance-optimization and learning-MAPF work suggests that learned
+  guidance policies need solver-facing counterfactual labels, strong baseline
+  shields, and executable policy evaluation. G5.52 introduces Label-v2:
+  same-checkpoint counterfactual labels, hard-negative forbidden theta labels,
+  support-aware abstention, and policy-as-executed targeted replay.
+
+- Baseline and SafeGate:
+  static_flow_shield remains primary. additive_ltm remains the paper/parity and
+  safety floor. Strong static variants remain diagnostics. SafeGate is tightened:
+  targeted replay must be policy-as-executed with zero success regressions vs
+  static_flow_shield and additive_ltm, fingerprint match rate = 1, and no solver
+  semantic changes.
+
+- Constraints:
+  No external/lacam2/lacam2 edits, no solver semantic changes, no static selector
+  masquerading as learned UpdateLTM, no IDs 166..205, no runtime/Phase5.5/Phase6/
+  AAAI claims.
+
 ## 2026-06-14 - Repair5G.5.50 region-to-policy active replay
 
 - Request:

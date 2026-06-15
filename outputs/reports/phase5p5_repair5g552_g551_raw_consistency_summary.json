@@ -1,0 +1,20 @@
+{
+  "aaai_ready": false,
+  "all_claim_flags_closed": true,
+  "authoritative_fields": "decision_summary, targeted_summary, checkpoint_policy_summary, iteration_summary; inconsistent autopsy field ignored",
+  "critical_summary_fields_consistent": true,
+  "decision": "g552_g551_artifacts_verified_autopsy_field_ignored",
+  "fingerprint_mismatch_contexts": 1447,
+  "fingerprint_mismatch_rows": 1629,
+  "fingerprint_mismatch_theta_ids": 1,
+  "g551_autopsy_summary_field_inconsistent": true,
+  "learned_runtime_policy_validated": false,
+  "missing_required_artifacts": [],
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "raw_additive_regressions_consistent_with_300": true,
+  "raw_static_flow_regressions_consistent_with_352": true,
+  "required_artifacts_present": true,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g552_g551_verification_summary_v1"
+}

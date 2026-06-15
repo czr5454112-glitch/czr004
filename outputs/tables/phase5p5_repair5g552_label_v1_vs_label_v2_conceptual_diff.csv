@@ -1,0 +1,6 @@
+axis,label_v1,label_v2,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+training unit,candidate or theta-slate row,same checkpoint/context counterfactual unit,False,False,False,False,False
+safety,implicit in utility/ranking,hard-negative heads before utility,False,False,False,False,False
+abstention,optional or posthoc,first-class ABSTAIN_TO_STATIC_FLOW action,False,False,False,False,False
+support,not explicit,safe and hard-negative support-distance gates,False,False,False,False,False
+policy replay,generated theta slate can be replayed,one executable action per context,False,False,False,False,False

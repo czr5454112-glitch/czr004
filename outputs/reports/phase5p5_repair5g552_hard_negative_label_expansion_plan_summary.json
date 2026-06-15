@@ -1,0 +1,16 @@
+{
+  "aaai_ready": false,
+  "candidate_theta_per_context_min": 1,
+  "decision": "g552_hard_negative_label_expansion_plan_created",
+  "exact_resume_command": "python scripts/run_repair5g552_hard_negative_label_expansion.py --row-limit 128000 --max-workers 16",
+  "hard_negative_contexts": 1861,
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "planned_label_v2_rows": 128000,
+  "raw_plan_path": "outputs/logs/phase5p5_repair5g552_label_expansion/label_expansion_plan.csv",
+  "runtime_claim_allowed": false,
+  "safe_positive_contexts": 2528,
+  "schema_version": "phase5p5_repair5g552_hard_negative_label_expansion_plan_summary_v1",
+  "unique_source_label_rows": 99399
+}

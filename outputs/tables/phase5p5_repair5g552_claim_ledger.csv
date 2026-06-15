@@ -1,0 +1,34 @@
+ledger_statement,status,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready,stage,claim_flag,value,closed
+No runtime claim is allowed.,closed_or_governance_active,False,False,False,False,False,,,,
+No Phase5.5 claim is allowed.,closed_or_governance_active,False,False,False,False,False,,,,
+No Phase6 claim is allowed.,closed_or_governance_active,False,False,False,False,False,,,,
+No AAAI-ready claim is allowed.,closed_or_governance_active,False,False,False,False,False,,,,
+A zero-regression targeted candidate is a development candidate only.,closed_or_governance_active,False,False,False,False,False,,,,
+Static_flow_shield remains the primary baseline.,closed_or_governance_active,False,False,False,False,False,,,,
+Additive_ltm remains the paper/parity and safety floor.,closed_or_governance_active,False,False,False,False,False,,,,
+Strong static variants remain diagnostics.,closed_or_governance_active,False,False,False,False,False,,,,
+,,False,False,False,False,False,decision,phase5p5_allowed,False,True
+,,False,False,False,False,False,decision,phase6_allowed,False,True
+,,False,False,False,False,False,decision,runtime_claim_allowed,False,True
+,,False,False,False,False,False,decision,learned_runtime_policy_validated,False,True
+,,False,False,False,False,False,decision,aaai_ready,False,True
+,,False,False,False,False,False,label,phase5p5_allowed,False,True
+,,False,False,False,False,False,label,phase6_allowed,False,True
+,,False,False,False,False,False,label,runtime_claim_allowed,False,True
+,,False,False,False,False,False,label,learned_runtime_policy_validated,False,True
+,,False,False,False,False,False,label,aaai_ready,False,True
+,,False,False,False,False,False,policy,phase5p5_allowed,False,True
+,,False,False,False,False,False,policy,phase6_allowed,False,True
+,,False,False,False,False,False,policy,runtime_claim_allowed,False,True
+,,False,False,False,False,False,policy,learned_runtime_policy_validated,False,True
+,,False,False,False,False,False,policy,aaai_ready,False,True
+,,False,False,False,False,False,targeted,phase5p5_allowed,False,True
+,,False,False,False,False,False,targeted,phase6_allowed,False,True
+,,False,False,False,False,False,targeted,runtime_claim_allowed,False,True
+,,False,False,False,False,False,targeted,learned_runtime_policy_validated,False,True
+,,False,False,False,False,False,targeted,aaai_ready,False,True
+,,False,False,False,False,False,blind,phase5p5_allowed,False,True
+,,False,False,False,False,False,blind,phase6_allowed,False,True
+,,False,False,False,False,False,blind,runtime_claim_allowed,False,True
+,,False,False,False,False,False,blind,learned_runtime_policy_validated,False,True
+,,False,False,False,False,False,blind,aaai_ready,False,True

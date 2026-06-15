@@ -1,0 +1,4 @@
+map_family,agents,nominal_budget_ms,rows,success_regression_rows,success_regression_vs_additive_rows,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+maze,100,2000,531,531,253,False,False,False,False,False
+random,100,2000,93,93,35,False,False,False,False,False
+maze,50,2000,28,28,12,False,False,False,False,False

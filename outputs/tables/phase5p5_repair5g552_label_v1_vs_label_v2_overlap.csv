@@ -1,0 +1,2 @@
+population,candidate_count,forbidden_under_label_v2,forbidden_rate,diagnosis,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+g551_allow_theta_candidates,27,27,1,selector_era_labeling_caused_false_safe_theta_actions,False,False,False,False,False

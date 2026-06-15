@@ -2303,3 +2303,22 @@ for promotion. A learned bounded UpdateParams policy must pass fresh targeted
 replay with zero success regressions versus static_flow_shield before blind replay
 or runtime claims. The next valid learning signal is iteration/checkpoint-level
 counterfactual labels, not final full-run hindsight alone.
+
+## 2026-06-15 - G5.52 governance update: Label-v2 and policy-as-executed SafeGate
+
+G5.52 adopts a literature-grounded Label-v2 interpretation for learned
+UpdateParams. Recent guidance-optimization and learning-MAPF work suggests that
+continuous guidance policies must be trained and evaluated through solver-facing
+counterfactual outcomes, shielded by strong baselines, and replayed as executable
+policies. Therefore czr004 no longer treats a fulltheta replay region or generated
+theta slate as a learned policy. A learned UpdateParams method must emit exactly
+one policy action per context: ABSTAIN_TO_STATIC_FLOW or ALLOW_THETA(theta_id),
+with bounded theta materialization, hard-negative safety checks, and zero
+success regression versus static_flow_shield and additive_ltm before blind or
+runtime claims.
+
+This is a SafeGate tightening. static_flow_shield remains the primary baseline,
+additive_ltm remains the paper/parity and safety floor, and strong static
+variants remain diagnostics. Offline checkpoint success, generated-theta
+candidate quality, or fulltheta hindsight cannot open Phase5.5, Phase6, runtime,
+or AAAI claims.

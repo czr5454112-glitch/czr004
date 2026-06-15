@@ -1,0 +1,5 @@
+feature,allowed,leakage_found,decision,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+candidate_ratio,False,False,excluded_from_policy_features,False,False,False,False,False
+candidate_success,False,False,excluded_from_policy_features,False,False,False,False,False
+map_family,True,False,runtime_available,False,False,False,False,False
+support_distance_to_hard_negative,True,False,computed_from_training_library,False,False,False,False,False

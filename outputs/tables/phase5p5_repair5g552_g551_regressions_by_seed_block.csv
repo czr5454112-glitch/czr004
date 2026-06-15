@@ -1,0 +1,12 @@
+seed_block,rows,success_regression_rows,success_regression_vs_additive_rows,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+3140_3159,98,98,43,False,False,False,False,False
+3120_3139,97,97,50,False,False,False,False,False
+3160_3179,87,87,38,False,False,False,False,False
+3060_3079,80,80,35,False,False,False,False,False
+3080_3099,78,78,37,False,False,False,False,False
+3020_3039,56,56,29,False,False,False,False,False
+3100_3119,55,55,25,False,False,False,False,False
+3040_3059,45,45,18,False,False,False,False,False
+3000_3019,37,37,16,False,False,False,False,False
+3200_3219,10,10,5,False,False,False,False,False
+3180_3199,9,9,4,False,False,False,False,False

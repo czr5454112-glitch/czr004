@@ -1,0 +1,2 @@
+map_family,expected_non_static_usage,reason,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+SKIPPED,0,policy_as_executed_offline_gate_not_met,False,False,False,False,False

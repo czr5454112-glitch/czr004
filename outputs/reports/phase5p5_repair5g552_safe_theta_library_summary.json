@@ -1,0 +1,14 @@
+{
+  "aaai_ready": false,
+  "decision": "g552_safe_theta_library_created",
+  "forbidden_if_any_static_or_additive_regression": true,
+  "forbidden_theta_count": 1213,
+  "learned_runtime_policy_validated": false,
+  "library_min_safe_positive_support": 50,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "safe_theta_count": 25,
+  "schema_version": "phase5p5_repair5g552_safe_theta_library_summary_v1",
+  "theta_support_rows": 2195
+}

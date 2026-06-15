@@ -1,0 +1,7 @@
+source_family,source_url,lesson,g552_design_change,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+Guidance Graph Optimization,https://arxiv.org/abs/2402.01446,guidance parameters should be optimized/evaluated through solver outcomes,"use same-checkpoint counterfactual labels, not selector labels",False,False,False,False,False
+Online GGO,https://arxiv.org/abs/2411.16506,guidance can depend on traffic patterns,"include traffic_before, trace_window, and checkpoint features",False,False,False,False,False
+CS-PIBT-style learning MAPF,https://arxiv.org/abs/2409.14491,learned outputs need shields and strong baselines,"UpdateParams shield, forbidden theta, ABSTAIN_TO_STATIC_FLOW",False,False,False,False,False
+MAPF-LNS benchmark,https://arxiv.org/abs/2407.09451,fair baselines and executable learned policies matter,"policy-as-executed replay, static_flow vs additive margin",False,False,False,False,False
+LaCAM2/LaCAM*,https://github.com/Kei18/lacam2,preserve search/PIBT semantics,only UpdateLTM guidance layer is learnable,False,False,False,False,False
+MAPF survey,https://arxiv.org/abs/2505.19219,learning-based MAPF evaluation needs standardized baselines and scale awareness,keep claim ledger closed until executable policy evidence exists,False,False,False,False,False

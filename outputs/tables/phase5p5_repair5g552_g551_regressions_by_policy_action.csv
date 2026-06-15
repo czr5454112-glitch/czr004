@@ -1,0 +1,2 @@
+policy_action_interpretation,rows,success_regression_rows,success_regression_vs_additive_rows,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+ALLOW_THETA_from_theta_slate_not_policy_action_log,652,652,300,False,False,False,False,False

@@ -1,0 +1,6 @@
+map_family,agents,nominal_budget_ms,rows,success_regression_rows,success_regression_vs_additive_rows,mean_candidate_minus_static_ratio_delta,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+random,100,2000,52169,1273,2195,0.000737291147189,False,False,False,False,False
+random,50,2000,41480,197,195,0.00359621389802,False,False,False,False,False
+maze,50,2000,17472,25,21,0.000558095618997,False,False,False,False,False
+maze,100,2000,15874,426,381,0.00286061470704,False,False,False,False,False
+warehouse,50,2000,1005,0,0,,False,False,False,False,False

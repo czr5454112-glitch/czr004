@@ -1,0 +1,22 @@
+{
+  "ALLOW_THETA_success_regression_count_vs_additive": "",
+  "ALLOW_THETA_success_regression_count_vs_static_flow": "",
+  "aaai_ready": false,
+  "decision": "g552_policy_as_executed_targeted_skipped_offline_gate_not_met",
+  "fulltheta_fingerprint_match_rate": "",
+  "gate_passed": false,
+  "learned_runtime_policy_validated": false,
+  "one_action_per_context": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "policy_as_executed": true,
+  "policy_as_executed_targeted_solver_rows": 0,
+  "realized_non_static_usage": "0",
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g552_policy_as_executed_targeted_summary_v1",
+  "skip_reason": "policy_as_executed_offline_gate_not_met",
+  "static_flow_abstention_rows_not_counted_as_learned_gain": true,
+  "success_regression_count_vs_additive": "",
+  "success_regression_count_vs_static_flow": "",
+  "targeted_replay_run": false
+}

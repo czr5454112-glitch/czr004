@@ -1,0 +1,15 @@
+policy_family,policy_as_executed,policy_action_log_exists,one_action_per_context,selected_theta_all_in_safe_library,selected_theta_none_in_forbidden_list,hard_negative_false_safe_count_vs_static_flow,hard_negative_false_safe_count_vs_additive,offline_non_static_usage,usage_cap,negative_controls_do_not_pass,candidate_recognized_all,fulltheta_fingerprint_match_rate,feature_leakage_found,offline_gate_passed,failure_mode,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+abstain_first_hard_negative_rejector,True,True,True,False,True,0,0,0,0.005,True,True,0.9869609375,False,False,zero_non_static_usage_below_min_usage_for_cap,False,False,False,False,False
+risk_classifier_then_utility_ranker,True,True,True,False,True,0,0,0,0.005,True,True,0.9869609375,False,False,zero_non_static_usage_below_min_usage_for_cap,False,False,False,False,False
+conformal_risk_bound_abstention_policy,True,True,True,False,True,0,0,0,0.005,True,True,0.9869609375,False,False,zero_non_static_usage_below_min_usage_for_cap,False,False,False,False,False
+ensemble_disagreement_abstention_policy,True,True,True,False,True,0,0,0,0.005,True,True,0.9869609375,False,False,zero_non_static_usage_below_min_usage_for_cap,False,False,False,False,False
+support_distance_knn_abstention_policy,True,True,True,False,True,0,0,0,0.005,True,True,0.9869609375,False,False,zero_non_static_usage_below_min_usage_for_cap,False,False,False,False,False
+map_agent_horizon_calibrated_threshold_policy,True,True,True,False,True,0,0,0,0.005,True,True,0.9869609375,False,False,zero_non_static_usage_below_min_usage_for_cap,False,False,False,False,False
+safe_theta_library_selector,True,True,True,False,True,0,0,0,0.005,True,True,0.9869609375,False,False,zero_non_static_usage_below_min_usage_for_cap,False,False,False,False,False
+bounded_residual_shrinkage_policy,True,True,True,False,True,0,0,0,0.005,True,True,0.9869609375,False,False,zero_non_static_usage_below_min_usage_for_cap,False,False,False,False,False
+two_stage_success_risk_then_quality_policy,True,True,True,False,True,0,0,0,0.005,True,True,0.9869609375,False,False,zero_non_static_usage_below_min_usage_for_cap,False,False,False,False,False
+conservative_bandit_policy_as_executed,True,True,True,False,True,0,0,0,0.005,True,True,0.9869609375,False,False,zero_non_static_usage_below_min_usage_for_cap,False,False,False,False,False
+random_feature_negative_control,True,True,True,False,True,,,0,0.005,False,True,0.9869609375,False,False,negative_control,False,False,False,False,False
+shuffled_label_negative_control,True,True,True,False,True,,,0,0.005,False,True,0.9869609375,False,False,negative_control,False,False,False,False,False
+random_theta_negative_control,True,True,True,False,True,,,0,0.005,False,True,0.9869609375,False,False,negative_control,False,False,False,False,False
+static_only_selector_like_invalid_control,True,True,True,False,True,,,0,0.005,False,True,0.9869609375,False,False,negative_control,False,False,False,False,False

@@ -1,0 +1,13 @@
+theta_family,rows,success_regression_rows,success_regression_vs_additive_rows,mean_candidate_minus_static_ratio_delta,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+checkpoint_risk_classifier_utility_ranker_abstention,44994,352,300,0.0054865163785,False,False,False,False,False
+safe_expert_mixture_with_abstention,25005,216,181,-0.00097632372215,False,False,False,False,False
+static_flow_local_perturbation_fulltheta,5801,133,246,-0.000780180566041,False,False,False,False,False
+alpha_cong_commit_nonprogress_sweep,5800,148,265,-0.002380813897,False,False,False,False,False
+alpha_flow_wait_progress_sweep,5800,147,270,-0.00285508319882,False,False,False,False,False
+edge_cost_clamp_sweep,5800,174,252,-0.0028360293969,False,False,False,False,False
+g543_true_near_signal_neighborhood,5800,136,252,-0.00790877391654,False,False,False,False,False
+g546_g548_safe_no_gain_neighborhood,5800,140,268,0.00230113609649,False,False,False,False,False
+goal_projection_mode_ablation,5800,111,171,0.0050254941986,False,False,False,False,False
+lambda_flow_lambda_cong_sweep,5800,136,262,-0.00239437727822,False,False,False,False,False
+negative_control,5800,78,67,0.0114041953371,False,False,False,False,False
+surrogate_guided_theta_if_model_exists,5800,150,258,0.00391543684209,False,False,False,False,False

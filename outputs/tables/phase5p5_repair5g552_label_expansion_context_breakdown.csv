@@ -1,0 +1,10 @@
+context_source,map_family,agents,nominal_budget_ms,rows,success_regression_rows,success_regression_vs_additive_rows,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+safe_positive_or_margin,random,100,2000,49286,0,0,False,False,False,False,False
+safe_positive_or_margin,random,50,2000,40750,0,0,False,False,False,False,False
+safe_positive_or_margin,maze,50,2000,17028,0,0,False,False,False,False,False
+safe_positive_or_margin,maze,100,2000,15070,0,0,False,False,False,False,False
+hard_negative,random,100,2000,2883,0,0,False,False,False,False,False
+safe_positive_or_margin,warehouse,50,2000,1005,0,0,False,False,False,False,False
+hard_negative,maze,100,2000,804,0,0,False,False,False,False,False
+hard_negative,random,50,2000,730,0,0,False,False,False,False,False
+hard_negative,maze,50,2000,444,0,0,False,False,False,False,False

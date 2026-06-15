@@ -1,0 +1,15 @@
+{
+  "aaai_ready": false,
+  "decision": "g552_label_v2_schema_created",
+  "decision_rule_count": 8,
+  "field_count": 40,
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "policy_actions": [
+    "ABSTAIN_TO_STATIC_FLOW",
+    "ALLOW_THETA(theta_id)"
+  ],
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g552_label_v2_schema_summary_v1"
+}

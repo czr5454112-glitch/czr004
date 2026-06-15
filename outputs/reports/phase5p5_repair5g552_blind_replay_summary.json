@@ -1,0 +1,11 @@
+{
+  "aaai_ready": false,
+  "blind_replay_run": false,
+  "decision": "g552_blind_skipped_targeted_gate_not_met",
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g552_blind_replay_summary_v1",
+  "skip_reason": "targeted_gate_not_met"
+}

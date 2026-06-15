@@ -1,0 +1,53 @@
+{
+  "aaai_ready": false,
+  "answers": {
+    "claim_flags_closed": true,
+    "did_any_policy_as_executed_model_pass_targeted_zero_regression": false,
+    "did_blind_replay_run": false,
+    "did_fingerprint_match_reach_exactly_1": false,
+    "did_g551_fail_because_of_label_replay_semantics_mismatch": true,
+    "did_label_v2_forbid_g551_false_safe_theta_actions": true,
+    "learned_runtime_policy_validated": false,
+    "next_scientific_step": "expand Label-v2 safe-positive support and generate a nonzero-usage policy-as-executed action log before targeted replay",
+    "safe_non_static_usage_cap": "",
+    "static_flow_vs_additive_margin": {
+      "margin_at_least_1pct": true,
+      "paired_rows": 9975,
+      "relative_improvement_pct": "7.43433883353"
+    }
+  },
+  "blind_replay_run": false,
+  "component_decisions": {
+    "A_g551_verification": "g552_g551_artifacts_verified_autopsy_field_ignored",
+    "B_literature_label_audit": "g552_literature_label_audit_complete",
+    "C_staticflow_vs_additive_margin": "g552_static_flow_margin_audited_mixed_or_underpowered",
+    "D_g551_targeted_autopsy_v2": "g551_targeted_replay_semantics_confounded_by_theta_slate_usage",
+    "E_label_v2_schema": "g552_label_v2_schema_created",
+    "F_label_expansion_plan": "g552_hard_negative_label_expansion_plan_created",
+    "G_label_v2_dataset": "g552_label_v2_dataset_passed_train_policy",
+    "H_safe_theta_library": "g552_safe_theta_library_created",
+    "I_policy_as_executed": "g552_label_v2_offline_policy_not_safe_continue_label_design",
+    "J_K_targeted": "g552_policy_as_executed_targeted_skipped_offline_gate_not_met",
+    "L_blind": "g552_blind_skipped_targeted_gate_not_met"
+  },
+  "decision": "g552_label_v2_offline_policy_not_safe_continue_label_design",
+  "diagnostic_baselines": [
+    "frozen_family_static_goal_aware",
+    "best_fixed_static_goal_aware",
+    "family_static variants"
+  ],
+  "external_lacam2_clean": true,
+  "forbidden_theta_count": 1213,
+  "g551_allow_theta_candidates_forbidden_under_label_v2": 27,
+  "git_head": "0ab51f8",
+  "label_v2_rows": 128000,
+  "learned_runtime_policy_validated": false,
+  "paper_parity_floor": "additive_ltm",
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "primary_baseline": "static_flow_shield",
+  "runtime_claim_allowed": false,
+  "safe_theta_count": 25,
+  "schema_version": "phase5p5_repair5g552_decision_summary_v1",
+  "targeted_replay_run": false
+}

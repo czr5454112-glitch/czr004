@@ -1,0 +1,9 @@
+rule_id,condition,action,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+R001,not candidate_recognized,forbidden_theta=1; allow_theta=0,False,False,False,False,False
+R002,fingerprint_match != 1,forbidden_theta=1; allow_theta=0,False,False,False,False,False
+R003,not cost_finite_all or not cost_within_bounds_all,forbidden_theta=1; allow_theta=0,False,False,False,False,False
+R004,success_regression_vs_static_flow,hard_negative_success_regression_vs_static_flow=1; forbidden_theta=1,False,False,False,False,False
+R005,success_regression_vs_additive,hard_negative_success_regression_vs_additive=1; forbidden_theta=1,False,False,False,False,False
+R006,safety_pass and both_success_vs_static_flow,utility_score_label=static_flow_ratio-candidate_ratio,False,False,False,False,False
+R007,no safe_useful_candidate in context,policy_action_label=ABSTAIN_TO_STATIC_FLOW,False,False,False,False,False
+R008,safe useful candidate with support,policy_action_label=ALLOW_THETA(best_safe_useful_theta_id),False,False,False,False,False

@@ -1,0 +1,22 @@
+feature,allowed,runtime_available,leakage_found,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+map_family,True,True,False,False,False,False,False,False
+agents,True,True,False,False,False,False,False,False
+nominal_budget_ms,True,True,False,False,False,False,False,False
+short_budget_ms,True,True,False,False,False,False,False,False
+base_time_limit_sec,True,True,False,False,False,False,False,False
+ltm_max_iterations,True,True,False,False,False,False,False,False
+checkpoint_iteration,True,True,False,False,False,False,False,False
+traffic_snapshot_summary_before_update,True,True,False,False,False,False,False,False
+trace_window_counts,True,True,False,False,False,False,False,False
+dual_channel_current_summary,True,True,False,False,False,False,False,False
+support_distance_to_safe,True,True,False,False,False,False,False,False
+support_distance_to_hard_negative,True,True,False,False,False,False,False,False
+candidate outcome in same replay row,False,False,False,False,False,False,False,False
+candidate ratio,False,False,False,False,False,False,False,False
+candidate success,False,False,False,False,False,False,False,False
+static_flow ratio after candidate replay,False,False,False,False,False,False,False,False
+oracle best label from same context as feature,False,False,False,False,False,False,False,False
+future solver outcome,False,False,False,False,False,False,False,False
+baseline success from same fresh targeted context if unavailable at runtime,False,False,False,False,False,False,False,False
+seed ID as direct continuous feature,False,False,False,False,False,False,False,False
+candidate_id one-hot as primary learned action,False,False,False,False,False,False,False,False

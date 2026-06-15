@@ -6962,3 +6962,6 @@ Execution guardrails remain strict: no external/lacam2/lacam2 edits, no
 LaCAM*/PIBT/search semantic changes, no reserved IDs 166..205, no static selector
 masquerading as learned UpdateLTM, and no Phase5.5/Phase6/runtime/AAAI claim
 flags.
+## 2026-06-15 - G5.53 fixed-global coefficient pivot
+
+G5.53 pauses the dynamic learned UpdateParams policy direction and evaluates a simpler fixed-global coefficient optimization problem. The candidate is a single deterministic static_flow_shield coefficient vector shared across all maps, agents, seeds, budgets, and checkpoints. It is not a contextual selector, abstention policy, or runtime learned policy. It can only replace the hand-designed static_flow_shield coefficients if it wins paired replay with zero success regression versus the current static_flow_shield. If it fails, current hand static_flow_shield remains the primary baseline.

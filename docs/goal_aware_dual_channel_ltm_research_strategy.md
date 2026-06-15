@@ -140,3 +140,6 @@ unless a later round explicitly promotes one. SafeGate is tightened, not relaxed
 offline success, generated-theta candidate quality, fulltheta hindsight, or theta
 slate usage cannot support learned-policy claims without policy-as-executed
 fresh replay.
+## 2026-06-15 - G5.53 fixed-global coefficient pivot
+
+G5.53 pauses the dynamic learned UpdateParams policy direction and evaluates a simpler fixed-global coefficient optimization problem. The candidate is a single deterministic static_flow_shield coefficient vector shared across all maps, agents, seeds, budgets, and checkpoints. It is not a contextual selector, abstention policy, or runtime learned policy. It can only replace the hand-designed static_flow_shield coefficients if it wins paired replay with zero success regression versus the current static_flow_shield. If it fails, current hand static_flow_shield remains the primary baseline.

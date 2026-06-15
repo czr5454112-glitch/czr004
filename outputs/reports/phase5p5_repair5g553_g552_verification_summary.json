@@ -1,0 +1,31 @@
+{
+  "aaai_ready": false,
+  "all_claim_flags_closed": true,
+  "all_required_artifacts_exist": true,
+  "decision": "g553_g552_verified_pivot_locked",
+  "external_lacam2_clean": true,
+  "forbidden_theta_count": 1213,
+  "g551_allow_theta_candidates_forbidden_under_label_v2": 27,
+  "g552_decision": "g552_label_v2_offline_policy_not_safe_continue_label_design",
+  "label_v2_rows": 128000,
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "policy_as_executed_offline_non_static_usage": "0",
+  "required_checks": {
+    "external_lacam2_clean": true,
+    "forbidden_theta_count": true,
+    "g551_allow_theta_candidates_forbidden_under_label_v2": true,
+    "g552_decision": true,
+    "label_v2_rows": true,
+    "policy_as_executed_offline_non_static_usage_zero": true,
+    "safe_theta_count": true,
+    "static_flow_vs_additive_relative_improvement_pct": true,
+    "targeted_replay_run_false": true
+  },
+  "runtime_claim_allowed": false,
+  "safe_theta_count": 25,
+  "schema_version": "phase5p5_repair5g553_g552_verification_summary_v1",
+  "static_flow_vs_additive_relative_improvement_pct": "7.43433883353",
+  "targeted_replay_run": false
+}

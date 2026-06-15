@@ -1,0 +1,17 @@
+{
+  "aaai_ready": false,
+  "context_rows": 1945,
+  "contexts_by_split": {
+    "stage0_smoke": 25,
+    "stage1_search": 960,
+    "stage2_validation": 480,
+    "stage3_blind_if_warranted": 480
+  },
+  "decision": "g553_split_manifest_created",
+  "learned_runtime_policy_validated": false,
+  "paired_key": "map|agents|seed|nominal_budget_ms|horizon_id|short_budget_ms|base_time_limit_sec|ltm_max_iterations|scenario_hash",
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g553_split_manifest_summary_v1"
+}

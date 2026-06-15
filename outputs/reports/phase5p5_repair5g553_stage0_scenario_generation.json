@@ -1,0 +1,389 @@
+{
+  "agent_counts": [
+    50,
+    100
+  ],
+  "created_at": "2026-06-15T15:59:04.936436",
+  "effective_instance_ids": [
+    486,
+    487,
+    488,
+    489,
+    490,
+    491,
+    492,
+    493,
+    494,
+    495,
+    496,
+    497,
+    498,
+    499,
+    500,
+    501,
+    502,
+    503,
+    504,
+    505,
+    506,
+    507,
+    508,
+    509,
+    510
+  ],
+  "final_missing_count": 0,
+  "final_missing_examples": [],
+  "generated_count": 50,
+  "generated_examples": [
+    {
+      "instance_id": 486,
+      "map": "maze-32-32-4",
+      "pairs": 100,
+      "path": "outputs\\tmp\\phase5p5_repair5g553_stage0_scenarios\\maze-32-32-4-random-486.scen",
+      "sha256": "b0111cee3503b7ba5869643ab8ddbf37daa60e2648bc89be2dd1cf56db8d5d82"
+    },
+    {
+      "instance_id": 487,
+      "map": "maze-32-32-4",
+      "pairs": 100,
+      "path": "outputs\\tmp\\phase5p5_repair5g553_stage0_scenarios\\maze-32-32-4-random-487.scen",
+      "sha256": "63d2414bc9ea3aa0bce25ce7377ed6e4018401add9462c085ab1631d9d340764"
+    },
+    {
+      "instance_id": 488,
+      "map": "maze-32-32-4",
+      "pairs": 100,
+      "path": "outputs\\tmp\\phase5p5_repair5g553_stage0_scenarios\\maze-32-32-4-random-488.scen",
+      "sha256": "b831160945fc85d0f0587c3d4f7ffd64b53de66b10ecc2a3562605b624909575"
+    },
+    {
+      "instance_id": 489,
+      "map": "maze-32-32-4",
+      "pairs": 100,
+      "path": "outputs\\tmp\\phase5p5_repair5g553_stage0_scenarios\\maze-32-32-4-random-489.scen",
+      "sha256": "ba434c9520fe61a4bb59bf3c91147fcd1f86e6cb179947475cd5bfecf82a1148"
+    },
+    {
+      "instance_id": 490,
+      "map": "maze-32-32-4",
+      "pairs": 100,
+      "path": "outputs\\tmp\\phase5p5_repair5g553_stage0_scenarios\\maze-32-32-4-random-490.scen",
+      "sha256": "18b8abac646d5d7bd9608662a9938a17fe260a03c123d1c681540bf703dd7ca4"
+    },
+    {
+      "instance_id": 491,
+      "map": "maze-32-32-4",
+      "pairs": 100,
+      "path": "outputs\\tmp\\phase5p5_repair5g553_stage0_scenarios\\maze-32-32-4-random-491.scen",
+      "sha256": "53eb9a47089e62e1fdeb439e0fc5aa8b1c277363ecbde813cff3e05a21706451"
+    },
+    {
+      "instance_id": 492,
+      "map": "maze-32-32-4",
+      "pairs": 100,
+      "path": "outputs\\tmp\\phase5p5_repair5g553_stage0_scenarios\\maze-32-32-4-random-492.scen",
+      "sha256": "a7e3237e6e77224fb93ac401852ddd9a9d4b63a964a532572d0db96b041209ef"
+    },
+    {
+      "instance_id": 493,
+      "map": "maze-32-32-4",
+      "pairs": 100,
+      "path": "outputs\\tmp\\phase5p5_repair5g553_stage0_scenarios\\maze-32-32-4-random-493.scen",
+      "sha256": "f62b3e7d8399b7ee7f28721a6ed655d6cf0fba686280a9b83942ed3adc3e55c7"
+    },
+    {
+      "instance_id": 494,
+      "map": "maze-32-32-4",
+      "pairs": 100,
+      "path": "outputs\\tmp\\phase5p5_repair5g553_stage0_scenarios\\maze-32-32-4-random-494.scen",
+      "sha256": "24dafd996895da944bdbcd78d71397680cda83d57956c7a8c3354ebfa17ddf55"
+    },
+    {
+      "instance_id": 495,
+      "map": "maze-32-32-4",
+      "pairs": 100,
+      "path": "outputs\\tmp\\phase5p5_repair5g553_stage0_scenarios\\maze-32-32-4-random-495.scen",
+      "sha256": "f056b9776234d52078429fae0984330f67c8938e7864ae062fb0fc3b8d9dcd5d"
+    },
+    {
+      "instance_id": 496,
+      "map": "maze-32-32-4",
+      "pairs": 100,
+      "path": "outputs\\tmp\\phase5p5_repair5g553_stage0_scenarios\\maze-32-32-4-random-496.scen",
+      "sha256": "5317d239ab01734a1795caf1db61240fdea0496f30485fb1f249a20bf60cb5cb"
+    },
+    {
+      "instance_id": 497,
+      "map": "maze-32-32-4",
+      "pairs": 100,
+      "path": "outputs\\tmp\\phase5p5_repair5g553_stage0_scenarios\\maze-32-32-4-random-497.scen",
+      "sha256": "58ea5fabef214be487885a1713aea281fc9ff813b14ff6656a2aec28e4684c93"
+    },
+    {
+      "instance_id": 498,
+      "map": "maze-32-32-4",
+      "pairs": 100,
+      "path": "outputs\\tmp\\phase5p5_repair5g553_stage0_scenarios\\maze-32-32-4-random-498.scen",
+      "sha256": "5861851b57269acdd79c9fcdda5c3e534ecd751ffbef313da24fe9358cabd321"
+    },
+    {
+      "instance_id": 499,
+      "map": "maze-32-32-4",
+      "pairs": 100,
+      "path": "outputs\\tmp\\phase5p5_repair5g553_stage0_scenarios\\maze-32-32-4-random-499.scen",
+      "sha256": "559ddbf3e8e92311b150e1fd7075feed53512309c86b74717637aba27c5ff89c"
+    },
+    {
+      "instance_id": 500,
+      "map": "maze-32-32-4",
+      "pairs": 100,
+      "path": "outputs\\tmp\\phase5p5_repair5g553_stage0_scenarios\\maze-32-32-4-random-500.scen",
+      "sha256": "1ac3e48867043b3ff28a8133c0e870c9c24222488e5be63bc6013304141e01a2"
+    },
+    {
+      "instance_id": 501,
+      "map": "maze-32-32-4",
+      "pairs": 100,
+      "path": "outputs\\tmp\\phase5p5_repair5g553_stage0_scenarios\\maze-32-32-4-random-501.scen",
+      "sha256": "2a4189e9e19c1905cb3bb3f2d7a2e84f2f2a59f99c6703a4558dba06466e4b08"
+    },
+    {
+      "instance_id": 502,
+      "map": "maze-32-32-4",
+      "pairs": 100,
+      "path": "outputs\\tmp\\phase5p5_repair5g553_stage0_scenarios\\maze-32-32-4-random-502.scen",
+      "sha256": "87c2484ac4147696343242d06882aaa5f89ea7127c36daa43900a29e131870ac"
+    },
+    {
+      "instance_id": 503,
+      "map": "maze-32-32-4",
+      "pairs": 100,
+      "path": "outputs\\tmp\\phase5p5_repair5g553_stage0_scenarios\\maze-32-32-4-random-503.scen",
+      "sha256": "6eda98fdd93ee4b8e640b460f5d6eaffa683a92e19ea87b5ede5cbc756ebbd47"
+    },
+    {
+      "instance_id": 504,
+      "map": "maze-32-32-4",
+      "pairs": 100,
+      "path": "outputs\\tmp\\phase5p5_repair5g553_stage0_scenarios\\maze-32-32-4-random-504.scen",
+      "sha256": "b911779e41bb3225709e64ebdf43988e48ba17c7728e983bb00e2ddbec0f02c3"
+    },
+    {
+      "instance_id": 505,
+      "map": "maze-32-32-4",
+      "pairs": 100,
+      "path": "outputs\\tmp\\phase5p5_repair5g553_stage0_scenarios\\maze-32-32-4-random-505.scen",
+      "sha256": "aa272faaabb354c21d6683dc5693398610411b5e287e57bbebb4f8666971f136"
+    }
+  ],
+  "generated_missing_scenarios": true,
+  "generator_policy": {
+    "base_seed": 20260522,
+    "equivalent_command": "python scripts/generate_phase1a_scenarios.py --manifest <f4 maps with instances 26..45> --output-dir outputs\\tmp\\phase5p5_repair5g553_stage0_scenarios --base-seed 20260522",
+    "script_version": "phase1a-scenario-generator-v1",
+    "seed_function": "sha256(script_version|base_seed|map_name|instance_id)",
+    "source": "scripts/generate_phase1a_scenarios.py functions"
+  },
+  "initial_missing_count": 50,
+  "initial_missing_examples": [
+    {
+      "instance_id": 486,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 487,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 488,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 489,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 490,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 491,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 492,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 493,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 494,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 495,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 496,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 497,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 498,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 499,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 500,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 501,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 502,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 503,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 504,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 505,
+      "map": "maze-32-32-4"
+    }
+  ],
+  "reduced_scope_reason": "",
+  "requested_instance_ids": [
+    486,
+    487,
+    488,
+    489,
+    490,
+    491,
+    492,
+    493,
+    494,
+    495,
+    496,
+    497,
+    498,
+    499,
+    500,
+    501,
+    502,
+    503,
+    504,
+    505,
+    506,
+    507,
+    508,
+    509,
+    510
+  ],
+  "requested_maps": [
+    "maze-32-32-4",
+    "random-32-32-20"
+  ],
+  "scenario_dir": "outputs\\tmp\\phase5p5_repair5g553_stage0_scenarios",
+  "scenario_metadata": "outputs\\reports\\phase5p5_repair5g553_stage0_scenario_generation.json",
+  "schema_version": "phase5p5_repair5f4_scenario_generation_v1",
+  "source_missing_count": 50,
+  "source_missing_examples": [
+    {
+      "instance_id": 486,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 487,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 488,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 489,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 490,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 491,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 492,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 493,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 494,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 495,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 496,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 497,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 498,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 499,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 500,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 501,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 502,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 503,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 504,
+      "map": "maze-32-32-4"
+    },
+    {
+      "instance_id": 505,
+      "map": "maze-32-32-4"
+    }
+  ],
+  "source_scenario_dir": "outputs\\tmp\\phase1a\\generated\\phase1a-generated-random"
+}

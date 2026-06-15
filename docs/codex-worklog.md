@@ -5084,3 +5084,19 @@
   No external/lacam2/lacam2 edits, no solver semantic changes, no candidate or
   PIBT conflict changes, no static selector as learned method, no IDs 166..205,
   no runtime/Phase5.5/Phase6/AAAI claims.
+## 2026-06-15 - Repair5G.5.53 fixed-global static_flow coefficient optimization
+
+- Request:
+  Pause the dynamic learned UpdateParams policy / contextual selector / checkpoint-level abstention direction. Do not train a contextual policy in this round. The new objective is to search or learn one fixed global set of static_flow_shield coefficients that can directly replace the current hand-designed static_flow_shield baseline.
+
+- Interpretation:
+  G5.50-G5.52 showed that fulltheta regions and checkpoint labels contain signal, but dynamic policy training repeatedly failed targeted SafeGate. G5.52 Label-v2 forbade all 27 G5.51 ALLOW_THETA actions and collapsed to all-abstain. Therefore this round reduces complexity: optimize a single global deterministic static-flow coefficient vector, not a per-context policy.
+
+- Baseline:
+  Primary comparison is optimized_fixed_static_flow_coefficients vs current hand static_flow_shield using paired replay. additive_ltm is the paper/parity floor and a diagnostic safety floor. Strong static/family variants remain diagnostics.
+
+- Success criteria:
+  Zero success regression versus current static_flow_shield, non-worse success rate, better paired quality metric on both-success rows, robustness on held-out/fresh seeds/maps/agent counts/budgets, candidate recognized, fingerprint match rate = 1, cost finite, all claim flags closed.
+
+- Constraints:
+  No external/lacam2/lacam2 edits, no solver semantic changes, no contextual selector, no checkpoint policy, no dynamic UpdateParams policy, no abstention gate, no IDs 166..205, no runtime/Phase5.5/Phase6/AAAI claims.

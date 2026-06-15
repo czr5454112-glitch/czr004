@@ -1,0 +1,18 @@
+{
+  "aaai_ready": false,
+  "baseline_candidate": "repair5g59_static_flow_shield",
+  "candidate_recognized_all": true,
+  "candidate_vectors": 1200,
+  "context_dependent_candidates": 0,
+  "cost_finite_required": true,
+  "decision": "g553_global_staticflow_search_space_created",
+  "distinct_candidate_vectors": 1200,
+  "dynamic_policy_candidates": 0,
+  "fulltheta_fingerprint_match_required": true,
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "reserved_ids_166_205_used": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g553_global_staticflow_search_space_summary_v1"
+}

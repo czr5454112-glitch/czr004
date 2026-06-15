@@ -1,0 +1,19 @@
+theta_parameter,cpp_fingerprint_alias,consumed_by_updateparams_materialization,current_value,notes,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+theta_alpha_cong_commit_progress,alpha_cong_commit_progress,True,1.25,,False,False,False,False,False
+theta_alpha_cong_commit_nonprogress,alpha_commit / alpha_cong_commit_nonprogress,True,1.25,,False,False,False,False,False
+theta_alpha_cong_block,alpha_block / alpha_cong_block,True,1.25,,False,False,False,False,False
+theta_alpha_cong_wait_progress,alpha_cong_wait_progress,True,0.75,,False,False,False,False,False
+theta_alpha_cong_wait_nonprogress,alpha_wait_spillover / alpha_cong_wait_nonprogress,True,0.75,,False,False,False,False,False
+theta_alpha_flow_commit_progress,alpha_flow_commit_progress,True,1,,False,False,False,False,False
+theta_alpha_flow_wait_progress,alpha_flow_wait_progress,True,0,,False,False,False,False,False
+theta_rho_cong_decay,rho_cong_decay,True,0.95,,False,False,False,False,False
+theta_rho_flow_decay,rho_flow_decay,True,1,,False,False,False,False,False
+theta_lambda_cong,lambda_cong,True,1,,False,False,False,False,False
+theta_lambda_flow,lambda_flow,True,0,,False,False,False,False,False
+theta_flow_shield_beta,flow_shield_beta,True,0.35,,False,False,False,False,False
+theta_max_flow_shield,max_flow_shield,True,0.75,,False,False,False,False,False
+theta_min_edge_cost,min_edge_cost,True,1,,False,False,False,False,False
+theta_max_edge_cost,max_edge_cost,True,11,,False,False,False,False,False
+theta_goal_projection_mode_flow_shield,goal_projection_mode,True,1,goal mode is encoded canonically as one-hot,False,False,False,False,False
+theta_goal_projection_mode_agent_progress,goal_projection_mode,True,0,goal mode is encoded canonically as one-hot,False,False,False,False,False
+theta_goal_projection_mode_none,goal_projection_mode,True,0,goal mode is encoded canonically as one-hot,False,False,False,False,False

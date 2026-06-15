@@ -1,0 +1,15 @@
+candidate_family,description,global_fixed_vector,context_dependent,dynamic_policy,allowed_for_promotion,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+hand_static_reference,exact current hand static_flow_shield materialized alias,True,False,False,True,False,False,False,False,False
+tiny_local_perturbation_2pct,2 percent bounded local perturbations around the hand vector,True,False,False,True,False,False,False,False,False
+small_local_perturbation_5pct,5 percent bounded local perturbations around the hand vector,True,False,False,True,False,False,False,False,False
+medium_local_perturbation_10pct,10 percent bounded local perturbations around the hand vector,True,False,False,True,False,False,False,False,False
+coordinate_sweep_each_field,single-field conservative sweeps,True,False,False,True,False,False,False,False,False
+lambda_flow_lambda_cong_grid,lambda channel grid,True,False,False,True,False,False,False,False,False
+flow_shield_beta_cap_grid,flow-shield beta and cap grid,True,False,False,True,False,False,False,False,False
+alpha_flow_wait_progress_grid,flow wait-progress grid,True,False,False,True,False,False,False,False,False
+alpha_cong_commit_nonprogress_grid,congestion commit-nonprogress grid,True,False,False,True,False,False,False,False,False
+edge_cost_clamp_grid,min/max edge-cost clamp grid,True,False,False,True,False,False,False,False,False
+rho_decay_grid,congestion/flow decay grid,True,False,False,True,False,False,False,False,False
+sobol_local_global_static,deterministic hash-sobol local global static samples,True,False,False,True,False,False,False,False,False
+cma_es_or_ranked_search_candidates,ranked-search style deterministic candidates,True,False,False,True,False,False,False,False,False
+negative_random_wide_control,wide negative controls for sensitivity only,True,False,False,False,False,False,False,False,False

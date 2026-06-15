@@ -1,0 +1,4 @@
+baseline,candidate_id,role_after_g553,reason,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+current hand static_flow_shield,repair5g59_static_flow_shield,primary_baseline,no fixed global replacement passed validation/blind zero-regression gates,False,False,False,False,False
+additive_ltm,repair5g59_additive_fallback,paper_parity_floor_and_diagnostic_safety_floor,static_flow has quality margin but lower success profile versus additive in G5.52,False,False,False,False,False
+frozen_family_static_goal_aware,repair5g59_high_beta_cap_safe,diagnostic_static_baseline,"strong static variants are diagnostics, not dynamic learned policy actions",False,False,False,False,False

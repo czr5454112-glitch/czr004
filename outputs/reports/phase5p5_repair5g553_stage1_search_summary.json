@@ -1,0 +1,23 @@
+{
+  "aaai_ready": false,
+  "baseline_static_flow_reference_rows": 128000,
+  "candidate_vectors": 2195,
+  "decision": "g553_no_fixed_coeff_candidate_beats_hand_staticflow_keep_baseline",
+  "global_support_with_regression_candidates": 27,
+  "learned_runtime_policy_validated": false,
+  "local_new_stage1_solver_rows": 0,
+  "min_global_support": 1000,
+  "paired_success_rows_vs_static_flow": 93584,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "reason_if_no_candidate": "zero-regression candidates exist only below fixed-global support; high-support candidates have success regressions",
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g553_stage1_search_summary_v1",
+  "solver_facing_rows_evaluated": 128000,
+  "stage1_fixed_global_promotion_gate_met": false,
+  "stage1_minimum_evidence_pool_met": true,
+  "stage1_source": "outputs/logs/phase5p5_repair5g552_label_expansion/label_v2_dataset.csv",
+  "stage1_source_reused_solver_rows": 128000,
+  "stage1_validation_ready_candidates": 0,
+  "zero_regression_low_support_candidates": 1470
+}

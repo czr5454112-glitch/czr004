@@ -1,0 +1,23 @@
+{
+  "aaai_ready": false,
+  "candidate_recognized_all": true,
+  "cost_finite_all": true,
+  "cost_within_bounds_all": true,
+  "current_candidate_id": "repair5g59_static_flow_shield",
+  "current_method_string": "repair5g59_static_flow_shield",
+  "current_static_flow_materializes_with_fingerprint_match": true,
+  "decision": "g553_current_staticflow_coefficients_audited",
+  "goal_projection_mode_canonical": true,
+  "interpretation": "Use the C++-materialized hand static_flow_shield alias as the G5.53 baseline, not the older helper fulltheta reference if they differ.",
+  "learned_runtime_policy_validated": false,
+  "legacy_helper_diff_count": 2,
+  "legacy_helper_diff_fields": [
+    "theta_alpha_flow_wait_progress",
+    "theta_lambda_flow"
+  ],
+  "min_edge_cost_le_max_edge_cost": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g553_current_staticflow_coefficients_summary_v1"
+}

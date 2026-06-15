@@ -1,0 +1,42 @@
+{
+  "aaai_ready": false,
+  "answers": {
+    "diagnostic_additive_comparison": "G5.52 static_flow quality margin over additive was 7.43433883353 pct on both-success rows, but static_flow had 465 success regressions vs additive.",
+    "did_it_generalize_to_heldout_seeds_maps_agent_counts_budgets": false,
+    "did_it_have_zero_success_regressions_vs_hand_static_flow_shield": false,
+    "did_it_improve_paired_both_success_quality": false,
+    "did_it_pass_fingerprint_1_and_cost_finite_gates": true,
+    "did_it_preserve_or_improve_success_rate": false,
+    "did_one_fixed_global_coefficient_vector_beat_hand_static_flow_shield": false,
+    "gain_versus_hand_static_flow": "none promotable",
+    "should_dynamic_learned_policy_remain_paused": true,
+    "should_hand_static_flow_shield_remain_primary_baseline": true
+  },
+  "component_decisions": {
+    "blind": "g553_blind_skipped_validation_gate_not_met",
+    "current_staticflow_coefficients": "g553_current_staticflow_coefficients_audited",
+    "g552_verification": "g553_g552_verified_pivot_locked",
+    "stage0_smoke": "g553_stage0_smoke_passed",
+    "stage1_search": "g553_no_fixed_coeff_candidate_beats_hand_staticflow_keep_baseline",
+    "validation": "g553_validation_skipped_no_stage1_global_candidate"
+  },
+  "decision": "g553_no_fixed_coeff_candidate_beats_hand_staticflow_keep_baseline",
+  "diagnostic_baselines": [
+    "frozen_family_static_goal_aware",
+    "best_fixed_static_goal_aware",
+    "family_static variants"
+  ],
+  "external_lacam2_clean": true,
+  "git_head": "679e763",
+  "learned_runtime_policy_validated": false,
+  "optimized_fixed_candidate_promoted": false,
+  "paper_parity_floor": "additive_ltm",
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "primary_baseline": "current hand static_flow_shield",
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g553_decision_summary_v1",
+  "stage0_solver_rows": 5075,
+  "stage1_solver_facing_rows_evaluated": 128000,
+  "stage1_validation_ready_candidates": 0
+}

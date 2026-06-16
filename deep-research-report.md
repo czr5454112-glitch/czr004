@@ -2335,3 +2335,11 @@ G5.53 pauses the dynamic learned UpdateParams policy direction and evaluates a s
 ## 2026-06-15 - G5.54 fixed-global coefficient optimization v2
 
 G5.54 continues fixed-global static_flow coefficient optimization. The candidate remains one deterministic global coefficient vector shared across all maps, agents, seeds, budgets, and checkpoints. It is not a dynamic learned policy. G5.53 did not promote a replacement because its Stage1 candidates either lacked support or regressed; G5.54 therefore runs fresh paired optimization and near-miss expansion. Current hand static_flow_shield remains the primary baseline unless a fixed global vector passes fresh validation/blind replay with zero success regression.
+
+## 2026-06-16 - G5.55 governance update: fixed-global staticflow repair promoted g554_c00051
+
+G5.55 resolved the G5.54 contradiction by finding a pair-schema analysis bug rather than a true fixed-global negative. The corrected analysis used `selected_success` and `baseline_success`/gain-regression fields from the pair rows instead of the missing or wrong contender success field. This recovered `82` Stage2 shortlist candidates.
+
+Server validation and blind replay completed on the KCS RTX4090 instance. Validation ran `120010` rows and passed; blind replay ran `120000` rows and passed for `g554_c00051`. The promoted fixed candidate has `0` blind success regressions versus the previous hand `static_flow_shield`, `37` success gains, mean quality delta `-0.0210143833861`, CI upper `-0.0205820545487`, and full materialization/fingerprint pass.
+
+The project baseline ladder is updated only for this fixed-global route: `g554_c00051` becomes the stronger fixed staticflow baseline candidate, while the old hand `static_flow_shield` becomes the beaten reference. This is not a learned runtime policy and does not open Phase5.5, Phase6, runtime, or AAAI claims. SafeGate remains strict zero-success-regression against the declared primary fixed baseline plus additive diagnostic checks before any learned/generated policy can advance.

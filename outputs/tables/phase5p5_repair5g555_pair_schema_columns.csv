@@ -1,0 +1,8 @@
+field,present_in_pair_schema,nonblank_count_in_stage2_pairs,true_count_in_stage2_pairs,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+selected_success,True,353770,353343,False,False,False,False,False
+contender_success,False,0,0,False,False,False,False,False
+candidate_success,False,0,0,False,False,False,False,False
+baseline_success,True,353770,353260,False,False,False,False,False
+success_regression,True,353770,142,False,False,False,False,False
+success_gain,True,353770,225,False,False,False,False,False
+both_success,True,353770,353118,False,False,False,False,False

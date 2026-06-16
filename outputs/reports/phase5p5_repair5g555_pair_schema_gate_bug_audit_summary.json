@@ -1,0 +1,21 @@
+{
+  "aaai_ready": false,
+  "decision": "g555_g554_analysis_gate_bug_confirmed",
+  "g554_leaderboard_success_rate_delta_bug": true,
+  "g554_no_promotion_decision_analysis_confounded": true,
+  "g554_not_ready_reason_misclassified": true,
+  "g554_not_ready_reason_misclassified_candidate_count": 82,
+  "g554_success_rate_delta_bug_candidate_count": 88,
+  "learned_runtime_policy_validated": false,
+  "pair_schema_contains_baseline_success": true,
+  "pair_schema_contains_candidate_success": false,
+  "pair_schema_contains_contender_success": false,
+  "pair_schema_contains_selected_success": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g555_pair_schema_gate_bug_audit_summary_v1",
+  "stage2_pair_rows_vs_static_flow": 353770,
+  "stage2_raw_solver_rows": 360013,
+  "top_bug_candidate_id": "g554_c00894"
+}

@@ -1,0 +1,30 @@
+ledger_statement,status,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready,source,claim_flag,value,closed
+G5.55 keeps dynamic learned UpdateParams policy paused.,closed_or_governance_active,False,False,False,False,False,,,,
+G5.55 treats G5.54 no-promotion as analysis-confounded when pair-schema/gate bug is confirmed.,closed_or_governance_active,False,False,False,False,False,,,,
+Corrected validation and blind replay promoted `g554_c00051` as the stronger fixed staticflow baseline candidate; the hand static_flow_shield is no longer primary for this fixed-global route.,closed_or_governance_active,False,False,False,False,False,,,,
+"All Phase5.5, Phase6, runtime, learned-runtime, and AAAI claims remain closed.",closed_or_governance_active,False,False,False,False,False,,,,
+,,False,False,False,False,False,verify,phase5p5_allowed,False,True
+,,False,False,False,False,False,verify,phase6_allowed,False,True
+,,False,False,False,False,False,verify,runtime_claim_allowed,False,True
+,,False,False,False,False,False,verify,learned_runtime_policy_validated,False,True
+,,False,False,False,False,False,verify,aaai_ready,False,True
+,,False,False,False,False,False,pair_schema_gate_audit,phase5p5_allowed,False,True
+,,False,False,False,False,False,pair_schema_gate_audit,phase6_allowed,False,True
+,,False,False,False,False,False,pair_schema_gate_audit,runtime_claim_allowed,False,True
+,,False,False,False,False,False,pair_schema_gate_audit,learned_runtime_policy_validated,False,True
+,,False,False,False,False,False,pair_schema_gate_audit,aaai_ready,False,True
+,,False,False,False,False,False,corrected_leaderboard,phase5p5_allowed,False,True
+,,False,False,False,False,False,corrected_leaderboard,phase6_allowed,False,True
+,,False,False,False,False,False,corrected_leaderboard,runtime_claim_allowed,False,True
+,,False,False,False,False,False,corrected_leaderboard,learned_runtime_policy_validated,False,True
+,,False,False,False,False,False,corrected_leaderboard,aaai_ready,False,True
+,,False,False,False,False,False,validation,phase5p5_allowed,False,True
+,,False,False,False,False,False,validation,phase6_allowed,False,True
+,,False,False,False,False,False,validation,runtime_claim_allowed,False,True
+,,False,False,False,False,False,validation,learned_runtime_policy_validated,False,True
+,,False,False,False,False,False,validation,aaai_ready,False,True
+,,False,False,False,False,False,blind,phase5p5_allowed,False,True
+,,False,False,False,False,False,blind,phase6_allowed,False,True
+,,False,False,False,False,False,blind,runtime_claim_allowed,False,True
+,,False,False,False,False,False,blind,learned_runtime_policy_validated,False,True
+,,False,False,False,False,False,blind,aaai_ready,False,True

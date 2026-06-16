@@ -1,0 +1,18 @@
+{
+  "aaai_ready": false,
+  "candidate_rows_per_candidate_target": 12000,
+  "corrected_stage2_shortlist_count": 82,
+  "decision": "g555_corrected_validation_plan_created",
+  "fresh_heldout_scenario_hashes": true,
+  "fresh_heldout_seeds": true,
+  "learned_runtime_policy_validated": false,
+  "minimum_validation_solver_rows_met_by_plan": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "planned_solver_rows": 132000,
+  "preferred_validation_solver_rows_met_by_plan": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g555_corrected_validation_plan_summary_v1",
+  "top_candidates_to_validate": 8,
+  "validation_candidate_count": 8
+}

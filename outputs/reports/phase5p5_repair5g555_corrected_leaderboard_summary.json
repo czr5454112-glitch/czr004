@@ -1,0 +1,19 @@
+{
+  "aaai_ready": false,
+  "best_corrected_candidate_id": "g554_c00894",
+  "best_corrected_candidate_quality_delta_vs_static_flow": "-0.0315924946469",
+  "best_corrected_candidate_success_rate_delta_vs_static_flow": "0.00144161460836",
+  "best_corrected_candidate_success_regressions_vs_static_flow": 0,
+  "corrected_stage2_shortlist_count": 82,
+  "decision": "g555_g554_analysis_gate_bug_confirmed_recomputed_shortlist",
+  "g554_analysis_gate_bug_confirmed": true,
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g555_corrected_leaderboard_summary_v1",
+  "stage1_corrected_validation_ready_candidates": 0,
+  "stage1_new_solver_rows": 260096,
+  "stage2_new_solver_rows": 360013,
+  "validation_required": true
+}

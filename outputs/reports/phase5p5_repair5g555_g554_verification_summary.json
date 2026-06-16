@@ -1,0 +1,31 @@
+{
+  "aaai_ready": false,
+  "checks": {
+    "all_claim_flags_closed": true,
+    "dynamic_learned_policy_paused": true,
+    "external_lacam2_clean": true,
+    "g554_decision": true,
+    "stage1_new_solver_rows": true,
+    "stage2_best_candidate_delta": true,
+    "stage2_best_candidate_id": true,
+    "stage2_best_candidate_regressions": true,
+    "stage2_new_solver_rows": true,
+    "validation_new_solver_rows": true
+  },
+  "decision": "g555_g554_artifacts_verified",
+  "dynamic_learned_policy_paused": true,
+  "external_lacam2_clean": true,
+  "g554_decision": "g554_no_fixed_global_candidate_after_fresh_search_keep_hand_baseline",
+  "learned_runtime_policy_validated": false,
+  "missing_artifacts": [],
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g555_g554_verification_summary_v1",
+  "stage1_new_solver_rows": 260096,
+  "stage2_best_candidate_delta": "-0.0315924946469",
+  "stage2_best_candidate_id": "g554_c00894",
+  "stage2_best_candidate_regressions": 0,
+  "stage2_new_solver_rows": 360013,
+  "validation_new_solver_rows": 0
+}

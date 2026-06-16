@@ -6975,3 +6975,11 @@ G5.53 pauses the dynamic learned UpdateParams policy direction and evaluates a s
 ## 2026-06-15 - G5.54 fixed-global coefficient optimization v2
 
 G5.54 continues fixed-global static_flow coefficient optimization. The candidate remains one deterministic global coefficient vector shared across all maps, agents, seeds, budgets, and checkpoints. It is not a dynamic learned policy. G5.53 did not promote a replacement because its Stage1 candidates either lacked support or regressed; G5.54 therefore runs fresh paired optimization and near-miss expansion. Current hand static_flow_shield remains the primary baseline unless a fixed global vector passes fresh validation/blind replay with zero success regression.
+
+## 2026-06-16 - G5.55 execution update: fixed-global staticflow baseline promoted
+
+G5.55 audited G5.54 and confirmed an analysis/gate bug in the fixed-global pair-schema handling. Corrected recomputation from raw pair rows produced `82` Stage2 shortlist candidates, then server replay on the KCS RTX4090 instance ran `120010` validation rows and `120000` blind rows.
+
+Blind replay promoted `g554_c00051` as the stronger fixed global staticflow baseline candidate. Its blind evidence versus the previous hand `static_flow_shield` is: `0` success regressions, `37` success gains, success-rate delta `0.00185`, both-success mean quality delta `-0.0210143833861`, CI upper `-0.0205820545487`, `14244` better and `3455` worse quality pairs, support across `216` strata and `1000` seed blocks, candidate recognized, and fingerprint match rate `1`.
+
+Baseline governance is updated for the fixed-global staticflow route: `g554_c00051` is now the promoted stronger fixed baseline candidate, and the previous hand `static_flow_shield` is the beaten comparison baseline. SafeGate is not relaxed. Dynamic learned UpdateParams policy, contextual selector, checkpoint policy, abstention policy, per-context theta, runtime, Phase5.5, Phase6, and AAAI claims remain closed.

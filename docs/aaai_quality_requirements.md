@@ -636,3 +636,22 @@ G5.53 pauses the dynamic learned UpdateParams policy direction and evaluates a s
 G5.54 continues fixed-global static_flow coefficient optimization. The candidate remains one deterministic global coefficient vector shared across all maps, agents, seeds, budgets, and checkpoints. It is not a dynamic learned policy. G5.53 did not promote a replacement because its Stage1 candidates either lacked support or regressed; G5.54 therefore runs fresh paired optimization and near-miss expansion. Current hand static_flow_shield remains the primary baseline unless a fixed global vector passes fresh validation/blind replay with zero success regression.
 
 G5.54 completed the server-scale fresh replay gate with `260096` Stage1 rows and `360013` Stage2 rows. Stage2 produced `0` validation shortlist candidates, so validation and blind replay were skipped by gate. The decision is `g554_no_fixed_global_candidate_after_fresh_search_keep_hand_baseline`: no fixed-global coefficient vector is promoted, `static_flow_shield` remains the primary baseline, and all runtime/Phase5.5/Phase6/AAAI claims stay closed.
+
+## 2026-06-16 - G5.55 fixed-global analysis repair and blind promotion
+
+G5.55 found that the G5.54 no-promotion decision was analysis-confounded: the Stage1/Stage2 leaderboard path used the wrong success field for fixed-global pair rows, so zero-regression candidates could be assigned false near-`-1` success-rate deltas and rejected with misleading readiness reasons. Recomputing from the raw pair rows produced `82` corrected Stage2 shortlist candidates.
+
+The corrected server replay ran `120010` validation rows and `120000` blind rows. Blind replay promoted `g554_c00051` as the stronger fixed global staticflow baseline candidate with `0` success regressions, `37` success gains, mean quality delta `-0.0210143833861`, CI upper `-0.0205820545487`, and fingerprint/materialization pass. The previous hand `static_flow_shield` is no longer the primary fixed-global baseline for this route; it remains the comparison that `g554_c00051` beat. This is still a fixed deterministic coefficient vector, not a learned runtime UpdateParams policy.
+
+AAAI-facing status remains closed:
+
+```text
+primary fixed baseline for this route: g554_c00051
+previous hand baseline: static_flow_shield
+dynamic_learned_policy_paused: true
+SafeGate: zero success regression versus declared static baseline remains required
+runtime_claim_allowed: false
+phase5p5_allowed: false
+phase6_allowed: false
+aaai_ready: false
+```

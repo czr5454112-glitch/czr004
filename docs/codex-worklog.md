@@ -5119,3 +5119,19 @@
   No external/lacam2/lacam2 edits, no solver semantic changes, no dynamic policy, no selector, no checkpoint policy, no abstention gate, no per-context theta, no IDs 166..205, and no runtime/Phase5.5/Phase6/AAAI claims.
 - Result:
   Server run completed under `tmux` on the KCS RTX4090 instance and compact data was retrieved locally. Stage0B passed materialization/fingerprint smoke. Stage1 executed `260096` fresh paired solver rows over `3000` candidate vectors and found `2933` zero-regression near-miss candidates but `0` validation-ready candidates. Stage2 expanded `170` candidates for `360013` fresh rows and produced `0` validation shortlist candidates; the best diagnostic row was `g554_c00894`, but it did not pass the full shortlist/materialization gate. Validation and blind replay were correctly skipped by gate. Final decision: `g554_no_fixed_global_candidate_after_fresh_search_keep_hand_baseline`; current hand `static_flow_shield` remains primary, dynamic learned policy remains paused, and all Phase5.5/Phase6/runtime/AAAI claim flags remain closed.
+
+## 2026-06-15 - Repair5G.5.55 fixed-global staticflow analysis-gate repair
+
+- Request:
+  Continue after G5.54 commit a584fa0. Do not resume dynamic learned policy yet. G5.54 ran a large fresh fixed-global search: 260,096 Stage1 rows and 360,013 Stage2 rows. The final decision kept hand static_flow_shield, but the Stage2 leaderboard contains suspicious candidate evidence: best candidate g554_c00894 has 0 success regressions, 3 success gains, mean quality delta -0.0315924946469, CI upper -0.0298130815132, better_count 1607 vs worse_count 329, support_strata 140, support_seed_blocks 200, fingerprint=1, recognized=true, cost_finite=true, yet shortlist_ready=false with not_ready_reason=materialization_gate_not_met.
+
+- Interpretation:
+  This is likely an analysis/gate schema bug, not a clean fixed-global negative. The leaderboard appears to compute candidate_success from `contender_success`, while pair rows use selected/candidate success fields. This can create fake success_rate_delta near -1 even when regressions=0 and gains>0. G5.55 must repair pair schema, recompute Stage1/Stage2 leaderboards from raw results, and only then decide whether fixed global coefficients failed.
+
+- Baseline:
+  Primary baseline remains current C++ hand static_flow_shield. additive_ltm remains paper/parity floor and diagnostic safety floor. Dynamic learned policy remains paused.
+
+- Constraints:
+  No external/lacam2/lacam2 edits, no solver semantic changes, no dynamic policy, no selector, no checkpoint policy, no abstention gate, no per-context theta, no IDs 166..205, no Phase5.5/Phase6/runtime/AAAI claims.
+- Result:
+  G5.55 confirmed the G5.54 no-promotion decision was analysis-confounded. The audit found the pair-schema gate used the wrong success field, recomputation recovered `82` corrected Stage2 shortlist candidates, and KCS server replay completed `120010` validation rows plus `120000` blind rows. Blind replay promoted `g554_c00051` as the stronger fixed global staticflow baseline candidate with `0` success regressions versus the previous hand `static_flow_shield`, `37` success gains, mean quality delta `-0.0210143833861`, CI upper `-0.0205820545487`, support across `216` strata and `1000` seed blocks, and fingerprint/materialization pass. Dynamic learned UpdateParams policy remains paused; no runtime/Phase5.5/Phase6/AAAI claim opened.

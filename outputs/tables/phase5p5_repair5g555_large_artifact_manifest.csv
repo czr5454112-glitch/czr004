@@ -1,0 +1,9 @@
+path,exists,rows,bytes,sha256_if_compact,commit_policy,exact_resume_command,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+outputs/logs/phase5p5_repair5g554_stage1_fresh_screening/stage1_fresh_screening_results.csv,True,260096,386532395,,do_not_commit_raw_outputs_logs,source artifact from G5.54; do not commit raw CSV >50MB,False,False,False,False,False
+outputs/logs/phase5p5_repair5g554_stage2_nearmiss_expansion/stage2_nearmiss_expansion_results.csv,True,360013,531831393,,do_not_commit_raw_outputs_logs,source artifact from G5.54; do not commit raw CSV >50MB,False,False,False,False,False
+outputs/logs/phase5p5_repair5g555_validation/validation_plan.csv,True,132000,62313040,,do_not_commit_raw_outputs_logs,,False,False,False,False,False
+outputs/logs/phase5p5_repair5g555_validation/validation_results.csv,True,120010,185471230,,do_not_commit_raw_outputs_logs,python scripts/run_repair5g555_corrected_validation.py --row-limit 120000 --max-workers 20,False,False,False,False,False
+outputs/logs/phase5p5_repair5g555_validation/validation_results.raw.csv,False,0,0,,do_not_commit_raw_outputs_logs,,False,False,False,False,False
+outputs/logs/phase5p5_repair5g555_blind/blind_plan.csv,True,120000,50613195,e02e0e08dd543690fca8a2c7349e9c50cab576fee1c63aa109fe899d894394b3,do_not_commit_raw_outputs_logs,,False,False,False,False,False
+outputs/logs/phase5p5_repair5g555_blind/blind_results.csv,True,120000,172212242,,do_not_commit_raw_outputs_logs,python scripts/run_repair5g555_blind_if_warranted.py --row-limit 120000 --max-workers 8,False,False,False,False,False
+outputs/logs/phase5p5_repair5g555_blind/blind_results.raw.csv,False,0,0,,do_not_commit_raw_outputs_logs,,False,False,False,False,False

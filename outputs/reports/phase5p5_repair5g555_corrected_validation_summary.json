@@ -1,0 +1,21 @@
+{
+  "aaai_ready": false,
+  "best_candidate_id": "g554_c00894",
+  "both_success_quality_delta_mean_vs_static_flow": "-0.0271602654522",
+  "candidate_count": 8,
+  "candidate_rows_per_candidate_min": 10910,
+  "decision": "g555_corrected_validation_passed_continue_blind",
+  "learned_runtime_policy_validated": false,
+  "minimum_validation_solver_rows_met": true,
+  "passing_candidate_count": 7,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "preferred_validation_solver_rows_met": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g555_corrected_validation_summary_v1",
+  "success_rate_delta_vs_static_flow": "0.00155820348304",
+  "success_regression_count_vs_static_flow": 0,
+  "validation_new_solver_rows": 120010,
+  "validation_passed": true,
+  "validation_run": true
+}

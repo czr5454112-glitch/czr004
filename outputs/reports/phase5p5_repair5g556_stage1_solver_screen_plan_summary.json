@@ -1,0 +1,15 @@
+{
+  "aaai_ready": false,
+  "additive_diagnostic_rows": 1500,
+  "baseline_g554_rows": 1500,
+  "candidate_vectors_screened": 3000,
+  "contexts": 1500,
+  "decision": "g556_stage1_solver_screen_plan_created",
+  "learned_runtime_policy_validated": false,
+  "old_hand_staticflow_diagnostic_rows": 1500,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "planned_solver_rows": 304500,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g556_stage1_solver_screen_plan_summary_v1"
+}

@@ -1,0 +1,16 @@
+source,claim_flag,value,closed,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+g555_decision,phase5p5_allowed,False,True,False,False,False,False,False
+g555_decision,phase6_allowed,False,True,False,False,False,False,False
+g555_decision,runtime_claim_allowed,False,True,False,False,False,False,False
+g555_decision,learned_runtime_policy_validated,False,True,False,False,False,False,False
+g555_decision,aaai_ready,False,True,False,False,False,False,False
+g555_validation,phase5p5_allowed,False,True,False,False,False,False,False
+g555_validation,phase6_allowed,False,True,False,False,False,False,False
+g555_validation,runtime_claim_allowed,False,True,False,False,False,False,False
+g555_validation,learned_runtime_policy_validated,False,True,False,False,False,False,False
+g555_validation,aaai_ready,False,True,False,False,False,False,False
+g555_blind,phase5p5_allowed,False,True,False,False,False,False,False
+g555_blind,phase6_allowed,False,True,False,False,False,False,False
+g555_blind,runtime_claim_allowed,False,True,False,False,False,False,False
+g555_blind,learned_runtime_policy_validated,False,True,False,False,False,False,False
+g555_blind,aaai_ready,False,True,False,False,False,False,False

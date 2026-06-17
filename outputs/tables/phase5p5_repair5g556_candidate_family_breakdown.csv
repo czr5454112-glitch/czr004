@@ -1,0 +1,10 @@
+candidate_family,generated,selected_for_solver,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+ftrst_gradient_guided_search,11112,1053,False,False,False,False,False
+ftrst_acquisition_sampling,11111,17,False,False,False,False,False
+retrieval_neighbor_interpolation,11111,234,False,False,False,False,False
+candidate_set_pareto_scoring,11111,0,False,False,False,False,False
+cem_elite_refit,11111,0,False,False,False,False,False
+cma_es_style_evolution,11111,0,False,False,False,False,False
+trust_region_g554_c00051,11111,1696,False,False,False,False,False
+ensemble_disagreement_sampling,11111,0,False,False,False,False,False
+wide_negative_control,11111,0,False,False,False,False,False

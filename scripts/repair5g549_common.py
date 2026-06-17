@@ -12,11 +12,13 @@ import argparse
 import csv
 import json
 import math
+import os
+import shutil
 import statistics
 import sys
 import time
 from collections import Counter, defaultdict
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from concurrent.futures import FIRST_COMPLETED, ThreadPoolExecutor, wait
 from pathlib import Path
 from typing import Any
 
@@ -254,6 +256,30 @@ def append_rows(existing: list[dict[str, Any]], new_rows: list[dict[str, Any]], 
         seen.add(key)
         out.append(row)
     return out
+
+
+def append_rows_to_csv(path: str | Path, rows: list[dict[str, Any]]) -> None:
+    if not rows:
+        return
+    target = resolve(path)
+    target.parent.mkdir(parents=True, exist_ok=True)
+    fieldnames: list[str]
+    write_header = not target.exists() or target.stat().st_size == 0
+    if write_header:
+        fieldnames = []
+        for row in rows:
+            for key in row.keys():
+                if key not in fieldnames:
+                    fieldnames.append(key)
+    else:
+        with target.open(newline="", encoding="utf-8") as handle:
+            reader = csv.reader(handle)
+            fieldnames = next(reader, [])
+    with target.open("a", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fieldnames, extrasaction="ignore")
+        if write_header:
+            writer.writeheader()
+        writer.writerows(rows)
 
 
 def map_for_family(family: str) -> str:
@@ -731,41 +757,63 @@ def run_probe_plan(
     log_root = resolve(log_dir)
     temp_dir = log_root / "_task_tmp"
     temp_dir.mkdir(parents=True, exist_ok=True)
-    all_results = read_rows(result_csv)
-    all_runs = read_jsonl_tolerant(run_jsonl)
-    all_commands = read_jsonl_tolerant(command_jsonl)
-    all_updates = read_jsonl_tolerant(update_jsonl)
-    all_probes = read_jsonl_tolerant(probe_jsonl)
-    all_checkpoints = read_jsonl_tolerant(checkpoint_jsonl)
+    skip_aggregate_jsonl = str(os.environ.get("REPAIR5G_SKIP_AGGREGATE_JSONL", "")).lower() in {
+        "1",
+        "true",
+        "yes",
+        "on",
+    }
+    stream_result_csv = str(os.environ.get("REPAIR5G_STREAM_RESULT_CSV", "")).lower() in {
+        "1",
+        "true",
+        "yes",
+        "on",
+    }
+    all_results = [] if stream_result_csv else read_rows(result_csv)
+    all_runs = [] if skip_aggregate_jsonl else read_jsonl_tolerant(run_jsonl)
+    all_commands = [] if skip_aggregate_jsonl else read_jsonl_tolerant(command_jsonl)
+    all_updates = [] if skip_aggregate_jsonl else read_jsonl_tolerant(update_jsonl)
+    all_probes = [] if skip_aggregate_jsonl else read_jsonl_tolerant(probe_jsonl)
+    all_checkpoints = [] if skip_aggregate_jsonl else read_jsonl_tolerant(checkpoint_jsonl)
     done = len(groups) - len(scheduled)
     write_status(status_json, result_csv, len(groups), done, "running")
     pending_flush = 0
     flush_every = 100
 
     def flush_logs(last: dict[str, Any] | None, phase: str) -> None:
-        write_rows_atomic(result_csv, all_results)
-        if phase == "solver_complete":
+        if not stream_result_csv:
+            write_rows_atomic(result_csv, all_results)
+        if phase == "solver_complete" and not skip_aggregate_jsonl:
             write_rows_atomic(raw_csv, all_results)
             write_jsonl(run_jsonl, all_runs)
             write_jsonl(command_jsonl, all_commands)
             write_jsonl(update_jsonl, all_updates)
             write_jsonl(probe_jsonl, all_probes)
             write_jsonl(checkpoint_jsonl, all_checkpoints)
+        elif phase == "solver_complete" and not stream_result_csv:
+            write_rows_atomic(raw_csv, all_results)
+        elif phase == "solver_complete":
+            resolve(raw_csv).parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(resolve(result_csv), resolve(raw_csv))
         write_status(status_json, result_csv, len(groups), done, phase, last or {})
 
     def merge_result(result: dict[str, Any]) -> None:
         nonlocal all_results, all_runs, all_commands, all_updates, all_probes, all_checkpoints, done, pending_flush
         done += 1
-        all_results = append_rows(
-            all_results,
-            result["enriched_rows"],
-            ["context_horizon_key", "materialized_method", "iteration", "traffic_before_hash_full", "probe_materialized"],
-        )
-        all_runs.extend(result["run_rows"])
-        all_commands.append(result["command_row"])
-        all_updates.extend(result["update_rows"])
-        all_probes.extend(result["probe_rows"])
-        all_checkpoints.extend(result["checkpoint_rows"])
+        if stream_result_csv:
+            append_rows_to_csv(result_csv, result["enriched_rows"])
+        else:
+            all_results = append_rows(
+                all_results,
+                result["enriched_rows"],
+                ["context_horizon_key", "materialized_method", "iteration", "traffic_before_hash_full", "probe_materialized"],
+            )
+        if not skip_aggregate_jsonl:
+            all_runs.extend(result["run_rows"])
+            all_commands.append(result["command_row"])
+            all_updates.extend(result["update_rows"])
+            all_probes.extend(result["probe_rows"])
+            all_checkpoints.extend(result["checkpoint_rows"])
         pending_flush += 1
         if pending_flush >= flush_every:
             flush_logs(result["command_row"], "running")
@@ -791,25 +839,41 @@ def run_probe_plan(
             )
     else:
         with ThreadPoolExecutor(max_workers=workers) as pool:
-            futures = [
-                pool.submit(
-                    run_context_task,
-                    index=index,
-                    key=key,
-                    group_rows=group_rows,
-                    binary=binary,
-                    log_dir=log_root,
-                    temp_dir=temp_dir,
-                    scenario_dir=resolve(scenario_dir),
-                    registry_path=resolve(registry_path),
-                    manifest_prefix=manifest_prefix,
-                    row_prefix=row_prefix,
-                    execution_mode=execution_mode,
+            scheduled_iter = iter(scheduled)
+            futures = set()
+            max_in_flight = max(workers, workers * 2)
+
+            def submit_next() -> bool:
+                try:
+                    index, key, group_rows = next(scheduled_iter)
+                except StopIteration:
+                    return False
+                futures.add(
+                    pool.submit(
+                        run_context_task,
+                        index=index,
+                        key=key,
+                        group_rows=group_rows,
+                        binary=binary,
+                        log_dir=log_root,
+                        temp_dir=temp_dir,
+                        scenario_dir=resolve(scenario_dir),
+                        registry_path=resolve(registry_path),
+                        manifest_prefix=manifest_prefix,
+                        row_prefix=row_prefix,
+                        execution_mode=execution_mode,
+                    )
                 )
-                for index, key, group_rows in scheduled
-            ]
-            for future in as_completed(futures):
-                merge_result(future.result())
+                return True
+
+            for _ in range(min(max_in_flight, len(scheduled))):
+                submit_next()
+
+            while futures:
+                done_futures, futures = wait(futures, return_when=FIRST_COMPLETED)
+                for future in done_futures:
+                    merge_result(future.result())
+                    submit_next()
     flush_logs(None, "solver_complete")
     return all_results
 

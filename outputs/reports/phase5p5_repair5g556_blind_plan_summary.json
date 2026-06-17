@@ -1,0 +1,13 @@
+{
+  "aaai_ready": false,
+  "blind_candidate_count": 3,
+  "decision": "g556_blind_plan_created",
+  "fresh_seeds_only": true,
+  "learned_runtime_policy_validated": false,
+  "no_tuning_after_plan": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "planned_solver_rows": 360000,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g556_blind_plan_summary_v1"
+}

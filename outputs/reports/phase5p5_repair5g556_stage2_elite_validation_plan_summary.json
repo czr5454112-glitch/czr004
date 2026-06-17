@@ -1,0 +1,12 @@
+{
+  "aaai_ready": false,
+  "candidate_count": 40,
+  "candidate_rows_per_candidate_target": 10000,
+  "decision": "g556_stage2_elite_validation_plan_created",
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "planned_solver_rows": 430000,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g556_stage2_elite_validation_plan_summary_v1"
+}

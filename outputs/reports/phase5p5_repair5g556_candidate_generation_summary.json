@@ -1,0 +1,15 @@
+{
+  "aaai_ready": false,
+  "all_fields_in_bounds": true,
+  "candidate_vectors_generated": 100000,
+  "candidate_vectors_selected_for_solver": 3000,
+  "decision": "g556_surrogate_candidates_generated",
+  "goal_mode_canonical_all": true,
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "primary_baseline": "g554_c00051",
+  "raw_registry": "/root/shared-nvme/czr004_g556_remote_artifacts/raw/surrogate_candidate_registry.csv",
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g556_candidate_generation_summary_v1"
+}

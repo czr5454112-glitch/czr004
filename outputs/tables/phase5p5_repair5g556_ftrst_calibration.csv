@@ -1,0 +1,9 @@
+model_family,bin,prob_lo,prob_hi,rows,mean_predicted_risk,observed_regression_rate,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+FixedTheta Retrieval-Set Transformer,0,0.0,0.1,193517,0.00358316581073,0.00348806564798,False,False,False,False,False
+FixedTheta Retrieval-Set Transformer,1,0.1,0.2,113,0.114986079127,0.070796460177,False,False,False,False,False
+FixedTheta Retrieval-Set Transformer,2,0.2,0.3,19,0.243799204889,0.157894736842,False,False,False,False,False
+FixedTheta Retrieval-Set Transformer,3,0.3,0.4,10,0.331048607826,0,False,False,False,False,False
+FixedTheta Retrieval-Set Transformer,4,0.4,0.5,8,0.424188543111,0.25,False,False,False,False,False
+FixedTheta Retrieval-Set Transformer,5,0.5,0.6,3,0.530571242174,0.333333333333,False,False,False,False,False
+FixedTheta Retrieval-Set Transformer,7,0.7,0.8,2,0.768789112568,1,False,False,False,False,False
+FixedTheta Retrieval-Set Transformer,9,0.9,1.0,1,0.927460253239,1,False,False,False,False,False

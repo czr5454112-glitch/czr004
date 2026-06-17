@@ -1,0 +1,17 @@
+{
+  "aaai_ready": false,
+  "baseline_role_bound_to_promoted_candidate": true,
+  "candidate_object": "one fixed global coefficient vector",
+  "decision": "g556_promoted_baseline_audited",
+  "distance_from_old_hand_static_flow": "1.93232484624",
+  "dynamic_learned_policy_paused": true,
+  "goal_projection_mode": "flow_shield",
+  "learned_runtime_policy_validated": false,
+  "old_hand_static_flow_is_diagnostic": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "primary_baseline": "g554_c00051",
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g556_promoted_baseline_audit_summary_v1",
+  "theta_in_bounds": true
+}

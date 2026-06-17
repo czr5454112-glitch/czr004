@@ -1,0 +1,8 @@
+split,label_scope,rows,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+candidate_generation_blind,primary_vs_g554_c00051,40000,False,False,False,False,False
+test,auxiliary_vs_old_hand_staticflow,95812,False,False,False,False,False
+test,primary_vs_g554_c00051,90147,False,False,False,False,False
+train,auxiliary_vs_old_hand_staticflow,335396,False,False,False,False,False
+train,primary_vs_g554_c00051,314290,False,False,False,False,False
+val,auxiliary_vs_old_hand_staticflow,47927,False,False,False,False,False
+val,primary_vs_g554_c00051,44790,False,False,False,False,False

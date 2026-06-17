@@ -157,3 +157,17 @@ G5.55 repaired the G5.54 pair-schema and shortlist analysis path. The G5.54 raw 
 The follow-up KCS server replay ran `120010` validation rows and `120000` blind rows. Blind replay promoted `g554_c00051` as the stronger fixed global staticflow baseline candidate: `0` success regressions versus the hand `static_flow_shield`, `37` success gains, mean quality delta `-0.0210143833861`, CI upper `-0.0205820545487`, `14244` better versus `3455` worse both-success quality pairs, support over `216` strata and `1000` seed blocks, and fingerprint/materialization pass.
 
 Governance changes only for the fixed baseline ladder. The previous hand `static_flow_shield` is now the beaten reference for this fixed-global route, while `g554_c00051` becomes the active stronger fixed baseline candidate. This does not resume the dynamic learned UpdateParams policy, does not validate a contextual selector or checkpoint policy, and does not open runtime, Phase5.5, Phase6, or AAAI claims. SafeGate remains strict: any learned or generated policy must pass fresh targeted and blind replay with zero success regression against the declared primary fixed baseline and the additive diagnostic floor before promotion.
+
+## 2026-06-16 - G5.56 strategic update: FTRST as offline fixed-vector optimizer
+
+G5.56 explores whether a modern attention/retrieval surrogate can propose one stronger fixed global staticflow vector. The surrogate route is allowed because it preserves the G5.53-G5.55 fixed-candidate object: one deterministic vector shared across every map, agent count, seed, budget, horizon, checkpoint, and runtime state.
+
+The primary baseline is `g554_c00051`. The old hand `static_flow_shield` is diagnostic only for this route. A G5.56 candidate that beats old hand staticflow but loses to `g554_c00051` is not a promotion. Promotion still requires paired solver validation and blind replay with zero success regression versus `g554_c00051`, nonnegative success-rate delta, negative quality delta, materialization/fingerprint pass, and closed claim flags.
+
+The Transformer/retrieval model is not a runtime policy. It is not allowed to choose theta by context, map, agent count, horizon, checkpoint, or traffic state. Dynamic learned UpdateParams policy, contextual selector, checkpoint policy, abstention policy, per-context theta, runtime, Phase5.5, Phase6, and AAAI claims remain paused.
+
+## 2026-06-18 - G5.56 strategic result: fixed baseline promoted, learned policy still paused
+
+G5.56 succeeded on the fixed-global route. The final decision is `g556_transformer_fixed_global_candidate_blind_passed_keep_claims_closed`. `g556_c063174` passed the full blind gate against `g554_c00051`: `360,000` fresh solver rows, `0` success regressions, quality delta `-0.0032705119799`, CI upper `-0.00305603582661`, `28,508` better versus `20,887` worse both-success quality pairs, support over `216` strata and `3,000` seed blocks, and materialization/fingerprint pass.
+
+Baseline governance changes only for the fixed baseline ladder. `g556_c063174` becomes the active fixed-global staticflow baseline candidate; `g554_c00051` becomes the prior fixed baseline; the old hand `static_flow_shield` remains a diagnostic beaten reference. FTRST did not pass the offline learned-SafeGate gate, so the neural model is not promoted as SafeGate, a contextual selector, or a runtime learned UpdateParams policy. Future learned/generated policies must beat `g556_c063174` by real replay before making any stronger claim.

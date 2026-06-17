@@ -1,0 +1,18 @@
+{
+  "aaai_ready": false,
+  "best_candidate_id": "g556_c063174",
+  "best_candidate_quality_delta_vs_g554_c00051": "-0.0032705119799",
+  "best_candidate_success_regressions_vs_g554_c00051": 0,
+  "blind_passed": true,
+  "blind_run": true,
+  "blind_solver_rows": 360000,
+  "candidate_count": 3,
+  "decision": "g556_blind_candidate_passed",
+  "gate_passed": true,
+  "learned_runtime_policy_validated": false,
+  "passing_candidate_count": 2,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g556_blind_summary_v1"
+}

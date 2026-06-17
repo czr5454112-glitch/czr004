@@ -1,0 +1,5 @@
+label,primary,description,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+success_regression_vs_g554_c00051,True,true only for rows with direct g554_c00051 baseline,False,False,False,False,False
+success_gain_vs_g554_c00051,True,true only for rows with direct g554_c00051 baseline,False,False,False,False,False
+quality_delta_vs_g554_c00051,True,negative is better; only direct primary rows,False,False,False,False,False
+success_regression_aux,False,auxiliary old-hand or direct baseline comparison for representation learning,False,False,False,False,False

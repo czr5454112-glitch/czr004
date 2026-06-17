@@ -1,0 +1,10 @@
+source_round,source_stage,path,exists,column_count,missing_required_columns,schema_ok_for_surrogate,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+g554,stage1_fresh_screening,outputs/logs/phase5p5_repair5g554_stage1_fresh_screening/stage1_fresh_screening_results.csv,True,93,,True,False,False,False,False,False
+g554,stage2_nearmiss_expansion,outputs/logs/phase5p5_repair5g554_stage2_nearmiss_expansion/stage2_nearmiss_expansion_results.csv,True,93,,True,False,False,False,False,False
+g555,validation,outputs/logs/phase5p5_repair5g555_validation/validation_results.csv,True,93,,True,False,False,False,False,False
+g555,blind,outputs/logs/phase5p5_repair5g555_blind/blind_results.csv,True,93,,True,False,False,False,False,False
+g550,fulltheta_expansion,outputs/logs/phase5p5_repair5g550_fulltheta_expansion/fulltheta_expansion_results.csv,True,95,,True,False,False,False,False,False
+g550,active_theta_search,outputs/logs/phase5p5_repair5g550_active_theta_search/active_theta_search_results.csv,True,95,,True,False,False,False,False,False
+g550,generated_theta_targeted,outputs/logs/phase5p5_repair5g550_generated_theta_targeted/generated_theta_targeted_results.csv,True,95,,True,False,False,False,False,False
+g551,iteration_label_expansion,outputs/logs/phase5p5_repair5g551_iteration_label_expansion/iteration_label_expansion_results.csv,True,97,,True,False,False,False,False,False
+g551,generated_theta_targeted,outputs/logs/phase5p5_repair5g551_generated_theta_targeted/generated_theta_targeted_results.csv,True,97,,True,False,False,False,False,False

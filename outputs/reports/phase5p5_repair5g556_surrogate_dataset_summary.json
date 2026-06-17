@@ -1,0 +1,21 @@
+{
+  "aaai_ready": false,
+  "auxiliary_rows": 479135,
+  "baseline": "g554_c00051",
+  "candidate_context_pairs": "/root/shared-nvme/czr004_g556_remote_artifacts/parquet/candidate_context_pairs.csv",
+  "candidate_sets": "/root/shared-nvme/czr004_g556_remote_artifacts/parquet/candidate_sets.csv",
+  "decision": "g556_surrogate_dataset_created",
+  "feature_leakage": false,
+  "learned_runtime_policy_validated": false,
+  "minimum_training_rows_met": false,
+  "parquet_status": "/root/shared-nvme/czr004_g556_remote_artifacts/parquet/surrogate_rows.parquet",
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "primary_vs_g554_c00051_rows": 489227,
+  "raw_surrogate_rows_csv": "/root/shared-nvme/czr004_g556_remote_artifacts/parquet/surrogate_rows.csv",
+  "raw_surrogate_rows_parquet": "/root/shared-nvme/czr004_g556_remote_artifacts/parquet/surrogate_rows.parquet",
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g556_surrogate_dataset_summary_v1",
+  "training_rows": 968362,
+  "unique_candidate_sets": 11607
+}

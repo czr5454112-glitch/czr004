@@ -1,5 +1,13 @@
 # LAU/LAUR-LTM Phase4–Phase6 Codex 执行计划
 
+## 2026-06-18 Repair5G.5.56 fixed-global Transformer/retrieval update
+
+G5.56 does not change LaCAM*/PIBT/search semantics and does not open runtime, Phase5.5, Phase6, or AAAI claims. It keeps dynamic learned UpdateParams, contextual selector, checkpoint policy, and abstention policy paused. The Transformer/retrieval model is used only as an offline fixed-vector optimizer.
+
+The KCS server run completed the full gate chain. The unified fixed-theta manifest contained `1,001,437` usable row-level examples; the surrogate dataset contained `968,362` training rows. FTRST and FT-Transformer did not pass the offline learned-SafeGate gate, so no learned SafeGate or learned runtime policy is promoted.
+
+The fixed-vector route nevertheless passed real replay: candidate generation produced `100,000` vectors, Stage1 executed `304,500` rows, Stage2 executed `430,000` rows with `29` passing candidates, and blind replay executed `360,000` fresh rows. Final decision: `g556_transformer_fixed_global_candidate_blind_passed_keep_claims_closed`. `g556_c063174` is promoted as the stronger fixed global staticflow baseline candidate versus `g554_c00051`, with `0` blind success regressions, quality delta `-0.0032705119799`, CI upper `-0.00305603582661`, and full materialization/fingerprint pass. Future fixed-global or learned/generated policy work must treat `g556_c063174` as the declared fixed baseline for this route unless explicitly superseded.
+
 ## 2026-06-15 Repair5G.5.54 fixed-global coefficient update
 
 G5.54 does not change LaCAM*/PIBT/search semantics and does not open runtime, Phase5.5, Phase6, or AAAI claims. It keeps dynamic learned UpdateParams, contextual selector, checkpoint policy, and abstention policy paused while testing only one deterministic global `static_flow_shield` coefficient vector at a time.
@@ -6983,3 +6991,9 @@ G5.55 audited G5.54 and confirmed an analysis/gate bug in the fixed-global pair-
 Blind replay promoted `g554_c00051` as the stronger fixed global staticflow baseline candidate. Its blind evidence versus the previous hand `static_flow_shield` is: `0` success regressions, `37` success gains, success-rate delta `0.00185`, both-success mean quality delta `-0.0210143833861`, CI upper `-0.0205820545487`, `14244` better and `3455` worse quality pairs, support across `216` strata and `1000` seed blocks, candidate recognized, and fingerprint match rate `1`.
 
 Baseline governance is updated for the fixed-global staticflow route: `g554_c00051` is now the promoted stronger fixed baseline candidate, and the previous hand `static_flow_shield` is the beaten comparison baseline. SafeGate is not relaxed. Dynamic learned UpdateParams policy, contextual selector, checkpoint policy, abstention policy, per-context theta, runtime, Phase5.5, Phase6, and AAAI claims remain closed.
+
+## 2026-06-16 - G5.56 execution update: offline Transformer/retrieval optimizer
+
+After G5.55, `g554_c00051` is the primary fixed global staticflow baseline. G5.56 uses a FixedTheta Retrieval-Set Transformer (FTRST) only as an offline optimizer for fixed global coefficient vectors. It is not a dynamic learned UpdateParams policy, contextual selector, checkpoint policy, abstention policy, per-context theta generator, or runtime method.
+
+The G5.56 SafeGate compares promotion candidates against `g554_c00051`, not the old hand staticflow vector. A candidate must pass paired solver validation and blind replay with zero success regression versus `g554_c00051` before becoming a stronger fixed baseline candidate. The old hand `static_flow_shield` and `additive_ltm` remain diagnostics. All runtime, Phase5.5, Phase6, learned-runtime, and AAAI claim flags remain closed.

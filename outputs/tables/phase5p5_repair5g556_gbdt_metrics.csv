@@ -1,0 +1,7 @@
+model_family,metric,value,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+GBDT controls,regression_risk_auc,0.942697464631,False,False,False,False,False
+GBDT controls,regression_risk_pr_auc,0.0538117528835,False,False,False,False,False
+GBDT controls,regression_risk_brier,0.00352854828066,False,False,False,False,False
+GBDT controls,quality_delta_mae,0.032280086999,False,False,False,False,False
+GBDT controls,quality_ranking_corr,0.480849210143,False,False,False,False,False
+GBDT controls,false_safe_hard_negative_count,559,False,False,False,False,False

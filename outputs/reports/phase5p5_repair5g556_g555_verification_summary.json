@@ -1,0 +1,32 @@
+{
+  "aaai_ready": false,
+  "blind_new_solver_rows": 120000,
+  "blind_quality_delta_vs_old_hand_static_flow": "-0.0210143833861",
+  "blind_success_regression_count_vs_old_hand_static_flow": 0,
+  "checks": {
+    "all_claim_flags_closed": true,
+    "blind_new_solver_rows": true,
+    "blind_passed": true,
+    "cost_finite": true,
+    "external_lacam2_clean": true,
+    "fingerprint": true,
+    "g555_decision": true,
+    "promoted_fixed_candidate_id": true,
+    "quality_delta_vs_old_hand_static_flow": true,
+    "recognized": true,
+    "success_gain_count_vs_old_hand_static_flow": true,
+    "success_regression_count_vs_old_hand_static_flow": true
+  },
+  "decision": "g556_g555_promoted_baseline_verified",
+  "external_lacam2_clean": true,
+  "g555_decision": "g555_fixed_global_staticflow_candidate_blind_passed_keep_claims_closed",
+  "learned_runtime_policy_validated": false,
+  "missing_artifacts": [],
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "previous_primary_baseline": "repair5g59_static_flow_shield",
+  "primary_baseline": "g554_c00051",
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g556_g555_verification_summary_v1",
+  "validation_new_solver_rows": 120010
+}

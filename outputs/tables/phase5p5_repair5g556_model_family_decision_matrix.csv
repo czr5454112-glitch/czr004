@@ -1,0 +1,11 @@
+model_family,attention_or_retrieval_support,fits_1m_3m_rows,fits_2x4090,mixed_feature_support,uncertainty_risk_outputs,code_feasibility,role_in_g556,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+FixedTheta Retrieval-Set Transformer,"row feature-token attention, retrieval centroids, candidate-set aggregation",True,True,True,True,implemented in train_eval_repair5g556_ftrst_surrogate.py,primary offline surrogate,False,False,False,False,False
+FT-Transformer,feature-token self-attention,True,True,True,True,same feature-token backbone without retrieval memory,required neural attention control,False,False,False,False,False
+TabTransformer,categorical token attention,True,True,True,with heads added,diagnostic through categorical-token ablation,diagnostic,False,False,False,False,False
+SAINT,row and column attention; masked/contrastive inspiration,medium,True,True,with heads added,lightweight diagnostic implementation,diagnostic,False,False,False,False,False
+AMFormer,additive and multiplicative attention for arithmetic interactions,medium,True,True,with heads added,multiplicative-feature diagnostic,diagnostic,False,False,False,False,False
+TabR,retrieval-augmented tabular learning,requires approximate memory,True,True,with heads added,coarse retrieval centroid memory in FTRST,retrieval design anchor,False,False,False,False,False
+TabPFN / TabICL,in-context/foundation-style tabular inference,False,small split only,True,True,diagnostic only if package is available,"small-split diagnostic, not primary",False,False,False,False,False
+TabM,"parameter-efficient MLP ensemble, no attention",True,True,True,True,implemented as MLP/ensemble control,required strong neural control,False,False,False,False,False
+GBDT controls,none,True,CPU-oriented,True,True,sklearn HistGradientBoosting fallback; LightGBM/XGBoost/CatBoost if installed,required hard-to-beat tabular control,False,False,False,False,False
+CEM / CMA-ES / trust-region controls,"optimizer, not predictor",True,True,True,uses surrogate acquisition/risk,implemented in candidate generation,non-neural candidate-generation controls,False,False,False,False,False

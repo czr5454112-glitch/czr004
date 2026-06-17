@@ -1,0 +1,7 @@
+model_family,metric,value,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+FixedTheta Retrieval-Set Transformer,regression_risk_auc,0.955392150079,False,False,False,False,False
+FixedTheta Retrieval-Set Transformer,regression_risk_pr_auc,0.0629430169944,False,False,False,False,False
+FixedTheta Retrieval-Set Transformer,regression_risk_brier,0.00342690972933,False,False,False,False,False
+FixedTheta Retrieval-Set Transformer,quality_delta_mae,0.0283583414136,False,False,False,False,False
+FixedTheta Retrieval-Set Transformer,quality_ranking_corr,0.22373944283,False,False,False,False,False
+FixedTheta Retrieval-Set Transformer,false_safe_hard_negative_count,407,False,False,False,False,False

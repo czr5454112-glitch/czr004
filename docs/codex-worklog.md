@@ -5135,3 +5135,31 @@
   No external/lacam2/lacam2 edits, no solver semantic changes, no dynamic policy, no selector, no checkpoint policy, no abstention gate, no per-context theta, no IDs 166..205, no Phase5.5/Phase6/runtime/AAAI claims.
 - Result:
   G5.55 confirmed the G5.54 no-promotion decision was analysis-confounded. The audit found the pair-schema gate used the wrong success field, recomputation recovered `82` corrected Stage2 shortlist candidates, and KCS server replay completed `120010` validation rows plus `120000` blind rows. Blind replay promoted `g554_c00051` as the stronger fixed global staticflow baseline candidate with `0` success regressions versus the previous hand `static_flow_shield`, `37` success gains, mean quality delta `-0.0210143833861`, CI upper `-0.0205820545487`, support across `216` strata and `1000` seed blocks, and fingerprint/materialization pass. Dynamic learned UpdateParams policy remains paused; no runtime/Phase5.5/Phase6/AAAI claim opened.
+
+## 2026-06-16 - Repair5G.5.56 Transformer/retrieval fixed-global surrogate optimization
+
+- Request:
+  Continue after G5.55 commit 9e083eb. G5.55 promoted `g554_c00051` as a stronger fixed global staticflow baseline candidate after validation and blind replay. Dynamic learned UpdateParams policy remains paused.
+
+- Objective:
+  Use a Transformer/retrieval offline surrogate to optimize one fixed global staticflow coefficient vector. The neural model is training-time only and proposes fixed candidate vectors; it is not a contextual selector or runtime learned policy.
+
+- Primary baseline:
+  `g554_c00051` is now the primary fixed baseline. Old hand `static_flow_shield` and `additive_ltm` are diagnostics.
+
+- Model:
+  Main model is FixedTheta Retrieval-Set Transformer (FTRST): row-level theta/context Transformer, retrieval memory over historical solver rows, candidate-set aggregation, and multi-head risk/utility/quantile outputs. TabM/MLP ensemble, FT-Transformer, SAINT/AMFormer-inspired diagnostics, TabPFN/TabICL small-split diagnostics, and GBDT controls are required baselines.
+
+- Resources:
+  Use two RTX 4090 GPUs where available. Store large data/checkpoints/results under `/root/shared-nvme/czr004_g556_remote_artifacts`, not root disk.
+
+- Constraints:
+  No external/lacam2/lacam2 edits, no solver semantic changes, no dynamic policy, no selector, no checkpoint policy, no abstention gate, no per-context theta, no IDs 166..205, no runtime/Phase5.5/Phase6/AAAI claims.
+- Result:
+  G5.56 completed on the KCS RTX4090 server under `tmux` in `/root/shared-nvme/czr004_g556_9e083eb`, with large raw artifacts kept under `/root/shared-nvme/czr004_g556_remote_artifacts`. The unified fixed-theta manifest met the AAAI-scale minimum with `1,001,437` usable row-level examples; the constructed surrogate dataset had `968,362` training rows (`489,227` primary rows versus `g554_c00051`). FTRST and FT-Transformer did not pass the offline learned-SafeGate gate, so no learned runtime policy or SafeGate is promoted.
+
+  The offline surrogate/search route still produced real fixed-vector gains after solver validation. Candidate generation wrote `100,000` vectors and selected `3,000`. Stage1 executed `304,500` solver rows and found `1,323` Stage2-ready candidates. Stage2 executed `430,000` rows, passed `29` candidates, and selected `g556_c063174` as the best candidate versus `g554_c00051`.
+
+  Blind replay then executed the full `360,000` fresh solver rows. Final decision is `g556_transformer_fixed_global_candidate_blind_passed_keep_claims_closed`: `g556_c063174` is promoted as the stronger fixed global staticflow candidate with `0` success regressions versus `g554_c00051`, quality delta `-0.0032705119799`, CI upper `-0.00305603582661`, `28,508` better versus `20,887` worse both-success quality pairs, support over `216` strata and `3,000` seed blocks, and fingerprint/materialization pass. `g554_c00051` becomes the prior fixed baseline for this route. Dynamic learned UpdateParams, contextual selector, checkpoint policy, abstention policy, runtime, Phase5.5, Phase6, and AAAI claims remain closed.
+
+  The remote blind run required an infrastructure repair after raw aggregate JSONL/checkpoint accumulation exhausted memory. `repair5g549_common.py` now supports skipping aggregate JSONL, streaming result CSV append, and bounded in-flight futures; those changes let the blind run finish with stable memory. This is an execution scalability fix, not a solver-semantic change.

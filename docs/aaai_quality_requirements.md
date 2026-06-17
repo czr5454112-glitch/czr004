@@ -655,3 +655,36 @@ phase5p5_allowed: false
 phase6_allowed: false
 aaai_ready: false
 ```
+
+## 2026-06-16 G5.56 AAAI gate note
+
+After G5.55, `g554_c00051` is the primary fixed global staticflow baseline. G5.56 may train a Transformer/retrieval surrogate, but the surrogate is an offline optimizer only. It cannot be described as a runtime learned UpdateParams policy, contextual selector, checkpoint policy, abstention policy, or per-context theta generator.
+
+AAAI-facing status remains:
+
+```text
+primary fixed baseline: g554_c00051
+old hand static_flow_shield: diagnostic beaten reference
+additive_ltm: paper/parity floor
+SafeGate: zero success regression versus g554_c00051 by paired solver validation/blind replay
+runtime_claim_allowed: false
+phase5p5_allowed: false
+phase6_allowed: false
+aaai_ready: false
+```
+
+## 2026-06-18 - G5.56 fixed-vector blind pass, AAAI claims still closed
+
+G5.56 completed the server-scale chain and promoted a stronger deterministic fixed-global coefficient vector. The evidence is solver-facing, not merely offline: Stage1 ran `304,500` rows, Stage2 ran `430,000` rows, and blind replay ran `360,000` fresh rows. `g556_c063174` passed blind versus `g554_c00051` with `0` success regressions, mean quality delta `-0.0032705119799`, CI upper `-0.00305603582661`, and materialization/fingerprint pass.
+
+The learned-model claim remains closed. FTRST did not pass the offline learned-SafeGate gate, and no learned runtime policy was validated. The allowed claim is only that offline Transformer/retrieval-assisted fixed-vector search found a stronger deterministic staticflow baseline candidate.
+
+```text
+primary fixed baseline for future fixed-global route: g556_c063174
+prior fixed baseline: g554_c00051
+learned_safegate_promoted: false
+runtime_claim_allowed: false
+phase5p5_allowed: false
+phase6_allowed: false
+aaai_ready: false
+```

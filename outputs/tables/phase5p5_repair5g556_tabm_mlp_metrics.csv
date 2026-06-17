@@ -1,0 +1,7 @@
+model_family,metric,value,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+TabM / MLP controls,regression_risk_auc,0.580837598856,False,False,False,False,False
+TabM / MLP controls,regression_risk_pr_auc,0.00391549856499,False,False,False,False,False
+TabM / MLP controls,regression_risk_brier,0.00357303073741,False,False,False,False,False
+TabM / MLP controls,quality_delta_mae,0.036927054123,False,False,False,False,False
+TabM / MLP controls,quality_ranking_corr,0.0318911627363,False,False,False,False,False
+TabM / MLP controls,false_safe_hard_negative_count,692,False,False,False,False,False

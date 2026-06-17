@@ -1,0 +1,7 @@
+model_family,metric,value,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+FT-Transformer baseline,regression_risk_auc,0.955707131371,False,False,False,False,False
+FT-Transformer baseline,regression_risk_pr_auc,0.0652721217339,False,False,False,False,False
+FT-Transformer baseline,regression_risk_brier,0.00342032141594,False,False,False,False,False
+FT-Transformer baseline,quality_delta_mae,0.0282590153881,False,False,False,False,False
+FT-Transformer baseline,quality_ranking_corr,0.195052234938,False,False,False,False,False
+FT-Transformer baseline,false_safe_hard_negative_count,471,False,False,False,False,False

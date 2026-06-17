@@ -1,0 +1,5 @@
+ledger_statement,status,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+G5.56 uses FTRST only as an offline fixed-vector optimizer.,closed_or_governance_active,False,False,False,False,False
+"Promotion baseline is g554_c00051, not old hand static_flow_shield.",closed_or_governance_active,False,False,False,False,False
+Dynamic learned UpdateParams policy remains paused.,closed,False,False,False,False,False
+"All Phase5.5, Phase6, runtime, learned-runtime, and AAAI claims remain closed.",closed,False,False,False,False,False

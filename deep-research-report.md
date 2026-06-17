@@ -2343,3 +2343,17 @@ G5.55 resolved the G5.54 contradiction by finding a pair-schema analysis bug rat
 Server validation and blind replay completed on the KCS RTX4090 instance. Validation ran `120010` rows and passed; blind replay ran `120000` rows and passed for `g554_c00051`. The promoted fixed candidate has `0` blind success regressions versus the previous hand `static_flow_shield`, `37` success gains, mean quality delta `-0.0210143833861`, CI upper `-0.0205820545487`, and full materialization/fingerprint pass.
 
 The project baseline ladder is updated only for this fixed-global route: `g554_c00051` becomes the stronger fixed staticflow baseline candidate, while the old hand `static_flow_shield` becomes the beaten reference. This is not a learned runtime policy and does not open Phase5.5, Phase6, runtime, or AAAI claims. SafeGate remains strict zero-success-regression against the declared primary fixed baseline plus additive diagnostic checks before any learned/generated policy can advance.
+
+## 2026-06-16 - G5.56 governance update: Transformer/retrieval surrogate remains offline
+
+After G5.55, `g554_c00051` is the primary fixed global staticflow baseline. G5.56 uses a Transformer/retrieval surrogate only as an offline optimizer for fixed global coefficient vectors. It is not a dynamic learned UpdateParams policy. Any candidate must beat `g554_c00051` by paired solver validation/blind replay with zero success regressions before becoming a stronger fixed baseline candidate.
+
+The old hand `static_flow_shield` remains a diagnostic beaten reference for this fixed-global route, and `additive_ltm` remains the paper/parity floor. SafeGate is not relaxed: surrogate predictions, candidate-generation scores, or offline rankings cannot promote a candidate without real solver replay against `g554_c00051`. Dynamic learned UpdateParams policy, contextual selector, checkpoint policy, abstention policy, per-context theta, runtime, Phase5.5, Phase6, and AAAI claims remain closed.
+
+## 2026-06-18 - G5.56 final result: fixed baseline ladder advances to g556_c063174
+
+The completed KCS server run confirms that G5.56 learned/searched a better deterministic fixed-global staticflow coefficient vector, not a deployable learned SafeGate. The unified manifest reached `1,001,437` usable row-level examples and the surrogate dataset contained `968,362` training rows. FTRST and FT-Transformer both failed the offline learned-SafeGate gate, so the Transformer/retrieval model remains an offline optimizer only.
+
+Real solver replay carried the claim. Stage1 ran `304,500` rows, Stage2 ran `430,000` rows and passed `29` candidates, and blind replay ran `360,000` fresh rows. `g556_c063174` passed blind against `g554_c00051` with `0` success regressions, mean quality delta `-0.0032705119799`, CI upper `-0.00305603582661`, `28,508` better versus `20,887` worse both-success quality pairs, support over `216` strata and `3,000` seed blocks, and full materialization/fingerprint pass.
+
+Governance update: for the fixed-global staticflow route, `g556_c063174` becomes the active stronger fixed baseline candidate and `g554_c00051` becomes the beaten prior fixed baseline. This does not resume dynamic learned UpdateParams, does not validate a contextual selector or checkpoint policy, and does not open runtime, Phase5.5, Phase6, or AAAI claims. Future learned/generated policies must now beat `g556_c063174` under the same zero-success-regression real replay gate.

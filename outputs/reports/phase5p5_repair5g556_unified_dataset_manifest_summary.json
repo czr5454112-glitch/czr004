@@ -1,0 +1,21 @@
+{
+  "aaai_ready": false,
+  "artifact_root": "/root/shared-nvme/czr004_g556_remote_artifacts",
+  "decision": "g556_unified_fixedtheta_dataset_manifest_created",
+  "direct_g554_contexts_sum_over_sources": 33075,
+  "direct_primary_g554_labels_under_preferred": false,
+  "learned_runtime_policy_validated": false,
+  "minimum_unique_contexts_met": true,
+  "minimum_unique_theta_candidates_met": true,
+  "minimum_usable_rows_met": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "preferred_usable_rows_met": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g556_unified_dataset_manifest_summary_v1",
+  "topup_plan_required_before_claiming_primary_only_training": false,
+  "total_solver_rows": 1132783,
+  "unique_contexts_sum_over_sources": 40832,
+  "unique_theta_candidates_sum_over_sources": 20136,
+  "usable_row_level_examples": 1001437
+}

@@ -1,0 +1,7 @@
+model_family,metric,value,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+SAINT/AMFormer diagnostics,regression_risk_auc,0.891860913679,False,False,False,False,False
+SAINT/AMFormer diagnostics,regression_risk_pr_auc,0.0342548963775,False,False,False,False,False
+SAINT/AMFormer diagnostics,regression_risk_brier,0.140746140132,False,False,False,False,False
+SAINT/AMFormer diagnostics,quality_delta_mae,0.0405630315689,False,False,False,False,False
+SAINT/AMFormer diagnostics,quality_ranking_corr,0.0804008728404,False,False,False,False,False
+SAINT/AMFormer diagnostics,false_safe_hard_negative_count,18,False,False,False,False,False

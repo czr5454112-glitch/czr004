@@ -1,0 +1,23 @@
+{
+  "aaai_ready": false,
+  "backend": "torch",
+  "calibration_ece": "0.000539730625947",
+  "cuda_device_count": 2,
+  "data_parallel": false,
+  "decision": "g556_ft_transformer_baseline_evaluated",
+  "device": "cuda:0",
+  "early_stopping": true,
+  "epochs_requested": 80,
+  "epochs_run": 26,
+  "eval_rows": 193673,
+  "false_safe_hard_negative_count": 471,
+  "learned_runtime_policy_validated": false,
+  "model_family": "FT-Transformer baseline",
+  "offline_gate_passed": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "quality_ranking_corr": "0.195052234938",
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g556_ft_transformer_baseline_summary_v1",
+  "training_rows": 774689
+}

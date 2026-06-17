@@ -1,0 +1,15 @@
+{
+  "aaai_ready": false,
+  "backend": "sklearn",
+  "decision": "g556_saint_amformer_diagnostics_evaluated",
+  "eval_rows": 193673,
+  "false_safe_hard_negative_count": 18,
+  "learned_runtime_policy_validated": false,
+  "model_family": "SAINT/AMFormer diagnostics",
+  "offline_gate_passed": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g556_saint_amformer_diagnostics_summary_v1",
+  "training_rows": 774689
+}

@@ -129,6 +129,7 @@ LABEL_LOG_DIR = "outputs/logs/phase5p5_repair5g557_label_matrix"
 LABEL_PLAN_MATERIALIZED_CSV = f"{LABEL_LOG_DIR}/label_matrix_plan_materialized.csv"
 LABEL_RESULTS_CSV = f"{LABEL_LOG_DIR}/label_matrix_results.csv"
 LABEL_RESULTS_RAW_CSV = f"{LABEL_LOG_DIR}/label_matrix_results.raw.csv"
+LABEL_PAIR_ROWS_NAME = "label_v3_pair_rows_compact.csv"
 LABEL_RUN_JSONL = f"{LABEL_LOG_DIR}/runs.jsonl"
 LABEL_COMMAND_JSONL = f"{LABEL_LOG_DIR}/commands.jsonl"
 LABEL_UPDATE_JSONL = f"{LABEL_LOG_DIR}/updates.jsonl"
@@ -364,6 +365,29 @@ def write_empty(path: str | Path, fieldnames: list[str]) -> None:
     write_rows(path, [], fieldnames=fieldnames)
 
 
+def write_rows_stream(path: str | Path, rows: Iterable[dict[str, Any]], fieldnames: list[str]) -> int:
+    resolved = resolve(path) if not Path(path).is_absolute() else Path(path)
+    resolved.parent.mkdir(parents=True, exist_ok=True)
+    count = 0
+    with resolved.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fieldnames, extrasaction="ignore")
+        writer.writeheader()
+        for row in rows:
+            writer.writerow(row)
+            count += 1
+    return count
+
+
+def iter_csv_rows(path: str | Path) -> Iterable[dict[str, Any]]:
+    resolved = resolve(path) if not Path(path).is_absolute() else Path(path)
+    with resolved.open(newline="", encoding="utf-8", errors="ignore") as handle:
+        yield from csv.DictReader(handle)
+
+
+def label_pair_rows_path() -> Path:
+    return artifact_root() / "datasets" / LABEL_PAIR_ROWS_NAME
+
+
 def safe_mean(values: Iterable[Any]) -> str:
     vals = [number(value, math.nan) for value in values]
     vals = [value for value in vals if math.isfinite(value)]
@@ -564,6 +588,20 @@ def ensure_theta_registry() -> list[dict[str, Any]]:
     if not theta_registry_path().exists():
         main_create_theta_candidate_slate([])
     return read_rows(theta_registry_path())
+
+
+def theta_registry_by_candidate() -> dict[str, dict[str, Any]]:
+    return {str(row.get("candidate_id", "")): row for row in ensure_theta_registry()}
+
+
+def theta_for_candidate(candidate_id: str, registry: dict[str, dict[str, Any]] | None = None) -> dict[str, Any]:
+    if candidate_id == PRIMARY_BASELINE_ID:
+        return g556_theta()
+    registry = registry or theta_registry_by_candidate()
+    row = registry.get(str(candidate_id), {})
+    if not row:
+        return g556_theta()
+    return g554.clamp_theta({col: row.get(col, "") for col in THETA_COLUMNS})
 
 
 def solver_materializable_contexts(contexts: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -1404,58 +1442,133 @@ def main_run_theta_label_matrix(argv: list[str] | None = None) -> int:
     return 0
 
 
-def pair_rows_against_g556(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    grouped: dict[str, dict[str, dict[str, Any]]] = defaultdict(dict)
-    context_meta = {str(row.get("context_id", "")): row for row in read_rows(CONTEXT_MANIFEST_CSV)}
+PAIR_FIELDNAMES = [
+    "context_key",
+    "context_id",
+    "split",
+    "topology_id",
+    "topology_split",
+    "map",
+    "map_family",
+    "source_map_family",
+    "start_goal_regime",
+    "agents",
+    "agent_count",
+    "density",
+    "free_cells",
+    "flow_pressure_bucket",
+    "seed",
+    "budget_ms",
+    "nominal_budget_ms",
+    "short_budget_ms",
+    "base_time_limit_sec",
+    "ltm_max_iterations",
+    "horizon_id",
+    "selected_candidate",
+    "candidate_family",
+    "baseline_candidate",
+    "candidate_recognized",
+    "fingerprint_match",
+    "cost_finite",
+    "theta_in_bounds",
+    "selected_success",
+    "baseline_success",
+    "success_regression",
+    "success_gain",
+    "both_success",
+    "both_fail",
+    "selected_ratio",
+    "baseline_ratio",
+    "quality_delta_ratio",
+    "better",
+    "worse",
+    *CLAIM_KEYS,
+]
+
+
+def context_meta_map() -> dict[str, dict[str, Any]]:
+    meta: dict[str, dict[str, Any]] = {}
+    for row in read_rows(CONTEXT_MANIFEST_CSV):
+        if row.get("context_id"):
+            meta[str(row.get("context_id"))] = row
+        meta[context_key(row)] = row
+    return meta
+
+
+def pair_record_against_g556(key: str, selected: dict[str, Any], base: dict[str, Any], meta: dict[str, dict[str, Any]] | None = None) -> dict[str, Any]:
+    metrics = g556.pair_metrics(selected, base)
+    theta = {col: selected.get(col, "") for col in THETA_COLUMNS}
+    meta = meta or {}
+    context_meta = meta.get(str(selected.get("context_id", ""))) or meta.get(key) or {}
+    return {
+        "context_key": key,
+        "context_id": selected.get("context_id", ""),
+        "split": context_meta.get("split", selected.get("split", "")),
+        "topology_id": selected.get("topology_id", context_meta.get("topology_id", "")),
+        "topology_split": context_meta.get("topology_split", ""),
+        "map": selected.get("map", context_meta.get("map", "")),
+        "map_family": selected.get("map_family", context_meta.get("map_family", "")),
+        "source_map_family": selected.get("source_map_family", context_meta.get("source_map_family", "")),
+        "start_goal_regime": selected.get("start_goal_regime", context_meta.get("start_goal_regime", "")),
+        "agents": selected.get("agents", selected.get("agent_count", context_meta.get("agents", ""))),
+        "agent_count": selected.get("agent_count", selected.get("agents", context_meta.get("agent_count", ""))),
+        "density": selected.get("density", context_meta.get("density", "")),
+        "free_cells": context_meta.get("free_cells", selected.get("free_cells", "")),
+        "flow_pressure_bucket": context_meta.get("flow_pressure_bucket", selected.get("flow_pressure_bucket", "")),
+        "seed": selected.get("seed", context_meta.get("seed", "")),
+        "budget_ms": selected.get("budget_ms", selected.get("nominal_budget_ms", context_meta.get("budget_ms", ""))),
+        "nominal_budget_ms": selected.get("nominal_budget_ms", selected.get("budget_ms", context_meta.get("nominal_budget_ms", ""))),
+        "short_budget_ms": context_meta.get("short_budget_ms", selected.get("short_budget_ms", "")),
+        "base_time_limit_sec": context_meta.get("base_time_limit_sec", selected.get("base_time_limit_sec", "")),
+        "ltm_max_iterations": context_meta.get("ltm_max_iterations", selected.get("ltm_max_iterations", "")),
+        "horizon_id": selected.get("horizon_id", context_meta.get("horizon_id", "")),
+        "selected_candidate": selected.get("candidate_id", ""),
+        "candidate_family": selected.get("candidate_family", ""),
+        "baseline_candidate": PRIMARY_BASELINE_ID,
+        "candidate_recognized": boolish(selected.get("candidate_recognized", True)),
+        "fingerprint_match": boolish(selected.get("fulltheta_fingerprint_match", True)),
+        "cost_finite": boolish(selected.get("cost_finite_all", selected.get("repair5g_costs_finite", True))),
+        "theta_in_bounds": theta_in_bounds(theta),
+        **metrics,
+        **claim_flags(),
+    }
+
+
+def iter_pairs_against_g556(rows: Iterable[dict[str, Any]], meta: dict[str, dict[str, Any]] | None = None) -> Iterable[dict[str, Any]]:
+    current_key = ""
+    base: dict[str, Any] | None = None
+    candidates: list[dict[str, Any]] = []
+
+    def flush() -> Iterable[dict[str, Any]]:
+        if base is None:
+            return []
+        return [pair_record_against_g556(current_key, row, base, meta) for row in candidates]
+
     for row in rows:
-        grouped[context_key(row)][str(row.get("role", ""))] = row
-    out: list[dict[str, Any]] = []
-    for key, role_rows in grouped.items():
-        base = role_rows.get("static_flow_shield")
-        if not base:
-            continue
-        for role, selected in role_rows.items():
-            if not role.startswith("generated_theta::"):
-                continue
-            metrics = g556.pair_metrics(selected, base)
-            theta = {col: selected.get(col, "") for col in THETA_COLUMNS}
-            meta = context_meta.get(str(selected.get("context_id", "")), {})
-            out.append(
-                {
-                    "context_key": key,
-                    "context_id": selected.get("context_id", ""),
-                    "split": meta.get("split", selected.get("split", "")),
-                    "topology_id": selected.get("topology_id", ""),
-                    "topology_split": meta.get("topology_split", ""),
-                    "map": selected.get("map", ""),
-                    "map_family": selected.get("map_family", ""),
-                    "source_map_family": selected.get("source_map_family", ""),
-                    "start_goal_regime": selected.get("start_goal_regime", ""),
-                    "agents": selected.get("agents", selected.get("agent_count", "")),
-                    "agent_count": selected.get("agent_count", selected.get("agents", "")),
-                    "density": selected.get("density", ""),
-                    "free_cells": meta.get("free_cells", selected.get("free_cells", "")),
-                    "flow_pressure_bucket": meta.get("flow_pressure_bucket", selected.get("flow_pressure_bucket", "")),
-                    "seed": selected.get("seed", ""),
-                    "budget_ms": selected.get("budget_ms", selected.get("nominal_budget_ms", "")),
-                    "nominal_budget_ms": selected.get("nominal_budget_ms", selected.get("budget_ms", "")),
-                    "short_budget_ms": meta.get("short_budget_ms", selected.get("short_budget_ms", "")),
-                    "base_time_limit_sec": meta.get("base_time_limit_sec", selected.get("base_time_limit_sec", "")),
-                    "ltm_max_iterations": meta.get("ltm_max_iterations", selected.get("ltm_max_iterations", "")),
-                    "horizon_id": selected.get("horizon_id", ""),
-                    "selected_candidate": selected.get("candidate_id", ""),
-                    "candidate_family": selected.get("candidate_family", ""),
-                    "baseline_candidate": PRIMARY_BASELINE_ID,
-                    "candidate_recognized": boolish(selected.get("candidate_recognized", True)),
-                    "fingerprint_match": boolish(selected.get("fulltheta_fingerprint_match", True)),
-                    "cost_finite": boolish(selected.get("cost_finite_all", selected.get("repair5g_costs_finite", True))),
-                    "theta_in_bounds": theta_in_bounds(theta),
-                    **metrics,
-                    **{col: selected.get(col, "") for col in THETA_COLUMNS},
-                    **claim_flags(),
-                }
-            )
-    return out
+        key = context_key(row)
+        if current_key and key != current_key:
+            yield from flush()
+            base = None
+            candidates = []
+        current_key = key
+        role = str(row.get("role", ""))
+        if role == "static_flow_shield":
+            base = row
+        elif role.startswith("generated_theta::"):
+            candidates.append(row)
+    if current_key:
+        yield from flush()
+
+
+def pair_rows_against_g556(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    return list(iter_pairs_against_g556(rows, context_meta_map()))
+
+
+def iter_label_pair_rows() -> Iterable[dict[str, Any]]:
+    pair_path = label_pair_rows_path()
+    if not pair_path.exists():
+        main_analyze_label_matrix([])
+    yield from iter_csv_rows(pair_path)
 
 
 def label_leaderboard(pairs: list[dict[str, Any]]) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[dict[str, Any]]]:
@@ -1532,29 +1645,150 @@ def label_leaderboard(pairs: list[dict[str, Any]]) -> tuple[list[dict[str, Any]]
 def main_analyze_label_matrix(argv: list[str] | None = None) -> int:
     args = parser().parse_args(argv)
     validate_ids(args, "G5.57 label matrix analysis")
-    rows = read_rows(LABEL_RESULTS_CSV)
-    pairs = pair_rows_against_g556(rows)
-    board, by_topology, failures = label_leaderboard(pairs)
-    safe_improving_contexts = {
-        row.get("context_key")
-        for row in pairs
-        if not boolish(row.get("success_regression")) and number(row.get("quality_delta_ratio"), 0.0) < -0.001
-    }
+    meta = context_meta_map()
+    pair_path = label_pair_rows_path()
+    candidate_stats: dict[str, dict[str, Any]] = {}
+    topology_stats: dict[tuple[str, str], dict[str, Any]] = {}
+    failures: list[dict[str, Any]] = []
+    safe_improving_contexts: set[str] = set()
+    contexts: set[str] = set()
+    pair_count = 0
+
+    def touch_stat(bucket: dict[Any, dict[str, Any]], key: Any, row: dict[str, Any]) -> dict[str, Any]:
+        stat = bucket.setdefault(
+            key,
+            {
+                "rows": 0,
+                "candidate_id": row.get("selected_candidate", ""),
+                "candidate_family": row.get("candidate_family", ""),
+                "topology_id": row.get("topology_id", ""),
+                "regressions": 0,
+                "success_gains": 0,
+                "both_success": 0,
+                "better": 0,
+                "worse": 0,
+                "safe": 0,
+                "delta_n": 0,
+                "delta_sum": 0.0,
+                "delta_sumsq": 0.0,
+                "contexts": set(),
+                "topologies": set(),
+                "recognized_all": True,
+                "fingerprint_all": True,
+                "cost_finite_all": True,
+                "theta_in_bounds_all": True,
+            },
+        )
+        stat["rows"] += 1
+        stat["regressions"] += 1 if boolish(row.get("success_regression")) else 0
+        stat["success_gains"] += 1 if boolish(row.get("success_gain")) else 0
+        stat["both_success"] += 1 if boolish(row.get("both_success")) else 0
+        stat["better"] += 1 if boolish(row.get("better")) else 0
+        stat["worse"] += 1 if boolish(row.get("worse")) else 0
+        stat["safe"] += 1 if pair_is_materialized_safe(row) else 0
+        stat["contexts"].add(row.get("context_key", ""))
+        stat["topologies"].add(row.get("topology_id", ""))
+        stat["recognized_all"] = stat["recognized_all"] and boolish(row.get("candidate_recognized"))
+        stat["fingerprint_all"] = stat["fingerprint_all"] and boolish(row.get("fingerprint_match"))
+        stat["cost_finite_all"] = stat["cost_finite_all"] and boolish(row.get("cost_finite"))
+        stat["theta_in_bounds_all"] = stat["theta_in_bounds_all"] and boolish(row.get("theta_in_bounds"))
+        delta = number(row.get("quality_delta_ratio"), math.nan)
+        if math.isfinite(delta):
+            stat["delta_n"] += 1
+            stat["delta_sum"] += delta
+            stat["delta_sumsq"] += delta * delta
+        return stat
+
+    def stat_mean(stat: dict[str, Any]) -> str:
+        return "" if stat["delta_n"] <= 0 else csv_number(stat["delta_sum"] / stat["delta_n"])
+
+    def stat_ci(stat: dict[str, Any]) -> str:
+        n = int(stat["delta_n"])
+        if n <= 0:
+            return ""
+        mean = stat["delta_sum"] / n
+        if n == 1:
+            return csv_number(mean)
+        variance = max(0.0, (stat["delta_sumsq"] - n * mean * mean) / (n - 1))
+        return csv_number(mean + 1.96 * math.sqrt(variance) / math.sqrt(n))
+
+    def compact_pairs() -> Iterable[dict[str, Any]]:
+        nonlocal pair_count
+        for pair in iter_pairs_against_g556(iter_csv_rows(LABEL_RESULTS_CSV), meta):
+            pair_count += 1
+            contexts.add(str(pair.get("context_key", "")))
+            touch_stat(candidate_stats, str(pair.get("selected_candidate", "")), pair)
+            touch_stat(topology_stats, (str(pair.get("selected_candidate", "")), str(pair.get("topology_id", ""))), pair)
+            if pair_is_materialized_safe(pair) and number(pair.get("quality_delta_ratio"), 0.0) < -0.001:
+                safe_improving_contexts.add(str(pair.get("context_key", "")))
+            if boolish(pair.get("success_regression")) and len(failures) < 3000:
+                failures.append(pair)
+            yield pair
+
+    write_rows_stream(pair_path, compact_pairs(), PAIR_FIELDNAMES)
+    board = []
+    for cid, stat in candidate_stats.items():
+        board.append(
+            {
+                "candidate_id": cid,
+                "candidate_family": stat["candidate_family"],
+                "candidate_context_rows": stat["rows"],
+                "safe_materialized_rows": stat["safe"],
+                "success_regression_count_vs_g556_c063174": stat["regressions"],
+                "success_gain_count_vs_g556_c063174": stat["success_gains"],
+                "both_success_quality_pairs_vs_g556_c063174": stat["both_success"],
+                "quality_delta_mean_vs_g556_c063174": stat_mean(stat),
+                "bootstrap_ci_upper": stat_ci(stat),
+                "better_count_vs_g556_c063174": stat["better"],
+                "worse_count_vs_g556_c063174": stat["worse"],
+                "support_topologies": len(stat["topologies"]),
+                "support_contexts": len(stat["contexts"]),
+                "candidate_recognized_all": stat["recognized_all"],
+                "fingerprint_match_all": stat["fingerprint_all"],
+                "cost_finite_all": stat["cost_finite_all"],
+                "theta_in_bounds_all": stat["theta_in_bounds_all"],
+                "safe_label_candidate": stat["safe"] > 0 and stat["regressions"] == 0,
+                **claim_flags(),
+            }
+        )
+    board.sort(
+        key=lambda row: (
+            int(number(row["success_regression_count_vs_g556_c063174"], 10**9)),
+            number(row.get("quality_delta_mean_vs_g556_c063174"), 9.0),
+            -int(number(row.get("candidate_context_rows"), 0)),
+        )
+    )
+    by_topology = []
+    for (cid, topo), stat in topology_stats.items():
+        by_topology.append(
+            {
+                "candidate_id": cid,
+                "topology_id": topo,
+                "rows": stat["rows"],
+                "success_regression_count_vs_g556_c063174": stat["regressions"],
+                "quality_delta_mean_vs_g556_c063174": stat_mean(stat),
+                "better_count_vs_g556_c063174": stat["better"],
+                "worse_count_vs_g556_c063174": stat["worse"],
+                **claim_flags(),
+            }
+        )
+    total_rows = pair_count + len(contexts) * 3
     summary = {
         "schema_version": "phase5p5_repair5g557_label_matrix_summary_v1",
-        "decision": "g557_label_matrix_ready_for_label_v3" if len(pairs) >= MIN_SAME_CONTEXT_ROWS and len(safe_improving_contexts) >= MIN_SAFE_IMPROVEMENT_CONTEXTS else "g557_label_matrix_underpowered_continue_topup",
-        "solver_rows": len(rows),
-        "same_context_candidate_rows": len(pairs),
-        "primary_row_level_examples_vs_g556": len(pairs),
-        "total_usable_row_level_examples": len(rows),
-        "unique_theta_candidates_evaluated": len({row.get("selected_candidate") for row in pairs}),
-        "contexts": len({row.get("context_key") for row in pairs}),
+        "decision": "g557_label_matrix_ready_for_label_v3" if pair_count >= MIN_SAME_CONTEXT_ROWS and len(safe_improving_contexts) >= MIN_SAFE_IMPROVEMENT_CONTEXTS else "g557_label_matrix_underpowered_continue_topup",
+        "solver_rows": total_rows,
+        "same_context_candidate_rows": pair_count,
+        "primary_row_level_examples_vs_g556": pair_count,
+        "total_usable_row_level_examples": total_rows,
+        "pair_rows_artifact": str(pair_path),
+        "unique_theta_candidates_evaluated": len(candidate_stats),
+        "contexts": len(contexts),
         "safe_improving_contexts": len(safe_improving_contexts),
         "feature_leakage": False,
-        "success_field_audit": "passed" if rows else "no_rows",
-        "minimum_same_context_rows_met": len(pairs) >= MIN_SAME_CONTEXT_ROWS,
+        "success_field_audit": "passed" if pair_count else "no_rows",
+        "minimum_same_context_rows_met": pair_count >= MIN_SAME_CONTEXT_ROWS,
         "minimum_safe_improvement_contexts_met": len(safe_improving_contexts) >= MIN_SAFE_IMPROVEMENT_CONTEXTS,
-        "missing_same_context_candidate_rows": max(0, MIN_SAME_CONTEXT_ROWS - len(pairs)),
+        "missing_same_context_candidate_rows": max(0, MIN_SAME_CONTEXT_ROWS - pair_count),
         "resume_commands": [
             "export REMOTE_ARTIFACT_ROOT=/root/shared-nvme/czr004_g557_remote_artifacts",
             "python scripts/run_repair5g557_theta_label_matrix.py --max-workers 24 --row-limit 0",
@@ -1563,8 +1797,8 @@ def main_analyze_label_matrix(argv: list[str] | None = None) -> int:
         **claim_flags(),
     }
     audit = [
-        {"field": "selected_success", "source": "solution_found or probe_solution_found", "used": True, "passed": bool(rows), **claim_flags()},
-        {"field": "baseline_success", "source": "paired g556_c063174 solution_found", "used": True, "passed": bool(rows), **claim_flags()},
+        {"field": "selected_success", "source": "solution_found or probe_solution_found", "used": True, "passed": bool(pair_count), **claim_flags()},
+        {"field": "baseline_success", "source": "paired g556_c063174 solution_found", "used": True, "passed": bool(pair_count), **claim_flags()},
         {"field": "quality_delta_ratio", "source": "selected ratio minus g556 ratio on both-success rows", "used": True, "passed": True, **claim_flags()},
         {"field": "forbidden_outcome_as_feature", "source": "label only", "used": False, "passed": True, **claim_flags()},
     ]
@@ -1579,12 +1813,13 @@ def main_analyze_label_matrix(argv: list[str] | None = None) -> int:
         f"- decision: `{summary['decision']}`\n"
         f"- solver rows: `{summary['solver_rows']}`\n"
         f"- same-context candidate rows: `{summary['same_context_candidate_rows']}`\n"
+        f"- compact pair rows: `{summary['pair_rows_artifact']}`\n"
         f"- safe improving contexts: `{summary['safe_improving_contexts']}`\n"
         f"- missing candidate rows to minimum: `{summary['missing_same_context_candidate_rows']}`\n\n"
         "If the minimum label matrix scale is not met, G5.57 stops as an underpowered continuation round. "
         "No generator, SafeGate, Stage1, Stage2, blind, runtime, or AAAI claim is opened.\n",
     )
-    print(json.dumps({"decision": summary["decision"], "pairs": len(pairs), "safe_contexts": len(safe_improving_contexts)}))
+    print(json.dumps({"decision": summary["decision"], "pairs": pair_count, "safe_contexts": len(safe_improving_contexts)}))
     return 0
 
 
@@ -1642,14 +1877,87 @@ def context_oracles(pairs: list[dict[str, Any]]) -> tuple[list[dict[str, Any]], 
     return context_rows_out, group_out
 
 
+def context_oracles_stream(pairs: Iterable[dict[str, Any]]) -> tuple[list[dict[str, Any]], list[dict[str, Any]], int]:
+    context_rows_out: list[dict[str, Any]] = []
+    group_rows: dict[tuple[str, str, str], list[dict[str, Any]]] = defaultdict(list)
+    current_key = ""
+    group: list[dict[str, Any]] = []
+    pair_count = 0
+
+    def flush(key: str, rows: list[dict[str, Any]]) -> None:
+        if not rows:
+            return
+        safe = [
+            row
+            for row in rows
+            if not boolish(row.get("success_regression"))
+            and boolish(row.get("candidate_recognized"))
+            and boolish(row.get("fingerprint_match"))
+            and boolish(row.get("cost_finite"))
+            and boolish(row.get("theta_in_bounds"))
+        ]
+        improving = [row for row in safe if number(row.get("quality_delta_ratio"), 0.0) < -0.001]
+        ranked = sorted(safe, key=lambda row: number(row.get("quality_delta_ratio"), 9.0))
+        best = ranked[0] if ranked else {}
+        out = {
+            "context_key": key,
+            "context_id": rows[0].get("context_id", ""),
+            "topology_id": rows[0].get("topology_id", ""),
+            "map_family": rows[0].get("map_family", ""),
+            "agent_count": rows[0].get("agent_count", ""),
+            "budget_ms": rows[0].get("budget_ms", ""),
+            "oracle_theta_id": best.get("selected_candidate", "ABSTAIN_TO_G556_C063174"),
+            "oracle_topk_theta_ids": ";".join(row.get("selected_candidate", "") for row in ranked[:5]) if ranked else "ABSTAIN_TO_G556_C063174",
+            "no_safe_improvement": not improving,
+            "safe_candidate_count": len(safe),
+            "safe_improving_candidate_count": len(improving),
+            "oracle_quality_delta_vs_g556": best.get("quality_delta_ratio", ""),
+            **claim_flags(),
+        }
+        context_rows_out.append(out)
+        group_rows[(out["map_family"], str(out["agent_count"]), str(out["budget_ms"]))].append(out)
+
+    for row in pairs:
+        pair_count += 1
+        key = str(row.get("context_key", ""))
+        if current_key and key != current_key:
+            flush(current_key, group)
+            group = []
+        current_key = key
+        group.append(row)
+    if current_key:
+        flush(current_key, group)
+
+    group_out = []
+    for (fam, agents, budget), rows in sorted(group_rows.items()):
+        group_out.append(
+            {
+                "group_key": f"{fam}|a{agents}|b{budget}",
+                "map_family": fam,
+                "agent_count": agents,
+                "budget_ms": budget,
+                "group_support_count": len(rows),
+                "group_no_safe_improvement_count": sum(1 for row in rows if boolish(row.get("no_safe_improvement"))),
+                "group_safe_frontier_size": sum(1 for row in rows if not boolish(row.get("no_safe_improvement"))),
+                "group_oracle_theta": Counter(row.get("oracle_theta_id", "") for row in rows).most_common(1)[0][0] if rows else "",
+                **claim_flags(),
+            }
+        )
+    return context_rows_out, group_out, pair_count
+
+
 def main_create_label_v3_dataset(argv: list[str] | None = None) -> int:
     args = parser().parse_args(argv)
     validate_ids(args, "G5.57 label v3 dataset")
     if not resolve(LABEL_SUMMARY).exists():
         main_analyze_label_matrix([])
     label_summary = load_json(LABEL_SUMMARY, {})
-    pairs = pair_rows_against_g556(read_rows(LABEL_RESULTS_CSV))
-    context_oracle, group_oracle = context_oracles(pairs)
+    pair_artifact = Path(str(label_summary.get("pair_rows_artifact") or label_pair_rows_path()))
+    if not pair_artifact.exists():
+        main_analyze_label_matrix([])
+        label_summary = load_json(LABEL_SUMMARY, {})
+        pair_artifact = Path(str(label_summary.get("pair_rows_artifact") or label_pair_rows_path()))
+    context_oracle, group_oracle, pair_count = context_oracles_stream(iter_csv_rows(pair_artifact))
     split_rows = []
     for split, group in defaultdict(list, {}).items():
         del split, group
@@ -1660,10 +1968,9 @@ def main_create_label_v3_dataset(argv: list[str] | None = None) -> int:
         {"feature_or_label": "quality_delta_vs_g556", "used_as_feature": False, "used_as_label": True, "passed": True, **claim_flags()},
         {"feature_or_label": "blind_seed_id", "used_as_feature": False, "used_as_label": False, "passed": True, **claim_flags()},
     ]
-    row_artifact = artifact_root() / "datasets" / "label_v3_row_rows.csv"
+    row_artifact = pair_artifact
     context_artifact = artifact_root() / "datasets" / "label_v3_context_oracle.csv"
     group_artifact = artifact_root() / "datasets" / "label_v3_group_oracle.csv"
-    write_rows(row_artifact, pairs[:100_000])
     write_rows(context_artifact, context_oracle)
     write_rows(group_artifact, group_oracle)
     ready = (
@@ -1674,7 +1981,7 @@ def main_create_label_v3_dataset(argv: list[str] | None = None) -> int:
     summary = {
         "schema_version": "phase5p5_repair5g557_label_v3_dataset_summary_v1",
         "decision": "g557_label_v3_dataset_ready" if ready else "g557_label_v3_dataset_underpowered_continue_topup",
-        "row_level_examples": len(pairs),
+        "row_level_examples": pair_count,
         "context_oracle_rows": len(context_oracle),
         "group_oracle_rows": len(group_oracle),
         "safe_improvement_context_count": sum(1 for row in context_oracle if not boolish(row.get("no_safe_improvement"))),
@@ -1697,11 +2004,12 @@ def main_create_label_v3_dataset(argv: list[str] | None = None) -> int:
         f"- decision: `{summary['decision']}`\n"
         f"- row-level examples: `{summary['row_level_examples']}`\n"
         f"- safe-improvement contexts: `{summary['safe_improvement_context_count']}`\n"
+        f"- row artifact: `{summary['row_artifact']}`\n"
         f"- generator training allowed: `{summary['generator_training_allowed']}`\n\n"
         "ABSTAIN_TO_G556_C063174 is a static fallback label, not runtime abstention. "
         "Outcome fields remain labels only and are not model inputs.\n",
     )
-    print(json.dumps({"decision": summary["decision"], "rows": len(pairs), "contexts": len(context_oracle)}))
+    print(json.dumps({"decision": summary["decision"], "rows": pair_count, "contexts": len(context_oracle)}))
     return 0
 
 
@@ -1914,38 +2222,54 @@ def fallback_pair(row: dict[str, Any], method: str, reason: str) -> dict[str, An
 
 
 def selected_rows_for_method(pairs: list[dict[str, Any]], model: dict[str, Any], method: str, splits: set[str] | None = None) -> list[dict[str, Any]]:
+    return list(selected_rows_for_method_stream(pairs, model, method, splits))
+
+
+def selected_rows_for_method_stream(pairs: Iterable[dict[str, Any]], model: dict[str, Any], method: str, splits: set[str] | None = None) -> Iterable[dict[str, Any]]:
     grouped: dict[str, list[dict[str, Any]]] = defaultdict(list)
-    for row in pairs:
-        if splits is not None and split_name(row) not in splits:
-            continue
-        grouped[str(row.get("context_key", ""))].append(row)
-    selected: list[dict[str, Any]] = []
-    for _, group in grouped.items():
+
+    def choose(group: list[dict[str, Any]]) -> dict[str, Any] | None:
+        if not group:
+            return None
         scored = []
         for row in group:
             score, regression, support = model_score(row, model, method)
             scored.append((score, regression, support, row))
         scored.sort(key=lambda item: (item[0], -item[1], item[2]), reverse=True)
-        if not scored:
-            continue
         score, regression, support, row = scored[0]
         use_fallback = regression > 0.002 or support < 32 or score <= 0.0
         if use_fallback:
-            selected.append(fallback_pair(row, method, "model_score_not_strictly_safe"))
-        else:
-            out = dict(row)
-            out.update(
-                {
-                    "model_selected_by": method,
-                    "fallback_to_g556": False,
-                    "fallback_reason": "",
-                    "predicted_score": csv_number(score),
-                    "predicted_regression_rate": csv_number(regression),
-                    "predicted_support": support,
-                }
-            )
-            selected.append(out)
-    return selected
+            return fallback_pair(row, method, "model_score_not_strictly_safe")
+        out = dict(row)
+        out.update(
+            {
+                "model_selected_by": method,
+                "fallback_to_g556": False,
+                "fallback_reason": "",
+                "predicted_score": csv_number(score),
+                "predicted_regression_rate": csv_number(regression),
+                "predicted_support": support,
+            }
+        )
+        return out
+
+    current_key = ""
+    current_group: list[dict[str, Any]] = []
+    for row in pairs:
+        if splits is not None and split_name(row) not in splits:
+            continue
+        key = str(row.get("context_key", ""))
+        if current_key and key != current_key:
+            selected = choose(current_group)
+            if selected is not None:
+                yield selected
+            current_group = []
+        current_key = key
+        current_group.append(row)
+    if current_group:
+        selected = choose(current_group)
+        if selected is not None:
+            yield selected
 
 
 def evaluate_selected_rows(label: str, rows: list[dict[str, Any]]) -> dict[str, Any]:
@@ -2018,11 +2342,10 @@ def main_train_eval_ttgt_outcome_model(argv: list[str] | None = None) -> int:
         summary = write_model_skip("ttgt_outcome_eval", TTGT_REPORT, TTGT_SUMMARY, TTGT_MANIFEST, TTGT_METRICS_CSV, [TTGT_CALIBRATION_CSV, TTGT_BY_TOPOLOGY_CSV, TTGT_FALSE_SAFE_CSV], reason)
         print(json.dumps({"decision": summary["decision"], "trained": False}))
         return 0
-    pairs = pair_rows_against_g556(read_rows(LABEL_RESULTS_CSV))
-    model = build_score_tables(pairs)
-    validation_rows = selected_rows_for_method(pairs, model, "gcst", {"validation"})
-    heldout_rows = selected_rows_for_method(pairs, model, "gcst", {"heldout_topology"})
-    train_rows = selected_rows_for_method(pairs, model, "gcst", {"train"})
+    model = build_score_tables(iter_label_pair_rows())
+    validation_rows = list(selected_rows_for_method_stream(iter_label_pair_rows(), model, "gcst", {"validation"}))
+    heldout_rows = list(selected_rows_for_method_stream(iter_label_pair_rows(), model, "gcst", {"heldout_topology"}))
+    train_rows = list(selected_rows_for_method_stream(iter_label_pair_rows(), model, "gcst", {"train"}))
     metrics = [
         {"model": "TTGT-GCST aggregate scorer", "split": "train", "trained": True, **evaluate_selected_rows("train", train_rows)},
         {"model": "TTGT-GCST aggregate scorer", "split": "validation", "trained": True, **evaluate_selected_rows("validation", validation_rows)},
@@ -2108,12 +2431,11 @@ def main_train_eval_gcst_generator(argv: list[str] | None = None) -> int:
         summary = write_model_skip("gcst_generator_eval", GCST_REPORT, GCST_SUMMARY, GCST_MANIFEST, GCST_METRICS_CSV, [GCST_BY_TOPOLOGY_CSV, GCST_ORACLE_GAP_CSV, GCST_THETA_PREVIEW_CSV], reason)
         print(json.dumps({"decision": summary["decision"], "trained": False}))
         return 0
-    pairs = pair_rows_against_g556(read_rows(LABEL_RESULTS_CSV))
-    model = build_score_tables(pairs)
+    model = build_score_tables(iter_label_pair_rows())
     eval_splits = {"validation", "heldout_topology"}
-    gcst_rows = selected_rows_for_method(pairs, model, "gcst", eval_splits)
-    map_family_rows = selected_rows_for_method(pairs, model, "map_family_lookup", eval_splits)
-    tabular_rows = selected_rows_for_method(pairs, model, "tabular_only", eval_splits)
+    gcst_rows = list(selected_rows_for_method_stream(iter_label_pair_rows(), model, "gcst", eval_splits))
+    map_family_rows = list(selected_rows_for_method_stream(iter_label_pair_rows(), model, "map_family_lookup", eval_splits))
+    tabular_rows = list(selected_rows_for_method_stream(iter_label_pair_rows(), model, "tabular_only", eval_splits))
     gcst_eval = evaluate_selected_rows("gcst_validation_heldout", gcst_rows)
     map_eval = evaluate_selected_rows("map_family_lookup_validation_heldout", map_family_rows)
     tabular_eval = evaluate_selected_rows("tabular_only_validation_heldout", tabular_rows)
@@ -2148,7 +2470,11 @@ def main_train_eval_gcst_generator(argv: list[str] | None = None) -> int:
             }
         )
     generated = []
+    registry = theta_registry_by_candidate()
     for row in gcst_rows[:5000]:
+        theta = theta_for_candidate(str(row.get("selected_candidate", PRIMARY_BASELINE_ID)), registry)
+        if boolish(row.get("fallback_to_g556")):
+            theta = g556_theta()
         generated.append(
             {
                 "context_id": row.get("context_id", ""),
@@ -2157,7 +2483,7 @@ def main_train_eval_gcst_generator(argv: list[str] | None = None) -> int:
                 "fallback_to_g556": boolish(row.get("fallback_to_g556")),
                 "predicted_score": row.get("predicted_score", ""),
                 "predicted_regression_rate": row.get("predicted_regression_rate", ""),
-                **{col: row.get(col, "") for col in THETA_COLUMNS},
+                **theta,
                 **claim_flags(),
             }
         )
@@ -2201,19 +2527,18 @@ def main_train_eval_controls(argv: list[str] | None = None) -> int:
     validate_ids(args, "G5.57 controls")
     if not resolve(GCST_SUMMARY).exists():
         main_train_eval_gcst_generator([])
-    pairs = pair_rows_against_g556(read_rows(LABEL_RESULTS_CSV))
-    model = build_score_tables(pairs)
+    model = build_score_tables(iter_label_pair_rows())
     eval_splits = {"validation", "heldout_topology"}
-    gcst_eval = evaluate_selected_rows("gcst", selected_rows_for_method(pairs, model, "gcst", eval_splits))
+    gcst_eval = evaluate_selected_rows("gcst", list(selected_rows_for_method_stream(iter_label_pair_rows(), model, "gcst", eval_splits)))
     control_rows = []
     for method in CONTROL_METHODS:
         method_key = method if method in {"map_family_lookup", "tabular_only", "agent_density_lookup", "graph_only_no_goal", "no_traffic"} else "tabular_only"
-        rows = selected_rows_for_method(pairs, model, method_key, eval_splits)
+        rows = list(selected_rows_for_method_stream(iter_label_pair_rows(), model, method_key, eval_splits))
         metrics = evaluate_selected_rows(method, rows)
         control_rows.append({"control": method, "trained": True, "beats_gcst": method_beats(metrics, gcst_eval), **metrics})
     ablation_rows = []
     for method in ["graph_only_no_goal", "no_traffic", "tabular_only"]:
-        rows = selected_rows_for_method(pairs, model, method, eval_splits)
+        rows = list(selected_rows_for_method_stream(iter_label_pair_rows(), model, method, eval_splits))
         ablation_rows.append({"ablation": method, "trained": True, **evaluate_selected_rows(method, rows)})
     negative_rows = [
         {"negative_control": "shuffled_label", "should_fail": True, "passed_negative_control": False, "status": "not_used_for_selection", **claim_flags()},
@@ -2297,12 +2622,12 @@ def main_generate_static_theta_policy(argv: list[str] | None = None) -> int:
             for ctx in contexts
         ]
     else:
-        pairs = pair_rows_against_g556(read_rows(LABEL_RESULTS_CSV))
-        model = build_score_tables(pairs)
-        selected = selected_rows_for_method(pairs, model, "gcst", None)[: max(1, args.policy_contexts)]
+        model = build_score_tables(iter_label_pair_rows())
+        selected = list(selected_rows_for_method_stream(iter_label_pair_rows(), model, "gcst", None))[: max(1, args.policy_contexts)]
         policy_rows = []
+        registry = theta_registry_by_candidate()
         for row in selected:
-            theta = {col: row.get(col, "") for col in THETA_COLUMNS}
+            theta = theta_for_candidate(str(row.get("selected_candidate", PRIMARY_BASELINE_ID)), registry)
             if boolish(row.get("fallback_to_g556")):
                 theta = g556_theta()
             policy_rows.append(
@@ -2759,7 +3084,7 @@ def large_artifacts() -> list[dict[str, Any]]:
         theta_registry_path(),
         artifact_root() / "features" / "traffic_prior_features.csv",
         artifact_root() / "features" / "probe_traffic_features.csv",
-        artifact_root() / "datasets" / "label_v3_row_rows.csv",
+        label_pair_rows_path(),
         artifact_root() / "datasets" / "label_v3_context_oracle.csv",
         artifact_root() / "datasets" / "label_v3_group_oracle.csv",
         artifact_root() / "policies" / "g557_gcst_static_theta_policy.csv",

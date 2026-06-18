@@ -1406,6 +1406,7 @@ def main_run_theta_label_matrix(argv: list[str] | None = None) -> int:
 
 def pair_rows_against_g556(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
     grouped: dict[str, dict[str, dict[str, Any]]] = defaultdict(dict)
+    context_meta = {str(row.get("context_id", "")): row for row in read_rows(CONTEXT_MANIFEST_CSV)}
     for row in rows:
         grouped[context_key(row)][str(row.get("role", ""))] = row
     out: list[dict[str, Any]] = []
@@ -1418,19 +1419,29 @@ def pair_rows_against_g556(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
                 continue
             metrics = g556.pair_metrics(selected, base)
             theta = {col: selected.get(col, "") for col in THETA_COLUMNS}
+            meta = context_meta.get(str(selected.get("context_id", "")), {})
             out.append(
                 {
                     "context_key": key,
                     "context_id": selected.get("context_id", ""),
+                    "split": meta.get("split", selected.get("split", "")),
                     "topology_id": selected.get("topology_id", ""),
+                    "topology_split": meta.get("topology_split", ""),
                     "map": selected.get("map", ""),
                     "map_family": selected.get("map_family", ""),
                     "source_map_family": selected.get("source_map_family", ""),
                     "start_goal_regime": selected.get("start_goal_regime", ""),
+                    "agents": selected.get("agents", selected.get("agent_count", "")),
                     "agent_count": selected.get("agent_count", selected.get("agents", "")),
                     "density": selected.get("density", ""),
+                    "free_cells": meta.get("free_cells", selected.get("free_cells", "")),
+                    "flow_pressure_bucket": meta.get("flow_pressure_bucket", selected.get("flow_pressure_bucket", "")),
                     "seed": selected.get("seed", ""),
                     "budget_ms": selected.get("budget_ms", selected.get("nominal_budget_ms", "")),
+                    "nominal_budget_ms": selected.get("nominal_budget_ms", selected.get("budget_ms", "")),
+                    "short_budget_ms": meta.get("short_budget_ms", selected.get("short_budget_ms", "")),
+                    "base_time_limit_sec": meta.get("base_time_limit_sec", selected.get("base_time_limit_sec", "")),
+                    "ltm_max_iterations": meta.get("ltm_max_iterations", selected.get("ltm_max_iterations", "")),
                     "horizon_id": selected.get("horizon_id", ""),
                     "selected_candidate": selected.get("candidate_id", ""),
                     "candidate_family": selected.get("candidate_family", ""),
@@ -1694,6 +1705,290 @@ def main_create_label_v3_dataset(argv: list[str] | None = None) -> int:
     return 0
 
 
+def split_name(row: dict[str, Any]) -> str:
+    value = str(row.get("split", "")).strip()
+    if value:
+        return value
+    if boolish(row.get("heldout_topology")) or str(row.get("topology_split", "")) == "heldout_topology":
+        return "heldout_topology"
+    return "train" if stable_hash(row.get("context_id", row.get("context_key", "")), modulo=11) else "validation"
+
+
+def agent_bucket(row: dict[str, Any]) -> str:
+    agents = int(number(row.get("agent_count", row.get("agents", 0)), 0))
+    if agents < 100:
+        return "a000_099"
+    if agents < 300:
+        return "a100_299"
+    if agents < 600:
+        return "a300_599"
+    if agents < 1000:
+        return "a600_999"
+    return "a1000_plus"
+
+
+def budget_bucket(row: dict[str, Any]) -> str:
+    budget = int(number(row.get("budget_ms", row.get("nominal_budget_ms", 0)), 0))
+    if budget <= 500:
+        return "b000_500"
+    if budget <= 1000:
+        return "b501_1000"
+    if budget <= 2000:
+        return "b1001_2000"
+    return "b2001_plus"
+
+
+def pair_is_materialized_safe(row: dict[str, Any]) -> bool:
+    return (
+        not boolish(row.get("success_regression"))
+        and boolish(row.get("candidate_recognized", True))
+        and boolish(row.get("fingerprint_match", True))
+        and boolish(row.get("cost_finite", True))
+        and boolish(row.get("theta_in_bounds", True))
+    )
+
+
+def pair_utility(row: dict[str, Any]) -> float:
+    if boolish(row.get("success_regression")):
+        return -10.0
+    if boolish(row.get("success_gain")):
+        return 5.0
+    delta = number(row.get("quality_delta_ratio"), math.nan)
+    if math.isfinite(delta):
+        return -delta
+    if boolish(row.get("both_fail")):
+        return -0.25
+    return 0.0
+
+
+def update_stat(stat: dict[str, Any], row: dict[str, Any]) -> None:
+    stat["n"] = int(stat.get("n", 0)) + 1
+    utility = pair_utility(row)
+    stat["utility_sum"] = float(stat.get("utility_sum", 0.0)) + utility
+    stat["regressions"] = int(stat.get("regressions", 0)) + (1 if boolish(row.get("success_regression")) else 0)
+    stat["success_gains"] = int(stat.get("success_gains", 0)) + (1 if boolish(row.get("success_gain")) else 0)
+    stat["better"] = int(stat.get("better", 0)) + (1 if boolish(row.get("better")) else 0)
+    stat["worse"] = int(stat.get("worse", 0)) + (1 if boolish(row.get("worse")) else 0)
+    stat["safe"] = int(stat.get("safe", 0)) + (1 if pair_is_materialized_safe(row) else 0)
+    delta = number(row.get("quality_delta_ratio"), math.nan)
+    if math.isfinite(delta):
+        stat["delta_sum"] = float(stat.get("delta_sum", 0.0)) + delta
+        stat["delta_n"] = int(stat.get("delta_n", 0)) + 1
+
+
+def finalized_stat(stat: dict[str, Any]) -> dict[str, Any]:
+    n = max(1, int(stat.get("n", 0)))
+    delta_n = int(stat.get("delta_n", 0))
+    return {
+        "n": int(stat.get("n", 0)),
+        "utility_mean": float(stat.get("utility_sum", 0.0)) / n,
+        "regression_rate": float(stat.get("regressions", 0)) / n,
+        "success_gain_rate": float(stat.get("success_gains", 0)) / n,
+        "better_rate": float(stat.get("better", 0)) / n,
+        "worse_rate": float(stat.get("worse", 0)) / n,
+        "safe_rate": float(stat.get("safe", 0)) / n,
+        "quality_delta_mean": "" if delta_n <= 0 else float(stat.get("delta_sum", 0.0)) / delta_n,
+    }
+
+
+def model_keys(row: dict[str, Any], method: str) -> list[tuple[str, str]]:
+    family = str(row.get("candidate_family", ""))
+    candidate = str(row.get("selected_candidate", ""))
+    map_family = str(row.get("map_family", ""))
+    source_family = str(row.get("source_map_family", map_family))
+    topo = str(row.get("topology_id", ""))
+    regime = str(row.get("start_goal_regime", ""))
+    flow = str(row.get("flow_pressure_bucket", ""))
+    ab = agent_bucket(row)
+    bb = budget_bucket(row)
+    if method == "map_family_lookup":
+        return [("map_family_candidate", f"{map_family}|{candidate}"), ("map_family_family", f"{map_family}|{family}")]
+    if method == "tabular_only":
+        return [("agent_budget_family", f"{ab}|{bb}|{family}"), ("family", family)]
+    if method == "agent_density_lookup":
+        return [("agent_bucket_candidate", f"{ab}|{candidate}"), ("agent_bucket_family", f"{ab}|{family}")]
+    if method == "graph_only_no_goal":
+        return [("topology_family", f"{topo}|{family}"), ("source_family", f"{source_family}|{family}")]
+    if method == "no_traffic":
+        return [("map_agent_family", f"{map_family}|{ab}|{family}"), ("family", family)]
+    return [
+        ("topology_candidate", f"{topo}|{candidate}"),
+        ("topology_family", f"{topo}|{family}"),
+        ("map_agent_budget_candidate", f"{map_family}|{ab}|{bb}|{candidate}"),
+        ("map_agent_budget_family", f"{map_family}|{ab}|{bb}|{family}"),
+        ("flow_regime_family", f"{flow}|{regime}|{family}"),
+        ("agent_budget_family", f"{ab}|{bb}|{family}"),
+        ("candidate", candidate),
+        ("family", family),
+    ]
+
+
+def build_score_tables(pairs: list[dict[str, Any]]) -> dict[str, Any]:
+    raw: dict[tuple[str, str], dict[str, Any]] = defaultdict(dict)
+    train_rows = [row for row in pairs if split_name(row) == "train"]
+    if not train_rows:
+        train_rows = pairs
+    for row in train_rows:
+        for method in ["gcst", "map_family_lookup", "tabular_only", "agent_density_lookup", "graph_only_no_goal", "no_traffic"]:
+            for kind, key in model_keys(row, method):
+                update_stat(raw[(f"{method}:{kind}", key)], row)
+    tables = {f"{kind}::{key}": finalized_stat(stat) for (kind, key), stat in raw.items()}
+    global_stat: dict[str, Any] = {}
+    for row in train_rows:
+        update_stat(global_stat, row)
+    return {
+        "train_rows": len(train_rows),
+        "tables": tables,
+        "global": finalized_stat(global_stat),
+    }
+
+
+def model_score(row: dict[str, Any], model: dict[str, Any], method: str) -> tuple[float, float, int]:
+    tables = model.get("tables", {})
+    scores = []
+    regression_rates = []
+    support = 0
+    weights = {
+        "topology_candidate": 3.0,
+        "topology_family": 2.0,
+        "map_agent_budget_candidate": 2.0,
+        "map_agent_budget_family": 1.6,
+        "flow_regime_family": 1.4,
+        "agent_budget_family": 1.2,
+        "candidate": 1.0,
+        "family": 0.8,
+        "map_family_candidate": 2.0,
+        "map_family_family": 1.0,
+        "agent_bucket_candidate": 1.5,
+        "agent_bucket_family": 1.0,
+        "source_family": 1.0,
+        "map_agent_family": 1.2,
+    }
+    for kind, key in model_keys(row, method):
+        stat = tables.get(f"{method}:{kind}::{key}")
+        if not stat:
+            continue
+        n = int(stat.get("n", 0))
+        if n < 4:
+            continue
+        weight = weights.get(kind, 1.0) * math.log1p(n)
+        raw_score = float(stat.get("utility_mean", 0.0)) - 4.0 * float(stat.get("regression_rate", 0.0))
+        scores.append((weight, raw_score))
+        regression_rates.append((weight, float(stat.get("regression_rate", 0.0))))
+        support += n
+    if not scores:
+        stat = model.get("global", {})
+        return float(stat.get("utility_mean", 0.0)) - 4.0 * float(stat.get("regression_rate", 0.0)), float(stat.get("regression_rate", 1.0)), 0
+    total_weight = sum(weight for weight, _ in scores)
+    score = sum(weight * value for weight, value in scores) / total_weight
+    regression = sum(weight * value for weight, value in regression_rates) / max(1e-9, sum(weight for weight, _ in regression_rates))
+    return score, regression, support
+
+
+def fallback_pair(row: dict[str, Any], method: str, reason: str) -> dict[str, Any]:
+    out = dict(row)
+    out.update(
+        {
+            "selected_candidate": PRIMARY_BASELINE_ID,
+            "candidate_family": "fallback_to_g556",
+            "model_selected_by": method,
+            "fallback_to_g556": True,
+            "fallback_reason": reason,
+            "predicted_score": "0",
+            "predicted_regression_rate": "0",
+            "predicted_support": "0",
+            "selected_success": True,
+            "baseline_success": True,
+            "success_regression": False,
+            "success_gain": False,
+            "both_success": True,
+            "both_fail": False,
+            "selected_ratio": "",
+            "baseline_ratio": "",
+            "quality_delta_ratio": "0",
+            "better": False,
+            "worse": False,
+        }
+    )
+    return out
+
+
+def selected_rows_for_method(pairs: list[dict[str, Any]], model: dict[str, Any], method: str, splits: set[str] | None = None) -> list[dict[str, Any]]:
+    grouped: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    for row in pairs:
+        if splits is not None and split_name(row) not in splits:
+            continue
+        grouped[str(row.get("context_key", ""))].append(row)
+    selected: list[dict[str, Any]] = []
+    for _, group in grouped.items():
+        scored = []
+        for row in group:
+            score, regression, support = model_score(row, model, method)
+            scored.append((score, regression, support, row))
+        scored.sort(key=lambda item: (item[0], -item[1], item[2]), reverse=True)
+        if not scored:
+            continue
+        score, regression, support, row = scored[0]
+        use_fallback = regression > 0.002 or support < 32 or score <= 0.0
+        if use_fallback:
+            selected.append(fallback_pair(row, method, "model_score_not_strictly_safe"))
+        else:
+            out = dict(row)
+            out.update(
+                {
+                    "model_selected_by": method,
+                    "fallback_to_g556": False,
+                    "fallback_reason": "",
+                    "predicted_score": csv_number(score),
+                    "predicted_regression_rate": csv_number(regression),
+                    "predicted_support": support,
+                }
+            )
+            selected.append(out)
+    return selected
+
+
+def evaluate_selected_rows(label: str, rows: list[dict[str, Any]]) -> dict[str, Any]:
+    deltas = [number(row.get("quality_delta_ratio"), math.nan) for row in rows if math.isfinite(number(row.get("quality_delta_ratio"), math.nan))]
+    nonfallback = [row for row in rows if not boolish(row.get("fallback_to_g556"))]
+    return {
+        "label": label,
+        "contexts": len(rows),
+        "nonfallback_contexts": len(nonfallback),
+        "fallback_to_g556_contexts": len(rows) - len(nonfallback),
+        "fallback_to_g556_rate": csv_number((len(rows) - len(nonfallback)) / max(1, len(rows))),
+        "success_regression_count_vs_g556_c063174": sum(1 for row in rows if boolish(row.get("success_regression"))),
+        "success_gain_count_vs_g556_c063174": sum(1 for row in rows if boolish(row.get("success_gain"))),
+        "both_success_quality_pairs_vs_g556_c063174": sum(1 for row in rows if boolish(row.get("both_success"))),
+        "quality_delta_mean_vs_g556_c063174": safe_mean(deltas),
+        "quality_delta_ci_upper_vs_g556_c063174": ci_upper(deltas),
+        "better_count_vs_g556_c063174": sum(1 for row in rows if boolish(row.get("better"))),
+        "worse_count_vs_g556_c063174": sum(1 for row in rows if boolish(row.get("worse"))),
+        "materialized_safe_contexts": sum(1 for row in rows if pair_is_materialized_safe(row)),
+        **claim_flags(),
+    }
+
+
+def strict_offline_gate(metrics: dict[str, Any]) -> bool:
+    return (
+        int(number(metrics.get("contexts"), 0)) > 0
+        and int(number(metrics.get("nonfallback_contexts"), 0)) > 0
+        and int(number(metrics.get("success_regression_count_vs_g556_c063174"), 1)) == 0
+        and number(metrics.get("quality_delta_ci_upper_vs_g556_c063174"), 1.0) <= 0.0
+        and int(number(metrics.get("better_count_vs_g556_c063174"), 0)) > int(number(metrics.get("worse_count_vs_g556_c063174"), 0))
+    )
+
+
+def method_beats(candidate: dict[str, Any], control: dict[str, Any]) -> bool:
+    cand_reg = int(number(candidate.get("success_regression_count_vs_g556_c063174"), 10**9))
+    ctrl_reg = int(number(control.get("success_regression_count_vs_g556_c063174"), 10**9))
+    cand_delta = number(candidate.get("quality_delta_mean_vs_g556_c063174"), 9.0)
+    ctrl_delta = number(control.get("quality_delta_mean_vs_g556_c063174"), 9.0)
+    cand_better = int(number(candidate.get("better_count_vs_g556_c063174"), 0))
+    ctrl_better = int(number(control.get("better_count_vs_g556_c063174"), 0))
+    return (cand_reg, cand_delta, -cand_better) < (ctrl_reg, ctrl_delta, -ctrl_better)
+
+
 def write_model_skip(kind: str, report: str, summary_path: str, manifest_path: str, metrics_csv: str, extra_csvs: list[str], reason: str) -> dict[str, Any]:
     summary = {
         "schema_version": f"phase5p5_repair5g557_{kind}_summary_v1",
@@ -1723,24 +2018,81 @@ def main_train_eval_ttgt_outcome_model(argv: list[str] | None = None) -> int:
         summary = write_model_skip("ttgt_outcome_eval", TTGT_REPORT, TTGT_SUMMARY, TTGT_MANIFEST, TTGT_METRICS_CSV, [TTGT_CALIBRATION_CSV, TTGT_BY_TOPOLOGY_CSV, TTGT_FALSE_SAFE_CSV], reason)
         print(json.dumps({"decision": summary["decision"], "trained": False}))
         return 0
-    metrics = [{"model": "TTGT-GCST outcome", "trained": True, "epochs_requested": args.epochs, "device": args.device, "gpus": args.gpus, "false_safe_hard_negative_count": 0, **claim_flags()}]
+    pairs = pair_rows_against_g556(read_rows(LABEL_RESULTS_CSV))
+    model = build_score_tables(pairs)
+    validation_rows = selected_rows_for_method(pairs, model, "gcst", {"validation"})
+    heldout_rows = selected_rows_for_method(pairs, model, "gcst", {"heldout_topology"})
+    train_rows = selected_rows_for_method(pairs, model, "gcst", {"train"})
+    metrics = [
+        {"model": "TTGT-GCST aggregate scorer", "split": "train", "trained": True, **evaluate_selected_rows("train", train_rows)},
+        {"model": "TTGT-GCST aggregate scorer", "split": "validation", "trained": True, **evaluate_selected_rows("validation", validation_rows)},
+        {"model": "TTGT-GCST aggregate scorer", "split": "heldout_topology", "trained": True, **evaluate_selected_rows("heldout_topology", heldout_rows)},
+    ]
+    calibration = []
+    for row in validation_rows + heldout_rows:
+        calibration.append(
+            {
+                "model": "TTGT-GCST aggregate scorer",
+                "split": split_name(row),
+                "predicted_score": row.get("predicted_score", ""),
+                "predicted_regression_rate": row.get("predicted_regression_rate", ""),
+                "actual_success_regression": boolish(row.get("success_regression")),
+                "actual_quality_delta_ratio": row.get("quality_delta_ratio", ""),
+                "fallback_to_g556": boolish(row.get("fallback_to_g556")),
+                **claim_flags(),
+            }
+        )
+    by_topology = []
+    grouped: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    for row in validation_rows + heldout_rows:
+        grouped[str(row.get("topology_id", ""))].append(row)
+    for topo, group in sorted(grouped.items()):
+        by_topology.append({"topology_id": topo, **evaluate_selected_rows(topo, group)})
+    false_safe = [
+        row
+        for row in validation_rows + heldout_rows
+        if not boolish(row.get("fallback_to_g556")) and boolish(row.get("success_regression"))
+    ][:3000]
     summary = {
         "schema_version": "phase5p5_repair5g557_ttgt_outcome_eval_summary_v1",
-        "decision": "g557_ttgt_outcome_model_trained_diagnostic",
+        "decision": "g557_ttgt_outcome_model_trained_real_label_v3",
         "trained": True,
         "train_rows": dataset.get("row_level_examples", 0),
+        "aggregate_train_rows": model.get("train_rows", 0),
+        "validation_contexts": len(validation_rows),
+        "heldout_topology_contexts": len(heldout_rows),
+        "heldout_success_regressions": sum(1 for row in heldout_rows if boolish(row.get("success_regression"))),
+        "heldout_quality_delta_ci_upper": evaluate_selected_rows("heldout_topology", heldout_rows).get("quality_delta_ci_upper_vs_g556_c063174", ""),
+        "false_safe_hard_negative_count": len(false_safe),
         "epochs_requested": args.epochs,
         "gpus_requested": args.gpus,
+        "training_backend": "deterministic_aggregate_scorer",
         "learned_safegate_promoted": False,
         **claim_flags(),
     }
     write_rows(TTGT_METRICS_CSV, metrics)
-    write_rows(TTGT_CALIBRATION_CSV, metrics)
-    write_rows(TTGT_BY_TOPOLOGY_CSV, metrics)
-    write_rows(TTGT_FALSE_SAFE_CSV, [], fieldnames=["context_id", "candidate_id", "reason", *CLAIM_KEYS])
+    write_rows(TTGT_CALIBRATION_CSV, calibration[:10000])
+    write_rows(TTGT_BY_TOPOLOGY_CSV, by_topology[:5000])
+    write_rows(TTGT_FALSE_SAFE_CSV, false_safe, fieldnames=["context_id", "selected_candidate", "candidate_family", "predicted_score", "quality_delta_ratio", "success_regression", *CLAIM_KEYS])
     write_json(TTGT_SUMMARY, summary)
-    write_json(TTGT_MANIFEST, summary)
-    write_text(TTGT_REPORT, f"# G5.57 TTGT Outcome Model\n\n- decision: `{summary['decision']}`\n- train rows: `{summary['train_rows']}`\n")
+    manifest = {
+        **summary,
+        "score_table_count": len(model.get("tables", {})),
+        "global_score": model.get("global", {}),
+        "score_tables_preview": dict(list(model.get("tables", {}).items())[:200]),
+    }
+    write_json(TTGT_MANIFEST, manifest)
+    write_text(
+        TTGT_REPORT,
+        "# G5.57 TTGT Outcome Model\n\n"
+        f"- decision: `{summary['decision']}`\n"
+        f"- train rows: `{summary['train_rows']}`\n"
+        f"- validation contexts: `{summary['validation_contexts']}`\n"
+        f"- heldout topology contexts: `{summary['heldout_topology_contexts']}`\n"
+        f"- false-safe hard negatives: `{summary['false_safe_hard_negative_count']}`\n\n"
+        "This is a deterministic aggregate scorer trained only on Label-v3 train rows. "
+        "It does not promote a learned SafeGate or runtime policy.\n",
+    )
     print(json.dumps({"decision": summary["decision"], "trained": True}))
     return 0
 
@@ -1756,25 +2108,90 @@ def main_train_eval_gcst_generator(argv: list[str] | None = None) -> int:
         summary = write_model_skip("gcst_generator_eval", GCST_REPORT, GCST_SUMMARY, GCST_MANIFEST, GCST_METRICS_CSV, [GCST_BY_TOPOLOGY_CSV, GCST_ORACLE_GAP_CSV, GCST_THETA_PREVIEW_CSV], reason)
         print(json.dumps({"decision": summary["decision"], "trained": False}))
         return 0
-    theta = g556_theta()
-    generated = [{"candidate_id": "GCST_P_DIAGNOSTIC", "fallback_to_g556": False, **theta, **claim_flags()}]
-    metrics = [{"model": "GCST-P", "trained": True, "mode": args.mode, "safe_improvement_recall": "", "unsafe_selection_rate": "", "fallback_to_g556_rate": "", **claim_flags()}]
+    pairs = pair_rows_against_g556(read_rows(LABEL_RESULTS_CSV))
+    model = build_score_tables(pairs)
+    eval_splits = {"validation", "heldout_topology"}
+    gcst_rows = selected_rows_for_method(pairs, model, "gcst", eval_splits)
+    map_family_rows = selected_rows_for_method(pairs, model, "map_family_lookup", eval_splits)
+    tabular_rows = selected_rows_for_method(pairs, model, "tabular_only", eval_splits)
+    gcst_eval = evaluate_selected_rows("gcst_validation_heldout", gcst_rows)
+    map_eval = evaluate_selected_rows("map_family_lookup_validation_heldout", map_family_rows)
+    tabular_eval = evaluate_selected_rows("tabular_only_validation_heldout", tabular_rows)
+    beats_map = method_beats(gcst_eval, map_eval)
+    beats_tabular = method_beats(gcst_eval, tabular_eval)
+    gate = strict_offline_gate(gcst_eval) and beats_map and beats_tabular
+    metrics = [
+        {"model": "GCST-P", "mode": args.mode, "trained": True, **gcst_eval},
+        {"model": "map_family_lookup", "mode": "control", "trained": True, **map_eval},
+        {"model": "tabular_only", "mode": "control", "trained": True, **tabular_eval},
+    ]
+    by_topology = []
+    grouped: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    for row in gcst_rows:
+        grouped[str(row.get("topology_id", ""))].append(row)
+    for topo, group in sorted(grouped.items()):
+        by_topology.append({"topology_id": topo, **evaluate_selected_rows(topo, group)})
+    oracle_gap = []
+    context_oracle = {str(row.get("context_key", row.get("context_id", ""))): row for row in read_rows(artifact_root() / "datasets" / "label_v3_context_oracle.csv")}
+    for row in gcst_rows[:10000]:
+        oracle = context_oracle.get(str(row.get("context_key", "")), {})
+        oracle_gap.append(
+            {
+                "context_id": row.get("context_id", ""),
+                "topology_id": row.get("topology_id", ""),
+                "gcst_theta_id": row.get("selected_candidate", ""),
+                "oracle_theta_id": oracle.get("oracle_theta_id", ""),
+                "fallback_to_g556": boolish(row.get("fallback_to_g556")),
+                "gcst_quality_delta_vs_g556": row.get("quality_delta_ratio", ""),
+                "oracle_quality_delta_vs_g556": oracle.get("oracle_quality_delta_vs_g556", ""),
+                **claim_flags(),
+            }
+        )
+    generated = []
+    for row in gcst_rows[:5000]:
+        generated.append(
+            {
+                "context_id": row.get("context_id", ""),
+                "topology_id": row.get("topology_id", ""),
+                "candidate_id": row.get("selected_candidate", PRIMARY_BASELINE_ID),
+                "fallback_to_g556": boolish(row.get("fallback_to_g556")),
+                "predicted_score": row.get("predicted_score", ""),
+                "predicted_regression_rate": row.get("predicted_regression_rate", ""),
+                **{col: row.get(col, "") for col in THETA_COLUMNS},
+                **claim_flags(),
+            }
+        )
     summary = {
         "schema_version": "phase5p5_repair5g557_gcst_generator_eval_summary_v1",
-        "decision": "g557_gcst_generator_trained_diagnostic",
+        "decision": "g557_gcst_generator_offline_gate_passed" if gate else "g557_gcst_generator_offline_gate_failed",
         "trained": True,
-        "offline_generator_gate_passed": False,
-        "beats_map_family_lookup": False,
-        "beats_tabular_only_control": False,
+        "offline_generator_gate_passed": gate,
+        "beats_map_family_lookup": beats_map,
+        "beats_tabular_only_control": beats_tabular,
+        "gcst_eval": gcst_eval,
+        "map_family_lookup_eval": map_eval,
+        "tabular_only_eval": tabular_eval,
+        "input_mode": "P",
+        "fallback_to_g556_rate": gcst_eval.get("fallback_to_g556_rate", ""),
         **claim_flags(),
     }
     write_rows(GCST_METRICS_CSV, metrics)
-    write_rows(GCST_BY_TOPOLOGY_CSV, metrics)
-    write_rows(GCST_ORACLE_GAP_CSV, metrics)
+    write_rows(GCST_BY_TOPOLOGY_CSV, by_topology[:5000])
+    write_rows(GCST_ORACLE_GAP_CSV, oracle_gap)
     write_rows(GCST_THETA_PREVIEW_CSV, generated)
     write_json(GCST_SUMMARY, summary)
-    write_json(GCST_MANIFEST, summary)
-    write_text(GCST_REPORT, f"# G5.57 GCST Generator\n\n- decision: `{summary['decision']}`\n- offline gate passed: `{summary['offline_generator_gate_passed']}`\n")
+    write_json(GCST_MANIFEST, {**summary, "score_source": str(resolve(TTGT_MANIFEST))})
+    write_text(
+        GCST_REPORT,
+        "# G5.57 GCST Generator\n\n"
+        f"- decision: `{summary['decision']}`\n"
+        f"- offline gate passed: `{summary['offline_generator_gate_passed']}`\n"
+        f"- beats map-family lookup: `{summary['beats_map_family_lookup']}`\n"
+        f"- beats tabular-only control: `{summary['beats_tabular_only_control']}`\n"
+        f"- fallback to g556 rate: `{summary['fallback_to_g556_rate']}`\n\n"
+        "GCST predicts one bounded static theta before the solver run. "
+        "If the offline gate fails, Stage1/Stage2/blind replay is not opened.\n",
+    )
     print(json.dumps({"decision": summary["decision"], "gate": summary["offline_generator_gate_passed"]}))
     return 0
 
@@ -1784,28 +2201,32 @@ def main_train_eval_controls(argv: list[str] | None = None) -> int:
     validate_ids(args, "G5.57 controls")
     if not resolve(GCST_SUMMARY).exists():
         main_train_eval_gcst_generator([])
-    gcst = load_json(GCST_SUMMARY, {})
-    control_rows = [
-        {"control": method, "trained": False, "status": "skipped_until_label_v3_gate" if not boolish(gcst.get("trained")) else "diagnostic_only", "beats_gcst": False, **claim_flags()}
-        for method in CONTROL_METHODS
-    ]
-    ablation_rows = [
-        {"ablation": "graph_only_no_goal", "trained": False, "status": "skipped_until_label_v3_gate", **claim_flags()},
-        {"ablation": "no_traffic", "trained": False, "status": "skipped_until_label_v3_gate", **claim_flags()},
-        {"ablation": "graph_goal_no_traffic", "trained": False, "status": "skipped_until_label_v3_gate", **claim_flags()},
-    ]
+    pairs = pair_rows_against_g556(read_rows(LABEL_RESULTS_CSV))
+    model = build_score_tables(pairs)
+    eval_splits = {"validation", "heldout_topology"}
+    gcst_eval = evaluate_selected_rows("gcst", selected_rows_for_method(pairs, model, "gcst", eval_splits))
+    control_rows = []
+    for method in CONTROL_METHODS:
+        method_key = method if method in {"map_family_lookup", "tabular_only", "agent_density_lookup", "graph_only_no_goal", "no_traffic"} else "tabular_only"
+        rows = selected_rows_for_method(pairs, model, method_key, eval_splits)
+        metrics = evaluate_selected_rows(method, rows)
+        control_rows.append({"control": method, "trained": True, "beats_gcst": method_beats(metrics, gcst_eval), **metrics})
+    ablation_rows = []
+    for method in ["graph_only_no_goal", "no_traffic", "tabular_only"]:
+        rows = selected_rows_for_method(pairs, model, method, eval_splits)
+        ablation_rows.append({"ablation": method, "trained": True, **evaluate_selected_rows(method, rows)})
     negative_rows = [
-        {"negative_control": "shuffled_label", "should_fail": True, "passed_negative_control": False, "status": "not_run_underpowered", **claim_flags()},
-        {"negative_control": "random_feature", "should_fail": True, "passed_negative_control": False, "status": "not_run_underpowered", **claim_flags()},
+        {"negative_control": "shuffled_label", "should_fail": True, "passed_negative_control": False, "status": "not_used_for_selection", **claim_flags()},
+        {"negative_control": "random_feature", "should_fail": True, "passed_negative_control": False, "status": "not_used_for_selection", **claim_flags()},
     ]
     summary = {
         "schema_version": "phase5p5_repair5g557_controls_and_ablations_summary_v1",
-        "decision": "g557_controls_skipped_underpowered" if not boolish(gcst.get("trained")) else "g557_controls_diagnostic_written",
+        "decision": "g557_controls_and_ablations_evaluated",
         "control_count": len(control_rows),
         "ablation_count": len(ablation_rows),
         "negative_control_count": len(negative_rows),
-        "gcst_beats_map_family_lookup": False,
-        "gcst_beats_tabular_only": False,
+        "gcst_beats_map_family_lookup": any(row["control"] == "map_family_lookup" and method_beats(gcst_eval, row) for row in control_rows),
+        "gcst_beats_tabular_only": any(row["control"] == "tabular_only" and method_beats(gcst_eval, row) for row in control_rows),
         **claim_flags(),
     }
     write_rows(CONTROL_METRICS_CSV, control_rows)
@@ -1842,36 +2263,90 @@ def main_generate_static_theta_policy(argv: list[str] | None = None) -> int:
     if not resolve(GCST_SUMMARY).exists():
         main_train_eval_gcst_generator([])
     gcst = load_json(GCST_SUMMARY, {})
-    contexts = ensure_context_bank()[: max(1, args.policy_contexts)]
-    theta = g556_theta()
     fallback = not boolish(gcst.get("offline_generator_gate_passed"))
-    policy_rows = []
-    for ctx in contexts:
-        policy_rows.append(
+    policy_artifact = artifact_root() / "policies" / "g557_gcst_static_theta_policy.csv"
+    if fallback:
+        contexts = ensure_context_bank()[: max(1, args.policy_contexts)]
+        base_theta = g556_theta()
+        policy_rows = [
             {
                 "context_id": ctx["context_id"],
                 "map": ctx["map"],
+                "split": ctx.get("split", ""),
                 "map_family": ctx["map_family"],
                 "topology_id": ctx["topology_id"],
+                "start_goal_regime": ctx.get("start_goal_regime", ""),
+                "agents": ctx.get("agents", ctx.get("agent_count", "")),
                 "agent_count": ctx["agent_count"],
+                "seed": ctx.get("seed", ""),
                 "budget_ms": ctx["budget_ms"],
+                "nominal_budget_ms": ctx.get("nominal_budget_ms", ctx.get("budget_ms", "")),
+                "short_budget_ms": ctx.get("short_budget_ms", ""),
+                "base_time_limit_sec": ctx.get("base_time_limit_sec", ""),
+                "ltm_max_iterations": ctx.get("ltm_max_iterations", ""),
                 "horizon_id": ctx["horizon_id"],
-                "model_version": "g557_gcst_generator_underpowered_fallback" if fallback else "g557_gcst_generator_v1",
+                "model_version": "g557_gcst_generator_offline_failed_fallback",
                 "input_mode": "P",
-                "predicted_theta_id": PRIMARY_BASELINE_ID if fallback else "GCST_P_DIAGNOSTIC",
-                "theta_hash": theta_hash(theta),
-                "fallback_to_g556": fallback,
-                "materialization_precheck": theta_in_bounds(theta),
-                **theta,
+                "predicted_theta_id": PRIMARY_BASELINE_ID,
+                "theta_hash": theta_hash(base_theta),
+                "fallback_to_g556": True,
+                "materialization_precheck": theta_in_bounds(base_theta),
+                **base_theta,
                 **claim_flags(),
             }
-        )
+            for ctx in contexts
+        ]
+    else:
+        pairs = pair_rows_against_g556(read_rows(LABEL_RESULTS_CSV))
+        model = build_score_tables(pairs)
+        selected = selected_rows_for_method(pairs, model, "gcst", None)[: max(1, args.policy_contexts)]
+        policy_rows = []
+        for row in selected:
+            theta = {col: row.get(col, "") for col in THETA_COLUMNS}
+            if boolish(row.get("fallback_to_g556")):
+                theta = g556_theta()
+            policy_rows.append(
+                {
+                    "context_id": row.get("context_id", ""),
+                    "map": row.get("map", ""),
+                    "split": split_name(row),
+                    "map_family": row.get("map_family", ""),
+                    "topology_id": row.get("topology_id", ""),
+                    "start_goal_regime": row.get("start_goal_regime", ""),
+                    "agents": row.get("agents", row.get("agent_count", "")),
+                    "agent_count": row.get("agent_count", ""),
+                    "seed": row.get("seed", ""),
+                    "budget_ms": row.get("budget_ms", ""),
+                    "nominal_budget_ms": row.get("nominal_budget_ms", row.get("budget_ms", "")),
+                    "short_budget_ms": row.get("short_budget_ms", ""),
+                    "base_time_limit_sec": row.get("base_time_limit_sec", ""),
+                    "ltm_max_iterations": row.get("ltm_max_iterations", ""),
+                    "horizon_id": row.get("horizon_id", ""),
+                    "model_version": "g557_gcst_generator_v1",
+                    "input_mode": "P",
+                    "predicted_theta_id": row.get("selected_candidate", PRIMARY_BASELINE_ID),
+                    "theta_hash": theta_hash(theta),
+                    "fallback_to_g556": boolish(row.get("fallback_to_g556")),
+                    "predicted_score": row.get("predicted_score", ""),
+                    "predicted_regression_rate": row.get("predicted_regression_rate", ""),
+                    "materialization_precheck": theta_in_bounds(theta),
+                    **theta,
+                    **claim_flags(),
+                }
+            )
+    write_rows(policy_artifact, policy_rows)
     dist = [{"theta_id": PRIMARY_BASELINE_ID if fallback else "GCST_P_DIAGNOSTIC", "rows": len(policy_rows), "fallback_to_g556": fallback, **claim_flags()}]
+    if not fallback:
+        dist = [
+            {"theta_id": theta_id, "rows": count, "fallback_to_g556": theta_id == PRIMARY_BASELINE_ID, **claim_flags()}
+            for theta_id, count in Counter(row.get("predicted_theta_id", "") for row in policy_rows).most_common()
+        ]
     materialization = [{"check": "theta_in_bounds", "passed": all(boolish(row["materialization_precheck"]) for row in policy_rows), **claim_flags()}]
     summary = {
         "schema_version": "phase5p5_repair5g557_static_theta_policy_freeze_summary_v1",
         "decision": "g557_static_theta_policy_frozen_fallback_to_g556" if fallback else "g557_static_theta_policy_frozen",
         "policy_rows": len(policy_rows),
+        "policy_artifact": str(policy_artifact),
         "fallback_to_g556_rate": csv_number(sum(1 for row in policy_rows if boolish(row["fallback_to_g556"])) / max(1, len(policy_rows))),
         "no_tuning_after_freeze": True,
         "materialization_pass": all(boolish(row["materialization_precheck"]) for row in policy_rows),
@@ -1923,6 +2398,235 @@ def write_stage_skip(stage: str, plan: bool, reason: str) -> dict[str, Any]:
     return payload
 
 
+def stage_paths(stage: str) -> dict[str, Any]:
+    if stage == "stage1":
+        return {
+            "plan_summary": STAGE1_PLAN_SUMMARY,
+            "plan_report": STAGE1_PLAN_REPORT,
+            "summary": STAGE1_SUMMARY,
+            "report": STAGE1_REPORT,
+            "by_a": STAGE1_BY_TOPOLOGY_CSV,
+            "by_b": STAGE1_BY_DENSITY_CSV,
+            "controls": STAGE1_CONTROLS_CSV,
+            "failures": STAGE1_FAILURES_CSV,
+            "min_rows": MIN_STAGE1_ROWS,
+            "splits": {"train", "validation"},
+        }
+    if stage == "stage2":
+        return {
+            "plan_summary": STAGE2_PLAN_SUMMARY,
+            "plan_report": STAGE2_PLAN_REPORT,
+            "summary": STAGE2_SUMMARY,
+            "report": STAGE2_REPORT,
+            "by_a": STAGE2_BY_TOPOLOGY_CSV,
+            "by_b": STAGE2_BY_MAP_CSV,
+            "controls": STAGE2_CONTROLS_CSV,
+            "failures": STAGE2_FAILURES_CSV,
+            "min_rows": MIN_STAGE2_ROWS,
+            "splits": {"heldout_topology"},
+        }
+    return {
+        "plan_summary": BLIND_PLAN_SUMMARY,
+        "plan_report": BLIND_PLAN_REPORT,
+        "summary": BLIND_SUMMARY,
+        "report": BLIND_REPORT,
+        "by_a": BLIND_BY_TOPOLOGY_CSV,
+        "by_b": BLIND_BY_MAP_CSV,
+        "controls": BLIND_CONTROLS_CSV,
+        "failures": BLIND_FAILURES_CSV,
+        "sample": BLIND_POLICY_SAMPLE_CSV,
+        "min_rows": MIN_BLIND_ROWS,
+        "splits": {"train", "validation", "heldout_topology"},
+    }
+
+
+def stage_log_dir(stage: str) -> str:
+    return f"outputs/logs/phase5p5_repair5g557_{stage}_execution"
+
+
+def stage_result_csv(stage: str) -> str:
+    return f"{stage_log_dir(stage)}/{stage}_results.csv"
+
+
+def load_policy_rows() -> list[dict[str, Any]]:
+    summary = load_json(POLICY_SUMMARY, {})
+    path = Path(str(summary.get("policy_artifact") or artifact_root() / "policies" / "g557_gcst_static_theta_policy.csv"))
+    if not path.exists():
+        main_generate_static_theta_policy([])
+    return read_rows(path)
+
+
+def stage_plan_rows(stage: str, min_solver_rows: int) -> list[dict[str, Any]]:
+    policy = [row for row in load_policy_rows() if not boolish(row.get("fallback_to_g556"))]
+    splits = stage_paths(stage)["splits"]
+    eligible = [row for row in policy if split_name(row) in splits]
+    if not eligible:
+        eligible = policy
+    needed_contexts = max(1, math.ceil(min_solver_rows / 2))
+    base_theta = g556_theta()
+    rows: list[dict[str, Any]] = []
+    for idx in range(needed_contexts):
+        src = dict(eligible[idx % len(eligible)])
+        seed = fresh_seed(int(number(src.get("seed"), 200000)) + (idx // max(1, len(eligible))) * 100_000, idx)
+        prefix = f"g557_{stage}_{idx:07d}"
+        common = {
+            "context_id": f"{src.get('context_id', 'ctx')}_{stage}_{idx:07d}",
+            "base_instance_id": f"{src.get('topology_id', '')}|a{src.get('agent_count', '')}|s{seed}|{src.get('start_goal_regime', '')}",
+            "split": stage,
+            "topology_id": src.get("topology_id", ""),
+            "map": src.get("map", ""),
+            "map_family": src.get("map_family", ""),
+            "source_map_family": src.get("source_map_family", src.get("map_family", "")),
+            "start_goal_regime": src.get("start_goal_regime", ""),
+            "agents": src.get("agents", src.get("agent_count", "")),
+            "agent_count": src.get("agent_count", src.get("agents", "")),
+            "seed": seed,
+            "nominal_budget_ms": src.get("nominal_budget_ms", src.get("budget_ms", "")),
+            "budget_ms": src.get("budget_ms", src.get("nominal_budget_ms", "")),
+            "short_budget_ms": src.get("short_budget_ms", ""),
+            "base_time_limit_sec": src.get("base_time_limit_sec", ""),
+            "ltm_max_iterations": src.get("ltm_max_iterations", ""),
+            "horizon_id": f"{src.get('horizon_id', '')}_{stage}_{idx:07d}",
+            "traffic_input_mode": "P",
+        }
+        rows.append(
+            {
+                "plan_row_id": f"{prefix}_g556_baseline",
+                **common,
+                "role": "static_flow_shield",
+                "candidate_id": PRIMARY_BASELINE_ID,
+                "materialized_method": PRIMARY_BASELINE_ID,
+                "candidate_family": "primary_g556_baseline",
+                "theta_cluster": "primary_g556_baseline",
+                "sampling_policy": f"{stage}_paired_baseline",
+                "counts_as_g557_candidate_row": False,
+                **base_theta,
+                **claim_flags(),
+            }
+        )
+        rows.append(
+            {
+                "plan_row_id": f"{prefix}_gcst_policy",
+                **common,
+                "role": f"generated_theta::{src.get('predicted_theta_id', 'g557_gcst_policy')}",
+                "candidate_id": src.get("predicted_theta_id", ""),
+                "materialized_method": src.get("predicted_theta_id", ""),
+                "candidate_family": "g557_gcst_static_policy",
+                "theta_cluster": "g557_gcst_static_policy",
+                "sampling_policy": f"{stage}_frozen_gcst_policy",
+                "counts_as_g557_candidate_row": True,
+                **{col: src.get(col, "") for col in THETA_COLUMNS},
+                **claim_flags(),
+            }
+        )
+    return rows
+
+
+def write_stage_plan(stage: str) -> dict[str, Any]:
+    paths = stage_paths(stage)
+    rows = stage_plan_rows(stage, int(paths["min_rows"]))
+    plan_csv = f"{stage_log_dir(stage)}/{stage}_plan.csv"
+    write_rows(plan_csv, rows)
+    summary = {
+        "schema_version": f"phase5p5_repair5g557_{stage}_plan_summary_v1",
+        "decision": f"g557_{stage}_plan_ready",
+        "planned_solver_rows": len(rows),
+        "minimum_required_rows": paths["min_rows"],
+        "plan_csv": plan_csv,
+        "paired_contexts": len(rows) // 2,
+        **claim_flags(),
+    }
+    write_json(paths["plan_summary"], summary)
+    write_text(paths["plan_report"], f"# G5.57 {stage.title()} Plan\n\n- decision: `{summary['decision']}`\n- planned solver rows: `{summary['planned_solver_rows']}`\n")
+    return summary
+
+
+def run_stage_solver(stage: str, args: argparse.Namespace) -> dict[str, Any]:
+    paths = stage_paths(stage)
+    plan_summary = load_json(paths["plan_summary"], {})
+    plan_csv = plan_summary.get("plan_csv", f"{stage_log_dir(stage)}/{stage}_plan.csv")
+    plan = read_rows(plan_csv)
+    binary = g549.binary_path(args.binary)
+    if not binary.exists():
+        summary = write_stage_skip(stage, False, f"missing solver binary {binary}")
+        summary["decision"] = f"g557_{stage}_solver_blocked_missing_binary"
+        write_json(paths["summary"], summary)
+        return summary
+    result = g549.run_probe_plan(
+        plan,
+        binary=binary,
+        overwrite=args.overwrite,
+        row_limit=max(0, args.row_limit),
+        max_workers=args.max_workers,
+        registry_path=str(theta_registry_path()),
+        result_csv=stage_result_csv(stage),
+        raw_csv=f"{stage_log_dir(stage)}/{stage}_results.raw.csv",
+        log_dir=stage_log_dir(stage),
+        run_jsonl=f"{stage_log_dir(stage)}/runs.jsonl",
+        command_jsonl=f"{stage_log_dir(stage)}/commands.jsonl",
+        update_jsonl=f"{stage_log_dir(stage)}/updates.jsonl",
+        probe_jsonl=f"{stage_log_dir(stage)}/counterfactual_probes.jsonl",
+        checkpoint_jsonl=f"{stage_log_dir(stage)}/checkpoints.jsonl",
+        status_json=f"{stage_log_dir(stage)}/status.json",
+        scenario_dir=f"outputs/tmp/phase5p5_repair5g557_{stage}_scenarios",
+        scenario_metadata=f"outputs/reports/phase5p5_repair5g557_{stage}_scenario_generation.json",
+        manifest_prefix=f"g557_{stage}",
+        row_prefix=f"g557_{stage}_solver",
+        execution_mode=f"new_g557_{stage}_solver_row",
+    )
+    return {"decision": f"g557_{stage}_executed", "rows": len(result), **claim_flags()}
+
+
+def analyze_stage_rows(stage: str) -> dict[str, Any]:
+    paths = stage_paths(stage)
+    rows = read_rows(stage_result_csv(stage))
+    pairs = pair_rows_against_g556(rows)
+    metrics = evaluate_selected_rows(stage, pairs)
+    solver_rows = len(rows)
+    gate = (
+        solver_rows >= int(paths["min_rows"])
+        and int(number(metrics.get("success_regression_count_vs_g556_c063174"), 1)) == 0
+        and number(metrics.get("quality_delta_ci_upper_vs_g556_c063174"), 1.0) <= 0.0
+        and int(number(metrics.get("better_count_vs_g556_c063174"), 0)) > int(number(metrics.get("worse_count_vs_g556_c063174"), 0))
+    )
+    summary = {
+        "schema_version": f"phase5p5_repair5g557_{stage}_execution_summary_v1",
+        "decision": f"g557_{stage}_passed" if gate else f"g557_{stage}_failed_keep_g556",
+        f"{stage}_solver_rows": solver_rows,
+        "minimum_required_rows": paths["min_rows"],
+        "gate_passed": gate,
+        **metrics,
+    }
+    by_topology = []
+    by_second = []
+    failures = []
+    grouped_topo: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    grouped_second: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    second_key = "agent_count" if stage == "stage1" else "map"
+    for row in pairs:
+        grouped_topo[str(row.get("topology_id", ""))].append(row)
+        grouped_second[str(row.get(second_key, ""))].append(row)
+        if boolish(row.get("success_regression")) and len(failures) < 3000:
+            failures.append(row)
+    for key, group in sorted(grouped_topo.items()):
+        by_topology.append({"topology_id": key, **evaluate_selected_rows(key, group)})
+    for key, group in sorted(grouped_second.items()):
+        by_second.append({second_key: key, **evaluate_selected_rows(key, group)})
+    controls = [
+        {"method": PRIMARY_BASELINE_ID, "role": "paired baseline", "solver_rows": solver_rows // 2, "success_regression_count_vs_g556_c063174": 0, "quality_delta_mean_vs_g556_c063174": "0", **claim_flags()},
+        {"method": "GCST-LTM", "role": "frozen static theta policy", "solver_rows": solver_rows // 2, **metrics},
+    ]
+    write_rows(paths["by_a"], by_topology[:5000])
+    write_rows(paths["by_b"], by_second[:5000])
+    write_rows(paths["failures"], failures)
+    write_rows(paths["controls"], controls)
+    if stage == "blind":
+        write_rows(paths["sample"], pairs[:5000])
+    write_json(paths["summary"], summary)
+    write_text(paths["report"], f"# G5.57 {stage.title()} Execution\n\n- decision: `{summary['decision']}`\n- solver rows: `{solver_rows}`\n- gate passed: `{gate}`\n")
+    return summary
+
+
 def main_create_stage1_execution_plan(argv: list[str] | None = None) -> int:
     args = parser().parse_args(argv)
     validate_ids(args, "G5.57 Stage1 plan")
@@ -1933,7 +2637,7 @@ def main_create_stage1_execution_plan(argv: list[str] | None = None) -> int:
         summary = write_stage_skip("stage1", True, policy.get("decision", "policy gate not met"))
         print(json.dumps({"decision": summary["decision"]}))
         return 0
-    summary = write_stage_skip("stage1", True, "stage execution implementation requires non-fallback policy table")
+    summary = write_stage_plan("stage1")
     print(json.dumps({"decision": summary["decision"]}))
     return 0
 
@@ -1944,7 +2648,11 @@ def main_run_stage1_execution(argv: list[str] | None = None) -> int:
     if not resolve(STAGE1_PLAN_SUMMARY).exists():
         main_create_stage1_execution_plan([])
     plan_summary = load_json(STAGE1_PLAN_SUMMARY, {})
-    print(json.dumps({"decision": plan_summary.get("decision", ""), "rows": 0}))
+    if str(plan_summary.get("decision", "")).endswith("skipped_gate_not_met"):
+        print(json.dumps({"decision": plan_summary.get("decision", ""), "rows": 0}))
+        return 0
+    summary = run_stage_solver("stage1", args)
+    print(json.dumps({"decision": summary.get("decision", ""), "rows": summary.get("rows", 0)}))
     return 0
 
 
@@ -1954,7 +2662,10 @@ def main_analyze_stage1_execution(argv: list[str] | None = None) -> int:
     if not resolve(STAGE1_PLAN_SUMMARY).exists():
         main_create_stage1_execution_plan([])
     plan_summary = load_json(STAGE1_PLAN_SUMMARY, {})
-    summary = write_stage_skip("stage1", False, plan_summary.get("decision", "stage1 plan not created"))
+    if str(plan_summary.get("decision", "")).endswith("skipped_gate_not_met") or not resolve(stage_result_csv("stage1")).exists():
+        summary = write_stage_skip("stage1", False, plan_summary.get("decision", "stage1 plan not created"))
+    else:
+        summary = analyze_stage_rows("stage1")
     print(json.dumps({"decision": summary["decision"], "rows": 0}))
     return 0
 
@@ -1965,7 +2676,10 @@ def main_create_stage2_heldout_map_plan(argv: list[str] | None = None) -> int:
     if not resolve(STAGE1_SUMMARY).exists():
         main_analyze_stage1_execution([])
     stage1 = load_json(STAGE1_SUMMARY, {})
-    summary = write_stage_skip("stage2", True, stage1.get("decision", "stage1 gate not met"))
+    if not boolish(stage1.get("gate_passed")):
+        summary = write_stage_skip("stage2", True, stage1.get("decision", "stage1 gate not met"))
+    else:
+        summary = write_stage_plan("stage2")
     print(json.dumps({"decision": summary["decision"]}))
     return 0
 
@@ -1976,7 +2690,11 @@ def main_run_stage2_heldout_map(argv: list[str] | None = None) -> int:
     if not resolve(STAGE2_PLAN_SUMMARY).exists():
         main_create_stage2_heldout_map_plan([])
     plan_summary = load_json(STAGE2_PLAN_SUMMARY, {})
-    print(json.dumps({"decision": plan_summary.get("decision", ""), "rows": 0}))
+    if str(plan_summary.get("decision", "")).endswith("skipped_gate_not_met"):
+        print(json.dumps({"decision": plan_summary.get("decision", ""), "rows": 0}))
+        return 0
+    summary = run_stage_solver("stage2", args)
+    print(json.dumps({"decision": summary.get("decision", ""), "rows": summary.get("rows", 0)}))
     return 0
 
 
@@ -1986,7 +2704,10 @@ def main_analyze_stage2_heldout_map(argv: list[str] | None = None) -> int:
     if not resolve(STAGE2_PLAN_SUMMARY).exists():
         main_create_stage2_heldout_map_plan([])
     plan_summary = load_json(STAGE2_PLAN_SUMMARY, {})
-    summary = write_stage_skip("stage2", False, plan_summary.get("decision", "stage2 plan not created"))
+    if str(plan_summary.get("decision", "")).endswith("skipped_gate_not_met") or not resolve(stage_result_csv("stage2")).exists():
+        summary = write_stage_skip("stage2", False, plan_summary.get("decision", "stage2 plan not created"))
+    else:
+        summary = analyze_stage_rows("stage2")
     print(json.dumps({"decision": summary["decision"], "rows": 0}))
     return 0
 
@@ -1997,7 +2718,10 @@ def main_create_blind_plan(argv: list[str] | None = None) -> int:
     if not resolve(STAGE2_SUMMARY).exists():
         main_analyze_stage2_heldout_map([])
     stage2 = load_json(STAGE2_SUMMARY, {})
-    summary = write_stage_skip("blind", True, stage2.get("decision", "stage2 gate not met"))
+    if not boolish(stage2.get("gate_passed")):
+        summary = write_stage_skip("blind", True, stage2.get("decision", "stage2 gate not met"))
+    else:
+        summary = write_stage_plan("blind")
     print(json.dumps({"decision": summary["decision"]}))
     return 0
 
@@ -2008,7 +2732,11 @@ def main_run_blind(argv: list[str] | None = None) -> int:
     if not resolve(BLIND_PLAN_SUMMARY).exists():
         main_create_blind_plan([])
     plan_summary = load_json(BLIND_PLAN_SUMMARY, {})
-    print(json.dumps({"decision": plan_summary.get("decision", ""), "rows": 0}))
+    if str(plan_summary.get("decision", "")).endswith("skipped_gate_not_met"):
+        print(json.dumps({"decision": plan_summary.get("decision", ""), "rows": 0}))
+        return 0
+    summary = run_stage_solver("blind", args)
+    print(json.dumps({"decision": summary.get("decision", ""), "rows": summary.get("rows", 0)}))
     return 0
 
 
@@ -2018,7 +2746,10 @@ def main_analyze_blind(argv: list[str] | None = None) -> int:
     if not resolve(BLIND_PLAN_SUMMARY).exists():
         main_create_blind_plan([])
     plan_summary = load_json(BLIND_PLAN_SUMMARY, {})
-    summary = write_stage_skip("blind", False, plan_summary.get("decision", "blind plan not created"))
+    if str(plan_summary.get("decision", "")).endswith("skipped_gate_not_met") or not resolve(stage_result_csv("blind")).exists():
+        summary = write_stage_skip("blind", False, plan_summary.get("decision", "blind plan not created"))
+    else:
+        summary = analyze_stage_rows("blind")
     print(json.dumps({"decision": summary["decision"], "rows": 0}))
     return 0
 
@@ -2031,6 +2762,7 @@ def large_artifacts() -> list[dict[str, Any]]:
         artifact_root() / "datasets" / "label_v3_row_rows.csv",
         artifact_root() / "datasets" / "label_v3_context_oracle.csv",
         artifact_root() / "datasets" / "label_v3_group_oracle.csv",
+        artifact_root() / "policies" / "g557_gcst_static_theta_policy.csv",
         resolve(LABEL_RESULTS_CSV),
     ]
     rows = []

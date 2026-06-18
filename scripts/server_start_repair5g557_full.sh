@@ -80,7 +80,34 @@ PY
     scripts/analyze_repair5g557_model_ablation.py \
     scripts/write_repair5g557_decision.py
 
-  python3 scripts/verify_repair5g557_g556_artifacts.py || true
+  python3 scripts/verify_repair5g557_g556_artifacts.py
+  if ! python3 - <<'PY'
+import json
+import sys
+from pathlib import Path
+
+summary_path = Path('outputs/reports/phase5p5_repair5g557_g556_verification_summary.json')
+summary = json.loads(summary_path.read_text(encoding='utf-8'))
+ok = (
+    summary.get('decision') == 'g557_g556_baseline_verified'
+    and summary.get('primary_baseline') == 'g556_c063174'
+    and bool(summary.get('external_lacam2_clean'))
+    and not summary.get('missing_artifacts')
+)
+print('[repair5g557] g556 baseline gate:', {
+    'decision': summary.get('decision'),
+    'primary_baseline': summary.get('primary_baseline'),
+    'external_lacam2_clean': summary.get('external_lacam2_clean'),
+    'missing_artifacts': summary.get('missing_artifacts'),
+    'ok': ok,
+})
+sys.exit(0 if ok else 1)
+PY
+  then
+    echo '[repair5g557] G5.56 baseline verification failed; stopping before G5.57 data generation'
+    python3 scripts/write_repair5g557_decision.py || true
+    exit 10
+  fi
   python3 scripts/create_repair5g557_literature_code_audit.py --overwrite
   python3 scripts/create_repair5g557_context_bank.py --min-contexts 20000 --min-topologies 60 --overwrite
   python3 scripts/create_repair5g557_graph_feature_cache.py --overwrite

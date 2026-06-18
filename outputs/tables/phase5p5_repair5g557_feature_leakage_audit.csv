@@ -1,0 +1,6 @@
+feature_group,allowed,uses_outcome_label,uses_runtime_main_trace,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+map_graph_topology,True,False,False,False,False,False,False,False
+start_goal_distribution,True,False,False,False,False,False,False,False
+pre_run_traffic_prior,True,False,False,False,False,False,False,False
+candidate_outcome_oracle,False,True,False,False,False,False,False,False
+main_run_checkpoint_trace,False,False,True,False,False,False,False,False

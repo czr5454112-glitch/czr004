@@ -1,0 +1,13 @@
+{
+  "aaai_ready": false,
+  "context_feature_preview_rows": 500,
+  "decision": "g557_graph_feature_cache_created",
+  "feature_leakage": false,
+  "learned_runtime_policy_validated": false,
+  "main_run_trace_features_used": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g557_graph_feature_cache_summary_v1",
+  "topology_feature_rows": 60
+}

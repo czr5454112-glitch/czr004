@@ -1,0 +1,14 @@
+{
+  "aaai_ready": false,
+  "decision": "g557_static_theta_policy_frozen_fallback_to_g556",
+  "fallback_to_g556_rate": "1",
+  "learned_runtime_policy_validated": false,
+  "materialization_pass": true,
+  "no_tuning_after_freeze": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "policy_rows": 12000,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g557_static_theta_policy_freeze_summary_v1",
+  "stage1_allowed": false
+}

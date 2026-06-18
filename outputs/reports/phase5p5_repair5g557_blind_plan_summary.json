@@ -1,0 +1,13 @@
+{
+  "aaai_ready": false,
+  "decision": "g557_blind_plan_skipped_gate_not_met",
+  "gate_passed": false,
+  "learned_runtime_policy_validated": false,
+  "minimum_required_rows": 720000,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "planned_solver_rows": 0,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g557_blind_plan_summary_v1",
+  "skip_reason": "g557_stage2_skipped_gate_not_met"
+}

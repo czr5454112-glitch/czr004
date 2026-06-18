@@ -1,0 +1,5 @@
+method,role,promoted,solver_rows,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+g556_c063174,primary fixed baseline,True,360000,False,False,False,False,False
+GCST-LTM,graph-conditioned static theta candidate,False,0,False,False,False,False,False
+map_family_lookup,control,False,0,False,False,False,False,False
+tabular_only,control,False,0,False,False,False,False,False

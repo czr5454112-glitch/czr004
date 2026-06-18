@@ -1,0 +1,11 @@
+start_goal_regime,contexts,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+uniform_random,2001,False,False,False,False,False
+opposite_side_cross_flow,2001,False,False,False,False,False
+same_room_local_flow,2001,False,False,False,False,False
+room_to_room_door_bottleneck,2001,False,False,False,False,False
+warehouse_aisle_to_aisle,2001,False,False,False,False,False
+many_to_one_goal_clustered,2001,False,False,False,False,False
+start_clustered_goal_dispersed,2000,False,False,False,False,False
+central_choke_point,1998,False,False,False,False,False
+low_conflict_easy,1998,False,False,False,False,False
+high_conflict_adversarial,1998,False,False,False,False,False

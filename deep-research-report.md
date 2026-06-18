@@ -2357,3 +2357,21 @@ The completed KCS server run confirms that G5.56 learned/searched a better deter
 Real solver replay carried the claim. Stage1 ran `304,500` rows, Stage2 ran `430,000` rows and passed `29` candidates, and blind replay ran `360,000` fresh rows. `g556_c063174` passed blind against `g554_c00051` with `0` success regressions, mean quality delta `-0.0032705119799`, CI upper `-0.00305603582661`, `28,508` better versus `20,887` worse both-success quality pairs, support over `216` strata and `3,000` seed blocks, and full materialization/fingerprint pass.
 
 Governance update: for the fixed-global staticflow route, `g556_c063174` becomes the active stronger fixed baseline candidate and `g554_c00051` becomes the beaten prior fixed baseline. This does not resume dynamic learned UpdateParams, does not validate a contextual selector or checkpoint policy, and does not open runtime, Phase5.5, Phase6, or AAAI claims. Future learned/generated policies must now beat `g556_c063174` under the same zero-success-regression real replay gate.
+
+## 2026-06-18 - G5.57 governance update: graph-conditioned static theta, not runtime policy
+
+G5.57 changes the next research target from another fixed-global vector to `GCST-LTM`: a graph-conditioned static-theta predictor. The predictor may read map topology, start/goal distribution, agent density, budget/horizon, and pre-run traffic priors, then emit one bounded dual-channel `UpdateParams` vector before the solver run. That theta is fixed for the whole run.
+
+The active promotion baseline is now `g556_c063174`. `g554_c00051`, old hand `static_flow_shield`, and `additive_ltm` remain diagnostics/floors only. SafeGate is tightened for this route: GCST cannot claim promotion from offline prediction, candidate ranking, proxy labels, or learned-SafeGate scores. Promotion requires real paired solver replay against `g556_c063174`, with zero success regression, non-worse success rate, negative quality delta with CI upper <= 0, materialization/fingerprint pass, and heldout-topology/blind controls.
+
+Closed-claim policy remains unchanged:
+
+```text
+phase5p5_allowed = false
+phase6_allowed = false
+runtime_claim_allowed = false
+learned_runtime_policy_validated = false
+aaai_ready = false
+```
+
+If G5.57 does not reach the minimum label/replay scale, the correct decision is `g557_label_matrix_underpowered_continue_topup`, not a GCST failure or success claim.

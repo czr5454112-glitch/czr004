@@ -1,0 +1,6 @@
+claim,allowed,reason,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+phase5p5_allowed,False,claims remain closed in G5.57,False,False,False,False,False
+phase6_allowed,False,claims remain closed in G5.57,False,False,False,False,False
+runtime_claim_allowed,False,claims remain closed in G5.57,False,False,False,False,False
+learned_runtime_policy_validated,False,claims remain closed in G5.57,False,False,False,False,False
+aaai_ready,False,claims remain closed in G5.57,False,False,False,False,False

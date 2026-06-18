@@ -1,0 +1,12 @@
+{
+  "aaai_ready": false,
+  "decision": "g557_probe_traffic_plan_created",
+  "learned_runtime_policy_validated": false,
+  "mode_w_secondary_only": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "planned_probe_contexts": 1024,
+  "probe_method": "g556_c063174",
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g557_probe_traffic_plan_summary_v1"
+}

@@ -1,0 +1,17 @@
+{
+  "aaai_ready": false,
+  "context_horizons": 20000,
+  "decision": "g557_context_bank_ready",
+  "heldout_map_topology_variants": 15,
+  "learned_runtime_policy_validated": false,
+  "minimum_context_scale_met": true,
+  "minimum_heldout_topology_scale_met": true,
+  "minimum_topology_scale_met": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g557_context_bank_summary_v1",
+  "start_goal_regimes": 10,
+  "unique_base_instances": 20000,
+  "unique_map_topology_variants": 60
+}

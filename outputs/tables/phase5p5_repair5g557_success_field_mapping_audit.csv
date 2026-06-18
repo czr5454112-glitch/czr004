@@ -1,0 +1,5 @@
+field,source,used,passed,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+selected_success,solution_found or probe_solution_found,True,False,False,False,False,False,False
+baseline_success,paired g556_c063174 solution_found,True,False,False,False,False,False,False
+quality_delta_ratio,selected ratio minus g556 ratio on both-success rows,True,True,False,False,False,False,False
+forbidden_outcome_as_feature,label only,False,True,False,False,False,False,False

@@ -1,0 +1,19 @@
+{
+  "aaai_ready": false,
+  "anchors_audited": 9,
+  "decision": "g557_literature_code_audit_completed",
+  "external_code_entries": 2,
+  "ideas_adopted": [
+    "Guidance Graph Optimization for Lifelong MAPF",
+    "GraphGPS",
+    "Exphormer",
+    "Quality Diversity MAPF benchmark-map generation"
+  ],
+  "learned_runtime_policy_validated": false,
+  "no_external_code_vendored": true,
+  "not_compatible_count": 0,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g557_literature_code_audit_summary_v1"
+}

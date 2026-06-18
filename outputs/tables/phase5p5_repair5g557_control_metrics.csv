@@ -1,0 +1,12 @@
+control,trained,status,beats_gcst,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+map_family_lookup,False,skipped_until_label_v3_gate,False,False,False,False,False,False
+map_id_lookup_diagnostic,False,skipped_until_label_v3_gate,False,False,False,False,False,False
+agent_density_lookup,False,skipped_until_label_v3_gate,False,False,False,False,False,False
+tabular_only,False,skipped_until_label_v3_gate,False,False,False,False,False,False
+graph_only_no_goal,False,skipped_until_label_v3_gate,False,False,False,False,False,False
+graph_goal_no_traffic,False,skipped_until_label_v3_gate,False,False,False,False,False,False
+no_traffic,False,skipped_until_label_v3_gate,False,False,False,False,False,False
+warmup_probe_mode_w,False,skipped_until_label_v3_gate,False,False,False,False,False,False
+gbdt_control,False,skipped_until_label_v3_gate,False,False,False,False,False,False
+random_feature_negative,False,skipped_until_label_v3_gate,False,False,False,False,False,False
+shuffled_label_negative,False,skipped_until_label_v3_gate,False,False,False,False,False,False

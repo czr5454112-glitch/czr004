@@ -1,0 +1,14 @@
+{
+  "aaai_ready": false,
+  "all_theta_in_bounds": true,
+  "decision": "g557_theta_candidate_slate_ready",
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "primary_baseline": "g556_c063174",
+  "registry_path": "C:\\PROGRAMING\\czr004\\outputs\\tmp\\phase5p5_repair5g557_remote_artifacts\\raw\\g557_theta_candidate_registry.csv",
+  "registry_rows_including_baselines": 20004,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g557_theta_candidate_slate_summary_v1",
+  "unique_theta_candidates": 20000
+}

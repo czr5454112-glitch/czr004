@@ -1,0 +1,3 @@
+project,url,available_for_audit,vendored_into_repo,license_review_required_before_reuse,used_as_dependency,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+Guidance Graph Optimization for Lifelong MAPF,https://github.com/lunjohnzhang/ggo_public,True,False,True,False,False,False,False,False,False
+Exphormer,https://github.com/hamed1375/Exphormer,True,False,True,False,False,False,False,False,False

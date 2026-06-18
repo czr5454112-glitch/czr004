@@ -1,0 +1,6 @@
+feature,feature_group,allowed,mode,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+pre_run_node_flow_prior_mean,pre_run_traffic_prior,True,P,False,False,False,False,False
+pre_run_edge_flow_prior_p90,pre_run_traffic_prior,True,P,False,False,False,False,False
+expected_edge_conflict_proxy,pre_run_traffic_prior,True,P,False,False,False,False,False
+opposing_flow_ratio_proxy,pre_run_traffic_prior,True,P,False,False,False,False,False
+flow_concentration_top5_percent,pre_run_traffic_prior,True,P,False,False,False,False,False

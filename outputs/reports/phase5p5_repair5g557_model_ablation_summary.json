@@ -1,0 +1,11 @@
+{
+  "aaai_ready": false,
+  "ablation_gate_passed": false,
+  "decision": "g557_model_ablation_no_promotion_underpowered",
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g557_model_ablation_summary_v1",
+  "source_decision": "g557_controls_skipped_underpowered"
+}

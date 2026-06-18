@@ -1,0 +1,16 @@
+{
+  "aaai_ready": false,
+  "available_contexts": 20000,
+  "available_theta_candidates": 20000,
+  "decision": "g557_label_matrix_plan_ready",
+  "learned_runtime_policy_validated": false,
+  "minimum_same_context_rows_met_by_plan": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "primary_baseline": "g556_c063174",
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g557_label_matrix_plan_summary_v1",
+  "target_candidates_per_context": 512,
+  "target_contexts": 12000,
+  "target_same_context_candidate_rows": 6144000
+}

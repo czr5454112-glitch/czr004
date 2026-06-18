@@ -8,6 +8,14 @@ The KCS server run completed the full gate chain. The unified fixed-theta manife
 
 The fixed-vector route nevertheless passed real replay: candidate generation produced `100,000` vectors, Stage1 executed `304,500` rows, Stage2 executed `430,000` rows with `29` passing candidates, and blind replay executed `360,000` fresh rows. Final decision: `g556_transformer_fixed_global_candidate_blind_passed_keep_claims_closed`. `g556_c063174` is promoted as the stronger fixed global staticflow baseline candidate versus `g554_c00051`, with `0` blind success regressions, quality delta `-0.0032705119799`, CI upper `-0.00305603582661`, and full materialization/fingerprint pass. Future fixed-global or learned/generated policy work must treat `g556_c063174` as the declared fixed baseline for this route unless explicitly superseded.
 
+## 2026-06-18 Repair5G.5.57 graph-conditioned static-theta execution update
+
+G5.57 introduces `GCST-LTM` / `TTGT` as a graph-conditioned static-theta route. The method is allowed to predict one bounded `UpdateParams` vector from pre-run graph, start/goal, density, budget, and traffic-prior features. It is not allowed to switch theta during the run, read main-run checkpoints, use runtime trace, select per-iteration actions, change LaCAM*/PIBT/search semantics, or claim learned SafeGate/runtime behavior.
+
+The primary baseline for every promotion gate is `g556_c063174`. `g554_c00051`, old hand `static_flow_shield`, and `additive_ltm` remain diagnostic baselines. The SafeGate for GCST requires same-context candidate-theta solver labels versus `g556_c063174`, context/group oracle labels without feature leakage, policy-as-executed freeze, Stage1, heldout-topology Stage2, and blind replay before any narrow GCST claim is allowed. Offline model quality and controls can only decide whether to continue, not promote.
+
+If the minimum scale is not met (`>= 3M` same-context candidate rows, `>= 20k` theta candidates, Stage1/Stage2/blind real replay floors), the execution decision must be an underpowered continuation such as `g557_label_matrix_underpowered_continue_topup`. Runtime, Phase5.5, Phase6, learned-runtime, and AAAI flags stay closed.
+
 ## 2026-06-15 Repair5G.5.54 fixed-global coefficient update
 
 G5.54 does not change LaCAM*/PIBT/search semantics and does not open runtime, Phase5.5, Phase6, or AAAI claims. It keeps dynamic learned UpdateParams, contextual selector, checkpoint policy, and abstention policy paused while testing only one deterministic global `static_flow_shield` coefficient vector at a time.

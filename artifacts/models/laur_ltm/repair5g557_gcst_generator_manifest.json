@@ -1,0 +1,12 @@
+{
+  "aaai_ready": false,
+  "decision": "g557_gcst_generator_eval_underpowered_skipped",
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "primary_baseline": "g556_c063174",
+  "reason": "TTGT outcome gate not met: g557_ttgt_outcome_eval_underpowered_skipped",
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g557_gcst_generator_eval_summary_v1",
+  "trained": false
+}

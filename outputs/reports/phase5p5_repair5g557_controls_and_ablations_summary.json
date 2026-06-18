@@ -1,0 +1,14 @@
+{
+  "aaai_ready": false,
+  "ablation_count": 3,
+  "control_count": 11,
+  "decision": "g557_controls_skipped_underpowered",
+  "gcst_beats_map_family_lookup": false,
+  "gcst_beats_tabular_only": false,
+  "learned_runtime_policy_validated": false,
+  "negative_control_count": 2,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g557_controls_and_ablations_summary_v1"
+}

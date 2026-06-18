@@ -1,0 +1,13 @@
+{
+  "aaai_ready": false,
+  "artifact_path": "C:\\PROGRAMING\\czr004\\outputs\\tmp\\phase5p5_repair5g557_remote_artifacts\\features\\traffic_prior_features.csv",
+  "decision": "g557_traffic_prior_features_created",
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "primary_traffic_input_mode": "P",
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g557_traffic_prior_features_summary_v1",
+  "traffic_prior_context_rows": 20000,
+  "uses_solver_probe": false
+}

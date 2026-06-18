@@ -1,0 +1,10 @@
+anchor,category,paper_url,code_url,g557_disposition,adopted_lesson,compatible_with_guardrails,changes_lacam_pibt_semantics,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+Guidance Graph Optimization for Lifelong MAPF,GGO,https://arxiv.org/abs/2402.01446,https://github.com/lunjohnzhang/ggo_public,adopt,solver-facing guidance optimization motivates theta slate replay,True,False,False,False,False,False,False
+Online Guidance Graph Optimization for Lifelong MAPF,Online GGO,https://arxiv.org/abs/2411.16506,,inspiration_only,dynamic online adaptation is deferred; G5.57 stays pre-run/static,True,False,False,False,False,False,False
+Mixed Guidance Graph Optimization,Mixed GGO,https://arxiv.org/abs/2602.23468,,inspiration_only,directional flow features are adopted without changing edge directions,True,False,False,False,False,False,False
+LaGAT,Graph attention MAPF,https://arxiv.org/abs/2510.17382,,inspiration_only,graph attention motivates topology/traffic encoder but not action decoding,True,False,False,False,False,False,False
+CS-PIBT,collision shield lesson,https://arxiv.org/abs/2409.14491,,guardrail,strong shield/baseline lesson becomes paired replay against g556_c063174,True,False,False,False,False,False,False
+Learning-based MAPF survey,survey,https://arxiv.org/abs/2505.19219,,guardrail,scale and heldout topology diversity are explicit gates,True,False,False,False,False,False,False
+GraphGPS,graph transformer,https://arxiv.org/abs/2205.12454,,adopt,local message passing plus global tokens informs TTGT,True,False,False,False,False,False,False
+Exphormer,sparse graph transformer,https://arxiv.org/abs/2303.06147,https://github.com/hamed1375/Exphormer,adopt_lightly,sparse/global attention idea is adopted without vendoring code,True,False,False,False,False,False,False
+Quality Diversity MAPF benchmark-map generation,QD topology,https://arxiv.org/abs/2409.06888,,adopt,generated/adversarial topology diagnostics are included in context bank,True,False,False,False,False,False,False

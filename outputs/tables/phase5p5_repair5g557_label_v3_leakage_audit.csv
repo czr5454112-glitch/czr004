@@ -1,0 +1,4 @@
+feature_or_label,used_as_feature,used_as_label,passed,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+oracle_theta_id,False,True,True,False,False,False,False,False
+quality_delta_vs_g556,False,True,True,False,False,False,False,False
+blind_seed_id,False,False,True,False,False,False,False,False

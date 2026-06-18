@@ -1,0 +1,6 @@
+claim_flag,value,expected_closed,passed
+phase5p5_allowed,False,True,True
+phase6_allowed,False,True,True
+runtime_claim_allowed,False,True,True
+learned_runtime_policy_validated,False,True,True
+aaai_ready,False,True,True

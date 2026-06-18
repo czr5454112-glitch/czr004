@@ -1,0 +1,9 @@
+{
+  "authentication_phase_reached": "password",
+  "decision": "g557_remote_execution_blocked_authentication_failed",
+  "host": "ssh.zw1.paratera.com",
+  "no_remote_artifacts_pulled": true,
+  "port": 2222,
+  "remote_tmux_started": false,
+  "schema_version": "phase5p5_repair5g557_remote_execution_status_summary_v1"
+}

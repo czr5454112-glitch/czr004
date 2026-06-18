@@ -1,0 +1,4 @@
+ablation,trained,status,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+graph_only_no_goal,False,skipped_until_label_v3_gate,False,False,False,False,False
+no_traffic,False,skipped_until_label_v3_gate,False,False,False,False,False
+graph_goal_no_traffic,False,skipped_until_label_v3_gate,False,False,False,False,False

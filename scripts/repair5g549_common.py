@@ -666,8 +666,14 @@ def run_context_task(
     )
     task_run = log_dir / f"task_{stable_hash('|'.join(map(str, key)), modulo=10**12):012d}.runs.jsonl"
     write_jsonl(task_run, rows)
+    skip_aggregate_jsonl = str(os.environ.get("REPAIR5G_SKIP_AGGREGATE_JSONL", "")).lower() in {
+        "1",
+        "true",
+        "yes",
+        "on",
+    }
     raw_probe = read_jsonl_tolerant(task_probe)
-    checkpoint_rows = read_jsonl_tolerant(task_checkpoint)
+    checkpoint_rows = [] if skip_aggregate_jsonl else read_jsonl_tolerant(task_checkpoint)
     enriched = enrich_or_placeholder(raw_probe, group_rows, key, row_prefix=row_prefix, execution_mode=execution_mode)
     for path in [task_probe, task_checkpoint, task_update]:
         path.unlink(missing_ok=True)

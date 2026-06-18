@@ -90,6 +90,8 @@ MAPS = {
     "maze-32-32-4": "external/lacam2/scripts/map/maze-32-32-4.map",
     "warehouse-10-20-10-2-1": "external/lacam2/scripts/map/warehouse-10-20-10-2-1.map",
 }
+for _map_file in (Path(__file__).resolve().parents[1] / "external/lacam2/scripts/map").glob("*.map"):
+    MAPS.setdefault(_map_file.stem, f"external/lacam2/scripts/map/{_map_file.name}")
 
 LOCKED_MAIN_CANDIDATE = "c100_b100_w075_d090"
 SUPPORT_IDS = set(range(1, 21))

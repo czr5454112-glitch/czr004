@@ -44,6 +44,11 @@ from repair5g531_common import (  # noqa: E402
     write_text,
 )
 from repair5g5_common import DEFAULT_BINARY  # noqa: E402
+from run_repair5f4_static_updateparams_validation import (  # noqa: E402
+    MAPS as SOLVER_MAP_PATHS,
+    largest_component as solver_largest_component,
+    read_map as solver_read_map,
+)
 
 
 ROUND = "repair5g557"
@@ -275,7 +280,22 @@ CONTROL_METHODS = [
     "shuffled_label_negative",
 ]
 
-SOLVER_SAFE_MAPS = {"random-32-32-20", "maze-32-32-4", "warehouse-10-20-10-2-1"}
+def solver_map_capacity() -> dict[str, int]:
+    capacities: dict[str, int] = {}
+    for map_name, map_path in SOLVER_MAP_PATHS.items():
+        path = resolve(map_path)
+        if not path.exists():
+            continue
+        try:
+            width, height, grid = solver_read_map(path)
+            capacities[map_name] = len(solver_largest_component(width, height, grid))
+        except Exception:
+            continue
+    return capacities
+
+
+SOLVER_MAP_CAPACITY = solver_map_capacity()
+SOLVER_SAFE_MAPS = set(SOLVER_MAP_CAPACITY)
 
 
 def parser() -> argparse.ArgumentParser:
@@ -548,7 +568,12 @@ def ensure_theta_registry() -> list[dict[str, Any]]:
 
 def solver_materializable_contexts(contexts: list[dict[str, Any]]) -> list[dict[str, Any]]:
     """Keep broad topology coverage offline but use the proven scenario adapter online."""
-    safe = [row for row in contexts if row.get("map") in SOLVER_SAFE_MAPS]
+    safe = [
+        row
+        for row in contexts
+        if row.get("map") in SOLVER_SAFE_MAPS
+        and int(number(row.get("agents"), 0)) <= int(SOLVER_MAP_CAPACITY.get(str(row.get("map")), 0))
+    ]
     return safe or contexts
 
 

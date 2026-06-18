@@ -635,7 +635,7 @@ def run_context_task(
             "--repair5g-checkpoint-edge-filter",
             "nonzero",
             "--repair5g-checkpoint-include-full-traffic",
-            "true",
+            os.environ.get("REPAIR5G_CHECKPOINT_INCLUDE_FULL_TRAFFIC", "false"),
             "--repair5g-counterfactual-update-probe-jsonl",
             str(task_probe),
             "--repair5g-counterfactual-candidates",

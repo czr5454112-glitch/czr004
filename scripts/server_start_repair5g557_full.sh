@@ -89,7 +89,7 @@ from pathlib import Path
 summary_path = Path('outputs/reports/phase5p5_repair5g557_g556_verification_summary.json')
 summary = json.loads(summary_path.read_text(encoding='utf-8'))
 ok = (
-    summary.get('decision') == 'g557_g556_baseline_verified'
+    summary.get('decision') in {'g557_g556_baseline_verified', 'g556_c063174_verified_for_g557'}
     and summary.get('primary_baseline') == 'g556_c063174'
     and bool(summary.get('external_lacam2_clean'))
     and not summary.get('missing_artifacts')

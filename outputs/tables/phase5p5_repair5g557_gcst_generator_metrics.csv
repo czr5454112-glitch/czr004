@@ -1,2 +1,4 @@
-model,trained,reason,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
-gcst_generator_eval,False,TTGT outcome gate not met: g557_ttgt_outcome_eval_underpowered_skipped,False,False,False,False,False
+model,mode,trained,label,contexts,nonfallback_contexts,fallback_to_g556_contexts,fallback_to_g556_rate,success_regression_count_vs_g556_c063174,success_gain_count_vs_g556_c063174,both_success_quality_pairs_vs_g556_c063174,quality_delta_mean_vs_g556_c063174,quality_delta_ci_upper_vs_g556_c063174,better_count_vs_g556_c063174,worse_count_vs_g556_c063174,materialized_safe_contexts,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+GCST-P,pre_run,True,gcst_validation_heldout,1519,0,1519,1,0,0,1519,0,0,0,0,1519,False,False,False,False,False
+map_family_lookup,control,True,map_family_lookup_validation_heldout,1519,0,1519,1,0,0,1519,0,0,0,0,1519,False,False,False,False,False
+tabular_only,control,True,tabular_only_validation_heldout,1519,0,1519,1,0,0,1519,0,0,0,0,1519,False,False,False,False,False

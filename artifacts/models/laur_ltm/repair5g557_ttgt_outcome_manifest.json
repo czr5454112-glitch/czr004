@@ -1,12 +1,2034 @@
 {
   "aaai_ready": false,
-  "decision": "g557_ttgt_outcome_eval_underpowered_skipped",
+  "aggregate_train_rows": 5366272,
+  "decision": "g557_ttgt_outcome_model_trained_real_label_v3",
+  "epochs_requested": 120,
+  "false_safe_hard_negative_count": 0,
+  "global_score": {
+    "better_rate": 0.1643122078045988,
+    "n": 5366272,
+    "quality_delta_mean": 0.024029822148351403,
+    "regression_rate": 0.005906334975193207,
+    "safe_rate": 0.9940936650248068,
+    "success_gain_rate": 0.010761847330884458,
+    "utility_mean": -0.13142710061621626,
+    "worse_rate": 0.23750995104236236
+  },
+  "gpus_requested": 2,
+  "heldout_quality_delta_ci_upper": "0",
+  "heldout_success_regressions": 0,
+  "heldout_topology_contexts": 489,
   "learned_runtime_policy_validated": false,
+  "learned_safegate_promoted": false,
   "phase5p5_allowed": false,
   "phase6_allowed": false,
-  "primary_baseline": "g556_c063174",
-  "reason": "label_v3 gate not met: g557_label_v3_dataset_underpowered_continue_topup",
   "runtime_claim_allowed": false,
   "schema_version": "phase5p5_repair5g557_ttgt_outcome_eval_summary_v1",
-  "trained": false
+  "score_table_count": 50409,
+  "score_tables_preview": {
+    "agent_density_lookup:agent_bucket_candidate::a000_099|g557_gcst_00000": {
+      "better_rate": 0.251998720818676,
+      "n": 3127,
+      "quality_delta_mean": -0.00029097090835055573,
+      "regression_rate": 0.004796929964822514,
+      "safe_rate": 0.9952030700351775,
+      "success_gain_rate": 0.007355292612727854,
+      "utility_mean": -0.05676940108557393,
+      "worse_rate": 0.25263831148065236
+    },
+    "agent_density_lookup:agent_bucket_candidate::a000_099|g557_gcst_00001": {
+      "better_rate": 0.1598976654940838,
+      "n": 3127,
+      "quality_delta_mean": 0.00026282364434315254,
+      "regression_rate": 0.006076111288775184,
+      "safe_rate": 0.9939238887112248,
+      "success_gain_rate": 0.0063959066197633516,
+      "utility_mean": -0.07504324048435874,
+      "worse_rate": 0.15318196354333227
+    },
+    "agent_density_lookup:agent_bucket_candidate::a000_099|g557_gcst_00002": {
+      "better_rate": 0.18963863127598338,
+      "n": 3127,
+      "quality_delta_mean": 0.004176955586118384,
+      "regression_rate": 0.004477134633834346,
+      "safe_rate": 0.9955228653661656,
+      "success_gain_rate": 0.0063959066197633516,
+      "utility_mean": -0.062204476242488,
+      "worse_rate": 0.356891589382795
+    },
+    "agent_density_lookup:agent_bucket_candidate::a000_099|g557_gcst_00003": {
+      "better_rate": 0.14838503357850977,
+      "n": 3127,
+      "quality_delta_mean": 0.008756612277651947,
+      "regression_rate": 0.004477134633834346,
+      "safe_rate": 0.9955228653661656,
+      "success_gain_rate": 0.007675087943716022,
+      "utility_mean": -0.05917505375850655,
+      "worse_rate": 0.4384393987847777
+    },
+    "agent_density_lookup:agent_bucket_candidate::a000_099|g557_gcst_00004": {
+      "better_rate": 0.17013111608570514,
+      "n": 3127,
+      "quality_delta_mean": 0.005802443840441357,
+      "regression_rate": 0.005116725295810681,
+      "safe_rate": 0.9948832747041894,
+      "success_gain_rate": 0.007355292612727854,
+      "utility_mean": -0.0648682910964855,
+      "worse_rate": 0.3946274384393988
+    },
+    "agent_density_lookup:agent_bucket_candidate::a000_099|g557_gcst_00005": {
+      "better_rate": 0.35944995203070035,
+      "n": 3127,
+      "quality_delta_mean": 0.002478589092957966,
+      "regression_rate": 0.002878157978893508,
+      "safe_rate": 0.9971218420211065,
+      "success_gain_rate": 0.007355292612727854,
+      "utility_mean": -0.03981483904459224,
+      "worse_rate": 0.3006076111288775
+    },
+    "agent_density_lookup:agent_bucket_candidate::a000_099|g557_gcst_00006": {
+      "better_rate": 0.3361048928685641,
+      "n": 3127,
+      "quality_delta_mean": -0.002108837360706911,
+      "regression_rate": 0.004157339302846178,
+      "safe_rate": 0.9958426606971538,
+      "success_gain_rate": 0.008634473936680525,
+      "utility_mean": -0.042193779189555476,
+      "worse_rate": 0.23121202430444515
+    },
+    "agent_density_lookup:agent_bucket_candidate::a000_099|g557_gcst_00007": {
+      "better_rate": 0.19891269587464022,
+      "n": 3127,
+      "quality_delta_mean": 0.0021839103331157948,
+      "regression_rate": 0.005756315957787016,
+      "safe_rate": 0.994243684042213,
+      "success_gain_rate": 0.008634473936680525,
+      "utility_mean": -0.0616367658033643,
+      "worse_rate": 0.29645027182603134
+    },
+    "agent_density_lookup:agent_bucket_candidate::a000_099|g557_gcst_00008": {
+      "better_rate": 0.360729133354653,
+      "n": 3127,
+      "quality_delta_mean": -0.002531468145562623,
+      "regression_rate": 0.005116725295810681,
+      "safe_rate": 0.9948832747041894,
+      "success_gain_rate": 0.00927406459865686,
+      "utility_mean": -0.04809189562325233,
+      "worse_rate": 0.234729772945315
+    },
+    "agent_density_lookup:agent_bucket_candidate::a000_099|g557_gcst_00009": {
+      "better_rate": 0.34537895746722097,
+      "n": 3127,
+      "quality_delta_mean": 0.0052423233090194464,
+      "regression_rate": 0.003837543971858011,
+      "safe_rate": 0.996162456028142,
+      "success_gain_rate": 0.00799488327470419,
+      "utility_mean": -0.04827483607784464,
+      "worse_rate": 0.3236328749600256
+    },
+    "agent_density_lookup:agent_bucket_candidate::a000_099|g557_gcst_00010": {
+      "better_rate": 0.14614646626159258,
+      "n": 3127,
+      "quality_delta_mean": 0.00828140270116223,
+      "regression_rate": 0.0031979533098816758,
+      "safe_rate": 0.9968020466901183,
+      "success_gain_rate": 0.00927406459865686,
+      "utility_mean": -0.03761669850004159,
+      "worse_rate": 0.4301247201790854
+    },
+    "agent_density_lookup:agent_bucket_candidate::a000_099|g557_gcst_00011": {
+      "better_rate": 0.11224816117684681,
+      "n": 3127,
+      "quality_delta_mean": -8.764621760110957e-05,
+      "regression_rate": 0.002878157978893508,
+      "safe_rate": 0.9971218420211065,
+      "success_gain_rate": 0.008314678605692356,
+      "utility_mean": -0.03270833266364245,
+      "worse_rate": 0.10489286856411896
+    },
+    "agent_density_lookup:agent_bucket_candidate::a000_099|g557_gcst_00012": {
+      "better_rate": 0.4074192516789255,
+      "n": 3127,
+      "quality_delta_mean": -0.004727026614920635,
+      "regression_rate": 0.003517748640869843,
+      "safe_rate": 0.9964822513591302,
+      "success_gain_rate": 0.010873041253597697,
+      "utility_mean": -0.021934087921458217,
+      "worse_rate": 0.22097857371282378
+    },
+    "agent_density_lookup:agent_bucket_candidate::a000_099|g557_gcst_00013": {
+      "better_rate": 0.1477454429165334,
+      "n": 3127,
+      "quality_delta_mean": 0.007303987207498024,
+      "regression_rate": 0.004157339302846178,
+      "safe_rate": 0.9958426606971538,
+      "success_gain_rate": 0.01055324592260953,
+      "utility_mean": -0.039699852826504636,
+      "worse_rate": 0.4259673808762392
+    },
+    "agent_density_lookup:agent_bucket_candidate::a000_099|g557_gcst_00014": {
+      "better_rate": 0.31148065238247524,
+      "n": 3127,
+      "quality_delta_mean": -0.0015888625781738776,
+      "regression_rate": 0.003837543971858011,
+      "safe_rate": 0.996162456028142,
+      "success_gain_rate": 0.009593859929645027,
+      "utility_mean": -0.034377248214128596,
+      "worse_rate": 0.2324912056283978
+    },
+    "agent_density_lookup:agent_bucket_candidate::a000_099|g557_gcst_00015": {
+      "better_rate": 0.18068436200831467,
+      "n": 3127,
+      "quality_delta_mean": 0.0055463252645205985,
+      "regression_rate": 0.002238567316917173,
+      "safe_rate": 0.9977614326830828,
+      "success_gain_rate": 0.008954269267668692,
+      "utility_mean": -0.0275020546746562,
+      "worse_rate": 0.36648544931244004
+    },
+    "agent_density_lookup:agent_bucket_candidate::a000_099|g557_gcst_00016": {
+      "better_rate": 0.37224176527022707,
+      "n": 3127,
+      "quality_delta_mean": -0.004097152545685959,
+      "regression_rate": 0.002878157978893508,
+      "safe_rate": 0.9971218420211065,
+      "success_gain_rate": 0.009593859929645027,
+      "utility_mean": -0.022758868333795954,
+      "worse_rate": 0.18356251998720818
+    },
+    "agent_density_lookup:agent_bucket_candidate::a000_099|g557_gcst_00017": {
+      "better_rate": 0.23504956827630316,
+      "n": 3127,
+      "quality_delta_mean": 0.00016257316957159887,
+      "regression_rate": 0.0031979533098816758,
+      "safe_rate": 0.9968020466901183,
+      "success_gain_rate": 0.009913655260633194,
+      "utility_mean": -0.027713414442113834,
+      "worse_rate": 0.24784138151582988
+    },
+    "agent_density_lookup:agent_bucket_candidate::a000_099|g557_gcst_00018": {
+      "better_rate": 0.16501439078989447,
+      "n": 3127,
+      "quality_delta_mean": 0.007536756915789051,
+      "regression_rate": 0.002878157978893508,
+      "safe_rate": 0.9971218420211065,
+      "success_gain_rate": 0.00927406459865686,
+      "utility_mean": -0.03382081897717308,
+      "worse_rate": 0.410297409657819
+    },
+    "agent_density_lookup:agent_bucket_candidate::a000_099|g557_gcst_00019": {
+      "better_rate": 0.11992324912056283,
+      "n": 3127,
+      "quality_delta_mean": 0.032039948069182846,
+      "regression_rate": 0.0031979533098816758,
+      "safe_rate": 0.9968020466901183,
+      "success_gain_rate": 0.01055324592260953,
+      "utility_mean": -0.05005523155817399,
+      "worse_rate": 0.534377998081228
+    },
+    "agent_density_lookup:agent_bucket_candidate::a000_099|g557_gcst_00020": {
+      "better_rate": 0.12567956507834985,
+      "n": 3127,
+      "quality_delta_mean": 0.012681774423087882,
+      "regression_rate": 0.0015989766549408379,
+      "safe_rate": 0.9984010233450592,
+      "success_gain_rate": 0.010233450591621363,
+      "utility_mean": -0.020158030761982734,
+      "worse_rate": 0.5123121202430444
+    },
+    "agent_density_lookup:agent_bucket_candidate::a000_099|g557_gcst_00021": {
+      "better_rate": 0.16309561880396548,
+      "n": 3127,
+      "quality_delta_mean": 0.00029033271989694807,
+      "regression_rate": 0.0025583626479053407,
+      "safe_rate": 0.9974416373520947,
+      "success_gain_rate": 0.011192836584585865,
+      "utility_mean": -0.014704991829964846,
+      "worse_rate": 0.15350175887432044
+    },
+    "agent_density_lookup:agent_bucket_candidate::a000_099|g557_gcst_00022": {
+      "better_rate": 0.30316597377678284,
+      "n": 3127,
+      "quality_delta_mean": -0.0012432880378116322,
+      "regression_rate": 0.0012791813239526704,
+      "safe_rate": 0.9987208186760473,
+      "success_gain_rate": 0.010233450591621363,
+      "utility_mean": -0.005710972538679262,
+      "worse_rate": 0.2516789254876879
+    },
+    "agent_density_lookup:agent_bucket_candidate::a000_099|g557_gcst_00023": {
+      "better_rate": 0.3658458586504637,
+      "n": 3127,
+      "quality_delta_mean": 0.0012401512019247554,
+      "regression_rate": 0.0019187719859290054,
+      "safe_rate": 0.998081228014071,
+      "success_gain_rate": 0.010233450591621363,
+      "utility_mean": -0.01411300984485444,
+      "worse_rate": 0.28621682123441
+    },
+    "agent_density_lookup:agent_bucket_candidate::a000_099|g557_gcst_00024": {
+      "better_rate": 0.3901503038055644,
+      "n": 3127,
+      "quality_delta_mean": -0.0030315998333161637,
+      "regression_rate": 0.002238567316917173,
+      "safe_rate": 0.9977614326830828,
+      "success_gain_rate": 0.009913655260633194,
+      "utility_mean": -0.015541490892456015,
+      "worse_rate": 0.22513591301566996
+    },
+    "agent_density_lookup:agent_bucket_candidate::a000_099|g557_gcst_00025": {
+      "better_rate": 0.12248161176846818,
+      "n": 3127,
+      "quality_delta_mean": 0.012929500543866865,
+      "regression_rate": 0.002238567316917173,
+      "safe_rate": 0.9977614326830828,
+      "success_gain_rate": 0.009913655260633194,
+      "utility_mean": -0.028424707186670905,
+      "worse_rate": 0.5119923249120563
+    },
+    "agent_density_lookup:agent_bucket_candidate::a000_099|g557_gcst_00026": {
+      "better_rate": 0.33546530220658777,
+      "n": 3127,
+      "quality_delta_mean": -0.0012823206106542403,
+      "regression_rate": 0.002878157978893508,
+      "safe_rate": 0.9971218420211065,
+      "success_gain_rate": 0.011192836584585865,
+      "utility_mean": -0.016634469913632897,
+      "worse_rate": 0.25295810681164055
+    },
+    "agent_density_lookup:agent_bucket_candidate::a000_099|g557_gcst_00027": {
+      "better_rate": 0.22417652702270546,
+      "n": 3127,
+      "quality_delta_mean": 0.0005299329222948872,
+      "regression_rate": 0.0025583626479053407,
+      "safe_rate": 0.9974416373520947,
+      "success_gain_rate": 0.00927406459865686,
+      "utility_mean": -0.024971864650767533,
+      "worse_rate": 0.2567956507834986
+    },
+    "agent_density_lookup:agent_bucket_candidate::a000_099|g557_gcst_00028": {
+      "better_rate": 0.232811000959386,
+      "n": 3127,
+      "quality_delta_mean": 0.0015516161034522381,
+      "regression_rate": 0.0025583626479053407,
+      "safe_rate": 0.9974416373520947,
+      "success_gain_rate": 0.009913655260633194,
+      "utility_mean": -0.022438352231854794,
+      "worse_rate": 0.29708986248800767
+    },
+    "agent_density_lookup:agent_bucket_candidate::a000_099|g557_gcst_00029": {
+      "better_rate": 0.07547169811320754,
+      "n": 3127,
+      "quality_delta_mean": 0.04854021332884638,
+      "regression_rate": 0.0,
+      "safe_rate": 1.0,
+      "success_gain_rate": 0.01598976654940838,
+      "utility_mean": -0.0029917748433994397,
+      "worse_rate": 0.6750879437160218
+    },
+    "agent_density_lookup:agent_bucket_candidate::a000_099|g557_gcst_00030": {
+      "better_rate": 0.26479053405820274,
+      "n": 3127,
+      "quality_delta_mean": -0.00015964749525336434,
+      "regression_rate": 0.0015989766549408379,
+      "safe_rate": 0.9984010233450592,
+      "success_gain_rate": 0.00927406459865686,
+      "utility_mean": -0.014821467997118648,
+      "worse_rate": 0.2494403581707707
+    },
+    "agent_density_lookup:agent_bucket_candidate::a000_099|g557_gcst_00031": {
+      "better_rate": 0.114486728493764,
+      "n": 3127,
+      "quality_delta_mean": -1.7848932038064738e-05,
+      "regression_rate": 0.002878157978893508,
+      "safe_rate": 0.9971218420211065,
+      "success_gain_rate": 0.008634473936680525,
+      "utility_mean": -0.0310857003496642,
+      "worse_rate": 0.11064918452190597
+    },
+    "agent_density_lookup:agent_bucket_candidate::a000_099|g557_gcst_00032": {
+      "better_rate": 0.17908538535337384,
+      "n": 3127,
+      "quality_delta_mean": 0.0059747492944092016,
+      "regression_rate": 0.002878157978893508,
+      "safe_rate": 0.9971218420211065,
+      "success_gain_rate": 0.00927406459865686,
+      "utility_mean": -0.03256102261608568,
+      "worse_rate": 0.38215542053086027
+    },
+    "agent_density_lookup:agent_bucket_candidate::a000_099|g557_gcst_00033": {
+      "better_rate": 0.28621682123441,
+      "n": 3127,
+      "quality_delta_mean": -0.00021560850403327963,
+      "regression_rate": 0.002238567316917173,
+      "safe_rate": 0.9977614326830828,
+      "success_gain_rate": 0.009593859929645027,
+      "utility_mean": -0.01949338155926448,
+      "worse_rate": 0.2494403581707707
+    },
+    "agent_density_lookup:agent_bucket_candidate::a000_099|g557_gcst_00034": {
+      "better_rate": 0.13047649504317238,
+      "n": 3127,
+      "quality_delta_mean": 0.01238353798426932,
+      "regression_rate": 0.0019187719859290054,
+      "safe_rate": 0.998081228014071,
+      "success_gain_rate": 0.010233450591621363,
+      "utility_mean": -0.023111107582436844,
+      "worse_rate": 0.4844899264470739
+    },
+    "agent_density_lookup:agent_bucket_candidate::a000_099|g557_gcst_00035": {
+      "better_rate": 0.19859290054365206,
+      "n": 3127,
+      "quality_delta_mean": 0.0023162546320174425,
+      "regression_rate": 0.0025583626479053407,
+      "safe_rate": 0.9974416373520947,
+      "success_gain_rate": 0.010233450591621363,
+      "utility_mean": -0.02137637046260958,
+      "worse_rate": 0.3194755356571794
+    },
+    "agent_density_lookup:agent_bucket_candidate::a000_099|g557_gcst_00036": {
+      "better_rate": 0.41765270227054685,
+      "n": 3127,
+      "quality_delta_mean": -0.004634030089333592,
+      "regression_rate": 0.0031979533098816758,
+      "safe_rate": 0.9968020466901183,
+      "success_gain_rate": 0.011192836584585865,
+      "utility_mean": -0.017130671616498234,
+      "worse_rate": 0.22161816437480014
+    },
+    "agent_density_lookup:agent_bucket_family::a000_099|": {
+      "better_rate": 0.2383468330268628,
+      "n": 1601024,
+      "quality_delta_mean": 0.007713553844050435,
+      "regression_rate": 0.0021342590741925166,
+      "safe_rate": 0.9978657409258075,
+      "success_gain_rate": 0.010936750479692996,
+      "utility_mean": -0.01780105809376461,
+      "worse_rate": 0.3158890809881676
+    },
+    "gcst:agent_budget_family::a000_099|b2001_plus|": {
+      "better_rate": 0.2123743444055944,
+      "n": 366080,
+      "quality_delta_mean": 0.01199370611963549,
+      "regression_rate": 0.0009151005244755245,
+      "safe_rate": 0.9990848994755245,
+      "success_gain_rate": 0.020446350524475524,
+      "utility_mean": 0.03128507497886339,
+      "worse_rate": 0.3137019230769231
+    },
+    "gcst:candidate::g557_gcst_00000": {
+      "better_rate": 0.17765480393092262,
+      "n": 10481,
+      "quality_delta_mean": 2.5640676715445604e-05,
+      "regression_rate": 0.007346627230226123,
+      "safe_rate": 0.9926533727697738,
+      "success_gain_rate": 0.007537448716725503,
+      "utility_mean": -0.1500469345621239,
+      "worse_rate": 0.19692777406735998
+    },
+    "gcst:candidate::g557_gcst_00001": {
+      "better_rate": 0.15551951149699456,
+      "n": 10481,
+      "quality_delta_mean": -0.0006504205191091047,
+      "regression_rate": 0.006392519797729224,
+      "safe_rate": 0.9936074802022707,
+      "success_gain_rate": 0.008491556149222403,
+      "utility_mean": -0.13513914876648636,
+      "worse_rate": 0.1503673313615113
+    },
+    "gcst:candidate::g557_gcst_00002": {
+      "better_rate": 0.16019463791622937,
+      "n": 10481,
+      "quality_delta_mean": 0.002070745986788914,
+      "regression_rate": 0.0047705371624844955,
+      "safe_rate": 0.9952294628375155,
+      "success_gain_rate": 0.008109913176223643,
+      "utility_mean": -0.12236594687324878,
+      "worse_rate": 0.23308844575899246
+    },
+    "gcst:candidate::g557_gcst_00003": {
+      "better_rate": 0.1383455777120504,
+      "n": 10481,
+      "quality_delta_mean": 0.00485382184497662,
+      "regression_rate": 0.004961358648983875,
+      "safe_rate": 0.9950386413510162,
+      "success_gain_rate": 0.008491556149222403,
+      "utility_mean": -0.12374651745616527,
+      "worse_rate": 0.27373342238336035
+    },
+    "gcst:candidate::g557_gcst_00004": {
+      "better_rate": 0.14836370575326782,
+      "n": 10481,
+      "quality_delta_mean": 0.002972601522663547,
+      "regression_rate": 0.0060108768247304645,
+      "safe_rate": 0.9939891231752696,
+      "success_gain_rate": 0.008014502432973953,
+      "utility_mean": -0.13574515464643264,
+      "worse_rate": 0.2497853258276882
+    },
+    "gcst:candidate::g557_gcst_00005": {
+      "better_rate": 0.17355214197118596,
+      "n": 10481,
+      "quality_delta_mean": 0.029397244713068545,
+      "regression_rate": 0.004388894189485736,
+      "safe_rate": 0.9956111058105143,
+      "success_gain_rate": 0.008300734662723023,
+      "utility_mean": -0.1320604011137239,
+      "worse_rate": 0.29109817765480395
+    },
+    "gcst:candidate::g557_gcst_00006": {
+      "better_rate": 0.20131666825684572,
+      "n": 10481,
+      "quality_delta_mean": -0.00031766549932841137,
+      "regression_rate": 0.005533823108482015,
+      "safe_rate": 0.994466176891518,
+      "success_gain_rate": 0.009350252838469611,
+      "utility_mean": -0.12221979637598802,
+      "worse_rate": 0.202461597175842
+    },
+    "gcst:candidate::g557_gcst_00007": {
+      "better_rate": 0.16496517507871386,
+      "n": 10481,
+      "quality_delta_mean": -0.0007741577048026671,
+      "regression_rate": 0.0060108768247304645,
+      "safe_rate": 0.9939891231752696,
+      "success_gain_rate": 0.008873199122221162,
+      "utility_mean": -0.12925333450014773,
+      "worse_rate": 0.20704131285182711
+    },
+    "gcst:candidate::g557_gcst_00008": {
+      "better_rate": 0.2016029004865948,
+      "n": 10481,
+      "quality_delta_mean": 0.004117884227566593,
+      "regression_rate": 0.0053430016219826355,
+      "safe_rate": 0.9946569983780174,
+      "success_gain_rate": 0.009159431351970232,
+      "utility_mean": -0.12366462787600038,
+      "worse_rate": 0.22001717393378495
+    },
+    "gcst:candidate::g557_gcst_00009": {
+      "better_rate": 0.14998568838851253,
+      "n": 10481,
+      "quality_delta_mean": 0.03813000724113455,
+      "regression_rate": 0.007251216486976434,
+      "safe_rate": 0.9927487835130235,
+      "success_gain_rate": 0.008777788378971472,
+      "utility_mean": -0.16270753936522447,
+      "worse_rate": 0.3159049708997233
+    },
+    "gcst:candidate::g557_gcst_00010": {
+      "better_rate": 0.1412079000095411,
+      "n": 10481,
+      "quality_delta_mean": 0.0038419069481031103,
+      "regression_rate": 0.004293483446236046,
+      "safe_rate": 0.995706516553764,
+      "success_gain_rate": 0.009159431351970232,
+      "utility_mean": -0.11302718213720926,
+      "worse_rate": 0.2669592596126324
+    },
+    "gcst:candidate::g557_gcst_00011": {
+      "better_rate": 0.14130331075279076,
+      "n": 10481,
+      "quality_delta_mean": -0.0008998365753133393,
+      "regression_rate": 0.0041026619597366665,
+      "safe_rate": 0.9958973380402634,
+      "success_gain_rate": 0.008777788378971472,
+      "utility_mean": -0.11060383647668008,
+      "worse_rate": 0.13319339757656712
+    },
+    "gcst:candidate::g557_gcst_00012": {
+      "better_rate": 0.21400629710905447,
+      "n": 10481,
+      "quality_delta_mean": 0.006582312642682356,
+      "regression_rate": 0.004388894189485736,
+      "safe_rate": 0.9956111058105143,
+      "success_gain_rate": 0.010686003243965271,
+      "utility_mean": -0.1074217300037374,
+      "worse_rate": 0.22278408548802595
+    },
+    "gcst:candidate::g557_gcst_00013": {
+      "better_rate": 0.13786852399580193,
+      "n": 10481,
+      "quality_delta_mean": 0.005353474261366919,
+      "regression_rate": 0.004961358648983875,
+      "safe_rate": 0.9950386413510162,
+      "success_gain_rate": 0.010208949527716822,
+      "utility_mean": -0.11499525969785321,
+      "worse_rate": 0.26915370670737526
+    },
+    "gcst:candidate::g557_gcst_00014": {
+      "better_rate": 0.20351111535158858,
+      "n": 10481,
+      "quality_delta_mean": -0.0022147404212259484,
+      "regression_rate": 0.004675126419234806,
+      "safe_rate": 0.9953248735807652,
+      "success_gain_rate": 0.010304360270966512,
+      "utility_mean": -0.10761658229526945,
+      "worse_rate": 0.1845243774449003
+    },
+    "gcst:candidate::g557_gcst_00015": {
+      "better_rate": 0.16038545940272875,
+      "n": 10481,
+      "quality_delta_mean": 0.0017517513017257429,
+      "regression_rate": 0.005247590878732946,
+      "safe_rate": 0.9947524091212671,
+      "success_gain_rate": 0.009445663581719301,
+      "utility_mean": -0.11995367636520275,
+      "worse_rate": 0.23385173170499
+    },
+    "gcst:candidate::g557_gcst_00016": {
+      "better_rate": 0.22679133670451293,
+      "n": 10481,
+      "quality_delta_mean": -0.001202438419872501,
+      "regression_rate": 0.0041026619597366665,
+      "safe_rate": 0.9958973380402634,
+      "success_gain_rate": 0.009064020608720542,
+      "utility_mean": -0.10894033207134146,
+      "worse_rate": 0.1721209808224406
+    },
+    "gcst:candidate::g557_gcst_00017": {
+      "better_rate": 0.17841808987692015,
+      "n": 10481,
+      "quality_delta_mean": 0.0007560176625863312,
+      "regression_rate": 0.004961358648983875,
+      "safe_rate": 0.9950386413510162,
+      "success_gain_rate": 0.00973189581146837,
+      "utility_mean": -0.11506091577177564,
+      "worse_rate": 0.1832840377826543
+    },
+    "gcst:candidate::g557_gcst_00018": {
+      "better_rate": 0.1522755462265051,
+      "n": 10481,
+      "quality_delta_mean": 0.005524828868163534,
+      "regression_rate": 0.004484304932735426,
+      "safe_rate": 0.9955156950672646,
+      "success_gain_rate": 0.009064020608720542,
+      "utility_mean": -0.11632913583163172,
+      "worse_rate": 0.25779982826066217
+    },
+    "gcst:candidate::g557_gcst_00019": {
+      "better_rate": 0.06392519797729224,
+      "n": 10481,
+      "quality_delta_mean": 0.06557650219309612,
+      "regression_rate": 0.017746398244442324,
+      "safe_rate": 0.9822536017555576,
+      "success_gain_rate": 0.007919091689724263,
+      "utility_mean": -0.28597634776259334,
+      "worse_rate": 0.3868905638774926
+    },
+    "gcst:candidate::g557_gcst_00020": {
+      "better_rate": 0.12641923480583914,
+      "n": 10481,
+      "quality_delta_mean": 0.008034649272424518,
+      "regression_rate": 0.004579715675985116,
+      "safe_rate": 0.9954202843240149,
+      "success_gain_rate": 0.00992271729796775,
+      "utility_mean": -0.11410693526874996,
+      "worse_rate": 0.3112298444804885
+    },
+    "gcst:candidate::g557_gcst_00021": {
+      "better_rate": 0.15685526190249022,
+      "n": 10481,
+      "quality_delta_mean": -0.0006789895292701767,
+      "regression_rate": 0.004675126419234806,
+      "safe_rate": 0.9953248735807652,
+      "success_gain_rate": 0.01116305696021372,
+      "utility_mean": -0.10392355512342992,
+      "worse_rate": 0.15093979582100944
+    },
+    "gcst:candidate::g557_gcst_00022": {
+      "better_rate": 0.18767293197214005,
+      "n": 10481,
+      "quality_delta_mean": 0.0010090751651417858,
+      "regression_rate": 0.0038164297299875965,
+      "safe_rate": 0.9961835702700124,
+      "success_gain_rate": 0.009350252838469611,
+      "utility_mean": -0.10575065039787891,
+      "worse_rate": 0.21171643927106193
+    },
+    "gcst:candidate::g557_gcst_00023": {
+      "better_rate": 0.1864325923098941,
+      "n": 10481,
+      "quality_delta_mean": 0.012648092008212947,
+      "regression_rate": 0.005820055338231085,
+      "safe_rate": 0.994179944661769,
+      "success_gain_rate": 0.00973189581146837,
+      "utility_mean": -0.12994557377517305,
+      "worse_rate": 0.26562350920713673
+    },
+    "gcst:candidate::g557_gcst_00024": {
+      "better_rate": 0.19940845339185193,
+      "n": 10481,
+      "quality_delta_mean": 0.010758796327002874,
+      "regression_rate": 0.0047705371624844955,
+      "safe_rate": 0.9952294628375155,
+      "success_gain_rate": 0.00982730655471806,
+      "utility_mean": -0.11796015887518294,
+      "worse_rate": 0.23528289285373533
+    },
+    "gcst:candidate::g557_gcst_00025": {
+      "better_rate": 0.12365232325159813,
+      "n": 10481,
+      "quality_delta_mean": 0.0066087300093773645,
+      "regression_rate": 0.0037210189867379066,
+      "safe_rate": 0.9962789810132621,
+      "success_gain_rate": 0.01001812804121744,
+      "utility_mean": -0.10426776570386986,
+      "worse_rate": 0.31361511306173073
+    },
+    "gcst:candidate::g557_gcst_00026": {
+      "better_rate": 0.1893903253506345,
+      "n": 10481,
+      "quality_delta_mean": 0.0046409431728096345,
+      "regression_rate": 0.004675126419234806,
+      "safe_rate": 0.9953248735807652,
+      "success_gain_rate": 0.01001812804121744,
+      "utility_mean": -0.11275809244063922,
+      "worse_rate": 0.2261234615017651
+    },
+    "gcst:candidate::g557_gcst_00027": {
+      "better_rate": 0.17736857170117354,
+      "n": 10481,
+      "quality_delta_mean": -0.0031941282234081905,
+      "regression_rate": 0.004388894189485736,
+      "safe_rate": 0.9956111058105143,
+      "success_gain_rate": 0.010495181757465891,
+      "utility_mean": -0.10323170330202362,
+      "worse_rate": 0.187386699742391
+    },
+    "gcst:candidate::g557_gcst_00028": {
+      "better_rate": 0.1779410361606717,
+      "n": 10481,
+      "quality_delta_mean": 0.001393487454045609,
+      "regression_rate": 0.0041026619597366665,
+      "safe_rate": 0.9958973380402634,
+      "success_gain_rate": 0.00982730655471806,
+      "utility_mean": -0.10631240641461513,
+      "worse_rate": 0.20656425913557866
+    },
+    "gcst:candidate::g557_gcst_00029": {
+      "better_rate": 0.035969850205133096,
+      "n": 10481,
+      "quality_delta_mean": 0.2615781607002796,
+      "regression_rate": 0.04713290716534682,
+      "safe_rate": 0.9528670928346532,
+      "success_gain_rate": 0.013357504054956589,
+      "utility_mean": -0.6450727055113087,
+      "worse_rate": 0.4287758801641065
+    },
+    "gcst:candidate::g557_gcst_00030": {
+      "better_rate": 0.18347485926915372,
+      "n": 10481,
+      "quality_delta_mean": -0.0008856456668115638,
+      "regression_rate": 0.004293483446236046,
+      "safe_rate": 0.995706516553764,
+      "success_gain_rate": 0.010208949527716822,
+      "utility_mean": -0.1050061645427783,
+      "worse_rate": 0.19349298731037115
+    },
+    "gcst:candidate::g557_gcst_00031": {
+      "better_rate": 0.13815475622555098,
+      "n": 10481,
+      "quality_delta_mean": 0.0010059023622904324,
+      "regression_rate": 0.003911840473237287,
+      "safe_rate": 0.9960881595267627,
+      "success_gain_rate": 0.010399771014216201,
+      "utility_mean": -0.10119300468088183,
+      "worse_rate": 0.1352924339280603
+    },
+    "gcst:candidate::g557_gcst_00032": {
+      "better_rate": 0.15437458257799827,
+      "n": 10481,
+      "quality_delta_mean": 0.004166350433330937,
+      "regression_rate": 0.005533823108482015,
+      "safe_rate": 0.994466176891518,
+      "success_gain_rate": 0.00992271729796775,
+      "utility_mean": -0.1215904885322701,
+      "worse_rate": 0.2432019845434596
+    },
+    "gcst:candidate::g557_gcst_00033": {
+      "better_rate": 0.18032630474191394,
+      "n": 10481,
+      "quality_delta_mean": 0.0029347481400000012,
+      "regression_rate": 0.004198072702986356,
+      "safe_rate": 0.9958019272970137,
+      "success_gain_rate": 0.00973189581146837,
+      "utility_mean": -0.10858607743951154,
+      "worse_rate": 0.21257513596030914
+    },
+    "gcst:candidate::g557_gcst_00034": {
+      "better_rate": 0.13853639919854976,
+      "n": 10481,
+      "quality_delta_mean": 0.0051643267435178995,
+      "regression_rate": 0.004675126419234806,
+      "safe_rate": 0.9953248735807652,
+      "success_gain_rate": 0.010590592500715581,
+      "utility_mean": -0.11003045030762242,
+      "worse_rate": 0.28785421238431447
+    },
+    "gcst:candidate::g557_gcst_00035": {
+      "better_rate": 0.1645835321057151,
+      "n": 10481,
+      "quality_delta_mean": 0.000978503389685646,
+      "regression_rate": 0.004293483446236046,
+      "safe_rate": 0.995706516553764,
+      "success_gain_rate": 0.01106764621696403,
+      "utility_mean": -0.10148815269252733,
+      "worse_rate": 0.21600992271729796
+    },
+    "gcst:candidate::g557_gcst_00036": {
+      "better_rate": 0.21410170785230417,
+      "n": 10481,
+      "quality_delta_mean": 0.007238179152258171,
+      "regression_rate": 0.0047705371624844955,
+      "safe_rate": 0.9952294628375155,
+      "success_gain_rate": 0.010399771014216201,
+      "utility_mean": -0.1130864185139645,
+      "worse_rate": 0.22765003339376014
+    },
+    "gcst:family::": {
+      "better_rate": 0.1643122078045988,
+      "n": 5366272,
+      "quality_delta_mean": 0.024029822148351403,
+      "regression_rate": 0.005906334975193207,
+      "safe_rate": 0.9940936650248068,
+      "success_gain_rate": 0.010761847330884458,
+      "utility_mean": -0.13142710061621626,
+      "worse_rate": 0.23750995104236236
+    },
+    "gcst:flow_regime_family::||": {
+      "better_rate": 0.25262670529558456,
+      "n": 3490304,
+      "quality_delta_mean": 0.024029822148351403,
+      "regression_rate": 0.009080870892621388,
+      "safe_rate": 0.9909191291073786,
+      "success_gain_rate": 0.016546123203021856,
+      "utility_mean": -0.06769655883213942,
+      "worse_rate": 0.3651667591132463
+    },
+    "gcst:map_agent_budget_candidate::random|a000_099|b2001_plus|g557_gcst_00000": {
+      "better_rate": 0.2923728813559322,
+      "n": 236,
+      "quality_delta_mean": 0.0027125991703813557,
+      "regression_rate": 0.0,
+      "safe_rate": 1.0,
+      "success_gain_rate": 0.0,
+      "utility_mean": -0.0027125991703813557,
+      "worse_rate": 0.423728813559322
+    },
+    "gcst:map_agent_budget_candidate::random|a000_099|b2001_plus|g557_gcst_00001": {
+      "better_rate": 0.2033898305084746,
+      "n": 236,
+      "quality_delta_mean": 0.0011167128497881356,
+      "regression_rate": 0.0,
+      "safe_rate": 1.0,
+      "success_gain_rate": 0.0,
+      "utility_mean": -0.0011167128497881356,
+      "worse_rate": 0.24152542372881355
+    },
+    "gcst:map_agent_budget_candidate::random|a000_099|b2001_plus|g557_gcst_00002": {
+      "better_rate": 0.2076271186440678,
+      "n": 236,
+      "quality_delta_mean": 0.007180480146398308,
+      "regression_rate": 0.0,
+      "safe_rate": 1.0,
+      "success_gain_rate": 0.0,
+      "utility_mean": -0.007180480146398308,
+      "worse_rate": 0.5466101694915254
+    },
+    "gcst:map_agent_budget_candidate::random|a000_099|b2001_plus|g557_gcst_00003": {
+      "better_rate": 0.17372881355932204,
+      "n": 236,
+      "quality_delta_mean": 0.011327492127245757,
+      "regression_rate": 0.0,
+      "safe_rate": 1.0,
+      "success_gain_rate": 0.0,
+      "utility_mean": -0.011327492127245757,
+      "worse_rate": 0.6483050847457628
+    },
+    "gcst:map_agent_budget_candidate::random|a000_099|b2001_plus|g557_gcst_00004": {
+      "better_rate": 0.1652542372881356,
+      "n": 236,
+      "quality_delta_mean": 0.009760244021906787,
+      "regression_rate": 0.0,
+      "safe_rate": 1.0,
+      "success_gain_rate": 0.0,
+      "utility_mean": -0.009760244021906787,
+      "worse_rate": 0.6101694915254238
+    },
+    "gcst:map_agent_budget_candidate::random|a000_099|b2001_plus|g557_gcst_00005": {
+      "better_rate": 0.5,
+      "n": 236,
+      "quality_delta_mean": -0.0024793064519067864,
+      "regression_rate": 0.0,
+      "safe_rate": 1.0,
+      "success_gain_rate": 0.0,
+      "utility_mean": 0.0024793064519067864,
+      "worse_rate": 0.3432203389830508
+    },
+    "gcst:map_agent_budget_candidate::random|a000_099|b2001_plus|g557_gcst_00006": {
+      "better_rate": 0.3813559322033898,
+      "n": 236,
+      "quality_delta_mean": -0.0006108355931779668,
+      "regression_rate": 0.0,
+      "safe_rate": 1.0,
+      "success_gain_rate": 0.0,
+      "utility_mean": 0.0006108355931779668,
+      "worse_rate": 0.3220338983050847
+    },
+    "gcst:map_agent_budget_candidate::random|a000_099|b2001_plus|g557_gcst_00007": {
+      "better_rate": 0.2245762711864407,
+      "n": 236,
+      "quality_delta_mean": 0.005063948933983054,
+      "regression_rate": 0.0,
+      "safe_rate": 1.0,
+      "success_gain_rate": 0.0,
+      "utility_mean": -0.005063948933983054,
+      "worse_rate": 0.4830508474576271
+    },
+    "gcst:map_agent_budget_candidate::random|a000_099|b2001_plus|g557_gcst_00008": {
+      "better_rate": 0.4788135593220339,
+      "n": 236,
+      "quality_delta_mean": -0.0033872085295338973,
+      "regression_rate": 0.0,
+      "safe_rate": 1.0,
+      "success_gain_rate": 0.0,
+      "utility_mean": 0.0033872085295338973,
+      "worse_rate": 0.2923728813559322
+    },
+    "gcst:map_agent_budget_candidate::random|a000_099|b2001_plus|g557_gcst_00009": {
+      "better_rate": 0.5338983050847458,
+      "n": 236,
+      "quality_delta_mean": 5.099198737288028e-05,
+      "regression_rate": 0.0,
+      "safe_rate": 1.0,
+      "success_gain_rate": 0.0,
+      "utility_mean": -5.099198737288028e-05,
+      "worse_rate": 0.3347457627118644
+    },
+    "gcst:map_agent_budget_candidate::random|a000_099|b2001_plus|g557_gcst_00010": {
+      "better_rate": 0.11016949152542373,
+      "n": 236,
+      "quality_delta_mean": 0.011977581310805091,
+      "regression_rate": 0.0,
+      "safe_rate": 1.0,
+      "success_gain_rate": 0.0,
+      "utility_mean": -0.011977581310805091,
+      "worse_rate": 0.7076271186440678
+    },
+    "gcst:map_agent_budget_candidate::random|a000_099|b2001_plus|g557_gcst_00011": {
+      "better_rate": 0.13559322033898305,
+      "n": 236,
+      "quality_delta_mean": 0.0005365955663983053,
+      "regression_rate": 0.0,
+      "safe_rate": 1.0,
+      "success_gain_rate": 0.0,
+      "utility_mean": -0.0005365955663983053,
+      "worse_rate": 0.13135593220338984
+    },
+    "gcst:map_agent_budget_candidate::random|a000_099|b2001_plus|g557_gcst_00012": {
+      "better_rate": 0.5805084745762712,
+      "n": 236,
+      "quality_delta_mean": -0.00740062831474576,
+      "regression_rate": 0.0,
+      "safe_rate": 1.0,
+      "success_gain_rate": 0.0,
+      "utility_mean": 0.00740062831474576,
+      "worse_rate": 0.2245762711864407
+    },
+    "gcst:map_agent_budget_candidate::random|a000_099|b2001_plus|g557_gcst_00013": {
+      "better_rate": 0.1440677966101695,
+      "n": 236,
+      "quality_delta_mean": 0.010417090256694921,
+      "regression_rate": 0.0,
+      "safe_rate": 1.0,
+      "success_gain_rate": 0.0,
+      "utility_mean": -0.010417090256694921,
+      "worse_rate": 0.673728813559322
+    },
+    "gcst:map_agent_budget_candidate::random|a000_099|b2001_plus|g557_gcst_00014": {
+      "better_rate": 0.3601694915254237,
+      "n": 236,
+      "quality_delta_mean": 0.0006900294132203398,
+      "regression_rate": 0.0,
+      "safe_rate": 1.0,
+      "success_gain_rate": 0.0,
+      "utility_mean": -0.0006900294132203398,
+      "worse_rate": 0.3559322033898305
+    },
+    "gcst:map_agent_budget_candidate::random|a000_099|b2001_plus|g557_gcst_00015": {
+      "better_rate": 0.2076271186440678,
+      "n": 236,
+      "quality_delta_mean": 0.006933527555720342,
+      "regression_rate": 0.0,
+      "safe_rate": 1.0,
+      "success_gain_rate": 0.0,
+      "utility_mean": -0.006933527555720342,
+      "worse_rate": 0.4830508474576271
+    },
+    "gcst:map_agent_budget_candidate::random|a000_099|b2001_plus|g557_gcst_00016": {
+      "better_rate": 0.4745762711864407,
+      "n": 236,
+      "quality_delta_mean": -0.0037328848692372864,
+      "regression_rate": 0.0,
+      "safe_rate": 1.0,
+      "success_gain_rate": 0.0,
+      "utility_mean": 0.0037328848692372864,
+      "worse_rate": 0.25
+    },
+    "gcst:map_agent_budget_candidate::random|a000_099|b2001_plus|g557_gcst_00017": {
+      "better_rate": 0.3474576271186441,
+      "n": 236,
+      "quality_delta_mean": 0.0018708302440677968,
+      "regression_rate": 0.0,
+      "safe_rate": 1.0,
+      "success_gain_rate": 0.0,
+      "utility_mean": -0.0018708302440677968,
+      "worse_rate": 0.4110169491525424
+    },
+    "gcst:map_agent_budget_candidate::random|a000_099|b2001_plus|g557_gcst_00018": {
+      "better_rate": 0.1652542372881356,
+      "n": 236,
+      "quality_delta_mean": 0.009709429406567795,
+      "regression_rate": 0.0,
+      "safe_rate": 1.0,
+      "success_gain_rate": 0.0,
+      "utility_mean": -0.009709429406567795,
+      "worse_rate": 0.597457627118644
+    },
+    "gcst:map_agent_budget_candidate::random|a000_099|b2001_plus|g557_gcst_00019": {
+      "better_rate": 0.1864406779661017,
+      "n": 236,
+      "quality_delta_mean": 0.02053485972661016,
+      "regression_rate": 0.0,
+      "safe_rate": 1.0,
+      "success_gain_rate": 0.0,
+      "utility_mean": -0.02053485972661016,
+      "worse_rate": 0.690677966101695
+    },
+    "gcst:map_agent_budget_candidate::random|a000_099|b2001_plus|g557_gcst_00020": {
+      "better_rate": 0.0635593220338983,
+      "n": 236,
+      "quality_delta_mean": 0.018554811456779667,
+      "regression_rate": 0.0,
+      "safe_rate": 1.0,
+      "success_gain_rate": 0.0,
+      "utility_mean": -0.018554811456779667,
+      "worse_rate": 0.8432203389830508
+    },
+    "gcst:map_agent_budget_candidate::random|a000_099|b2001_plus|g557_gcst_00021": {
+      "better_rate": 0.19491525423728814,
+      "n": 236,
+      "quality_delta_mean": 0.0013164819891525422,
+      "regression_rate": 0.0,
+      "safe_rate": 1.0,
+      "success_gain_rate": 0.0,
+      "utility_mean": -0.0013164819891525422,
+      "worse_rate": 0.2457627118644068
+    },
+    "gcst:map_agent_budget_candidate::random|a000_099|b2001_plus|g557_gcst_00022": {
+      "better_rate": 0.326271186440678,
+      "n": 236,
+      "quality_delta_mean": 0.001219194832669492,
+      "regression_rate": 0.0,
+      "safe_rate": 1.0,
+      "success_gain_rate": 0.0,
+      "utility_mean": -0.001219194832669492,
+      "worse_rate": 0.3813559322033898
+    },
+    "gcst:map_agent_budget_candidate::random|a000_099|b2001_plus|g557_gcst_00023": {
+      "better_rate": 0.5042372881355932,
+      "n": 236,
+      "quality_delta_mean": -0.0010225601999152543,
+      "regression_rate": 0.0,
+      "safe_rate": 1.0,
+      "success_gain_rate": 0.0,
+      "utility_mean": 0.0010225601999152543,
+      "worse_rate": 0.3389830508474576
+    },
+    "gcst:map_agent_budget_candidate::random|a000_099|b2001_plus|g557_gcst_00024": {
+      "better_rate": 0.5550847457627118,
+      "n": 236,
+      "quality_delta_mean": -0.006775880688177961,
+      "regression_rate": 0.0,
+      "safe_rate": 1.0,
+      "success_gain_rate": 0.0,
+      "utility_mean": 0.006775880688177961,
+      "worse_rate": 0.2076271186440678
+    },
+    "gcst:map_agent_budget_candidate::random|a000_099|b2001_plus|g557_gcst_00025": {
+      "better_rate": 0.0847457627118644,
+      "n": 236,
+      "quality_delta_mean": 0.01898221694025426,
+      "regression_rate": 0.0,
+      "safe_rate": 1.0,
+      "success_gain_rate": 0.0,
+      "utility_mean": -0.01898221694025426,
+      "worse_rate": 0.788135593220339
+    },
+    "gcst:map_agent_budget_candidate::random|a000_099|b2001_plus|g557_gcst_00026": {
+      "better_rate": 0.3983050847457627,
+      "n": 236,
+      "quality_delta_mean": 6.473483088983104e-05,
+      "regression_rate": 0.0,
+      "safe_rate": 1.0,
+      "success_gain_rate": 0.0,
+      "utility_mean": -6.473483088983104e-05,
+      "worse_rate": 0.3686440677966102
+    },
+    "gcst:map_agent_budget_candidate::random|a000_099|b2001_plus|g557_gcst_00027": {
+      "better_rate": 0.2288135593220339,
+      "n": 236,
+      "quality_delta_mean": 0.005673117927669494,
+      "regression_rate": 0.0,
+      "safe_rate": 1.0,
+      "success_gain_rate": 0.0,
+      "utility_mean": -0.005673117927669494,
+      "worse_rate": 0.4915254237288136
+    },
+    "gcst:map_agent_budget_candidate::random|a000_099|b2001_plus|g557_gcst_00028": {
+      "better_rate": 0.2838983050847458,
+      "n": 236,
+      "quality_delta_mean": 0.003064765036567796,
+      "regression_rate": 0.0,
+      "safe_rate": 1.0,
+      "success_gain_rate": 0.0,
+      "utility_mean": -0.003064765036567796,
+      "worse_rate": 0.461864406779661
+    },
+    "gcst:map_agent_budget_candidate::random|a000_099|b2001_plus|g557_gcst_00029": {
+      "better_rate": 0.038135593220338986,
+      "n": 236,
+      "quality_delta_mean": 0.045286307341864396,
+      "regression_rate": 0.0,
+      "safe_rate": 1.0,
+      "success_gain_rate": 0.0,
+      "utility_mean": -0.045286307341864396,
+      "worse_rate": 0.8940677966101694
+    },
+    "gcst:map_agent_budget_candidate::random|a000_099|b2001_plus|g557_gcst_00030": {
+      "better_rate": 0.2838983050847458,
+      "n": 236,
+      "quality_delta_mean": 0.002969321795381356,
+      "regression_rate": 0.0,
+      "safe_rate": 1.0,
+      "success_gain_rate": 0.0,
+      "utility_mean": -0.002969321795381356,
+      "worse_rate": 0.4406779661016949
+    },
+    "gcst:map_agent_budget_candidate::random|a000_099|b2001_plus|g557_gcst_00031": {
+      "better_rate": 0.13559322033898305,
+      "n": 236,
+      "quality_delta_mean": 0.0005956124025,
+      "regression_rate": 0.0,
+      "safe_rate": 1.0,
+      "success_gain_rate": 0.0,
+      "utility_mean": -0.0005956124025,
+      "worse_rate": 0.13983050847457626
+    },
+    "gcst:map_agent_budget_candidate::random|a000_099|b2001_plus|g557_gcst_00032": {
+      "better_rate": 0.19915254237288135,
+      "n": 236,
+      "quality_delta_mean": 0.00797824087305085,
+      "regression_rate": 0.0,
+      "safe_rate": 1.0,
+      "success_gain_rate": 0.0,
+      "utility_mean": -0.00797824087305085,
+      "worse_rate": 0.5635593220338984
+    },
+    "gcst:map_agent_budget_candidate::random|a000_099|b2001_plus|g557_gcst_00033": {
+      "better_rate": 0.2923728813559322,
+      "n": 236,
+      "quality_delta_mean": 0.003963652867584749,
+      "regression_rate": 0.0,
+      "safe_rate": 1.0,
+      "success_gain_rate": 0.0,
+      "utility_mean": -0.003963652867584749,
+      "worse_rate": 0.4661016949152542
+    },
+    "gcst:map_agent_budget_candidate::random|a000_099|b2001_plus|g557_gcst_00034": {
+      "better_rate": 0.11440677966101695,
+      "n": 236,
+      "quality_delta_mean": 0.015409559879194921,
+      "regression_rate": 0.0,
+      "safe_rate": 1.0,
+      "success_gain_rate": 0.0,
+      "utility_mean": -0.015409559879194921,
+      "worse_rate": 0.7033898305084746
+    },
+    "gcst:map_agent_budget_candidate::random|a000_099|b2001_plus|g557_gcst_00035": {
+      "better_rate": 0.211864406779661,
+      "n": 236,
+      "quality_delta_mean": 0.00535384534864407,
+      "regression_rate": 0.0,
+      "safe_rate": 1.0,
+      "success_gain_rate": 0.0,
+      "utility_mean": -0.00535384534864407,
+      "worse_rate": 0.5042372881355932
+    },
+    "gcst:map_agent_budget_candidate::random|a000_099|b2001_plus|g557_gcst_00036": {
+      "better_rate": 0.5423728813559322,
+      "n": 236,
+      "quality_delta_mean": -0.006776281286398297,
+      "regression_rate": 0.0,
+      "safe_rate": 1.0,
+      "success_gain_rate": 0.0,
+      "utility_mean": 0.006776281286398297,
+      "worse_rate": 0.2457627118644068
+    },
+    "gcst:map_agent_budget_candidate::random|a000_099|b2001_plus|g557_gcst_00037": {
+      "better_rate": 0.3220338983050847,
+      "n": 236,
+      "quality_delta_mean": -0.0012872821700423735,
+      "regression_rate": 0.0,
+      "safe_rate": 1.0,
+      "success_gain_rate": 0.0,
+      "utility_mean": 0.0012872821700423735,
+      "worse_rate": 0.2457627118644068
+    },
+    "gcst:map_agent_budget_family::random|a000_099|b2001_plus|": {
+      "better_rate": 0.2832114009533898,
+      "n": 120832,
+      "quality_delta_mean": 0.006989308307329854,
+      "regression_rate": 9.10354872881356e-05,
+      "safe_rate": 0.9999089645127118,
+      "success_gain_rate": 0.0,
+      "utility_mean": -0.00789902690512367,
+      "worse_rate": 0.4596878310381356
+    },
+    "gcst:topology_candidate::|g557_gcst_00000": {
+      "better_rate": 0.273140677717471,
+      "n": 6817,
+      "quality_delta_mean": 2.5640676715445604e-05,
+      "regression_rate": 0.011295291183805192,
+      "safe_rate": 0.9887047088161948,
+      "success_gain_rate": 0.011588675370397535,
+      "utility_mean": -0.09632417795887069,
+      "worse_rate": 0.30277248056329764
+    },
+    "gcst:topology_candidate::|g557_gcst_00001": {
+      "better_rate": 0.23910811207275928,
+      "n": 6817,
+      "quality_delta_mean": -0.0006504205191091047,
+      "regression_rate": 0.00982837025084348,
+      "safe_rate": 0.9901716297491565,
+      "success_gain_rate": 0.013055596303359248,
+      "utility_mean": -0.07340375799054435,
+      "worse_rate": 0.23118673903476603
+    },
+    "gcst:topology_candidate::|g557_gcst_00002": {
+      "better_rate": 0.24629602464427167,
+      "n": 6817,
+      "quality_delta_mean": 0.002070745986788914,
+      "regression_rate": 0.0073346046648085665,
+      "safe_rate": 0.9926653953351914,
+      "success_gain_rate": 0.012468827930174564,
+      "utility_mean": -0.05376521771725414,
+      "worse_rate": 0.35836878392254656
+    },
+    "gcst:topology_candidate::|g557_gcst_00003": {
+      "better_rate": 0.21270353527944844,
+      "n": 6817,
+      "quality_delta_mean": 0.00485382184497662,
+      "regression_rate": 0.0076279888514009095,
+      "safe_rate": 0.9923720111485991,
+      "success_gain_rate": 0.013055596303359248,
+      "utility_mean": -0.05588781714215484,
+      "worse_rate": 0.42085961566671554
+    },
+    "gcst:topology_candidate::|g557_gcst_00004": {
+      "better_rate": 0.22810620507554644,
+      "n": 6817,
+      "quality_delta_mean": 0.002972601522663547,
+      "regression_rate": 0.009241601877658795,
+      "safe_rate": 0.9907583981223412,
+      "success_gain_rate": 0.012322135836878393,
+      "utility_mean": -0.07433547980772463,
+      "worse_rate": 0.38403990024937656
+    },
+    "gcst:topology_candidate::|g557_gcst_00005": {
+      "better_rate": 0.26683291770573564,
+      "n": 6817,
+      "quality_delta_mean": 0.029397244713068545,
+      "regression_rate": 0.006747836291623881,
+      "safe_rate": 0.9932521637083761,
+      "success_gain_rate": 0.012762212116766907,
+      "utility_mean": -0.06867024557326389,
+      "worse_rate": 0.44755757664661877
+    },
+    "gcst:topology_candidate::|g557_gcst_00006": {
+      "better_rate": 0.30952031685492154,
+      "n": 6817,
+      "quality_delta_mean": -0.00031766549932841137,
+      "regression_rate": 0.008508141411177937,
+      "safe_rate": 0.991491858588822,
+      "success_gain_rate": 0.014375825143024792,
+      "utility_mean": -0.053540514275594836,
+      "worse_rate": 0.3112806219744756
+    },
+    "gcst:topology_candidate::|g557_gcst_00007": {
+      "better_rate": 0.25363062930908026,
+      "n": 6817,
+      "quality_delta_mean": -0.0007741577048026671,
+      "regression_rate": 0.009241601877658795,
+      "safe_rate": 0.9907583981223412,
+      "success_gain_rate": 0.013642364676543934,
+      "utility_mean": -0.06435443727388153,
+      "worse_rate": 0.3183218424526918
+    },
+    "gcst:topology_candidate::|g557_gcst_00008": {
+      "better_rate": 0.30996039313481005,
+      "n": 6817,
+      "quality_delta_mean": 0.004117884227566593,
+      "regression_rate": 0.008214757224585595,
+      "safe_rate": 0.9917852427754144,
+      "success_gain_rate": 0.014082440956432449,
+      "utility_mean": -0.0557619135643773,
+      "worse_rate": 0.3382719671409711
+    },
+    "gcst:topology_candidate::|g557_gcst_00009": {
+      "better_rate": 0.23059997066158133,
+      "n": 6817,
+      "quality_delta_mean": 0.03813000724113455,
+      "regression_rate": 0.01114859909050902,
+      "safe_rate": 0.988851400909491,
+      "success_gain_rate": 0.013495672583247763,
+      "utility_mean": -0.11578960247717773,
+      "worse_rate": 0.4856975209036233
+    },
+    "gcst:topology_candidate::|g557_gcst_00010": {
+      "better_rate": 0.2171042980783336,
+      "n": 6817,
+      "quality_delta_mean": 0.0038419069481031103,
+      "regression_rate": 0.00660114419832771,
+      "safe_rate": 0.9933988558016723,
+      "success_gain_rate": 0.014082440956432449,
+      "utility_mean": -0.0394070552999985,
+      "worse_rate": 0.4104444770426874
+    },
+    "gcst:topology_candidate::|g557_gcst_00011": {
+      "better_rate": 0.21725099017162974,
+      "n": 6817,
+      "quality_delta_mean": -0.0008998365753133393,
+      "regression_rate": 0.006307760011735368,
+      "safe_rate": 0.9936922399882646,
+      "success_gain_rate": 0.013495672583247763,
+      "utility_mean": -0.03568121022621094,
+      "worse_rate": 0.20478216224145518
+    },
+    "gcst:topology_candidate::|g557_gcst_00012": {
+      "better_rate": 0.3290303652633123,
+      "n": 6817,
+      "quality_delta_mean": 0.006582312642682356,
+      "regression_rate": 0.006747836291623881,
+      "safe_rate": 0.9932521637083761,
+      "success_gain_rate": 0.01642951444917119,
+      "utility_mean": -0.030788785707667563,
+      "worse_rate": 0.34252603784656005
+    },
+    "gcst:topology_candidate::|g557_gcst_00013": {
+      "better_rate": 0.2119700748129676,
+      "n": 6817,
+      "quality_delta_mean": 0.005353474261366919,
+      "regression_rate": 0.0076279888514009095,
+      "safe_rate": 0.9923720111485991,
+      "success_gain_rate": 0.015696053982690333,
+      "utility_mean": -0.04243293485304383,
+      "worse_rate": 0.41381839518849933
+    },
+    "gcst:topology_candidate::|g557_gcst_00014": {
+      "better_rate": 0.31289423500073343,
+      "n": 6817,
+      "quality_delta_mean": -0.0022147404212259484,
+      "regression_rate": 0.007187912571512396,
+      "safe_rate": 0.9928120874284876,
+      "success_gain_rate": 0.015842746075986503,
+      "utility_mean": -0.03108836717569608,
+      "worse_rate": 0.2837025084347954
+    },
+    "gcst:topology_candidate::|g557_gcst_00015": {
+      "better_rate": 0.24658940883086403,
+      "n": 6817,
+      "quality_delta_mean": 0.0017517513017257429,
+      "regression_rate": 0.008068065131289423,
+      "safe_rate": 0.9919319348687106,
+      "success_gain_rate": 0.014522517236320961,
+      "utility_mean": -0.05005640046702208,
+      "worse_rate": 0.35954232066891595
+    },
+    "gcst:topology_candidate::|g557_gcst_00016": {
+      "better_rate": 0.3486871057649993,
+      "n": 6817,
+      "quality_delta_mean": -0.001202438419872501,
+      "regression_rate": 0.006307760011735368,
+      "safe_rate": 0.9936922399882646,
+      "success_gain_rate": 0.013935748863136277,
+      "utility_mean": -0.03312360575615813,
+      "worse_rate": 0.2646325363062931
+    },
+    "gcst:topology_candidate::|g557_gcst_00017": {
+      "better_rate": 0.2743142144638404,
+      "n": 6817,
+      "quality_delta_mean": 0.0007560176625863312,
+      "regression_rate": 0.0076279888514009095,
+      "safe_rate": 0.9923720111485991,
+      "success_gain_rate": 0.014962593516209476,
+      "utility_mean": -0.04253387974240583,
+      "worse_rate": 0.2817955112219451
+    },
+    "gcst:topology_candidate::|g557_gcst_00018": {
+      "better_rate": 0.23412058090068946,
+      "n": 6817,
+      "quality_delta_mean": 0.005524828868163534,
+      "regression_rate": 0.006894528384920053,
+      "safe_rate": 0.9931054716150799,
+      "success_gain_rate": 0.013935748863136277,
+      "utility_mean": -0.044483742504228964,
+      "worse_rate": 0.396362036086255
+    },
+    "gcst:topology_candidate::|g557_gcst_00019": {
+      "better_rate": 0.0982837025084348,
+      "n": 6817,
+      "quality_delta_mean": 0.06557650219309612,
+      "regression_rate": 0.02728472935308787,
+      "safe_rate": 0.9727152706469121,
+      "success_gain_rate": 0.012175443743582221,
+      "utility_mean": -0.30531290903619457,
+      "worse_rate": 0.5948364383159748
+    },
+    "gcst:topology_candidate::|g557_gcst_00020": {
+      "better_rate": 0.19436702361742703,
+      "n": 6817,
+      "quality_delta_mean": 0.008034649272424518,
+      "regression_rate": 0.007041220478216224,
+      "safe_rate": 0.9929587795217838,
+      "success_gain_rate": 0.015255977702801819,
+      "utility_mean": -0.04106715396094622,
+      "worse_rate": 0.4785096083321109
+    },
+    "gcst:topology_candidate::|g557_gcst_00021": {
+      "better_rate": 0.24116180137890567,
+      "n": 6817,
+      "quality_delta_mean": -0.0006789895292701767,
+      "regression_rate": 0.007187912571512396,
+      "safe_rate": 0.9928120874284876,
+      "success_gain_rate": 0.017162974915652045,
+      "utility_mean": -0.025410412387952164,
+      "worse_rate": 0.23206689159454305
+    },
+    "gcst:topology_candidate::|g557_gcst_00022": {
+      "better_rate": 0.288543347513569,
+      "n": 6817,
+      "quality_delta_mean": 0.0010090751651417858,
+      "regression_rate": 0.005867683731846853,
+      "safe_rate": 0.9941323162681531,
+      "success_gain_rate": 0.014375825143024792,
+      "utility_mean": -0.02821953451960833,
+      "worse_rate": 0.3255097550242042
+    },
+    "gcst:topology_candidate::|g557_gcst_00023": {
+      "better_rate": 0.28663635030071877,
+      "n": 6817,
+      "quality_delta_mean": 0.012648092008212947,
+      "regression_rate": 0.008948217691066452,
+      "safe_rate": 0.9910517823089335,
+      "success_gain_rate": 0.014962593516209476,
+      "utility_mean": -0.06541874119665395,
+      "worse_rate": 0.408390787736541
+    },
+    "gcst:topology_candidate::|g557_gcst_00024": {
+      "better_rate": 0.3065864749889981,
+      "n": 6817,
+      "quality_delta_mean": 0.010758796327002874,
+      "regression_rate": 0.0073346046648085665,
+      "safe_rate": 0.9926653953351914,
+      "success_gain_rate": 0.015109285609505647,
+      "utility_mean": -0.046991407535688756,
+      "worse_rate": 0.3617427020683585
+    },
+    "gcst:topology_candidate::|g557_gcst_00025": {
+      "better_rate": 0.19011295291183805,
+      "n": 6817,
+      "quality_delta_mean": 0.0066087300093773645,
+      "regression_rate": 0.005720991638550682,
+      "safe_rate": 0.9942790083614493,
+      "success_gain_rate": 0.01540266979609799,
+      "utility_mean": -0.025939629212594992,
+      "worse_rate": 0.4821769106645152
+    },
+    "gcst:topology_candidate::|g557_gcst_00026": {
+      "better_rate": 0.2911838051929001,
+      "n": 6817,
+      "quality_delta_mean": 0.0046409431728096345,
+      "regression_rate": 0.007187912571512396,
+      "safe_rate": 0.9928120874284876,
+      "success_gain_rate": 0.01540266979609799,
+      "utility_mean": -0.03899333531910519,
+      "worse_rate": 0.34766026111192605
+    },
+    "gcst:topology_candidate::|g557_gcst_00027": {
+      "better_rate": 0.2727006014375825,
+      "n": 6817,
+      "quality_delta_mean": -0.0031941282234081905,
+      "regression_rate": 0.006747836291623881,
+      "safe_rate": 0.9932521637083761,
+      "success_gain_rate": 0.016136130262578846,
+      "utility_mean": -0.024346704167303855,
+      "worse_rate": 0.2881032712336805
+    },
+    "gcst:topology_candidate::|g557_gcst_00028": {
+      "better_rate": 0.27358075399735954,
+      "n": 6817,
+      "quality_delta_mean": 0.001393487454045609,
+      "regression_rate": 0.006307760011735368,
+      "safe_rate": 0.9936922399882646,
+      "success_gain_rate": 0.015109285609505647,
+      "utility_mean": -0.0290832230646295,
+      "worse_rate": 0.3175883819862109
+    },
+    "gcst:topology_candidate::|g557_gcst_00029": {
+      "better_rate": 0.055302919172656596,
+      "n": 6817,
+      "quality_delta_mean": 0.2615781607002796,
+      "regression_rate": 0.07246589408830864,
+      "safe_rate": 0.9275341059116914,
+      "success_gain_rate": 0.020536893061463987,
+      "utility_mean": -0.8574163160428382,
+      "worse_rate": 0.659234267272994
+    },
+    "gcst:topology_candidate::|g557_gcst_00030": {
+      "better_rate": 0.2820888954085375,
+      "n": 6817,
+      "quality_delta_mean": -0.0008856456668115638,
+      "regression_rate": 0.00660114419832771,
+      "safe_rate": 0.9933988558016723,
+      "success_gain_rate": 0.015696053982690333,
+      "utility_mean": -0.02707490253379199,
+      "worse_rate": 0.2974915652046355
+    },
+    "gcst:topology_candidate::|g557_gcst_00031": {
+      "better_rate": 0.2124101510928561,
+      "n": 6817,
+      "quality_delta_mean": 0.0010059023622904324,
+      "regression_rate": 0.006014375825143025,
+      "safe_rate": 0.993985624174857,
+      "success_gain_rate": 0.015989438169282676,
+      "utility_mean": -0.021212246158181056,
+      "worse_rate": 0.20800938829397095
+    },
+    "gcst:topology_candidate::|g557_gcst_00032": {
+      "better_rate": 0.23734780695320523,
+      "n": 6817,
+      "quality_delta_mean": 0.004166350433330937,
+      "regression_rate": 0.008508141411177937,
+      "safe_rate": 0.991491858588822,
+      "success_gain_rate": 0.015255977702801819,
+      "utility_mean": -0.05257296615911972,
+      "worse_rate": 0.3739181458119407
+    },
+    "gcst:topology_candidate::|g557_gcst_00033": {
+      "better_rate": 0.27724805632976385,
+      "n": 6817,
+      "quality_delta_mean": 0.0029347481400000012,
+      "regression_rate": 0.006454452105031538,
+      "safe_rate": 0.9935455478949684,
+      "success_gain_rate": 0.014962593516209476,
+      "utility_mean": -0.03257894640509321,
+      "worse_rate": 0.32682998386386974
+    },
+    "gcst:topology_candidate::|g557_gcst_00034": {
+      "better_rate": 0.21299691946604077,
+      "n": 6817,
+      "quality_delta_mean": 0.0051643267435178995,
+      "regression_rate": 0.007187912571512396,
+      "safe_rate": 0.9928120874284876,
+      "success_gain_rate": 0.01628282235587502,
+      "utility_mean": -0.03479964055657774,
+      "worse_rate": 0.4425700454745489
+    },
+    "gcst:topology_candidate::|g557_gcst_00035": {
+      "better_rate": 0.25304386093589554,
+      "n": 6817,
+      "quality_delta_mean": 0.000978503389685646,
+      "regression_rate": 0.00660114419832771,
+      "safe_rate": 0.9933988558016723,
+      "success_gain_rate": 0.017016282822355875,
+      "utility_mean": -0.02166603027290305,
+      "worse_rate": 0.3321108992225319
+    },
+    "gcst:topology_candidate::|g557_gcst_00036": {
+      "better_rate": 0.32917705735660846,
+      "n": 6817,
+      "quality_delta_mean": 0.007238179152258171,
+      "regression_rate": 0.0073346046648085665,
+      "safe_rate": 0.9926653953351914,
+      "success_gain_rate": 0.015989438169282676,
+      "utility_mean": -0.039498130034452135,
+      "worse_rate": 0.3500073346046648
+    },
+    "gcst:topology_candidate::|g557_gcst_00037": {
+      "better_rate": 0.2646325363062931,
+      "n": 6817,
+      "quality_delta_mean": -0.0005253914986979854,
+      "regression_rate": 0.005280915358662168,
+      "safe_rate": 0.9947190846413378,
+      "success_gain_rate": 0.015842746075986503,
+      "utility_mean": -0.013395983130887495,
+      "worse_rate": 0.2564177790817075
+    },
+    "gcst:topology_family::|": {
+      "better_rate": 0.25262670529558456,
+      "n": 3490304,
+      "quality_delta_mean": 0.024029822148351403,
+      "regression_rate": 0.009080870892621388,
+      "safe_rate": 0.9909191291073786,
+      "success_gain_rate": 0.016546123203021856,
+      "utility_mean": -0.06769655883213942,
+      "worse_rate": 0.3651667591132463
+    },
+    "graph_only_no_goal:source_family::|": {
+      "better_rate": 0.25262670529558456,
+      "n": 3490304,
+      "quality_delta_mean": 0.024029822148351403,
+      "regression_rate": 0.009080870892621388,
+      "safe_rate": 0.9909191291073786,
+      "success_gain_rate": 0.016546123203021856,
+      "utility_mean": -0.06769655883213942,
+      "worse_rate": 0.3651667591132463
+    },
+    "graph_only_no_goal:topology_family::|": {
+      "better_rate": 0.25262670529558456,
+      "n": 3490304,
+      "quality_delta_mean": 0.024029822148351403,
+      "regression_rate": 0.009080870892621388,
+      "safe_rate": 0.9909191291073786,
+      "success_gain_rate": 0.016546123203021856,
+      "utility_mean": -0.06769655883213942,
+      "worse_rate": 0.3651667591132463
+    },
+    "map_family_lookup:map_family_candidate::random|g557_gcst_00000": {
+      "better_rate": 0.24128233970753657,
+      "n": 1778,
+      "quality_delta_mean": 0.0030741487099143,
+      "regression_rate": 0.0005624296962879641,
+      "safe_rate": 0.999437570303712,
+      "success_gain_rate": 0.0005624296962879641,
+      "utility_mean": -0.041852352976906634,
+      "worse_rate": 0.34870641169853767
+    },
+    "map_family_lookup:map_family_candidate::random|g557_gcst_00001": {
+      "better_rate": 0.24634420697412823,
+      "n": 1778,
+      "quality_delta_mean": -0.0005595608192018467,
+      "regression_rate": 0.0011248593925759281,
+      "safe_rate": 0.9988751406074241,
+      "success_gain_rate": 0.0022497187851518562,
+      "utility_mean": -0.03551839471208662,
+      "worse_rate": 0.24015748031496062
+    },
+    "map_family_lookup:map_family_candidate::random|g557_gcst_00002": {
+      "better_rate": 0.24971878515185603,
+      "n": 1778,
+      "quality_delta_mean": -0.0002936052109683755,
+      "regression_rate": 0.0,
+      "safe_rate": 1.0,
+      "success_gain_rate": 0.0022497187851518562,
+      "utility_mean": -0.02449623582100675,
+      "worse_rate": 0.36501687289088863
+    },
+    "map_family_lookup:map_family_candidate::random|g557_gcst_00003": {
+      "better_rate": 0.2075365579302587,
+      "n": 1778,
+      "quality_delta_mean": 0.0021279447295646406,
+      "regression_rate": 0.0011248593925759281,
+      "safe_rate": 0.9988751406074241,
+      "success_gain_rate": 0.0011248593925759281,
+      "utility_mean": -0.0437153904443307,
+      "worse_rate": 0.45219347581552305
+    },
+    "map_family_lookup:map_family_candidate::random|g557_gcst_00004": {
+      "better_rate": 0.21766029246344207,
+      "n": 1778,
+      "quality_delta_mean": 0.0012970348709564644,
+      "regression_rate": 0.0011248593925759281,
+      "safe_rate": 0.9988751406074241,
+      "success_gain_rate": 0.0022497187851518562,
+      "utility_mean": -0.037101408810106866,
+      "worse_rate": 0.406636670416198
+    },
+    "map_family_lookup:map_family_candidate::random|g557_gcst_00005": {
+      "better_rate": 0.22215973003374578,
+      "n": 1778,
+      "quality_delta_mean": 0.04412110676673035,
+      "regression_rate": 0.0005624296962879641,
+      "safe_rate": 0.999437570303712,
+      "success_gain_rate": 0.0022497187851518562,
+      "utility_mean": -0.06801558996913948,
+      "worse_rate": 0.5101237345331834
+    },
+    "map_family_lookup:map_family_candidate::random|g557_gcst_00006": {
+      "better_rate": 0.25815523059617546,
+      "n": 1778,
+      "quality_delta_mean": 0.007052467832854326,
+      "regression_rate": 0.0005624296962879641,
+      "safe_rate": 0.999437570303712,
+      "success_gain_rate": 0.001687289088863892,
+      "utility_mean": -0.03934116631183353,
+      "worse_rate": 0.3532058492688414
+    },
+    "map_family_lookup:map_family_candidate::random|g557_gcst_00007": {
+      "better_rate": 0.2407199100112486,
+      "n": 1778,
+      "quality_delta_mean": 0.0010863165252704466,
+      "regression_rate": 0.0011248593925759281,
+      "safe_rate": 0.9988751406074241,
+      "success_gain_rate": 0.0011248593925759281,
+      "utility_mean": -0.04282725301029808,
+      "worse_rate": 0.35095613048368957
+    },
+    "map_family_lookup:map_family_candidate::random|g557_gcst_00008": {
+      "better_rate": 0.26152980877390325,
+      "n": 1778,
+      "quality_delta_mean": 0.012694743206778656,
+      "regression_rate": 0.0,
+      "safe_rate": 1.0,
+      "success_gain_rate": 0.00281214848143982,
+      "utility_mean": -0.032632519790714284,
+      "worse_rate": 0.38076490438695165
+    },
+    "map_family_lookup:map_family_candidate::random|g557_gcst_00009": {
+      "better_rate": 0.20528683914510687,
+      "n": 1778,
+      "quality_delta_mean": 0.05757135991837949,
+      "regression_rate": 0.0,
+      "safe_rate": 1.0,
+      "success_gain_rate": 0.0011248593925759281,
+      "utility_mean": -0.0798050193228909,
+      "worse_rate": 0.5416197975253093
+    },
+    "map_family_lookup:map_family_candidate::random|g557_gcst_00010": {
+      "better_rate": 0.2013498312710911,
+      "n": 1778,
+      "quality_delta_mean": 0.0015057605660144927,
+      "regression_rate": 0.0,
+      "safe_rate": 1.0,
+      "success_gain_rate": 0.0005624296962879641,
+      "utility_mean": -0.03489074496018559,
+      "worse_rate": 0.44431946006749157
+    },
+    "map_family_lookup:map_family_candidate::random|g557_gcst_00011": {
+      "better_rate": 0.2215973003374578,
+      "n": 1778,
+      "quality_delta_mean": -6.61506422200261e-05,
+      "regression_rate": 0.0,
+      "safe_rate": 1.0,
+      "success_gain_rate": 0.001687289088863892,
+      "utility_mean": -0.0276431852222216,
+      "worse_rate": 0.21766029246344207
+    },
+    "map_family_lookup:map_family_candidate::random|g557_gcst_00012": {
+      "better_rate": 0.3008998875140607,
+      "n": 1778,
+      "quality_delta_mean": 0.017108112547356617,
+      "regression_rate": 0.0005624296962879641,
+      "safe_rate": 0.999437570303712,
+      "success_gain_rate": 0.0022497187851518562,
+      "utility_mean": -0.04496794529490438,
+      "worse_rate": 0.3796400449943757
+    },
+    "map_family_lookup:map_family_candidate::random|g557_gcst_00013": {
+      "better_rate": 0.20697412823397077,
+      "n": 1778,
+      "quality_delta_mean": 0.002178140489571811,
+      "regression_rate": 0.0,
+      "safe_rate": 1.0,
+      "success_gain_rate": 0.00281214848143982,
+      "utility_mean": -0.023653777988284597,
+      "worse_rate": 0.4313835770528684
+    },
+    "map_family_lookup:map_family_candidate::random|g557_gcst_00014": {
+      "better_rate": 0.2722159730033746,
+      "n": 1778,
+      "quality_delta_mean": 0.0036517252012779975,
+      "regression_rate": 0.0,
+      "safe_rate": 1.0,
+      "success_gain_rate": 0.0022497187851518562,
+      "utility_mean": -0.02786463377701912,
+      "worse_rate": 0.3217097862767154
+    },
+    "map_family_lookup:map_family_candidate::random|g557_gcst_00015": {
+      "better_rate": 0.2440944881889764,
+      "n": 1778,
+      "quality_delta_mean": -0.0010223452512582321,
+      "regression_rate": 0.0,
+      "safe_rate": 1.0,
+      "success_gain_rate": 0.0022497187851518562,
+      "utility_mean": -0.023874060690995503,
+      "worse_rate": 0.3610798650168729
+    },
+    "map_family_lookup:map_family_candidate::random|g557_gcst_00016": {
+      "better_rate": 0.3380202474690664,
+      "n": 1778,
+      "quality_delta_mean": 0.0015734496015820706,
+      "regression_rate": 0.0005624296962879641,
+      "safe_rate": 0.999437570303712,
+      "success_gain_rate": 0.00281214848143982,
+      "utility_mean": -0.02876092409763779,
+      "worse_rate": 0.2761529808773903
+    },
+    "map_family_lookup:map_family_candidate::random|g557_gcst_00017": {
+      "better_rate": 0.3065241844769404,
+      "n": 1778,
+      "quality_delta_mean": -0.00017417488630434703,
+      "regression_rate": 0.0,
+      "safe_rate": 1.0,
+      "success_gain_rate": 0.003374578177727784,
+      "utility_mean": -0.018692689832727788,
+      "worse_rate": 0.2958380202474691
+    },
+    "map_family_lookup:map_family_candidate::random|g557_gcst_00018": {
+      "better_rate": 0.2249718785151856,
+      "n": 1778,
+      "quality_delta_mean": 0.0013262292206262394,
+      "regression_rate": 0.0005624296962879641,
+      "safe_rate": 0.999437570303712,
+      "success_gain_rate": 0.0011248593925759281,
+      "utility_mean": -0.03740826193908324,
+      "worse_rate": 0.41732283464566927
+    },
+    "map_family_lookup:map_family_candidate::random|g557_gcst_00019": {
+      "better_rate": 0.09167604049493813,
+      "n": 1778,
+      "quality_delta_mean": 0.0706908546753534,
+      "regression_rate": 0.010123734533183352,
+      "safe_rate": 0.9898762654668166,
+      "success_gain_rate": 0.001687289088863892,
+      "utility_mean": -0.18857496176210906,
+      "worse_rate": 0.6625421822272216
+    },
+    "map_family_lookup:map_family_candidate::random|g557_gcst_00020": {
+      "better_rate": 0.16760404949381327,
+      "n": 1778,
+      "quality_delta_mean": 0.0067167600729466,
+      "regression_rate": 0.0005624296962879641,
+      "safe_rate": 0.999437570303712,
+      "success_gain_rate": 0.0011248593925759281,
+      "utility_mean": -0.042007494392947126,
+      "worse_rate": 0.5562429696287964
+    },
+    "map_family_lookup:map_family_candidate::random|g557_gcst_00021": {
+      "better_rate": 0.24578177727784026,
+      "n": 1778,
+      "quality_delta_mean": -0.00025379197465085645,
+      "regression_rate": 0.0,
+      "safe_rate": 1.0,
+      "success_gain_rate": 0.0022497187851518562,
+      "utility_mean": -0.02453022709925759,
+      "worse_rate": 0.24578177727784026
+    },
+    "map_family_lookup:map_family_candidate::random|g557_gcst_00022": {
+      "better_rate": 0.23847019122609675,
+      "n": 1778,
+      "quality_delta_mean": 0.007653017865253792,
+      "regression_rate": 0.0005624296962879641,
+      "safe_rate": 0.999437570303712,
+      "success_gain_rate": 0.0011248593925759281,
+      "utility_mean": -0.042806315017767146,
+      "worse_rate": 0.3858267716535433
+    },
+    "map_family_lookup:map_family_candidate::random|g557_gcst_00023": {
+      "better_rate": 0.2575928008998875,
+      "n": 1778,
+      "quality_delta_mean": 0.020315823927189156,
+      "regression_rate": 0.003374578177727784,
+      "safe_rate": 0.9966254218222722,
+      "success_gain_rate": 0.0011248593925759281,
+      "utility_mean": -0.08167464891895947,
+      "worse_rate": 0.4516310461192351
+    },
+    "map_family_lookup:map_family_candidate::random|g557_gcst_00024": {
+      "better_rate": 0.26152980877390325,
+      "n": 1778,
+      "quality_delta_mean": 0.021433618682643367,
+      "regression_rate": 0.0005624296962879641,
+      "safe_rate": 0.999437570303712,
+      "success_gain_rate": 0.001687289088863892,
+      "utility_mean": -0.05161124833609111,
+      "worse_rate": 0.39876265466816646
+    },
+    "map_family_lookup:map_family_candidate::random|g557_gcst_00025": {
+      "better_rate": 0.16310461192350956,
+      "n": 1778,
+      "quality_delta_mean": 0.006786559299776018,
+      "regression_rate": 0.0,
+      "safe_rate": 1.0,
+      "success_gain_rate": 0.001687289088863892,
+      "utility_mean": -0.03349381159564679,
+      "worse_rate": 0.5539932508436446
+    },
+    "map_family_lookup:map_family_candidate::random|g557_gcst_00026": {
+      "better_rate": 0.23284589426321708,
+      "n": 1778,
+      "quality_delta_mean": 0.01436702254338603,
+      "regression_rate": 0.0,
+      "safe_rate": 1.0,
+      "success_gain_rate": 0.0022497187851518562,
+      "utility_mean": -0.03701301474739033,
+      "worse_rate": 0.41394825646794153
+    },
+    "map_family_lookup:map_family_candidate::random|g557_gcst_00027": {
+      "better_rate": 0.2778402699662542,
+      "n": 1778,
+      "quality_delta_mean": -0.00040490839531620316,
+      "regression_rate": 0.0,
+      "safe_rate": 1.0,
+      "success_gain_rate": 0.003374578177727784,
+      "utility_mean": -0.018495696881839142,
+      "worse_rate": 0.33014623172103486
+    },
+    "map_family_lookup:map_family_candidate::random|g557_gcst_00028": {
+      "better_rate": 0.28683914510686165,
+      "n": 1778,
+      "quality_delta_mean": -0.0008936413301515155,
+      "regression_rate": 0.0,
+      "safe_rate": 1.0,
+      "success_gain_rate": 0.0011248593925759281,
+      "utility_mean": -0.029889455827238474,
+      "worse_rate": 0.31046119235095615
+    },
+    "map_family_lookup:map_family_candidate::random|g557_gcst_00029": {
+      "better_rate": 0.011811023622047244,
+      "n": 1778,
+      "quality_delta_mean": 0.5039688779245509,
+      "regression_rate": 0.10854893138357705,
+      "safe_rate": 0.891451068616423,
+      "success_gain_rate": 0.00281214848143982,
+      "utility_mean": -1.4828508229752697,
+      "worse_rate": 0.7103487064116986
+    },
+    "map_family_lookup:map_family_candidate::random|g557_gcst_00030": {
+      "better_rate": 0.2542182227221597,
+      "n": 1778,
+      "quality_delta_mean": 0.003216896056086955,
+      "regression_rate": 0.0,
+      "safe_rate": 1.0,
+      "success_gain_rate": 0.0022497187851518562,
+      "utility_mean": -0.027493390446085498,
+      "worse_rate": 0.34758155230596177
+    },
+    "map_family_lookup:map_family_candidate::random|g557_gcst_00031": {
+      "better_rate": 0.21822272215973004,
+      "n": 1778,
+      "quality_delta_mean": -0.0003886080212121215,
+      "regression_rate": 0.0,
+      "safe_rate": 1.0,
+      "success_gain_rate": 0.00281214848143982,
+      "utility_mean": -0.021462369529696292,
+      "worse_rate": 0.2109111361079865
+    },
+    "map_family_lookup:map_family_candidate::random|g557_gcst_00032": {
+      "better_rate": 0.2407199100112486,
+      "n": 1778,
+      "quality_delta_mean": 0.00031355991244561243,
+      "regression_rate": 0.0005624296962879641,
+      "safe_rate": 0.999437570303712,
+      "success_gain_rate": 0.001687289088863892,
+      "utility_mean": -0.033591490656456675,
+      "worse_rate": 0.3925759280089989
+    },
+    "map_family_lookup:map_family_candidate::random|g557_gcst_00033": {
+      "better_rate": 0.218785151856018,
+      "n": 1778,
+      "quality_delta_mean": 0.007531684108568601,
+      "regression_rate": 0.0011248593925759281,
+      "safe_rate": 0.9988751406074241,
+      "success_gain_rate": 0.0011248593925759281,
+      "utility_mean": -0.04832285326692352,
+      "worse_rate": 0.39032620922384703
+    },
+    "map_family_lookup:map_family_candidate::random|g557_gcst_00034": {
+      "better_rate": 0.19516310461192352,
+      "n": 1778,
+      "quality_delta_mean": 0.004253808508141067,
+      "regression_rate": 0.0005624296962879641,
+      "safe_rate": 0.999437570303712,
+      "success_gain_rate": 0.0011248593925759281,
+      "utility_mean": -0.0399060897113892,
+      "worse_rate": 0.4769403824521935
+    },
+    "map_family_lookup:map_family_candidate::random|g557_gcst_00035": {
+      "better_rate": 0.25815523059617546,
+      "n": 1778,
+      "quality_delta_mean": -0.0015907645858827429,
+      "regression_rate": 0.0,
+      "safe_rate": 1.0,
+      "success_gain_rate": 0.001687289088863892,
+      "utility_mean": -0.02634151819945445,
+      "worse_rate": 0.33183352080989875
+    },
+    "map_family_lookup:map_family_candidate::random|g557_gcst_00036": {
+      "better_rate": 0.29471316085489313,
+      "n": 1778,
+      "quality_delta_mean": 0.017722118294179294,
+      "regression_rate": 0.0005624296962879641,
+      "safe_rate": 0.999437570303712,
+      "success_gain_rate": 0.001687289088863892,
+      "utility_mean": -0.04844457449508995,
+      "worse_rate": 0.39201349831271093
+    },
+    "map_family_lookup:map_family_family::random|": {
+      "better_rate": 0.23149035081552305,
+      "n": 910336,
+      "quality_delta_mean": 0.02236603854776144,
+      "regression_rate": 0.003966667252530934,
+      "safe_rate": 0.9960333327474691,
+      "success_gain_rate": 0.0023859322272215973,
+      "utility_mean": -0.08270515419662591,
+      "worse_rate": 0.405027374507874
+    },
+    "no_traffic:family::": {
+      "better_rate": 0.1643122078045988,
+      "n": 5366272,
+      "quality_delta_mean": 0.024029822148351403,
+      "regression_rate": 0.005906334975193207,
+      "safe_rate": 0.9940936650248068,
+      "success_gain_rate": 0.010761847330884458,
+      "utility_mean": -0.13142710061621626,
+      "worse_rate": 0.23750995104236236
+    },
+    "no_traffic:map_agent_family::random|a000_099|": {
+      "better_rate": 0.2791183997844828,
+      "n": 296960,
+      "quality_delta_mean": 0.005574020735660325,
+      "regression_rate": 7.745150862068966e-05,
+      "safe_rate": 0.9999225484913793,
+      "success_gain_rate": 0.0,
+      "utility_mean": -0.006348104105552157,
+      "worse_rate": 0.4145373114224138
+    },
+    "tabular_only:agent_budget_family::a000_099|b2001_plus|": {
+      "better_rate": 0.2123743444055944,
+      "n": 366080,
+      "quality_delta_mean": 0.01199370611963549,
+      "regression_rate": 0.0009151005244755245,
+      "safe_rate": 0.9990848994755245,
+      "success_gain_rate": 0.020446350524475524,
+      "utility_mean": 0.03128507497886339,
+      "worse_rate": 0.3137019230769231
+    },
+    "tabular_only:family::": {
+      "better_rate": 0.1643122078045988,
+      "n": 5366272,
+      "quality_delta_mean": 0.024029822148351403,
+      "regression_rate": 0.005906334975193207,
+      "safe_rate": 0.9940936650248068,
+      "success_gain_rate": 0.010761847330884458,
+      "utility_mean": -0.13142710061621626,
+      "worse_rate": 0.23750995104236236
+    }
+  },
+  "train_rows": 6144000,
+  "trained": true,
+  "training_backend": "deterministic_aggregate_scorer",
+  "validation_contexts": 1030
 }

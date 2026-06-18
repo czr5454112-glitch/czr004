@@ -3138,6 +3138,12 @@ def main_write_decision(argv: list[str] | None = None) -> int:
         decision = "g557_blind_failed_keep_g556"
     else:
         decision = "g557_gcst_strict_blind_passed_keep_claims_closed"
+    final_eval = blind if int(number(blind.get("blind_solver_rows"), 0)) > 0 else stage2 if int(number(stage2.get("stage2_solver_rows"), 0)) > 0 else stage1
+    final_success_regressions = int(number(final_eval.get("success_regression_count_vs_g556_c063174"), 0))
+    final_quality_delta = final_eval.get("quality_delta_mean_vs_g556_c063174", "")
+    final_quality_ci_upper = final_eval.get("quality_delta_ci_upper_vs_g556_c063174", "")
+    final_better_count = int(number(final_eval.get("better_count_vs_g556_c063174"), 0))
+    final_worse_count = int(number(final_eval.get("worse_count_vs_g556_c063174"), 0))
     summary = {
         "schema_version": "phase5p5_repair5g557_decision_summary_v1",
         "decision": decision,
@@ -3155,8 +3161,11 @@ def main_write_decision(argv: list[str] | None = None) -> int:
         "stage2_solver_rows": stage2.get("stage2_solver_rows", 0),
         "blind_solver_rows": blind.get("blind_solver_rows", 0),
         "strict_blind_passed": decision == "g557_gcst_strict_blind_passed_keep_claims_closed",
-        "success_regressions_vs_g556": 0 if decision == "g557_label_matrix_underpowered_continue_topup" else "",
-        "quality_delta_vs_g556": "",
+        "success_regressions_vs_g556": final_success_regressions,
+        "quality_delta_vs_g556": final_quality_delta,
+        "quality_delta_ci_upper_vs_g556": final_quality_ci_upper,
+        "better_count_vs_g556": final_better_count,
+        "worse_count_vs_g556": final_worse_count,
         "beats_map_family_lookup": boolish(gcst.get("beats_map_family_lookup", False)),
         "beats_tabular_only_control": boolish(gcst.get("beats_tabular_only_control", False)),
         "phase5p5_allowed": False,
@@ -3186,6 +3195,8 @@ def main_write_decision(argv: list[str] | None = None) -> int:
         f"- row-level examples vs g556: `{summary['primary_row_level_examples_vs_g556']}`\n"
         f"- Stage1/Stage2/blind rows: `{summary['stage1_solver_rows']}` / `{summary['stage2_solver_rows']}` / `{summary['blind_solver_rows']}`\n"
         f"- strict blind passed: `{summary['strict_blind_passed']}`\n\n"
+        f"- success regressions vs g556: `{summary['success_regressions_vs_g556']}`\n"
+        f"- quality delta vs g556: `{summary['quality_delta_vs_g556']}` (CI upper `{summary['quality_delta_ci_upper_vs_g556']}`)\n\n"
         "G5.57 does not open runtime, Phase5.5, Phase6, learned-SafeGate, learned-runtime, or AAAI claims. "
         "If the label matrix is underpowered, continue top-up on the KCS instance using the commands in the label matrix summary.\n",
     )

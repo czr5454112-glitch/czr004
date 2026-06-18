@@ -2,11 +2,12 @@
   "aaai_ready": false,
   "beats_map_family_lookup": false,
   "beats_tabular_only_control": false,
+  "better_count_vs_g556": 0,
   "blind_solver_rows": 0,
   "candidate_object": "one graph-conditioned static theta predicted before solver run",
   "checkpoint_policy": false,
   "context_horizons": 20000,
-  "decision": "g557_label_matrix_underpowered_continue_topup",
+  "decision": "g557_gcst_offline_not_better_than_controls_exploratory_only",
   "dynamic_policy": false,
   "learned_runtime_policy_validated": false,
   "method": "GCST-LTM",
@@ -14,7 +15,8 @@
   "phase5p5_allowed": false,
   "phase6_allowed": false,
   "primary_baseline": "g556_c063174",
-  "primary_row_level_examples_vs_g556": 0,
+  "primary_row_level_examples_vs_g556": 6144000,
+  "quality_delta_ci_upper_vs_g556": "",
   "quality_delta_vs_g556": "",
   "runtime_claim_allowed": false,
   "schema_version": "phase5p5_repair5g557_decision_summary_v1",
@@ -22,6 +24,7 @@
   "stage2_solver_rows": 0,
   "strict_blind_passed": false,
   "success_regressions_vs_g556": 0,
-  "total_row_level_examples": 0,
-  "traffic_input_mode": "P"
+  "total_row_level_examples": 6180000,
+  "traffic_input_mode": "P",
+  "worse_count_vs_g556": 0
 }

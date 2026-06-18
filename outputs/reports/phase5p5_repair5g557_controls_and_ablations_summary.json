@@ -2,7 +2,7 @@
   "aaai_ready": false,
   "ablation_count": 3,
   "control_count": 11,
-  "decision": "g557_controls_skipped_underpowered",
+  "decision": "g557_controls_and_ablations_evaluated",
   "gcst_beats_map_family_lookup": false,
   "gcst_beats_tabular_only": false,
   "learned_runtime_policy_validated": false,

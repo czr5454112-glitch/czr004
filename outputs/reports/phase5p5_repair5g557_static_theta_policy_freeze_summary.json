@@ -7,6 +7,7 @@
   "no_tuning_after_freeze": true,
   "phase5p5_allowed": false,
   "phase6_allowed": false,
+  "policy_artifact": "/root/shared-nvme/czr004_g557_remote_artifacts/policies/g557_gcst_static_theta_policy.csv",
   "policy_rows": 12000,
   "runtime_claim_allowed": false,
   "schema_version": "phase5p5_repair5g557_static_theta_policy_freeze_summary_v1",

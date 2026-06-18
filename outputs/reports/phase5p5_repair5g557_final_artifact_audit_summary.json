@@ -1,0 +1,229 @@
+{
+  "checks": [
+    {
+      "detail": "parsed JSON object",
+      "name": "summary_present:outputs/reports/phase5p5_repair5g557_g556_verification_summary.json",
+      "passed": true
+    },
+    {
+      "detail": "parsed JSON object",
+      "name": "summary_present:outputs/reports/phase5p5_repair5g557_literature_code_audit_summary.json",
+      "passed": true
+    },
+    {
+      "detail": "parsed JSON object",
+      "name": "summary_present:outputs/reports/phase5p5_repair5g557_context_bank_summary.json",
+      "passed": true
+    },
+    {
+      "detail": "parsed JSON object",
+      "name": "summary_present:outputs/reports/phase5p5_repair5g557_graph_feature_cache_summary.json",
+      "passed": true
+    },
+    {
+      "detail": "parsed JSON object",
+      "name": "summary_present:outputs/reports/phase5p5_repair5g557_traffic_prior_features_summary.json",
+      "passed": true
+    },
+    {
+      "detail": "parsed JSON object",
+      "name": "summary_present:outputs/reports/phase5p5_repair5g557_probe_traffic_plan_summary.json",
+      "passed": true
+    },
+    {
+      "detail": "parsed JSON object",
+      "name": "summary_present:outputs/reports/phase5p5_repair5g557_probe_traffic_summary.json",
+      "passed": true
+    },
+    {
+      "detail": "parsed JSON object",
+      "name": "summary_present:outputs/reports/phase5p5_repair5g557_theta_candidate_slate_summary.json",
+      "passed": true
+    },
+    {
+      "detail": "parsed JSON object",
+      "name": "summary_present:outputs/reports/phase5p5_repair5g557_label_matrix_plan_summary.json",
+      "passed": true
+    },
+    {
+      "detail": "parsed JSON object",
+      "name": "summary_present:outputs/reports/phase5p5_repair5g557_label_matrix_summary.json",
+      "passed": true
+    },
+    {
+      "detail": "parsed JSON object",
+      "name": "summary_present:outputs/reports/phase5p5_repair5g557_label_v3_dataset_summary.json",
+      "passed": true
+    },
+    {
+      "detail": "parsed JSON object",
+      "name": "summary_present:outputs/reports/phase5p5_repair5g557_ttgt_outcome_eval_summary.json",
+      "passed": true
+    },
+    {
+      "detail": "parsed JSON object",
+      "name": "summary_present:outputs/reports/phase5p5_repair5g557_gcst_generator_eval_summary.json",
+      "passed": true
+    },
+    {
+      "detail": "parsed JSON object",
+      "name": "summary_present:outputs/reports/phase5p5_repair5g557_controls_and_ablations_summary.json",
+      "passed": true
+    },
+    {
+      "detail": "parsed JSON object",
+      "name": "summary_present:outputs/reports/phase5p5_repair5g557_model_ablation_summary.json",
+      "passed": true
+    },
+    {
+      "detail": "parsed JSON object",
+      "name": "summary_present:outputs/reports/phase5p5_repair5g557_static_theta_policy_freeze_summary.json",
+      "passed": true
+    },
+    {
+      "detail": "parsed JSON object",
+      "name": "summary_present:outputs/reports/phase5p5_repair5g557_stage1_execution_plan_summary.json",
+      "passed": true
+    },
+    {
+      "detail": "parsed JSON object",
+      "name": "summary_present:outputs/reports/phase5p5_repair5g557_stage1_execution_summary.json",
+      "passed": true
+    },
+    {
+      "detail": "parsed JSON object",
+      "name": "summary_present:outputs/reports/phase5p5_repair5g557_stage2_heldout_map_plan_summary.json",
+      "passed": true
+    },
+    {
+      "detail": "parsed JSON object",
+      "name": "summary_present:outputs/reports/phase5p5_repair5g557_stage2_heldout_map_summary.json",
+      "passed": true
+    },
+    {
+      "detail": "parsed JSON object",
+      "name": "summary_present:outputs/reports/phase5p5_repair5g557_blind_plan_summary.json",
+      "passed": true
+    },
+    {
+      "detail": "parsed JSON object",
+      "name": "summary_present:outputs/reports/phase5p5_repair5g557_blind_summary.json",
+      "passed": true
+    },
+    {
+      "detail": "parsed JSON object",
+      "name": "summary_present:outputs/reports/phase5p5_repair5g557_decision_summary.json",
+      "passed": true
+    },
+    {
+      "detail": "parsed JSON object",
+      "name": "summary_present:outputs/reports/phase5p5_repair5g557_remote_run_provenance_summary.json",
+      "passed": true
+    },
+    {
+      "detail": "parsed JSON object",
+      "name": "summary_present:outputs/reports/phase5p5_repair5g557_compact_bundle_manifest.json",
+      "passed": true
+    },
+    {
+      "detail": "g557_gcst_offline_not_better_than_controls_exploratory_only",
+      "name": "decision_present",
+      "passed": true
+    },
+    {
+      "detail": "g557_gcst_offline_not_better_than_controls_exploratory_only",
+      "name": "decision_not_continue_topup",
+      "passed": true
+    },
+    {
+      "detail": "g557_gcst_offline_not_better_than_controls_exploratory_only",
+      "name": "decision_known_terminal_or_continue",
+      "passed": true
+    },
+    {
+      "detail": "g557_gcst_offline_not_better_than_controls_exploratory_only",
+      "name": "decision_terminal_for_push",
+      "passed": true
+    },
+    {
+      "detail": "value=False",
+      "name": "offline_gcst_gate_failed_for_exploratory_decision",
+      "passed": true
+    },
+    {
+      "detail": "g556_c063174",
+      "name": "primary_baseline_g556_c063174",
+      "passed": true
+    },
+    {
+      "detail": "value=False",
+      "name": "claim_closed:dynamic_policy",
+      "passed": true
+    },
+    {
+      "detail": "value=False",
+      "name": "claim_closed:checkpoint_policy",
+      "passed": true
+    },
+    {
+      "detail": "value=False",
+      "name": "claim_closed:runtime_claim_allowed",
+      "passed": true
+    },
+    {
+      "detail": "value=False",
+      "name": "claim_closed:learned_runtime_policy_validated",
+      "passed": true
+    },
+    {
+      "detail": "value=False",
+      "name": "claim_closed:phase5p5_allowed",
+      "passed": true
+    },
+    {
+      "detail": "value=False",
+      "name": "claim_closed:phase6_allowed",
+      "passed": true
+    },
+    {
+      "detail": "value=False",
+      "name": "claim_closed:aaai_ready",
+      "passed": true
+    },
+    {
+      "detail": "20000 >= 20000",
+      "name": "context_bank_min_contexts",
+      "passed": true
+    },
+    {
+      "detail": "6144000 >= 3000000",
+      "name": "label_primary_rows_min",
+      "passed": true
+    },
+    {
+      "detail": "6180000 >= 5000000",
+      "name": "label_total_rows_min",
+      "passed": true
+    },
+    {
+      "detail": "6144000 >= 3000000",
+      "name": "label_same_context_rows_min",
+      "passed": true
+    },
+    {
+      "detail": "selected_file_count=108",
+      "name": "compact_bundle_manifest_selected_files",
+      "passed": true
+    },
+    {
+      "detail": "no selected raw/log/tmp/archive/checkpoint artifacts",
+      "name": "compact_bundle_excludes_raw_large_artifacts",
+      "passed": true
+    }
+  ],
+  "decision": "g557_gcst_offline_not_better_than_controls_exploratory_only",
+  "failed_count": 0,
+  "passed": true,
+  "schema_version": "phase5p5_repair5g557_final_artifact_audit_summary_v1",
+  "strict_blind_passed": false
+}

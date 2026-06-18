@@ -1,2 +1,4 @@
-model,trained,reason,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
-ttgt_outcome_eval,False,label_v3 gate not met: g557_label_v3_dataset_underpowered_continue_topup,False,False,False,False,False
+model,split,trained,label,contexts,nonfallback_contexts,fallback_to_g556_contexts,fallback_to_g556_rate,success_regression_count_vs_g556_c063174,success_gain_count_vs_g556_c063174,both_success_quality_pairs_vs_g556_c063174,quality_delta_mean_vs_g556_c063174,quality_delta_ci_upper_vs_g556_c063174,better_count_vs_g556_c063174,worse_count_vs_g556_c063174,materialized_safe_contexts,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+TTGT-GCST aggregate scorer,train,True,train,10481,0,10481,1,0,0,10481,0,0,0,0,10481,False,False,False,False,False
+TTGT-GCST aggregate scorer,validation,True,validation,1030,0,1030,1,0,0,1030,0,0,0,0,1030,False,False,False,False,False
+TTGT-GCST aggregate scorer,heldout_topology,True,heldout_topology,489,0,489,1,0,0,489,0,0,0,0,489,False,False,False,False,False

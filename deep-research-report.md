@@ -2375,3 +2375,26 @@ aaai_ready = false
 ```
 
 If G5.57 does not reach the minimum label/replay scale, the correct decision is `g557_label_matrix_underpowered_continue_topup`, not a GCST failure or success claim.
+
+<!-- G5.57_FINAL_RESULT_BEGIN -->
+## 2026-06-19 - G5.57 final result: graph-conditioned static theta
+
+Final decision: `g557_gcst_offline_not_better_than_controls_exploratory_only`. GCST-LTM is not promoted as a new baseline; keep g556_c063174 as the active promotion baseline.
+
+Baseline/SafeGate: the declared promotion baseline is `g556_c063174`. Offline prediction, candidate ranking, learned-SafeGate scores, and proxy labels do not promote GCST. Promotion requires real paired solver replay against `g556_c063174` with the strict zero-success-regression gate.
+
+Scale and replay evidence:
+
+- context horizons: `20,000`
+- primary row-level examples vs g556: `6,144,000`
+- total usable row-level examples: `6,180,000`
+- same-context candidate rows: `6,144,000`
+- Stage1 / Stage2 / blind solver rows: `0` / `0` / `0`
+- success regressions vs g556: `0`
+- quality delta vs g556: `n/a`; CI upper `n/a`
+- better/worse quality pairs vs g556: `0` / `0`
+
+Closed-claim policy remains unchanged: `phase5p5_allowed=false`, `phase6_allowed=false`, `runtime_claim_allowed=false`, `learned_runtime_policy_validated=false`, and `aaai_ready=false`.
+
+Local final-artifact audit status: `true` with `0` failed checks.
+<!-- G5.57_FINAL_RESULT_END -->

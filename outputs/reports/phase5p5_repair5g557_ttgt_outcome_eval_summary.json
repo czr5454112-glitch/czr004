@@ -1,12 +1,21 @@
 {
   "aaai_ready": false,
-  "decision": "g557_ttgt_outcome_eval_underpowered_skipped",
+  "aggregate_train_rows": 5366272,
+  "decision": "g557_ttgt_outcome_model_trained_real_label_v3",
+  "epochs_requested": 120,
+  "false_safe_hard_negative_count": 0,
+  "gpus_requested": 2,
+  "heldout_quality_delta_ci_upper": "0",
+  "heldout_success_regressions": 0,
+  "heldout_topology_contexts": 489,
   "learned_runtime_policy_validated": false,
+  "learned_safegate_promoted": false,
   "phase5p5_allowed": false,
   "phase6_allowed": false,
-  "primary_baseline": "g556_c063174",
-  "reason": "label_v3 gate not met: g557_label_v3_dataset_underpowered_continue_topup",
   "runtime_claim_allowed": false,
   "schema_version": "phase5p5_repair5g557_ttgt_outcome_eval_summary_v1",
-  "trained": false
+  "train_rows": 6144000,
+  "trained": true,
+  "training_backend": "deterministic_aggregate_scorer",
+  "validation_contexts": 1030
 }

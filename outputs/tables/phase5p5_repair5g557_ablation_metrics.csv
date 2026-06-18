@@ -1,4 +1,4 @@
-ablation,trained,status,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
-graph_only_no_goal,False,skipped_until_label_v3_gate,False,False,False,False,False
-no_traffic,False,skipped_until_label_v3_gate,False,False,False,False,False
-graph_goal_no_traffic,False,skipped_until_label_v3_gate,False,False,False,False,False
+ablation,trained,label,contexts,nonfallback_contexts,fallback_to_g556_contexts,fallback_to_g556_rate,success_regression_count_vs_g556_c063174,success_gain_count_vs_g556_c063174,both_success_quality_pairs_vs_g556_c063174,quality_delta_mean_vs_g556_c063174,quality_delta_ci_upper_vs_g556_c063174,better_count_vs_g556_c063174,worse_count_vs_g556_c063174,materialized_safe_contexts,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+graph_only_no_goal,True,graph_only_no_goal,1519,0,1519,1,0,0,1519,0,0,0,0,1519,False,False,False,False,False
+no_traffic,True,no_traffic,1519,0,1519,1,0,0,1519,0,0,0,0,1519,False,False,False,False,False
+tabular_only,True,tabular_only,1519,0,1519,1,0,0,1519,0,0,0,0,1519,False,False,False,False,False

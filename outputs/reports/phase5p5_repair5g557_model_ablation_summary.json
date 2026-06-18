@@ -7,5 +7,5 @@
   "phase6_allowed": false,
   "runtime_claim_allowed": false,
   "schema_version": "phase5p5_repair5g557_model_ablation_summary_v1",
-  "source_decision": "g557_controls_skipped_underpowered"
+  "source_decision": "g557_controls_and_ablations_evaluated"
 }

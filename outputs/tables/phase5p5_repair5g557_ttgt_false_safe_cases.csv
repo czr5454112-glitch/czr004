@@ -1,2 +1,1 @@
-model,trained,reason,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
-ttgt_outcome_eval,False,label_v3 gate not met: g557_label_v3_dataset_underpowered_continue_topup,False,False,False,False,False
+context_id,selected_candidate,candidate_family,predicted_score,quality_delta_ratio,success_regression,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready

@@ -1,0 +1,655 @@
+{
+  "bundle_path": "/root/shared-nvme/czr004_g557_bundles/czr004_g557_compact_results_20260619_035728.tar.gz",
+  "files": [
+    {
+      "path": "outputs/reports/phase5p5_repair5g557_blind.md",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 120
+    },
+    {
+      "path": "outputs/reports/phase5p5_repair5g557_blind_plan.md",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 116
+    },
+    {
+      "path": "outputs/reports/phase5p5_repair5g557_blind_plan_summary.json",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 421
+    },
+    {
+      "path": "outputs/reports/phase5p5_repair5g557_blind_summary.json",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 413
+    },
+    {
+      "path": "outputs/reports/phase5p5_repair5g557_context_bank.md",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 388
+    },
+    {
+      "path": "outputs/reports/phase5p5_repair5g557_context_bank_summary.json",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 559
+    },
+    {
+      "path": "outputs/reports/phase5p5_repair5g557_controls_and_ablations.md",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 101
+    },
+    {
+      "path": "outputs/reports/phase5p5_repair5g557_controls_and_ablations_summary.json",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 448
+    },
+    {
+      "path": "outputs/reports/phase5p5_repair5g557_decision.md",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 589
+    },
+    {
+      "path": "outputs/reports/phase5p5_repair5g557_decision_summary.json",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 1032
+    },
+    {
+      "path": "outputs/reports/phase5p5_repair5g557_g556_verification.md",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 330
+    },
+    {
+      "path": "outputs/reports/phase5p5_repair5g557_g556_verification_summary.json",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 578
+    },
+    {
+      "path": "outputs/reports/phase5p5_repair5g557_gcst_generator_eval.md",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 343
+    },
+    {
+      "path": "outputs/reports/phase5p5_repair5g557_gcst_generator_eval_summary.json",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 2690
+    },
+    {
+      "path": "outputs/reports/phase5p5_repair5g557_graph_feature_cache.md",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 303
+    },
+    {
+      "path": "outputs/reports/phase5p5_repair5g557_graph_feature_cache_summary.json",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 425
+    },
+    {
+      "path": "outputs/reports/phase5p5_repair5g557_label_matrix.md",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 510
+    },
+    {
+      "path": "outputs/reports/phase5p5_repair5g557_label_matrix_plan.md",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 280
+    },
+    {
+      "path": "outputs/reports/phase5p5_repair5g557_label_matrix_plan_summary.json",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 554
+    },
+    {
+      "path": "outputs/reports/phase5p5_repair5g557_label_matrix_scenario_generation.json",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 18925
+    },
+    {
+      "path": "outputs/reports/phase5p5_repair5g557_label_matrix_summary.json",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 1115
+    },
+    {
+      "path": "outputs/reports/phase5p5_repair5g557_label_v3_dataset.md",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 415
+    },
+    {
+      "path": "outputs/reports/phase5p5_repair5g557_label_v3_dataset_summary.json",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 846
+    },
+    {
+      "path": "outputs/reports/phase5p5_repair5g557_literature_code_audit.md",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 473
+    },
+    {
+      "path": "outputs/reports/phase5p5_repair5g557_literature_code_audit_summary.json",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 578
+    },
+    {
+      "path": "outputs/reports/phase5p5_repair5g557_model_ablation.md",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 134
+    },
+    {
+      "path": "outputs/reports/phase5p5_repair5g557_model_ablation_summary.json",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 389
+    },
+    {
+      "path": "outputs/reports/phase5p5_repair5g557_probe_traffic.md",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 262
+    },
+    {
+      "path": "outputs/reports/phase5p5_repair5g557_probe_traffic_plan.md",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 132
+    },
+    {
+      "path": "outputs/reports/phase5p5_repair5g557_probe_traffic_plan_summary.json",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 385
+    },
+    {
+      "path": "outputs/reports/phase5p5_repair5g557_probe_traffic_summary.json",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 511
+    },
+    {
+      "path": "outputs/reports/phase5p5_repair5g557_remote_run_provenance.md",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 535
+    },
+    {
+      "path": "outputs/reports/phase5p5_repair5g557_remote_run_provenance_summary.json",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 1960
+    },
+    {
+      "path": "outputs/reports/phase5p5_repair5g557_stage1_execution.md",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 123
+    },
+    {
+      "path": "outputs/reports/phase5p5_repair5g557_stage1_execution_plan.md",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 134
+    },
+    {
+      "path": "outputs/reports/phase5p5_repair5g557_stage1_execution_plan_summary.json",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 439
+    },
+    {
+      "path": "outputs/reports/phase5p5_repair5g557_stage1_execution_summary.json",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 417
+    },
+    {
+      "path": "outputs/reports/phase5p5_repair5g557_stage2_heldout_map.md",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 123
+    },
+    {
+      "path": "outputs/reports/phase5p5_repair5g557_stage2_heldout_map_plan.md",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 118
+    },
+    {
+      "path": "outputs/reports/phase5p5_repair5g557_stage2_heldout_map_plan_summary.json",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 423
+    },
+    {
+      "path": "outputs/reports/phase5p5_repair5g557_stage2_heldout_map_summary.json",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 417
+    },
+    {
+      "path": "outputs/reports/phase5p5_repair5g557_static_theta_policy_freeze.md",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 279
+    },
+    {
+      "path": "outputs/reports/phase5p5_repair5g557_static_theta_policy_freeze_summary.json",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 572
+    },
+    {
+      "path": "outputs/reports/phase5p5_repair5g557_theta_candidate_slate.md",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 426
+    },
+    {
+      "path": "outputs/reports/phase5p5_repair5g557_theta_candidate_slate_summary.json",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 546
+    },
+    {
+      "path": "outputs/reports/phase5p5_repair5g557_traffic_prior_features.md",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 239
+    },
+    {
+      "path": "outputs/reports/phase5p5_repair5g557_traffic_prior_features_summary.json",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 503
+    },
+    {
+      "path": "outputs/reports/phase5p5_repair5g557_ttgt_outcome_eval.md",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 347
+    },
+    {
+      "path": "outputs/reports/phase5p5_repair5g557_ttgt_outcome_eval_summary.json",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 703
+    },
+    {
+      "path": "outputs/tables/phase5p5_repair5g557_ablation_metrics.csv",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 779
+    },
+    {
+      "path": "outputs/tables/phase5p5_repair5g557_available_external_code.csv",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 450
+    },
+    {
+      "path": "outputs/tables/phase5p5_repair5g557_blind_by_map.csv",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 220
+    },
+    {
+      "path": "outputs/tables/phase5p5_repair5g557_blind_by_topology.csv",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 220
+    },
+    {
+      "path": "outputs/tables/phase5p5_repair5g557_blind_failure_cases.csv",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 220
+    },
+    {
+      "path": "outputs/tables/phase5p5_repair5g557_blind_vs_controls.csv",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 220
+    },
+    {
+      "path": "outputs/tables/phase5p5_repair5g557_claim_flag_audit.csv",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 224
+    },
+    {
+      "path": "outputs/tables/phase5p5_repair5g557_claim_ledger.csv",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 553
+    },
+    {
+      "path": "outputs/tables/phase5p5_repair5g557_context_manifest.csv",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 7025038
+    },
+    {
+      "path": "outputs/tables/phase5p5_repair5g557_control_metrics.csv",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 1815
+    },
+    {
+      "path": "outputs/tables/phase5p5_repair5g557_feature_leakage_audit.csv",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 520
+    },
+    {
+      "path": "outputs/tables/phase5p5_repair5g557_feature_preview.csv",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 66637
+    },
+    {
+      "path": "outputs/tables/phase5p5_repair5g557_final_method_comparison.csv",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 425
+    },
+    {
+      "path": "outputs/tables/phase5p5_repair5g557_final_policy_theta_sample.csv",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 220
+    },
+    {
+      "path": "outputs/tables/phase5p5_repair5g557_g556_theta.csv",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 983
+    },
+    {
+      "path": "outputs/tables/phase5p5_repair5g557_gcst_generated_theta_preview.csv",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 421390
+    },
+    {
+      "path": "outputs/tables/phase5p5_repair5g557_gcst_generator_by_topology.csv",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 3832
+    },
+    {
+      "path": "outputs/tables/phase5p5_repair5g557_gcst_generator_metrics.csv",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 850
+    },
+    {
+      "path": "outputs/tables/phase5p5_repair5g557_gcst_generator_oracle_gap.csv",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 220458
+    },
+    {
+      "path": "outputs/tables/phase5p5_repair5g557_graph_feature_manifest.csv",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 38037
+    },
+    {
+      "path": "outputs/tables/phase5p5_repair5g557_label_matrix_by_topology.csv",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 417703
+    },
+    {
+      "path": "outputs/tables/phase5p5_repair5g557_label_matrix_failure_cases.csv",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 1190735
+    },
+    {
+      "path": "outputs/tables/phase5p5_repair5g557_label_matrix_leaderboard.csv",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 77823
+    },
+    {
+      "path": "outputs/tables/phase5p5_repair5g557_label_matrix_plan_preview.csv",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 237382
+    },
+    {
+      "path": "outputs/tables/phase5p5_repair5g557_label_v3_context_oracle_preview.csv",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 334638
+    },
+    {
+      "path": "outputs/tables/phase5p5_repair5g557_label_v3_group_oracle_preview.csv",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 16110
+    },
+    {
+      "path": "outputs/tables/phase5p5_repair5g557_label_v3_leakage_audit.csv",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 347
+    },
+    {
+      "path": "outputs/tables/phase5p5_repair5g557_label_v3_split_summary.csv",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 262
+    },
+    {
+      "path": "outputs/tables/phase5p5_repair5g557_large_artifact_manifest.csv",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 1515
+    },
+    {
+      "path": "outputs/tables/phase5p5_repair5g557_literature_method_matrix.csv",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 2057
+    },
+    {
+      "path": "outputs/tables/phase5p5_repair5g557_map_topology_manifest.csv",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 8964
+    },
+    {
+      "path": "outputs/tables/phase5p5_repair5g557_negative_control_metrics.csv",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 319
+    },
+    {
+      "path": "outputs/tables/phase5p5_repair5g557_policy_as_executed_preview.csv",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 2161946
+    },
+    {
+      "path": "outputs/tables/phase5p5_repair5g557_policy_materialization_audit.csv",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 164
+    },
+    {
+      "path": "outputs/tables/phase5p5_repair5g557_policy_theta_distribution.csv",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 185
+    },
+    {
+      "path": "outputs/tables/phase5p5_repair5g557_probe_overhead_audit.csv",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 263
+    },
+    {
+      "path": "outputs/tables/phase5p5_repair5g557_probe_traffic_manifest.csv",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 192688
+    },
+    {
+      "path": "outputs/tables/phase5p5_repair5g557_remote_code_manifest.csv",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 2829
+    },
+    {
+      "path": "outputs/tables/phase5p5_repair5g557_split_manifest.csv",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 257
+    },
+    {
+      "path": "outputs/tables/phase5p5_repair5g557_stage1_by_agent_density.csv",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 222
+    },
+    {
+      "path": "outputs/tables/phase5p5_repair5g557_stage1_by_topology.csv",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 222
+    },
+    {
+      "path": "outputs/tables/phase5p5_repair5g557_stage1_failure_cases.csv",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 222
+    },
+    {
+      "path": "outputs/tables/phase5p5_repair5g557_stage1_vs_controls.csv",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 222
+    },
+    {
+      "path": "outputs/tables/phase5p5_repair5g557_stage2_by_map.csv",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 222
+    },
+    {
+      "path": "outputs/tables/phase5p5_repair5g557_stage2_by_topology.csv",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 222
+    },
+    {
+      "path": "outputs/tables/phase5p5_repair5g557_stage2_failure_cases.csv",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 222
+    },
+    {
+      "path": "outputs/tables/phase5p5_repair5g557_stage2_vs_controls.csv",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 222
+    },
+    {
+      "path": "outputs/tables/phase5p5_repair5g557_start_goal_distribution_manifest.csv",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 723
+    },
+    {
+      "path": "outputs/tables/phase5p5_repair5g557_success_field_mapping_audit.csv",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 510
+    },
+    {
+      "path": "outputs/tables/phase5p5_repair5g557_theta_candidate_registry_preview.csv",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 359849
+    },
+    {
+      "path": "outputs/tables/phase5p5_repair5g557_theta_family_breakdown.csv",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 987
+    },
+    {
+      "path": "outputs/tables/phase5p5_repair5g557_traffic_prior_feature_preview.csv",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 105786
+    },
+    {
+      "path": "outputs/tables/phase5p5_repair5g557_traffic_prior_manifest.csv",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 578
+    },
+    {
+      "path": "outputs/tables/phase5p5_repair5g557_ttgt_false_safe_cases.csv",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 201
+    },
+    {
+      "path": "outputs/tables/phase5p5_repair5g557_ttgt_outcome_by_topology.csv",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 3832
+    },
+    {
+      "path": "outputs/tables/phase5p5_repair5g557_ttgt_outcome_calibration.csv",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 133791
+    },
+    {
+      "path": "outputs/tables/phase5p5_repair5g557_ttgt_outcome_metrics.csv",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 845
+    },
+    {
+      "path": "artifacts/models/laur_ltm/repair5g557_gcst_generator_manifest.json",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 2806
+    },
+    {
+      "path": "artifacts/models/laur_ltm/repair5g557_ttgt_outcome_manifest.json",
+      "reason": "compact artifact selected",
+      "selected": true,
+      "size_bytes": 78450
+    }
+  ],
+  "schema_version": "phase5p5_repair5g557_compact_bundle_manifest_v1",
+  "selected_file_count": 108
+}

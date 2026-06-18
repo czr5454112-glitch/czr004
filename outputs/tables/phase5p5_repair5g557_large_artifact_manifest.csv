@@ -1,8 +1,9 @@
 artifact_path,exists,size_mb,commit_to_git,reason,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
-C:\PROGRAMING\czr004\outputs\tmp\phase5p5_repair5g557_remote_artifacts\raw\g557_theta_candidate_registry.csv,True,6.84946918488,False,large/raw artifact kept out of git,False,False,False,False,False
-C:\PROGRAMING\czr004\outputs\tmp\phase5p5_repair5g557_remote_artifacts\features\traffic_prior_features.csv,True,3.92627429962,False,large/raw artifact kept out of git,False,False,False,False,False
-C:\PROGRAMING\czr004\outputs\tmp\phase5p5_repair5g557_remote_artifacts\features\probe_traffic_features.csv,True,0.282740592957,False,large/raw artifact kept out of git,False,False,False,False,False
-C:\PROGRAMING\czr004\outputs\tmp\phase5p5_repair5g557_remote_artifacts\datasets\label_v3_row_rows.csv,True,1.90734863281e-06,False,large/raw artifact kept out of git,False,False,False,False,False
-C:\PROGRAMING\czr004\outputs\tmp\phase5p5_repair5g557_remote_artifacts\datasets\label_v3_context_oracle.csv,True,1.90734863281e-06,False,large/raw artifact kept out of git,False,False,False,False,False
-C:\PROGRAMING\czr004\outputs\tmp\phase5p5_repair5g557_remote_artifacts\datasets\label_v3_group_oracle.csv,True,1.90734863281e-06,False,large/raw artifact kept out of git,False,False,False,False,False
-C:\PROGRAMING\czr004\outputs\logs\phase5p5_repair5g557_label_matrix\label_matrix_results.csv,True,0.000129699707031,False,large/raw artifact kept out of git,False,False,False,False,False
+/root/shared-nvme/czr004_g557_remote_artifacts/raw/g557_theta_candidate_registry.csv,True,6.8493976593,True,compact artifact eligible,False,False,False,False,False
+/root/shared-nvme/czr004_g557_remote_artifacts/features/traffic_prior_features.csv,True,3.92627429962,True,compact artifact eligible,False,False,False,False,False
+/root/shared-nvme/czr004_g557_remote_artifacts/features/probe_traffic_features.csv,True,0.282740592957,True,compact artifact eligible,False,False,False,False,False
+/root/shared-nvme/czr004_g557_remote_artifacts/datasets/label_v3_pair_rows_compact.csv,True,2328.41435623,False,large/raw artifact kept out of git,False,False,False,False,False
+/root/shared-nvme/czr004_g557_remote_artifacts/datasets/label_v3_context_oracle.csv,True,3.44142532349,True,compact artifact eligible,False,False,False,False,False
+/root/shared-nvme/czr004_g557_remote_artifacts/datasets/label_v3_group_oracle.csv,True,0.0153636932373,True,compact artifact eligible,False,False,False,False,False
+/root/shared-nvme/czr004_g557_remote_artifacts/policies/g557_gcst_static_theta_policy.csv,True,4.94709300995,True,compact artifact eligible,False,False,False,False,False
+/root/shared-nvme/czr004_g557/outputs/logs/phase5p5_repair5g557_label_matrix/label_matrix_results.csv,True,7557.70120525,False,large/raw artifact kept out of git,False,False,False,False,False

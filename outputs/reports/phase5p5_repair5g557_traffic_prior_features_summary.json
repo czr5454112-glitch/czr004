@@ -1,6 +1,6 @@
 {
   "aaai_ready": false,
-  "artifact_path": "C:\\PROGRAMING\\czr004\\outputs\\tmp\\phase5p5_repair5g557_remote_artifacts\\features\\traffic_prior_features.csv",
+  "artifact_path": "/root/shared-nvme/czr004_g557_remote_artifacts/features/traffic_prior_features.csv",
   "decision": "g557_traffic_prior_features_created",
   "learned_runtime_policy_validated": false,
   "phase5p5_allowed": false,

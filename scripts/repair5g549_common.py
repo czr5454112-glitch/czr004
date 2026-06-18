@@ -624,18 +624,31 @@ def run_context_task(
     for path in [task_probe, task_checkpoint, task_update]:
         path.unlink(missing_ok=True)
     alias = f"{manifest_prefix}_{map_name}_a{agents_count}_s{seed}_h{horizon_id}_b{nominal_budget}".replace("-", "_")
+    export_checkpoint_jsonl = str(os.environ.get("REPAIR5G_EXPORT_UPDATE_CHECKPOINTS_JSONL", "")).lower() in {
+        "1",
+        "true",
+        "yes",
+        "on",
+    }
+    checkpoint_args = [
+        "--repair5g-checkpoint-topk-edges",
+        "64",
+        "--repair5g-checkpoint-edge-filter",
+        "nonzero",
+        "--repair5g-checkpoint-include-full-traffic",
+        os.environ.get("REPAIR5G_CHECKPOINT_INCLUDE_FULL_TRAFFIC", "false"),
+    ]
+    if export_checkpoint_jsonl:
+        checkpoint_args = [
+            "--repair5g-export-update-checkpoints-jsonl",
+            str(task_checkpoint),
+            *checkpoint_args,
+        ]
     spec = MethodSpec(
         STATIC_FLOW,
         alias,
         (
-            "--repair5g-export-update-checkpoints-jsonl",
-            str(task_checkpoint),
-            "--repair5g-checkpoint-topk-edges",
-            "64",
-            "--repair5g-checkpoint-edge-filter",
-            "nonzero",
-            "--repair5g-checkpoint-include-full-traffic",
-            os.environ.get("REPAIR5G_CHECKPOINT_INCLUDE_FULL_TRAFFIC", "false"),
+            *checkpoint_args,
             "--repair5g-counterfactual-update-probe-jsonl",
             str(task_probe),
             "--repair5g-counterfactual-candidates",
@@ -673,7 +686,7 @@ def run_context_task(
         "on",
     }
     raw_probe = read_jsonl_tolerant(task_probe)
-    checkpoint_rows = [] if skip_aggregate_jsonl else read_jsonl_tolerant(task_checkpoint)
+    checkpoint_rows = [] if skip_aggregate_jsonl or not export_checkpoint_jsonl else read_jsonl_tolerant(task_checkpoint)
     enriched = enrich_or_placeholder(raw_probe, group_rows, key, row_prefix=row_prefix, execution_mode=execution_mode)
     for path in [task_probe, task_checkpoint, task_update]:
         path.unlink(missing_ok=True)

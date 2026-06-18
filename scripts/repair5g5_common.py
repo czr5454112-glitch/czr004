@@ -246,7 +246,14 @@ def run_one_solver_task(
         "Windows Repair5G.5 contextual flow-shield selector diagnostic",
         *extra_args,
     ]
-    completed = subprocess.run(command, cwd=root, text=True, capture_output=True)
+    completed = subprocess.run(
+        command,
+        cwd=root,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+        capture_output=True,
+    )
     command_row = {
         "method": spec.alias,
         "map": map_name,

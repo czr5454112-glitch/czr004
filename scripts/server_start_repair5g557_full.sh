@@ -7,7 +7,7 @@ artifact_root="${3:-/root/shared-nvme/czr004_g557_remote_artifacts}"
 tmux_log_dir="$repo_dir/outputs/logs/phase5p5_repair5g557_tmux"
 driver_log="$tmux_log_dir/tmux_driver.log"
 pane_log="$tmux_log_dir/tmux_pane.log"
-label_row_limit="${G557_LABEL_ROW_LIMIT:-8192}"
+label_row_limit="${G557_LABEL_ROW_LIMIT:-0}"
 
 if ! command -v tmux >/dev/null 2>&1; then
   echo "tmux is required on the server" >&2
@@ -94,6 +94,30 @@ PY
   python3 scripts/create_repair5g557_label_matrix_plan.py --contexts 12000 --candidates-per-context 512 --overwrite
   python3 scripts/run_repair5g557_theta_label_matrix.py --max-workers 24 --row-limit '$label_row_limit' --overwrite
   python3 scripts/analyze_repair5g557_label_matrix.py
+  if ! python3 - <<'PY'
+import json
+import sys
+from pathlib import Path
+
+summary_path = Path('outputs/reports/phase5p5_repair5g557_label_matrix_summary.json')
+summary = json.loads(summary_path.read_text(encoding='utf-8'))
+same_context_rows = int(summary.get('same_context_candidate_rows') or 0)
+total_rows = int(summary.get('total_usable_row_level_examples') or 0)
+primary_rows = int(summary.get('primary_row_level_examples_vs_g556') or 0)
+ok = same_context_rows >= 3_000_000 and total_rows >= 5_000_000 and primary_rows >= 3_000_000
+print('[repair5g557] label matrix gate:', {
+    'same_context_candidate_rows': same_context_rows,
+    'total_usable_row_level_examples': total_rows,
+    'primary_row_level_examples_vs_g556': primary_rows,
+    'ok': ok,
+})
+sys.exit(0 if ok else 1)
+PY
+  then
+    echo '[repair5g557] label matrix underpowered; writing conservative decision and stopping before model/stage replay'
+    python3 scripts/write_repair5g557_decision.py || true
+    exit 20
+  fi
   python3 scripts/create_repair5g557_label_v3_dataset.py
 
   python3 scripts/train_eval_repair5g557_ttgt_outcome_model.py --device cuda --gpus 2 --epochs 120 --mixed-precision

@@ -82,7 +82,13 @@ def rel(path: Path, root: Path) -> str:
 
 def git_value(args: list[str], cwd: Path) -> str:
     try:
-        return subprocess.check_output(["git", *args], cwd=cwd, text=True).strip()
+        return subprocess.check_output(
+            ["git", *args],
+            cwd=cwd,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+        ).strip()
     except (FileNotFoundError, subprocess.CalledProcessError):
         return ""
 
@@ -134,7 +140,7 @@ def read_jsonl(path: Path) -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
     if not path.exists():
         return rows
-    with path.open("r", encoding="utf-8") as handle:
+    with path.open("r", encoding="utf-8", errors="replace") as handle:
         for line in handle:
             if line.strip():
                 rows.append(json.loads(line))

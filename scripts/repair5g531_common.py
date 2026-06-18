@@ -224,7 +224,7 @@ def read_jsonl(path: str | Path) -> list[dict[str, Any]]:
     if not path.exists():
         return []
     out = []
-    with path.open(encoding="utf-8") as handle:
+    with path.open(encoding="utf-8", errors="replace") as handle:
         for line in handle:
             line = line.strip()
             if line:
@@ -307,6 +307,8 @@ def external_lacam2_clean() -> bool:
         ["git", "status", "--short", "--", "external/lacam2/lacam2"],
         cwd=ROOT,
         text=True,
+        encoding="utf-8",
+        errors="replace",
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         check=False,

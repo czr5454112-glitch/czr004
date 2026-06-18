@@ -745,15 +745,17 @@ def run_probe_plan(
             continue
         scheduled.append((index, key, group_rows))
         estimated_rows += len({str(row.get("materialized_method")) for row in group_rows if row.get("materialized_method")})
-    prepare_scenarios(
-        root=ROOT,
-        source_scenario_dir=resolve(DEFAULT_SOURCE_SCENARIO_DIR),
-        scenario_dir=resolve(scenario_dir),
-        scenario_metadata=resolve(scenario_metadata),
-        maps=sorted({key[0] for key, _rows in groups}),
-        agent_counts=sorted({key[1] for key, _rows in groups}),
-        instance_ids=sorted({key[2] for key, _rows in groups}),
-    )
+    maps_in_plan = sorted({key[0] for key, _rows in groups})
+    for map_name in maps_in_plan:
+        prepare_scenarios(
+            root=ROOT,
+            source_scenario_dir=resolve(DEFAULT_SOURCE_SCENARIO_DIR),
+            scenario_dir=resolve(scenario_dir),
+            scenario_metadata=resolve(scenario_metadata),
+            maps=[map_name],
+            agent_counts=sorted({key[1] for key, _rows in groups if key[0] == map_name}),
+            instance_ids=sorted({key[2] for key, _rows in groups if key[0] == map_name}),
+        )
     log_root = resolve(log_dir)
     temp_dir = log_root / "_task_tmp"
     temp_dir.mkdir(parents=True, exist_ok=True)

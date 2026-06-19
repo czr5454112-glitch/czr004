@@ -6,6 +6,7 @@ mkdir -p outputs/logs /root/shared-nvme/czr004_g559_remote_artifacts/{contexts,c
 
 export PYTHONPATH=/root/czr004/src:/root/czr004/scripts:${PYTHONPATH:-}
 export REMOTE_ARTIFACT_ROOT=/root/shared-nvme/czr004_g559_remote_artifacts
+export G559_SOURCE_COMMIT="${G559_SOURCE_COMMIT:-5e90b92778b61ef386fc7b5f279b162da348a3c8}"
 export REPAIR5G_SKIP_AGGREGATE_JSONL=1
 export REPAIR5G_STREAM_RESULT_CSV=1
 

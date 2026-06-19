@@ -195,6 +195,9 @@ def csv_number(value: Any, digits: int = 12) -> str:
 
 
 def git_head() -> str:
+    override = os.environ.get("G559_SOURCE_COMMIT", "").strip()
+    if override:
+        return override
     try:
         return subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
     except Exception:

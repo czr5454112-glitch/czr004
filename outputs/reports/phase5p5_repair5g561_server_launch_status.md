@@ -40,13 +40,15 @@ python3 scripts/write_repair5g561_decision.py
 
 ## Observed State
 
-At `2026-06-19T12:12:22Z`, the tmux job was still running:
+At `2026-06-19T12:21:14Z`, the tmux job was still running:
 
 - training PID: `42554`
-- elapsed: `00:05:56`
-- GPU memory: `1016 MiB`
+- elapsed: `00:14:48`
+- GPU memory: `1064 MiB`
 - GPU utilization: `36%`
-- first server checkpoint rewritten: `artifacts/models/gcst/g561_f1_scalar_conservative_actor_seed561.pt`
+- completed server checkpoint rewrites:
+  - `artifacts/models/gcst/g561_f1_scalar_conservative_actor_seed561.pt`
+  - `artifacts/models/gcst/g561_f2_graph_only_direct_actor_seed561.pt`
 
 The audit stage had completed inside the server log:
 
@@ -56,12 +58,21 @@ The audit stage had completed inside the server log:
 
 The server training summary had not yet been overwritten at this observation point, so the final server training metrics should be pulled after tmux exits.
 
+This run predates the training-progress JSONL instrumentation added in `scripts/monitor_repair5g561_server.py` / `scripts/train_repair5g561_goal_aware_actor.py`, so `outputs/reports/phase5p5_repair5g561_training_progress.jsonl` is expected to be absent for the currently running tmux job.
+
 Resume/status command:
 
 ```bash
 ssh -p 2233 'root@ackcs-00gjh6i6'@ssh.bj8.bz1.paratera.com
 tmux attach -t g561_7aa3ce2
 tail -f /root/shared-nvme/czr004_g561_7aa3ce2/outputs/reports/phase5p5_repair5g561_server_tmux.log
+```
+
+Local monitor command:
+
+```powershell
+$env:G561_SSH_PASSWORD='<password>'
+python scripts/monitor_repair5g561_server.py
 ```
 
 Claims remain closed:

@@ -5,6 +5,7 @@ import csv
 import json
 import random
 import sys
+import time
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -31,6 +32,7 @@ CAUSAL_SENSITIVITY = Path(f"outputs/tables/{ROUND}_causal_sensitivity_audit.csv"
 CRITIC_CALIBRATION = Path(f"outputs/tables/{ROUND}_critic_calibration.csv")
 OFFLINE_COMPARISON = Path(f"outputs/tables/{ROUND}_offline_model_comparison.csv")
 TRAINING_SUMMARY = Path(f"outputs/reports/{ROUND}_training_summary.json")
+TRAINING_PROGRESS = Path(f"outputs/reports/{ROUND}_training_progress.jsonl")
 
 
 VARIANTS = {
@@ -76,6 +78,21 @@ def write_text(path: str | Path, text: str) -> None:
     p = ROOT / path
     p.parent.mkdir(parents=True, exist_ok=True)
     p.write_text(text, encoding="utf-8")
+
+
+def utc_now() -> str:
+    return time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+
+
+def append_progress(path: str | Path, row: dict[str, Any]) -> None:
+    if not path:
+        return
+    p = ROOT / path
+    p.parent.mkdir(parents=True, exist_ok=True)
+    line = json.dumps({"ts_utc": utc_now(), **row}, sort_keys=True)
+    with p.open("a", encoding="utf-8") as handle:
+        handle.write(line + "\n")
+    print(line, flush=True)
 
 
 def graph_with_edge_features(graph: GraphData, edge_features: np.ndarray) -> GraphData:
@@ -174,6 +191,7 @@ def normalized_l1(pred: np.ndarray, target: np.ndarray) -> float:
 def train_variant(variant_id: str, config: dict[str, Any], samples: list[Sample], args: argparse.Namespace, device: str) -> dict[str, Any]:
     import torch
 
+    variant_start = time.perf_counter()
     torch.manual_seed(args.seed + sum(ord(c) for c in variant_id))
     rng = random.Random(args.seed + len(variant_id))
     model = GoalAwareDualChannelActor(
@@ -187,6 +205,22 @@ def train_variant(variant_id: str, config: dict[str, Any], samples: list[Sample]
     train = samples[: max(1, int(len(samples) * 0.75))]
     valid = samples[len(train) :] or samples[-4:]
     history = []
+    append_progress(
+        args.progress_jsonl,
+        {
+            "event": "variant_start",
+            "variant_id": variant_id,
+            "variant_name": config["name"],
+            "device": device,
+            "steps": args.steps,
+            "batch_size": args.batch_size,
+            "train_instances": len(train),
+            "validation_instances": len(valid),
+            "uses_graph": config["use_graph"],
+            "uses_paired_od": config["use_paired_od"],
+            "uses_c0f0": config["use_c0f0"],
+        },
+    )
     for step in range(1, args.steps + 1):
         batch = rng.sample(train, min(args.batch_size, len(train)))
         graph_batch, od_tokens, od_mask, scalars, target = tensor_batch(batch, device)
@@ -199,14 +233,30 @@ def train_variant(variant_id: str, config: dict[str, Any], samples: list[Sample]
         loss.backward()
         torch.nn.utils.clip_grad_norm_(model.parameters(), 2.0)
         opt.step()
-        if step == 1 or step == args.steps:
-            history.append({"step": step, "loss": float(loss.detach().cpu())})
+        should_report = step == 1 or step == args.steps or (
+            args.progress_interval > 0 and step % args.progress_interval == 0
+        )
+        if should_report:
+            elapsed = max(time.perf_counter() - variant_start, 1.0e-9)
+            loss_value = float(loss.detach().cpu())
+            row = {
+                "event": "variant_step",
+                "variant_id": variant_id,
+                "step": step,
+                "steps": args.steps,
+                "loss": loss_value,
+                "elapsed_sec": elapsed,
+                "examples_per_sec": (step * len(batch)) / elapsed,
+            }
+            history.append(row)
+            append_progress(args.progress_jsonl, row)
     with torch.no_grad():
         graph_batch, od_tokens, od_mask, scalars, target = tensor_batch(valid, device)
         pred = model(graph_batch, od_tokens, od_mask, scalars).detach().cpu().numpy()
         target_np = target.detach().cpu().numpy()
     model_path = ROOT / MODEL_DIR / f"g561_{variant_id.lower()}_{config['name']}_seed{args.seed}.pt"
     model_path.parent.mkdir(parents=True, exist_ok=True)
+    variant_elapsed = time.perf_counter() - variant_start
     torch.save(
         {
             "artifact_type": "g561_goal_aware_direct_actor",
@@ -223,8 +273,19 @@ def train_variant(variant_id: str, config: dict[str, Any], samples: list[Sample]
             "uses_paired_od": config["use_paired_od"],
             "uses_c0f0": config["use_c0f0"],
             "critic_training_only": config.get("critic", False),
+            "variant_elapsed_sec": variant_elapsed,
         },
         model_path,
+    )
+    append_progress(
+        args.progress_jsonl,
+        {
+            "event": "variant_done",
+            "variant_id": variant_id,
+            "model_path": str(model_path.relative_to(ROOT)),
+            "elapsed_sec": variant_elapsed,
+            "validation_normalized_l1": normalized_l1(pred, target_np),
+        },
     )
     return {
         "variant_id": variant_id,
@@ -238,6 +299,7 @@ def train_variant(variant_id: str, config: dict[str, Any], samples: list[Sample]
         "uses_paired_od": config["use_paired_od"],
         "uses_c0f0": config["use_c0f0"],
         "critic_training_only": config.get("critic", False),
+        "variant_elapsed_sec": variant_elapsed,
         "history": history,
     }
 
@@ -278,6 +340,7 @@ def causal_audit(model_path: str, samples: list[Sample], device: str, hidden_dim
 
 
 def main(argv: list[str] | None = None) -> int:
+    run_start = time.perf_counter()
     parser = argparse.ArgumentParser(description="Train G5.61 goal-aware direct actor variants.")
     parser.add_argument("--samples", type=int, default=48)
     parser.add_argument("--steps", type=int, default=80)
@@ -287,10 +350,30 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--seed", type=int, default=561)
     parser.add_argument("--device", default="auto")
     parser.add_argument("--variants", nargs="*", default=["F1", "F2", "F4", "F6", "F7"])
+    parser.add_argument("--progress-interval", type=int, default=50)
+    parser.add_argument("--progress-jsonl", default=str(TRAINING_PROGRESS))
+    parser.add_argument("--append-progress", action="store_true")
     args = parser.parse_args(argv)
     import torch
 
+    if args.progress_jsonl and not args.append_progress:
+        progress_path = ROOT / args.progress_jsonl
+        progress_path.parent.mkdir(parents=True, exist_ok=True)
+        progress_path.write_text("", encoding="utf-8")
     device = args.device if args.device != "auto" else ("cuda" if torch.cuda.is_available() else "cpu")
+    append_progress(
+        args.progress_jsonl,
+        {
+            "event": "run_start",
+            "device": device,
+            "cuda_available": bool(torch.cuda.is_available()),
+            "samples_requested": args.samples,
+            "steps_per_variant": args.steps,
+            "batch_size": args.batch_size,
+            "hidden_dim": args.hidden_dim,
+            "variants": args.variants,
+        },
+    )
     samples = build_samples(args.samples, args.seed)
     results = []
     for variant_id in args.variants:
@@ -328,6 +411,8 @@ def main(argv: list[str] | None = None) -> int:
         "best_variant_id": best["variant_id"],
         "best_validation_normalized_l1": best["validation_normalized_l1"],
         "causal_sensitivity_passed": all(bool(row["passed"]) for row in causal),
+        "progress_jsonl": args.progress_jsonl,
+        "run_elapsed_sec": time.perf_counter() - run_start,
         "phase5p5_allowed": False,
         "phase6_allowed": False,
         "runtime_claim_allowed": False,
@@ -346,6 +431,16 @@ def main(argv: list[str] | None = None) -> int:
         "This smoke proves the forward path consumes graph tensors, paired OD tokens, C0/F0 edge channels, and budget scalars. It is not a promotion replay.\n",
     )
     print(json.dumps({"decision": summary["decision"], "device": device, "best": best["variant_id"]}, sort_keys=True))
+    append_progress(
+        args.progress_jsonl,
+        {
+            "event": "run_done",
+            "decision": summary["decision"],
+            "device": device,
+            "best_variant_id": best["variant_id"],
+            "run_elapsed_sec": summary["run_elapsed_sec"],
+        },
+    )
     return 0
 
 

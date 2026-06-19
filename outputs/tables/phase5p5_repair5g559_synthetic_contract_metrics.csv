@@ -1,0 +1,6 @@
+metric,value,required,passed,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+ranking_accuracy,0.9998467292011526,0.98,True,False,False,False,False,False
+safe_classification,1.0,0.99,True,False,False,False,False,False
+fallback_accuracy,1.0,0.99,True,False,False,False,False,False
+best_of_k_safe_set_hit,1.0,0.98,True,False,False,False,False,False
+safe_recall_at_16,0.1111111111111111,0.01,True,False,False,False,False,False

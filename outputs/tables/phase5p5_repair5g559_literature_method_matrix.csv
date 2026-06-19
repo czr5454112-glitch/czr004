@@ -1,0 +1,7 @@
+method_family,adopted_in_g559,not_adopted,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+GGO,"CMA-ES/CEM teacher/control, reloadable logs",guidance graph replacement,False,False,False,False,False
+LaGAT,edge-aware local layers plus per-graph global attention,MAPF action policy,False,False,False,False,False
+MAPF-GPT,dataset streaming and split rigor,trajectory/action imitation target,False,False,False,False,False
+CS-PIBT/ML-MAPF-with-Search,strong g556 fallback shield,search action learning,False,False,False,False,False
+GraphGPS/Exphormer,local real-edge aggregation with graph-local global attention,cross-instance attention,False,False,False,False,False
+QD-MAPPER,morphology-stratified maps and physical hash accounting,claiming aliases as new maps,False,False,False,False,False

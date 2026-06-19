@@ -1,0 +1,11 @@
+{
+  "aaai_ready": false,
+  "decision": "g559_stage2_failed_keep_g556",
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "reason": "g559_stage1_skipped_policy_all_fallback_keep_g556",
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g559_skip_summary_v1",
+  "solver_rows": 0
+}

@@ -1,0 +1,382 @@
+{
+  "agent_counts": [
+    96
+  ],
+  "created_at": "2026-06-19T14:25:13.370046",
+  "effective_instance_ids": [
+    7009,
+    7033,
+    7057,
+    7081,
+    7105,
+    7129,
+    7153,
+    7177,
+    7201,
+    7225,
+    7249,
+    7273,
+    7297,
+    7321,
+    7345,
+    7369,
+    7393,
+    7417,
+    7441,
+    7465,
+    7489,
+    7513,
+    7537,
+    7561,
+    7585,
+    7609,
+    7633,
+    7657,
+    7681,
+    7705,
+    7729,
+    7753,
+    7777,
+    7801,
+    7825,
+    7849,
+    7873,
+    7897,
+    7921,
+    7945,
+    7969,
+    7993,
+    8017,
+    8041,
+    8065,
+    8089,
+    8113,
+    8137,
+    8161,
+    8185,
+    8209,
+    8233,
+    8257,
+    8281,
+    8305,
+    8329,
+    8353,
+    8377,
+    8401,
+    8425,
+    8449,
+    8473,
+    8497,
+    8521,
+    8545,
+    8569,
+    8593,
+    8617,
+    8641,
+    8665,
+    8689,
+    8713,
+    8737,
+    8761,
+    8785,
+    8809,
+    8833,
+    8857,
+    8881,
+    8905,
+    8929,
+    8953,
+    8977
+  ],
+  "final_missing_count": 0,
+  "final_missing_examples": [],
+  "generated_count": 83,
+  "generated_examples": [
+    {
+      "instance_id": 7009,
+      "map": "room-40-32-8",
+      "path": "/root/shared-nvme/czr004_g559_remote_artifacts/contexts/scenarios/room-40-32-8-random-7009.scen"
+    },
+    {
+      "instance_id": 7033,
+      "map": "room-40-32-8",
+      "path": "/root/shared-nvme/czr004_g559_remote_artifacts/contexts/scenarios/room-40-32-8-random-7033.scen"
+    },
+    {
+      "instance_id": 7057,
+      "map": "room-40-32-8",
+      "path": "/root/shared-nvme/czr004_g559_remote_artifacts/contexts/scenarios/room-40-32-8-random-7057.scen"
+    },
+    {
+      "instance_id": 7081,
+      "map": "room-40-32-8",
+      "path": "/root/shared-nvme/czr004_g559_remote_artifacts/contexts/scenarios/room-40-32-8-random-7081.scen"
+    },
+    {
+      "instance_id": 7105,
+      "map": "room-40-32-8",
+      "path": "/root/shared-nvme/czr004_g559_remote_artifacts/contexts/scenarios/room-40-32-8-random-7105.scen"
+    },
+    {
+      "instance_id": 7129,
+      "map": "room-40-32-8",
+      "path": "/root/shared-nvme/czr004_g559_remote_artifacts/contexts/scenarios/room-40-32-8-random-7129.scen"
+    },
+    {
+      "instance_id": 7153,
+      "map": "room-40-32-8",
+      "path": "/root/shared-nvme/czr004_g559_remote_artifacts/contexts/scenarios/room-40-32-8-random-7153.scen"
+    },
+    {
+      "instance_id": 7177,
+      "map": "room-40-32-8",
+      "path": "/root/shared-nvme/czr004_g559_remote_artifacts/contexts/scenarios/room-40-32-8-random-7177.scen"
+    },
+    {
+      "instance_id": 7201,
+      "map": "room-40-32-8",
+      "path": "/root/shared-nvme/czr004_g559_remote_artifacts/contexts/scenarios/room-40-32-8-random-7201.scen"
+    },
+    {
+      "instance_id": 7225,
+      "map": "room-40-32-8",
+      "path": "/root/shared-nvme/czr004_g559_remote_artifacts/contexts/scenarios/room-40-32-8-random-7225.scen"
+    },
+    {
+      "instance_id": 7249,
+      "map": "room-40-32-8",
+      "path": "/root/shared-nvme/czr004_g559_remote_artifacts/contexts/scenarios/room-40-32-8-random-7249.scen"
+    },
+    {
+      "instance_id": 7273,
+      "map": "room-40-32-8",
+      "path": "/root/shared-nvme/czr004_g559_remote_artifacts/contexts/scenarios/room-40-32-8-random-7273.scen"
+    },
+    {
+      "instance_id": 7297,
+      "map": "room-40-32-8",
+      "path": "/root/shared-nvme/czr004_g559_remote_artifacts/contexts/scenarios/room-40-32-8-random-7297.scen"
+    },
+    {
+      "instance_id": 7321,
+      "map": "room-40-32-8",
+      "path": "/root/shared-nvme/czr004_g559_remote_artifacts/contexts/scenarios/room-40-32-8-random-7321.scen"
+    },
+    {
+      "instance_id": 7345,
+      "map": "room-40-32-8",
+      "path": "/root/shared-nvme/czr004_g559_remote_artifacts/contexts/scenarios/room-40-32-8-random-7345.scen"
+    },
+    {
+      "instance_id": 7369,
+      "map": "room-40-32-8",
+      "path": "/root/shared-nvme/czr004_g559_remote_artifacts/contexts/scenarios/room-40-32-8-random-7369.scen"
+    },
+    {
+      "instance_id": 7393,
+      "map": "room-40-32-8",
+      "path": "/root/shared-nvme/czr004_g559_remote_artifacts/contexts/scenarios/room-40-32-8-random-7393.scen"
+    },
+    {
+      "instance_id": 7417,
+      "map": "room-40-32-8",
+      "path": "/root/shared-nvme/czr004_g559_remote_artifacts/contexts/scenarios/room-40-32-8-random-7417.scen"
+    },
+    {
+      "instance_id": 7441,
+      "map": "room-40-32-8",
+      "path": "/root/shared-nvme/czr004_g559_remote_artifacts/contexts/scenarios/room-40-32-8-random-7441.scen"
+    },
+    {
+      "instance_id": 7465,
+      "map": "room-40-32-8",
+      "path": "/root/shared-nvme/czr004_g559_remote_artifacts/contexts/scenarios/room-40-32-8-random-7465.scen"
+    }
+  ],
+  "generated_missing_scenarios": true,
+  "generator_policy": {
+    "base_seed": 20260522,
+    "equivalent_command": "python scripts/generate_phase1a_scenarios.py --manifest <f4 maps with instances 26..45> --output-dir /root/shared-nvme/czr004_g559_remote_artifacts/contexts/scenarios --base-seed 20260522",
+    "script_version": "phase1a-scenario-generator-v1",
+    "seed_function": "sha256(script_version|base_seed|map_name|instance_id)",
+    "source": "scripts/generate_phase1a_scenarios.py functions"
+  },
+  "initial_missing_count": 0,
+  "initial_missing_examples": [],
+  "reduced_scope_reason": "",
+  "requested_instance_ids": [
+    7009,
+    7033,
+    7057,
+    7081,
+    7105,
+    7129,
+    7153,
+    7177,
+    7201,
+    7225,
+    7249,
+    7273,
+    7297,
+    7321,
+    7345,
+    7369,
+    7393,
+    7417,
+    7441,
+    7465,
+    7489,
+    7513,
+    7537,
+    7561,
+    7585,
+    7609,
+    7633,
+    7657,
+    7681,
+    7705,
+    7729,
+    7753,
+    7777,
+    7801,
+    7825,
+    7849,
+    7873,
+    7897,
+    7921,
+    7945,
+    7969,
+    7993,
+    8017,
+    8041,
+    8065,
+    8089,
+    8113,
+    8137,
+    8161,
+    8185,
+    8209,
+    8233,
+    8257,
+    8281,
+    8305,
+    8329,
+    8353,
+    8377,
+    8401,
+    8425,
+    8449,
+    8473,
+    8497,
+    8521,
+    8545,
+    8569,
+    8593,
+    8617,
+    8641,
+    8665,
+    8689,
+    8713,
+    8737,
+    8761,
+    8785,
+    8809,
+    8833,
+    8857,
+    8881,
+    8905,
+    8929,
+    8953,
+    8977
+  ],
+  "requested_maps": [
+    "room-40-32-8"
+  ],
+  "scenario_dir": "/root/shared-nvme/czr004_g559_remote_artifacts/contexts/scenarios",
+  "scenario_metadata": "/root/shared-nvme/czr004_g559_remote_artifacts/contexts/scenario_metadata.json",
+  "schema_version": "phase5p5_repair5f4_scenario_generation_v1",
+  "source_missing_count": 83,
+  "source_missing_examples": [
+    {
+      "instance_id": 7009,
+      "map": "room-40-32-8"
+    },
+    {
+      "instance_id": 7033,
+      "map": "room-40-32-8"
+    },
+    {
+      "instance_id": 7057,
+      "map": "room-40-32-8"
+    },
+    {
+      "instance_id": 7081,
+      "map": "room-40-32-8"
+    },
+    {
+      "instance_id": 7105,
+      "map": "room-40-32-8"
+    },
+    {
+      "instance_id": 7129,
+      "map": "room-40-32-8"
+    },
+    {
+      "instance_id": 7153,
+      "map": "room-40-32-8"
+    },
+    {
+      "instance_id": 7177,
+      "map": "room-40-32-8"
+    },
+    {
+      "instance_id": 7201,
+      "map": "room-40-32-8"
+    },
+    {
+      "instance_id": 7225,
+      "map": "room-40-32-8"
+    },
+    {
+      "instance_id": 7249,
+      "map": "room-40-32-8"
+    },
+    {
+      "instance_id": 7273,
+      "map": "room-40-32-8"
+    },
+    {
+      "instance_id": 7297,
+      "map": "room-40-32-8"
+    },
+    {
+      "instance_id": 7321,
+      "map": "room-40-32-8"
+    },
+    {
+      "instance_id": 7345,
+      "map": "room-40-32-8"
+    },
+    {
+      "instance_id": 7369,
+      "map": "room-40-32-8"
+    },
+    {
+      "instance_id": 7393,
+      "map": "room-40-32-8"
+    },
+    {
+      "instance_id": 7417,
+      "map": "room-40-32-8"
+    },
+    {
+      "instance_id": 7441,
+      "map": "room-40-32-8"
+    },
+    {
+      "instance_id": 7465,
+      "map": "room-40-32-8"
+    }
+  ],
+  "source_scenario_dir": "outputs/tmp/phase1a/generated/phase1a-generated-random"
+}

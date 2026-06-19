@@ -7081,3 +7081,37 @@ Baseline governance is updated for the fixed-global staticflow route: `g554_c000
 After G5.55, `g554_c00051` is the primary fixed global staticflow baseline. G5.56 uses a FixedTheta Retrieval-Set Transformer (FTRST) only as an offline optimizer for fixed global coefficient vectors. It is not a dynamic learned UpdateParams policy, contextual selector, checkpoint policy, abstention policy, per-context theta generator, or runtime method.
 
 The G5.56 SafeGate compares promotion candidates against `g554_c00051`, not the old hand staticflow vector. A candidate must pass paired solver validation and blind replay with zero success regression versus `g554_c00051` before becoming a stronger fixed baseline candidate. The old hand `static_flow_shield` and `additive_ltm` remain diagnostics. All runtime, Phase5.5, Phase6, learned-runtime, and AAAI claim flags remain closed.
+## 2026-06-19 Repair5G.5.59 final server result
+
+G5.59 ran on the RTX5090 server under tmux; no local experiment result is used
+for the gate decision. The round repaired the G5.58 raw-label blocker by
+materializing a real Label-v5 pilot from solver-facing `.map` and `.scen`
+artifacts. The `.scen` files are generated from the same start-goal assignment
+used in the instance hash, so solver labels are tied to the recorded
+`instance_uid` rather than reconstructed after the fact.
+
+Final server evidence:
+
+```text
+pytest: 38 passed, 1 warning
+instances: 2000
+physical map hashes: 24
+solver scenario rows: 2000
+planned solver rows: 130000
+real solver rows: 130000
+candidate Label-v5 rows: 128000
+safe-set rows: 2000
+artifact bundle: outputs/reports/phase5p5_repair5g559_compact_bundle.zip
+decision: g559_real_learnability_failed_continue_feature_or_label_repair
+```
+
+The pilot is no longer underpowered, but strict real-label learnability did
+not pass. Therefore active replay planning, Stage1, Stage2, blind replay,
+runtime, Phase5.5, Phase6, learned-runtime, learned SafeGate, and AAAI claims
+remain closed.
+
+Baseline/SafeGate governance: the active GCST promotion baseline remains
+`g556_c063174`. G5.59 does not promote a contextual theta policy, a learned
+SafeGate, a learned runtime policy, or a new baseline. The next valid action is
+feature/label/split repair using the real Label-v5 artifacts, then another
+heldout-physical-map learnability gate before any replay promotion path.

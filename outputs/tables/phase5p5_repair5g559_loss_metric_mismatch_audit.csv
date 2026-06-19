@@ -1,0 +1,7 @@
+finding,g558_status,g559_action,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+critic_loss_no_explicit_pairwise_or_listwise_ranking,True,added gcst.listwise_losses,False,False,False,False,False
+generator_target_single_synthetic_theta,True,Label-v5 safe-set and set-matching APIs added,False,False,False,False,False
+fallback_accuracy_proxy_identity,True,fallback_accuracy now consumes predictions,False,False,False,False,False
+success_gain_accuracy_proxy_identity,True,metric removed from pass gate,False,False,False,False,False
+generator_safe_set_hit_rate_proxy,True,generator_safe_set_hit_rate consumes generated ids,False,False,False,False,False
+narrow_ordered_slice_evaluation,True,context-balanced Label-v5 evaluation plan,False,False,False,False,False

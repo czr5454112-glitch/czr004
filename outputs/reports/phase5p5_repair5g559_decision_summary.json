@@ -1,0 +1,14 @@
+{
+  "aaai_ready": false,
+  "decision": "g559_real_learnability_failed_continue_feature_or_label_repair",
+  "g558_autopsy_decision": "g559_g558_representation_bug_confirmed",
+  "labelv5_pilot_decision": "g559_labelv5_pilot_analyzed",
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "primary_baseline": "g556_c063174",
+  "real_learnability_decision": "g559_real_learnability_failed_continue_feature_or_label_repair",
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g559_decision_summary_v1",
+  "stage1_decision": "g559_stage1_skipped_policy_all_fallback_keep_g556"
+}

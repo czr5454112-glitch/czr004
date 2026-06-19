@@ -2460,3 +2460,39 @@ Closed-claim policy remains unchanged: `phase5p5_allowed=false`, `phase6_allowed
 
 Local final-artifact audit status: `true` with `0` failed checks.
 <!-- G5.57_FINAL_RESULT_END -->
+## 2026-06-19 - G5.59 final result: real solver Label-v5 materialized, learnability gate closed
+
+G5.59 ran the complete real-solver Label-v5 pilot on the RTX5090 server under
+tmux. This was not a local experiment. The repaired pipeline generated
+topology-preserving pilot maps, hash-addressable solver `.map` files, and
+solver `.scen` files directly from the same start-goal assignments used in
+`instance_uid`.
+
+Server result:
+
+```text
+pytest: 38 passed, 1 warning
+instances: 2000
+physical map hashes: 24
+map families: >= 6
+solver scenario manifest rows: 2000
+planned solver rows: 130000
+real solver rows: 130000
+candidate Label-v5 rows: 128000
+safe-set rows: 2000
+compact artifact bundle: outputs/reports/phase5p5_repair5g559_compact_bundle.zip
+final decision: g559_real_learnability_failed_continue_feature_or_label_repair
+```
+
+Interpretation: the G5.58/G5.57 raw-label blocker is repaired for this pilot
+scale; the new blocker is strict real-label learnability. The pilot is not
+underpowered, but the heldout-map learnability gate does not open Stage1,
+Stage2, blind replay, runtime, Phase5.5, Phase6, learned-runtime, or AAAI
+claims.
+
+Governance update: `g556_c063174` remains the active promotion baseline for
+GCST. SafeGate is unchanged and remains closed for GCST promotion. G5.59 does
+not promote a learned SafeGate, learned runtime policy, contextual theta
+policy, or new baseline. The next valid continuation is feature/label/split
+repair on the real Label-v5 artifacts, followed by another heldout-map
+learnability check before any active replay planning.

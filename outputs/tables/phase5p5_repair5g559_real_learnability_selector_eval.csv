@@ -1,0 +1,6 @@
+selector,available,reason,selected_instances,selected_rows,nonfallback_coverage,false_safe_rate,success_regressions,quality_delta_mean,quality_delta_count,better,worse,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+oracle_candidate_slate,False,no heldout physical-map examples,0,0,0.0,0.0,0,nan,0,0,0,False,False,False,False,False
+agent_density_lookup,False,train or heldout split empty,0,0,0.0,0.0,0,nan,0,0,0,False,False,False,False,False
+gbdt_like_boosted_stumps,False,train or heldout split empty,0,0,0.0,0.0,0,nan,0,0,0,False,False,False,False,False
+tabular_mlp,False,train or heldout split empty,0,0,0.0,0.0,0,nan,0,0,0,False,False,False,False,False
+dualtraffic_hgt_gcst_codebook_critic,False,missing real trained GCST codebook critic checkpoint,0,0,0.0,0.0,0,nan,0,0,0,False,False,False,False,False

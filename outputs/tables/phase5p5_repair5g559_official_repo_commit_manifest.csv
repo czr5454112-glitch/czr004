@@ -1,0 +1,5 @@
+name,url,head_commit,lesson,vendored,modified,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+GGO,https://github.com/lunjohnzhang/ggo_public,d8de695dbd95c912ee59e8e626d63e511da684a7,"CMA-ES/control optimizer, solver-facing simulation as truth, exact reloadable logs",False,False,False,False,False,False,False
+LaGAT,https://github.com/proroklab/lagat,69e0611d10567daf76db37fe9ca6af92766df188,edge-aware graph attention and learned/search safeguards,False,False,False,False,False,False,False
+MAPF-GPT,https://github.com/CognitiveAISystems/MAPF-GPT,d6307447ddc6bc2b7bf5da4f81d4e0707fbc8fa3,"streaming datasets, train/validation separation, reproducible configs",False,False,False,False,False,False,False
+ML-MAPF-with-Search,https://github.com/Rishi-V/ML-MAPF-with-Search,ed9e273ac0d72f492d3fa5f799dc3a20f17a0364,learned guidance needs strong search shield/baseline,False,False,False,False,False,False,False

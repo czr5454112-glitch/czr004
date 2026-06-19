@@ -1,0 +1,7 @@
+requested_agent_count,g558_max_agents,g558_represented_agent_mass,g558_mass_preserved,g559_required_represented_agent_mass,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+32,64,32,True,32,False,False,False,False,False
+64,64,64,True,64,False,False,False,False,False
+128,64,64,False,128,False,False,False,False,False
+256,64,64,False,256,False,False,False,False,False
+512,64,64,False,512,False,False,False,False,False
+1024,64,64,False,1024,False,False,False,False,False

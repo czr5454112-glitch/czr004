@@ -1,0 +1,14 @@
+{
+  "aaai_ready": false,
+  "all_cells_assigned": true,
+  "component_count_unchanged": true,
+  "decision": "g559_corridor_graphs_materialized",
+  "learned_runtime_policy_validated": false,
+  "max_shortest_path_distortion": 0.0,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g559_corridor_graph_summary_v1",
+  "topologies": 24,
+  "unique_physical_map_hashes": 24
+}

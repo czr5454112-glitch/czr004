@@ -1,0 +1,11 @@
+{
+  "aaai_ready": false,
+  "decision": "g559_policy_frozen_fallback_to_g556",
+  "fallback_to_g556": true,
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "primary_baseline": "g556_c063174",
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g559_policy_freeze_summary_v1"
+}

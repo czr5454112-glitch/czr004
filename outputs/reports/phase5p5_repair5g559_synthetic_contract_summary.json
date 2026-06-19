@@ -1,0 +1,10 @@
+{
+  "aaai_ready": false,
+  "decision": "g559_synthetic_contract_passed",
+  "learned_runtime_policy_validated": false,
+  "passed": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g559_synthetic_contract_summary_v1"
+}

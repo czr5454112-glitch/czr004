@@ -1,0 +1,21 @@
+{
+  "aaai_ready": false,
+  "aggregate_rows": 128000,
+  "decision": "g559_labelv5_pilot_analyzed",
+  "learned_runtime_policy_validated": false,
+  "meets_pilot_candidate_row_minimum": true,
+  "pair_rows": 128000,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "pilot_min_candidate_rows": 128000,
+  "planned_solver_rows": 130000,
+  "raw_solver_labelv5_available": true,
+  "real_solver_candidate_rows": 128000,
+  "real_solver_rows": 130000,
+  "remote_log_dir": "/root/shared-nvme/czr004_g559_remote_artifacts/solver_logs/labelv5_pilot",
+  "remote_raw_csv": "/root/shared-nvme/czr004_g559_remote_artifacts/pair_rows/labelv5_pilot_results.raw.csv",
+  "remote_result_csv": "/root/shared-nvme/czr004_g559_remote_artifacts/pair_rows/labelv5_pilot_results.csv",
+  "runtime_claim_allowed": false,
+  "safe_set_rows": 2000,
+  "schema_version": "phase5p5_repair5g559_labelv5_pilot_summary_v1"
+}

@@ -1,0 +1,13 @@
+{
+  "aaai_ready": false,
+  "candidate_count": 1024,
+  "decision": "g559_codebook_ready",
+  "learned_runtime_policy_validated": false,
+  "nonbaseline_candidate_count": 1023,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "pilot_min_candidates_per_instance": 64,
+  "primary_baseline": "g556_c063174",
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g559_codebook_summary_v1"
+}

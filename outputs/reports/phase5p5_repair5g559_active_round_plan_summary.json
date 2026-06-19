@@ -1,0 +1,10 @@
+{
+  "aaai_ready": false,
+  "decision": "g559_active_round_skipped_real_learnability_gate_closed",
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "planned_instances": 0,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g559_active_round_plan_summary_v1"
+}

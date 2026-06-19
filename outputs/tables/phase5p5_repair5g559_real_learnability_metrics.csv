@@ -1,0 +1,11 @@
+metric,value,required,passed,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+real_solver_labels_available,True,True,True,False,False,False,False,False
+real_pair_rows,128000,128000,True,False,False,False,False,False
+unique_instance_uids,2000,2000,True,False,False,False,False,False
+heldout_physical_map_examples,0,1,False,False,False,False,False,False
+synthetic_contract_passed,True,True,True,False,False,False,False,False
+main_gcst_model_available,False,True,False,False,False,False,False,False
+density_gbdt_mlp_beaten_by_main_model,False,True,False,False,False,False,False,False
+main_nonfallback_coverage,0.0,0.05,False,False,False,False,False,False
+main_heldout_quality_delta_negative,False,True,False,False,False,False,False,False
+usable_false_safe_operating_point,False,True,False,False,False,False,False,False

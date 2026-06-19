@@ -1,0 +1,13 @@
+{
+  "aaai_ready": false,
+  "cwd": "/root/czr004",
+  "decision": "g559_5090_server_run_recorded",
+  "gpu_sample": "NVIDIA GeForce RTX 5090, 32607 MiB",
+  "hostname": "redacted_rtx5090_server",
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g559_5090_server_run_summary_v1",
+  "tmux_required": true
+}

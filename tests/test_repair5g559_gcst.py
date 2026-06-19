@@ -43,6 +43,14 @@ def test_benchmark_map_resolver_includes_lacam2_script_maps():
     assert any("external/lacam2/scripts/map/corners.map" in path for path in candidates)
 
 
+def test_default_pilot_topologies_have_solver_capacity():
+    from repair5g559_pipeline import default_topologies, largest_component_size
+
+    for row in default_topologies(limit=24):
+        graph = build_corridor_graph(row).graph
+        assert largest_component_size(graph) >= 16
+
+
 def test_corridor_graph_shortest_path_distortion():
     audit = audit_corridor_graph(topo(), [((0, 0), (7, 7)), ((1, 1), (6, 2))])
     assert audit["shortest_path_distortion_max"] == 0.0

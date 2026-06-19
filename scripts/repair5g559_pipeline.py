@@ -255,12 +255,12 @@ def default_topologies(limit: int = 24) -> list[dict[str, Any]]:
         ("room-64-64-8", "room", 64, 64),
         ("warehouse-10-20-10-2-1", "warehouse", 32, 32),
         ("warehouse-10-20-10-2-2", "warehouse", 32, 32),
-        ("connector", "irregular_bottleneck", 32, 32),
-        ("corners", "irregular_bottleneck", 32, 32),
-        ("loop-chain", "irregular_bottleneck", 32, 32),
-        ("tunnel", "irregular_bottleneck", 32, 32),
-        ("string", "irregular_bottleneck", 32, 32),
-        ("tree", "irregular_bottleneck", 32, 32),
+        ("g559-synth-connector-64", "irregular_bottleneck", 64, 64),
+        ("g559-synth-corners-64", "irregular_bottleneck", 64, 64),
+        ("g559-synth-loop-chain-64", "irregular_bottleneck", 64, 64),
+        ("g559-synth-tunnel-64", "irregular_bottleneck", 64, 64),
+        ("g559-synth-string-64", "irregular_bottleneck", 64, 64),
+        ("g559-synth-tree-64", "irregular_bottleneck", 64, 64),
         ("den312d", "game", 64, 64),
         ("brc202d", "game", 64, 64),
         ("Berlin_1_256", "city", 64, 64),
@@ -272,6 +272,32 @@ def default_topologies(limit: int = 24) -> list[dict[str, Any]]:
         {"topology_id": f"g559_topo_{idx:03d}", "map": name, "map_family": family, "width": width, "height": height}
         for idx, (name, family, width, height) in enumerate(names[:limit])
     ]
+
+
+def largest_component_size(graph) -> int:
+    if not graph.cells:
+        return 0
+    adj: dict[int, list[int]] = {idx: [] for idx in range(len(graph.cells))}
+    if graph.edge_index.size:
+        for src, dst in graph.edge_index.T:
+            adj[int(src)].append(int(dst))
+    seen: set[int] = set()
+    largest = 0
+    for start in range(len(graph.cells)):
+        if start in seen:
+            continue
+        stack = [start]
+        seen.add(start)
+        size = 0
+        while stack:
+            cur = stack.pop()
+            size += 1
+            for nxt in adj.get(cur, []):
+                if nxt not in seen:
+                    seen.add(nxt)
+                    stack.append(nxt)
+        largest = max(largest, size)
+    return largest
 
 
 def main_record_server_run(argv: list[str] | None = None) -> int:
@@ -476,11 +502,18 @@ def build_instances(count: int, seed: int) -> list[dict[str, Any]]:
     for idx in range(count):
         topo = topologies[idx % len(topologies)]
         graph = build_corridor_graph(topo).graph
-        agents = [16, 32, 64, 96, 128, 256][idx % 6]
+        requested_agents = [16, 32, 64, 96, 128, 256][idx % 6]
+        capacity = largest_component_size(graph)
+        feasible_agent_counts = [value for value in [16, 32, 64, 96, 128, 256] if value <= capacity]
+        agents = feasible_agent_counts[-1] if requested_agents > capacity and feasible_agent_counts else requested_agents
+        if agents > capacity:
+            agents = max(1, capacity)
         context = {
             **topo,
             "agent_count": agents,
             "agents": agents,
+            "requested_pilot_agent_count": requested_agents,
+            "solver_largest_component_size": capacity,
             "seed": 5000 + idx,
             "solver_seed": 7000 + idx,
             "nominal_budget_ms": budgets[idx % len(budgets)],
@@ -502,6 +535,8 @@ def build_instances(count: int, seed: int) -> list[dict[str, Any]]:
                 "topology_id": topo["topology_id"],
                 "agents": agents,
                 "agent_count": agents,
+                "requested_pilot_agent_count": requested_agents,
+                "solver_largest_component_size": capacity,
                 "seed": context["solver_seed"],
                 "budget_ms": context["nominal_budget_ms"],
                 "nominal_budget_ms": context["nominal_budget_ms"],

@@ -1,0 +1,11 @@
+{
+  "aaai_ready": false,
+  "decision": "g558_active_topup_not_run_gate_closed",
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "reason": "g558_active_topup_skipped_until_label_v4_and_learnability_pass",
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g558_skip_summary_v1",
+  "solver_rows": 0
+}

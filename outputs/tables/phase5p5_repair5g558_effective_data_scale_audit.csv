@@ -1,0 +1,9 @@
+metric,value,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+pair_rows,6144000,False,False,False,False,False
+unique_solver_contexts,12000,False,False,False,False,False
+declared_topology_ids,60,False,False,False,False,False
+registry_unique_theta_count,20004,False,False,False,False,False
+effective_label_matrix_unique_theta_count,512,False,False,False,False,False
+per_context_theta_count,512,False,False,False,False,False
+candidate_family_coverage,14,False,False,False,False,False
+theta_parameter_space_coverage,registry recorded but label matrix sliced to 512,False,False,False,False,False

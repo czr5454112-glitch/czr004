@@ -1,0 +1,7 @@
+source,lesson,g558_action,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+Guidance Graph Optimization for Lifelong MAPF,guidance must be evaluated by simulation; CMA-ES is a strong non-neural control,keep CMA-ES/CEM diagnostic and solver replay gates,False,False,False,False,False
+LaGAT,"real edge-aware graph attention, pretrain/fine-tune, hybrid safeguards",implement edge-aware attention but keep g556 fallback,False,False,False,False,False
+CS-PIBT,large example counts do not guarantee learned MAPF policy quality,"require local learnability, controls, and shield",False,False,False,False,False
+MAPF-GPT,scale and protocol reference only,do not copy action-policy target,False,False,False,False,False
+GraphGPS/Exphormer,combine local message passing and light global attention,"use GraphGPS-lite, no dense all-pairs grid attention",False,False,False,False,False
+MAPF QD maps,diversity requires actual new layouts,"count physical hashes, not aliases",False,False,False,False,False

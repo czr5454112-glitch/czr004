@@ -1,0 +1,5 @@
+finding,verified_value,expected_for_real_ttgt,conclusion,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+torch_nn_module_instantiated,False,True,gap,False,False,False,False,False
+optimizer_step_executed,False,True,gap,False,False,False,False,False
+training_backend,deterministic_aggregate_scorer,torch_graph_attention,deterministic aggregate lookup control,False,False,False,False,False
+fallback_rule,regression > 0.002 or support < 32 or score <= 0.0,calibrated learned risk threshold,all-fallback partly induced by scorer/gate design,False,False,False,False,False

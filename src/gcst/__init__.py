@@ -1,0 +1,11 @@
+"""Graph-conditioned static-theta utilities for Repair5G.5.58."""
+
+from .label_v4 import THETA_COLUMNS, THETA_NUMERIC_COLUMNS, build_context_uid
+from .map_hash import physical_hashes
+
+__all__ = [
+    "THETA_COLUMNS",
+    "THETA_NUMERIC_COLUMNS",
+    "build_context_uid",
+    "physical_hashes",
+]

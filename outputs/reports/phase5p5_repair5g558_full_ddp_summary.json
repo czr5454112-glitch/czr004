@@ -1,0 +1,11 @@
+{
+  "aaai_ready": false,
+  "decision": "g558_full_ddp_skipped_single_gpu_or_gate_closed",
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "reason": "cuda_device_count=1; local_decision=g558_tiny_overfit_failed_stop",
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g558_skip_summary_v1",
+  "solver_rows": 0
+}

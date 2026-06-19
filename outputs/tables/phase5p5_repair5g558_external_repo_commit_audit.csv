@@ -1,0 +1,3 @@
+name,url,used,head_commit,license_probe,vendored,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+GGO official code,https://github.com/lunjohnzhang/ggo_public,False,unavailable,license_probe_unavailable,False,False,False,False,False,False
+LaGAT official code,https://github.com/proroklab/lagat,False,unavailable,MIT License,False,False,False,False,False,False

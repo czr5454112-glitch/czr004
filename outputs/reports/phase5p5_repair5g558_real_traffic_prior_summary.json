@@ -1,0 +1,13 @@
+{
+  "aaai_ready": false,
+  "actual_od_flow_computation_used": true,
+  "actual_start_goal_assignment_count": 192,
+  "contexts": 192,
+  "decision": "g558_real_traffic_priors_materialized",
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g558_real_traffic_prior_summary_v1",
+  "traffic_feature_rows": 192
+}

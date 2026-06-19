@@ -1,5 +1,58 @@
 # LAU/LAUR-LTM Phase4–Phase6 Codex 执行计划
 
+## 2026-06-19 Repair5G.5.58 final server result
+
+G5.58 ran on the RTX5090 server under tmux. The implementation-truth part of
+the round succeeded: the model is a real PyTorch graph-attention network, used
+CUDA, recorded nonzero gradients, saved model and optimizer state, and wrote
+the required neural truth artifacts. The G5.57 audit also succeeded and
+confirms that the prior "TTGT" path was a deterministic aggregate lookup
+control rather than a neural model.
+
+The round stops at Label-v4 repair:
+
+```text
+final decision: g558_label_v4_join_repair_failed
+raw G5.57 pair rows on the fresh 5090: missing
+Label-v4 pair preview source: synthetic learnability labels only
+tiny overfit ranking: below strict 0.95 threshold
+policy freeze: fallback to g556_c063174
+Stage1/Stage2/blind: skipped
+claims: closed
+```
+
+This is not a negative result for neural GCST. It is an implementation-truth
+advance plus a data-provenance blocker. The next valid continuation is to
+restore or regenerate raw G5.57/G5.58 solver pair rows with context IDs,
+physical hashes, actual starts/goals, graph tensors, and OD traffic priors.
+
+## 2026-06-19 Repair5G.5.58 real graph-attention GCST / Label-v4 update
+
+G5.58 continues the graph-conditioned static-theta route but corrects the
+G5.57 interpretation. The G5.57 "TTGT" scorer is now treated as a deterministic
+aggregate lookup control. It is not evidence that a graph-attention neural
+GCST model was trained, because it did not instantiate a real torch module,
+backpropagate, step an optimizer, or save learned graph-attention weights.
+
+The active promotion baseline remains `g556_c063174`. SafeGate is unchanged in
+strictness and is now more explicit for GCST:
+
+```text
+offline neural metrics can only open diagnostic Stage1 planning;
+Label-v4 joins must recover context_uid, physical map hashes, actual starts,
+actual goals, graph tensors, and OD/path-flow traffic priors;
+one predicted theta must be frozen for the full solver run;
+fresh replay promotion requires zero success regressions vs g556_c063174,
+non-worse success, negative quality delta with CI upper <= 0, recognized
+candidate materialization, fingerprint match, finite cost, and bounds pass.
+```
+
+G5.58 execution is server-first on the single RTX5090 instance. The old
+two-RTX4090 full-DDP path is not assumed available in this round; if the
+5090 run cannot satisfy raw Label-v4 repair or learnability gates, Stage1,
+Stage2, blind, runtime, Phase5.5, Phase6, learned-runtime, and AAAI claims
+remain closed.
+
 ## 2026-06-18 Repair5G.5.56 fixed-global Transformer/retrieval update
 
 G5.56 does not change LaCAM*/PIBT/search semantics and does not open runtime, Phase5.5, Phase6, or AAAI claims. It keeps dynamic learned UpdateParams, contextual selector, checkpoint policy, and abstention policy paused. The Transformer/retrieval model is used only as an offline fixed-vector optimizer.

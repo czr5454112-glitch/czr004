@@ -1,0 +1,7 @@
+join_key,nonempty_rate,required,status,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+context_uid,0.0,1.0,missing_in_g557,False,False,False,False,False
+context_manifest_topology_id,1.0,1.0,ok,False,False,False,False,False
+label_matrix_by_topology_topology_id,0.8976,1.0,failed_blank_topology_ids,False,False,False,False,False
+start_goal_assignment_hash,0.0,1.0,missing_in_g557,False,False,False,False,False
+graph_tensor_join,1.0,1.0,manifest_only_or_proxy,False,False,False,False,False
+traffic_tensor_join,5.0,1.0,proxy_manifest,False,False,False,False,False

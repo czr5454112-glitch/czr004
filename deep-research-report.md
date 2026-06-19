@@ -1,4 +1,66 @@
-﻿## 2026-06-15 Repair5G.5.54 fixed-global coefficient replay result
+﻿## 2026-06-19 - G5.58 final result: real neural GCST implementation blocked by Label-v4/raw-row repair
+
+G5.58 ran on the RTX5090 server under tmux as requested. The code now contains
+a real edge-aware graph-attention GCST implementation, actual graph tensor
+materialization, actual start-goal assignments, actual shortest-path OD traffic
+priors, Label-v4 context UID construction, and strict G5.57 truth audits.
+
+Server result:
+
+```text
+g557 truth audit: confirms no real G5.57 neural training
+neural implementation truth: passed
+CUDA used: true
+trainable parameters: 5,957,541
+optimizer steps: 300 in final overfit repair pass
+checkpoint state_dict and optimizer state: saved
+raw G5.57 pair rows on new 5090: missing
+Label-v4 decision: partial repair only, raw-row repair blocked
+local/tiny learnability: failed strict 0.95 ranking threshold
+Stage1/Stage2/blind: skipped by gate
+final decision: g558_label_v4_join_repair_failed
+```
+
+Interpretation: the neural implementation gap is closed, but the scientific
+GCST experiment is not complete because this fresh 5090 instance did not have
+the G5.57 raw pair-row artifact needed to repair solver labels into Label-v4.
+The correct next action is to restore or regenerate raw paired solver rows
+before opening active top-up, Stage1, Stage2, or blind replay.
+
+No runtime, Phase5.5, Phase6, learned-runtime, or AAAI claim is opened.
+
+## 2026-06-19 - G5.58 governance update: real neural GCST and Label-v4 repair
+
+G5.58 does not replace the active promotion baseline. `g556_c063174`
+remains the primary baseline for graph-conditioned static-theta work.
+`g554_c00051`, old hand `static_flow_shield`, and `additive_ltm` remain
+diagnostics/floors only.
+
+The G5.57 TTGT result is reinterpreted as a deterministic aggregate lookup
+control, not as a trained graph-attention model. Requested epochs or GPUs do
+not count as neural evidence unless a real `torch.nn.Module`, optimizer steps,
+nonzero gradients, checkpoint state, CUDA use when requested, and input
+sensitivity are recorded.
+
+SafeGate for GCST is tightened around Label-v4:
+
+```text
+context_uid must include physical map hash, actual starts/goals, seed, budget,
+and LTM iteration budget.
+physical-map splits are by adjacency/free-cell hashes, not topology aliases.
+traffic priors must come from actual start-goal paths, not stable hash proxies.
+generator targets are safe sets / soft listwise / multi-proposal clusters,
+not one oracle-theta MSE.
+promotion still requires fresh paired solver replay vs g556_c063174 with
+zero success regressions and non-worse quality.
+```
+
+The 2026-06-19 G5.58 execution is server-first on the RTX5090 instance per
+operator instruction. Local checkout work is limited to code/document editing
+and static preparation; all experiments, tests, training, and smoke gates run
+under tmux on the server.
+
+## 2026-06-15 Repair5G.5.54 fixed-global coefficient replay result
 
 G5.54 completed a server-scale fixed-global `static_flow_shield` coefficient search. The run used fresh paired solver replay, not reused Label-v2 rows: Stage1 executed `260096` rows over `3000` candidate vectors, and Stage2 expanded `170` near-miss candidates for `360013` rows. Stage2 produced `0` validation shortlist candidates, so validation and blind replay were skipped by gate.
 

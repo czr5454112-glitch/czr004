@@ -1,0 +1,25 @@
+{
+  "aaai_ready": false,
+  "cwd": "/root/czr004",
+  "decision": "g558_5090_server_run_recorded",
+  "gpu_sample": {
+    "aaai_ready": false,
+    "cuda_available": true,
+    "gpu_memory_total_mb": "32607",
+    "gpu_memory_used_mb": "4",
+    "gpu_name": "NVIDIA GeForce RTX 5090",
+    "gpu_utilization_pct": "0",
+    "learned_runtime_policy_validated": false,
+    "phase5p5_allowed": false,
+    "phase6_allowed": false,
+    "runtime_claim_allowed": false,
+    "timestamp": 1781834861.4553614
+  },
+  "hostname": "redacted_rtx5090_server",
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g558_5090_server_run_summary_v1",
+  "tmux_required": true
+}

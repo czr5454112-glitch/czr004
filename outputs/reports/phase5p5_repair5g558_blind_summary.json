@@ -1,0 +1,11 @@
+{
+  "aaai_ready": false,
+  "decision": "g558_blind_skipped_stage2_not_passed",
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "reason": "g558_stage2_skipped_stage1_not_passed",
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g558_skip_summary_v1",
+  "solver_rows": 0
+}

@@ -1,0 +1,15 @@
+{
+  "aaai_ready": false,
+  "decision": "g558_label_v4_join_repair_failed",
+  "g557_truth_audit_decision": "g558_g557_truth_audit_confirms_no_real_neural_training",
+  "label_v4_decision": "g558_label_v4_join_repair_partial_raw_pair_rows_missing_learnability_dataset_built",
+  "learned_runtime_policy_validated": false,
+  "local_learnability_decision": "g558_tiny_overfit_failed_stop",
+  "neural_truth_decision": "g558_real_neural_implementation_truth_passed",
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "primary_baseline": "g556_c063174",
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g558_decision_summary_v1",
+  "stage1_decision": "g558_stage1_skipped_policy_all_fallback_keep_g556"
+}

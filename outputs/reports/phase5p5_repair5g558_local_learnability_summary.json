@@ -1,0 +1,45 @@
+{
+  "aaai_ready": false,
+  "decision": "g558_tiny_overfit_failed_stop",
+  "implementation_learnability_passed": false,
+  "learned_runtime_policy_validated": false,
+  "nonfallback_coverage_between_5_and_80_pct": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "raw_solver_label_repair_available": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g558_local_learnability_summary_v1",
+  "server_execution_note": "This local-stage gate was executed on the RTX5090 server per user instruction.",
+  "tiny_overfit_metrics": [
+    {
+      "metric": "critic_train_ranking_accuracy",
+      "passed": false,
+      "required": 0.95,
+      "value": "0.820745527642"
+    },
+    {
+      "metric": "critic_train_top5_safe_recall",
+      "passed": true,
+      "required": 0.95,
+      "value": "1"
+    },
+    {
+      "metric": "generator_best_of_k_safe_set_hit_rate_proxy",
+      "passed": true,
+      "required": 0.9,
+      "value": 0.9
+    },
+    {
+      "metric": "fallback_classification_train_accuracy",
+      "passed": true,
+      "required": 0.95,
+      "value": "1"
+    },
+    {
+      "metric": "raw_solver_label_repair_available",
+      "passed": false,
+      "required": true,
+      "value": false
+    }
+  ]
+}

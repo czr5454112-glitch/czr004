@@ -1,0 +1,6 @@
+metric,value,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+pair_rows_preview_or_training_rows,12288,False,False,False,False,False
+unique_context_uids,192,False,False,False,False,False
+unique_theta_vectors,64,False,False,False,False,False
+candidate_rows_per_context,64,False,False,False,False,False
+effective_context_weights,row_weight=1/candidate_rows_for_context,False,False,False,False,False

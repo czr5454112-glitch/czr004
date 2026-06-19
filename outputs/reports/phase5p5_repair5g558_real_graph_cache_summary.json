@@ -1,0 +1,15 @@
+{
+  "aaai_ready": false,
+  "actual_edge_tensor_count": 1008,
+  "actual_node_tensor_count": 5760,
+  "decision": "g558_real_graph_features_materialized",
+  "edge_feature_count": 9,
+  "learned_runtime_policy_validated": false,
+  "node_feature_count": 9,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g558_real_graph_cache_summary_v1",
+  "tensor_dir": "/root/czr004/outputs/tmp/phase5p5_repair5g558_graph_cache",
+  "topologies": 60
+}

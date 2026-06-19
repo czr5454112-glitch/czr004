@@ -1,0 +1,22 @@
+{
+  "aaai_ready": false,
+  "context_uid_nonempty_rate": 1.0,
+  "contexts": 192,
+  "decision": "g558_label_v4_join_repair_partial_raw_pair_rows_missing_learnability_dataset_built",
+  "graph_tensor_join_rate": 1.0,
+  "label_source_for_pair_preview": "synthetic_learnability_labels_not_solver_evidence",
+  "learned_runtime_policy_validated": false,
+  "pair_rows_preview_or_training_rows": 12288,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "physical_map_hash_nonempty_rate": 1.0,
+  "raw_g557_pair_rows_available": false,
+  "raw_g557_pair_rows_path": "",
+  "runtime_claim_allowed": false,
+  "safe_improving_contexts": 15,
+  "safe_set_contexts": 192,
+  "schema_version": "phase5p5_repair5g558_label_v4_summary_v1",
+  "start_goal_assignment_hash_nonempty_rate": 1.0,
+  "topology_id_nonempty_rate": 1.0,
+  "traffic_tensor_join_rate": 1.0
+}

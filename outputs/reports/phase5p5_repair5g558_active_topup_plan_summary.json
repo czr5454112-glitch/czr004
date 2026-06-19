@@ -1,0 +1,12 @@
+{
+  "aaai_ready": false,
+  "allowed": false,
+  "decision": "g558_active_topup_skipped_until_label_v4_and_learnability_pass",
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "planned_candidate_rows": 0,
+  "planned_contexts": 0,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g558_active_topup_plan_summary_v1"
+}

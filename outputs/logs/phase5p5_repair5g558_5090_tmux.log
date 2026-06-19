@@ -1,0 +1,35 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-8.1.1, pluggy-1.5.0
+cachedir: /tmp/pytest-cache-czr004
+rootdir: /root/czr004
+configfile: pytest.ini
+plugins: shard-0.1.2, rerunfailures-15.0, hypothesis-6.127.9, flakefinder-1.1.0, xdoctest-1.0.2, anyio-4.8.0, xdist-3.6.1, typeguard-4.3.0
+collected 15 items
+Running 15 items in this shard
+
+tests/test_repair5g558_gcst.py ...............                           [100%]
+
+=============================== warnings summary ===============================
+tests/test_repair5g558_gcst.py::test_fallback_to_g556
+  /root/czr004/tests/test_repair5g558_gcst.py:145: UserWarning: Creating a tensor from a list of numpy.ndarrays is extremely slow. Please consider converting the list to a single numpy.ndarray with numpy.array() before converting to a tensor. (Triggered internally at /opt/pytorch/pytorch/torch/csrc/utils/tensor_new.cpp:254.)
+    torch.tensor([BASELINE_G556], dtype=torch.float32),
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+======================== 15 passed, 1 warning in 1.63s =========================
+{"decision": "g558_5090_server_run_recorded", "hostname": "redacted_rtx5090_server"}
+{"decision": "g558_g557_truth_audit_confirms_no_real_neural_training"}
+{"decision": "g558_literature_code_audit_written", "repos": 2}
+{"decision": "g558_real_graph_features_materialized", "topologies": 60}
+{"decision": "g558_real_traffic_priors_materialized", "contexts": 192}
+{"decision": "g558_label_v4_join_repair_partial_raw_pair_rows_missing_learnability_dataset_built", "contexts": 192}
+{"decision": "g558_real_neural_implementation_truth_passed", "steps": 140, "device": "cuda"}
+{"decision": "g558_generator_training_completed", "steps": 100, "device": "cuda"}
+{"decision": "g558_tiny_overfit_failed_stop", "implementation_learnability_passed": false}
+{"decision": "g558_active_topup_skipped_until_label_v4_and_learnability_pass"}
+{"decision": "g558_active_topup_not_run_gate_closed"}
+{"decision": "g558_full_ddp_skipped_single_gpu_or_gate_closed", "cuda_device_count": 1}
+{"decision": "g558_static_theta_policy_frozen_fallback_to_g556"}
+{"decision": "g558_stage1_skipped_policy_all_fallback_keep_g556"}
+{"decision": "g558_stage2_skipped_stage1_not_passed"}
+{"decision": "g558_blind_skipped_stage2_not_passed"}
+{"decision": "g558_label_v4_join_repair_failed"}

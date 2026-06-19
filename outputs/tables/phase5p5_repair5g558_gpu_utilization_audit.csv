@@ -1,0 +1,5 @@
+timestamp,cuda_available,gpu_utilization_pct,gpu_memory_used_mb,gpu_memory_total_mb,gpu_name,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+1781835812.1808734,True,0,548,32607,NVIDIA GeForce RTX 5090,False,False,False,False,False
+1781835812.9450026,True,4,802,32607,NVIDIA GeForce RTX 5090,False,False,False,False,False
+1781835846.7844992,True,30,830,32607,NVIDIA GeForce RTX 5090,False,False,False,False,False
+1781835876.8774269,True,35,830,32607,NVIDIA GeForce RTX 5090,False,False,False,False,False

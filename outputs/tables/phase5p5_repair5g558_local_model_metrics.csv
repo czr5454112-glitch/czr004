@@ -1,0 +1,6 @@
+metric,value,required,passed,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+critic_train_ranking_accuracy,0.820745527642,0.95,False,False,False,False,False,False
+critic_train_top5_safe_recall,1,0.95,True,False,False,False,False,False
+generator_best_of_k_safe_set_hit_rate_proxy,0.9,0.9,True,False,False,False,False,False
+fallback_classification_train_accuracy,1,0.95,True,False,False,False,False,False
+raw_solver_label_repair_available,False,True,False,False,False,False,False,False

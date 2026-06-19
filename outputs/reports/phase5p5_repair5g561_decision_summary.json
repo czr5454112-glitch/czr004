@@ -1,0 +1,17 @@
+{
+  "aaai_ready": false,
+  "actor_rows": 300,
+  "decision": "g561_g560_replay_invalid_materialization_not_actor_failure",
+  "exact_materialization_actor_rows": 165,
+  "g560_replay_truth_decision": "g561_g560_replay_invalid_materialization_not_actor_failure",
+  "learned_runtime_policy_validated": false,
+  "next_required_gate": "run G5.61 materialization contract on server and require candidate_recognized/fingerprint/identity/scenario rates all equal 1.0",
+  "oracle_decision": "g561_valid_oracle_opportunity_limited_to_exact_g560_replay",
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "scenario_decision": "g561_valid_scenario_bank_underpowered_continue_generation",
+  "schema_version": "phase5p5_repair5g561_decision_summary_v1",
+  "training_decision": "g561_goal_aware_representation_truth_smoke_completed",
+  "valid_scenarios": 1203
+}

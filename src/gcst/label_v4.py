@@ -9,51 +9,9 @@ from typing import Any
 import numpy as np
 
 from .scenario_features import build_context_uid
+from .theta_schema import BASELINE_G556, THETA_HI, THETA_LO, THETA_NUMERIC_COLUMNS
 
-THETA_COLUMNS = [
-    "theta_alpha_cong_commit_progress",
-    "theta_alpha_cong_commit_nonprogress",
-    "theta_alpha_cong_block",
-    "theta_alpha_cong_wait_progress",
-    "theta_alpha_cong_wait_nonprogress",
-    "theta_alpha_flow_commit_progress",
-    "theta_alpha_flow_wait_progress",
-    "theta_rho_cong_decay",
-    "theta_rho_flow_decay",
-    "theta_lambda_cong",
-    "theta_lambda_flow",
-    "theta_flow_shield_beta",
-    "theta_max_flow_shield",
-    "theta_min_edge_cost",
-    "theta_max_edge_cost",
-    "theta_goal_projection_mode",
-]
-
-THETA_NUMERIC_COLUMNS = [col for col in THETA_COLUMNS if col != "theta_goal_projection_mode"]
-
-BASELINE_G556 = np.asarray(
-    [
-        1.25,
-        1.15800417416,
-        1.25,
-        0.75,
-        0.75,
-        1.04033966143,
-        0.693265827075,
-        0.979935812493,
-        1.0,
-        0.684155364534,
-        0.65,
-        0.335511281608,
-        0.859006022148,
-        1.0,
-        10.7932631603,
-    ],
-    dtype=np.float32,
-)
-
-THETA_LO = np.asarray([0, 0, 0, 0, 0, 0, 0, 0.70, 0.70, 0, 0, 0, 0.25, 0, 1], dtype=np.float32)
-THETA_HI = np.asarray([2, 2, 2, 2, 2, 2, 2, 1, 1, 2, 2, 1, 1.5, 5, 12], dtype=np.float32)
+THETA_COLUMNS = [*THETA_NUMERIC_COLUMNS, "theta_goal_projection_mode"]
 
 
 def theta_vector(row: dict[str, Any]) -> np.ndarray:

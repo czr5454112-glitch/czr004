@@ -1,0 +1,134 @@
+{
+  "aaai_ready": false,
+  "best_validation_normalized_l1": 0.20509622991085052,
+  "best_variant_id": "F1",
+  "causal_sensitivity_passed": true,
+  "cuda_available": false,
+  "cuda_used": false,
+  "decision": "g561_goal_aware_representation_truth_smoke_completed",
+  "device": "cpu",
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "samples": 16,
+  "schema_version": "phase5p5_repair5g561_training_summary_v1",
+  "steps_per_variant": 4,
+  "variants": [
+    {
+      "critic_training_only": false,
+      "history": [
+        {
+          "loss": 0.2207956314086914,
+          "step": 1
+        },
+        {
+          "loss": 0.18839651346206665,
+          "step": 4
+        }
+      ],
+      "model_path": "artifacts\\models\\gcst\\g561_f1_scalar_conservative_actor_seed561.pt",
+      "steps": 4,
+      "train_instances": 12,
+      "uses_c0f0": false,
+      "uses_graph": false,
+      "uses_paired_od": false,
+      "validation_instances": 4,
+      "validation_normalized_l1": 0.20509622991085052,
+      "variant_id": "F1",
+      "variant_name": "scalar_conservative_actor"
+    },
+    {
+      "critic_training_only": false,
+      "history": [
+        {
+          "loss": 0.22685374319553375,
+          "step": 1
+        },
+        {
+          "loss": 0.19186821579933167,
+          "step": 4
+        }
+      ],
+      "model_path": "artifacts\\models\\gcst\\g561_f2_graph_only_direct_actor_seed561.pt",
+      "steps": 4,
+      "train_instances": 12,
+      "uses_c0f0": false,
+      "uses_graph": true,
+      "uses_paired_od": false,
+      "validation_instances": 4,
+      "validation_normalized_l1": 0.20740294456481934,
+      "variant_id": "F2",
+      "variant_name": "graph_only_direct_actor"
+    },
+    {
+      "critic_training_only": false,
+      "history": [
+        {
+          "loss": 0.2325512319803238,
+          "step": 1
+        },
+        {
+          "loss": 0.19625551998615265,
+          "step": 4
+        }
+      ],
+      "model_path": "artifacts\\models\\gcst\\g561_f4_graph_paired_od_actor_seed561.pt",
+      "steps": 4,
+      "train_instances": 12,
+      "uses_c0f0": false,
+      "uses_graph": true,
+      "uses_paired_od": true,
+      "validation_instances": 4,
+      "validation_normalized_l1": 0.21295222640037537,
+      "variant_id": "F4",
+      "variant_name": "graph_paired_od_actor"
+    },
+    {
+      "critic_training_only": false,
+      "history": [
+        {
+          "loss": 0.22530467808246613,
+          "step": 1
+        },
+        {
+          "loss": 0.194636270403862,
+          "step": 4
+        }
+      ],
+      "model_path": "artifacts\\models\\gcst\\g561_f6_full_goal_aware_dual_channel_actor_seed561.pt",
+      "steps": 4,
+      "train_instances": 12,
+      "uses_c0f0": true,
+      "uses_graph": true,
+      "uses_paired_od": true,
+      "validation_instances": 4,
+      "validation_normalized_l1": 0.20694635808467865,
+      "variant_id": "F6",
+      "variant_name": "full_goal_aware_dual_channel_actor"
+    },
+    {
+      "critic_training_only": true,
+      "history": [
+        {
+          "loss": 0.23291678726673126,
+          "step": 1
+        },
+        {
+          "loss": 0.1961587369441986,
+          "step": 4
+        }
+      ],
+      "model_path": "artifacts\\models\\gcst\\g561_f7_full_goal_aware_actor_training_critic_seed561.pt",
+      "steps": 4,
+      "train_instances": 12,
+      "uses_c0f0": true,
+      "uses_graph": true,
+      "uses_paired_od": true,
+      "validation_instances": 4,
+      "validation_normalized_l1": 0.215193510055542,
+      "variant_id": "F7",
+      "variant_name": "full_goal_aware_actor_training_critic"
+    }
+  ]
+}

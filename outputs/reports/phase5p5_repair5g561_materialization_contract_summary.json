@@ -1,0 +1,18 @@
+{
+  "aaai_ready": false,
+  "candidate_recognized_rate": null,
+  "decision": "g561_materialization_contract_planned_server_run_required",
+  "dual_channel_enabled_rate": null,
+  "executed_contract_vectors": 0,
+  "fingerprint_exact_match_rate": null,
+  "force_additive_false_rate": null,
+  "identity_retention_rate": null,
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "planned_contract_vectors": 31,
+  "runtime_claim_allowed": false,
+  "scenario_hash_match_rate": null,
+  "schema_version": "phase5p5_repair5g561_materialization_contract_summary_v1",
+  "source_truth_audit_decision": "g561_g560_replay_invalid_materialization_not_actor_failure"
+}

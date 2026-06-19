@@ -1,0 +1,7 @@
+# Repair5G.5.61 Failure Attribution
+
+- g560_replay_truth: `failed_materialization_gate` (exact_materialization_actor_rows=165/300; fallback_additive_executed=135)
+- canonical_theta_schema: `implemented` (src/gcst/theta_schema.py is the canonical solver-facing schema; label_v4 actor bounds now use solver bounds.)
+- valid_scenario_bank: `underpowered` (valid_scenarios=1203 target=2500)
+- goal_aware_representation: `smoke_completed` (variants=F1,F2,F4,F6,F7; causal_sensitivity_passed=True)
+- replay_ladder: `blocked` (architecture/development replay remains closed until materialization contract passes at 1.0.)

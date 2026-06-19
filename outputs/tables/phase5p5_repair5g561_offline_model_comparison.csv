@@ -1,0 +1,6 @@
+variant_id,variant_name,steps,train_instances,validation_instances,validation_normalized_l1,model_path,uses_graph,uses_paired_od,uses_c0f0,critic_training_only
+F1,scalar_conservative_actor,4,12,4,0.20509622991085052,artifacts\models\gcst\g561_f1_scalar_conservative_actor_seed561.pt,False,False,False,False
+F2,graph_only_direct_actor,4,12,4,0.20740294456481934,artifacts\models\gcst\g561_f2_graph_only_direct_actor_seed561.pt,True,False,False,False
+F4,graph_paired_od_actor,4,12,4,0.21295222640037537,artifacts\models\gcst\g561_f4_graph_paired_od_actor_seed561.pt,True,True,False,False
+F6,full_goal_aware_dual_channel_actor,4,12,4,0.20694635808467865,artifacts\models\gcst\g561_f6_full_goal_aware_dual_channel_actor_seed561.pt,True,True,True,False
+F7,full_goal_aware_actor_training_critic,4,12,4,0.215193510055542,artifacts\models\gcst\g561_f7_full_goal_aware_actor_training_critic_seed561.pt,True,True,True,True

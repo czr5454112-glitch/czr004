@@ -1,0 +1,82 @@
+{
+  "aaai_ready": false,
+  "actor_rows": 300,
+  "baseline_rows": 300,
+  "candidate_recognized_actor_rows": 165,
+  "committed_historical_summary": {
+    "aaai_ready": false,
+    "better_count": 116,
+    "both_fail": 2,
+    "both_success": 272,
+    "decision": "g560_direct_actor_dev_replay_completed",
+    "learned_runtime_policy_validated": false,
+    "mean_quality_delta_vs_g556": 0.11486412997058826,
+    "pair_csv": "/root/czr004/outputs/tables/phase5p5_repair5g560_direct_actor_dev_replay_pairs.csv",
+    "phase5p5_allowed": false,
+    "phase6_allowed": false,
+    "planned_contexts": 300,
+    "planned_solver_rows": 600,
+    "real_solver_rows": 600,
+    "registry_rows": 301,
+    "replay_pairs": 300,
+    "result_csv": "/root/czr004/outputs/tables/phase5p5_repair5g560_direct_actor_dev_replay_results.csv",
+    "round": "phase5p5_repair5g560",
+    "runtime_claim_allowed": false,
+    "success_gains": 1,
+    "success_regressions": 25,
+    "worse_count": 153
+  },
+  "corrected_replay_summary": {
+    "all": {
+      "better_count": 116,
+      "both_fail": 2,
+      "both_success": 272,
+      "mean_quality_delta_vs_g556": 0.11486412997058822,
+      "pairs": 300,
+      "success_gains": 1,
+      "success_regressions": 25,
+      "worse_count": 153
+    },
+    "exact": {
+      "better_count": 116,
+      "both_fail": 0,
+      "both_success": 164,
+      "mean_quality_delta_vs_g556": -0.01112573317310974,
+      "pairs": 165,
+      "success_gains": 1,
+      "success_regressions": 0,
+      "worse_count": 45
+    },
+    "recognized": {
+      "better_count": 116,
+      "both_fail": 0,
+      "both_success": 164,
+      "mean_quality_delta_vs_g556": -0.01112573317310974,
+      "pairs": 165,
+      "success_gains": 1,
+      "success_regressions": 0,
+      "worse_count": 45
+    }
+  },
+  "decision": "g561_g560_replay_invalid_materialization_not_actor_failure",
+  "exact_materialization_actor_rows": 165,
+  "learned_runtime_policy_validated": false,
+  "materialization_class_counts": {
+    "fallback_additive_executed": 135,
+    "valid_exact_materialization": 165
+  },
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "planned_rows": 600,
+  "recovered_pairs_by_evaluation_uid": 300,
+  "regression_truth_rows": 25,
+  "result_identity_missing_actor_rows": 300,
+  "round": "phase5p5_repair5g561",
+  "runtime_claim_allowed": false,
+  "scenario_sha_missing_actor_rows": 300,
+  "schema_version": "phase5p5_repair5g561_g560_replay_truth_audit_summary_v1",
+  "solver_rows": 600,
+  "source_round": "phase5p5_repair5g560",
+  "strict_exact_materialization_rate": 0.55,
+  "unrecognized_actor_rows": 135
+}

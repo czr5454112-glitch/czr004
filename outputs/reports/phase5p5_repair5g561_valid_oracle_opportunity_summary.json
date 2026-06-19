@@ -1,0 +1,14 @@
+{
+  "aaai_ready": false,
+  "candidate_regression_rate": 0.0,
+  "decision": "g561_valid_oracle_opportunity_limited_to_exact_g560_replay",
+  "exact_materialized_pairs": 165,
+  "learned_runtime_policy_validated": false,
+  "mean_oracle_quality_gain_vs_g556": NaN,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "safe_improvement_fraction": 0.006060606060606061,
+  "schema_version": "phase5p5_repair5g561_valid_oracle_opportunity_summary_v1",
+  "success_gain_fraction": 0.006060606060606061
+}

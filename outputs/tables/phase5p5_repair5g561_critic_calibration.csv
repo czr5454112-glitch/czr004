@@ -1,0 +1,6 @@
+variant_id,critic_training_only,risk_pr_auc,recall_at_fixed_precision,deployment_includes_critic
+F1,False,,,False
+F2,False,,,False
+F4,False,,,False
+F6,False,,,False
+F7,True,0.5,0.0,False

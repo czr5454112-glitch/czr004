@@ -1,0 +1,22 @@
+{
+  "aaai_ready": false,
+  "decision": "g561_valid_scenario_bank_underpowered_continue_generation",
+  "invalid_scenarios": 797,
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "physical_map_hashes": 23,
+  "reason_counts": {
+    "duplicate_goals": 298,
+    "duplicate_starts": 515,
+    "pair_not_reachable": 288
+  },
+  "runtime_claim_allowed": false,
+  "scenario_rows": 2000,
+  "schema_version": "phase5p5_repair5g561_scenario_validity_summary_v1",
+  "source_round": "phase5p5_repair5g560",
+  "valid_independent_instances_target": 2500,
+  "valid_independent_instances_target_met": false,
+  "valid_scenarios": 1203,
+  "validity_rate": 0.6015
+}

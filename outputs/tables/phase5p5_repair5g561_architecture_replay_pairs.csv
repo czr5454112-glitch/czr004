@@ -1,0 +1,2 @@
+decision,reason,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+skipped_until_materialization_contract_passes,G5.60 replay truth audit found mixed actor materialization; no architecture performance replay may be interpreted yet.,False,False,False,False,False

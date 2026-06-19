@@ -1,0 +1,8 @@
+{
+  "aaai_ready": false,
+  "decision": "g561_architecture_replay_blocked_by_materialization_truth_gate",
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false
+}

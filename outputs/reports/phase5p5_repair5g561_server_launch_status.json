@@ -1,0 +1,16 @@
+{
+  "attempted_hosts": [
+    {
+      "host": "paratera-rtx5090",
+      "status": "tcp_connect_timeout"
+    },
+    {
+      "host": "ssh.zw1.paratera.com:2222",
+      "status": "password_required_key_not_accepted"
+    }
+  ],
+  "commit": "acf0ca6a48a052457ecb63795758b613d81de420",
+  "decision": "blocked_before_tmux_launch",
+  "remote_tmux_started": false,
+  "requested_server": "RTX5090 / Paratera"
+}

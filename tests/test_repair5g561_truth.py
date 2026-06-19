@@ -1,6 +1,7 @@
 import numpy as np
 import pytest
 
+import write_repair5g561_decision as g561_decision
 from gcst.graph_data import GraphData, build_graph
 from gcst.goal_aware_actor import GoalAwareDualChannelActor, make_graph_batch, pad_od_tokens, scalar_features
 from gcst.label_v4 import THETA_HI, THETA_LO
@@ -18,6 +19,7 @@ from run_repair5g561_materialization_contract import (
     stable_uid,
     summarize_contract,
 )
+from run_repair5g561_replay_ladder import build_contexts
 
 
 def _fingerprint(theta):
@@ -234,3 +236,29 @@ def test_g561_contract_summary_requires_exact_materialization():
     assert summary["dual_channel_enabled_rate"] == 1.0
     assert summary["identity_retention_rate"] == 1.0
     assert summary["gates"]["minimum_64_vectors_met"] is False
+
+
+def test_g561_replay_ladder_contexts_cover_required_strata():
+    contexts = build_contexts(100)
+    assert len(contexts) == 100
+    assert {ctx.map_family for ctx in contexts} == {"maze", "random", "warehouse"}
+    assert {ctx.agents for ctx in contexts} == {32, 64, 96}
+    assert {ctx.budget_ms for ctx in contexts} == {500, 1000, 2000, 3000}
+    assert len({ctx.seed for ctx in contexts}) == 100
+
+
+def test_g561_decision_preserves_executed_architecture_replay(tmp_path, monkeypatch):
+    monkeypatch.setattr(g561_decision, "ROOT", tmp_path)
+    g561_decision.write_json(
+        g561_decision.ARCH_REPLAY_SUMMARY,
+        {"decision": "g561_architecture_replay_executed_exact_materialization"},
+    )
+    g561_decision.write_rows(
+        g561_decision.ARCH_REPLAY_PAIRS,
+        [{"replay_phase": "architecture_replay", "theta_id": "keep-me"}],
+    )
+
+    g561_decision.write_blocked_replay_artifacts({"materialization_contract_passed": True, "decision": "contract_passed"})
+
+    rows = g561_decision.read_rows(g561_decision.ARCH_REPLAY_PAIRS)
+    assert rows == [{"replay_phase": "architecture_replay", "theta_id": "keep-me"}]

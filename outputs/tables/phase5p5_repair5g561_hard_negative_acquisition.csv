@@ -1,2 +1,2 @@
-decision,reason,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
-skipped_until_replay_ladder_runs,G5.61 materialization contract passed; corrected scalar and architecture replay ladder has not been executed yet.,False,False,False,False,False
+decision,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+g561_replay_ladder_no_success_regressions_observed,False,False,False,False,False

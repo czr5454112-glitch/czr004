@@ -34,6 +34,7 @@ DECISION_MD = Path(f"outputs/reports/{ROUND}_decision.md")
 DECISION_SUMMARY = Path(f"outputs/reports/{ROUND}_decision_summary.json")
 ARCH_REPLAY_PAIRS = Path(f"outputs/tables/{ROUND}_architecture_replay_pairs.csv")
 ARCH_REPLAY_SUMMARY = Path(f"outputs/reports/{ROUND}_architecture_replay_summary.json")
+CORRECTED_REPLAY_SUMMARY = Path(f"outputs/reports/{ROUND}_corrected_g560_replay_summary.json")
 DEV_REPLAY = Path(f"outputs/tables/{ROUND}_dev_replay_by_stratum.csv")
 DEV_REPLAY_SUMMARY = Path(f"outputs/reports/{ROUND}_dev_replay_summary.json")
 HARD_NEGATIVE = Path(f"outputs/tables/{ROUND}_hard_negative_acquisition.csv")
@@ -243,6 +244,13 @@ def write_oracle_artifacts() -> dict[str, Any]:
 
 
 def write_blocked_replay_artifacts(contract: dict[str, Any]) -> None:
+    existing_arch = read_json(ARCH_REPLAY_SUMMARY)
+    existing_decision = str(existing_arch.get("decision", ""))
+    real_arch_replay = existing_decision.startswith("g561_architecture_replay_") and not any(
+        token in existing_decision for token in ["pending", "blocked"]
+    )
+    if real_arch_replay and resolve(ARCH_REPLAY_PAIRS).exists():
+        return
     contract_passed = bool(contract.get("materialization_contract_passed"))
     decision = "skipped_until_replay_ladder_runs" if contract_passed else "skipped_until_materialization_contract_passes"
     reason = (
@@ -281,7 +289,31 @@ def write_blocked_replay_artifacts(contract: dict[str, Any]) -> None:
 def write_failure_and_decision(scenario: dict[str, Any], oracle: dict[str, Any], contract: dict[str, Any]) -> dict[str, Any]:
     audit = read_json(f"outputs/reports/{ROUND}_g560_replay_truth_audit_summary.json")
     training = read_json(f"outputs/reports/{ROUND}_training_summary.json")
+    corrected_replay = read_json(CORRECTED_REPLAY_SUMMARY)
+    arch_replay = read_json(ARCH_REPLAY_SUMMARY)
     contract_passed = bool(contract.get("materialization_contract_passed"))
+    corrected_decision = str(corrected_replay.get("decision", ""))
+    arch_decision = str(arch_replay.get("decision", ""))
+    corrected_real_replay = corrected_decision.startswith("g561_corrected_g560_scalar_replay_") and not any(
+        token in corrected_decision for token in ["pending", "blocked"]
+    )
+    arch_real_replay = arch_decision.startswith("g561_architecture_replay_") and not any(token in arch_decision for token in ["pending", "blocked"])
+    replay_executed = corrected_real_replay and arch_real_replay
+    replay_exact = replay_executed and corrected_decision.endswith("_executed_exact_materialization") and arch_decision.endswith(
+        "_executed_exact_materialization"
+    )
+    if replay_exact:
+        replay_status = "executed_exact_materialization"
+        next_required_gate = "run development replay and hard-negative acquisition from exact-materialized replay ladder rows"
+    elif replay_executed:
+        replay_status = "executed_needs_materialization_repair"
+        next_required_gate = "repair replay ladder materialization identity/fingerprint failures before interpreting performance"
+    elif contract_passed:
+        replay_status = "pending_after_contract"
+        next_required_gate = "run corrected G5.60 scalar replay and G5.61 architecture replay ladder with exact-materialization rows only"
+    else:
+        replay_status = "blocked"
+        next_required_gate = "run G5.61 materialization contract on server and require candidate_recognized/fingerprint/identity/scenario rates all equal 1.0"
     scenario_target_met = bool(
         scenario.get("all_scenario_bank_targets_met")
         or scenario.get("valid_independent_instances_target_met")
@@ -326,11 +358,16 @@ def write_failure_and_decision(scenario: dict[str, Any], oracle: dict[str, Any],
         },
         {
             "branch": "replay_ladder",
-            "status": "pending_after_contract" if contract_passed else "blocked",
+            "status": replay_status,
             "evidence": (
+                f"corrected={corrected_decision}; architecture={arch_decision}; "
+                f"corrected_actor_rows={corrected_replay.get('actor_rows')}; architecture_actor_rows={arch_replay.get('actor_rows')}"
+                if replay_executed
+                else (
                 "materialization contract passed; corrected G5.60 scalar replay and architecture replay ladder are now the next required experiments."
                 if contract_passed
                 else "architecture/development replay remains closed until materialization contract passes at 1.0."
+                )
             ),
         },
     ]
@@ -347,11 +384,11 @@ def write_failure_and_decision(scenario: dict[str, Any], oracle: dict[str, Any],
         "training_decision": training.get("decision"),
         "materialization_contract_decision": contract.get("decision"),
         "materialization_contract_passed": contract_passed,
-        "next_required_gate": (
-            "run corrected G5.60 scalar replay and G5.61 architecture replay ladder with exact-materialization rows only"
-            if contract_passed
-            else "run G5.61 materialization contract on server and require candidate_recognized/fingerprint/identity/scenario rates all equal 1.0"
-        ),
+        "corrected_g560_replay_decision": corrected_decision,
+        "architecture_replay_decision": arch_decision,
+        "replay_ladder_executed": replay_executed,
+        "replay_ladder_exact_materialization": replay_exact,
+        "next_required_gate": next_required_gate,
         **claims(),
     }
     write_json(DECISION_SUMMARY, decision)
@@ -369,7 +406,8 @@ def write_failure_and_decision(scenario: dict[str, Any], oracle: dict[str, Any],
         "The exact-materialized subset has zero success regressions, while 135 actor rows executed fallback additive settings. "
         f"The valid scenario bank status is `{scenario.get('decision')}` with `{scenario.get('valid_scenarios')}` valid instances. "
         f"The G5.61 materialization contract status is `{contract.get('decision')}` with `{contract.get('executed_contract_vectors')}` executed vectors. "
-        "The next required work is corrected scalar replay and architecture replay using exact-materialization rows only.\n\n"
+        f"The replay ladder status is corrected=`{corrected_decision}` and architecture=`{arch_decision}`. "
+        f"The next required work is {decision['next_required_gate']}.\n\n"
         "All Phase5.5, Phase6, runtime, learned-policy, and AAAI claims remain closed.\n",
     )
     return decision
@@ -384,6 +422,7 @@ def write_manifest() -> None:
         "scripts/generate_repair5g561_valid_scenario_bank.py",
         "scripts/monitor_repair5g561_server.py",
         "scripts/run_repair5g561_materialization_contract.py",
+        "scripts/run_repair5g561_replay_ladder.py",
         "scripts/train_repair5g561_goal_aware_actor.py",
         "scripts/write_repair5g561_decision.py",
         "tests/test_repair5g561_truth.py",

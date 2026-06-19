@@ -1,0 +1,19 @@
+{
+  "aaai_ready": false,
+  "acquisition_rows": 607,
+  "critic_false_safe_proxy_rows": 224,
+  "decision": "g561_hard_negative_acquisition_completed_with_success_regressions",
+  "fine_tune_completed": false,
+  "large_positive_quality_delta_source_rows": 447,
+  "learned_runtime_policy_validated": false,
+  "next_required_gate": "fine-tune on acquired hard negatives and rerun one frozen-comparison development panel",
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g561_hard_negative_acquisition_summary_v1",
+  "source_pairs": 800,
+  "source_replay_phase": "development_replay",
+  "success_regression_rows": 7,
+  "unique_acquisition_keys": 354,
+  "worst_family_count": 7
+}

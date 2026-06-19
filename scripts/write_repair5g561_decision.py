@@ -38,6 +38,7 @@ CORRECTED_REPLAY_SUMMARY = Path(f"outputs/reports/{ROUND}_corrected_g560_replay_
 DEV_REPLAY = Path(f"outputs/tables/{ROUND}_dev_replay_by_stratum.csv")
 DEV_REPLAY_SUMMARY = Path(f"outputs/reports/{ROUND}_dev_replay_summary.json")
 HARD_NEGATIVE = Path(f"outputs/tables/{ROUND}_hard_negative_acquisition.csv")
+HARD_NEGATIVE_SUMMARY = Path(f"outputs/reports/{ROUND}_hard_negative_acquisition_summary.json")
 CONTRACT_SUMMARY = Path(f"outputs/reports/{ROUND}_materialization_contract_summary.json")
 
 
@@ -291,9 +292,13 @@ def write_failure_and_decision(scenario: dict[str, Any], oracle: dict[str, Any],
     training = read_json(f"outputs/reports/{ROUND}_training_summary.json")
     corrected_replay = read_json(CORRECTED_REPLAY_SUMMARY)
     arch_replay = read_json(ARCH_REPLAY_SUMMARY)
+    dev_replay = read_json(DEV_REPLAY_SUMMARY)
+    hard_negative = read_json(HARD_NEGATIVE_SUMMARY)
     contract_passed = bool(contract.get("materialization_contract_passed"))
     corrected_decision = str(corrected_replay.get("decision", ""))
     arch_decision = str(arch_replay.get("decision", ""))
+    dev_decision = str(dev_replay.get("decision", ""))
+    hard_negative_decision = str(hard_negative.get("decision", ""))
     corrected_real_replay = corrected_decision.startswith("g561_corrected_g560_scalar_replay_") and not any(
         token in corrected_decision for token in ["pending", "blocked"]
     )
@@ -314,6 +319,10 @@ def write_failure_and_decision(scenario: dict[str, Any], oracle: dict[str, Any],
     else:
         replay_status = "blocked"
         next_required_gate = "run G5.61 materialization contract on server and require candidate_recognized/fingerprint/identity/scenario rates all equal 1.0"
+    dev_real_replay = dev_decision.startswith("g561_development_replay_") and not any(token in dev_decision for token in ["pending", "blocked"])
+    hard_negative_done = hard_negative_decision.startswith("g561_hard_negative_acquisition_completed")
+    if dev_real_replay and hard_negative_done:
+        next_required_gate = "complete three training seeds for primary variants, then final failure attribution/fine-tune gate"
     scenario_target_met = bool(
         scenario.get("all_scenario_bank_targets_met")
         or scenario.get("valid_independent_instances_target_met")
@@ -370,6 +379,28 @@ def write_failure_and_decision(scenario: dict[str, Any], oracle: dict[str, Any],
                 )
             ),
         },
+        {
+            "branch": "development_replay",
+            "status": "executed" if dev_real_replay else ("pending_after_replay_ladder" if replay_exact else "blocked"),
+            "evidence": (
+                f"decision={dev_decision}; contexts={dev_replay.get('development_contexts')}; "
+                f"actor_rows={dev_replay.get('actor_rows')}; materialization_invalid_rows={dev_replay.get('materialization_invalid_rows')}; "
+                f"success_regressions={dev_replay.get('success_regressions')}"
+                if dev_real_replay
+                else "development replay has not produced a real executed summary yet"
+            ),
+        },
+        {
+            "branch": "hard_negative_acquisition",
+            "status": "completed" if hard_negative_done else ("pending_after_development_replay" if dev_real_replay else "blocked"),
+            "evidence": (
+                f"decision={hard_negative_decision}; acquisition_rows={hard_negative.get('acquisition_rows')}; "
+                f"success_regression_rows={hard_negative.get('success_regression_rows')}; "
+                f"large_positive_quality_delta_source_rows={hard_negative.get('large_positive_quality_delta_source_rows')}"
+                if hard_negative_done
+                else "hard-negative acquisition has not produced a completed summary yet"
+            ),
+        },
     ]
     write_rows(FAILURE_CSV, failure_rows)
     decision = {
@@ -388,6 +419,10 @@ def write_failure_and_decision(scenario: dict[str, Any], oracle: dict[str, Any],
         "architecture_replay_decision": arch_decision,
         "replay_ladder_executed": replay_executed,
         "replay_ladder_exact_materialization": replay_exact,
+        "development_replay_decision": dev_decision,
+        "development_replay_executed": dev_real_replay,
+        "hard_negative_acquisition_decision": hard_negative_decision,
+        "hard_negative_acquisition_completed": hard_negative_done,
         "next_required_gate": next_required_gate,
         **claims(),
     }
@@ -407,6 +442,7 @@ def write_failure_and_decision(scenario: dict[str, Any], oracle: dict[str, Any],
         f"The valid scenario bank status is `{scenario.get('decision')}` with `{scenario.get('valid_scenarios')}` valid instances. "
         f"The G5.61 materialization contract status is `{contract.get('decision')}` with `{contract.get('executed_contract_vectors')}` executed vectors. "
         f"The replay ladder status is corrected=`{corrected_decision}` and architecture=`{arch_decision}`. "
+        f"The development replay status is `{dev_decision}` and hard-negative acquisition is `{hard_negative_decision}`. "
         f"The next required work is {decision['next_required_gate']}.\n\n"
         "All Phase5.5, Phase6, runtime, learned-policy, and AAAI claims remain closed.\n",
     )
@@ -422,6 +458,7 @@ def write_manifest() -> None:
         "scripts/generate_repair5g561_valid_scenario_bank.py",
         "scripts/monitor_repair5g561_server.py",
         "scripts/run_repair5g561_materialization_contract.py",
+        "scripts/run_repair5g561_development_replay.py",
         "scripts/run_repair5g561_replay_ladder.py",
         "scripts/train_repair5g561_goal_aware_actor.py",
         "scripts/write_repair5g561_decision.py",

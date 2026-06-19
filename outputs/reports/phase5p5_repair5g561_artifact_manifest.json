@@ -1,6 +1,6 @@
 {
   "aaai_ready": false,
-  "artifact_count": 69,
+  "artifact_count": 81,
   "artifacts": [
     {
       "bytes": 9542,
@@ -38,6 +38,11 @@
       "sha256": "37f26eee0e139af3e71daed2b9506c463cb920d4d7782140211d016e5a3bff81"
     },
     {
+      "bytes": 32581,
+      "path": "scripts/run_repair5g561_development_replay.py",
+      "sha256": "ae8289c5b45bd76e04ba5d2b16bffa8efb51e439b033816cde255216719b6b1d"
+    },
+    {
       "bytes": 37836,
       "path": "scripts/run_repair5g561_replay_ladder.py",
       "sha256": "5c17325b612cba46ab7d332d53689eba7275d0242b5cdaacfef3155b83357f93"
@@ -48,14 +53,14 @@
       "sha256": "79ced2244c69d1b6a0b24f69818364ee47c7e58e49fed53ec38f07d0616c29f0"
     },
     {
-      "bytes": 22162,
+      "bytes": 24700,
       "path": "scripts/write_repair5g561_decision.py",
-      "sha256": "59f0d867ee4b2f765cd1eab0dbaa2a1a7a27295f0943ff529fcb3d861c2115f5"
+      "sha256": "23ed218bed1016514c55ca5980cdf76fc30b48e3462b976ca776d738caeddd0c"
     },
     {
-      "bytes": 10615,
+      "bytes": 11521,
       "path": "tests/test_repair5g561_truth.py",
-      "sha256": "1e789951c2c38e5f1dee5fb5d23d562db28155c01a583fabe6501639c431e4ff"
+      "sha256": "88580e25f2f1944edab081af51f0d6149caeb564a67ded388155784538307ceb"
     },
     {
       "bytes": 444,
@@ -70,7 +75,7 @@
     {
       "bytes": 14117,
       "path": "outputs/reports/phase5p5_repair5g561_artifact_manifest.json",
-      "sha256": "202927bd15d6b09a194d61b8e2ee2e8ff33288ee7efa05cb8180e16fcb32a0aa"
+      "sha256": "125a04fe577b620c1e84118a579f753dde34c0e826bf148001d587a26a82ec0b"
     },
     {
       "bytes": 8426,
@@ -88,24 +93,39 @@
       "sha256": "fc5ca5f6c1d3efdb3de5e25bd8706166900f0604badf17ae4c2372c2fa391af5"
     },
     {
-      "bytes": 941,
+      "bytes": 1135,
       "path": "outputs/reports/phase5p5_repair5g561_decision.md",
-      "sha256": "c7ab51a39d01eed38d0cc96ec7c5e866474f19e05cfef75884498265951e3fa6"
+      "sha256": "30ed696171aca90f48154d23e3e75b6da721a7214c451f85e7649ab7cf915b62"
     },
     {
-      "bytes": 1268,
+      "bytes": 1560,
       "path": "outputs/reports/phase5p5_repair5g561_decision_summary.json",
-      "sha256": "9d589885fe204f84c5afbc5340874e2ac79a0c64197b967f476757fb8456735b"
+      "sha256": "e8df44454be9ba7f9d2cdf57c3da028552d5ef63be60dd41cab1ae38b22598f0"
     },
     {
-      "bytes": 319,
+      "bytes": 2405,
       "path": "outputs/reports/phase5p5_repair5g561_dev_replay_summary.json",
-      "sha256": "57cb72cd15acd44f4e83d220e8835b1b2e2d8e46ce40e0ad01448f700157249b"
+      "sha256": "7be8d2e994096b6016b1ac11d67e874ed07817c3ee5573dd242447355f233341"
     },
     {
-      "bytes": 974,
+      "bytes": 674,
+      "path": "outputs/reports/phase5p5_repair5g561_development_replay.md",
+      "sha256": "58519b2fe7b28a51ef882b9fe240a269bf89deb73534e76cb7b22d287fbb5350"
+    },
+    {
+      "bytes": 6692,
+      "path": "outputs/reports/phase5p5_repair5g561_development_replay_scenario_generation.json",
+      "sha256": "0ed80bd1df1dd2d373944ec7bac5e3c6e7793123034dfee9ac6b3ba5b94fc11d"
+    },
+    {
+      "bytes": 171771,
+      "path": "outputs/reports/phase5p5_repair5g561_development_replay_tmux.log",
+      "sha256": "a0451e941a51066550c3d3d4c86335d7ffe904019683326c93a7321959e5ac50"
+    },
+    {
+      "bytes": 1373,
       "path": "outputs/reports/phase5p5_repair5g561_failure_attribution.md",
-      "sha256": "93c59722e0152a16bf64e5581d135071a2a5e5fcdfc3087f0e4b989bdf1bae86"
+      "sha256": "565c33d1e390b8a5864062754d6b5d298a2d0d92448046c670108b64873bf966"
     },
     {
       "bytes": 1192,
@@ -116,6 +136,16 @@
       "bytes": 2678,
       "path": "outputs/reports/phase5p5_repair5g561_g560_replay_truth_audit_summary.json",
       "sha256": "45d6c07624b34a44c4ca8bf08985332efa63987328ed9340850b00624540d171"
+    },
+    {
+      "bytes": 423,
+      "path": "outputs/reports/phase5p5_repair5g561_hard_negative_acquisition.md",
+      "sha256": "9933c00a3a3687ad5d73bf4292d5172ef8d61d3a8387f2e96e109c64cfb39a70"
+    },
+    {
+      "bytes": 751,
+      "path": "outputs/reports/phase5p5_repair5g561_hard_negative_acquisition_summary.json",
+      "sha256": "c5b14adaca39d38c0bd7a8b759ce3920d12951154bba627ca6c4f6dc7837070f"
     },
     {
       "bytes": 825,
@@ -210,7 +240,7 @@
     {
       "bytes": 8832,
       "path": "outputs/tables/phase5p5_repair5g561_checksums.sha256",
-      "sha256": "7d25fe2ea23f47e77db41c3ff08f79ab9300996d8c954db5b5134d2984270e76"
+      "sha256": "e63bd2699671bd7eb4da6ff42507beeb1fce7e38c5b3b896dc878ba16989bd0f"
     },
     {
       "bytes": 185579,
@@ -223,14 +253,44 @@
       "sha256": "37c23456c20db0e7c8cebf06c17f2cb42a686f8e289c516ecb3f5aa54dbc8136"
     },
     {
-      "bytes": 293,
+      "bytes": 2114,
       "path": "outputs/tables/phase5p5_repair5g561_dev_replay_by_stratum.csv",
-      "sha256": "d450ec89261db7ad7407246d7991e9a0afea8335824a3da3345c38ff6070a8da"
+      "sha256": "43d54370aa122985dfe6c2c3adf5b83726dc1367ba784829f35928e49dd5682c"
     },
     {
-      "bytes": 919,
+      "bytes": 774994,
+      "path": "outputs/tables/phase5p5_repair5g561_development_replay_pairs.csv",
+      "sha256": "1612b5423056c01f8ad4832812dbffaf880a9824224da3f641107543333d28dc"
+    },
+    {
+      "bytes": 2822427,
+      "path": "outputs/tables/phase5p5_repair5g561_development_replay_plan.csv",
+      "sha256": "061e202fab2e4fe7526985946d21a85daf8fd3cac72c3c180bf9c2ba26676515"
+    },
+    {
+      "bytes": 396672,
+      "path": "outputs/tables/phase5p5_repair5g561_development_replay_registry.csv",
+      "sha256": "83452df0524b2530769ed9723b18baa3fd0202641b3868bd7a5da951e1dc5350"
+    },
+    {
+      "bytes": 4572306,
+      "path": "outputs/tables/phase5p5_repair5g561_development_replay_results.csv",
+      "sha256": "41809fcd2ce6cf95274e0c0daf5f7876b1cc9faf33007cea6b021cd4c3ecac66"
+    },
+    {
+      "bytes": 2705981,
+      "path": "outputs/tables/phase5p5_repair5g561_development_replay_results.raw.csv",
+      "sha256": "7a68cd9c3a45527641b3e39ab3c29dfd0be02546b0a84e482b6bfe6bfddb4971"
+    },
+    {
+      "bytes": 1784,
+      "path": "outputs/tables/phase5p5_repair5g561_development_replay_selection.csv",
+      "sha256": "3299e33480865bb5a7798b0e1062474659376f92bafb1c7c16587cf25451db69"
+    },
+    {
+      "bytes": 1304,
       "path": "outputs/tables/phase5p5_repair5g561_failure_attribution.csv",
-      "sha256": "c527f68f24a7495ddc8a25770c70fdfc4ae4c36d7ed8e9c4f0ad56859f7579f7"
+      "sha256": "d7e8091094083c1ddd7dc618004e629cc8ca6114a11048e8d5fdba57141fc07e"
     },
     {
       "bytes": 6880,
@@ -243,9 +303,9 @@
       "sha256": "b8b24870b2a37889aaf16561af15f3a95464c3f5694424ec3b378dd67f1aeba2"
     },
     {
-      "bytes": 190,
+      "bytes": 234662,
       "path": "outputs/tables/phase5p5_repair5g561_hard_negative_acquisition.csv",
-      "sha256": "462bf9f516a5e25e0d59c3f609e7f8789803c3ad7ff9a71eea72e6dabc7545bc"
+      "sha256": "58ed79a5c865fbc534498bbc88d27662c0c6e0f4342006cec96292b21fedc33a"
     },
     {
       "bytes": 167795,

@@ -1,2 +1,15 @@
-decision,reason,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
-skipped_until_replay_ladder_runs,G5.61 materialization contract passed; corrected scalar and architecture replay ladder has not been executed yet.,False,False,False,False,False
+stratum,method,pairs,success_regressions,success_gains,mean_quality_delta_vs_g556,median_quality_delta_vs_g556,better,worse,ties,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+empty,F6_full_goal_aware_dual_channel_actor,43,0,0,0.08816208249302325,0.024193548389999986,12,31,0,False,False,False,False,False
+empty,F7_full_goal_aware_actor_training_critic,43,0,0,0.16354798848348837,0.024193548389999986,10,33,0,False,False,False,False,False
+irregular_bottleneck,F6_full_goal_aware_dual_channel_actor,58,1,0,-0.007084966045263153,-0.0012970168699999451,29,26,2,False,False,False,False,False
+irregular_bottleneck,F7_full_goal_aware_actor_training_critic,58,2,0,0.007666744455178569,0.0,26,27,3,False,False,False,False,False
+loop,F6_full_goal_aware_dual_channel_actor,58,2,0,-0.004363684378518508,0.0029435290350000587,24,30,0,False,False,False,False,False
+loop,F7_full_goal_aware_actor_training_critic,58,2,2,-0.002469011809814794,0.0001864587900000103,27,27,0,False,False,False,False,False
+random,F6_full_goal_aware_dual_channel_actor,101,0,0,0.060863076920891115,0.018264840190000076,43,54,4,False,False,False,False,False
+random,F7_full_goal_aware_actor_training_critic,101,0,0,0.05952948686514853,0.025477707010000072,43,57,1,False,False,False,False,False
+room,F6_full_goal_aware_dual_channel_actor,24,0,0,0.04133273062791665,0.03812296249500002,4,20,0,False,False,False,False,False
+room,F7_full_goal_aware_actor_training_critic,24,0,0,0.03746129815208332,0.041893620220000094,7,17,0,False,False,False,False,False
+tree,F6_full_goal_aware_dual_channel_actor,58,0,0,-0.012054793408771924,0.012595837899999962,24,33,0,False,False,False,False,False
+tree,F7_full_goal_aware_actor_training_critic,58,0,0,0.003667007983684214,0.0060975609800000274,24,33,0,False,False,False,False,False
+tunnel,F6_full_goal_aware_dual_channel_actor,58,0,0,0.0008385182817241563,0.0005917159750000733,28,29,1,False,False,False,False,False
+tunnel,F7_full_goal_aware_actor_training_critic,58,0,0,0.005539676277586222,0.0016375898300000635,28,30,0,False,False,False,False,False

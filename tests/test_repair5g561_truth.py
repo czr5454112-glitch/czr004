@@ -19,6 +19,7 @@ from run_repair5g561_materialization_contract import (
     stable_uid,
     summarize_contract,
 )
+from run_repair5g561_development_replay import select_best_two_actor_variants, select_development_contexts
 from run_repair5g561_replay_ladder import build_contexts
 
 
@@ -262,3 +263,18 @@ def test_g561_decision_preserves_executed_architecture_replay(tmp_path, monkeypa
 
     rows = g561_decision.read_rows(g561_decision.ARCH_REPLAY_PAIRS)
     assert rows == [{"replay_phase": "architecture_replay", "theta_id": "keep-me"}]
+
+
+def test_g561_development_context_selection_uses_heldout_strata():
+    contexts = select_development_contexts(400)
+    assert len(contexts) == 400
+    assert len({ctx.development_split_physical_map_sha256 for ctx in contexts}) >= 8
+    assert len({ctx.map_family for ctx in contexts}) >= 6
+    assert {ctx.budget_ms for ctx in contexts} == {500, 750, 1000, 1500, 2000, 3000, 5000, 8000}
+    assert {ctx.scenario_bank_source for ctx in contexts} <= {"generated_g561_component_aware", "retained_g560_valid"}
+
+
+def test_g561_development_actor_selection_freezes_best_two_from_r2():
+    selected = select_best_two_actor_variants(write_selection=False)
+    assert [row["variant_id"] for row in selected] == ["F6", "F7"]
+    assert all(row["selected_for_development_replay"] is True for row in selected)

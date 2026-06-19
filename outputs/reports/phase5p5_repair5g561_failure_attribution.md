@@ -6,3 +6,5 @@
 - materialization_contract: `passed` (planned=85; executed=85; candidate=1.0; fingerprint=1.0; scenario=1.0; identity=1.0)
 - goal_aware_representation: `smoke_completed` (variants=F1,F2,F4,F6,F7; causal_sensitivity_passed=True)
 - replay_ladder: `executed_exact_materialization` (corrected=g561_corrected_g560_scalar_replay_executed_exact_materialization; architecture=g561_architecture_replay_executed_exact_materialization; corrected_actor_rows=200; architecture_actor_rows=400)
+- development_replay: `executed` (decision=g561_development_replay_executed_exact_materialization; contexts=400; actor_rows=800; materialization_invalid_rows=0; success_regressions=7)
+- hard_negative_acquisition: `completed` (decision=g561_hard_negative_acquisition_completed_with_success_regressions; acquisition_rows=607; success_regression_rows=7; large_positive_quality_delta_source_rows=447)

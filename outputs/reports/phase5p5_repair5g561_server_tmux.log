@@ -1,0 +1,30 @@
+=== G5.61 SERVER RUN START 2026-06-19T12:06:23Z ===
+source_commit=7aa3ce2b7cee8f66152f2640c37ddbd77429a0f1
+workdir=/root/shared-nvme/czr004_g561_7aa3ce2
+session=g561_7aa3ce2
+p-c4d1118c7152-ackcs-00gjh6i6
+Fri Jun 19 20:06:23 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.105.08             Driver Version: 580.105.08     CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA GeForce RTX 5090        On  |   00000000:56:00.0 Off |                  N/A |
+|  0%   27C    P8             17W /  575W |       1MiB /  32607MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+torch 2.7.0a0+7c8ec84dab.nv25.03
+cuda_available True
+cuda_device_count 1
+cuda_device_name NVIDIA GeForce RTX 5090
+{"actor_rows": 300, "decision": "g561_g560_replay_invalid_materialization_not_actor_failure", "exact": 165}

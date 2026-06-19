@@ -1,32 +1,73 @@
 # Repair5G.5.61 Server Launch Status
 
-- local commit: `acf0ca6a48a052457ecb63795758b613d81de420`
+- status: `running_in_tmux_on_rtx5090`
+- source commit: `7aa3ce2b7cee8f66152f2640c37ddbd77429a0f1`
 - pushed branch: `server-code`
-- requested server: RTX5090 / Paratera
-- attempted alias: `paratera-rtx5090`
-- attempted historical host: `ssh.zw1.paratera.com:2222`
+- instance: `ackcs-00gjh6i6`
+- remote host: `ssh.bj8.bz1.paratera.com:2233`
+- remote user: `root@ackcs-00gjh6i6`
+- remote hostname: `p-c4d1118c7152-ackcs-00gjh6i6`
+- remote workdir: `/root/shared-nvme/czr004_g561_7aa3ce2`
+- tmux session: `g561_7aa3ce2`
+- remote log: `/root/shared-nvme/czr004_g561_7aa3ce2/outputs/reports/phase5p5_repair5g561_server_tmux.log`
+- local pulled log snapshot: `outputs/reports/phase5p5_repair5g561_server_tmux.log`
 
-Status: `blocked_before_tmux_launch`
+## Environment Probe
 
-The pushed G5.61 code and artifacts are available on `origin/server-code`, but this Codex session could not start the remote tmux run:
+- GPU: NVIDIA GeForce RTX 5090, 32607 MiB
+- driver: `580.105.08`
+- CUDA: `13.0`
+- PyTorch: `2.7.0a0+7c8ec84dab.nv25.03`
+- `torch.cuda.is_available()`: `True`
+- `/root/shared-nvme`: 200G available at launch
 
-- `paratera-rtx5090` (`111.127.53.198:2222`) timed out at TCP connect.
-- Historical gateway `ssh.zw1.paratera.com:2222` was reachable, but the available SSH key was not accepted and the server requested a password.
+## Launch Command
 
-No remote training or solver tmux session was started from this session.
-
-Recommended server command once access is restored:
+The remote HTTPS clone hit a transient GnuTLS receive error, so the exact tracked source commit was deployed as a minimal git archive and extracted into the remote workdir. No local dirty worktree files were included.
 
 ```bash
-mkdir -p /root/shared-nvme
-cd /root/shared-nvme
-git clone https://github.com/czr5454112-glitch/czr004.git czr004_g561_acf0ca6 || true
-cd /root/shared-nvme/czr004_g561_acf0ca6
-git fetch origin server-code
-git checkout server-code
-git reset --hard acf0ca6a48a052457ecb63795758b613d81de420
-export REMOTE_ARTIFACT_ROOT=/root/shared-nvme/czr004_g561_remote_artifacts
-export TMPDIR=/root/shared-nvme/tmp
-mkdir -p "$REMOTE_ARTIFACT_ROOT" "$TMPDIR"
-tmux new -d -s g561 "python scripts/audit_repair5g561_replay_truth.py && python scripts/train_repair5g561_goal_aware_actor.py --samples 96 --steps 400 --batch-size 4 --hidden-dim 64 --device auto --variants F1 F2 F4 F6 F7 && python scripts/write_repair5g561_decision.py 2>&1 | tee outputs/reports/phase5p5_repair5g561_server_tmux.log"
+cd /root/shared-nvme/czr004_g561_7aa3ce2
+tmux new-session -d -s g561_7aa3ce2 'bash /root/shared-nvme/czr004_g561_7aa3ce2/run_g561_server.sh'
 ```
+
+The tmux script runs:
+
+```bash
+python3 scripts/audit_repair5g561_replay_truth.py
+python3 scripts/train_repair5g561_goal_aware_actor.py --samples 128 --steps 500 --batch-size 8 --hidden-dim 96 --device auto --variants F1 F2 F4 F6 F7
+python3 scripts/write_repair5g561_decision.py
+```
+
+## Observed State
+
+At `2026-06-19T12:12:22Z`, the tmux job was still running:
+
+- training PID: `42554`
+- elapsed: `00:05:56`
+- GPU memory: `1016 MiB`
+- GPU utilization: `36%`
+- first server checkpoint rewritten: `artifacts/models/gcst/g561_f1_scalar_conservative_actor_seed561.pt`
+
+The audit stage had completed inside the server log:
+
+```json
+{"actor_rows": 300, "decision": "g561_g560_replay_invalid_materialization_not_actor_failure", "exact": 165}
+```
+
+The server training summary had not yet been overwritten at this observation point, so the final server training metrics should be pulled after tmux exits.
+
+Resume/status command:
+
+```bash
+ssh -p 2233 'root@ackcs-00gjh6i6'@ssh.bj8.bz1.paratera.com
+tmux attach -t g561_7aa3ce2
+tail -f /root/shared-nvme/czr004_g561_7aa3ce2/outputs/reports/phase5p5_repair5g561_server_tmux.log
+```
+
+Claims remain closed:
+
+- `phase5p5_allowed = false`
+- `phase6_allowed = false`
+- `runtime_claim_allowed = false`
+- `learned_runtime_policy_validated = false`
+- `aaai_ready = false`

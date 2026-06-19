@@ -231,3 +231,19 @@ def test_full_pilot_defaults_are_not_smoke_sized():
     smoke = parse_args_checked(["--smoke", "--pilot-instances", "24", "--candidates-per-instance", "4", "--codebook-size", "64"], "test")
     assert effective_pilot_instances(smoke) == 24
     assert effective_candidates_per_instance(smoke) == 4
+
+
+def test_real_learnability_density_lookup_uses_predictions():
+    from repair5g559_pipeline import _density_lookup_scores, _select_by_scores
+
+    train = [
+        {"example_id": 0, "instance_uid": "train_a", "theta_id": "good", "density_bin": "d01_low", "target": -1.0},
+        {"example_id": 1, "instance_uid": "train_a", "theta_id": "bad", "density_bin": "d01_low", "target": 2.0},
+    ]
+    heldout = [
+        {"example_id": 2, "instance_uid": "heldout_a", "theta_id": "bad", "density_bin": "d01_low", "target": 2.0},
+        {"example_id": 3, "instance_uid": "heldout_a", "theta_id": "good", "density_bin": "d01_low", "target": -1.0},
+    ]
+    scores = _density_lookup_scores(train, heldout)
+    selected = _select_by_scores(heldout, scores)
+    assert selected[0]["theta_id"] == "good"

@@ -103,6 +103,8 @@ SYNTHETIC_JSON = f"outputs/reports/{ROUND}_synthetic_contract_summary.json"
 SYNTHETIC_METRICS_CSV = f"outputs/tables/{ROUND}_synthetic_contract_metrics.csv"
 LEARNABILITY_JSON = f"outputs/reports/{ROUND}_real_learnability_summary.json"
 LEARNABILITY_CSV = f"outputs/tables/{ROUND}_real_learnability_metrics.csv"
+LEARNABILITY_SPLIT_CSV = f"outputs/tables/{ROUND}_real_learnability_split_manifest.csv"
+LEARNABILITY_SELECTOR_CSV = f"outputs/tables/{ROUND}_real_learnability_selector_eval.csv"
 ACTIVE_JSON = f"outputs/reports/{ROUND}_active_round_plan_summary.json"
 ACTIVE_CSV = f"outputs/tables/{ROUND}_active_round_plan.csv"
 POLICY_JSON = f"outputs/reports/{ROUND}_policy_freeze_summary.json"
@@ -507,6 +509,8 @@ def build_instances(count: int, seed: int) -> list[dict[str, Any]]:
                 "adjacency_sha256": hashes["adjacency_sha256"],
                 "start_goal_assignment_sha256": assignment["start_goal_assignment_hash"],
                 "requested_agent_count": assignment["requested_agent_count"],
+                "physical_free_cell_count": graph.physical_free_cell_count,
+                "agent_density": agents / max(1, graph.physical_free_cell_count),
                 "encoded_OD_token_count": assignment["encoded_agent_count"],
                 "represented_agent_mass": assignment["represented_agent_mass"],
                 "represented_flow_mass": traffic["summary"]["edge_use_total"],
@@ -834,21 +838,324 @@ def main_synthetic_contract(argv: list[str] | None = None) -> int:
     return 0
 
 
+def _row_bool(row: dict[str, Any], key: str) -> bool:
+    return str(row.get(key, "")).strip().lower() in {"1", "true", "yes", "y"}
+
+
+def _quality_target(row: dict[str, Any]) -> float:
+    if _row_bool(row, "success_regression"):
+        return 10.0
+    if _row_bool(row, "success_gain"):
+        return -10.0
+    value = num(row.get("quality_delta_vs_g556"), math.nan)
+    if math.isfinite(value):
+        return value
+    if _row_bool(row, "both_fail"):
+        return 2.0
+    return 0.0
+
+
+def _density_bin(value: Any) -> str:
+    density = num(value, 0.0)
+    if density < 0.10:
+        return "d00_very_low"
+    if density < 0.25:
+        return "d01_low"
+    if density < 0.50:
+        return "d02_mid"
+    if density < 1.00:
+        return "d03_high"
+    return "d04_extreme"
+
+
+def _feature_vector(pair: dict[str, Any], inst: dict[str, Any]) -> list[float]:
+    base = [
+        num(inst.get("agent_count")),
+        num(inst.get("nominal_budget_ms")),
+        num(inst.get("ltm_max_iterations")),
+        num(inst.get("agent_density")),
+        num(inst.get("physical_free_cell_count")),
+        num(inst.get("represented_flow_mass")),
+        num(inst.get("path_found_rate")),
+    ]
+    theta = [num(pair.get(col), num(baseline_theta_row().get(col), 0.0)) for col in THETA_NUMERIC_COLUMNS]
+    return [*base, *theta]
+
+
+def _split_physical_hashes(instance_rows: list[dict[str, Any]]) -> dict[str, str]:
+    hashes = sorted({str(row.get("physical_map_sha256") or row.get("adjacency_sha256") or "") for row in instance_rows if row.get("physical_map_sha256") or row.get("adjacency_sha256")})
+    out: dict[str, str] = {}
+    for h in hashes:
+        bucket = int(hashlib.sha256(h.encode("utf-8")).hexdigest()[:8], 16) % 10
+        if bucket < 7:
+            split = "train"
+        elif bucket < 9:
+            split = "validation"
+        else:
+            split = "heldout"
+        out[h] = split
+    if hashes and "heldout" not in set(out.values()):
+        out[hashes[-1]] = "heldout"
+    if len(hashes) > 1 and "validation" not in set(out.values()):
+        out[hashes[-2]] = "validation"
+    return out
+
+
+def _joined_label_examples(pair_rows: list[dict[str, Any]], instance_rows: list[dict[str, Any]]) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    instances = {str(row.get("instance_uid", "")): row for row in instance_rows}
+    split_by_hash = _split_physical_hashes(instance_rows)
+    split_rows = []
+    for uid, inst in instances.items():
+        physical = str(inst.get("physical_map_sha256") or inst.get("adjacency_sha256") or "")
+        split = split_by_hash.get(physical, "train")
+        split_rows.append(
+            {
+                "instance_uid": uid,
+                "physical_map_sha256": physical,
+                "map": inst.get("map", ""),
+                "map_family": inst.get("map_family", ""),
+                "split": split,
+                **CLAIMS_CLOSED,
+            }
+        )
+    examples = []
+    for idx, row in enumerate(pair_rows):
+        uid = str(row.get("instance_uid", ""))
+        inst = instances.get(uid)
+        if not inst:
+            continue
+        physical = str(inst.get("physical_map_sha256") or inst.get("adjacency_sha256") or "")
+        target = _quality_target(row)
+        examples.append(
+            {
+                "example_id": idx,
+                "instance_uid": uid,
+                "theta_id": str(row.get("theta_id") or row.get("candidate_id") or ""),
+                "split": split_by_hash.get(physical, "train"),
+                "density_bin": _density_bin(inst.get("agent_density")),
+                "target": target,
+                "quality_delta_vs_g556": num(row.get("quality_delta_vs_g556"), math.nan),
+                "success_regression": _row_bool(row, "success_regression"),
+                "success_gain": _row_bool(row, "success_gain"),
+                "features": _feature_vector(row, inst),
+                "row": row,
+            }
+        )
+    return examples, split_rows
+
+
+def _selector_metrics(name: str, selected: list[dict[str, Any]], *, available: bool = True, reason: str = "") -> dict[str, Any]:
+    finite = [num(ex["quality_delta_vs_g556"], math.nan) for ex in selected]
+    finite = [v for v in finite if math.isfinite(v)]
+    regressions = sum(1 for ex in selected if bool(ex.get("success_regression")))
+    improving = sum(1 for v in finite if v < 0.0)
+    worse = sum(1 for v in finite if v > 0.0)
+    return {
+        "selector": name,
+        "available": available,
+        "reason": reason,
+        "selected_instances": len({str(ex.get("instance_uid", "")) for ex in selected}),
+        "selected_rows": len(selected),
+        "nonfallback_coverage": 1.0 if selected else 0.0,
+        "false_safe_rate": regressions / max(1, len(selected)),
+        "success_regressions": regressions,
+        "quality_delta_mean": statistics.fmean(finite) if finite else math.nan,
+        "quality_delta_count": len(finite),
+        "better": improving,
+        "worse": worse,
+        **CLAIMS_CLOSED,
+    }
+
+
+def _select_by_scores(examples: list[dict[str, Any]], scores: dict[int, float]) -> list[dict[str, Any]]:
+    grouped: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    for ex in examples:
+        grouped[str(ex["instance_uid"])].append(ex)
+    selected = []
+    for rows in grouped.values():
+        selected.append(min(rows, key=lambda ex: scores.get(int(ex["example_id"]), float("inf"))))
+    return selected
+
+
+def _density_lookup_scores(train: list[dict[str, Any]], test: list[dict[str, Any]]) -> dict[int, float]:
+    buckets: dict[tuple[str, str], list[float]] = defaultdict(list)
+    global_theta: dict[str, list[float]] = defaultdict(list)
+    for ex in train:
+        buckets[(str(ex["density_bin"]), str(ex["theta_id"]))].append(float(ex["target"]))
+        global_theta[str(ex["theta_id"])].append(float(ex["target"]))
+    global_default = statistics.fmean([float(ex["target"]) for ex in train]) if train else 0.0
+    return {
+        int(ex["example_id"]): statistics.fmean(buckets.get((str(ex["density_bin"]), str(ex["theta_id"])), global_theta.get(str(ex["theta_id"]), [global_default])))
+        for ex in test
+    }
+
+
+def _fit_boosted_stumps(train_x: np.ndarray, train_y: np.ndarray, rounds: int = 16) -> tuple[float, list[tuple[int, float, float, float]]]:
+    if train_x.size == 0:
+        return 0.0, []
+    rng = np.random.default_rng(559)
+    keep = np.arange(len(train_y))
+    if len(keep) > 30000:
+        keep = rng.choice(keep, size=30000, replace=False)
+    x = train_x[keep]
+    y = train_y[keep]
+    base = float(np.mean(y))
+    pred = np.full(len(y), base, dtype=np.float64)
+    stumps: list[tuple[int, float, float, float]] = []
+    lr = 0.12
+    for _ in range(rounds):
+        residual = y - pred
+        best: tuple[float, int, float, float, float] | None = None
+        for feat in range(x.shape[1]):
+            thresholds = np.unique(np.quantile(x[:, feat], np.linspace(0.15, 0.85, 7)))
+            for threshold in thresholds:
+                left = x[:, feat] <= threshold
+                if left.sum() < 16 or (~left).sum() < 16:
+                    continue
+                left_value = float(np.mean(residual[left]))
+                right_value = float(np.mean(residual[~left]))
+                update = np.where(left, left_value, right_value)
+                loss = float(np.mean((residual - update) ** 2))
+                if best is None or loss < best[0]:
+                    best = (loss, feat, float(threshold), left_value, right_value)
+        if best is None:
+            break
+        _loss, feat, threshold, left_value, right_value = best
+        update = np.where(x[:, feat] <= threshold, left_value, right_value)
+        pred += lr * update
+        stumps.append((feat, threshold, lr * left_value, lr * right_value))
+    return base, stumps
+
+
+def _predict_boosted_stumps(x: np.ndarray, model: tuple[float, list[tuple[int, float, float, float]]]) -> np.ndarray:
+    base, stumps = model
+    pred = np.full(x.shape[0], base, dtype=np.float64)
+    for feat, threshold, left, right in stumps:
+        pred += np.where(x[:, feat] <= threshold, left, right)
+    return pred
+
+
+def _mlp_scores(train_x: np.ndarray, train_y: np.ndarray, test_x: np.ndarray) -> tuple[dict[int, float], str]:
+    if not TORCH_AVAILABLE or torch is None:
+        return {}, "torch unavailable"
+    if train_x.size == 0 or test_x.size == 0:
+        return {}, "empty train/test matrix"
+    try:
+        rng = np.random.default_rng(560)
+        keep = np.arange(len(train_y))
+        if len(keep) > 50000:
+            keep = rng.choice(keep, size=50000, replace=False)
+        x = train_x[keep].astype(np.float32)
+        y = train_y[keep].astype(np.float32)
+        mean = x.mean(axis=0, keepdims=True)
+        std = x.std(axis=0, keepdims=True) + 1.0e-6
+        x = (x - mean) / std
+        xt = ((test_x.astype(np.float32) - mean) / std)
+        device = "cuda" if torch.cuda.is_available() else "cpu"
+        model = torch.nn.Sequential(torch.nn.Linear(x.shape[1], 64), torch.nn.GELU(), torch.nn.Linear(64, 32), torch.nn.GELU(), torch.nn.Linear(32, 1)).to(device)
+        opt = torch.optim.AdamW(model.parameters(), lr=2.0e-3)
+        tx = torch.tensor(x, device=device)
+        ty = torch.tensor(y, device=device)
+        for _ in range(8):
+            order = torch.randperm(tx.shape[0], device=device)
+            for start in range(0, tx.shape[0], 2048):
+                batch = order[start : start + 2048]
+                loss = torch.nn.functional.smooth_l1_loss(model(tx[batch]).squeeze(-1), ty[batch])
+                opt.zero_grad()
+                loss.backward()
+                opt.step()
+        with torch.no_grad():
+            pred = model(torch.tensor(xt, device=device)).squeeze(-1).detach().cpu().numpy()
+        return {i: float(v) for i, v in enumerate(pred)}, f"torch_device={device}"
+    except Exception as exc:
+        return {}, f"torch MLP failed: {type(exc).__name__}: {exc}"
+
+
 def main_eval_real_learnability(argv: list[str] | None = None) -> int:
     args = parse_args_checked(argv, "G5.59 real learnability")
     pilot = load_json(PILOT_JSON, {})
     synth = load_json(SYNTHETIC_JSON, {})
     pair_rows = read_rows(PILOT_PAIR_CSV)
+    instance_rows = read_rows(INSTANCE_CSV)
     instance_uids = {row.get("instance_uid", "") for row in pair_rows if row.get("instance_uid", "")}
     expected_pair_rows = 1 if args.smoke else PILOT_MIN_PAIR_ROWS
     expected_instances = 1 if args.smoke else PILOT_MIN_INSTANCE_UIDS
     enough_real = bool(pilot.get("raw_solver_labelv5_available")) and len(pair_rows) >= expected_pair_rows and len(instance_uids) >= expected_instances
+    examples, split_rows = _joined_label_examples(pair_rows, instance_rows)
+    train = [ex for ex in examples if ex["split"] == "train"]
+    heldout = [ex for ex in examples if ex["split"] == "heldout"]
+    if not heldout:
+        heldout = [ex for ex in examples if ex["split"] in {"validation", "heldout"}]
+    write_rows(LEARNABILITY_SPLIT_CSV, split_rows)
+
+    selector_rows: list[dict[str, Any]] = []
+    if heldout:
+        oracle_scores = {int(ex["example_id"]): float(ex["target"]) for ex in heldout}
+        selector_rows.append(_selector_metrics("oracle_candidate_slate", _select_by_scores(heldout, oracle_scores), available=True))
+    else:
+        selector_rows.append(_selector_metrics("oracle_candidate_slate", [], available=False, reason="no heldout physical-map examples"))
+
+    if train and heldout:
+        density_scores = _density_lookup_scores(train, heldout)
+        selector_rows.append(_selector_metrics("agent_density_lookup", _select_by_scores(heldout, density_scores), available=True))
+        train_x = np.asarray([ex["features"] for ex in train], dtype=np.float64)
+        train_y = np.asarray([float(ex["target"]) for ex in train], dtype=np.float64)
+        heldout_x = np.asarray([ex["features"] for ex in heldout], dtype=np.float64)
+
+        stump_model = _fit_boosted_stumps(train_x, train_y)
+        stump_pred = _predict_boosted_stumps(heldout_x, stump_model)
+        stump_scores = {int(ex["example_id"]): float(pred) for ex, pred in zip(heldout, stump_pred)}
+        selector_rows.append(_selector_metrics("gbdt_like_boosted_stumps", _select_by_scores(heldout, stump_scores), available=True, reason=f"stumps={len(stump_model[1])}"))
+
+        mlp_index_scores, mlp_reason = _mlp_scores(train_x, train_y, heldout_x)
+        if mlp_index_scores:
+            mlp_scores = {int(ex["example_id"]): mlp_index_scores[idx] for idx, ex in enumerate(heldout)}
+            selector_rows.append(_selector_metrics("tabular_mlp", _select_by_scores(heldout, mlp_scores), available=True, reason=mlp_reason))
+        else:
+            selector_rows.append(_selector_metrics("tabular_mlp", [], available=False, reason=mlp_reason))
+    else:
+        selector_rows.append(_selector_metrics("agent_density_lookup", [], available=False, reason="train or heldout split empty"))
+        selector_rows.append(_selector_metrics("gbdt_like_boosted_stumps", [], available=False, reason="train or heldout split empty"))
+        selector_rows.append(_selector_metrics("tabular_mlp", [], available=False, reason="train or heldout split empty"))
+
+    gcst_checkpoint = ROOT / "artifacts" / "models" / "gcst" / "g559_codebook_critic.pt"
+    selector_rows.append(
+        _selector_metrics(
+            "dualtraffic_hgt_gcst_codebook_critic",
+            [],
+            available=gcst_checkpoint.exists(),
+            reason=("checkpoint present but evaluation hook not finalized" if gcst_checkpoint.exists() else "missing real trained GCST codebook critic checkpoint"),
+        )
+    )
+    write_rows(LEARNABILITY_SELECTOR_CSV, selector_rows)
+
+    selector_by_name = {str(row["selector"]): row for row in selector_rows}
+    main_row = selector_by_name.get("dualtraffic_hgt_gcst_codebook_critic", {})
+    density_row = selector_by_name.get("agent_density_lookup", {})
+    gbdt_row = selector_by_name.get("gbdt_like_boosted_stumps", {})
+    mlp_row = selector_by_name.get("tabular_mlp", {})
+    main_available = bool(main_row.get("available"))
+    main_quality = num(main_row.get("quality_delta_mean"), math.inf)
+    beats_controls = (
+        main_available
+        and main_quality < num(density_row.get("quality_delta_mean"), math.inf)
+        and main_quality < num(gbdt_row.get("quality_delta_mean"), math.inf)
+        and main_quality < num(mlp_row.get("quality_delta_mean"), math.inf)
+    )
+    main_coverage_ok = num(main_row.get("nonfallback_coverage"), 0.0) >= 0.05
+    main_quality_ok = math.isfinite(main_quality) and main_quality < 0.0
+    false_safe_usable = main_available and num(main_row.get("false_safe_rate"), 1.0) <= 0.02
     metrics = [
         {"metric": "real_solver_labels_available", "value": bool(pilot.get("raw_solver_labelv5_available")), "required": True},
         {"metric": "real_pair_rows", "value": len(pair_rows), "required": expected_pair_rows},
         {"metric": "unique_instance_uids", "value": len(instance_uids), "required": expected_instances},
+        {"metric": "heldout_physical_map_examples", "value": len(heldout), "required": 1},
         {"metric": "synthetic_contract_passed", "value": bool(synth.get("passed")), "required": True},
-        {"metric": "density_gbdt_mlp_beaten_by_main_model", "value": False, "required": True},
+        {"metric": "main_gcst_model_available", "value": main_available, "required": True},
+        {"metric": "density_gbdt_mlp_beaten_by_main_model", "value": beats_controls, "required": True},
+        {"metric": "main_nonfallback_coverage", "value": num(main_row.get("nonfallback_coverage"), 0.0), "required": 0.05},
+        {"metric": "main_heldout_quality_delta_negative", "value": main_quality_ok, "required": True},
+        {"metric": "usable_false_safe_operating_point", "value": false_safe_usable, "required": True},
     ]
     for row in metrics:
         row["passed"] = row["value"] == row["required"] if isinstance(row["required"], bool) else float(row["value"]) >= float(row["required"])
@@ -858,6 +1165,8 @@ def main_eval_real_learnability(argv: list[str] | None = None) -> int:
         decision = "g559_synthetic_contract_failed"
     elif not enough_real:
         decision = "g559_real_labelv5_pilot_underpowered"
+    elif all(bool(row["passed"]) for row in metrics):
+        decision = "g559_codebook_critic_learnability_passed"
     write_rows(LEARNABILITY_CSV, metrics)
     write_json(
         LEARNABILITY_JSON,
@@ -868,6 +1177,9 @@ def main_eval_real_learnability(argv: list[str] | None = None) -> int:
             "real_pair_rows": len(pair_rows),
             "unique_instance_uids": len(instance_uids),
             "pilot_min_pair_rows": expected_pair_rows,
+            "heldout_examples": len(heldout),
+            "selector_eval_csv": LEARNABILITY_SELECTOR_CSV,
+            "split_manifest_csv": LEARNABILITY_SPLIT_CSV,
             **CLAIMS_CLOSED,
         },
     )

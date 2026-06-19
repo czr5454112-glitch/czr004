@@ -36,6 +36,13 @@ def test_graph_connectivity_preserved():
     assert audit["connectivity_preserved"]
 
 
+def test_benchmark_map_resolver_includes_lacam2_script_maps():
+    from gcst.map_hash import known_map_candidates
+
+    candidates = [str(path).replace("\\", "/") for path in known_map_candidates("corners")]
+    assert any("external/lacam2/scripts/map/corners.map" in path for path in candidates)
+
+
 def test_corridor_graph_shortest_path_distortion():
     audit = audit_corridor_graph(topo(), [((0, 0), (7, 7)), ((1, 1), (6, 2))])
     assert audit["shortest_path_distortion_max"] == 0.0

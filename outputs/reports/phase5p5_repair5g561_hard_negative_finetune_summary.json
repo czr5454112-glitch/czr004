@@ -1,0 +1,34 @@
+{
+  "aaai_ready": false,
+  "base_variants": [
+    "F6",
+    "F7"
+  ],
+  "batch_size": 16,
+  "cuda_used": true,
+  "decision": "g561_hard_negative_finetune_completed",
+  "device": "cuda",
+  "fine_tune_completed": true,
+  "fine_tune_rows": 2,
+  "fine_tune_variants": [
+    "F6FT",
+    "F7FT"
+  ],
+  "hard_negative_category_counts": {
+    "actor_outputs_far_from_support": 200,
+    "critic_false_safe_proxy": 100,
+    "large_positive_quality_delta": 200,
+    "success_regression": 7,
+    "worst_map_family": 100
+  },
+  "hard_negative_examples": 607,
+  "learned_runtime_policy_validated": false,
+  "lr": 5e-05,
+  "next_required_gate": "rerun frozen-comparison development panel with original and fine-tuned actors",
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "run_elapsed_sec": 2703.9742707218975,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g561_hard_negative_finetune_summary_v1",
+  "steps": 300
+}

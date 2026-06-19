@@ -40,6 +40,8 @@ DEV_REPLAY_SUMMARY = Path(f"outputs/reports/{ROUND}_dev_replay_summary.json")
 HARD_NEGATIVE = Path(f"outputs/tables/{ROUND}_hard_negative_acquisition.csv")
 HARD_NEGATIVE_SUMMARY = Path(f"outputs/reports/{ROUND}_hard_negative_acquisition_summary.json")
 PRIMARY_SEED_SUMMARY = Path(f"outputs/reports/{ROUND}_primary_seed_training_summary.json")
+FINE_TUNE_SUMMARY = Path(f"outputs/reports/{ROUND}_hard_negative_finetune_summary.json")
+FINE_TUNE_PANEL_SUMMARY = Path(f"outputs/reports/{ROUND}_hard_negative_finetune_panel_summary.json")
 CONTRACT_SUMMARY = Path(f"outputs/reports/{ROUND}_materialization_contract_summary.json")
 
 
@@ -312,6 +314,8 @@ def build_final_failure_attribution(
     dev_replay: dict[str, Any],
     hard_negative: dict[str, Any],
     primary_seed: dict[str, Any],
+    fine_tune: dict[str, Any],
+    fine_tune_panel: dict[str, Any],
     replay_exact: bool,
     dev_real_replay: bool,
     hard_negative_done: bool,
@@ -329,7 +333,9 @@ def build_final_failure_attribution(
     materialization_invalid = as_int(dev_replay.get("materialization_invalid_rows"))
     large_positive = as_int(hard_negative.get("large_positive_quality_delta_source_rows"))
     critic_false_safe = as_int(hard_negative.get("critic_false_safe_proxy_rows"))
-    fine_tune_completed = bool(hard_negative.get("fine_tune_completed"))
+    fine_tune_completed = bool(fine_tune.get("fine_tune_completed") or fine_tune_panel.get("fine_tune_completed"))
+    fine_tune_panel_executed = str(fine_tune_panel.get("decision", "")).startswith("g561_hard_negative_finetune_panel_")
+    fine_tune_panel_passed = bool(fine_tune_panel.get("fine_tuned_panel_passed"))
     fine_tune_required = bool(
         dev_real_replay
         and hard_negative_done
@@ -380,11 +386,22 @@ def build_final_failure_attribution(
         {
             "branch": "final_loss",
             "category": "loss",
-            "status": "requires_hard_negative_finetune" if fine_tune_required and not fine_tune_completed else "no_pending_loss_gate",
+            "status": (
+                "fine_tune_panel_passed"
+                if fine_tune_panel_passed
+                else "fine_tuned_but_not_promotable"
+                if fine_tune_panel_executed
+                else "requires_hard_negative_finetune"
+                if fine_tune_required and not fine_tune_completed
+                else "no_pending_loss_gate"
+            ),
             "evidence": (
                 f"dev_success_regressions={dev_success_regressions}; dev_success_gains={dev_success_gains}; "
                 f"dev_worse={dev_worse}; mean_quality_delta_vs_g556={dev_replay.get('mean_quality_delta_vs_g556')}; "
-                f"large_positive_quality_delta_source_rows={large_positive}; critic_false_safe_proxy_rows={critic_false_safe}"
+                f"large_positive_quality_delta_source_rows={large_positive}; critic_false_safe_proxy_rows={critic_false_safe}; "
+                f"fine_tune_decision={fine_tune.get('decision')}; panel_decision={fine_tune_panel.get('decision')}; "
+                f"fine_tuned_success_regressions={fine_tune_panel.get('fine_tuned_success_regressions')}; "
+                f"fine_tuned_mean_quality_delta_vs_g556={fine_tune_panel.get('fine_tuned_mean_quality_delta_vs_g556')}"
             ),
         },
         {
@@ -400,12 +417,21 @@ def build_final_failure_attribution(
         {
             "branch": "final_solver_behavior",
             "category": "solver_behavior",
-            "status": "development_replay_not_promotable" if dev_success_regressions > 0 or dev_mean_delta > 0.0 else "stable_under_development_replay",
+            "status": (
+                "fine_tuned_panel_stage1_candidate"
+                if fine_tune_panel_passed
+                else "fine_tuned_panel_not_promotable"
+                if fine_tune_panel_executed
+                else "development_replay_not_promotable"
+                if dev_success_regressions > 0 or dev_mean_delta > 0.0
+                else "stable_under_development_replay"
+            ),
             "evidence": (
                 f"both_success={dev_replay.get('both_success')}; both_fail={dev_replay.get('both_fail')}; "
                 f"mean_candidate_expanded_nodes={dev_replay.get('mean_candidate_expanded_nodes')}; "
                 f"mean_candidate_low_level_pibt_calls={dev_replay.get('mean_candidate_low_level_pibt_calls')}; "
-                f"mean_runtime_overhead_ms={dev_replay.get('mean_runtime_overhead_ms')}; worst_family_count={hard_negative.get('worst_family_count')}"
+                f"mean_runtime_overhead_ms={dev_replay.get('mean_runtime_overhead_ms')}; worst_family_count={hard_negative.get('worst_family_count')}; "
+                f"panel_contexts={fine_tune_panel.get('panel_contexts')}; panel_actor_rows={fine_tune_panel.get('actor_rows')}"
             ),
         },
     ]
@@ -414,13 +440,25 @@ def build_final_failure_attribution(
         "final_failure_attribution_categories": [row["category"] for row in rows],
         "fine_tune_required": fine_tune_required,
         "fine_tune_completed": fine_tune_completed,
+        "fine_tune_panel_executed": fine_tune_panel_executed,
+        "fine_tune_panel_passed": fine_tune_panel_passed,
+        "fine_tune_panel_decision": fine_tune_panel.get("decision", ""),
         "fine_tune_decision": (
+            "fine_tune_panel_passed_stage1_planning_available"
+            if fine_tune_panel_passed
+            else "fine_tune_panel_completed_keep_g556_or_continue_loss_repair"
+            if fine_tune_panel_executed
+            else "fine_tune_completed_waiting_for_frozen_development_panel"
+            if fine_tune_completed
+            else
             "fine_tune_on_hard_negatives_and_rerun_frozen_development_panel"
             if fine_tune_required and not fine_tune_completed
             else "no_additional_fine_tune_required_from_current_evidence"
         ),
         "dev_success_regressions": dev_success_regressions,
         "dev_mean_quality_delta_vs_g556": dev_mean_delta,
+        "fine_tuned_success_regressions": fine_tune_panel.get("fine_tuned_success_regressions"),
+        "fine_tuned_mean_quality_delta_vs_g556": fine_tune_panel.get("fine_tuned_mean_quality_delta_vs_g556"),
     }
     return rows, summary
 
@@ -433,6 +471,8 @@ def write_failure_and_decision(scenario: dict[str, Any], oracle: dict[str, Any],
     dev_replay = read_json(DEV_REPLAY_SUMMARY)
     hard_negative = read_json(HARD_NEGATIVE_SUMMARY)
     primary_seed = read_json(PRIMARY_SEED_SUMMARY)
+    fine_tune = read_json(FINE_TUNE_SUMMARY)
+    fine_tune_panel = read_json(FINE_TUNE_PANEL_SUMMARY)
     contract_passed = bool(contract.get("materialization_contract_passed"))
     corrected_decision = str(corrected_replay.get("decision", ""))
     arch_decision = str(arch_replay.get("decision", ""))
@@ -475,14 +515,22 @@ def write_failure_and_decision(scenario: dict[str, Any], oracle: dict[str, Any],
         dev_replay=dev_replay,
         hard_negative=hard_negative,
         primary_seed=primary_seed,
+        fine_tune=fine_tune,
+        fine_tune_panel=fine_tune_panel,
         replay_exact=replay_exact,
         dev_real_replay=dev_real_replay,
         hard_negative_done=hard_negative_done,
         primary_seed_done=primary_seed_done,
     )
     if final_summary["final_failure_attribution_complete"]:
-        if final_summary["fine_tune_required"] and not final_summary["fine_tune_completed"]:
+        if final_summary["fine_tune_panel_passed"]:
+            next_required_gate = "write Stage1 plan from the hard-negative fine-tuned direct actor"
+        elif final_summary["fine_tune_panel_executed"]:
+            next_required_gate = "keep g556 as supported baseline; direct actor remains not promotable after hard-negative fine-tune"
+        elif final_summary["fine_tune_required"] and not final_summary["fine_tune_completed"]:
             next_required_gate = "fine-tune on acquired hard negatives and rerun one frozen-comparison development panel"
+        elif final_summary["fine_tune_completed"]:
+            next_required_gate = "rerun one frozen-comparison development panel with original and fine-tuned actors"
         else:
             next_required_gate = "no additional G5.61 fine-tune gate from current evidence; keep promotion gates closed pending Stage1 criteria"
     scenario_target_met = bool(
@@ -575,11 +623,32 @@ def write_failure_and_decision(scenario: dict[str, Any], oracle: dict[str, Any],
                 else "primary seed training summary missing"
             ),
         },
+        {
+            "branch": "hard_negative_finetune_panel",
+            "status": (
+                "passed_stage1_candidate"
+                if final_summary["fine_tune_panel_passed"]
+                else "executed_not_promotable"
+                if final_summary["fine_tune_panel_executed"]
+                else "fine_tune_completed_waiting_for_panel"
+                if final_summary["fine_tune_completed"]
+                else "pending"
+            ),
+            "evidence": (
+                f"fine_tune_decision={fine_tune.get('decision')}; panel_decision={fine_tune_panel.get('decision')}; "
+                f"fine_tuned_success_regressions={fine_tune_panel.get('fine_tuned_success_regressions')}; "
+                f"fine_tuned_mean_quality_delta_vs_g556={fine_tune_panel.get('fine_tuned_mean_quality_delta_vs_g556')}"
+            ),
+        },
     ]
     failure_rows.extend(final_rows)
     write_rows(FAILURE_CSV, failure_rows)
     decision_label = "g561_g560_replay_invalid_materialization_not_actor_failure"
-    if dev_real_replay and hard_negative_done and (
+    if final_summary["fine_tune_panel_passed"]:
+        decision_label = "g561_goal_aware_actor_dev_replay_passed_plan_stage1"
+    elif final_summary["fine_tune_panel_executed"]:
+        decision_label = "g561_no_supported_direct_actor_signal_keep_g556"
+    elif dev_real_replay and hard_negative_done and (
         final_summary["dev_success_regressions"] > 0 or final_summary["dev_mean_quality_delta_vs_g556"] > 0.0
     ):
         decision_label = "g561_goal_aware_actor_dev_replay_failed_continue_hard_negative_acquisition"
@@ -605,6 +674,8 @@ def write_failure_and_decision(scenario: dict[str, Any], oracle: dict[str, Any],
         "hard_negative_acquisition_completed": hard_negative_done,
         "primary_seed_training_decision": primary_seed_decision,
         "primary_seed_training_completed": primary_seed_done,
+        "hard_negative_finetune_decision": fine_tune.get("decision", ""),
+        "hard_negative_finetune_panel_decision": fine_tune_panel.get("decision", ""),
         "next_required_gate": next_required_gate,
         **final_summary,
         **claims(),
@@ -627,6 +698,7 @@ def write_failure_and_decision(scenario: dict[str, Any], oracle: dict[str, Any],
         f"The replay ladder status is corrected=`{corrected_decision}` and architecture=`{arch_decision}`. "
         f"The development replay status is `{dev_decision}` and hard-negative acquisition is `{hard_negative_decision}`. "
         f"The primary seed training status is `{primary_seed_decision}`. "
+        f"The hard-negative fine-tune status is `{fine_tune.get('decision', '')}` and the frozen panel status is `{fine_tune_panel.get('decision', '')}`. "
         f"The final attribution status is `{decision['fine_tune_decision']}` across data, representation, loss, materialization, and solver behavior. "
         f"The next required work is {decision['next_required_gate']}.\n\n"
         "All Phase5.5, Phase6, runtime, learned-policy, and AAAI claims remain closed.\n",
@@ -644,6 +716,7 @@ def write_manifest() -> None:
         "scripts/monitor_repair5g561_server.py",
         "scripts/run_repair5g561_materialization_contract.py",
         "scripts/run_repair5g561_development_replay.py",
+        "scripts/run_repair5g561_hard_negative_finetune_panel.py",
         "scripts/run_repair5g561_primary_seed_training.py",
         "scripts/run_repair5g561_replay_ladder.py",
         "scripts/train_repair5g561_goal_aware_actor.py",

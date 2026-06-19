@@ -2,6 +2,7 @@ import numpy as np
 import pytest
 
 import write_repair5g561_decision as g561_decision
+import run_repair5g561_hard_negative_finetune_panel as g561_finetune
 from gcst.graph_data import GraphData, build_graph
 from gcst.goal_aware_actor import GoalAwareDualChannelActor, make_graph_batch, pad_od_tokens, scalar_features
 from gcst.label_v4 import THETA_HI, THETA_LO
@@ -327,6 +328,8 @@ def test_g561_final_failure_attribution_distinguishes_required_categories():
             "causal_sensitivity_passed": True,
             "validation_by_variant": [{"variant_id": "F7", "best_validation_normalized_l1": 0.112}],
         },
+        fine_tune={},
+        fine_tune_panel={},
         replay_exact=True,
         dev_real_replay=True,
         hard_negative_done=True,
@@ -337,3 +340,14 @@ def test_g561_final_failure_attribution_distinguishes_required_categories():
     assert summary["final_failure_attribution_complete"] is True
     assert summary["fine_tune_required"] is True
     assert summary["fine_tune_decision"] == "fine_tune_on_hard_negatives_and_rerun_frozen_development_panel"
+
+
+def test_g561_hard_negative_success_regression_targets_g556_anchor():
+    source = {col: float(BASELINE_G556[idx] + 0.1) for idx, col in enumerate(THETA_NUMERIC_COLUMNS)}
+    source.update({"success_regression": "True"})
+
+    target, source_theta, blend = g561_finetune.target_from_pair(source, "success_regression")
+
+    assert blend == pytest.approx(1.0)
+    assert np.allclose(source_theta, np.asarray(BASELINE_G556, dtype=np.float32) + 0.1)
+    assert np.allclose(target, np.asarray(BASELINE_G556, dtype=np.float32))

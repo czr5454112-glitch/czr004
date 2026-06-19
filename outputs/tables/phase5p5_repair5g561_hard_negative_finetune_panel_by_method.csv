@@ -1,0 +1,5 @@
+method,is_finetuned,pairs,success_regressions,success_gains,mean_quality_delta_vs_g556,better,worse,ties,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+F6FT_full_goal_aware_dual_channel_actor_hard_negative_finetuned,True,400,0,0,0.015079232949000002,194,188,18,False,False,False,False,False
+F6_full_goal_aware_dual_channel_actor,False,400,0,0,0.023227712067150002,139,252,9,False,False,False,False,False
+F7FT_full_goal_aware_actor_training_critic_hard_negative_finetuned,True,400,0,0,0.010056729674025,203,188,9,False,False,False,False,False
+F7_full_goal_aware_actor_training_critic,False,400,0,0,0.023204405194574996,145,247,8,False,False,False,False,False

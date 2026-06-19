@@ -2,7 +2,7 @@
   "agent_counts": [
     64
   ],
-  "created_at": "2026-06-19T23:10:42.008696",
+  "created_at": "2026-06-20T00:07:33.329733",
   "effective_instance_ids": [
     7008,
     7032,
@@ -37,147 +37,147 @@
       "instance_id": 7008,
       "map": "room-32-32-4",
       "pairs": 64,
-      "path": "outputs\\tmp\\phase5p5_repair5g561_development_replay_scenarios\\room-32-32-4-random-7008.scen",
+      "path": "outputs/tmp/phase5p5_repair5g561_hard_negative_finetune_panel_scenarios/room-32-32-4-random-7008.scen",
       "sha256": "91b081130636aa9871fbcdb96faecee1fc969c18370be7b89f15b1cd82e7ac50"
     },
     {
       "instance_id": 7032,
       "map": "room-32-32-4",
       "pairs": 64,
-      "path": "outputs\\tmp\\phase5p5_repair5g561_development_replay_scenarios\\room-32-32-4-random-7032.scen",
+      "path": "outputs/tmp/phase5p5_repair5g561_hard_negative_finetune_panel_scenarios/room-32-32-4-random-7032.scen",
       "sha256": "cb4e967dd7af66b4522d4cc1264b11cf527f3aa4d25ae085be1f9640b19fa1aa"
     },
     {
       "instance_id": 7056,
       "map": "room-32-32-4",
       "pairs": 64,
-      "path": "outputs\\tmp\\phase5p5_repair5g561_development_replay_scenarios\\room-32-32-4-random-7056.scen",
+      "path": "outputs/tmp/phase5p5_repair5g561_hard_negative_finetune_panel_scenarios/room-32-32-4-random-7056.scen",
       "sha256": "ec15064b0198941e4a9ec6c1cae0cf05404375a78269472be7ab875b9878e80f"
     },
     {
       "instance_id": 7080,
       "map": "room-32-32-4",
       "pairs": 64,
-      "path": "outputs\\tmp\\phase5p5_repair5g561_development_replay_scenarios\\room-32-32-4-random-7080.scen",
+      "path": "outputs/tmp/phase5p5_repair5g561_hard_negative_finetune_panel_scenarios/room-32-32-4-random-7080.scen",
       "sha256": "9f8f55a9dfaed0ac0d78fcf30185ad90108280231ca465383fd83d59bee2d1f0"
     },
     {
       "instance_id": 7128,
       "map": "room-32-32-4",
       "pairs": 64,
-      "path": "outputs\\tmp\\phase5p5_repair5g561_development_replay_scenarios\\room-32-32-4-random-7128.scen",
+      "path": "outputs/tmp/phase5p5_repair5g561_hard_negative_finetune_panel_scenarios/room-32-32-4-random-7128.scen",
       "sha256": "2df377e6fe2037d1130dd4f0f87b8361a1cae848ad9ecc7fd79ee08c4e675082"
     },
     {
       "instance_id": 7152,
       "map": "room-32-32-4",
       "pairs": 64,
-      "path": "outputs\\tmp\\phase5p5_repair5g561_development_replay_scenarios\\room-32-32-4-random-7152.scen",
+      "path": "outputs/tmp/phase5p5_repair5g561_hard_negative_finetune_panel_scenarios/room-32-32-4-random-7152.scen",
       "sha256": "9a3f9de05f8e1f53d53c9613e0732c8c8c573f8268f7dfe3ae79852450b7882b"
     },
     {
       "instance_id": 7176,
       "map": "room-32-32-4",
       "pairs": 64,
-      "path": "outputs\\tmp\\phase5p5_repair5g561_development_replay_scenarios\\room-32-32-4-random-7176.scen",
+      "path": "outputs/tmp/phase5p5_repair5g561_hard_negative_finetune_panel_scenarios/room-32-32-4-random-7176.scen",
       "sha256": "cc94680dd8125a826a7489d0d20b48806e3797f4c9cc34e049d4f33d788de152"
     },
     {
       "instance_id": 7200,
       "map": "room-32-32-4",
       "pairs": 64,
-      "path": "outputs\\tmp\\phase5p5_repair5g561_development_replay_scenarios\\room-32-32-4-random-7200.scen",
+      "path": "outputs/tmp/phase5p5_repair5g561_hard_negative_finetune_panel_scenarios/room-32-32-4-random-7200.scen",
       "sha256": "0e4e10635c3227e8b1dae548addd2e551e4fb2ebd940f1f41dca799f0d45bed7"
     },
     {
       "instance_id": 7248,
       "map": "room-32-32-4",
       "pairs": 64,
-      "path": "outputs\\tmp\\phase5p5_repair5g561_development_replay_scenarios\\room-32-32-4-random-7248.scen",
+      "path": "outputs/tmp/phase5p5_repair5g561_hard_negative_finetune_panel_scenarios/room-32-32-4-random-7248.scen",
       "sha256": "c97bbfc4fe52ddf317a3351eee0e26ebc80ef5c6572277bc00dd21c584759684"
     },
     {
       "instance_id": 7272,
       "map": "room-32-32-4",
       "pairs": 64,
-      "path": "outputs\\tmp\\phase5p5_repair5g561_development_replay_scenarios\\room-32-32-4-random-7272.scen",
+      "path": "outputs/tmp/phase5p5_repair5g561_hard_negative_finetune_panel_scenarios/room-32-32-4-random-7272.scen",
       "sha256": "c4f8204a763395e835fee6a0d37c771c18c077548bba446e4f52d6610c0c103f"
     },
     {
       "instance_id": 7296,
       "map": "room-32-32-4",
       "pairs": 64,
-      "path": "outputs\\tmp\\phase5p5_repair5g561_development_replay_scenarios\\room-32-32-4-random-7296.scen",
+      "path": "outputs/tmp/phase5p5_repair5g561_hard_negative_finetune_panel_scenarios/room-32-32-4-random-7296.scen",
       "sha256": "33eaafd636719a1ea855f6c6a67b77601605d7a8af5b7f6946d5acf8c34e1f38"
     },
     {
       "instance_id": 7320,
       "map": "room-32-32-4",
       "pairs": 64,
-      "path": "outputs\\tmp\\phase5p5_repair5g561_development_replay_scenarios\\room-32-32-4-random-7320.scen",
+      "path": "outputs/tmp/phase5p5_repair5g561_hard_negative_finetune_panel_scenarios/room-32-32-4-random-7320.scen",
       "sha256": "3ad7071ce49ef4077ddc65d40438fd1a82bf6ad891b4b09ac3b1ffdc60579e8a"
     },
     {
       "instance_id": 7368,
       "map": "room-32-32-4",
       "pairs": 64,
-      "path": "outputs\\tmp\\phase5p5_repair5g561_development_replay_scenarios\\room-32-32-4-random-7368.scen",
+      "path": "outputs/tmp/phase5p5_repair5g561_hard_negative_finetune_panel_scenarios/room-32-32-4-random-7368.scen",
       "sha256": "6815744e220549697e07868bfdd659a473e9310099a98478fe2fd60a28442cda"
     },
     {
       "instance_id": 7392,
       "map": "room-32-32-4",
       "pairs": 64,
-      "path": "outputs\\tmp\\phase5p5_repair5g561_development_replay_scenarios\\room-32-32-4-random-7392.scen",
+      "path": "outputs/tmp/phase5p5_repair5g561_hard_negative_finetune_panel_scenarios/room-32-32-4-random-7392.scen",
       "sha256": "34cb01a5738e3196acbc87ef4f6e0538b744f89724b563485f27e9d2723c431a"
     },
     {
       "instance_id": 7416,
       "map": "room-32-32-4",
       "pairs": 64,
-      "path": "outputs\\tmp\\phase5p5_repair5g561_development_replay_scenarios\\room-32-32-4-random-7416.scen",
+      "path": "outputs/tmp/phase5p5_repair5g561_hard_negative_finetune_panel_scenarios/room-32-32-4-random-7416.scen",
       "sha256": "80447956e272170da09094be26c9691a08daccc9fdb979719ad44f7d021d6bc7"
     },
     {
       "instance_id": 7440,
       "map": "room-32-32-4",
       "pairs": 64,
-      "path": "outputs\\tmp\\phase5p5_repair5g561_development_replay_scenarios\\room-32-32-4-random-7440.scen",
+      "path": "outputs/tmp/phase5p5_repair5g561_hard_negative_finetune_panel_scenarios/room-32-32-4-random-7440.scen",
       "sha256": "a743164980e93eaf915b14831d0b0948a9d8f8bafb32d3ec996331cca7ca3de9"
     },
     {
       "instance_id": 7488,
       "map": "room-32-32-4",
       "pairs": 64,
-      "path": "outputs\\tmp\\phase5p5_repair5g561_development_replay_scenarios\\room-32-32-4-random-7488.scen",
+      "path": "outputs/tmp/phase5p5_repair5g561_hard_negative_finetune_panel_scenarios/room-32-32-4-random-7488.scen",
       "sha256": "e51c91bd2e2955f7f8731239ff25836fe6e78bd8d1b5f7a61107d8d17dc25483"
     },
     {
       "instance_id": 7512,
       "map": "room-32-32-4",
       "pairs": 64,
-      "path": "outputs\\tmp\\phase5p5_repair5g561_development_replay_scenarios\\room-32-32-4-random-7512.scen",
+      "path": "outputs/tmp/phase5p5_repair5g561_hard_negative_finetune_panel_scenarios/room-32-32-4-random-7512.scen",
       "sha256": "b6cfcff9432ee36cf40a363ebfc74693a2be3712e5e60311a9deb2418e41bf4b"
     },
     {
       "instance_id": 7536,
       "map": "room-32-32-4",
       "pairs": 64,
-      "path": "outputs\\tmp\\phase5p5_repair5g561_development_replay_scenarios\\room-32-32-4-random-7536.scen",
+      "path": "outputs/tmp/phase5p5_repair5g561_hard_negative_finetune_panel_scenarios/room-32-32-4-random-7536.scen",
       "sha256": "529b611644b034a791a1715c5490ba58e7a436347a94a18440b7bfbd3a79a03a"
     },
     {
       "instance_id": 7560,
       "map": "room-32-32-4",
       "pairs": 64,
-      "path": "outputs\\tmp\\phase5p5_repair5g561_development_replay_scenarios\\room-32-32-4-random-7560.scen",
+      "path": "outputs/tmp/phase5p5_repair5g561_hard_negative_finetune_panel_scenarios/room-32-32-4-random-7560.scen",
       "sha256": "e26154ba8babe9dd6238a1261f8e59da1ee80af0c54a9c2742e9dd1f13f8676d"
     }
   ],
   "generated_missing_scenarios": true,
   "generator_policy": {
     "base_seed": 20260522,
-    "equivalent_command": "python scripts/generate_phase1a_scenarios.py --manifest <f4 maps with instances 26..45> --output-dir outputs\\tmp\\phase5p5_repair5g561_development_replay_scenarios --base-seed 20260522",
+    "equivalent_command": "python scripts/generate_phase1a_scenarios.py --manifest <f4 maps with instances 26..45> --output-dir outputs/tmp/phase5p5_repair5g561_hard_negative_finetune_panel_scenarios --base-seed 20260522",
     "script_version": "phase1a-scenario-generator-v1",
     "seed_function": "sha256(script_version|base_seed|map_name|instance_id)",
     "source": "scripts/generate_phase1a_scenarios.py functions"
@@ -295,8 +295,8 @@
   "requested_maps": [
     "room-32-32-4"
   ],
-  "scenario_dir": "outputs\\tmp\\phase5p5_repair5g561_development_replay_scenarios",
-  "scenario_metadata": "outputs\\reports\\phase5p5_repair5g561_development_replay_scenario_generation.json",
+  "scenario_dir": "outputs/tmp/phase5p5_repair5g561_hard_negative_finetune_panel_scenarios",
+  "scenario_metadata": "outputs/reports/phase5p5_repair5g561_hard_negative_finetune_panel_scenario_generation.json",
   "schema_version": "phase5p5_repair5f4_scenario_generation_v1",
   "source_missing_count": 24,
   "source_missing_examples": [
@@ -381,5 +381,5 @@
       "map": "room-32-32-4"
     }
   ],
-  "source_scenario_dir": "outputs\\tmp\\phase1a\\generated\\phase1a-generated-random"
+  "source_scenario_dir": "outputs/tmp/phase1a/generated/phase1a-generated-random"
 }

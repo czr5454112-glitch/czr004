@@ -1,7 +1,8 @@
 {
   "aaai_ready": false,
-  "decision": "g561_dev_replay_blocked_by_materialization_truth_gate",
+  "decision": "g561_dev_replay_pending_after_materialization_contract",
   "learned_runtime_policy_validated": false,
+  "materialization_contract_decision": "g561_materialization_contract_passed",
   "phase5p5_allowed": false,
   "phase6_allowed": false,
   "runtime_claim_allowed": false

@@ -1,6 +1,6 @@
 {
   "aaai_ready": false,
-  "artifact_count": 53,
+  "artifact_count": 60,
   "artifacts": [
     {
       "bytes": 9542,
@@ -33,29 +33,34 @@
       "sha256": "6de2d899f9f78a20e18fae340fd5720cda6df1193bfa4fe885f8da6569e83803"
     },
     {
+      "bytes": 33279,
+      "path": "scripts/run_repair5g561_materialization_contract.py",
+      "sha256": "37f26eee0e139af3e71daed2b9506c463cb920d4d7782140211d016e5a3bff81"
+    },
+    {
       "bytes": 19209,
       "path": "scripts/train_repair5g561_goal_aware_actor.py",
       "sha256": "79ced2244c69d1b6a0b24f69818364ee47c7e58e49fed53ec38f07d0616c29f0"
     },
     {
-      "bytes": 17303,
+      "bytes": 19757,
       "path": "scripts/write_repair5g561_decision.py",
-      "sha256": "b7323c62c65ece45e35feb392d73dc80e632b184618eda9c80f51a054c630dda"
+      "sha256": "55b1268edf2cdb8c514a02cbc7060112aef54deec000cd54f235956e5a47550c"
     },
     {
-      "bytes": 7011,
+      "bytes": 9372,
       "path": "tests/test_repair5g561_truth.py",
-      "sha256": "ea8e9f0f7f62d39662d99376b22666d343c9f3c89e5e4639c7dab6e07a5eb09f"
+      "sha256": "162ecd924d7b5d344d99e06a69f8955fa200d7a11c29d81a1a66382736ff8cc3"
     },
     {
-      "bytes": 247,
+      "bytes": 328,
       "path": "outputs/reports/phase5p5_repair5g561_architecture_replay_summary.json",
-      "sha256": "229abb78660d6ca74b6a24c8058a7560dc5001428d5a4ab30f794ecdd04d1f53"
+      "sha256": "d9a255f2d20466a751e14cbe919c6ae8a6c247551dea14f98a67e88ed8f2c8b2"
     },
     {
       "bytes": 10822,
       "path": "outputs/reports/phase5p5_repair5g561_artifact_manifest.json",
-      "sha256": "9e31af5aafe5c7fcc1767ea6c92d26889c233fdae5fc51fb3f0c5449dee9d967"
+      "sha256": "1d172029758944f761059d35edb74dc625f9e42e53b7750148ca5dff51443f30"
     },
     {
       "bytes": 8426,
@@ -68,24 +73,24 @@
       "sha256": "9643a49bd3c3a48df09d32dce836d9ef96bc24a687ee40f12945be84ed726594"
     },
     {
-      "bytes": 614,
+      "bytes": 750,
       "path": "outputs/reports/phase5p5_repair5g561_decision.md",
-      "sha256": "4ced12d1f5ac2a6a6d3026aafaa376dd525e74878a9cbb1667a041f470fbd7a8"
+      "sha256": "816928c391312dc404111e574a05d5d08e9c19812307f8bda6d5298acb95683d"
     },
     {
-      "bytes": 894,
+      "bytes": 998,
       "path": "outputs/reports/phase5p5_repair5g561_decision_summary.json",
-      "sha256": "8cb9fbf226e41a756c59212f0703dc2876ce9206b6512212a85450c36429d05e"
+      "sha256": "740e59c75035e1837e007c451e65a6471786a50593101ea35e244e77fee8067e"
     },
     {
-      "bytes": 238,
+      "bytes": 319,
       "path": "outputs/reports/phase5p5_repair5g561_dev_replay_summary.json",
-      "sha256": "99963fe899d0a8d603f590c4a816878ac2c7ca0a47bcb3dc0419ecc77deebdb3"
+      "sha256": "57cb72cd15acd44f4e83d220e8835b1b2e2d8e46ce40e0ad01448f700157249b"
     },
     {
-      "bytes": 720,
+      "bytes": 899,
       "path": "outputs/reports/phase5p5_repair5g561_failure_attribution.md",
-      "sha256": "c82ae37adcdf85181b500f74d558d2a7f29dec5f0c26ad5b861e95d1f5a74262"
+      "sha256": "8feb753bf89af3ade20435219f77738b5f558f6870d45fe25d859d3a72bf25cd"
     },
     {
       "bytes": 1192,
@@ -98,9 +103,24 @@
       "sha256": "45d6c07624b34a44c4ca8bf08985332efa63987328ed9340850b00624540d171"
     },
     {
-      "bytes": 717,
+      "bytes": 825,
+      "path": "outputs/reports/phase5p5_repair5g561_materialization_contract.md",
+      "sha256": "7229da0956613bfd03ce0f0b1282e271e30d4451ce93bec434862b2d9761a1b7"
+    },
+    {
+      "bytes": 1639,
+      "path": "outputs/reports/phase5p5_repair5g561_materialization_contract_scenario_generation.json",
+      "sha256": "3cb90bbd903b0c151e5e7de6118283ab5f722ebfa761b6207ee34341f98edb80"
+    },
+    {
+      "bytes": 1755,
       "path": "outputs/reports/phase5p5_repair5g561_materialization_contract_summary.json",
-      "sha256": "39e3e4df4f59e5c1947c6a974b1c2da77b73d2340144e8a1bf71e70ed017544a"
+      "sha256": "aba14ae7ed085fb8029c559b9f80f71ff0c16b36b9ae9080c45bbe031979ec1d"
+    },
+    {
+      "bytes": 3625,
+      "path": "outputs/reports/phase5p5_repair5g561_materialization_contract_tmux.log",
+      "sha256": "68bbf074d685ceae6e0a5dc3698c6acc2587c99d4eb66c2208ada4dff307ba71"
     },
     {
       "bytes": 399,
@@ -153,9 +173,9 @@
       "sha256": "8595a9b91b75fa151d9091aee2b1c99892dfc630d42b9cb023848bfc4ea393cf"
     },
     {
-      "bytes": 311,
+      "bytes": 293,
       "path": "outputs/tables/phase5p5_repair5g561_architecture_replay_pairs.csv",
-      "sha256": "2798b463118dfb248019df5ba6a99648eae47e0d3bf602edb62b0714da4b66eb"
+      "sha256": "d450ec89261db7ad7407246d7991e9a0afea8335824a3da3345c38ff6070a8da"
     },
     {
       "bytes": 133,
@@ -165,7 +185,7 @@
     {
       "bytes": 6715,
       "path": "outputs/tables/phase5p5_repair5g561_checksums.sha256",
-      "sha256": "61874afb59c509cdbcd9239a23114022e1cc45e652128770f4587f2c43e1df01"
+      "sha256": "3475710716ebfbf8ff83a2034bd363c701fa0fdcdd0e850844db072e6c054b13"
     },
     {
       "bytes": 261254,
@@ -178,14 +198,14 @@
       "sha256": "37c23456c20db0e7c8cebf06c17f2cb42a686f8e289c516ecb3f5aa54dbc8136"
     },
     {
-      "bytes": 311,
+      "bytes": 293,
       "path": "outputs/tables/phase5p5_repair5g561_dev_replay_by_stratum.csv",
-      "sha256": "2798b463118dfb248019df5ba6a99648eae47e0d3bf602edb62b0714da4b66eb"
+      "sha256": "d450ec89261db7ad7407246d7991e9a0afea8335824a3da3345c38ff6070a8da"
     },
     {
-      "bytes": 672,
+      "bytes": 844,
       "path": "outputs/tables/phase5p5_repair5g561_failure_attribution.csv",
-      "sha256": "0508a6c51a253b54e3be37d1de2ba881c0a5d63bd496d4cf54978fe96a1da68c"
+      "sha256": "10d5fe0b8a43bb07570ab4e3cc2a84e78651ddf757d3c3f97bd9178df1a2d484"
     },
     {
       "bytes": 6880,
@@ -198,14 +218,29 @@
       "sha256": "b8b24870b2a37889aaf16561af15f3a95464c3f5694424ec3b378dd67f1aeba2"
     },
     {
-      "bytes": 311,
+      "bytes": 293,
       "path": "outputs/tables/phase5p5_repair5g561_hard_negative_acquisition.csv",
-      "sha256": "2798b463118dfb248019df5ba6a99648eae47e0d3bf602edb62b0714da4b66eb"
+      "sha256": "d450ec89261db7ad7407246d7991e9a0afea8335824a3da3345c38ff6070a8da"
     },
     {
-      "bytes": 9796,
+      "bytes": 167795,
+      "path": "outputs/tables/phase5p5_repair5g561_materialization_contract_plan.csv",
+      "sha256": "37cac1a8237771c08a6cdc8cdacd0f1224a8c5fff63c94f4fc400d7099eddd4e"
+    },
+    {
+      "bytes": 37129,
+      "path": "outputs/tables/phase5p5_repair5g561_materialization_contract_registry.csv",
+      "sha256": "7182e792b72ef5341bba96dbf0d4d84e91ac57070a952e0bd295b990c9b59f19"
+    },
+    {
+      "bytes": 292531,
       "path": "outputs/tables/phase5p5_repair5g561_materialization_contract_results.csv",
-      "sha256": "936f04d9e71e1a3f90de1ccf8882f825be446566ff317dce628bec2e3512b756"
+      "sha256": "e4a313b7813c93dfd79a2ec17ab2cbeb9f46da45da53032dfae820d0c438f4ee"
+    },
+    {
+      "bytes": 153446,
+      "path": "outputs/tables/phase5p5_repair5g561_materialization_contract_results.raw.csv",
+      "sha256": "ab4b6a46408a73fee40e61ffb771dfe1fb2af476820f1e771480a6599851c921"
     },
     {
       "bytes": 935,

@@ -10,6 +10,14 @@ from gcst.theta_schema import BASELINE_G556, THETA_NUMERIC_COLUMNS, compare_thet
 from gcst.traffic_prior import compute_traffic_prior
 from audit_repair5g561_replay_truth import audit_rows
 from generate_repair5g561_valid_scenario_bank import build_assignment, split_rows
+from run_repair5g561_materialization_contract import (
+    attach_contract_audit,
+    build_contract_vectors,
+    build_plan_rows,
+    default_contexts,
+    stable_uid,
+    summarize_contract,
+)
 
 
 def _fingerprint(theta):
@@ -171,3 +179,58 @@ def test_g561_split_manifest_has_no_physical_hash_overlap():
     assert len(rows) == 3
     by_hash = {row["physical_map_sha256"]: row["split"] for row in rows}
     assert set(by_hash) == {"hash-a", "hash-b", "hash-c"}
+
+
+def test_g561_contract_vectors_cover_required_families_without_actor_points():
+    rows = build_contract_vectors(include_actor=False)
+    families = {row["vector_family"] for row in rows}
+    modes = {row["changed_field"] for row in rows if row["vector_family"] == "goal_mode"}
+    assert len(rows) >= 64
+    assert {
+        "g556_anchor",
+        "small_residual",
+        "field_lower_bound",
+        "field_upper_bound",
+        "mixed_field_group_residual",
+        "goal_mode",
+        "random_valid_interior",
+    }.issubset(families)
+    assert {"flow_shield", "agent_progress", "none"}.issubset(modes)
+
+
+def test_g561_contract_summary_requires_exact_materialization():
+    vectors = build_contract_vectors(include_actor=False, vector_limit=3)
+    plan, _registry = build_plan_rows(vectors, default_contexts(context_limit=1))
+    for row in plan:
+        row["g561_scenario_sha256"] = "scenario-hash"
+        row["g561_identity_digest"] = stable_uid(
+            "g561_contract_identity",
+            row["plan_row_id"],
+            row["g561_instance_uid"],
+            row["g561_scenario_sha256"],
+            row["candidate_id"],
+            row["generated_theta_uid"],
+        )
+    results = [
+        {
+            "map": row["map"],
+            "agents": row["agents"],
+            "seed": row["seed"],
+            "budget_ms": row["budget_ms"],
+            "materialized_method": row["materialized_method"],
+            "candidate_id": row["candidate_id"],
+            "candidate_recognized": "True",
+            "real_solver_execution": "True",
+            "probe_materialized": "True",
+            "updateparams_fingerprint": row["expected_updateparams_fingerprint"],
+        }
+        for row in plan
+    ]
+    audited = attach_contract_audit(results, plan)
+    summary = summarize_contract(audited, plan)
+    assert summary["candidate_recognized_rate"] == 1.0
+    assert summary["fingerprint_exact_match_rate"] == 1.0
+    assert summary["force_additive_false_rate"] == 1.0
+    assert summary["dual_channel_enabled_rate"] == 1.0
+    assert summary["identity_retention_rate"] == 1.0
+    assert summary["gates"]["minimum_64_vectors_met"] is False

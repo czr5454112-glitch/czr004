@@ -37,6 +37,7 @@ ARCH_REPLAY_SUMMARY = Path(f"outputs/reports/{ROUND}_architecture_replay_summary
 DEV_REPLAY = Path(f"outputs/tables/{ROUND}_dev_replay_by_stratum.csv")
 DEV_REPLAY_SUMMARY = Path(f"outputs/reports/{ROUND}_dev_replay_summary.json")
 HARD_NEGATIVE = Path(f"outputs/tables/{ROUND}_hard_negative_acquisition.csv")
+CONTRACT_SUMMARY = Path(f"outputs/reports/{ROUND}_materialization_contract_summary.json")
 
 
 def resolve(path: str | Path) -> Path:
@@ -241,24 +242,46 @@ def write_oracle_artifacts() -> dict[str, Any]:
     return summary
 
 
-def write_blocked_replay_artifacts() -> None:
+def write_blocked_replay_artifacts(contract: dict[str, Any]) -> None:
+    contract_passed = bool(contract.get("materialization_contract_passed"))
+    decision = "skipped_until_replay_ladder_runs" if contract_passed else "skipped_until_materialization_contract_passes"
+    reason = (
+        "G5.61 materialization contract passed; corrected scalar and architecture replay ladder has not been executed yet."
+        if contract_passed
+        else "G5.60 replay truth audit found mixed actor materialization; no architecture performance replay may be interpreted yet."
+    )
     rows = [
         {
-            "decision": "skipped_until_materialization_contract_passes",
-            "reason": "G5.60 replay truth audit found mixed actor materialization; no architecture performance replay may be interpreted yet.",
+            "decision": decision,
+            "reason": reason,
             **claims(),
         }
     ]
     write_rows(ARCH_REPLAY_PAIRS, rows)
     write_rows(DEV_REPLAY, rows)
     write_rows(HARD_NEGATIVE, rows)
-    write_json(ARCH_REPLAY_SUMMARY, {"decision": "g561_architecture_replay_blocked_by_materialization_truth_gate", **claims()})
-    write_json(DEV_REPLAY_SUMMARY, {"decision": "g561_dev_replay_blocked_by_materialization_truth_gate", **claims()})
+    write_json(
+        ARCH_REPLAY_SUMMARY,
+        {
+            "decision": "g561_architecture_replay_pending_after_materialization_contract" if contract_passed else "g561_architecture_replay_blocked_by_materialization_truth_gate",
+            "materialization_contract_decision": contract.get("decision"),
+            **claims(),
+        },
+    )
+    write_json(
+        DEV_REPLAY_SUMMARY,
+        {
+            "decision": "g561_dev_replay_pending_after_materialization_contract" if contract_passed else "g561_dev_replay_blocked_by_materialization_truth_gate",
+            "materialization_contract_decision": contract.get("decision"),
+            **claims(),
+        },
+    )
 
 
-def write_failure_and_decision(scenario: dict[str, Any], oracle: dict[str, Any]) -> dict[str, Any]:
+def write_failure_and_decision(scenario: dict[str, Any], oracle: dict[str, Any], contract: dict[str, Any]) -> dict[str, Any]:
     audit = read_json(f"outputs/reports/{ROUND}_g560_replay_truth_audit_summary.json")
     training = read_json(f"outputs/reports/{ROUND}_training_summary.json")
+    contract_passed = bool(contract.get("materialization_contract_passed"))
     scenario_target_met = bool(
         scenario.get("all_scenario_bank_targets_met")
         or scenario.get("valid_independent_instances_target_met")
@@ -288,14 +311,27 @@ def write_failure_and_decision(scenario: dict[str, Any], oracle: dict[str, Any])
             ),
         },
         {
+            "branch": "materialization_contract",
+            "status": "passed" if contract_passed else "blocked",
+            "evidence": (
+                f"planned={contract.get('planned_contract_vectors')}; executed={contract.get('executed_contract_vectors')}; "
+                f"candidate={contract.get('candidate_recognized_rate')}; fingerprint={contract.get('fingerprint_exact_match_rate')}; "
+                f"scenario={contract.get('scenario_hash_match_rate')}; identity={contract.get('identity_retention_rate')}"
+            ),
+        },
+        {
             "branch": "goal_aware_representation",
             "status": "smoke_completed",
             "evidence": f"variants={','.join(row.get('variant_id', '') for row in training.get('variants', []))}; causal_sensitivity_passed={training.get('causal_sensitivity_passed')}",
         },
         {
             "branch": "replay_ladder",
-            "status": "blocked",
-            "evidence": "architecture/development replay remains closed until materialization contract passes at 1.0.",
+            "status": "pending_after_contract" if contract_passed else "blocked",
+            "evidence": (
+                "materialization contract passed; corrected G5.60 scalar replay and architecture replay ladder are now the next required experiments."
+                if contract_passed
+                else "architecture/development replay remains closed until materialization contract passes at 1.0."
+            ),
         },
     ]
     write_rows(FAILURE_CSV, failure_rows)
@@ -309,7 +345,13 @@ def write_failure_and_decision(scenario: dict[str, Any], oracle: dict[str, Any])
         "valid_scenarios": scenario.get("valid_scenarios"),
         "oracle_decision": oracle.get("decision"),
         "training_decision": training.get("decision"),
-        "next_required_gate": "run G5.61 materialization contract on server and require candidate_recognized/fingerprint/identity/scenario rates all equal 1.0",
+        "materialization_contract_decision": contract.get("decision"),
+        "materialization_contract_passed": contract_passed,
+        "next_required_gate": (
+            "run corrected G5.60 scalar replay and G5.61 architecture replay ladder with exact-materialization rows only"
+            if contract_passed
+            else "run G5.61 materialization contract on server and require candidate_recognized/fingerprint/identity/scenario rates all equal 1.0"
+        ),
         **claims(),
     }
     write_json(DECISION_SUMMARY, decision)
@@ -326,7 +368,8 @@ def write_failure_and_decision(scenario: dict[str, Any], oracle: dict[str, Any])
         "G5.60 is reclassified as a replay-materialization/identity contamination, not a clean direct-actor failure. "
         "The exact-materialized subset has zero success regressions, while 135 actor rows executed fallback additive settings. "
         f"The valid scenario bank status is `{scenario.get('decision')}` with `{scenario.get('valid_scenarios')}` valid instances. "
-        "Architecture replay remains blocked until the materialization contract passes perfectly.\n\n"
+        f"The G5.61 materialization contract status is `{contract.get('decision')}` with `{contract.get('executed_contract_vectors')}` executed vectors. "
+        "The next required work is corrected scalar replay and architecture replay using exact-materialization rows only.\n\n"
         "All Phase5.5, Phase6, runtime, learned-policy, and AAAI claims remain closed.\n",
     )
     return decision
@@ -340,6 +383,7 @@ def write_manifest() -> None:
         "scripts/audit_repair5g561_replay_truth.py",
         "scripts/generate_repair5g561_valid_scenario_bank.py",
         "scripts/monitor_repair5g561_server.py",
+        "scripts/run_repair5g561_materialization_contract.py",
         "scripts/train_repair5g561_goal_aware_actor.py",
         "scripts/write_repair5g561_decision.py",
         "tests/test_repair5g561_truth.py",
@@ -383,8 +427,9 @@ def main(argv: list[str] | None = None) -> int:
     parser.parse_args(argv)
     scenario = write_scenario_artifacts()
     oracle = write_oracle_artifacts()
-    write_blocked_replay_artifacts()
-    decision = write_failure_and_decision(scenario, oracle)
+    contract = read_json(CONTRACT_SUMMARY)
+    write_blocked_replay_artifacts(contract)
+    decision = write_failure_and_decision(scenario, oracle, contract)
     write_manifest()
     print(json.dumps({"decision": decision["decision"], "valid_scenarios": scenario.get("valid_scenarios")}, sort_keys=True))
     return 0

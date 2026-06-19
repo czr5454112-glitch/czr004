@@ -93,7 +93,12 @@ date +%Y-%m-%dT%H:%M:%S%z
 printf '=== tmux ===\\n'
 tmux ls || true
 printf '=== train process ===\\n'
-ps -o pid,etime,pcpu,pmem,cmd -p $(pgrep -f 'train_repair5g561_goal_aware_actor.py' | head -1) 2>/dev/null || echo TRAIN_PROCESS_NOT_FOUND
+train_pid=$(ps -eo pid=,etime=,pcpu=,pmem=,comm=,args= | awk '$5 == "python3" && index($0, "scripts/train_repair5g561_goal_aware_actor.py") {{print $1; exit}}')
+if [ -n "$train_pid" ]; then
+  ps -o pid,etime,pcpu,pmem,cmd -p "$train_pid" 2>/dev/null || echo TRAIN_PROCESS_NOT_FOUND
+else
+  echo TRAIN_PROCESS_NOT_FOUND
+fi
 printf '=== final marker ===\\n'
 grep -n 'G5.61 SERVER RUN DONE' {workdir}/outputs/reports/{ROUND}_server_tmux.log || true
 printf '=== progress tail ===\\n'

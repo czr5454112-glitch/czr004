@@ -28,9 +28,9 @@
       "sha256": "e8af6ee385fc0211c9b528882293b3c491832c9785b654e6a4caa7eeb19b5f7e"
     },
     {
-      "bytes": 7546,
+      "bytes": 8573,
       "path": "scripts/monitor_repair5g561_server.py",
-      "sha256": "82deb2719a0705df0570fa5686c475b2bb4a4bb4120aeb3e9976a786a989117f"
+      "sha256": "6de2d899f9f78a20e18fae340fd5720cda6df1193bfa4fe885f8da6569e83803"
     },
     {
       "bytes": 19209,
@@ -53,9 +53,9 @@
       "sha256": "229abb78660d6ca74b6a24c8058a7560dc5001428d5a4ab30f794ecdd04d1f53"
     },
     {
-      "bytes": 10443,
+      "bytes": 10822,
       "path": "outputs/reports/phase5p5_repair5g561_artifact_manifest.json",
-      "sha256": "303e7637e5dde965031e55a5fe0922904ce838989e18860f6fe1a9cb36a9255b"
+      "sha256": "9e31af5aafe5c7fcc1767ea6c92d26889c233fdae5fc51fb3f0c5449dee9d967"
     },
     {
       "bytes": 8426,
@@ -103,9 +103,9 @@
       "sha256": "39e3e4df4f59e5c1947c6a974b1c2da77b73d2340144e8a1bf71e70ed017544a"
     },
     {
-      "bytes": 407,
+      "bytes": 399,
       "path": "outputs/reports/phase5p5_repair5g561_representation_truth.md",
-      "sha256": "155ccd04b7235a931b1d73e89ab8482567b6b2e51b73f7be4416262e2d4ab24b"
+      "sha256": "67e81c29c61fa33e34380a9337114696bb8130c876b225a779cf48298ea78d90"
     },
     {
       "bytes": 1022,
@@ -118,24 +118,24 @@
       "sha256": "a240a910f4f341789ed61c6d45ab8c33a9fae3a4170f874c7e0a17c9a56314b7"
     },
     {
-      "bytes": 2816,
+      "bytes": 3278,
       "path": "outputs/reports/phase5p5_repair5g561_server_launch_status.json",
-      "sha256": "0b637a2d0e3924c8e35e8e4e511e60c6fe1d87916b66a4eb621b877a859f4638"
+      "sha256": "854e7a0931a2c5d42a2113b6a972bd842f7e5fad5eeb3b69f7570a1133841e75"
     },
     {
-      "bytes": 3096,
+      "bytes": 3659,
       "path": "outputs/reports/phase5p5_repair5g561_server_launch_status.md",
-      "sha256": "bd533776d0a151c2ce0ebaee03f0605298de18fbf7c8eaa362311b372e6ab746"
+      "sha256": "db7c74b7a2f9df816562c90c9059910477ceb3e3e5b33202cd71c06d39616f93"
     },
     {
-      "bytes": 2115,
+      "bytes": 4056,
       "path": "outputs/reports/phase5p5_repair5g561_server_tmux.log",
-      "sha256": "a206536df7e531694dc031e7b55605aefa62994b18377e8942838e1380e8d511"
+      "sha256": "36029e21d726c5f6aab65c7b780c0d6848aaf9d12d9174d76ae12c56a257ccac"
     },
     {
-      "bytes": 3816,
+      "bytes": 3700,
       "path": "outputs/reports/phase5p5_repair5g561_training_summary.json",
-      "sha256": "9cc443e41063ce2c1c76a1b8a5751bc9b173474e3dc8c8c4e15790141cef8ee6"
+      "sha256": "6363b77dd80d0030c600052ce3bfad94c273e7cbf518359b891c9024012aebe5"
     },
     {
       "bytes": 371,
@@ -148,9 +148,9 @@
       "sha256": "f73e2ad5dd258d5d659acc0647269f83278ea6bd5cc1319ffb6c0f70f3213146"
     },
     {
-      "bytes": 919,
+      "bytes": 935,
       "path": "outputs/tables/phase5p5_repair5g561_ablation_matrix.csv",
-      "sha256": "e3f26857d3d9f18aad8d3cf144eab55c74a39047ff3dfddab01a0b7ca0667d64"
+      "sha256": "8595a9b91b75fa151d9091aee2b1c99892dfc630d42b9cb023848bfc4ea393cf"
     },
     {
       "bytes": 311,
@@ -160,12 +160,12 @@
     {
       "bytes": 133,
       "path": "outputs/tables/phase5p5_repair5g561_causal_sensitivity_audit.csv",
-      "sha256": "5faa2b58d1cee3c4f741e6fd369f48c2ec1c015365493d22cf2dc5729951bea5"
+      "sha256": "4c451a7ec4453c13a6363ac2276ef591f2027b90ef901d00a440835ba6d84d47"
     },
     {
-      "bytes": 6491,
+      "bytes": 6715,
       "path": "outputs/tables/phase5p5_repair5g561_checksums.sha256",
-      "sha256": "bbaac101fe1d6e60e3fac6757375c35bf9eeb66f2bab6954654c27aebe92ab7a"
+      "sha256": "61874afb59c509cdbcd9239a23114022e1cc45e652128770f4587f2c43e1df01"
     },
     {
       "bytes": 261254,
@@ -208,14 +208,14 @@
       "sha256": "936f04d9e71e1a3f90de1ccf8882f825be446566ff317dce628bec2e3512b756"
     },
     {
-      "bytes": 919,
+      "bytes": 935,
       "path": "outputs/tables/phase5p5_repair5g561_model_variant_matrix.csv",
-      "sha256": "e3f26857d3d9f18aad8d3cf144eab55c74a39047ff3dfddab01a0b7ca0667d64"
+      "sha256": "8595a9b91b75fa151d9091aee2b1c99892dfc630d42b9cb023848bfc4ea393cf"
     },
     {
-      "bytes": 919,
+      "bytes": 935,
       "path": "outputs/tables/phase5p5_repair5g561_offline_model_comparison.csv",
-      "sha256": "e3f26857d3d9f18aad8d3cf144eab55c74a39047ff3dfddab01a0b7ca0667d64"
+      "sha256": "8595a9b91b75fa151d9091aee2b1c99892dfc630d42b9cb023848bfc4ea393cf"
     },
     {
       "bytes": 7887,
@@ -243,29 +243,29 @@
       "sha256": "582512249f745797ca4840bb4e58b6b1cb56869e404bba8b01bfb77613c28827"
     },
     {
-      "bytes": 91415,
+      "bytes": 1749741,
       "path": "artifacts/models/gcst/g561_f1_scalar_conservative_actor_seed561.pt",
-      "sha256": "f881a7e6e1b770b7890c6d638087c4576c98efbad9e22590994178114d3ab5f1"
+      "sha256": "d4eb232ff4e0c25c5f2ca515ac13ef14fed2d6e312d932cb3f748766fc1da965"
     },
     {
-      "bytes": 91227,
+      "bytes": 1749555,
       "path": "artifacts/models/gcst/g561_f2_graph_only_direct_actor_seed561.pt",
-      "sha256": "63016e87ebb52817faf42e1637adfe30578f559cf0b868b38f7769d5163b1cfe"
+      "sha256": "0bb1381c5def6aaa3216f86f362d09bf360bd523e25e68ddea88a602dceb9266"
     },
     {
-      "bytes": 91039,
+      "bytes": 1749369,
       "path": "artifacts/models/gcst/g561_f4_graph_paired_od_actor_seed561.pt",
-      "sha256": "538ccb081cf7d8754d6533cbc9aa0b764f7b34d6cae3edf62b33771436b123a4"
+      "sha256": "2152466711a1c8b6c859b7a8e4cd5c95f6b348ba9165fb19483f43db7e7ab0ab"
     },
     {
-      "bytes": 92261,
+      "bytes": 1750578,
       "path": "artifacts/models/gcst/g561_f6_full_goal_aware_dual_channel_actor_seed561.pt",
-      "sha256": "877be4c7621d7ac9568e7b2fc723d683aab648f8ee15f17c8d18f4d32a83ea50"
+      "sha256": "363fb82549cf9b978c0261f5701f5d0b090bd375ffcc64c2f8cf0a1d1e77ee76"
     },
     {
-      "bytes": 92607,
+      "bytes": 1750857,
       "path": "artifacts/models/gcst/g561_f7_full_goal_aware_actor_training_critic_seed561.pt",
-      "sha256": "e379c98423689764d53ff56637a2378812b1918ad031d1e907445231fd7d9b06"
+      "sha256": "90f45ac21b4d66dd73aebb037849fcfb7da7f6e8e157defb5582ce4145797a1d"
     }
   ],
   "learned_runtime_policy_validated": false,

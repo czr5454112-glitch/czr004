@@ -1,6 +1,6 @@
 {
   "schema_version": "phase5p5_repair5g561_server_launch_status_v2",
-  "decision": "running_in_tmux_on_rtx5090",
+  "decision": "completed_in_tmux_on_rtx5090",
   "remote_tmux_started": true,
   "source_commit": "7aa3ce2b7cee8f66152f2640c37ddbd77429a0f1",
   "branch": "server-code",
@@ -26,7 +26,8 @@
   "launch": {
     "deployed_by": "local_git_archive_minimal_tracked_payload",
     "started_at_utc": "2026-06-19T12:06:23Z",
-    "observed_running_at_utc": "2026-06-19T12:51:42Z",
+    "completed_at_utc": "2026-06-19T12:57:17Z",
+    "observed_completed_at_utc": "2026-06-19T12:57:41Z",
     "command": "python3 scripts/audit_repair5g561_replay_truth.py && python3 scripts/train_repair5g561_goal_aware_actor.py --samples 128 --steps 500 --batch-size 8 --hidden-dim 96 --device auto --variants F1 F2 F4 F6 F7 && python3 scripts/write_repair5g561_decision.py",
     "audit_observed": {
       "actor_rows": 300,
@@ -34,16 +35,23 @@
       "decision": "g561_g560_replay_invalid_materialization_not_actor_failure"
     },
     "training_observed": {
-      "status": "running",
-      "pid": 42554,
-      "elapsed_at_observation": "00:45:16",
-      "gpu_memory_mib_at_observation": 1070,
-      "gpu_util_percent_at_observation": 30,
+      "status": "completed",
+      "pid": null,
+      "gpu_memory_mib_at_completion_observation": 1,
+      "gpu_util_percent_at_completion_observation": 0,
+      "device": "cuda",
+      "cuda_available": true,
+      "cuda_used": true,
+      "samples": 128,
+      "steps_per_variant": 500,
+      "best_variant_id": "F7",
+      "best_validation_normalized_l1": 0.11238349974155426,
       "completed_checkpoint_rewrites": [
         "artifacts/models/gcst/g561_f1_scalar_conservative_actor_seed561.pt",
         "artifacts/models/gcst/g561_f2_graph_only_direct_actor_seed561.pt",
         "artifacts/models/gcst/g561_f4_graph_paired_od_actor_seed561.pt",
-        "artifacts/models/gcst/g561_f6_full_goal_aware_dual_channel_actor_seed561.pt"
+        "artifacts/models/gcst/g561_f6_full_goal_aware_dual_channel_actor_seed561.pt",
+        "artifacts/models/gcst/g561_f7_full_goal_aware_actor_training_critic_seed561.pt"
       ],
       "training_progress_jsonl_present": false
     }
@@ -51,7 +59,7 @@
   "local_monitor_tool": "scripts/monitor_repair5g561_server.py",
   "notes": [
     "Remote HTTPS git clone failed with a transient GnuTLS receive error, so the server was deployed from a minimal git archive of the exact tracked source commit.",
-    "The tmux job was still running at the observation timestamp; training_summary.json had not yet been overwritten by the server run.",
+    "The tmux job completed and server training_summary.json was safely pulled with --pull-training-only to avoid overwriting local scenario-bank and decision artifacts.",
     "Current running job predates training-progress JSONL instrumentation; future runs will write outputs/reports/phase5p5_repair5g561_training_progress.jsonl."
   ],
   "claim_policy": {

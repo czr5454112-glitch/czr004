@@ -1,6 +1,6 @@
 # Repair5G.5.61 Server Launch Status
 
-- status: `running_in_tmux_on_rtx5090`
+- status: `completed_in_tmux_on_rtx5090`
 - source commit: `7aa3ce2b7cee8f66152f2640c37ddbd77429a0f1`
 - pushed branch: `server-code`
 - instance: `ackcs-00gjh6i6`
@@ -40,17 +40,22 @@ python3 scripts/write_repair5g561_decision.py
 
 ## Observed State
 
-At `2026-06-19T12:51:42Z`, the tmux job was still running:
+The tmux job completed at `2026-06-19T12:57:17Z` and was observed complete at `2026-06-19T12:57:41Z`.
 
-- training PID: `42554`
-- elapsed: `00:45:16`
-- GPU memory: `1070 MiB`
-- GPU utilization: `30%`
+- training process: complete
+- GPU memory at completion observation: `1 MiB`
+- GPU utilization at completion observation: `0%`
+- training device: `cuda`
+- samples: `128`
+- steps per variant: `500`
+- best variant: `F7`
+- best validation normalized L1: `0.11238349974155426`
 - completed server checkpoint rewrites:
   - `artifacts/models/gcst/g561_f1_scalar_conservative_actor_seed561.pt`
   - `artifacts/models/gcst/g561_f2_graph_only_direct_actor_seed561.pt`
   - `artifacts/models/gcst/g561_f4_graph_paired_od_actor_seed561.pt`
   - `artifacts/models/gcst/g561_f6_full_goal_aware_dual_channel_actor_seed561.pt`
+  - `artifacts/models/gcst/g561_f7_full_goal_aware_actor_training_critic_seed561.pt`
 
 The audit stage had completed inside the server log:
 
@@ -58,7 +63,7 @@ The audit stage had completed inside the server log:
 {"actor_rows": 300, "decision": "g561_g560_replay_invalid_materialization_not_actor_failure", "exact": 165}
 ```
 
-The server training summary had not yet been overwritten at this observation point, so the final server training metrics should be pulled after tmux exits.
+The server training summary, model comparison tables, tmux log, and checkpoints were pulled with `--pull-training-only --pull-models` so the local expanded scenario-bank and decision artifacts were not overwritten by the older remote payload.
 
 This run predates the training-progress JSONL instrumentation added in `scripts/monitor_repair5g561_server.py` / `scripts/train_repair5g561_goal_aware_actor.py`, so `outputs/reports/phase5p5_repair5g561_training_progress.jsonl` is expected to be absent for the currently running tmux job.
 

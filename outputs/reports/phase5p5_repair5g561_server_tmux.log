@@ -28,3 +28,26 @@ cuda_available True
 cuda_device_count 1
 cuda_device_name NVIDIA GeForce RTX 5090
 {"actor_rows": 300, "decision": "g561_g560_replay_invalid_materialization_not_actor_failure", "exact": 165}
+{"best": "F7", "decision": "g561_goal_aware_representation_truth_smoke_completed", "device": "cuda"}
+{"decision": "g561_g560_replay_invalid_materialization_not_actor_failure", "valid_scenarios": 1203}
+Fri Jun 19 20:57:17 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.105.08             Driver Version: 580.105.08     CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA GeForce RTX 5090        On  |   00000000:56:00.0 Off |                  N/A |
+|  0%   36C    P0             65W /  575W |       1MiB /  32607MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+=== G5.61 SERVER RUN DONE 2026-06-19T12:57:17Z ===

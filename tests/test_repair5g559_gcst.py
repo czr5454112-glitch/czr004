@@ -49,6 +49,7 @@ def test_default_pilot_topologies_have_solver_capacity():
     for row in default_topologies(limit=24):
         graph = build_corridor_graph(row).graph
         assert largest_component_size(graph) >= 16
+        assert graph.physical_free_cell_count <= 6000
 
 
 def test_corridor_graph_shortest_path_distortion():

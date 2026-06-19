@@ -36,7 +36,7 @@ def shortest_path(graph: GraphData, start: tuple[int, int], goal: tuple[int, int
                 parent[nxt] = cur
                 q.append(nxt)
     if dst not in parent:
-        return [src]
+        return []
     path = [dst]
     while path[-1] != src:
         path.append(parent[path[-1]])
@@ -48,9 +48,14 @@ def compute_traffic_prior(graph: GraphData, assignment: dict[str, Any]) -> dict[
     counts = np.zeros((graph.edge_features.shape[0],), dtype=np.float32)
     opposite = np.zeros_like(counts)
     paths = []
+    path_found = 0
+    expected_edge_use_total = 0.0
     for start, goal in zip(assignment["starts"], assignment["goals"]):
         path = shortest_path(graph, start, goal)
         paths.append(path)
+        if path:
+            path_found += 1
+            expected_edge_use_total += max(0, len(path) - 1)
         for a, b in zip(path, path[1:]):
             idx = edge_to_idx.get((a, b))
             if idx is not None:
@@ -83,5 +88,10 @@ def compute_traffic_prior(graph: GraphData, assignment: dict[str, Any]) -> dict[
         "head_on_pressure": float(head_on.mean()) if head_on.size else 0.0,
         "flow_imbalance_mean": float(imbalance.mean()) if imbalance.size else 0.0,
         "paths_computed": len(paths),
+        "path_found_count": int(path_found),
+        "path_found_rate": float(path_found / max(1, len(paths))),
+        "expected_edge_use_total": float(expected_edge_use_total),
+        "flow_mass_preservation_ratio": float(counts.sum() / max(1.0, expected_edge_use_total)),
+        "nonzero_flow": bool(float(counts.sum()) > 0.0),
     }
     return {"edge_features": edge_features, "summary": summary, "paths": paths}

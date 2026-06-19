@@ -1,4 +1,9 @@
-"""Real grid-graph materialization and features for G5.58."""
+"""Real grid-graph materialization and features for GCST rounds.
+
+G5.59 deliberately keeps the full physical grid topology.  The older G5.58
+smoke path accepted ``max_nodes`` and stride-sampled cells, which broke corridor
+connectivity; this module now treats that argument as a reporting hint only.
+"""
 
 from __future__ import annotations
 
@@ -21,6 +26,8 @@ class GraphData:
     edge_index: np.ndarray
     edge_features: np.ndarray
     hashes: dict[str, Any]
+    component_count: int = 0
+    physical_free_cell_count: int = 0
 
 
 NODE_FEATURE_NAMES = [
@@ -56,6 +63,30 @@ def _degree_lookup(grid: list[str]) -> dict[tuple[int, int], int]:
     return deg
 
 
+def connected_components(cells: list[tuple[int, int]], edge_index: np.ndarray) -> int:
+    if not cells:
+        return 0
+    adj: dict[int, list[int]] = {i: [] for i in range(len(cells))}
+    if edge_index.size:
+        for src, dst in edge_index.T:
+            adj[int(src)].append(int(dst))
+    seen: set[int] = set()
+    components = 0
+    for start in range(len(cells)):
+        if start in seen:
+            continue
+        components += 1
+        stack = [start]
+        seen.add(start)
+        while stack:
+            cur = stack.pop()
+            for nxt in adj.get(cur, []):
+                if nxt not in seen:
+                    seen.add(nxt)
+                    stack.append(nxt)
+    return components
+
+
 def _local_obstacle_density(grid: list[str], x: int, y: int) -> float:
     height = len(grid)
     width = max((len(row) for row in grid), default=0)
@@ -74,9 +105,8 @@ def _local_obstacle_density(grid: list[str], x: int, y: int) -> float:
 def build_graph(row: dict[str, Any], max_nodes: int | None = None) -> GraphData:
     width, height, grid, _source = load_grid(row)
     cells = free_cells(grid)
-    if max_nodes and len(cells) > max_nodes:
-        stride = max(1, len(cells) // max_nodes)
-        cells = cells[::stride][:max_nodes]
+    physical_free_cell_count = len(cells)
+    sampling_truncated = bool(max_nodes and len(cells) > max_nodes)
     cell_to_idx = {cell: idx for idx, cell in enumerate(cells)}
     degree = _degree_lookup(grid)
     node_rows = []
@@ -124,6 +154,15 @@ def build_graph(row: dict[str, Any], max_nodes: int | None = None) -> GraphData:
             ]
         )
     edge_index = np.asarray(edges, dtype=np.int64).T if edges else np.zeros((2, 0), dtype=np.int64)
+    component_count = connected_components(cells, edge_index)
+    hashes = physical_hashes(row)
+    hashes.update(
+        {
+            "max_nodes_hint": int(max_nodes or 0),
+            "max_nodes_sampling_truncated": False,
+            "max_nodes_sampling_rejected_for_g559": sampling_truncated,
+        }
+    )
     return GraphData(
         topology_id=str(row.get("topology_id", "")),
         map_name=str(row.get("map", row.get("map_name", ""))),
@@ -133,7 +172,9 @@ def build_graph(row: dict[str, Any], max_nodes: int | None = None) -> GraphData:
         node_features=np.asarray(node_rows, dtype=np.float32),
         edge_index=edge_index,
         edge_features=np.asarray(edge_rows, dtype=np.float32),
-        hashes=physical_hashes(row),
+        hashes=hashes,
+        component_count=component_count,
+        physical_free_cell_count=physical_free_cell_count,
     )
 
 
@@ -147,6 +188,9 @@ def graph_summary(graph: GraphData) -> dict[str, Any]:
         "directed_edge_count": int(graph.edge_features.shape[0]),
         "node_feature_count": int(graph.node_features.shape[1]) if graph.node_features.ndim == 2 else 0,
         "edge_feature_count": int(graph.edge_features.shape[1]) if graph.edge_features.ndim == 2 else 0,
+        "component_count": int(graph.component_count),
+        "physical_free_cell_count": int(graph.physical_free_cell_count or len(graph.cells)),
+        "connectivity_preserved_by_full_graph": int(graph.component_count <= 1),
     }
     for name, value in zip(NODE_FEATURE_NAMES, node_mean):
         out[f"node_mean_{name}"] = float(value)

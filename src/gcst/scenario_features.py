@@ -78,6 +78,8 @@ def generate_assignment(graph: GraphData, context: dict[str, Any], max_agents: i
     return {
         "requested_agent_count": requested,
         "encoded_agent_count": count,
+        "represented_agent_mass": requested if count == requested else count,
+        "all_agent_mass_preserved": count == requested,
         "starts": starts,
         "goals": goals,
         "start_positions_sha256": start_hash,

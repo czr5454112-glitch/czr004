@@ -1,4 +1,9 @@
-"""Pure PyTorch edge-aware graph-attention encoder."""
+"""Pure PyTorch edge-aware graph-attention encoder.
+
+Global attention is applied inside each graph independently.  G5.58 pooled each
+graph to a token and then ran a Transformer across the minibatch, which leaked
+batch composition into per-instance predictions.
+"""
 
 from __future__ import annotations
 
@@ -90,8 +95,17 @@ class GraphGPSLiteEncoder(nn.Module):
         h = self.node_in(batch.node_features.float())
         for layer in self.local_layers:
             h = layer(h, batch.edge_index, batch.edge_features.float())
-        pooled = scatter_mean(h, batch.batch_index.long(), batch.num_graphs)
-        tokens = pooled.unsqueeze(0)
-        for layer in self.global_layers:
-            tokens = layer(tokens)
-        return self.out_norm(tokens.squeeze(0))
+        batch_index = batch.batch_index.long()
+        if self.global_layers:
+            updated = h.clone()
+            for graph_id in range(int(batch.num_graphs)):
+                mask = batch_index == graph_id
+                if not bool(mask.any()):
+                    continue
+                tokens = h[mask].unsqueeze(0)
+                for layer in self.global_layers:
+                    tokens = layer(tokens)
+                updated[mask] = tokens.squeeze(0)
+            h = updated
+        pooled = scatter_mean(h, batch_index, batch.num_graphs)
+        return self.out_norm(pooled)

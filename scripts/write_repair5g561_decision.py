@@ -39,6 +39,7 @@ DEV_REPLAY = Path(f"outputs/tables/{ROUND}_dev_replay_by_stratum.csv")
 DEV_REPLAY_SUMMARY = Path(f"outputs/reports/{ROUND}_dev_replay_summary.json")
 HARD_NEGATIVE = Path(f"outputs/tables/{ROUND}_hard_negative_acquisition.csv")
 HARD_NEGATIVE_SUMMARY = Path(f"outputs/reports/{ROUND}_hard_negative_acquisition_summary.json")
+PRIMARY_SEED_SUMMARY = Path(f"outputs/reports/{ROUND}_primary_seed_training_summary.json")
 CONTRACT_SUMMARY = Path(f"outputs/reports/{ROUND}_materialization_contract_summary.json")
 
 
@@ -99,6 +100,20 @@ def file_sha256(path: Path) -> str:
         for chunk in iter(lambda: handle.read(1024 * 1024), b""):
             h.update(chunk)
     return h.hexdigest()
+
+
+def as_int(value: Any, default: int = 0) -> int:
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return default
+
+
+def as_float(value: Any, default: float = 0.0) -> float:
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return default
 
 
 def claims() -> dict[str, bool]:
@@ -287,6 +302,129 @@ def write_blocked_replay_artifacts(contract: dict[str, Any]) -> None:
     )
 
 
+def build_final_failure_attribution(
+    *,
+    scenario: dict[str, Any],
+    contract: dict[str, Any],
+    training: dict[str, Any],
+    corrected_replay: dict[str, Any],
+    arch_replay: dict[str, Any],
+    dev_replay: dict[str, Any],
+    hard_negative: dict[str, Any],
+    primary_seed: dict[str, Any],
+    replay_exact: bool,
+    dev_real_replay: bool,
+    hard_negative_done: bool,
+    primary_seed_done: bool,
+) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    scenario_target_met = bool(
+        scenario.get("all_scenario_bank_targets_met")
+        or scenario.get("valid_independent_instances_target_met")
+    )
+    contract_passed = bool(contract.get("materialization_contract_passed"))
+    dev_success_regressions = as_int(dev_replay.get("success_regressions"))
+    dev_success_gains = as_int(dev_replay.get("success_gains"))
+    dev_worse = as_int(dev_replay.get("worse"))
+    dev_mean_delta = as_float(dev_replay.get("mean_quality_delta_vs_g556"))
+    materialization_invalid = as_int(dev_replay.get("materialization_invalid_rows"))
+    large_positive = as_int(hard_negative.get("large_positive_quality_delta_source_rows"))
+    critic_false_safe = as_int(hard_negative.get("critic_false_safe_proxy_rows"))
+    fine_tune_completed = bool(hard_negative.get("fine_tune_completed"))
+    fine_tune_required = bool(
+        dev_real_replay
+        and hard_negative_done
+        and primary_seed_done
+        and (
+            dev_success_regressions > 0
+            or dev_mean_delta > 0.0
+            or large_positive > 0
+            or critic_false_safe > 0
+        )
+    )
+    validation_rows = primary_seed.get("validation_by_variant", [])
+    best_variant = ""
+    best_validation = ""
+    if validation_rows:
+        best = min(validation_rows, key=lambda row: as_float(row.get("best_validation_normalized_l1"), float("inf")))
+        best_variant = str(best.get("variant_id", ""))
+        best_validation = str(best.get("best_validation_normalized_l1", ""))
+    variants = ",".join(map(str, primary_seed.get("variants", [])))
+    seeds = ",".join(map(str, primary_seed.get("seeds", [])))
+    final_complete = bool(dev_real_replay and hard_negative_done and primary_seed_done)
+    rows = [
+        {
+            "branch": "final_data",
+            "category": "data",
+            "status": (
+                "scenario_bank_expanded_and_hard_negative_support_collected"
+                if hard_negative_done and scenario_target_met
+                else "hard_negative_support_collected_target_bank_still_underpowered"
+                if hard_negative_done
+                else "incomplete"
+            ),
+            "evidence": (
+                f"valid_scenarios={scenario.get('valid_scenarios')} target={scenario.get('valid_independent_instances_target', 2500)}; "
+                f"scenario_target_met={scenario_target_met}; acquisition_rows={hard_negative.get('acquisition_rows')}; "
+                f"unique_acquisition_keys={hard_negative.get('unique_acquisition_keys')}"
+            ),
+        },
+        {
+            "branch": "final_representation",
+            "category": "representation",
+            "status": "implemented_and_causally_sensitive_but_not_replay_sufficient" if primary_seed_done else "incomplete",
+            "evidence": (
+                f"primary_variants={variants}; seeds={seeds}; causal_sensitivity_passed={primary_seed.get('causal_sensitivity_passed')}; "
+                f"best_validation_variant={best_variant}; best_validation_normalized_l1={best_validation}"
+            ),
+        },
+        {
+            "branch": "final_loss",
+            "category": "loss",
+            "status": "requires_hard_negative_finetune" if fine_tune_required and not fine_tune_completed else "no_pending_loss_gate",
+            "evidence": (
+                f"dev_success_regressions={dev_success_regressions}; dev_success_gains={dev_success_gains}; "
+                f"dev_worse={dev_worse}; mean_quality_delta_vs_g556={dev_replay.get('mean_quality_delta_vs_g556')}; "
+                f"large_positive_quality_delta_source_rows={large_positive}; critic_false_safe_proxy_rows={critic_false_safe}"
+            ),
+        },
+        {
+            "branch": "final_materialization",
+            "category": "materialization",
+            "status": "repaired_for_g561_exact_replays" if contract_passed and replay_exact and materialization_invalid == 0 else "unresolved",
+            "evidence": (
+                f"contract_passed={contract_passed}; candidate_rate={contract.get('candidate_recognized_rate')}; "
+                f"fingerprint_rate={contract.get('fingerprint_exact_match_rate')}; corrected={corrected_replay.get('decision')}; "
+                f"architecture={arch_replay.get('decision')}; dev_materialization_invalid_rows={materialization_invalid}"
+            ),
+        },
+        {
+            "branch": "final_solver_behavior",
+            "category": "solver_behavior",
+            "status": "development_replay_not_promotable" if dev_success_regressions > 0 or dev_mean_delta > 0.0 else "stable_under_development_replay",
+            "evidence": (
+                f"both_success={dev_replay.get('both_success')}; both_fail={dev_replay.get('both_fail')}; "
+                f"mean_candidate_expanded_nodes={dev_replay.get('mean_candidate_expanded_nodes')}; "
+                f"mean_candidate_low_level_pibt_calls={dev_replay.get('mean_candidate_low_level_pibt_calls')}; "
+                f"mean_runtime_overhead_ms={dev_replay.get('mean_runtime_overhead_ms')}; worst_family_count={hard_negative.get('worst_family_count')}"
+            ),
+        },
+    ]
+    summary = {
+        "final_failure_attribution_complete": final_complete,
+        "final_failure_attribution_categories": [row["category"] for row in rows],
+        "fine_tune_required": fine_tune_required,
+        "fine_tune_completed": fine_tune_completed,
+        "fine_tune_decision": (
+            "fine_tune_on_hard_negatives_and_rerun_frozen_development_panel"
+            if fine_tune_required and not fine_tune_completed
+            else "no_additional_fine_tune_required_from_current_evidence"
+        ),
+        "dev_success_regressions": dev_success_regressions,
+        "dev_mean_quality_delta_vs_g556": dev_mean_delta,
+    }
+    return rows, summary
+
+
 def write_failure_and_decision(scenario: dict[str, Any], oracle: dict[str, Any], contract: dict[str, Any]) -> dict[str, Any]:
     audit = read_json(f"outputs/reports/{ROUND}_g560_replay_truth_audit_summary.json")
     training = read_json(f"outputs/reports/{ROUND}_training_summary.json")
@@ -294,11 +432,13 @@ def write_failure_and_decision(scenario: dict[str, Any], oracle: dict[str, Any],
     arch_replay = read_json(ARCH_REPLAY_SUMMARY)
     dev_replay = read_json(DEV_REPLAY_SUMMARY)
     hard_negative = read_json(HARD_NEGATIVE_SUMMARY)
+    primary_seed = read_json(PRIMARY_SEED_SUMMARY)
     contract_passed = bool(contract.get("materialization_contract_passed"))
     corrected_decision = str(corrected_replay.get("decision", ""))
     arch_decision = str(arch_replay.get("decision", ""))
     dev_decision = str(dev_replay.get("decision", ""))
     hard_negative_decision = str(hard_negative.get("decision", ""))
+    primary_seed_decision = str(primary_seed.get("decision", ""))
     corrected_real_replay = corrected_decision.startswith("g561_corrected_g560_scalar_replay_") and not any(
         token in corrected_decision for token in ["pending", "blocked"]
     )
@@ -321,8 +461,30 @@ def write_failure_and_decision(scenario: dict[str, Any], oracle: dict[str, Any],
         next_required_gate = "run G5.61 materialization contract on server and require candidate_recognized/fingerprint/identity/scenario rates all equal 1.0"
     dev_real_replay = dev_decision.startswith("g561_development_replay_") and not any(token in dev_decision for token in ["pending", "blocked"])
     hard_negative_done = hard_negative_decision.startswith("g561_hard_negative_acquisition_completed")
+    primary_seed_done = bool(primary_seed.get("three_training_seeds_complete")) and primary_seed_decision == "g561_primary_seed_training_completed"
     if dev_real_replay and hard_negative_done:
         next_required_gate = "complete three training seeds for primary variants, then final failure attribution/fine-tune gate"
+    if dev_real_replay and hard_negative_done and primary_seed_done:
+        next_required_gate = "write final failure attribution and decide whether to fine-tune/rerun a frozen comparison panel"
+    final_rows, final_summary = build_final_failure_attribution(
+        scenario=scenario,
+        contract=contract,
+        training=training,
+        corrected_replay=corrected_replay,
+        arch_replay=arch_replay,
+        dev_replay=dev_replay,
+        hard_negative=hard_negative,
+        primary_seed=primary_seed,
+        replay_exact=replay_exact,
+        dev_real_replay=dev_real_replay,
+        hard_negative_done=hard_negative_done,
+        primary_seed_done=primary_seed_done,
+    )
+    if final_summary["final_failure_attribution_complete"]:
+        if final_summary["fine_tune_required"] and not final_summary["fine_tune_completed"]:
+            next_required_gate = "fine-tune on acquired hard negatives and rerun one frozen-comparison development panel"
+        else:
+            next_required_gate = "no additional G5.61 fine-tune gate from current evidence; keep promotion gates closed pending Stage1 criteria"
     scenario_target_met = bool(
         scenario.get("all_scenario_bank_targets_met")
         or scenario.get("valid_independent_instances_target_met")
@@ -401,11 +563,29 @@ def write_failure_and_decision(scenario: dict[str, Any], oracle: dict[str, Any],
                 else "hard-negative acquisition has not produced a completed summary yet"
             ),
         },
+        {
+            "branch": "primary_seed_training",
+            "status": "completed" if primary_seed_done else ("pending_after_development_replay" if dev_real_replay else "blocked"),
+            "evidence": (
+                f"decision={primary_seed_decision}; variants={','.join(primary_seed.get('variants', []))}; "
+                f"seeds={','.join(map(str, primary_seed.get('seeds', [])))}; "
+                f"three_training_seeds_complete={primary_seed.get('three_training_seeds_complete')}; "
+                f"causal_sensitivity_passed={primary_seed.get('causal_sensitivity_passed')}"
+                if primary_seed
+                else "primary seed training summary missing"
+            ),
+        },
     ]
+    failure_rows.extend(final_rows)
     write_rows(FAILURE_CSV, failure_rows)
+    decision_label = "g561_g560_replay_invalid_materialization_not_actor_failure"
+    if dev_real_replay and hard_negative_done and (
+        final_summary["dev_success_regressions"] > 0 or final_summary["dev_mean_quality_delta_vs_g556"] > 0.0
+    ):
+        decision_label = "g561_goal_aware_actor_dev_replay_failed_continue_hard_negative_acquisition"
     decision = {
         "schema_version": "phase5p5_repair5g561_decision_summary_v1",
-        "decision": "g561_g560_replay_invalid_materialization_not_actor_failure",
+        "decision": decision_label,
         "g560_replay_truth_decision": audit.get("decision"),
         "exact_materialization_actor_rows": audit.get("exact_materialization_actor_rows"),
         "actor_rows": audit.get("actor_rows"),
@@ -423,7 +603,10 @@ def write_failure_and_decision(scenario: dict[str, Any], oracle: dict[str, Any],
         "development_replay_executed": dev_real_replay,
         "hard_negative_acquisition_decision": hard_negative_decision,
         "hard_negative_acquisition_completed": hard_negative_done,
+        "primary_seed_training_decision": primary_seed_decision,
+        "primary_seed_training_completed": primary_seed_done,
         "next_required_gate": next_required_gate,
+        **final_summary,
         **claims(),
     }
     write_json(DECISION_SUMMARY, decision)
@@ -443,6 +626,8 @@ def write_failure_and_decision(scenario: dict[str, Any], oracle: dict[str, Any],
         f"The G5.61 materialization contract status is `{contract.get('decision')}` with `{contract.get('executed_contract_vectors')}` executed vectors. "
         f"The replay ladder status is corrected=`{corrected_decision}` and architecture=`{arch_decision}`. "
         f"The development replay status is `{dev_decision}` and hard-negative acquisition is `{hard_negative_decision}`. "
+        f"The primary seed training status is `{primary_seed_decision}`. "
+        f"The final attribution status is `{decision['fine_tune_decision']}` across data, representation, loss, materialization, and solver behavior. "
         f"The next required work is {decision['next_required_gate']}.\n\n"
         "All Phase5.5, Phase6, runtime, learned-policy, and AAAI claims remain closed.\n",
     )
@@ -459,6 +644,7 @@ def write_manifest() -> None:
         "scripts/monitor_repair5g561_server.py",
         "scripts/run_repair5g561_materialization_contract.py",
         "scripts/run_repair5g561_development_replay.py",
+        "scripts/run_repair5g561_primary_seed_training.py",
         "scripts/run_repair5g561_replay_ladder.py",
         "scripts/train_repair5g561_goal_aware_actor.py",
         "scripts/write_repair5g561_decision.py",

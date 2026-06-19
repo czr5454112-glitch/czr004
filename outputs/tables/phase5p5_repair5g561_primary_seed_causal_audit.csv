@@ -1,0 +1,7 @@
+seed,variant_id,audit,normalized_theta_l1,passed,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+561,F6,paired_od_goal_reassignment,0.00024238530022557825,True,False,False,False,False,False
+561,F6,c0_f0_zero_out,0.046320874243974686,True,False,False,False,False,False
+562,F6,paired_od_goal_reassignment,3.253934846725315e-05,True,False,False,False,False,False
+562,F6,c0_f0_zero_out,0.00034652496105991304,True,False,False,False,False,False
+563,F6,paired_od_goal_reassignment,7.825681677786633e-05,True,False,False,False,False,False
+563,F6,c0_f0_zero_out,0.00537989754229784,True,False,False,False,False,False

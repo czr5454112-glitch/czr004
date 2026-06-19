@@ -19,8 +19,8 @@ The committed G5.60 replay cannot be read as a clean actor result: generated row
 ## Recomputed Summaries
 
 - Historical committed pairs: `300`, regressions `25`, mean delta `0.11486412997058826`
-- Evaluation-UID recovered pairs: `300`, regressions `25`, mean delta `0.11486412997058822`
-- Recognized rows only: `165`, regressions `0`, mean delta `-0.01112573317310974`
-- Exact materialization only: `165`, regressions `0`, mean delta `-0.01112573317310974`
+- Evaluation-UID recovered pairs: `300`, regressions `25`, mean delta `0.11486412997058826`
+- Recognized rows only: `165`, regressions `0`, mean delta `-0.011125733173109748`
+- Exact materialization only: `165`, regressions `0`, mean delta `-0.011125733173109748`
 
 Non-materialized rows are excluded from scientific actor-performance interpretation. All promotion/runtime claims remain closed.

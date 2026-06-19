@@ -36,6 +36,7 @@ TRAINING_PROGRESS = Path(f"outputs/reports/{ROUND}_training_progress.jsonl")
 
 
 VARIANTS = {
+    "F0": {"name": "g560_scalar_actor_control", "use_graph": False, "use_paired_od": False, "use_c0f0": False, "critic": False},
     "F1": {"name": "scalar_conservative_actor", "use_graph": False, "use_paired_od": False, "use_c0f0": False, "critic": False},
     "F2": {"name": "graph_only_direct_actor", "use_graph": True, "use_paired_od": False, "use_c0f0": False, "critic": False},
     "F4": {"name": "graph_paired_od_actor", "use_graph": True, "use_paired_od": True, "use_c0f0": False, "critic": False},
@@ -262,6 +263,7 @@ def train_variant(variant_id: str, config: dict[str, Any], samples: list[Sample]
             "artifact_type": "g561_goal_aware_direct_actor",
             "variant_id": variant_id,
             "variant_name": config["name"],
+            "seed": args.seed,
             "actor_state_dict": model.state_dict(),
             "theta_columns": THETA_NUMERIC_COLUMNS,
             "theta_anchor_g556": BASELINE_G556,
@@ -290,6 +292,7 @@ def train_variant(variant_id: str, config: dict[str, Any], samples: list[Sample]
     return {
         "variant_id": variant_id,
         "variant_name": config["name"],
+        "seed": args.seed,
         "steps": args.steps,
         "train_instances": len(train),
         "validation_instances": len(valid),
@@ -308,7 +311,13 @@ def causal_audit(model_path: str, samples: list[Sample], device: str, hidden_dim
     import torch
 
     checkpoint = torch.load(ROOT / model_path, map_location=device, weights_only=False)
-    model = GoalAwareDualChannelActor(hidden_dim=hidden_dim, use_graph=True, use_paired_od=True, use_c0f0=True).module().to(device)
+    model = GoalAwareDualChannelActor(
+        hidden_dim=int(checkpoint.get("hidden_dim", hidden_dim)),
+        use_graph=bool(checkpoint.get("uses_graph", True)),
+        use_paired_od=bool(checkpoint.get("uses_paired_od", True)),
+        use_c0f0=bool(checkpoint.get("uses_c0f0", True)),
+        residual_scale=0.35 if bool(checkpoint.get("critic_training_only")) else 0.30,
+    ).module().to(device)
     model.load_state_dict(checkpoint["actor_state_dict"])
     model.eval()
     sample = samples[0]

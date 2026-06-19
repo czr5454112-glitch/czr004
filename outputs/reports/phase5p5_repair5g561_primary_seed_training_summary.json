@@ -1,0 +1,99 @@
+{
+  "aaai_ready": false,
+  "all_required_primary_variants_present": true,
+  "causal_audit_rows": 6,
+  "causal_sensitivity_passed": true,
+  "cuda_used": true,
+  "decision": "g561_primary_seed_training_completed",
+  "device": "cuda",
+  "learned_runtime_policy_validated": false,
+  "missing_seed_coverage": [],
+  "new_training_rows": 11,
+  "next_required_gate": "write final failure attribution/fine-tune decision from multi-seed + replay evidence",
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "primary_variant_count": 5,
+  "progress_jsonl": "outputs/reports/phase5p5_repair5g561_primary_seed_training_progress.jsonl",
+  "reused_seed561_rows": 4,
+  "run_elapsed_sec": 2280.2147412430495,
+  "runtime_claim_allowed": false,
+  "samples_per_seed": 128,
+  "schema_version": "phase5p5_repair5g561_primary_seed_training_summary_v1",
+  "seed_variant_counts": {
+    "561": 5,
+    "562": 5,
+    "563": 5
+  },
+  "seeds": [
+    561,
+    562,
+    563
+  ],
+  "steps_per_new_training": 500,
+  "three_training_seeds_complete": true,
+  "training_rows": 15,
+  "validation_by_variant": [
+    {
+      "best_validation_normalized_l1": 0.13140204548835754,
+      "mean_validation_normalized_l1": 0.13344761729240417,
+      "seed_count": 3,
+      "seeds": [
+        561,
+        562,
+        563
+      ],
+      "variant_id": "F0"
+    },
+    {
+      "best_validation_normalized_l1": 0.13071884214878082,
+      "mean_validation_normalized_l1": 0.13197107116381326,
+      "seed_count": 3,
+      "seeds": [
+        561,
+        562,
+        563
+      ],
+      "variant_id": "F1"
+    },
+    {
+      "best_validation_normalized_l1": 0.12727071344852448,
+      "mean_validation_normalized_l1": 0.13023988902568817,
+      "seed_count": 3,
+      "seeds": [
+        561,
+        562,
+        563
+      ],
+      "variant_id": "F4"
+    },
+    {
+      "best_validation_normalized_l1": 0.12346022576093674,
+      "mean_validation_normalized_l1": 0.12876182546218237,
+      "seed_count": 3,
+      "seeds": [
+        561,
+        562,
+        563
+      ],
+      "variant_id": "F6"
+    },
+    {
+      "best_validation_normalized_l1": 0.11238349974155426,
+      "mean_validation_normalized_l1": 0.11970309913158417,
+      "seed_count": 3,
+      "seeds": [
+        561,
+        562,
+        563
+      ],
+      "variant_id": "F7"
+    }
+  ],
+  "variants": [
+    "F0",
+    "F1",
+    "F4",
+    "F6",
+    "F7"
+  ]
+}

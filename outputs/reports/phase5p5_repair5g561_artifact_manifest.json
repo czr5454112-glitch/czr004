@@ -1,6 +1,6 @@
 {
   "aaai_ready": false,
-  "artifact_count": 81,
+  "artifact_count": 99,
   "artifacts": [
     {
       "bytes": 9542,
@@ -43,24 +43,29 @@
       "sha256": "ae8289c5b45bd76e04ba5d2b16bffa8efb51e439b033816cde255216719b6b1d"
     },
     {
+      "bytes": 11187,
+      "path": "scripts/run_repair5g561_primary_seed_training.py",
+      "sha256": "73f7b267799d282070e9e4d28ac15ca66a4563aefaf8ce30bfee725abfc22a88"
+    },
+    {
       "bytes": 37836,
       "path": "scripts/run_repair5g561_replay_ladder.py",
       "sha256": "5c17325b612cba46ab7d332d53689eba7275d0242b5cdaacfef3155b83357f93"
     },
     {
-      "bytes": 19209,
+      "bytes": 19668,
       "path": "scripts/train_repair5g561_goal_aware_actor.py",
-      "sha256": "79ced2244c69d1b6a0b24f69818364ee47c7e58e49fed53ec38f07d0616c29f0"
+      "sha256": "6f9da6fd5593c91ed39c5221e1dac952bf61c751ac14c54183f353a87ff11349"
     },
     {
-      "bytes": 24700,
+      "bytes": 34266,
       "path": "scripts/write_repair5g561_decision.py",
-      "sha256": "23ed218bed1016514c55ca5980cdf76fc30b48e3462b976ca776d738caeddd0c"
+      "sha256": "89a4269faca982e5b002198d461864ca003b377846f8950343dacedb9ee3c148"
     },
     {
-      "bytes": 11521,
+      "bytes": 14209,
       "path": "tests/test_repair5g561_truth.py",
-      "sha256": "88580e25f2f1944edab081af51f0d6149caeb564a67ded388155784538307ceb"
+      "sha256": "1afc19d5d8ab4b203235052540bbd10eb6eb170b8cd64704d910f6250ceaa42f"
     },
     {
       "bytes": 444,
@@ -73,14 +78,14 @@
       "sha256": "b8501646bc70c00c3e7f5448409d3437c98dfe740ce4396f577fe0d4157c944c"
     },
     {
-      "bytes": 14117,
+      "bytes": 20358,
       "path": "outputs/reports/phase5p5_repair5g561_artifact_manifest.json",
-      "sha256": "125a04fe577b620c1e84118a579f753dde34c0e826bf148001d587a26a82ec0b"
+      "sha256": "d43080a6cf1b42ad923c43bfa14e490e205e6a5aafbb14e1b377e5d5120fead7"
     },
     {
-      "bytes": 8426,
+      "bytes": 8165,
       "path": "outputs/reports/phase5p5_repair5g561_canonical_theta_schema.json",
-      "sha256": "31fa13742633c770db112c6bdff708f30ab88da439a87fb4bc9c8d5f146ae48b"
+      "sha256": "80176d9ae2ab5f3fc5f11dd2a4dc39b35d47bce0cd1b7394ea504894754d8305"
     },
     {
       "bytes": 467,
@@ -93,14 +98,14 @@
       "sha256": "fc5ca5f6c1d3efdb3de5e25bd8706166900f0604badf17ae4c2372c2fa391af5"
     },
     {
-      "bytes": 1135,
+      "bytes": 1386,
       "path": "outputs/reports/phase5p5_repair5g561_decision.md",
-      "sha256": "30ed696171aca90f48154d23e3e75b6da721a7214c451f85e7649ab7cf915b62"
+      "sha256": "f771bfe0226336a4836defb46fbf66228186d24fdbdef7c21283335e0bde5f84"
     },
     {
-      "bytes": 1560,
+      "bytes": 2127,
       "path": "outputs/reports/phase5p5_repair5g561_decision_summary.json",
-      "sha256": "e8df44454be9ba7f9d2cdf57c3da028552d5ef63be60dd41cab1ae38b22598f0"
+      "sha256": "2ce81d16d9bf823f642f6a802aca3c2493f4bb75371d882be7f49ba21f1e34fc"
     },
     {
       "bytes": 2405,
@@ -123,19 +128,19 @@
       "sha256": "a0451e941a51066550c3d3d4c86335d7ffe904019683326c93a7321959e5ac50"
     },
     {
-      "bytes": 1373,
+      "bytes": 2808,
       "path": "outputs/reports/phase5p5_repair5g561_failure_attribution.md",
-      "sha256": "565c33d1e390b8a5864062754d6b5d298a2d0d92448046c670108b64873bf966"
+      "sha256": "e6c4a43752eee80c95108254bc07458f33df513c5fce5652157184ea778943f7"
     },
     {
-      "bytes": 1192,
+      "bytes": 1168,
       "path": "outputs/reports/phase5p5_repair5g561_g560_replay_truth_audit.md",
-      "sha256": "d9fe035915c8aa04a78655289b4e7ac0cc5e02d837696acd69377996bda548e7"
+      "sha256": "2ae6f73eac216c4871106c47719fbdef5f594eab782e325fdb3cd9f82f365700"
     },
     {
-      "bytes": 2678,
+      "bytes": 2599,
       "path": "outputs/reports/phase5p5_repair5g561_g560_replay_truth_audit_summary.json",
-      "sha256": "45d6c07624b34a44c4ca8bf08985332efa63987328ed9340850b00624540d171"
+      "sha256": "e5737ece2b9492098b4c39767aaae19ea1940501462363e4e21b82b1d3c68c30"
     },
     {
       "bytes": 423,
@@ -168,6 +173,26 @@
       "sha256": "68bbf074d685ceae6e0a5dc3698c6acc2587c99d4eb66c2208ada4dff307ba71"
     },
     {
+      "bytes": 382,
+      "path": "outputs/reports/phase5p5_repair5g561_primary_seed_training.md",
+      "sha256": "a4c18353d987b6888f639da18a485907528c4f9769076d16f87b8af1b1c9968f"
+    },
+    {
+      "bytes": 12884,
+      "path": "outputs/reports/phase5p5_repair5g561_primary_seed_training_progress.jsonl",
+      "sha256": "fb6cab2ce3b80c9a1f339c674ea4dfc82a654e51e7ce66605d4d57cfb50cd2fd"
+    },
+    {
+      "bytes": 2380,
+      "path": "outputs/reports/phase5p5_repair5g561_primary_seed_training_summary.json",
+      "sha256": "3a17230ba16e4e7f5118dc969d72ce2c4938182f13780da8a7892f7134a4bafa"
+    },
+    {
+      "bytes": 13023,
+      "path": "outputs/reports/phase5p5_repair5g561_primary_seed_training_tmux.log",
+      "sha256": "1bb14dc653cd53a9e8532362c60edeb8bd79ca2c59d41879a62b3c1c49157e56"
+    },
+    {
       "bytes": 7383,
       "path": "outputs/reports/phase5p5_repair5g561_replay_ladder_scenario_generation.json",
       "sha256": "6a0983825a94ac4092c6c11d57bd14fcc21478f8c78e642e6f3d2606b696a957"
@@ -183,9 +208,9 @@
       "sha256": "67e81c29c61fa33e34380a9337114696bb8130c876b225a779cf48298ea78d90"
     },
     {
-      "bytes": 1022,
+      "bytes": 1003,
       "path": "outputs/reports/phase5p5_repair5g561_scenario_generator_repair.md",
-      "sha256": "557e63ff9211f4d0c940be11e903be2c7dfb57d89e5a17bf4f94f0786dfd2150"
+      "sha256": "2d8be0168283f98ba1ba7259c5d70fc992ec8db2ff4b7501c4cceb2596272d0d"
     },
     {
       "bytes": 2237,
@@ -238,9 +263,9 @@
       "sha256": "4c451a7ec4453c13a6363ac2276ef591f2027b90ef901d00a440835ba6d84d47"
     },
     {
-      "bytes": 8832,
+      "bytes": 12870,
       "path": "outputs/tables/phase5p5_repair5g561_checksums.sha256",
-      "sha256": "e63bd2699671bd7eb4da6ff42507beeb1fce7e38c5b3b896dc878ba16989bd0f"
+      "sha256": "42d8f1631207207488876da5c3726cb925798f779c7dc8c3d11b5499947f4fd8"
     },
     {
       "bytes": 185579,
@@ -288,9 +313,9 @@
       "sha256": "3299e33480865bb5a7798b0e1062474659376f92bafb1c7c16587cf25451db69"
     },
     {
-      "bytes": 1304,
+      "bytes": 2776,
       "path": "outputs/tables/phase5p5_repair5g561_failure_attribution.csv",
-      "sha256": "d7e8091094083c1ddd7dc618004e629cc8ca6114a11048e8d5fdba57141fc07e"
+      "sha256": "50679569259e4a9c9dba5aca6cabe26dd91f10daf1723829591c5ae505d5ca16"
     },
     {
       "bytes": 6880,
@@ -343,6 +368,16 @@
       "sha256": "e69af4ca0389a1716ac0e500bbef0bfe3a85e81bca47e536c3d3fbe67d45857e"
     },
     {
+      "bytes": 666,
+      "path": "outputs/tables/phase5p5_repair5g561_primary_seed_causal_audit.csv",
+      "sha256": "aabae0c58b102904e13cd55441dc382d7753e35c5daeadc2201f0b287ae24b33"
+    },
+    {
+      "bytes": 4783,
+      "path": "outputs/tables/phase5p5_repair5g561_primary_seed_training_matrix.csv",
+      "sha256": "7755c1db4a1ae0b793533c9122a397a78c0aee392141f26ad3650b2354854a3f"
+    },
+    {
       "bytes": 1382204,
       "path": "outputs/tables/phase5p5_repair5g561_replay_ladder_plan.csv",
       "sha256": "11ecd9614086c8b790bee28c1c628a755ef7c66dd7f0f7685355aad7fcc5adb1"
@@ -383,9 +418,34 @@
       "sha256": "bf5226679fb71bdc761919c081edf768ed1f71835a77caa6d8b19d567b2d3db0"
     },
     {
+      "bytes": 239597,
+      "path": "artifacts/models/gcst/g561_f0_g560_scalar_actor_control_seed561.pt",
+      "sha256": "229fa5978d09d0ead763d04a41228e83f0259f8e7a813b268fbf78884709cbc7"
+    },
+    {
+      "bytes": 239597,
+      "path": "artifacts/models/gcst/g561_f0_g560_scalar_actor_control_seed562.pt",
+      "sha256": "cef302107e84a8a6df6eeeed217d11140a32006b9910f103052c467f0afce4a7"
+    },
+    {
+      "bytes": 239597,
+      "path": "artifacts/models/gcst/g561_f0_g560_scalar_actor_control_seed563.pt",
+      "sha256": "4fd5ff842cacdbd128e6c357ac7986fd35154359421c1ee7f85146fc541672af"
+    },
+    {
       "bytes": 1749741,
       "path": "artifacts/models/gcst/g561_f1_scalar_conservative_actor_seed561.pt",
       "sha256": "d4eb232ff4e0c25c5f2ca515ac13ef14fed2d6e312d932cb3f748766fc1da965"
+    },
+    {
+      "bytes": 239597,
+      "path": "artifacts/models/gcst/g561_f1_scalar_conservative_actor_seed562.pt",
+      "sha256": "674af5b4547fd82e202ae5335b5d50cf55ed07241dd15ee67e2f332506835858"
+    },
+    {
+      "bytes": 239597,
+      "path": "artifacts/models/gcst/g561_f1_scalar_conservative_actor_seed563.pt",
+      "sha256": "844823b278e9106349e785b2a9804d3172a5dc7e0504d355796c1ed15c0d10a9"
     },
     {
       "bytes": 1749555,
@@ -398,14 +458,44 @@
       "sha256": "2152466711a1c8b6c859b7a8e4cd5c95f6b348ba9165fb19483f43db7e7ab0ab"
     },
     {
+      "bytes": 239225,
+      "path": "artifacts/models/gcst/g561_f4_graph_paired_od_actor_seed562.pt",
+      "sha256": "45207cfb2235713ef0cf11d622c37a83160cf8df8a080f3e2baa463b857603e5"
+    },
+    {
+      "bytes": 239225,
+      "path": "artifacts/models/gcst/g561_f4_graph_paired_od_actor_seed563.pt",
+      "sha256": "8bc10ac5213040e34f53c569c40fe9e6ebeab1ba78e4cc5dc82c7382544e4f8a"
+    },
+    {
       "bytes": 1750578,
       "path": "artifacts/models/gcst/g561_f6_full_goal_aware_dual_channel_actor_seed561.pt",
       "sha256": "363fb82549cf9b978c0261f5701f5d0b090bd375ffcc64c2f8cf0a1d1e77ee76"
     },
     {
+      "bytes": 240498,
+      "path": "artifacts/models/gcst/g561_f6_full_goal_aware_dual_channel_actor_seed562.pt",
+      "sha256": "b15e2a67bb11a14c8035702d9d926d3df6e305eb6e3bf94f28d4e425a280374f"
+    },
+    {
+      "bytes": 240498,
+      "path": "artifacts/models/gcst/g561_f6_full_goal_aware_dual_channel_actor_seed563.pt",
+      "sha256": "f1be1b17ac5658f628ca60e19ffa724b18f33699d36cb7511ccb0609bf8c8783"
+    },
+    {
       "bytes": 1750857,
       "path": "artifacts/models/gcst/g561_f7_full_goal_aware_actor_training_critic_seed561.pt",
       "sha256": "90f45ac21b4d66dd73aebb037849fcfb7da7f6e8e157defb5582ce4145797a1d"
+    },
+    {
+      "bytes": 240777,
+      "path": "artifacts/models/gcst/g561_f7_full_goal_aware_actor_training_critic_seed562.pt",
+      "sha256": "3f45a982be171a206d4e5b974d64b9bb76063c01724a11a1dd095c67ec08d9fc"
+    },
+    {
+      "bytes": 240777,
+      "path": "artifacts/models/gcst/g561_f7_full_goal_aware_actor_training_critic_seed563.pt",
+      "sha256": "39df5ae92127965c641b2e5a843cf5f60e3a4e6e7d5bdf7614e503112d1d4521"
     }
   ],
   "learned_runtime_policy_validated": false,

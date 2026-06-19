@@ -20,7 +20,9 @@ from run_repair5g561_materialization_contract import (
     summarize_contract,
 )
 from run_repair5g561_development_replay import select_best_two_actor_variants, select_development_contexts
+from run_repair5g561_primary_seed_training import PRIMARY_SEEDS, PRIMARY_VARIANTS, primary_seed_plan
 from run_repair5g561_replay_ladder import build_contexts
+from train_repair5g561_goal_aware_actor import VARIANTS
 
 
 def _fingerprint(theta):
@@ -278,3 +280,60 @@ def test_g561_development_actor_selection_freezes_best_two_from_r2():
     selected = select_best_two_actor_variants(write_selection=False)
     assert [row["variant_id"] for row in selected] == ["F6", "F7"]
     assert all(row["selected_for_development_replay"] is True for row in selected)
+
+
+def test_g561_primary_seed_plan_covers_required_variants_and_seeds():
+    plan = primary_seed_plan()
+    assert len(plan) == len(PRIMARY_SEEDS) * len(PRIMARY_VARIANTS)
+    assert {row["seed"] for row in plan} == set(PRIMARY_SEEDS)
+    assert {row["variant_id"] for row in plan} == set(PRIMARY_VARIANTS)
+
+
+def test_g561_f0_primary_control_variant_is_available():
+    assert "F0" in VARIANTS
+    assert VARIANTS["F0"]["use_graph"] is False
+    assert VARIANTS["F0"]["use_paired_od"] is False
+    assert VARIANTS["F0"]["use_c0f0"] is False
+
+
+def test_g561_final_failure_attribution_distinguishes_required_categories():
+    rows, summary = g561_decision.build_final_failure_attribution(
+        scenario={"valid_scenarios": 1203, "valid_independent_instances_target": 2500},
+        contract={
+            "materialization_contract_passed": True,
+            "candidate_recognized_rate": 1.0,
+            "fingerprint_exact_match_rate": 1.0,
+        },
+        training={"variants": [{"variant_id": "F1"}], "causal_sensitivity_passed": True},
+        corrected_replay={"decision": "g561_corrected_g560_scalar_replay_executed_exact_materialization"},
+        arch_replay={"decision": "g561_architecture_replay_executed_exact_materialization"},
+        dev_replay={
+            "success_regressions": 7,
+            "success_gains": 2,
+            "worse": 447,
+            "mean_quality_delta_vs_g556": 0.031,
+            "materialization_invalid_rows": 0,
+        },
+        hard_negative={
+            "decision": "g561_hard_negative_acquisition_completed_with_success_regressions",
+            "acquisition_rows": 607,
+            "large_positive_quality_delta_source_rows": 447,
+            "critic_false_safe_proxy_rows": 224,
+            "fine_tune_completed": False,
+        },
+        primary_seed={
+            "variants": ["F0", "F1", "F4", "F6", "F7"],
+            "seeds": [561, 562, 563],
+            "causal_sensitivity_passed": True,
+            "validation_by_variant": [{"variant_id": "F7", "best_validation_normalized_l1": 0.112}],
+        },
+        replay_exact=True,
+        dev_real_replay=True,
+        hard_negative_done=True,
+        primary_seed_done=True,
+    )
+
+    assert {row["category"] for row in rows} == {"data", "representation", "loss", "materialization", "solver_behavior"}
+    assert summary["final_failure_attribution_complete"] is True
+    assert summary["fine_tune_required"] is True
+    assert summary["fine_tune_decision"] == "fine_tune_on_hard_negatives_and_rerun_frozen_development_panel"

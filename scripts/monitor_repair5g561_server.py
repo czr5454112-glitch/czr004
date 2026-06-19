@@ -29,6 +29,21 @@ DEFAULT_TABLES = [
     f"outputs/tables/{ROUND}_offline_model_comparison.csv",
 ]
 
+TRAINING_REPORTS = [
+    f"outputs/reports/{ROUND}_server_tmux.log",
+    f"outputs/reports/{ROUND}_training_progress.jsonl",
+    f"outputs/reports/{ROUND}_training_summary.json",
+    f"outputs/reports/{ROUND}_representation_truth.md",
+]
+
+TRAINING_TABLES = [
+    f"outputs/tables/{ROUND}_model_variant_matrix.csv",
+    f"outputs/tables/{ROUND}_ablation_matrix.csv",
+    f"outputs/tables/{ROUND}_causal_sensitivity_audit.csv",
+    f"outputs/tables/{ROUND}_critic_calibration.csv",
+    f"outputs/tables/{ROUND}_offline_model_comparison.csv",
+]
+
 
 def env(name: str, default: str) -> str:
     return os.environ.get(name, default)
@@ -147,7 +162,8 @@ def pull_artifacts(client: Any, args: argparse.Namespace) -> list[dict[str, Any]
     sftp = client.open_sftp()
     try:
         pulled = []
-        for rel_path in DEFAULT_REPORTS + DEFAULT_TABLES:
+        paths = TRAINING_REPORTS + TRAINING_TABLES if args.pull_training_only else DEFAULT_REPORTS + DEFAULT_TABLES
+        for rel_path in paths:
             pulled.append(pull_one(sftp, args.workdir, Path(args.local_root), rel_path))
         if args.pull_models:
             remote_dir = args.workdir.rstrip("/") + "/artifacts/models/gcst"
@@ -175,6 +191,11 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--timeout", type=int, default=25)
     parser.add_argument("--command-timeout", type=int, default=120)
     parser.add_argument("--pull", action="store_true")
+    parser.add_argument(
+        "--pull-training-only",
+        action="store_true",
+        help="Pull only training/log/model comparison artifacts, preserving local scenario-bank and decision artifacts.",
+    )
     parser.add_argument("--pull-models", action="store_true")
     parser.add_argument("--json", action="store_true")
     args = parser.parse_args(argv)

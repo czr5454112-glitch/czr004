@@ -40,12 +40,12 @@ python3 scripts/write_repair5g561_decision.py
 
 ## Observed State
 
-At `2026-06-19T12:46:25Z`, the tmux job was still running:
+At `2026-06-19T12:51:42Z`, the tmux job was still running:
 
 - training PID: `42554`
-- elapsed: `00:39:59`
+- elapsed: `00:45:16`
 - GPU memory: `1070 MiB`
-- GPU utilization: `37%`
+- GPU utilization: `30%`
 - completed server checkpoint rewrites:
   - `artifacts/models/gcst/g561_f1_scalar_conservative_actor_seed561.pt`
   - `artifacts/models/gcst/g561_f2_graph_only_direct_actor_seed561.pt`
@@ -75,6 +75,7 @@ Local monitor command:
 ```powershell
 $env:G561_SSH_PASSWORD='<password>'
 python scripts/monitor_repair5g561_server.py
+python scripts/monitor_repair5g561_server.py --pull --pull-training-only --pull-models
 ```
 
 Claims remain closed:

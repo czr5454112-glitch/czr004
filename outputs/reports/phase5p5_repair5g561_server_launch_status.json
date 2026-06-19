@@ -26,7 +26,7 @@
   "launch": {
     "deployed_by": "local_git_archive_minimal_tracked_payload",
     "started_at_utc": "2026-06-19T12:06:23Z",
-    "observed_running_at_utc": "2026-06-19T12:21:14Z",
+    "observed_running_at_utc": "2026-06-19T12:43:55Z",
     "command": "python3 scripts/audit_repair5g561_replay_truth.py && python3 scripts/train_repair5g561_goal_aware_actor.py --samples 128 --steps 500 --batch-size 8 --hidden-dim 96 --device auto --variants F1 F2 F4 F6 F7 && python3 scripts/write_repair5g561_decision.py",
     "audit_observed": {
       "actor_rows": 300,
@@ -36,12 +36,13 @@
     "training_observed": {
       "status": "running",
       "pid": 42554,
-      "elapsed_at_observation": "00:14:48",
-      "gpu_memory_mib_at_observation": 1064,
-      "gpu_util_percent_at_observation": 36,
+      "elapsed_at_observation": "00:37:29",
+      "gpu_memory_mib_at_observation": 1070,
+      "gpu_util_percent_at_observation": 32,
       "completed_checkpoint_rewrites": [
         "artifacts/models/gcst/g561_f1_scalar_conservative_actor_seed561.pt",
-        "artifacts/models/gcst/g561_f2_graph_only_direct_actor_seed561.pt"
+        "artifacts/models/gcst/g561_f2_graph_only_direct_actor_seed561.pt",
+        "artifacts/models/gcst/g561_f4_graph_paired_od_actor_seed561.pt"
       ],
       "training_progress_jsonl_present": false
     }

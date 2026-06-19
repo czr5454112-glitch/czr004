@@ -40,15 +40,16 @@ python3 scripts/write_repair5g561_decision.py
 
 ## Observed State
 
-At `2026-06-19T12:21:14Z`, the tmux job was still running:
+At `2026-06-19T12:43:55Z`, the tmux job was still running:
 
 - training PID: `42554`
-- elapsed: `00:14:48`
-- GPU memory: `1064 MiB`
-- GPU utilization: `36%`
+- elapsed: `00:37:29`
+- GPU memory: `1070 MiB`
+- GPU utilization: `32%`
 - completed server checkpoint rewrites:
   - `artifacts/models/gcst/g561_f1_scalar_conservative_actor_seed561.pt`
   - `artifacts/models/gcst/g561_f2_graph_only_direct_actor_seed561.pt`
+  - `artifacts/models/gcst/g561_f4_graph_paired_od_actor_seed561.pt`
 
 The audit stage had completed inside the server log:
 

@@ -10,8 +10,8 @@
   "phase5p5_allowed": false,
   "phase6_allowed": false,
   "runtime_claim_allowed": false,
-  "scenario_decision": "g561_valid_scenario_bank_underpowered_continue_generation",
+  "scenario_decision": "g561_valid_scenario_bank_expanded_component_aware",
   "schema_version": "phase5p5_repair5g561_decision_summary_v1",
   "training_decision": "g561_goal_aware_representation_truth_smoke_completed",
-  "valid_scenarios": 1203
+  "valid_scenarios": 2600
 }

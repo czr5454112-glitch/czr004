@@ -9,6 +9,7 @@ from gcst.schemas_v51 import PRIMARY_BASELINE
 from gcst.theta_schema import BASELINE_G556, THETA_NUMERIC_COLUMNS, compare_theta_to_fingerprint, expected_cpp_params, mode_columns
 from gcst.traffic_prior import compute_traffic_prior
 from audit_repair5g561_replay_truth import audit_rows
+from generate_repair5g561_valid_scenario_bank import build_assignment, split_rows
 
 
 def _fingerprint(theta):
@@ -139,3 +140,34 @@ def test_goal_aware_actor_uses_paired_od_and_traffic():
 
     assert not torch.allclose(theta_full, theta_od_changed, atol=1e-7)
     assert not torch.allclose(theta_full, theta_traffic_zeroed, atol=1e-7)
+
+
+def test_g561_generated_assignment_is_component_aware_without_reuse():
+    grid = [
+        "................",
+        "................",
+        "....@@@@........",
+        "....@@@@........",
+        "................",
+        "................",
+    ]
+    assignment = build_assignment(grid, width=16, height=6, agent_count=12, regime_name="opposite_side_cross_flow", seed=561)
+    assert len(assignment["starts"]) == 12
+    assert len(assignment["goals"]) == 12
+    assert assignment["unique_start_count"] == 12
+    assert assignment["unique_goal_count"] == 12
+    assert len(assignment["assignment_sha256"]) == 64
+    assert min(assignment["distances"]) >= 0
+
+
+def test_g561_split_manifest_has_no_physical_hash_overlap():
+    manifest = [
+        {"physical_map_sha256": "hash-a", "map": "a0", "map_family": "empty"},
+        {"physical_map_sha256": "hash-a", "map": "a1", "map_family": "empty"},
+        {"physical_map_sha256": "hash-b", "map": "b0", "map_family": "room"},
+        {"physical_map_sha256": "hash-c", "map": "c0", "map_family": "maze"},
+    ]
+    rows = split_rows(manifest)
+    assert len(rows) == 3
+    by_hash = {row["physical_map_sha256"]: row["split"] for row in rows}
+    assert set(by_hash) == {"hash-a", "hash-b", "hash-c"}

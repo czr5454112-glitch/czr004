@@ -109,6 +109,14 @@ def claims() -> dict[str, bool]:
 
 
 def write_scenario_artifacts() -> dict[str, Any]:
+    existing = read_json(SCENARIO_SUMMARY)
+    if (
+        existing.get("valid_independent_instances_target_met") is True
+        and resolve(SCENARIO_AUDIT).exists()
+        and resolve(VALID_MANIFEST).exists()
+        and resolve(SPLIT_MANIFEST).exists()
+    ):
+        return existing
     source_rows = read_rows(f"outputs/tables/{SOURCE}_scenario_validity_audit.csv")
     out_rows = []
     for row in source_rows:
@@ -251,6 +259,11 @@ def write_blocked_replay_artifacts() -> None:
 def write_failure_and_decision(scenario: dict[str, Any], oracle: dict[str, Any]) -> dict[str, Any]:
     audit = read_json(f"outputs/reports/{ROUND}_g560_replay_truth_audit_summary.json")
     training = read_json(f"outputs/reports/{ROUND}_training_summary.json")
+    scenario_target_met = bool(
+        scenario.get("all_scenario_bank_targets_met")
+        or scenario.get("valid_independent_instances_target_met")
+    )
+    scenario_status = "expanded_component_aware" if scenario_target_met else "underpowered"
     failure_rows = [
         {
             "branch": "g560_replay_truth",
@@ -264,8 +277,15 @@ def write_failure_and_decision(scenario: dict[str, Any], oracle: dict[str, Any])
         },
         {
             "branch": "valid_scenario_bank",
-            "status": "underpowered",
-            "evidence": f"valid_scenarios={scenario.get('valid_scenarios')} target=2500",
+            "status": scenario_status,
+            "evidence": (
+                f"valid_scenarios={scenario.get('valid_scenarios')} target={scenario.get('valid_independent_instances_target', 2500)}; "
+                f"physical_map_hashes={scenario.get('physical_map_hashes')}; "
+                f"map_families={scenario.get('map_family_count')}; "
+                f"regimes={scenario.get('start_goal_regime_count')}; "
+                f"density_bins={scenario.get('density_bin_count')}; "
+                f"budget_profiles={scenario.get('budget_profile_count')}"
+            ),
         },
         {
             "branch": "goal_aware_representation",
@@ -305,7 +325,8 @@ def write_failure_and_decision(scenario: dict[str, Any], oracle: dict[str, Any])
         f"Decision: `{decision['decision']}`\n\n"
         "G5.60 is reclassified as a replay-materialization/identity contamination, not a clean direct-actor failure. "
         "The exact-materialized subset has zero success regressions, while 135 actor rows executed fallback additive settings. "
-        "The valid scenario bank is still under the 2,500-instance minimum, and architecture replay remains blocked until the materialization contract passes perfectly.\n\n"
+        f"The valid scenario bank status is `{scenario.get('decision')}` with `{scenario.get('valid_scenarios')}` valid instances. "
+        "Architecture replay remains blocked until the materialization contract passes perfectly.\n\n"
         "All Phase5.5, Phase6, runtime, learned-policy, and AAAI claims remain closed.\n",
     )
     return decision
@@ -317,6 +338,8 @@ def write_manifest() -> None:
         "src/gcst/goal_aware_actor.py",
         "src/gcst/label_v4.py",
         "scripts/audit_repair5g561_replay_truth.py",
+        "scripts/generate_repair5g561_valid_scenario_bank.py",
+        "scripts/monitor_repair5g561_server.py",
         "scripts/train_repair5g561_goal_aware_actor.py",
         "scripts/write_repair5g561_decision.py",
         "tests/test_repair5g561_truth.py",

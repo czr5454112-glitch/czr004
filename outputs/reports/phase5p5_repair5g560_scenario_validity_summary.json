@@ -1,0 +1,19 @@
+{
+  "aaai_ready": false,
+  "actual_file_validation_complete": true,
+  "invalid_scenarios": 797,
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "reason_counts": {
+    "duplicate_goals": 298,
+    "duplicate_starts": 515,
+    "pair_not_reachable": 288
+  },
+  "round": "phase5p5_repair5g560",
+  "runtime_claim_allowed": false,
+  "scenario_rows": 2000,
+  "scenario_validity_gate_passed": false,
+  "valid_scenarios": 1203,
+  "validity_rate": 0.6015
+}

@@ -1,0 +1,18 @@
+{
+  "aaai_ready": false,
+  "filtered_invalid_scenario_rows": 51805,
+  "input_rows": 130000,
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "round": "phase5p5_repair5g560",
+  "runtime_claim_allowed": false,
+  "scenario_validity_filter_applied": true,
+  "split_counts": {
+    "heldout": 2176,
+    "train": 49280,
+    "validation": 25536
+  },
+  "valid_evaluation_groups": 1203,
+  "valid_training_rows": 78195
+}

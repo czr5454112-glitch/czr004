@@ -1,0 +1,53 @@
++ /usr/bin/python -m pytest tests/test_repair5g560_labelv51.py tests/test_repair5g560_direct_actor.py tests/test_repair5g559_gcst.py -q
+Running 46 items in this shard
+........F.......F.............................                           [100%]
+=================================== FAILURES ===================================
+___________________ test_direct_actor_does_not_load_codebook ___________________
+
+    def test_direct_actor_does_not_load_codebook():
+        source = (Path(__file__).resolve().parents[1] / "src" / "gcst" / "direct_actor_inference.py").read_text(encoding="utf-8").lower()
+        assert "theta_codebook" not in source
+        assert "nearest_neighbor" not in source
+>       assert "retrieval" not in source
+E       assert 'retrieval' not in '"""actor-on...nce_row)\n\n'
+E
+E         'retrieval' is contained here:
+E           e_dict", "retrieval_memory", "selector_table"}
+E         ?           +++++++++
+E               present = sorted(forbidden.intersection(bundle.keys()))
+E               if present:
+E                   raise valueerror(f"actor bundle contains forbidden training-only keys: {present}")...
+E
+E         ...Full output truncated (26 lines hidden), use '-vv' to show
+
+tests/test_repair5g560_direct_actor.py:27: AssertionError
+___________________ test_actor_inference_single_forward_pass ___________________
+
+    def test_actor_inference_single_forward_pass():
+        source = (Path(__file__).resolve().parents[1] / "src" / "gcst" / "direct_actor_inference.py").read_text(encoding="utf-8")
+>       assert source.count("model(") == 1
+E       assert 0 == 1
+E        +  where 0 = <built-in method count of str object at 0x398df6c0>('model(')
+E        +    where <built-in method count of str object at 0x398df6c0> = '"""Actor-only inference for exported Repair5G.5.60 direct generators."""\n\nfrom __future__ import annotations\n\nfro... str = "cpu") -> dict[str, float]:\n    return predict_theta(load_actor_bundle(path, device=device), instance_row)\n\n'.count
+
+tests/test_repair5g560_direct_actor.py:106: AssertionError
+=============================== warnings summary ===============================
+tests/test_repair5g559_gcst.py::test_theta_fixed_for_run
+  /root/czr004/tests/test_repair5g559_gcst.py:235: UserWarning: Creating a tensor from a list of numpy.ndarrays is extremely slow. Please consider converting the list to a single numpy.ndarray with numpy.array() before converting to a tensor. (Triggered internally at /opt/pytorch/pytorch/torch/csrc/utils/tensor_new.cpp:254.)
+    theta = torch.tensor([BASELINE_G556, BASELINE_G556 + 0.02], dtype=torch.float32)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/test_repair5g560_direct_actor.py::test_direct_actor_does_not_load_codebook
+FAILED tests/test_repair5g560_direct_actor.py::test_actor_inference_single_forward_pass
+2 failed, 44 passed, 1 warning in 4.37s
+Traceback (most recent call last):
+  File "/root/czr004/scripts/run_repair5g560_phase0.py", line 64, in <module>
+    main()
+  File "/root/czr004/scripts/run_repair5g560_phase0.py", line 32, in main
+    run([py, "-m", "pytest", "tests/test_repair5g560_labelv51.py", "tests/test_repair5g560_direct_actor.py", "tests/test_repair5g559_gcst.py", "-q"], args.root)
+  File "/root/czr004/scripts/run_repair5g560_phase0.py", line 13, in run
+    subprocess.run(cmd, cwd=root, check=True)
+  File "/usr/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['/usr/bin/python', '-m', 'pytest', 'tests/test_repair5g560_labelv51.py', 'tests/test_repair5g560_direct_actor.py', 'tests/test_repair5g559_gcst.py', '-q']' returned non-zero exit status 1.

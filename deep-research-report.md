@@ -2496,3 +2496,39 @@ not promote a learned SafeGate, learned runtime policy, contextual theta
 policy, or new baseline. The next valid continuation is feature/label/split
 repair on the real Label-v5 artifacts, followed by another heldout-map
 learnability check before any active replay planning.
+
+## 2026-06-19 - G5.60 final result: direct continuous actor attempted, replay failed
+
+G5.60 applied the mandatory direct-continuous-generator addendum. The primary
+method is now explicitly the Direct Continuous GCST Actor: one deterministic
+network forward pass reads one MAPF instance and emits one bounded continuous
+UpdateParams theta, fixed for the full solver run. A codebook selector may only
+be a diagnostic or training aid; it cannot satisfy the main-method gate.
+
+The identity repair succeeded. G5.59 Label-v5 rows were recovered into
+Label-v5.1 with `128000/128000` retained pair rows, identity join rate `1.0`,
+physical-map/scenario/theta join rates `1.0`, baseline same-evaluation pairing
+rate `1.0`, digest match rate `1.0`, and `0` quarantined rows.
+
+The actual scenario audit exposed the real blocker: only `1203/2000` scenarios
+were valid. The invalid cases include duplicate starts (`515`), duplicate goals
+(`298`), and unreachable pairs (`288`). Actor training therefore filtered to
+`78195` valid rows over `1203` evaluation groups.
+
+G0 direct actor and G1 direct actor plus training-time auxiliary critic were
+trained on the RTX5090 server. The exported actor bundle is actor-only: it
+excludes the auxiliary critic, theta registry, selector table, and retrieval
+memory. Anti-selector tests and generated-theta novelty audits passed.
+
+Fresh generated-theta development replay then ran `300` paired contexts
+(`600` real solver rows) against `g556_c063174`. The direct actor failed the
+promotion direction: `25` success regressions, `1` success gain, mean quality
+delta `+0.11486412997058826`, and `116` better vs `153` worse both-success
+quality pairs.
+
+Decision: `g560_direct_actor_dev_replay_failed_keep_g556_and_repair_instances`.
+The active GCST promotion baseline remains `g556_c063174`. Phase5.5, Phase6,
+runtime, learned-runtime, learned SafeGate, Stage1/Stage2/blind, and AAAI claims
+remain closed. The next valid continuation is valid-instance/start-goal repair
+plus direct actor loss/feature repair; selector success would not substitute for
+the direct continuous actor requirement.

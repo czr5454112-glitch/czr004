@@ -1,0 +1,3 @@
+method,model_path,groups,safe_improvement_groups,nearest_safe_theta_l1_mean,nearest_observed_theta_l1_mean,anchor_l1_mean,fraction_exact_g556
+G0_direct_actor,/root/czr004/artifacts/models/gcst/g560_direct_actor_g0_560.pt,433,427,0.05257352517451001,0.008622624947394806,0.008622624947394806,0.0
+G1_direct_actor_aux_critic,/root/czr004/artifacts/models/gcst/g560_direct_actor_g1_561.pt,433,427,0.05926498286077094,0.021336457668427233,0.021557552529193513,0.0

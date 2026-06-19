@@ -7115,3 +7115,39 @@ Baseline/SafeGate governance: the active GCST promotion baseline remains
 SafeGate, a learned runtime policy, or a new baseline. The next valid action is
 feature/label/split repair using the real Label-v5 artifacts, then another
 heldout-physical-map learnability gate before any replay promotion path.
+
+## 2026-06-19 Repair5G.5.60 direct continuous actor result
+
+G5.60 supersedes the selector-first route with the mandatory direct continuous
+actor route. The main method is `Direct Continuous GCST Actor`: one instance,
+one actor forward pass, one bounded continuous theta, fixed for the solver run.
+Codebook selectors are diagnostics/training aids only and cannot open the main
+GCST gate.
+
+Server evidence on RTX5090:
+
+```text
+pytest: 46 passed, 1 warning
+Label-v5.1 recovered pair rows: 128000 / 128000
+identity / physical-map / scenario / theta join rates: 1.0 / 1.0 / 1.0 / 1.0
+baseline same-evaluation pairing rate: 1.0
+valid scenarios: 1203 / 2000
+invalid scenarios: 797
+valid actor-training rows: 78195
+G0 direct actor checkpoint: artifacts/models/gcst/g560_direct_actor_g0_560.pt
+G1 direct actor checkpoint: artifacts/models/gcst/g560_direct_actor_g1_561.pt
+actor-only export: artifacts/models/gcst/g560_direct_actor_export.pt
+generated-theta dev replay: 300 contexts / 600 solver rows
+success regressions vs g556: 25
+success gains vs g556: 1
+mean quality delta vs g556: +0.11486412997058826
+better / worse: 116 / 153
+decision: g560_direct_actor_dev_replay_failed_keep_g556_and_repair_instances
+```
+
+Execution governance: `g556_c063174` remains the active promotion baseline.
+The direct actor is not promoted. Stage1, Stage2, blind replay, Phase5.5,
+Phase6, runtime, learned-runtime, learned SafeGate, and AAAI claims remain
+closed. The next implementation step must repair valid start-goal/scenario
+generation and direct actor feature/loss behavior. A selector/control result
+cannot substitute for the direct continuous actor gate.

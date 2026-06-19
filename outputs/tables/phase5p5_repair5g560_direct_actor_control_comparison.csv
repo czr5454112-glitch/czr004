@@ -1,0 +1,5 @@
+method,groups,safe_improvement_groups,nearest_safe_theta_l1_mean,nearest_observed_theta_l1_mean,anchor_l1_mean,fraction_exact_g556,model_path
+always_g556,433,427,0.05301703202082346,0.0,0.0,1.0,
+agent_density_lookup_control,433,427,0.0751811781902503,0.030766896473342773,0.030766896473342773,0.0,
+G0_direct_actor,433,427,0.05257352517451001,0.008622624947394806,0.008622624947394806,0.0,/root/czr004/artifacts/models/gcst/g560_direct_actor_g0_560.pt
+G1_direct_actor_aux_critic,433,427,0.05926498286077094,0.021336457668427233,0.021557552529193513,0.0,/root/czr004/artifacts/models/gcst/g560_direct_actor_g1_561.pt

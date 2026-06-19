@@ -15,10 +15,35 @@ def _sha(parts: list[Any]) -> str:
     return hashlib.sha256("|".join(map(str, parts)).encode("utf-8")).hexdigest()
 
 
-def _sample(cells: list[tuple[int, int]], rng: random.Random, count: int) -> list[tuple[int, int]]:
-    if count <= len(cells):
-        return rng.sample(cells, count)
-    return [cells[i % len(cells)] for i in range(count)]
+def _unique(cells: list[tuple[int, int]]) -> list[tuple[int, int]]:
+    seen: set[tuple[int, int]] = set()
+    out: list[tuple[int, int]] = []
+    for cell in cells:
+        if cell in seen:
+            continue
+        seen.add(cell)
+        out.append(cell)
+    return out
+
+
+def _sample(
+    cells: list[tuple[int, int]],
+    rng: random.Random,
+    count: int,
+    fallback_cells: list[tuple[int, int]] | None = None,
+) -> list[tuple[int, int]]:
+    """Sample without replacement, filling from fallback cells when needed."""
+    primary = _unique(cells)
+    fallback = _unique(fallback_cells or primary)
+    if count <= len(primary):
+        return rng.sample(primary, count)
+    chosen = list(primary)
+    remaining = [cell for cell in fallback if cell not in set(chosen)]
+    need = max(0, count - len(chosen))
+    if need:
+        chosen.extend(rng.sample(remaining, min(need, len(remaining))))
+    rng.shuffle(chosen)
+    return chosen[:count]
 
 
 def _region(cells: list[tuple[int, int]], width: int, height: int, name: str) -> list[tuple[int, int]]:
@@ -44,21 +69,24 @@ def generate_assignment(graph: GraphData, context: dict[str, Any], max_agents: i
     regime = str(context.get("start_goal_regime") or "uniform_random")
     rng = random.Random(seed)
     cells = graph.cells or [(0, 0)]
+    cells = _unique(cells)
+    feasible_count = min(count, len(cells))
+    capacity_limited = feasible_count < count
     if regime == "opposite_side_cross_flow":
-        starts = _sample(_region(cells, graph.width, graph.height, "left"), rng, count)
-        goals = _sample(_region(cells, graph.width, graph.height, "right"), rng, count)
+        starts = _sample(_region(cells, graph.width, graph.height, "left"), rng, feasible_count, cells)
+        goals = _sample(_region(cells, graph.width, graph.height, "right"), rng, feasible_count, cells)
     elif regime in {"many_to_one_goal_clustered", "central_choke_point", "high_conflict_adversarial"}:
-        starts = _sample(_region(cells, graph.width, graph.height, "left"), rng, count)
-        goals = _sample(_region(cells, graph.width, graph.height, "center"), rng, count)
+        starts = _sample(_region(cells, graph.width, graph.height, "left"), rng, feasible_count, cells)
+        goals = _sample(_region(cells, graph.width, graph.height, "center"), rng, feasible_count, cells)
     elif regime in {"room_to_room_door_bottleneck", "warehouse_aisle_to_aisle"}:
-        starts = _sample(_region(cells, graph.width, graph.height, "top"), rng, count)
-        goals = _sample(_region(cells, graph.width, graph.height, "bottom"), rng, count)
+        starts = _sample(_region(cells, graph.width, graph.height, "top"), rng, feasible_count, cells)
+        goals = _sample(_region(cells, graph.width, graph.height, "bottom"), rng, feasible_count, cells)
     elif regime == "clustered_starts_to_dispersed_goals":
-        starts = _sample(_region(cells, graph.width, graph.height, "center"), rng, count)
-        goals = _sample(cells, rng, count)
+        starts = _sample(_region(cells, graph.width, graph.height, "center"), rng, feasible_count, cells)
+        goals = _sample(cells, rng, feasible_count)
     else:
-        starts = _sample(cells, rng, count)
-        goals = _sample(cells, rng, count)
+        starts = _sample(cells, rng, feasible_count)
+        goals = _sample(cells, rng, feasible_count)
     distances = [abs(s[0] - g[0]) + abs(s[1] - g[1]) for s, g in zip(starts, goals)]
     start_hash = _sha([*starts])
     goal_hash = _sha([*goals])
@@ -77,9 +105,13 @@ def generate_assignment(graph: GraphData, context: dict[str, Any], max_agents: i
         )
     return {
         "requested_agent_count": requested,
-        "encoded_agent_count": count,
-        "represented_agent_mass": requested if count == requested else count,
-        "all_agent_mass_preserved": count == requested,
+        "encoded_agent_count": feasible_count,
+        "represented_agent_mass": requested if feasible_count == requested else feasible_count,
+        "all_agent_mass_preserved": feasible_count == requested,
+        "assignment_capacity_limited": capacity_limited,
+        "unique_start_count": len(set(starts)),
+        "unique_goal_count": len(set(goals)),
+        "assignment_valid": len(set(starts)) == len(starts) and len(set(goals)) == len(goals) and not capacity_limited,
         "starts": starts,
         "goals": goals,
         "start_positions_sha256": start_hash,

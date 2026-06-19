@@ -129,9 +129,21 @@ def test_node_permutation_invariance():
 
 def test_agent_mass_conservation():
     g = build_graph(topo())
-    assignment = generate_assignment(g, context(agents=80), max_agents=None)
-    assert assignment["represented_agent_mass"] == 80
+    assignment = generate_assignment(g, context(agents=48), max_agents=None)
+    assert assignment["represented_agent_mass"] == 48
     assert assignment["all_agent_mass_preserved"]
+    assert assignment["assignment_valid"]
+
+
+def test_over_capacity_assignment_is_marked_invalid_without_duplicate_cycles():
+    g = build_graph(topo())
+    assignment = generate_assignment(g, context(agents=80), max_agents=None)
+    assert assignment["encoded_agent_count"] == 64
+    assert assignment["represented_agent_mass"] == 64
+    assert not assignment["all_agent_mass_preserved"]
+    assert assignment["assignment_capacity_limited"]
+    assert len(set(assignment["starts"])) == len(assignment["starts"])
+    assert len(set(assignment["goals"])) == len(assignment["goals"])
 
 
 def test_flow_mass_conservation():

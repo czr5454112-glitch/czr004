@@ -1,0 +1,1017 @@
+{
+  "aaai_ready": false,
+  "created_at": "2026-06-19T10:15:15.166578+00:00",
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "round": "phase5p5_repair5g560",
+  "runtime_claim_allowed": false,
+  "schema_version": "repair5g560_state_v1",
+  "source_commit": "unknown",
+  "stages": {
+    "direct_actor_export": {
+      "artifacts": [
+        "/root/czr004/artifacts/models/gcst/g560_direct_actor_export.pt",
+        "outputs/reports/phase5p5_repair5g560_direct_actor_export_manifest.json"
+      ],
+      "gate_result": true,
+      "metrics": {
+        "aaai_ready": false,
+        "contains_auxiliary_critic": false,
+        "contains_retrieval_memory": false,
+        "contains_selector_table": false,
+        "contains_theta_registry": false,
+        "export_path": "/root/czr004/artifacts/models/gcst/g560_direct_actor_export.pt",
+        "feature_schema": [
+          "agent_count",
+          "nominal_budget_ms",
+          "requested_agent_count",
+          "physical_free_cell_count",
+          "agent_density",
+          "encoded_OD_token_count",
+          "represented_agent_mass",
+          "represented_flow_mass",
+          "path_found_rate",
+          "base_time_limit_sec",
+          "ltm_max_iterations",
+          "nonzero_flow"
+        ],
+        "learned_runtime_policy_validated": false,
+        "phase5p5_allowed": false,
+        "phase6_allowed": false,
+        "round": "phase5p5_repair5g560",
+        "runtime_claim_allowed": false,
+        "source_model_path": "/root/czr004/artifacts/models/gcst/g560_direct_actor_g1_561.pt"
+      },
+      "producer_command": "python scripts/export_repair5g560_direct_actor.py",
+      "source_commit": "unknown",
+      "status": "completed",
+      "updated_at": "2026-06-19T10:32:10.281918+00:00"
+    },
+    "direct_actor_g0_training": {
+      "artifacts": [
+        "/root/czr004/artifacts/models/gcst/g560_direct_actor_g0_560.pt",
+        "outputs/reports/phase5p5_repair5g560_direct_actor_g0_training_summary.json",
+        "outputs/tables/phase5p5_repair5g560_labelv51_valid_training_rows.csv"
+      ],
+      "gate_result": true,
+      "metrics": {
+        "aaai_ready": false,
+        "eval_groups": 433,
+        "final_eval": {
+          "anchor_l1_mean": 0.008622625334549687,
+          "fraction_exact_g556": 0.0,
+          "groups": 433,
+          "nearest_observed_theta_l1_mean": 0.008622625334549687,
+          "nearest_safe_theta_l1_mean": 0.052573524620514844,
+          "safe_improvement_groups": 427
+        },
+        "history": [
+          {
+            "anchor_l1_mean": 0.026145836463150746,
+            "fraction_exact_g556": 0.0,
+            "groups": 433,
+            "loss": 0.0750962346792221,
+            "nearest_observed_theta_l1_mean": 0.026145836463150746,
+            "nearest_safe_theta_l1_mean": 0.05939219673480446,
+            "safe_improvement_groups": 427,
+            "step": 1,
+            "variant": "G0_direct_actor"
+          },
+          {
+            "anchor_l1_mean": 0.014779571486813367,
+            "fraction_exact_g556": 0.0,
+            "groups": 433,
+            "loss": 0.06234130263328552,
+            "nearest_observed_theta_l1_mean": 0.014779571486813367,
+            "nearest_safe_theta_l1_mean": 0.05324277201061087,
+            "safe_improvement_groups": 427,
+            "step": 300,
+            "variant": "G0_direct_actor"
+          },
+          {
+            "anchor_l1_mean": 0.013426388326739811,
+            "fraction_exact_g556": 0.0,
+            "groups": 433,
+            "loss": 0.06687290221452713,
+            "nearest_observed_theta_l1_mean": 0.013426388326739811,
+            "nearest_safe_theta_l1_mean": 0.052870991764114667,
+            "safe_improvement_groups": 427,
+            "step": 600,
+            "variant": "G0_direct_actor"
+          },
+          {
+            "anchor_l1_mean": 0.013319336565095269,
+            "fraction_exact_g556": 0.0,
+            "groups": 433,
+            "loss": 0.07214877009391785,
+            "nearest_observed_theta_l1_mean": 0.013319336565095269,
+            "nearest_safe_theta_l1_mean": 0.05282931969843508,
+            "safe_improvement_groups": 427,
+            "step": 900,
+            "variant": "G0_direct_actor"
+          },
+          {
+            "anchor_l1_mean": 0.013859874350567269,
+            "fraction_exact_g556": 0.0,
+            "groups": 433,
+            "loss": 0.07130544632673264,
+            "nearest_observed_theta_l1_mean": 0.013859874350567269,
+            "nearest_safe_theta_l1_mean": 0.05315189453962955,
+            "safe_improvement_groups": 427,
+            "step": 1200,
+            "variant": "G0_direct_actor"
+          },
+          {
+            "anchor_l1_mean": 0.013190244817590088,
+            "fraction_exact_g556": 0.0,
+            "groups": 433,
+            "loss": 0.07199475914239883,
+            "nearest_observed_theta_l1_mean": 0.013190244817590088,
+            "nearest_safe_theta_l1_mean": 0.05298762972656402,
+            "safe_improvement_groups": 427,
+            "step": 1500,
+            "variant": "G0_direct_actor"
+          },
+          {
+            "anchor_l1_mean": 0.011932888317758574,
+            "fraction_exact_g556": 0.0,
+            "groups": 433,
+            "loss": 0.0686967521905899,
+            "nearest_observed_theta_l1_mean": 0.011932888317758574,
+            "nearest_safe_theta_l1_mean": 0.05299071048493268,
+            "safe_improvement_groups": 427,
+            "step": 1800,
+            "variant": "G0_direct_actor"
+          },
+          {
+            "anchor_l1_mean": 0.011410919580002064,
+            "fraction_exact_g556": 0.0,
+            "groups": 433,
+            "loss": 0.06967870146036148,
+            "nearest_observed_theta_l1_mean": 0.011410919580002064,
+            "nearest_safe_theta_l1_mean": 0.05296004299222725,
+            "safe_improvement_groups": 427,
+            "step": 2100,
+            "variant": "G0_direct_actor"
+          },
+          {
+            "anchor_l1_mean": 0.011596246225131336,
+            "fraction_exact_g556": 0.0,
+            "groups": 433,
+            "loss": 0.07190865278244019,
+            "nearest_observed_theta_l1_mean": 0.011596246225131336,
+            "nearest_safe_theta_l1_mean": 0.053321253120096564,
+            "safe_improvement_groups": 427,
+            "step": 2400,
+            "variant": "G0_direct_actor"
+          },
+          {
+            "anchor_l1_mean": 0.010386029040058064,
+            "fraction_exact_g556": 0.0,
+            "groups": 433,
+            "loss": 0.06572344899177551,
+            "nearest_observed_theta_l1_mean": 0.010386029040058064,
+            "nearest_safe_theta_l1_mean": 0.05286023319552738,
+            "safe_improvement_groups": 427,
+            "step": 2700,
+            "variant": "G0_direct_actor"
+          },
+          {
+            "anchor_l1_mean": 0.010329138751595558,
+            "fraction_exact_g556": 0.0,
+            "groups": 433,
+            "loss": 0.06959649175405502,
+            "nearest_observed_theta_l1_mean": 0.010329138751595558,
+            "nearest_safe_theta_l1_mean": 0.05263115497484838,
+            "safe_improvement_groups": 427,
+            "step": 3000,
+            "variant": "G0_direct_actor"
+          },
+          {
+            "anchor_l1_mean": 0.009304069488591086,
+            "fraction_exact_g556": 0.0,
+            "groups": 433,
+            "loss": 0.06745393574237823,
+            "nearest_observed_theta_l1_mean": 0.009304069488591086,
+            "nearest_safe_theta_l1_mean": 0.052707213206125085,
+            "safe_improvement_groups": 427,
+            "step": 3300,
+            "variant": "G0_direct_actor"
+          },
+          {
+            "anchor_l1_mean": 0.009540551826013703,
+            "fraction_exact_g556": 0.0,
+            "groups": 433,
+            "loss": 0.07115347683429718,
+            "nearest_observed_theta_l1_mean": 0.009540551826013703,
+            "nearest_safe_theta_l1_mean": 0.05279444974238616,
+            "safe_improvement_groups": 427,
+            "step": 3600,
+            "variant": "G0_direct_actor"
+          },
+          {
+            "anchor_l1_mean": 0.009378490161352875,
+            "fraction_exact_g556": 0.0,
+            "groups": 433,
+            "loss": 0.06873977929353714,
+            "nearest_observed_theta_l1_mean": 0.009378490161352875,
+            "nearest_safe_theta_l1_mean": 0.05265393442271465,
+            "safe_improvement_groups": 427,
+            "step": 3900,
+            "variant": "G0_direct_actor"
+          },
+          {
+            "anchor_l1_mean": 0.00888611686869802,
+            "fraction_exact_g556": 0.0,
+            "groups": 433,
+            "loss": 0.07285529375076294,
+            "nearest_observed_theta_l1_mean": 0.00888611686869802,
+            "nearest_safe_theta_l1_mean": 0.052686861766375756,
+            "safe_improvement_groups": 427,
+            "step": 4200,
+            "variant": "G0_direct_actor"
+          },
+          {
+            "anchor_l1_mean": 0.009264026024307858,
+            "fraction_exact_g556": 0.0,
+            "groups": 433,
+            "loss": 0.06689798086881638,
+            "nearest_observed_theta_l1_mean": 0.009264026024307858,
+            "nearest_safe_theta_l1_mean": 0.05257589474704282,
+            "safe_improvement_groups": 427,
+            "step": 4500,
+            "variant": "G0_direct_actor"
+          },
+          {
+            "anchor_l1_mean": 0.009400675996522877,
+            "fraction_exact_g556": 0.0,
+            "groups": 433,
+            "loss": 0.07020106911659241,
+            "nearest_observed_theta_l1_mean": 0.009400675996522877,
+            "nearest_safe_theta_l1_mean": 0.052621896489931215,
+            "safe_improvement_groups": 427,
+            "step": 4800,
+            "variant": "G0_direct_actor"
+          },
+          {
+            "anchor_l1_mean": 0.009026985414386415,
+            "fraction_exact_g556": 0.0,
+            "groups": 433,
+            "loss": 0.06890355795621872,
+            "nearest_observed_theta_l1_mean": 0.009026985414386415,
+            "nearest_safe_theta_l1_mean": 0.05256296806822616,
+            "safe_improvement_groups": 427,
+            "step": 5100,
+            "variant": "G0_direct_actor"
+          },
+          {
+            "anchor_l1_mean": 0.009063226971495681,
+            "fraction_exact_g556": 0.0,
+            "groups": 433,
+            "loss": 0.0691562294960022,
+            "nearest_observed_theta_l1_mean": 0.009063226971495681,
+            "nearest_safe_theta_l1_mean": 0.05280003885125667,
+            "safe_improvement_groups": 427,
+            "step": 5400,
+            "variant": "G0_direct_actor"
+          },
+          {
+            "anchor_l1_mean": 0.009079763317893648,
+            "fraction_exact_g556": 0.0,
+            "groups": 433,
+            "loss": 0.06763996183872223,
+            "nearest_observed_theta_l1_mean": 0.009079763317893648,
+            "nearest_safe_theta_l1_mean": 0.05275950276792329,
+            "safe_improvement_groups": 427,
+            "step": 5700,
+            "variant": "G0_direct_actor"
+          },
+          {
+            "anchor_l1_mean": 0.008622625334549687,
+            "fraction_exact_g556": 0.0,
+            "groups": 433,
+            "loss": 0.0708569809794426,
+            "nearest_observed_theta_l1_mean": 0.008622625334549687,
+            "nearest_safe_theta_l1_mean": 0.052573524620514844,
+            "safe_improvement_groups": 427,
+            "step": 6000,
+            "variant": "G0_direct_actor"
+          }
+        ],
+        "learned_runtime_policy_validated": false,
+        "model_path": "/root/czr004/artifacts/models/gcst/g560_direct_actor_g0_560.pt",
+        "phase5p5_allowed": false,
+        "phase6_allowed": false,
+        "round": "phase5p5_repair5g560",
+        "runtime_claim_allowed": false,
+        "step": 6000,
+        "train_groups": 770,
+        "valid_groups": 1203,
+        "valid_label_summary": {
+          "aaai_ready": false,
+          "filtered_invalid_scenario_rows": 51805,
+          "input_rows": 130000,
+          "learned_runtime_policy_validated": false,
+          "phase5p5_allowed": false,
+          "phase6_allowed": false,
+          "round": "phase5p5_repair5g560",
+          "runtime_claim_allowed": false,
+          "scenario_validity_filter_applied": true,
+          "split_counts": {
+            "heldout": 2176,
+            "train": 49280,
+            "validation": 25536
+          },
+          "valid_evaluation_groups": 1203,
+          "valid_training_rows": 78195
+        },
+        "variant": "G0_direct_actor"
+      },
+      "producer_command": "python scripts/train_repair5g560_direct_actor.py",
+      "source_commit": "unknown",
+      "status": "completed",
+      "updated_at": "2026-06-19T10:29:20.970398+00:00"
+    },
+    "direct_actor_g1_aux_critic_training": {
+      "artifacts": [
+        "/root/czr004/artifacts/models/gcst/g560_direct_actor_g1_561.pt",
+        "/root/czr004/artifacts/models/gcst/g560_auxiliary_critic_g1_561.pt",
+        "outputs/reports/phase5p5_repair5g560_direct_actor_g1_training_summary.json"
+      ],
+      "gate_result": true,
+      "metrics": {
+        "aaai_ready": false,
+        "actor_step": 5000,
+        "auxiliary_critic_path": "/root/czr004/artifacts/models/gcst/g560_auxiliary_critic_g1_561.pt",
+        "critic_step": 3000,
+        "eval_groups": 433,
+        "final_eval": {
+          "anchor_l1_mean": 0.021557552742128696,
+          "fraction_exact_g556": 0.0,
+          "groups": 433,
+          "nearest_observed_theta_l1_mean": 0.02133645756303507,
+          "nearest_safe_theta_l1_mean": 0.05926498091088246,
+          "safe_improvement_groups": 427
+        },
+        "history": [
+          {
+            "anchor_l1_mean": 0.04251121215986875,
+            "fraction_exact_g556": 0.0,
+            "groups": 433,
+            "loss": 0.07422101497650146,
+            "nearest_observed_theta_l1_mean": 0.04117144019650532,
+            "nearest_safe_theta_l1_mean": 0.06415309975102579,
+            "safe_improvement_groups": 427,
+            "step": 1,
+            "variant": "G1_direct_actor_aux_critic"
+          },
+          {
+            "anchor_l1_mean": 0.024364721763440286,
+            "fraction_exact_g556": 0.0,
+            "groups": 433,
+            "loss": 0.06856389343738556,
+            "nearest_observed_theta_l1_mean": 0.024262594956018495,
+            "nearest_safe_theta_l1_mean": 0.05986756745472865,
+            "safe_improvement_groups": 427,
+            "step": 250,
+            "variant": "G1_direct_actor_aux_critic"
+          },
+          {
+            "anchor_l1_mean": 0.023203972327000274,
+            "fraction_exact_g556": 0.0,
+            "groups": 433,
+            "loss": 0.06232457607984543,
+            "nearest_observed_theta_l1_mean": 0.02308405774879951,
+            "nearest_safe_theta_l1_mean": 0.059829778362946714,
+            "safe_improvement_groups": 427,
+            "step": 500,
+            "variant": "G1_direct_actor_aux_critic"
+          },
+          {
+            "anchor_l1_mean": 0.02273462025134654,
+            "fraction_exact_g556": 0.0,
+            "groups": 433,
+            "loss": 0.057444896548986435,
+            "nearest_observed_theta_l1_mean": 0.022559022868598445,
+            "nearest_safe_theta_l1_mean": 0.05933583340666473,
+            "safe_improvement_groups": 427,
+            "step": 750,
+            "variant": "G1_direct_actor_aux_critic"
+          },
+          {
+            "anchor_l1_mean": 0.022526676297686805,
+            "fraction_exact_g556": 0.0,
+            "groups": 433,
+            "loss": 0.059904150664806366,
+            "nearest_observed_theta_l1_mean": 0.022314380637131304,
+            "nearest_safe_theta_l1_mean": 0.05967093588875943,
+            "safe_improvement_groups": 427,
+            "step": 1000,
+            "variant": "G1_direct_actor_aux_critic"
+          },
+          {
+            "anchor_l1_mean": 0.023737429359424474,
+            "fraction_exact_g556": 0.0,
+            "groups": 433,
+            "loss": 0.06436649709939957,
+            "nearest_observed_theta_l1_mean": 0.02344688196724612,
+            "nearest_safe_theta_l1_mean": 0.05974861141076133,
+            "safe_improvement_groups": 427,
+            "step": 1250,
+            "variant": "G1_direct_actor_aux_critic"
+          },
+          {
+            "anchor_l1_mean": 0.02310233878715966,
+            "fraction_exact_g556": 0.0,
+            "groups": 433,
+            "loss": 0.06654702126979828,
+            "nearest_observed_theta_l1_mean": 0.02285826375910165,
+            "nearest_safe_theta_l1_mean": 0.05974811408450648,
+            "safe_improvement_groups": 427,
+            "step": 1500,
+            "variant": "G1_direct_actor_aux_critic"
+          },
+          {
+            "anchor_l1_mean": 0.022978377457510243,
+            "fraction_exact_g556": 0.0,
+            "groups": 433,
+            "loss": 0.06405285745859146,
+            "nearest_observed_theta_l1_mean": 0.022773682055930344,
+            "nearest_safe_theta_l1_mean": 0.0598285823746364,
+            "safe_improvement_groups": 427,
+            "step": 1750,
+            "variant": "G1_direct_actor_aux_critic"
+          },
+          {
+            "anchor_l1_mean": 0.024264200391596307,
+            "fraction_exact_g556": 0.0,
+            "groups": 433,
+            "loss": 0.06493916362524033,
+            "nearest_observed_theta_l1_mean": 0.0240207749578078,
+            "nearest_safe_theta_l1_mean": 0.060431745317731864,
+            "safe_improvement_groups": 427,
+            "step": 2000,
+            "variant": "G1_direct_actor_aux_critic"
+          },
+          {
+            "anchor_l1_mean": 0.023143394906116825,
+            "fraction_exact_g556": 0.0,
+            "groups": 433,
+            "loss": 0.06017690524458885,
+            "nearest_observed_theta_l1_mean": 0.022895203630158175,
+            "nearest_safe_theta_l1_mean": 0.060024526692159144,
+            "safe_improvement_groups": 427,
+            "step": 2250,
+            "variant": "G1_direct_actor_aux_critic"
+          },
+          {
+            "anchor_l1_mean": 0.022629150021692208,
+            "fraction_exact_g556": 0.0,
+            "groups": 433,
+            "loss": 0.05580177903175354,
+            "nearest_observed_theta_l1_mean": 0.0223774984887614,
+            "nearest_safe_theta_l1_mean": 0.059389271099443176,
+            "safe_improvement_groups": 427,
+            "step": 2500,
+            "variant": "G1_direct_actor_aux_critic"
+          },
+          {
+            "anchor_l1_mean": 0.023442689695032035,
+            "fraction_exact_g556": 0.0,
+            "groups": 433,
+            "loss": 0.05947607755661011,
+            "nearest_observed_theta_l1_mean": 0.023178355088651043,
+            "nearest_safe_theta_l1_mean": 0.059777909139524577,
+            "safe_improvement_groups": 427,
+            "step": 2750,
+            "variant": "G1_direct_actor_aux_critic"
+          },
+          {
+            "anchor_l1_mean": 0.022416645527643088,
+            "fraction_exact_g556": 0.0,
+            "groups": 433,
+            "loss": 0.06375802308320999,
+            "nearest_observed_theta_l1_mean": 0.02217096179362395,
+            "nearest_safe_theta_l1_mean": 0.059514391718026624,
+            "safe_improvement_groups": 427,
+            "step": 3000,
+            "variant": "G1_direct_actor_aux_critic"
+          },
+          {
+            "anchor_l1_mean": 0.022514826609531535,
+            "fraction_exact_g556": 0.0,
+            "groups": 433,
+            "loss": 0.06323131173849106,
+            "nearest_observed_theta_l1_mean": 0.02228849434334673,
+            "nearest_safe_theta_l1_mean": 0.05953319948297474,
+            "safe_improvement_groups": 427,
+            "step": 3250,
+            "variant": "G1_direct_actor_aux_critic"
+          },
+          {
+            "anchor_l1_mean": 0.02311008077708458,
+            "fraction_exact_g556": 0.0,
+            "groups": 433,
+            "loss": 0.06291364878416061,
+            "nearest_observed_theta_l1_mean": 0.022833294663191117,
+            "nearest_safe_theta_l1_mean": 0.059714211229522834,
+            "safe_improvement_groups": 427,
+            "step": 3500,
+            "variant": "G1_direct_actor_aux_critic"
+          },
+          {
+            "anchor_l1_mean": 0.024197372992890813,
+            "fraction_exact_g556": 0.0,
+            "groups": 433,
+            "loss": 0.06637156754732132,
+            "nearest_observed_theta_l1_mean": 0.023932188052434567,
+            "nearest_safe_theta_l1_mean": 0.05953472229353298,
+            "safe_improvement_groups": 427,
+            "step": 3750,
+            "variant": "G1_direct_actor_aux_critic"
+          },
+          {
+            "anchor_l1_mean": 0.022028354190152317,
+            "fraction_exact_g556": 0.0,
+            "groups": 433,
+            "loss": 0.06391172111034393,
+            "nearest_observed_theta_l1_mean": 0.02179008501842102,
+            "nearest_safe_theta_l1_mean": 0.05902803199370097,
+            "safe_improvement_groups": 427,
+            "step": 4000,
+            "variant": "G1_direct_actor_aux_critic"
+          },
+          {
+            "anchor_l1_mean": 0.02219049843978868,
+            "fraction_exact_g556": 0.0,
+            "groups": 433,
+            "loss": 0.06216950714588165,
+            "nearest_observed_theta_l1_mean": 0.02195178292579863,
+            "nearest_safe_theta_l1_mean": 0.059049029099543425,
+            "safe_improvement_groups": 427,
+            "step": 4250,
+            "variant": "G1_direct_actor_aux_critic"
+          },
+          {
+            "anchor_l1_mean": 0.021835898978347455,
+            "fraction_exact_g556": 0.0,
+            "groups": 433,
+            "loss": 0.057068243622779846,
+            "nearest_observed_theta_l1_mean": 0.021594479828470712,
+            "nearest_safe_theta_l1_mean": 0.05938022841963333,
+            "safe_improvement_groups": 427,
+            "step": 4500,
+            "variant": "G1_direct_actor_aux_critic"
+          },
+          {
+            "anchor_l1_mean": 0.021644952803781346,
+            "fraction_exact_g556": 0.0,
+            "groups": 433,
+            "loss": 0.0614335760474205,
+            "nearest_observed_theta_l1_mean": 0.021398322222276868,
+            "nearest_safe_theta_l1_mean": 0.05917259798204173,
+            "safe_improvement_groups": 427,
+            "step": 4750,
+            "variant": "G1_direct_actor_aux_critic"
+          },
+          {
+            "anchor_l1_mean": 0.021557552742128696,
+            "fraction_exact_g556": 0.0,
+            "groups": 433,
+            "loss": 0.06421864777803421,
+            "nearest_observed_theta_l1_mean": 0.02133645756303507,
+            "nearest_safe_theta_l1_mean": 0.05926498091088246,
+            "safe_improvement_groups": 427,
+            "step": 5000,
+            "variant": "G1_direct_actor_aux_critic"
+          }
+        ],
+        "learned_runtime_policy_validated": false,
+        "model_path": "/root/czr004/artifacts/models/gcst/g560_direct_actor_g1_561.pt",
+        "phase5p5_allowed": false,
+        "phase6_allowed": false,
+        "round": "phase5p5_repair5g560",
+        "runtime_claim_allowed": false,
+        "train_groups": 770,
+        "valid_groups": 1203,
+        "valid_label_summary": {
+          "aaai_ready": false,
+          "filtered_invalid_scenario_rows": 51805,
+          "input_rows": 130000,
+          "learned_runtime_policy_validated": false,
+          "phase5p5_allowed": false,
+          "phase6_allowed": false,
+          "round": "phase5p5_repair5g560",
+          "runtime_claim_allowed": false,
+          "scenario_validity_filter_applied": true,
+          "split_counts": {
+            "heldout": 2176,
+            "train": 49280,
+            "validation": 25536
+          },
+          "valid_evaluation_groups": 1203,
+          "valid_training_rows": 78195
+        },
+        "variant": "G1_direct_actor_aux_critic"
+      },
+      "producer_command": "python scripts/train_repair5g560_direct_actor_critic.py",
+      "source_commit": "unknown",
+      "status": "completed",
+      "updated_at": "2026-06-19T10:31:43.188393+00:00"
+    },
+    "direct_actor_generated_theta_dev_replay": {
+      "artifacts": [
+        "outputs/tables/phase5p5_repair5g560_direct_actor_dev_replay_results.csv",
+        "outputs/tables/phase5p5_repair5g560_direct_actor_dev_replay_pairs.csv",
+        "outputs/reports/phase5p5_repair5g560_direct_actor_dev_replay_summary.json",
+        "outputs/reports/phase5p5_repair5g560_direct_actor_dev_replay.md"
+      ],
+      "gate_result": true,
+      "metrics": {
+        "aaai_ready": false,
+        "better_count": 116,
+        "both_fail": 2,
+        "both_success": 272,
+        "decision": "g560_direct_actor_dev_replay_completed",
+        "learned_runtime_policy_validated": false,
+        "mean_quality_delta_vs_g556": 0.11486412997058826,
+        "pair_csv": "/root/czr004/outputs/tables/phase5p5_repair5g560_direct_actor_dev_replay_pairs.csv",
+        "phase5p5_allowed": false,
+        "phase6_allowed": false,
+        "planned_contexts": 300,
+        "planned_solver_rows": 600,
+        "real_solver_rows": 600,
+        "registry_rows": 301,
+        "replay_pairs": 300,
+        "result_csv": "/root/czr004/outputs/tables/phase5p5_repair5g560_direct_actor_dev_replay_results.csv",
+        "round": "phase5p5_repair5g560",
+        "runtime_claim_allowed": false,
+        "success_gains": 1,
+        "success_regressions": 25,
+        "worse_count": 153
+      },
+      "producer_command": "python scripts/run_repair5g560_direct_actor_dev_replay.py",
+      "source_commit": "unknown",
+      "status": "completed",
+      "updated_at": "2026-06-19T10:36:18.430138+00:00"
+    },
+    "direct_actor_offline_evaluation": {
+      "artifacts": [
+        "outputs/reports/phase5p5_repair5g560_direct_actor_evaluation.md",
+        "outputs/reports/phase5p5_repair5g560_direct_actor_evaluation_summary.json",
+        "outputs/tables/phase5p5_repair5g560_direct_actor_eval.csv",
+        "outputs/tables/phase5p5_repair5g560_direct_actor_generated_theta.csv",
+        "outputs/reports/phase5p5_repair5g560_generated_theta_novelty_summary.json"
+      ],
+      "gate_result": true,
+      "metrics": {
+        "aaai_ready": false,
+        "anti_selector_passed": true,
+        "controls": [
+          {
+            "anchor_l1_mean": 0.0,
+            "fraction_exact_g556": 1.0,
+            "groups": 433,
+            "method": "always_g556",
+            "nearest_observed_theta_l1_mean": 0.0,
+            "nearest_safe_theta_l1_mean": 0.05301703202082346,
+            "safe_improvement_groups": 427
+          },
+          {
+            "anchor_l1_mean": 0.030766896473342773,
+            "fraction_exact_g556": 0.0,
+            "groups": 433,
+            "method": "agent_density_lookup_control",
+            "nearest_observed_theta_l1_mean": 0.030766896473342773,
+            "nearest_safe_theta_l1_mean": 0.0751811781902503,
+            "safe_improvement_groups": 427
+          },
+          {
+            "anchor_l1_mean": 0.008622624947394806,
+            "fraction_exact_g556": 0.0,
+            "groups": 433,
+            "method": "G0_direct_actor",
+            "model_path": "/root/czr004/artifacts/models/gcst/g560_direct_actor_g0_560.pt",
+            "nearest_observed_theta_l1_mean": 0.008622624947394806,
+            "nearest_safe_theta_l1_mean": 0.05257352517451001,
+            "safe_improvement_groups": 427
+          },
+          {
+            "anchor_l1_mean": 0.021557552529193513,
+            "fraction_exact_g556": 0.0,
+            "groups": 433,
+            "method": "G1_direct_actor_aux_critic",
+            "model_path": "/root/czr004/artifacts/models/gcst/g560_direct_actor_g1_561.pt",
+            "nearest_observed_theta_l1_mean": 0.021336457668427233,
+            "nearest_safe_theta_l1_mean": 0.05926498286077094,
+            "safe_improvement_groups": 427
+          }
+        ],
+        "direct_actor_offline_gate_passed": true,
+        "eval_rows": [
+          {
+            "anchor_l1_mean": 0.008622624947394806,
+            "fraction_exact_g556": 0.0,
+            "groups": 433,
+            "method": "G0_direct_actor",
+            "model_path": "/root/czr004/artifacts/models/gcst/g560_direct_actor_g0_560.pt",
+            "nearest_observed_theta_l1_mean": 0.008622624947394806,
+            "nearest_safe_theta_l1_mean": 0.05257352517451001,
+            "safe_improvement_groups": 427
+          },
+          {
+            "anchor_l1_mean": 0.021557552529193513,
+            "fraction_exact_g556": 0.0,
+            "groups": 433,
+            "method": "G1_direct_actor_aux_critic",
+            "model_path": "/root/czr004/artifacts/models/gcst/g560_direct_actor_g1_561.pt",
+            "nearest_observed_theta_l1_mean": 0.021336457668427233,
+            "nearest_safe_theta_l1_mean": 0.05926498286077094,
+            "safe_improvement_groups": 427
+          }
+        ],
+        "learned_runtime_policy_validated": false,
+        "model_paths": [
+          "/root/czr004/artifacts/models/gcst/g560_direct_actor_g0_560.pt",
+          "/root/czr004/artifacts/models/gcst/g560_direct_actor_g1_561.pt"
+        ],
+        "novelty": {
+          "exact_match_rate_to_observed_theta": 0.0,
+          "fraction_exactly_equal_to_g556": 0.0,
+          "fraction_within_epsilon_of_g556": 0.0,
+          "generated_rows": 2406,
+          "nearest_observed_theta_distance_mean": 0.008037369698286057,
+          "nearest_safe_theta_distance_mean": 0.012550859712064266,
+          "pairwise_generated_theta_distance_mean": 0.012772534042596817,
+          "per_field": {
+            "theta_alpha_cong_block": {
+              "max": 1.3474749326705933,
+              "mean": 1.26052725315094,
+              "min": 1.2080025672912598,
+              "residual_variance": 0.00045262411003932357,
+              "std": 0.02127496525645256
+            },
+            "theta_alpha_cong_commit_nonprogress": {
+              "max": 1.186840295791626,
+              "mean": 1.1509660482406616,
+              "min": 0.9961792826652527,
+              "residual_variance": 0.000748288119211793,
+              "std": 0.027354856953024864
+            },
+            "theta_alpha_cong_commit_progress": {
+              "max": 1.5062675476074219,
+              "mean": 1.250247836112976,
+              "min": 1.1875967979431152,
+              "residual_variance": 0.0013580677332356572,
+              "std": 0.03685196861624718
+            },
+            "theta_alpha_cong_wait_nonprogress": {
+              "max": 0.9454191327095032,
+              "mean": 0.7608118057250977,
+              "min": 0.6524641513824463,
+              "residual_variance": 0.0009612275171093643,
+              "std": 0.031003668904304504
+            },
+            "theta_alpha_cong_wait_progress": {
+              "max": 1.0881785154342651,
+              "mean": 0.7527416348457336,
+              "min": 0.7252082824707031,
+              "residual_variance": 0.001168037299066782,
+              "std": 0.03417656198143959
+            },
+            "theta_alpha_flow_commit_progress": {
+              "max": 1.2179183959960938,
+              "mean": 1.0391745567321777,
+              "min": 0.9153881072998047,
+              "residual_variance": 0.0006892340607009828,
+              "std": 0.026253268122673035
+            },
+            "theta_alpha_flow_wait_progress": {
+              "max": 0.7338384389877319,
+              "mean": 0.6881455779075623,
+              "min": 0.44291144609451294,
+              "residual_variance": 0.0009792073396965861,
+              "std": 0.03129228949546814
+            },
+            "theta_flow_shield_beta": {
+              "max": 0.39458489418029785,
+              "mean": 0.3431325852870941,
+              "min": 0.2348792552947998,
+              "residual_variance": 0.0003037018177565187,
+              "std": 0.01742704212665558
+            },
+            "theta_lambda_cong": {
+              "max": 0.9993323683738708,
+              "mean": 0.6732136011123657,
+              "min": 0.4768178164958954,
+              "residual_variance": 0.0019953909795731306,
+              "std": 0.044669799506664276
+            },
+            "theta_lambda_flow": {
+              "max": 0.6726686954498291,
+              "mean": 0.64654141664505,
+              "min": 0.5989948511123657,
+              "residual_variance": 9.861674334388226e-05,
+              "std": 0.009930596686899662
+            },
+            "theta_max_edge_cost": {
+              "max": 10.964001655578613,
+              "mean": 10.75489330291748,
+              "min": 8.383537292480469,
+              "residual_variance": 0.07538292557001114,
+              "std": 0.27455949783325195
+            },
+            "theta_max_flow_shield": {
+              "max": 1.0016661882400513,
+              "mean": 0.8932128548622131,
+              "min": 0.5471919775009155,
+              "residual_variance": 0.0026064531411975622,
+              "std": 0.05105343088507652
+            },
+            "theta_min_edge_cost": {
+              "max": 1.5704318284988403,
+              "mean": 1.0108672380447388,
+              "min": 0.9026055932044983,
+              "residual_variance": 0.004618109203875065,
+              "std": 0.06795667111873627
+            },
+            "theta_rho_cong_decay": {
+              "max": 0.9834054112434387,
+              "mean": 0.9794501662254333,
+              "min": 0.9529224634170532,
+              "residual_variance": 1.635845546843484e-05,
+              "std": 0.0040445588529109955
+            },
+            "theta_rho_flow_decay": {
+              "max": 1.0,
+              "mean": 0.9969004392623901,
+              "min": 0.9558371901512146,
+              "residual_variance": 6.55960975564085e-05,
+              "std": 0.008099142462015152
+            }
+          },
+          "theta_hash_count": 2406,
+          "unique_generated_theta_count": 2182
+        },
+        "phase5p5_allowed": false,
+        "phase6_allowed": false,
+        "round": "phase5p5_repair5g560",
+        "runtime_claim_allowed": false,
+        "sensitivity_audit_rows": 4
+      },
+      "producer_command": "python scripts/eval_repair5g560_direct_actor.py",
+      "source_commit": "unknown",
+      "status": "completed",
+      "updated_at": "2026-06-19T10:32:08.746648+00:00"
+    },
+    "g559_truth_audit": {
+      "artifacts": [
+        "outputs/reports/phase5p5_repair5g560_g559_truth_audit.md",
+        "outputs/reports/phase5p5_repair5g560_g559_truth_audit_summary.json",
+        "outputs/tables/phase5p5_repair5g560_stage_implementation_audit.csv",
+        "outputs/tables/phase5p5_repair5g560_identity_failure_audit.csv",
+        "outputs/tables/phase5p5_repair5g560_scenario_validity_pre_audit.csv",
+        "outputs/tables/phase5p5_repair5g560_training_entrypoint_audit.csv"
+      ],
+      "gate_result": true,
+      "metrics": {
+        "active_label_v5_acquisition_executed": false,
+        "blind_replay_executed": false,
+        "decision": "g559_failed_identity_and_training_entrypoints_not_gcst_learnability",
+        "heldout_pair_rows_after_original_join": 0,
+        "instance_manifest_rows": 2000,
+        "pair_rows": 128000,
+        "pair_uid_join_to_split_manifest": 0,
+        "path_found_rate_min": 0.84375,
+        "real_continuous_theta_generator_trained": false,
+        "real_gcst_codebook_critic_trained": false,
+        "real_pair_outcomes_exist": true,
+        "real_solver_materialization_succeeded": true,
+        "round": "phase5p5_repair5g560",
+        "self_supervised_instance_pretraining_executed": false,
+        "source_round": "phase5p5_repair5g559",
+        "stage1_solver_policy_replay_executed": false,
+        "stage2_solver_replay_executed": false,
+        "start_commit": "6c9de29909535df138e7b7dd0a6a4fce29024689",
+        "unique_sha_instance_uids": 1762
+      },
+      "producer_command": "python scripts/audit_repair5g560_g559_truth.py",
+      "source_commit": "unknown",
+      "status": "completed",
+      "updated_at": "2026-06-19T10:26:39.740415+00:00"
+    },
+    "labelv51_identity_recovery": {
+      "artifacts": [
+        "outputs/reports/phase5p5_repair5g560_labelv51_recovery.md",
+        "outputs/reports/phase5p5_repair5g560_labelv51_recovery_summary.json",
+        "outputs/tables/phase5p5_repair5g560_identity_crosswalk.csv",
+        "outputs/tables/phase5p5_repair5g560_labelv51_join_audit.csv",
+        "outputs/tables/phase5p5_repair5g560_labelv51_quarantine.csv",
+        "outputs/tables/phase5p5_repair5g560_labelv51_training_rows.csv",
+        "outputs/tables/phase5p5_repair5g560_labelv51_safe_sets.csv"
+      ],
+      "gate_result": true,
+      "metrics": {
+        "aaai_ready": false,
+        "ambiguous_legacy_key_count": 0,
+        "baseline_pair_same_evaluation_rate": 1.0,
+        "baseline_pseudo_candidate_rows": 2000,
+        "evaluation_uid_nonempty_rate": 1.0,
+        "identity_crosswalk_rows": 130000,
+        "identity_digest_match_rate": 1.0,
+        "identity_join_rate": 1.0,
+        "learned_runtime_policy_validated": false,
+        "pair_row_count_after": 128000,
+        "pair_row_count_before": 128000,
+        "phase5p5_allowed": false,
+        "phase6_allowed": false,
+        "physical_map_join_rate": 1.0,
+        "quarantined_rows": 0,
+        "recovery_gate_passed": true,
+        "round": "phase5p5_repair5g560",
+        "runtime_claim_allowed": false,
+        "safe_set_rows": 2000,
+        "scenario_join_rate": 1.0,
+        "schema_version": "label_v5.1_identity_safe",
+        "source_round": "phase5p5_repair5g559",
+        "split_counts": {
+          "heldout": 10624,
+          "train": 79936,
+          "validation": 37440
+        },
+        "theta_join_rate": 1.0
+      },
+      "producer_command": "python scripts/recover_repair5g560_labelv51.py",
+      "source_commit": "unknown",
+      "status": "completed",
+      "updated_at": "2026-06-19T10:27:00.767237+00:00"
+    },
+    "oracle_and_candidate_space_audit": {
+      "artifacts": [
+        "outputs/reports/phase5p5_repair5g560_oracle_opportunity.md",
+        "outputs/reports/phase5p5_repair5g560_oracle_opportunity_summary.json",
+        "outputs/tables/phase5p5_repair5g560_candidate_space_audit.csv"
+      ],
+      "gate_result": true,
+      "metrics": {
+        "candidate_improvement_rate": 0.200546875,
+        "candidate_regression_rate": 0.0195390625,
+        "candidate_rows": 128000,
+        "candidate_slate_blocker": false,
+        "fraction_with_safe_improvement": 0.606,
+        "groups": 2000,
+        "mean_oracle_quality_gain": -0.28578665601589115,
+        "normalized_distance_from_g556_mean": 0.10037358746391692,
+        "oracle_by_map_family": {
+          "city": 0.07228915662650602,
+          "empty": 0.9920634920634921,
+          "game": 0.6987951807228916,
+          "irregular_bottleneck": 0.5843373493975904,
+          "maze": 0.8214285714285714,
+          "random": 0.5238095238095238,
+          "room": 0.7831325301204819,
+          "warehouse": 0.4759036144578313
+        },
+        "oracle_success_gain_groups": 1212,
+        "round": "phase5p5_repair5g560"
+      },
+      "producer_command": "python scripts/analyze_repair5g560_oracle_gap.py",
+      "source_commit": "unknown",
+      "status": "completed",
+      "updated_at": "2026-06-19T10:27:09.734439+00:00"
+    },
+    "scenario_validity": {
+      "artifacts": [
+        "outputs/tables/phase5p5_repair5g560_scenario_validity_audit.csv",
+        "outputs/reports/phase5p5_repair5g560_scenario_validity_summary.json",
+        "outputs/reports/phase5p5_repair5g560_scenario_validity.md"
+      ],
+      "gate_result": false,
+      "metrics": {
+        "aaai_ready": false,
+        "actual_file_validation_complete": true,
+        "invalid_scenarios": 797,
+        "learned_runtime_policy_validated": false,
+        "phase5p5_allowed": false,
+        "phase6_allowed": false,
+        "reason_counts": {
+          "duplicate_goals": 298,
+          "duplicate_starts": 515,
+          "pair_not_reachable": 288
+        },
+        "round": "phase5p5_repair5g560",
+        "runtime_claim_allowed": false,
+        "scenario_rows": 2000,
+        "scenario_validity_gate_passed": false,
+        "valid_scenarios": 1203,
+        "validity_rate": 0.6015
+      },
+      "producer_command": "python scripts/validate_repair5g560_scenarios.py",
+      "source_commit": "unknown",
+      "status": "gate_failed",
+      "updated_at": "2026-06-19T10:27:04.567380+00:00"
+    }
+  },
+  "updated_at": "2026-06-19T10:36:18.428050+00:00"
+}

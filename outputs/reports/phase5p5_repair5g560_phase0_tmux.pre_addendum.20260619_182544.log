@@ -1,0 +1,21 @@
++ /usr/bin/python -m pytest tests/test_repair5g560_labelv51.py tests/test_repair5g559_gcst.py -q
+Running 31 items in this shard
+...............................                                          [100%]
+=============================== warnings summary ===============================
+tests/test_repair5g559_gcst.py::test_theta_fixed_for_run
+  /root/czr004/tests/test_repair5g559_gcst.py:235: UserWarning: Creating a tensor from a list of numpy.ndarrays is extremely slow. Please consider converting the list to a single numpy.ndarray with numpy.array() before converting to a tensor. (Triggered internally at /opt/pytorch/pytorch/torch/csrc/utils/tensor_new.cpp:254.)
+    theta = torch.tensor([BASELINE_G556, BASELINE_G556 + 0.02], dtype=torch.float32)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+31 passed, 1 warning in 4.59s
++ /usr/bin/python scripts/audit_repair5g560_g559_truth.py --root /root/czr004
+fatal: not a git repository (or any of the parent directories): .git
+fatal: not a git repository (or any of the parent directories): .git
+{'round': 'phase5p5_repair5g560', 'source_round': 'phase5p5_repair5g559', 'start_commit': '6c9de29909535df138e7b7dd0a6a4fce29024689', 'real_solver_materialization_succeeded': True, 'real_pair_outcomes_exist': True, 'real_gcst_codebook_critic_trained': False, 'real_continuous_theta_generator_trained': False, 'self_supervised_instance_pretraining_executed': False, 'active_label_v5_acquisition_executed': False, 'stage1_solver_policy_replay_executed': False, 'stage2_solver_replay_executed': False, 'blind_replay_executed': False, 'instance_manifest_rows': 2000, 'unique_sha_instance_uids': 1762, 'pair_rows': 128000, 'pair_uid_join_to_split_manifest': 0, 'heldout_pair_rows_after_original_join': 0, 'path_found_rate_min': 0.84375, 'decision': 'g559_failed_identity_and_training_entrypoints_not_gcst_learnability'}
++ /usr/bin/python scripts/recover_repair5g560_labelv51.py --root /root/czr004
+fatal: not a git repository (or any of the parent directories): .git
+{'round': 'phase5p5_repair5g560', 'schema_version': 'label_v5.1_identity_safe', 'source_round': 'phase5p5_repair5g559', 'pair_row_count_before': 128000, 'pair_row_count_after': 128000, 'quarantined_rows': 0, 'identity_crosswalk_rows': 130000, 'ambiguous_legacy_key_count': 0, 'baseline_pseudo_candidate_rows': 2000, 'split_counts': {'train': 79936, 'validation': 37440, 'heldout': 10624}, 'safe_set_rows': 2000, 'identity_join_rate': 1.0, 'physical_map_join_rate': 1.0, 'scenario_join_rate': 1.0, 'theta_join_rate': 1.0, 'evaluation_uid_nonempty_rate': 1.0, 'baseline_pair_same_evaluation_rate': 1.0, 'identity_digest_match_rate': 1.0, 'recovery_gate_passed': True, 'phase5p5_allowed': False, 'phase6_allowed': False, 'runtime_claim_allowed': False, 'learned_runtime_policy_validated': False, 'aaai_ready': False}
++ /usr/bin/python scripts/validate_repair5g560_scenarios.py --root /root/czr004
+fatal: not a git repository (or any of the parent directories): .git
+{'round': 'phase5p5_repair5g560', 'scenario_rows': 2000, 'valid_scenarios': 1203, 'invalid_scenarios': 797, 'validity_rate': 0.6015, 'reason_counts': {'duplicate_goals': 298, 'duplicate_starts': 515, 'pair_not_reachable': 288}, 'actual_file_validation_complete': False, 'phase5p5_allowed': False, 'phase6_allowed': False, 'runtime_claim_allowed': False, 'learned_runtime_policy_validated': False, 'aaai_ready': False}
++ /usr/bin/python scripts/analyze_repair5g560_oracle_gap.py --root /root/czr004

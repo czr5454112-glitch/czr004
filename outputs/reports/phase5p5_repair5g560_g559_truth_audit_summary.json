@@ -1,0 +1,21 @@
+{
+  "active_label_v5_acquisition_executed": false,
+  "blind_replay_executed": false,
+  "decision": "g559_failed_identity_and_training_entrypoints_not_gcst_learnability",
+  "heldout_pair_rows_after_original_join": 0,
+  "instance_manifest_rows": 2000,
+  "pair_rows": 128000,
+  "pair_uid_join_to_split_manifest": 0,
+  "path_found_rate_min": 0.84375,
+  "real_continuous_theta_generator_trained": false,
+  "real_gcst_codebook_critic_trained": false,
+  "real_pair_outcomes_exist": true,
+  "real_solver_materialization_succeeded": true,
+  "round": "phase5p5_repair5g560",
+  "self_supervised_instance_pretraining_executed": false,
+  "source_round": "phase5p5_repair5g559",
+  "stage1_solver_policy_replay_executed": false,
+  "stage2_solver_replay_executed": false,
+  "start_commit": "6c9de29909535df138e7b7dd0a6a4fce29024689",
+  "unique_sha_instance_uids": 1762
+}

@@ -1,0 +1,23 @@
+{
+  "aaai_ready": false,
+  "better_count": 116,
+  "both_fail": 2,
+  "both_success": 272,
+  "decision": "g560_direct_actor_dev_replay_completed",
+  "learned_runtime_policy_validated": false,
+  "mean_quality_delta_vs_g556": 0.11486412997058826,
+  "pair_csv": "/root/czr004/outputs/tables/phase5p5_repair5g560_direct_actor_dev_replay_pairs.csv",
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "planned_contexts": 300,
+  "planned_solver_rows": 600,
+  "real_solver_rows": 600,
+  "registry_rows": 301,
+  "replay_pairs": 300,
+  "result_csv": "/root/czr004/outputs/tables/phase5p5_repair5g560_direct_actor_dev_replay_results.csv",
+  "round": "phase5p5_repair5g560",
+  "runtime_claim_allowed": false,
+  "success_gains": 1,
+  "success_regressions": 25,
+  "worse_count": 153
+}

@@ -1,0 +1,7 @@
+check,observed,expected,passed
+instance_manifest_rows,2000,2000,True
+unique_sha_instance_uids,1762,2000,False
+pair_rows,128000,128000,True
+pair_uid_join_to_split_manifest,0,128000,False
+heldout_pair_rows_after_original_join,0,>0,False
+path_found_rate_min,0.84375,>=0.95,False

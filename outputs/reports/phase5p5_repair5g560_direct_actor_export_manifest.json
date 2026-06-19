@@ -1,0 +1,28 @@
+{
+  "aaai_ready": false,
+  "contains_auxiliary_critic": false,
+  "contains_retrieval_memory": false,
+  "contains_selector_table": false,
+  "contains_theta_registry": false,
+  "export_path": "/root/czr004/artifacts/models/gcst/g560_direct_actor_export.pt",
+  "feature_schema": [
+    "agent_count",
+    "nominal_budget_ms",
+    "requested_agent_count",
+    "physical_free_cell_count",
+    "agent_density",
+    "encoded_OD_token_count",
+    "represented_agent_mass",
+    "represented_flow_mass",
+    "path_found_rate",
+    "base_time_limit_sec",
+    "ltm_max_iterations",
+    "nonzero_flow"
+  ],
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "round": "phase5p5_repair5g560",
+  "runtime_claim_allowed": false,
+  "source_model_path": "/root/czr004/artifacts/models/gcst/g560_direct_actor_g1_561.pt"
+}

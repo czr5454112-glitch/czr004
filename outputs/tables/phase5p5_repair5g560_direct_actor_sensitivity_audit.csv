@@ -1,0 +1,5 @@
+check,passed,theta_l1
+same_instance_repeated_identical_theta,True,0.0
+traffic_feature_change_can_change_theta,True,4.60565097455401e-05
+budget_change_consistent_forward,True,0.0015201290370896459
+solver_seed_change_alone_ignored,True,0.0

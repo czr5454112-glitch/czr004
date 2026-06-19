@@ -1,0 +1,118 @@
+{
+  "exact_match_rate_to_observed_theta": 0.0,
+  "fraction_exactly_equal_to_g556": 0.0,
+  "fraction_within_epsilon_of_g556": 0.0,
+  "generated_rows": 2406,
+  "nearest_observed_theta_distance_mean": 0.008037369698286057,
+  "nearest_safe_theta_distance_mean": 0.012550859712064266,
+  "pairwise_generated_theta_distance_mean": 0.012772534042596817,
+  "per_field": {
+    "theta_alpha_cong_block": {
+      "max": 1.3474749326705933,
+      "mean": 1.26052725315094,
+      "min": 1.2080025672912598,
+      "residual_variance": 0.00045262411003932357,
+      "std": 0.02127496525645256
+    },
+    "theta_alpha_cong_commit_nonprogress": {
+      "max": 1.186840295791626,
+      "mean": 1.1509660482406616,
+      "min": 0.9961792826652527,
+      "residual_variance": 0.000748288119211793,
+      "std": 0.027354856953024864
+    },
+    "theta_alpha_cong_commit_progress": {
+      "max": 1.5062675476074219,
+      "mean": 1.250247836112976,
+      "min": 1.1875967979431152,
+      "residual_variance": 0.0013580677332356572,
+      "std": 0.03685196861624718
+    },
+    "theta_alpha_cong_wait_nonprogress": {
+      "max": 0.9454191327095032,
+      "mean": 0.7608118057250977,
+      "min": 0.6524641513824463,
+      "residual_variance": 0.0009612275171093643,
+      "std": 0.031003668904304504
+    },
+    "theta_alpha_cong_wait_progress": {
+      "max": 1.0881785154342651,
+      "mean": 0.7527416348457336,
+      "min": 0.7252082824707031,
+      "residual_variance": 0.001168037299066782,
+      "std": 0.03417656198143959
+    },
+    "theta_alpha_flow_commit_progress": {
+      "max": 1.2179183959960938,
+      "mean": 1.0391745567321777,
+      "min": 0.9153881072998047,
+      "residual_variance": 0.0006892340607009828,
+      "std": 0.026253268122673035
+    },
+    "theta_alpha_flow_wait_progress": {
+      "max": 0.7338384389877319,
+      "mean": 0.6881455779075623,
+      "min": 0.44291144609451294,
+      "residual_variance": 0.0009792073396965861,
+      "std": 0.03129228949546814
+    },
+    "theta_flow_shield_beta": {
+      "max": 0.39458489418029785,
+      "mean": 0.3431325852870941,
+      "min": 0.2348792552947998,
+      "residual_variance": 0.0003037018177565187,
+      "std": 0.01742704212665558
+    },
+    "theta_lambda_cong": {
+      "max": 0.9993323683738708,
+      "mean": 0.6732136011123657,
+      "min": 0.4768178164958954,
+      "residual_variance": 0.0019953909795731306,
+      "std": 0.044669799506664276
+    },
+    "theta_lambda_flow": {
+      "max": 0.6726686954498291,
+      "mean": 0.64654141664505,
+      "min": 0.5989948511123657,
+      "residual_variance": 9.861674334388226e-05,
+      "std": 0.009930596686899662
+    },
+    "theta_max_edge_cost": {
+      "max": 10.964001655578613,
+      "mean": 10.75489330291748,
+      "min": 8.383537292480469,
+      "residual_variance": 0.07538292557001114,
+      "std": 0.27455949783325195
+    },
+    "theta_max_flow_shield": {
+      "max": 1.0016661882400513,
+      "mean": 0.8932128548622131,
+      "min": 0.5471919775009155,
+      "residual_variance": 0.0026064531411975622,
+      "std": 0.05105343088507652
+    },
+    "theta_min_edge_cost": {
+      "max": 1.5704318284988403,
+      "mean": 1.0108672380447388,
+      "min": 0.9026055932044983,
+      "residual_variance": 0.004618109203875065,
+      "std": 0.06795667111873627
+    },
+    "theta_rho_cong_decay": {
+      "max": 0.9834054112434387,
+      "mean": 0.9794501662254333,
+      "min": 0.9529224634170532,
+      "residual_variance": 1.635845546843484e-05,
+      "std": 0.0040445588529109955
+    },
+    "theta_rho_flow_decay": {
+      "max": 1.0,
+      "mean": 0.9969004392623901,
+      "min": 0.9558371901512146,
+      "residual_variance": 6.55960975564085e-05,
+      "std": 0.008099142462015152
+    }
+  },
+  "theta_hash_count": 2406,
+  "unique_generated_theta_count": 2182
+}

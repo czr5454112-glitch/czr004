@@ -1,0 +1,106 @@
++ /usr/bin/python -m pytest tests/test_repair5g560_labelv51.py tests/test_repair5g559_gcst.py -q
+Running 31 items in this shard
+......F........................                                          [100%]
+=================================== FAILURES ===================================
+____________________ test_training_script_writes_checkpoint ____________________
+
+tmp_path = PosixPath('/root/czr004/C:/tmp/pytest-basetemp-czr004/test_training_script_writes_ch0')
+
+    @pytest.mark.skipif(__import__("importlib").util.find_spec("torch") is None, reason="torch unavailable")
+    def test_training_script_writes_checkpoint(tmp_path):
+        root = tmp_path
+        rows = []
+        for group, split, phys in [("g1", "train", "h1"), ("g2", "heldout", "h2")]:
+            for idx, theta in enumerate(["g556_c063174", "c1", "c2"]):
+                base = {
+                    "schema_version": "label_v5.1_identity_safe",
+                    "source_round": "phase5p5_repair5g559",
+                    "row_kind": "baseline_pseudo_candidate" if theta == "g556_c063174" else "candidate_pair",
+                    "g560_evaluation_uid": group,
+                    "g560_instance_uid": group + "i",
+                    "g560_physical_map_sha256": phys,
+                    "split": split,
+                    "theta_id": theta,
+                    "candidate_id": theta,
+                    "agent_count": "4",
+                    "nominal_budget_ms": "500",
+                    "requested_agent_count": "4",
+                    "physical_free_cell_count": "9",
+                    "agent_density": "0.4",
+                    "encoded_OD_token_count": "4",
+                    "represented_agent_mass": "4",
+                    "represented_flow_mass": "4",
+                    "path_found_rate": "1.0",
+                    "base_time_limit_sec": "0.5",
+                    "ltm_max_iterations": "2",
+                    "nonzero_flow": "True",
+                    "labelv51_target_utility": str(0.0 if theta == "g556_c063174" else (1.0 if idx == 1 else -1.0)),
+                    "labelv51_development_safe": "True" if idx != 2 else "False",
+                    "labelv51_success_gain": "True" if idx == 1 else "False",
+                    "labelv51_success_regression": "True" if idx == 2 else "False",
+                    "labelv51_comparable_quality": "True",
+                    "quality_delta_vs_g556": str(0.0 if theta == "g556_c063174" else (-0.2 if idx == 1 else 0.4)),
+                }
+                for col in [
+                    "theta_alpha_cong_commit_progress",
+                    "theta_alpha_cong_commit_nonprogress",
+                    "theta_alpha_cong_block",
+                    "theta_alpha_cong_wait_progress",
+                    "theta_alpha_cong_wait_nonprogress",
+                    "theta_alpha_flow_commit_progress",
+                    "theta_alpha_flow_wait_progress",
+                    "theta_rho_cong_decay",
+                    "theta_rho_flow_decay",
+                    "theta_lambda_cong",
+                    "theta_lambda_flow",
+                    "theta_flow_shield_beta",
+                    "theta_max_flow_shield",
+                    "theta_min_edge_cost",
+                    "theta_max_edge_cost",
+                ]:
+                    base[col] = "1.0"
+                rows.append(base)
+        write_csv(root / TRAINING_ROWS_CSV, rows)
+>       summary = train_and_evaluate(root, seed=1, hidden_dim=16, steps=2, fold_steps=1, n_folds=2, batch_groups=1, device="cpu")
+
+tests/test_repair5g560_labelv51.py:227:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src/gcst/real_critic_training.py:644: in train_and_evaluate
+    _write_rows(SELECTOR_EVAL_CSV, selector_rows, root)
+src/gcst/real_critic_training.py:69: in _write_rows
+    writer.writerows(rows)
+/usr/lib/python3.12/csv.py:167: in writerows
+    return self.writer.writerows(map(self._dict_to_list, rowdicts))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <csv.DictWriter object at 0x7f8d136eede0>
+rowdict = {'best_validation_metric': -0.1, 'control_backend': 'torch_mlp', 'fold': 0, 'groups': 1, ...}
+
+    def _dict_to_list(self, rowdict):
+        if self.extrasaction == "raise":
+            wrong_fields = rowdict.keys() - self.fieldnames
+            if wrong_fields:
+>               raise ValueError("dict contains fields not in fieldnames: "
+                                 + ", ".join([repr(x) for x in wrong_fields]))
+E               ValueError: dict contains fields not in fieldnames: 'best_validation_metric'
+
+/usr/lib/python3.12/csv.py:159: ValueError
+=============================== warnings summary ===============================
+tests/test_repair5g559_gcst.py::test_theta_fixed_for_run
+  /root/czr004/tests/test_repair5g559_gcst.py:235: UserWarning: Creating a tensor from a list of numpy.ndarrays is extremely slow. Please consider converting the list to a single numpy.ndarray with numpy.array() before converting to a tensor. (Triggered internally at /opt/pytorch/pytorch/torch/csrc/utils/tensor_new.cpp:254.)
+    theta = torch.tensor([BASELINE_G556, BASELINE_G556 + 0.02], dtype=torch.float32)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/test_repair5g560_labelv51.py::test_training_script_writes_checkpoint
+1 failed, 30 passed, 1 warning in 4.31s
+Traceback (most recent call last):
+  File "/root/czr004/scripts/run_repair5g560_phase0.py", line 57, in <module>
+    main()
+  File "/root/czr004/scripts/run_repair5g560_phase0.py", line 28, in main
+    run([py, "-m", "pytest", "tests/test_repair5g560_labelv51.py", "tests/test_repair5g559_gcst.py", "-q"], args.root)
+  File "/root/czr004/scripts/run_repair5g560_phase0.py", line 13, in run
+    subprocess.run(cmd, cwd=root, check=True)
+  File "/usr/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['/usr/bin/python', '-m', 'pytest', 'tests/test_repair5g560_labelv51.py', 'tests/test_repair5g559_gcst.py', '-q']' returned non-zero exit status 1.

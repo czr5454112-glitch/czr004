@@ -1,0 +1,6 @@
+# Repair5G.5.60 Direct Actor Failure Attribution
+
+- scenario_validity: open (G5.59 scenario validation retained only 1203/2000 valid contexts; invalid rows were filtered before actor training.)
+- direct_actor_dev_replay: failed (success_regressions=25; success_gains=1; mean_delta=0.11486412997058826; better=116; worse=153)
+- auxiliary_critic_refinement: open (G1 actor did not improve offline nearest-safe distance over G0; critic remains training-only and is not exported.)
+- selector_control_boundary: closed (Actor export excludes critic, theta registry, selector table, and retrieval memory; selector cannot satisfy the main-method gate.)

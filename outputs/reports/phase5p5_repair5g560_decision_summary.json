@@ -1,0 +1,17 @@
+{
+  "aaai_ready": false,
+  "baseline_kept": "g556_c063174",
+  "better_count": 116,
+  "decision": "g560_direct_actor_dev_replay_failed_keep_g556_and_repair_instances",
+  "direct_actor_dev_replay_passed": false,
+  "learned_runtime_policy_validated": false,
+  "mean_quality_delta_vs_g556": 0.11486412997058826,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "primary_method": "Direct Continuous GCST Actor",
+  "round": "phase5p5_repair5g560",
+  "runtime_claim_allowed": false,
+  "success_gains": 1,
+  "success_regressions": 25,
+  "worse_count": 153
+}

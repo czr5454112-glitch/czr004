@@ -1,0 +1,324 @@
+{
+  "artifact_count": 53,
+  "artifacts": [
+    {
+      "git_payload_candidate": true,
+      "path": "artifacts/models/gcst/g560_auxiliary_critic_g1_561.pt",
+      "sha256": "51844b19900cb508a86cf96de2952026f4cd1ed1b6e48fd199e1a56c95de592d",
+      "size_bytes": 90232
+    },
+    {
+      "git_payload_candidate": true,
+      "path": "artifacts/models/gcst/g560_direct_actor_export.pt",
+      "sha256": "38d9d8c3ca21995457ed1190984ecbb3909419753d5a39e96d23b7dbe8d15872",
+      "size_bytes": 165036
+    },
+    {
+      "git_payload_candidate": true,
+      "path": "artifacts/models/gcst/g560_direct_actor_g0_560.pt",
+      "sha256": "c0f65784c6fd216e22759969511d64662b9bb5ce430ab0ac2fb8b34dc5a119fb",
+      "size_bytes": 165292
+    },
+    {
+      "git_payload_candidate": true,
+      "path": "artifacts/models/gcst/g560_direct_actor_g1_561.pt",
+      "sha256": "a891aaeacb285b63292650c2e3186311c597b59f7c70ac0877406045c7b6fcb9",
+      "size_bytes": 165420
+    },
+    {
+      "git_payload_candidate": true,
+      "path": "outputs/reports/phase5p5_repair5g560_decision.md",
+      "sha256": "98dfb1ade5bda819a4daafd03c7fae11dc898df4bd0dc4ca72f6c07a6059a307",
+      "size_bytes": 455
+    },
+    {
+      "git_payload_candidate": true,
+      "path": "outputs/reports/phase5p5_repair5g560_decision_summary.json",
+      "sha256": "c0524f8484f5ff21f9fa8d5cf75a1b56cc4236380b013153632bbfd23d958422",
+      "size_bytes": 558
+    },
+    {
+      "git_payload_candidate": true,
+      "path": "outputs/reports/phase5p5_repair5g560_direct_actor_dev_replay.md",
+      "sha256": "40a9af0f8a17a42f1a6f8e9c40cbd408da6919639ce350350c7491464927b5ad",
+      "size_bytes": 352
+    },
+    {
+      "git_payload_candidate": true,
+      "path": "outputs/reports/phase5p5_repair5g560_direct_actor_dev_replay_summary.json",
+      "sha256": "d76f4f1715b2ecff60a1afb42098641599906cdaff2bb8fe7fc38e59b0a55cbd",
+      "size_bytes": 776
+    },
+    {
+      "git_payload_candidate": true,
+      "path": "outputs/reports/phase5p5_repair5g560_direct_actor_evaluation.md",
+      "sha256": "d6d024c454958c374ecb3d44ca95b35808dd837c6cbed00abdce1bbd26af9f09",
+      "size_bytes": 369
+    },
+    {
+      "git_payload_candidate": true,
+      "path": "outputs/reports/phase5p5_repair5g560_direct_actor_evaluation_summary.json",
+      "sha256": "541abee4f095994563b4cf8c394a1ee955e14b301994923af0eda01f4e1ab72d",
+      "size_bytes": 6711
+    },
+    {
+      "git_payload_candidate": true,
+      "path": "outputs/reports/phase5p5_repair5g560_direct_actor_export_manifest.json",
+      "sha256": "60a139c4cd769a75b6cce92414608e7f46756e558076b86c958a0bc24d818474",
+      "size_bytes": 852
+    },
+    {
+      "git_payload_candidate": true,
+      "path": "outputs/reports/phase5p5_repair5g560_direct_actor_failure_attribution.md",
+      "sha256": "287d6a56216e41627ff0aa902b0f590dcc37bcdfb2ba5b674a975b695dabe87b",
+      "size_bytes": 645
+    },
+    {
+      "git_payload_candidate": true,
+      "path": "outputs/reports/phase5p5_repair5g560_direct_actor_g0_training_summary.json",
+      "sha256": "3061d3d7ff99bec9b6dbbf18d4cfcb9cace7c64dcd76fd5e7c6f552635dd43c6",
+      "size_bytes": 8257
+    },
+    {
+      "git_payload_candidate": true,
+      "path": "outputs/reports/phase5p5_repair5g560_direct_actor_g1_training_summary.json",
+      "sha256": "1e8abbdae5ca2bf5c30df41019e9023fc19eac9919dc776f551173da1c288cd1",
+      "size_bytes": 8614
+    },
+    {
+      "git_payload_candidate": true,
+      "path": "outputs/reports/phase5p5_repair5g560_direct_actor_replay_tmux.failed_seed.20260619_183602.log",
+      "sha256": "6f623b5b9bf3559bbe815fc3af024866181c0aaa068428eec5e0007aac400f08",
+      "size_bytes": 2643
+    },
+    {
+      "git_payload_candidate": true,
+      "path": "outputs/reports/phase5p5_repair5g560_direct_actor_replay_tmux.log",
+      "sha256": "355a1826927f00c9f92ae81341b63440b8b3393ffc23d172349705759363b904",
+      "size_bytes": 62902
+    },
+    {
+      "git_payload_candidate": true,
+      "path": "outputs/reports/phase5p5_repair5g560_g559_truth_audit.md",
+      "sha256": "1c6e1fff08839e4c37e3c63a430dd5ca7760d2ff810761e956e119748aad3b03",
+      "size_bytes": 711
+    },
+    {
+      "git_payload_candidate": true,
+      "path": "outputs/reports/phase5p5_repair5g560_g559_truth_audit_summary.json",
+      "sha256": "39c8889e645005557fb4963d65c7825968257c371eed903392968bf228bbbeb3",
+      "size_bytes": 854
+    },
+    {
+      "git_payload_candidate": true,
+      "path": "outputs/reports/phase5p5_repair5g560_generated_theta_novelty_summary.json",
+      "sha256": "b7695a4f47c969d1e8536d4f9585190a444e33fbe7591aefe0600fe5e4c18d93",
+      "size_bytes": 3786
+    },
+    {
+      "git_payload_candidate": true,
+      "path": "outputs/reports/phase5p5_repair5g560_labelv51_recovery.md",
+      "sha256": "aebe37e3b9d982c646ae06fe77fee243cb9612567370f06a094f67ddae486e05",
+      "size_bytes": 422
+    },
+    {
+      "git_payload_candidate": true,
+      "path": "outputs/reports/phase5p5_repair5g560_labelv51_recovery_summary.json",
+      "sha256": "2355669a7a5889f09b729f29df6e1c662dbe26bf146245ea4d558f8a5512588c",
+      "size_bytes": 879
+    },
+    {
+      "git_payload_candidate": true,
+      "path": "outputs/reports/phase5p5_repair5g560_labelv51_valid_training_summary.json",
+      "sha256": "603d353d93c3a6f42f9026572974cbc7de005f047cf860ba1dc01454393f2465",
+      "size_bytes": 463
+    },
+    {
+      "git_payload_candidate": true,
+      "path": "outputs/reports/phase5p5_repair5g560_oracle_opportunity.md",
+      "sha256": "770a91a066bf9243e4f0b5f944f5373327f7055351f606268c903ad8e0b91686",
+      "size_bytes": 280
+    },
+    {
+      "git_payload_candidate": true,
+      "path": "outputs/reports/phase5p5_repair5g560_oracle_opportunity_summary.json",
+      "sha256": "bd0bc1728e70a22fa0295a90b457f8064077413c94f3542db5f68f4015c63c0e",
+      "size_bytes": 716
+    },
+    {
+      "git_payload_candidate": true,
+      "path": "outputs/reports/phase5p5_repair5g560_phase0_tmux.failed.20260619_181508.log",
+      "sha256": "584ef8053fcc9302dcd655f6a16329a3e6fa5620382637b15437d7dc39200c53",
+      "size_bytes": 6215
+    },
+    {
+      "git_payload_candidate": true,
+      "path": "outputs/reports/phase5p5_repair5g560_phase0_tmux.failed_tests.20260619_182632.log",
+      "sha256": "d698ddd79905a23584b485d8a2d83b82ee5ae8b51d2507c994e43f67b56debf1",
+      "size_bytes": 3806
+    },
+    {
+      "git_payload_candidate": true,
+      "path": "outputs/reports/phase5p5_repair5g560_phase0_tmux.log",
+      "sha256": "76467d6ab4be6033555cd9609d10c65afff0ff6e0253de3e616f7b5c41064e33",
+      "size_bytes": 27653
+    },
+    {
+      "git_payload_candidate": true,
+      "path": "outputs/reports/phase5p5_repair5g560_phase0_tmux.pre_addendum.20260619_182544.log",
+      "sha256": "5c8773a617667b3d663b5cf1271ee4f1c5232dfe1aa4c81003802c44127db9f7",
+      "size_bytes": 3500
+    },
+    {
+      "git_payload_candidate": true,
+      "path": "outputs/reports/phase5p5_repair5g560_scenario_validity.md",
+      "sha256": "98b99ed624a6d7ee8a86312302a6f3d32707a8132fcc69262b840b7edf389d31",
+      "size_bytes": 318
+    },
+    {
+      "git_payload_candidate": true,
+      "path": "outputs/reports/phase5p5_repair5g560_scenario_validity_summary.json",
+      "sha256": "a56c71f06c41c5580f55fa392233163cc254acd7da9c6057c491b51caa3facef",
+      "size_bytes": 501
+    },
+    {
+      "git_payload_candidate": true,
+      "path": "outputs/reports/phase5p5_repair5g560_state.json",
+      "sha256": "7c16b20139a4b28a9781265daa57218590508864773a9bbd4b85c047c5220002",
+      "size_bytes": 40463
+    },
+    {
+      "git_payload_candidate": true,
+      "path": "outputs/tables/phase5p5_repair5g560_candidate_space_audit.csv",
+      "sha256": "740473b0a59b37d4c3e4376a487d2128b972568ae45d138dc2079fc533c76708",
+      "size_bytes": 1564
+    },
+    {
+      "git_payload_candidate": true,
+      "path": "outputs/tables/phase5p5_repair5g560_direct_actor_control_comparison.csv",
+      "sha256": "a51de05de62fc443e44ca1ff019fb5699146892517d35ef258c092f3fd06c7cd",
+      "size_bytes": 620
+    },
+    {
+      "git_payload_candidate": true,
+      "path": "outputs/tables/phase5p5_repair5g560_direct_actor_dev_replay_pairs.csv",
+      "sha256": "9a700bc58e850736c12abbe47b2969d3ce6aa13e261ebb39a9baec9e0ba28915",
+      "size_bytes": 189803
+    },
+    {
+      "git_payload_candidate": true,
+      "path": "outputs/tables/phase5p5_repair5g560_direct_actor_dev_replay_plan.csv",
+      "sha256": "9d9c6b7cbf101b8ef1ef73bdb588141a3b6c598a1c3faf60337a0f65e2f17bb9",
+      "size_bytes": 433716
+    },
+    {
+      "git_payload_candidate": true,
+      "path": "outputs/tables/phase5p5_repair5g560_direct_actor_dev_replay_results.csv",
+      "sha256": "832c99b0e2140f5e5e3a1e53402d155c349c15cbfe66871c648ab4db2ac53274",
+      "size_bytes": 924113
+    },
+    {
+      "git_payload_candidate": true,
+      "path": "outputs/tables/phase5p5_repair5g560_direct_actor_dev_replay_results.raw.csv",
+      "sha256": "832c99b0e2140f5e5e3a1e53402d155c349c15cbfe66871c648ab4db2ac53274",
+      "size_bytes": 924113
+    },
+    {
+      "git_payload_candidate": true,
+      "path": "outputs/tables/phase5p5_repair5g560_direct_actor_eval.csv",
+      "sha256": "e05ce428734c2972873d591ca27290b6a662938dc20b3fdb5ef1d9256a81279e",
+      "size_bytes": 462
+    },
+    {
+      "git_payload_candidate": true,
+      "path": "outputs/tables/phase5p5_repair5g560_direct_actor_failure_attribution.csv",
+      "sha256": "9697d54ad1a2e07c5c54ab34a5c8ab862f94f6e8315cbdcab25858b6eb3cc073",
+      "size_bytes": 605
+    },
+    {
+      "git_payload_candidate": true,
+      "path": "outputs/tables/phase5p5_repair5g560_direct_actor_generated_theta.csv",
+      "sha256": "d342063729e063d6d3602b138a8eef20b57eef3b9d6830a0ea006b7340842b81",
+      "size_bytes": 1348537
+    },
+    {
+      "git_payload_candidate": true,
+      "path": "outputs/tables/phase5p5_repair5g560_direct_actor_generated_theta_registry.csv",
+      "sha256": "d25d0b170d39895f8a45dd8a58dc57f44c00d56d130fa4ce4456c2442f32de2c",
+      "size_bytes": 136613
+    },
+    {
+      "git_payload_candidate": true,
+      "path": "outputs/tables/phase5p5_repair5g560_direct_actor_sensitivity_audit.csv",
+      "sha256": "83fdfe012f991cc7cd42814324f590ba08bf00cd065b3c9d4663250c6799810f",
+      "size_bytes": 243
+    },
+    {
+      "git_payload_candidate": false,
+      "path": "outputs/tables/phase5p5_repair5g560_identity_crosswalk.csv",
+      "sha256": "2e74c2a0b9e8381817e3577449db933d5984743b62b6e0e1ac9946775a0e536a",
+      "size_bytes": 144013138
+    },
+    {
+      "git_payload_candidate": true,
+      "path": "outputs/tables/phase5p5_repair5g560_identity_failure_audit.csv",
+      "sha256": "9ba5a5e9b5479e06b8c22b9f2a8a9a5e7e4f1a56a5e8d1c525940d1d705eb162",
+      "size_bytes": 283
+    },
+    {
+      "git_payload_candidate": false,
+      "path": "outputs/tables/phase5p5_repair5g560_labelv51_join_audit.csv",
+      "sha256": "3a50f308c8e7477f49b0f1a3b12df31809ba1fcf5eb366a9150c311cd334818f",
+      "size_bytes": 194307356
+    },
+    {
+      "git_payload_candidate": true,
+      "path": "outputs/tables/phase5p5_repair5g560_labelv51_quarantine.csv",
+      "sha256": "654e13f7d360fb568138e8402d4f11155db64498db91b8e946441aa1fbc4f44e",
+      "size_bytes": 187
+    },
+    {
+      "git_payload_candidate": true,
+      "path": "outputs/tables/phase5p5_repair5g560_labelv51_safe_sets.csv",
+      "sha256": "8b060a6c3fd4cfa747739a7cd69afdff1e2402f2a90254e39eac73a541e2a584",
+      "size_bytes": 2514557
+    },
+    {
+      "git_payload_candidate": false,
+      "path": "outputs/tables/phase5p5_repair5g560_labelv51_training_rows.csv",
+      "sha256": "d6629b263862ee537e9249f2b46d75dfcfff8f1c312fa34c56620491cf203c5c",
+      "size_bytes": 196556698
+    },
+    {
+      "git_payload_candidate": false,
+      "path": "outputs/tables/phase5p5_repair5g560_labelv51_valid_training_rows.csv",
+      "sha256": "7ca7cbfb376d9e5b5bb525c2911670275169869e73975d184a506bf48c0acc57",
+      "size_bytes": 118298105
+    },
+    {
+      "git_payload_candidate": true,
+      "path": "outputs/tables/phase5p5_repair5g560_scenario_validity_audit.csv",
+      "sha256": "8b75eb0daf36be59cd9148e5a16887542722f397009c2a68c7670263059faf96",
+      "size_bytes": 1295871
+    },
+    {
+      "git_payload_candidate": true,
+      "path": "outputs/tables/phase5p5_repair5g560_scenario_validity_pre_audit.csv",
+      "sha256": "27ed3592918cd83f3904420f98e3aeeebb9114319af72010ce3688b53ddc24a4",
+      "size_bytes": 705724
+    },
+    {
+      "git_payload_candidate": true,
+      "path": "outputs/tables/phase5p5_repair5g560_stage_implementation_audit.csv",
+      "sha256": "7e6e951dad210d173eba80d893334e74a599a3af0a45b18d9f7b7dc7c13314aa",
+      "size_bytes": 752
+    },
+    {
+      "git_payload_candidate": true,
+      "path": "outputs/tables/phase5p5_repair5g560_training_entrypoint_audit.csv",
+      "sha256": "e7e00a3b7a1abb8c10d443762aa6ff9e85112c93dc1cfe4575f5a97427b63a73",
+      "size_bytes": 673
+    }
+  ],
+  "round": "phase5p5_repair5g560"
+}

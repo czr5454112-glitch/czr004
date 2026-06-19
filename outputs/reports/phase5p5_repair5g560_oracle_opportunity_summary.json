@@ -1,0 +1,22 @@
+{
+  "candidate_improvement_rate": 0.200546875,
+  "candidate_regression_rate": 0.0195390625,
+  "candidate_rows": 128000,
+  "candidate_slate_blocker": false,
+  "fraction_with_safe_improvement": 0.606,
+  "groups": 2000,
+  "mean_oracle_quality_gain": -0.28578665601589115,
+  "normalized_distance_from_g556_mean": 0.10037358746391692,
+  "oracle_by_map_family": {
+    "city": 0.07228915662650602,
+    "empty": 0.9920634920634921,
+    "game": 0.6987951807228916,
+    "irregular_bottleneck": 0.5843373493975904,
+    "maze": 0.8214285714285714,
+    "random": 0.5238095238095238,
+    "room": 0.7831325301204819,
+    "warehouse": 0.4759036144578313
+  },
+  "oracle_success_gain_groups": 1212,
+  "round": "phase5p5_repair5g560"
+}

@@ -211,3 +211,23 @@ def test_reserved_ids_166_205_rejected():
 
     with pytest.raises(SystemExit):
         parse_args_checked(["--ids", "166"], "test")
+
+
+def test_full_pilot_defaults_are_not_smoke_sized():
+    from repair5g559_pipeline import (
+        PILOT_MIN_CANDIDATES_PER_INSTANCE,
+        PILOT_MIN_INSTANCE_UIDS,
+        effective_candidates_per_instance,
+        effective_codebook_size,
+        effective_pilot_instances,
+        parse_args_checked,
+    )
+
+    args = parse_args_checked([], "test")
+    assert effective_pilot_instances(args) >= PILOT_MIN_INSTANCE_UIDS
+    assert effective_candidates_per_instance(args) >= PILOT_MIN_CANDIDATES_PER_INSTANCE
+    assert effective_codebook_size(args) >= PILOT_MIN_CANDIDATES_PER_INSTANCE + 1
+
+    smoke = parse_args_checked(["--smoke", "--pilot-instances", "24", "--candidates-per-instance", "4", "--codebook-size", "64"], "test")
+    assert effective_pilot_instances(smoke) == 24
+    assert effective_candidates_per_instance(smoke) == 4

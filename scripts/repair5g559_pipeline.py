@@ -17,6 +17,7 @@ import random
 import statistics
 import subprocess
 import sys
+import zipfile
 from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any, Iterable
@@ -60,6 +61,12 @@ PRIMARY_BASELINE = "g556_c063174"
 START_COMMIT = "6b0c5e807239b68f1c9c86018db3424c25739525"
 REMOTE_ARTIFACT_ROOT = Path(os.environ.get("REMOTE_ARTIFACT_ROOT", "/root/shared-nvme/czr004_g559_remote_artifacts"))
 
+PILOT_MIN_INSTANCE_UIDS = 2000
+PILOT_MIN_CANDIDATES_PER_INSTANCE = 64
+PILOT_MIN_PAIR_ROWS = PILOT_MIN_INSTANCE_UIDS * PILOT_MIN_CANDIDATES_PER_INSTANCE
+PILOT_MIN_PHYSICAL_HASHES = 24
+PILOT_MIN_MAP_FAMILIES = 6
+
 CLAIMS_CLOSED = {
     "phase5p5_allowed": False,
     "phase6_allowed": False,
@@ -86,6 +93,7 @@ INSTANCE_JSON = f"outputs/reports/{ROUND}_instance_generation_summary.json"
 INSTANCE_CSV = f"outputs/tables/{ROUND}_instance_manifest.csv"
 CODEBOOK_JSON = f"outputs/reports/{ROUND}_codebook_summary.json"
 CODEBOOK_CSV = f"outputs/tables/{ROUND}_theta_codebook.csv"
+PLAN_JSON = f"outputs/reports/{ROUND}_labelv5_pilot_plan_summary.json"
 PLAN_CSV = f"outputs/tables/{ROUND}_labelv5_pilot_plan.csv"
 PILOT_JSON = f"outputs/reports/{ROUND}_labelv5_pilot_summary.json"
 PILOT_PAIR_CSV = f"outputs/tables/{ROUND}_labelv5_pair_rows.csv"
@@ -106,6 +114,11 @@ DECISION_JSON = f"outputs/reports/{ROUND}_decision_summary.json"
 REGISTRY_JSON = f"outputs/reports/{ROUND}_artifact_registry.json"
 SERVER_JSON = f"outputs/reports/{ROUND}_5090_server_run_summary.json"
 SERVER_MD = f"outputs/reports/{ROUND}_5090_server_run.md"
+RAW_TRANSFER_MANIFEST_CSV = f"outputs/tables/{ROUND}_raw_data_transfer_manifest.csv"
+CHECKSUMS_SHA256 = f"outputs/tables/{ROUND}_checksums.sha256"
+RESUME_SH = f"outputs/reports/{ROUND}_resume.sh"
+VERIFY_CHECKSUMS_SH = f"outputs/reports/{ROUND}_verify_checksums.sh"
+COMPACT_BUNDLE_ZIP = f"outputs/reports/{ROUND}_compact_bundle.zip"
 
 
 def resolve(path: str | Path) -> Path:
@@ -189,9 +202,9 @@ def git_head() -> str:
 def parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser()
     p.add_argument("--contexts", type=int, default=96)
-    p.add_argument("--pilot-instances", type=int, default=48)
-    p.add_argument("--candidates-per-instance", type=int, default=8)
-    p.add_argument("--codebook-size", type=int, default=256)
+    p.add_argument("--pilot-instances", type=int, default=PILOT_MIN_INSTANCE_UIDS)
+    p.add_argument("--candidates-per-instance", type=int, default=PILOT_MIN_CANDIDATES_PER_INSTANCE)
+    p.add_argument("--codebook-size", type=int, default=1024)
     p.add_argument("--row-limit", type=int, default=0)
     p.add_argument("--max-workers", type=int, default=1)
     p.add_argument("--seed", type=int, default=20260619)
@@ -208,6 +221,19 @@ def parse_args_checked(argv: list[str] | None, label: str) -> argparse.Namespace
         print(json.dumps({"decision": "reserved_id_guard_rejected", "label": label, "ids": bad}))
         raise SystemExit(1)
     return args
+
+
+def effective_pilot_instances(args: argparse.Namespace) -> int:
+    return int(args.pilot_instances if args.smoke else max(args.pilot_instances, PILOT_MIN_INSTANCE_UIDS))
+
+
+def effective_candidates_per_instance(args: argparse.Namespace) -> int:
+    return int(args.candidates_per_instance if args.smoke else max(args.candidates_per_instance, PILOT_MIN_CANDIDATES_PER_INSTANCE))
+
+
+def effective_codebook_size(args: argparse.Namespace) -> int:
+    required = effective_candidates_per_instance(args) + 1
+    return int(min(args.codebook_size, 64) if args.smoke else max(args.codebook_size, required))
 
 
 def default_topologies(limit: int = 24) -> list[dict[str, Any]]:
@@ -495,7 +521,7 @@ def build_instances(count: int, seed: int) -> list[dict[str, Any]]:
 
 def main_generate_real_instances(argv: list[str] | None = None) -> int:
     args = parse_args_checked(argv, "G5.59 instance generation")
-    rows = build_instances(args.pilot_instances if args.smoke else max(args.pilot_instances, 96), args.seed)
+    rows = build_instances(effective_pilot_instances(args), args.seed)
     summary = {
         "schema_version": f"{ROUND}_instance_generation_summary_v1",
         "decision": "g559_instance_manifest_ready",
@@ -503,6 +529,12 @@ def main_generate_real_instances(argv: list[str] | None = None) -> int:
         "unique_instance_uids": len({r["instance_uid"] for r in rows}),
         "unique_physical_map_hashes": len({r["adjacency_sha256"] for r in rows}),
         "map_families": len({r["map_family"] for r in rows}),
+        "pilot_min_instance_uids": PILOT_MIN_INSTANCE_UIDS,
+        "pilot_min_physical_hashes": PILOT_MIN_PHYSICAL_HASHES,
+        "pilot_min_map_families": PILOT_MIN_MAP_FAMILIES,
+        "meets_pilot_instance_minimum": len({r["instance_uid"] for r in rows}) >= (1 if args.smoke else PILOT_MIN_INSTANCE_UIDS),
+        "meets_pilot_physical_hash_minimum": len({r["adjacency_sha256"] for r in rows}) >= (1 if args.smoke else PILOT_MIN_PHYSICAL_HASHES),
+        "meets_pilot_map_family_minimum": len({r["map_family"] for r in rows}) >= (1 if args.smoke else PILOT_MIN_MAP_FAMILIES),
         "all_agent_mass_preserved": all(num(r["represented_agent_mass"]) == num(r["requested_agent_count"]) for r in rows),
         "path_found_rate_min": min([num(r["path_found_rate"]) for r in rows], default=0.0),
         **CLAIMS_CLOSED,
@@ -536,7 +568,7 @@ def main_build_codebook(argv: list[str] | None = None) -> int:
     baseline = baseline_theta_row()
     cols = theta_columns()
     rows = [{"candidate_id": PRIMARY_BASELINE, "candidate_source": "primary_baseline", "theta_id": PRIMARY_BASELINE, **baseline, **CLAIMS_CLOSED}]
-    count = args.codebook_size if not args.smoke else min(args.codebook_size, 64)
+    count = effective_codebook_size(args)
     for idx in range(max(0, count - 1)):
         scale = 0.05 + 0.35 * ((idx % 17) / 16)
         lo, hi = numeric_bounds()
@@ -547,19 +579,38 @@ def main_build_codebook(argv: list[str] | None = None) -> int:
         rows.append({"candidate_id": f"g559_c{idx:05d}", "theta_id": f"g559_c{idx:05d}", "candidate_source": "sobol_like_trust_region", **row, **CLAIMS_CLOSED})
     rows = [{k: row.get(k, "") for k in ["candidate_id", "theta_id", "candidate_source", *cols, *CLAIMS_CLOSED.keys()]} for row in rows]
     write_rows(CODEBOOK_CSV, rows)
-    write_json(CODEBOOK_JSON, {"schema_version": f"{ROUND}_codebook_summary_v1", "decision": "g559_codebook_ready", "candidate_count": len(rows), "primary_baseline": PRIMARY_BASELINE, **CLAIMS_CLOSED})
+    write_json(
+        CODEBOOK_JSON,
+        {
+            "schema_version": f"{ROUND}_codebook_summary_v1",
+            "decision": "g559_codebook_ready",
+            "candidate_count": len(rows),
+            "nonbaseline_candidate_count": max(0, len(rows) - 1),
+            "pilot_min_candidates_per_instance": PILOT_MIN_CANDIDATES_PER_INSTANCE,
+            "primary_baseline": PRIMARY_BASELINE,
+            **CLAIMS_CLOSED,
+        },
+    )
     print(json.dumps({"decision": "g559_codebook_ready", "candidates": len(rows)}))
     return 0
 
 
 def main_plan_labelv5_pilot(argv: list[str] | None = None) -> int:
     args = parse_args_checked(argv, "G5.59 Label-v5 pilot plan")
+    effective_instances = effective_pilot_instances(args)
+    effective_candidates = effective_candidates_per_instance(args)
     if not resolve(INSTANCE_CSV).exists():
-        main_generate_real_instances(["--pilot-instances", str(args.pilot_instances), "--seed", str(args.seed)] + (["--smoke"] if args.smoke else []))
+        main_generate_real_instances(["--pilot-instances", str(effective_instances), "--seed", str(args.seed)] + (["--smoke"] if args.smoke else []))
     if not resolve(CODEBOOK_CSV).exists():
-        main_build_codebook(["--codebook-size", str(args.codebook_size), "--seed", str(args.seed)] + (["--smoke"] if args.smoke else []))
-    instances = read_rows(INSTANCE_CSV, limit=args.pilot_instances)
+        main_build_codebook(["--codebook-size", str(effective_codebook_size(args)), "--seed", str(args.seed)] + (["--smoke"] if args.smoke else []))
+    instances = read_rows(INSTANCE_CSV, limit=effective_instances)
+    if len(instances) < effective_instances:
+        main_generate_real_instances(["--pilot-instances", str(effective_instances), "--seed", str(args.seed)] + (["--smoke"] if args.smoke else []))
+        instances = read_rows(INSTANCE_CSV, limit=effective_instances)
     candidates = [r for r in read_rows(CODEBOOK_CSV) if r.get("candidate_id") != PRIMARY_BASELINE]
+    if len(candidates) < effective_candidates:
+        main_build_codebook(["--codebook-size", str(effective_codebook_size(args)), "--seed", str(args.seed)] + (["--smoke"] if args.smoke else []))
+        candidates = [r for r in read_rows(CODEBOOK_CSV) if r.get("candidate_id") != PRIMARY_BASELINE]
     baseline = next((r for r in read_rows(CODEBOOK_CSV) if r.get("candidate_id") == PRIMARY_BASELINE), {**baseline_theta_row(), "candidate_id": PRIMARY_BASELINE})
     plan_rows = []
     for idx, inst in enumerate(instances):
@@ -584,8 +635,8 @@ def main_plan_labelv5_pilot(argv: list[str] | None = None) -> int:
                 **CLAIMS_CLOSED,
             }
         )
-        offset = (idx * args.candidates_per_instance) % max(1, len(candidates))
-        slate = [candidates[(offset + j) % len(candidates)] for j in range(min(args.candidates_per_instance, len(candidates)))]
+        offset = (idx * effective_candidates) % max(1, len(candidates))
+        slate = [candidates[(offset + j) % len(candidates)] for j in range(min(effective_candidates, len(candidates)))]
         for cand in slate:
             plan_rows.append(
                 {
@@ -602,6 +653,23 @@ def main_plan_labelv5_pilot(argv: list[str] | None = None) -> int:
                 }
             )
     write_rows(PLAN_CSV, plan_rows)
+    candidate_rows = sum(1 for row in plan_rows if row.get("candidate_id") != PRIMARY_BASELINE)
+    summary = {
+        "schema_version": f"{ROUND}_labelv5_pilot_plan_summary_v1",
+        "decision": "g559_labelv5_pilot_plan_ready",
+        "planned_rows": len(plan_rows),
+        "planned_candidate_rows": candidate_rows,
+        "planned_baseline_rows": len(plan_rows) - candidate_rows,
+        "unique_instance_uids": len({r.get("instance_uid", "") for r in plan_rows}),
+        "unique_physical_map_hashes": len({r.get("physical_map_sha256", "") for r in plan_rows}),
+        "map_families": len({r.get("map_family", "") for r in plan_rows}),
+        "pilot_min_pair_rows": PILOT_MIN_PAIR_ROWS,
+        "pilot_min_instance_uids": PILOT_MIN_INSTANCE_UIDS,
+        "pilot_min_candidates_per_instance": PILOT_MIN_CANDIDATES_PER_INSTANCE,
+        "meets_pilot_candidate_row_minimum": candidate_rows >= (1 if args.smoke else PILOT_MIN_PAIR_ROWS),
+        **CLAIMS_CLOSED,
+    }
+    write_json(PLAN_JSON, summary)
     print(json.dumps({"decision": "g559_labelv5_pilot_plan_ready", "planned_rows": len(plan_rows)}))
     return 0
 
@@ -677,14 +745,20 @@ def main_run_labelv5_pilot(argv: list[str] | None = None) -> int:
         print(json.dumps({"decision": summary["decision"], "rows": 0}))
         return 0
     compact_rows = read_rows(result_csv)
-    write_rows(PILOT_PAIR_CSV, compact_rows[:5000])
+    write_rows(PILOT_PAIR_CSV, compact_rows)
+    candidate_rows = [row for row in compact_rows if row.get("candidate_id") != PRIMARY_BASELINE and row.get("materialized_method") != PRIMARY_BASELINE]
     summary = {
         "schema_version": f"{ROUND}_labelv5_pilot_summary_v1",
         "decision": "g559_labelv5_pilot_real_solver_rows_recorded" if compact_rows else "g559_real_labelv5_pilot_underpowered",
         "real_solver_rows": len(compact_rows),
+        "real_solver_candidate_rows": len(candidate_rows),
         "planned_solver_rows": len(plan),
+        "pilot_min_candidate_rows": PILOT_MIN_PAIR_ROWS,
+        "meets_pilot_candidate_row_minimum": len(candidate_rows) >= (1 if args.smoke else PILOT_MIN_PAIR_ROWS),
         "raw_solver_labelv5_available": bool(compact_rows),
         "remote_result_csv": result_csv,
+        "remote_raw_csv": raw_csv,
+        "remote_log_dir": log_dir,
         **CLAIMS_CLOSED,
     }
     write_json(PILOT_JSON, summary)
@@ -761,15 +835,20 @@ def main_synthetic_contract(argv: list[str] | None = None) -> int:
 
 
 def main_eval_real_learnability(argv: list[str] | None = None) -> int:
-    _args = parse_args_checked(argv, "G5.59 real learnability")
+    args = parse_args_checked(argv, "G5.59 real learnability")
     pilot = load_json(PILOT_JSON, {})
     synth = load_json(SYNTHETIC_JSON, {})
     pair_rows = read_rows(PILOT_PAIR_CSV)
-    enough_real = bool(pilot.get("raw_solver_labelv5_available")) and len(pair_rows) >= 1000
+    instance_uids = {row.get("instance_uid", "") for row in pair_rows if row.get("instance_uid", "")}
+    expected_pair_rows = 1 if args.smoke else PILOT_MIN_PAIR_ROWS
+    expected_instances = 1 if args.smoke else PILOT_MIN_INSTANCE_UIDS
+    enough_real = bool(pilot.get("raw_solver_labelv5_available")) and len(pair_rows) >= expected_pair_rows and len(instance_uids) >= expected_instances
     metrics = [
         {"metric": "real_solver_labels_available", "value": bool(pilot.get("raw_solver_labelv5_available")), "required": True},
-        {"metric": "real_pair_rows", "value": len(pair_rows), "required": 128000},
+        {"metric": "real_pair_rows", "value": len(pair_rows), "required": expected_pair_rows},
+        {"metric": "unique_instance_uids", "value": len(instance_uids), "required": expected_instances},
         {"metric": "synthetic_contract_passed", "value": bool(synth.get("passed")), "required": True},
+        {"metric": "density_gbdt_mlp_beaten_by_main_model", "value": False, "required": True},
     ]
     for row in metrics:
         row["passed"] = row["value"] == row["required"] if isinstance(row["required"], bool) else float(row["value"]) >= float(row["required"])
@@ -780,7 +859,18 @@ def main_eval_real_learnability(argv: list[str] | None = None) -> int:
     elif not enough_real:
         decision = "g559_real_labelv5_pilot_underpowered"
     write_rows(LEARNABILITY_CSV, metrics)
-    write_json(LEARNABILITY_JSON, {"schema_version": f"{ROUND}_real_learnability_summary_v1", "decision": decision, "pilot_underpowered": not enough_real, **CLAIMS_CLOSED})
+    write_json(
+        LEARNABILITY_JSON,
+        {
+            "schema_version": f"{ROUND}_real_learnability_summary_v1",
+            "decision": decision,
+            "pilot_underpowered": not enough_real,
+            "real_pair_rows": len(pair_rows),
+            "unique_instance_uids": len(instance_uids),
+            "pilot_min_pair_rows": expected_pair_rows,
+            **CLAIMS_CLOSED,
+        },
+    )
     print(json.dumps({"decision": decision}))
     return 0
 
@@ -875,6 +965,114 @@ def main_write_decision(argv: list[str] | None = None) -> int:
     return 0
 
 
+def _g559_output_files() -> list[Path]:
+    roots = [ROOT / "outputs" / "reports", ROOT / "outputs" / "tables", ROOT / "outputs" / "logs"]
+    files: list[Path] = []
+    for root in roots:
+        if not root.exists():
+            continue
+        for path in root.rglob(f"*{ROUND}*"):
+            if path.is_file() and path.name != Path(COMPACT_BUNDLE_ZIP).name:
+                files.append(path)
+    return sorted(set(files))
+
+
+def _remote_artifact_files() -> list[Path]:
+    if not REMOTE_ARTIFACT_ROOT.exists():
+        return []
+    return sorted(path for path in REMOTE_ARTIFACT_ROOT.rglob("*") if path.is_file())
+
+
+def main_write_artifact_bundle(argv: list[str] | None = None) -> int:
+    args = parse_args_checked(argv, "G5.59 artifact durability")
+    source_commit = git_head()
+    remote_files = _remote_artifact_files()
+    remote_entries = [
+        make_entry(path, schema_version=f"{ROUND}_remote_raw_artifact_v1", producer_command="python scripts/run_repair5g559_5090.py", source_commit=source_commit, root=REMOTE_ARTIFACT_ROOT)
+        for path in remote_files
+    ]
+    write_rows(RAW_TRANSFER_MANIFEST_CSV, [entry.__dict__ for entry in remote_entries])
+
+    output_files = _g559_output_files()
+    checksum_lines = []
+    for path in output_files + remote_files:
+        digest = hashlib.sha256()
+        try:
+            with path.open("rb") as handle:
+                for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+                    digest.update(chunk)
+            try:
+                rel = path.resolve().relative_to(ROOT.resolve())
+            except Exception:
+                rel = path
+            checksum_lines.append(f"{digest.hexdigest()}  {str(rel).replace(os.sep, '/')}")
+        except Exception:
+            continue
+    write_text(CHECKSUMS_SHA256, "\n".join(checksum_lines) + ("\n" if checksum_lines else ""))
+
+    resume_command = (
+        "python scripts/run_repair5g559_5090.py "
+        f"--pilot-instances {effective_pilot_instances(args)} "
+        f"--candidates-per-instance {effective_candidates_per_instance(args)} "
+        f"--codebook-size {effective_codebook_size(args)} "
+        f"--row-limit {args.row_limit} "
+        f"--max-workers {args.max_workers} "
+        f"--seed {args.seed} "
+        f"--binary {args.binary}"
+    )
+    if args.smoke:
+        resume_command += " --smoke"
+    write_text(
+        RESUME_SH,
+        "#!/usr/bin/env bash\n"
+        "set -euo pipefail\n"
+        "cd \"${CZR004_ROOT:-/root/czr004}\"\n"
+        "export PYTHONPATH=\"$PWD/src:$PWD/scripts:${PYTHONPATH:-}\"\n"
+        "export REMOTE_ARTIFACT_ROOT=\"${REMOTE_ARTIFACT_ROOT:-/root/shared-nvme/czr004_g559_remote_artifacts}\"\n"
+        f"{resume_command}\n",
+    )
+    write_text(
+        VERIFY_CHECKSUMS_SH,
+        "#!/usr/bin/env bash\n"
+        "set -euo pipefail\n"
+        "cd \"${CZR004_ROOT:-/root/czr004}\"\n"
+        f"sha256sum -c {CHECKSUMS_SHA256}\n",
+    )
+    for script in [resolve(RESUME_SH), resolve(VERIFY_CHECKSUMS_SH)]:
+        try:
+            script.chmod(script.stat().st_mode | 0o755)
+        except Exception:
+            pass
+
+    bundle = resolve(COMPACT_BUNDLE_ZIP)
+    ensure_parent(bundle)
+    with zipfile.ZipFile(bundle, "w", compression=zipfile.ZIP_DEFLATED) as zf:
+        for path in _g559_output_files():
+            try:
+                zf.write(path, arcname=str(path.resolve().relative_to(ROOT.resolve())).replace(os.sep, "/"))
+            except Exception:
+                continue
+
+    local_entries = [
+        make_entry(path, schema_version=f"{ROUND}_artifact_v1", producer_command="python scripts/run_repair5g559_5090.py", source_commit=source_commit, root=ROOT)
+        for path in [*output_files, resolve(RAW_TRANSFER_MANIFEST_CSV), resolve(CHECKSUMS_SHA256), resolve(RESUME_SH), resolve(VERIFY_CHECKSUMS_SH), bundle]
+    ]
+    write_registry(
+        resolve(REGISTRY_JSON),
+        [*local_entries, *remote_entries],
+        {
+            "remote_artifact_root": str(REMOTE_ARTIFACT_ROOT),
+            "compact_bundle": COMPACT_BUNDLE_ZIP,
+            "raw_transfer_manifest": RAW_TRANSFER_MANIFEST_CSV,
+            "resume_script": RESUME_SH,
+            "checksum_script": VERIFY_CHECKSUMS_SH,
+            **CLAIMS_CLOSED,
+        },
+    )
+    print(json.dumps({"decision": "g559_artifact_durability_bundle_written", "remote_files": len(remote_files), "bundle": COMPACT_BUNDLE_ZIP}))
+    return 0
+
+
 def main_run_all(argv: list[str] | None = None) -> int:
     args = parse_args_checked(argv, "G5.59 run all")
     forwarded = [
@@ -913,6 +1111,7 @@ def main_run_all(argv: list[str] | None = None) -> int:
         main_run_stage2,
         main_run_blind,
         main_write_decision,
+        main_write_artifact_bundle,
     ]:
         fn(forwarded)
     return 0

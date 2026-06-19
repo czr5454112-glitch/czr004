@@ -33,10 +33,11 @@ from gcst.graph_coarsening import audit_corridor_graph, build_corridor_graph
 from gcst.graph_data import build_graph, graph_summary
 from gcst.label_v4 import BASELINE_G556, THETA_HI, THETA_LO, THETA_NUMERIC_COLUMNS
 from gcst.label_v5 import aggregate_replicates, evaluation_uid, instance_uid, pair_record, row_weight_by_instance, safe_sets
-from gcst.map_hash import physical_hashes
+from gcst.map_hash import load_grid, physical_hashes
 from gcst.metrics import coverage_risk, fallback_accuracy, generator_safe_set_hit_rate, ranking_accuracy, safe_recall_at_k
 from gcst.scenario_features import generate_assignment
 from gcst.traffic_prior import compute_traffic_prior
+from generate_phase1a_scenarios import scenario_text
 
 try:
     import torch
@@ -121,6 +122,8 @@ CHECKSUMS_SHA256 = f"outputs/tables/{ROUND}_checksums.sha256"
 RESUME_SH = f"outputs/reports/{ROUND}_resume.sh"
 VERIFY_CHECKSUMS_SH = f"outputs/reports/{ROUND}_verify_checksums.sh"
 COMPACT_BUNDLE_ZIP = f"outputs/reports/{ROUND}_compact_bundle.zip"
+SOLVER_MAP_MANIFEST_CSV = f"outputs/tables/{ROUND}_solver_map_manifest.csv"
+SOLVER_SCENARIO_MANIFEST_CSV = f"outputs/tables/{ROUND}_solver_scenario_manifest.csv"
 
 
 def resolve(path: str | Path) -> Path:
@@ -204,6 +207,95 @@ def git_head() -> str:
         return ""
 
 
+def sha256_bytes(data: bytes) -> str:
+    return hashlib.sha256(data).hexdigest()
+
+
+def movingai_map_text(width: int, height: int, grid: list[str]) -> str:
+    return "type octile\nheight {height}\nwidth {width}\nmap\n{grid}\n".format(
+        height=int(height),
+        width=int(width),
+        grid="\n".join(grid),
+    )
+
+
+def solver_map_dir() -> Path:
+    return REMOTE_ARTIFACT_ROOT / "contexts" / "maps"
+
+
+def solver_scenario_dir() -> Path:
+    return REMOTE_ARTIFACT_ROOT / "contexts" / "scenarios"
+
+
+def solver_scenario_path(map_name: str, solver_seed: int) -> Path:
+    return solver_scenario_dir() / f"{map_name}-random-{int(solver_seed)}.scen"
+
+
+def register_solver_maps(topologies: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Materialize G5.59 maps as MovingAI files and register them for legacy solver helpers."""
+
+    solver_map_dir().mkdir(parents=True, exist_ok=True)
+    rows: list[dict[str, Any]] = []
+    map_paths: dict[str, str] = {}
+    for topo in topologies:
+        width, height, grid, source = load_grid(topo)
+        text = movingai_map_text(width, height, grid)
+        out = solver_map_dir() / f"{topo['map']}.map"
+        out.write_text(text, encoding="utf-8", newline="\n")
+        hashes = physical_hashes({**topo, "width": width, "height": height})
+        map_path = str(out)
+        map_paths[str(topo["map"])] = map_path
+        rows.append(
+            {
+                "map": topo["map"],
+                "map_family": topo["map_family"],
+                "width": width,
+                "height": height,
+                "solver_map_path": map_path,
+                "solver_map_sha256": sha256_bytes(text.encode("utf-8")),
+                "grid_source": source,
+                "physical_map_sha256": hashes["physical_map_sha256"],
+                "adjacency_sha256": hashes["adjacency_sha256"],
+                "actual_solver_map_registered": True,
+                **CLAIMS_CLOSED,
+            }
+        )
+    try:
+        import run_repair5f4_static_updateparams_validation as f4maps
+        import repair5g5_common as g5common
+
+        for map_name, map_path in map_paths.items():
+            f4maps.MAPS[map_name] = map_path
+            g5common.MAP_PATHS[map_name] = map_path
+    except Exception:
+        pass
+    write_rows(SOLVER_MAP_MANIFEST_CSV, rows)
+    return rows
+
+
+def materialize_solver_scenario(
+    topo: dict[str, Any],
+    graph: Any,
+    assignment: dict[str, Any],
+    solver_seed: int,
+) -> dict[str, Any]:
+    solver_scenario_dir().mkdir(parents=True, exist_ok=True)
+    path = solver_scenario_path(str(topo["map"]), solver_seed)
+    text = scenario_text(str(topo["map"]), graph.width, graph.height, assignment["starts"], assignment["goals"])
+    path.write_text(text, encoding="utf-8", newline="\n")
+    return {
+        "map": topo["map"],
+        "map_family": topo["map_family"],
+        "solver_seed": int(solver_seed),
+        "solver_scenario_path": str(path),
+        "solver_scenario_sha256": sha256_bytes(text.encode("utf-8")),
+        "solver_scenario_pair_count": len(assignment["starts"]),
+        "start_goal_assignment_sha256": assignment["start_goal_assignment_hash"],
+        "actual_solver_scenario_from_instance_assignment": True,
+        **CLAIMS_CLOSED,
+    }
+
+
 def parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser()
     p.add_argument("--contexts", type=int, default=96)
@@ -250,23 +342,23 @@ def default_topologies(limit: int = 24) -> list[dict[str, Any]]:
         ("random-32-32-10", "random", 32, 32),
         ("random-32-32-20", "random", 32, 32),
         ("maze-32-32-2", "maze", 32, 32),
-        ("maze-32-32-4", "maze", 32, 32),
+        ("maze-36-32-4", "maze", 36, 32),
         ("room-32-32-4", "room", 32, 32),
-        ("room-64-64-8", "room", 64, 64),
-        ("g559-synth-warehouse-a-64", "warehouse", 64, 64),
-        ("g559-synth-warehouse-b-64", "warehouse", 64, 64),
-        ("g559-synth-connector-64", "irregular_bottleneck", 64, 64),
-        ("g559-synth-corners-64", "irregular_bottleneck", 64, 64),
-        ("g559-synth-loop-chain-64", "irregular_bottleneck", 64, 64),
-        ("g559-synth-tunnel-64", "irregular_bottleneck", 64, 64),
-        ("g559-synth-string-64", "irregular_bottleneck", 64, 64),
-        ("g559-synth-tree-64", "irregular_bottleneck", 64, 64),
-        ("g559-synth-game-den-64", "game", 64, 64),
-        ("g559-synth-game-brc-64", "game", 64, 64),
-        ("g559-synth-city-berlin-64", "city", 64, 64),
-        ("g559-synth-city-boston-64", "city", 64, 64),
-        ("g559-synth-city-paris-64", "city", 64, 64),
-        ("g559-synth-game-lak-64", "game", 64, 64),
+        ("room-40-32-8", "room", 40, 32),
+        ("g559-synth-warehouse-a-32", "warehouse", 32, 32),
+        ("g559-synth-warehouse-b-36", "warehouse", 36, 32),
+        ("g559-synth-connector-32", "irregular_bottleneck", 32, 32),
+        ("g559-synth-corners-34", "irregular_bottleneck", 34, 32),
+        ("g559-synth-loop-chain-36", "irregular_bottleneck", 36, 32),
+        ("g559-synth-tunnel-38", "irregular_bottleneck", 38, 32),
+        ("g559-synth-string-40", "irregular_bottleneck", 40, 32),
+        ("g559-synth-tree-42", "irregular_bottleneck", 42, 32),
+        ("g559-synth-game-den-32", "game", 32, 32),
+        ("g559-synth-game-brc-32", "game", 32, 32),
+        ("g559-synth-city-berlin-32", "city", 32, 32),
+        ("g559-synth-city-boston-32", "city", 32, 32),
+        ("g559-synth-city-paris-32", "city", 32, 32),
+        ("g559-synth-game-lak-32", "game", 32, 32),
     ]
     return [
         {"topology_id": f"g559_topo_{idx:03d}", "map": name, "map_family": family, "width": width, "height": height}
@@ -474,7 +566,9 @@ def main_literature_code_audit(argv: list[str] | None = None) -> int:
 def main_build_corridor_graphs(argv: list[str] | None = None) -> int:
     args = parse_args_checked(argv, "G5.59 corridor graphs")
     rows = []
-    for topo in default_topologies(limit=24 if not args.smoke else 6):
+    topologies = default_topologies(limit=24 if not args.smoke else 6)
+    register_solver_maps(topologies)
+    for topo in topologies:
         rows.append({**audit_corridor_graph(topo), **CLAIMS_CLOSED})
     unique_hashes = len({r["adjacency_sha256"] for r in rows})
     summary = {
@@ -496,14 +590,26 @@ def main_build_corridor_graphs(argv: list[str] | None = None) -> int:
 def build_instances(count: int, seed: int) -> list[dict[str, Any]]:
     rng = random.Random(seed)
     topologies = default_topologies(limit=24)
+    register_solver_maps(topologies)
     regimes = ["uniform_random", "opposite_side_cross_flow", "room_to_room_door_bottleneck", "warehouse_aisle_to_aisle", "clustered_starts_to_dispersed_goals"]
     budgets = [500, 1000, 2000, 5000]
     rows: list[dict[str, Any]] = []
+    scenario_rows: list[dict[str, Any]] = []
+    topology_cache: dict[tuple[str, int, int], dict[str, Any]] = {}
     for idx in range(count):
         topo = topologies[idx % len(topologies)]
-        graph = build_corridor_graph(topo).graph
+        topo_key = (str(topo["map"]), int(topo["width"]), int(topo["height"]))
+        if topo_key not in topology_cache:
+            graph = build_corridor_graph(topo).graph
+            topology_cache[topo_key] = {
+                "graph": graph,
+                "capacity": largest_component_size(graph),
+                "hashes": physical_hashes(topo),
+            }
+        cached = topology_cache[topo_key]
+        graph = cached["graph"]
         requested_agents = [16, 32, 64, 96, 128, 256][idx % 6]
-        capacity = largest_component_size(graph)
+        capacity = int(cached["capacity"])
         feasible_agent_counts = [value for value in [16, 32, 64, 96, 128, 256] if value <= capacity]
         agents = feasible_agent_counts[-1] if requested_agents > capacity and feasible_agent_counts else requested_agents
         if agents > capacity:
@@ -523,7 +629,9 @@ def build_instances(count: int, seed: int) -> list[dict[str, Any]]:
         }
         assignment = generate_assignment(graph, context, max_agents=None)
         traffic = compute_traffic_prior(graph, assignment)
-        hashes = physical_hashes(topo)
+        hashes = cached["hashes"]
+        scenario = materialize_solver_scenario(topo, graph, assignment, context["solver_seed"])
+        scenario_rows.append({"instance_index": idx, **scenario})
         uid = instance_uid(hashes["physical_map_sha256"], assignment["start_goal_assignment_hash"], agents, context["nominal_budget_ms"], context["ltm_max_iterations"])
         rows.append(
             {
@@ -546,6 +654,9 @@ def build_instances(count: int, seed: int) -> list[dict[str, Any]]:
                 "physical_map_sha256": hashes["physical_map_sha256"],
                 "adjacency_sha256": hashes["adjacency_sha256"],
                 "start_goal_assignment_sha256": assignment["start_goal_assignment_hash"],
+                "solver_scenario_path": scenario["solver_scenario_path"],
+                "solver_scenario_sha256": scenario["solver_scenario_sha256"],
+                "actual_solver_scenario_from_instance_assignment": True,
                 "requested_agent_count": assignment["requested_agent_count"],
                 "physical_free_cell_count": graph.physical_free_cell_count,
                 "agent_density": agents / max(1, graph.physical_free_cell_count),
@@ -557,6 +668,7 @@ def build_instances(count: int, seed: int) -> list[dict[str, Any]]:
                 **CLAIMS_CLOSED,
             }
         )
+    write_rows(SOLVER_SCENARIO_MANIFEST_CSV, scenario_rows)
     rng.shuffle(rows)
     return rows
 

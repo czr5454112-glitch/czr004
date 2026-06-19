@@ -18,13 +18,16 @@ def _adjacency(graph: GraphData) -> dict[int, list[int]]:
     return out
 
 
-def shortest_path(graph: GraphData, start: tuple[int, int], goal: tuple[int, int]) -> list[int]:
-    cell_to_idx = {cell: i for i, cell in enumerate(graph.cells)}
+def _shortest_path_from_lookup(
+    adj: dict[int, list[int]],
+    cell_to_idx: dict[tuple[int, int], int],
+    start: tuple[int, int],
+    goal: tuple[int, int],
+) -> list[int]:
     if start not in cell_to_idx or goal not in cell_to_idx:
         return []
     src = cell_to_idx[start]
     dst = cell_to_idx[goal]
-    adj = _adjacency(graph)
     parent = {src: -1}
     q: deque[int] = deque([src])
     while q:
@@ -43,7 +46,14 @@ def shortest_path(graph: GraphData, start: tuple[int, int], goal: tuple[int, int
     return list(reversed(path))
 
 
+def shortest_path(graph: GraphData, start: tuple[int, int], goal: tuple[int, int]) -> list[int]:
+    cell_to_idx = {cell: i for i, cell in enumerate(graph.cells)}
+    return _shortest_path_from_lookup(_adjacency(graph), cell_to_idx, start, goal)
+
+
 def compute_traffic_prior(graph: GraphData, assignment: dict[str, Any]) -> dict[str, Any]:
+    adj = _adjacency(graph)
+    cell_to_idx = {cell: i for i, cell in enumerate(graph.cells)}
     edge_to_idx = {(int(s), int(d)): i for i, (s, d) in enumerate(graph.edge_index.T)} if graph.edge_index.size else {}
     counts = np.zeros((graph.edge_features.shape[0],), dtype=np.float32)
     opposite = np.zeros_like(counts)
@@ -51,7 +61,7 @@ def compute_traffic_prior(graph: GraphData, assignment: dict[str, Any]) -> dict[
     path_found = 0
     expected_edge_use_total = 0.0
     for start, goal in zip(assignment["starts"], assignment["goals"]):
-        path = shortest_path(graph, start, goal)
+        path = _shortest_path_from_lookup(adj, cell_to_idx, start, goal)
         paths.append(path)
         if path:
             path_found += 1

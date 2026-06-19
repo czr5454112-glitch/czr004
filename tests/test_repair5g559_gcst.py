@@ -45,8 +45,13 @@ def test_benchmark_map_resolver_includes_lacam2_script_maps():
 
 def test_default_pilot_topologies_have_solver_capacity():
     from repair5g559_pipeline import default_topologies, largest_component_size
+    from gcst.map_hash import physical_hashes
 
-    for row in default_topologies(limit=24):
+    rows = default_topologies(limit=24)
+    assert len(rows) == 24
+    assert len({row["map_family"] for row in rows}) >= 6
+    assert len({physical_hashes(row)["adjacency_sha256"] for row in rows}) == 24
+    for row in rows:
         graph = build_corridor_graph(row).graph
         assert largest_component_size(graph) >= 16
         assert graph.physical_free_cell_count <= 6000

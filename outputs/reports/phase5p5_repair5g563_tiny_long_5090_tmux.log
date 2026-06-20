@@ -1,0 +1,4 @@
+Sat Jun 20 05:32:22 UTC 2026
+{"decision": "g563_tiny_overfit_failed_repair_model_or_loss", "final_loss": 0.08067557215690613, "initial_loss": 0.1267247200012207}
+{"code_truth_gate": true, "decision": "g563_tiny_overfit_failed_repair_model_or_loss", "scaling_gate": true, "tiny_overfit_gate": false}
+Sat Jun 20 05:33:07 UTC 2026

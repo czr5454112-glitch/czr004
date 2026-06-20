@@ -1,0 +1,9 @@
+Sat Jun 20 05:27:32 UTC 2026
+Running 12 items in this shard
+............                                                             [100%]
+12 passed in 1.30s
+{"candidate_rows": 65000, "contexts": 1000, "decision": "g563_labelv52_set_dataset_ready"}
+{"decision": "g563_tiny_overfit_failed_repair_model_or_loss", "final_loss": 0.08092188835144043, "initial_loss": 0.1267247200012207}
+{"decision": "g563_validation_loss_scales_with_context_count", "rows": 12, "sizes": [64, 128, 256, 512]}
+{"code_truth_gate": true, "decision": "g563_tiny_overfit_failed_repair_model_or_loss", "scaling_gate": true, "tiny_overfit_gate": false}
+Sat Jun 20 05:31:59 UTC 2026

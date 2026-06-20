@@ -1,0 +1,7 @@
+{"contexts": 32, "dataset_count": 32, "device": "cuda", "event": "start", "run_uid": "phase5p5_repair5g563_tiny_overfit_20260620_052744_e842255aae", "time_unix": 1781933264.7944393}
+{"event": "tiny_overfit_step", "loss": 0.1267247200012207, "run_uid": "phase5p5_repair5g563_tiny_overfit_20260620_052744_e842255aae", "step": 1, "time_unix": 1781933265.9321234}
+{"event": "tiny_overfit_step", "loss": 0.08154301345348358, "run_uid": "phase5p5_repair5g563_tiny_overfit_20260620_052744_e842255aae", "step": 100, "time_unix": 1781933267.7761083}
+{"event": "tiny_overfit_step", "loss": 0.08110624551773071, "run_uid": "phase5p5_repair5g563_tiny_overfit_20260620_052744_e842255aae", "step": 200, "time_unix": 1781933269.6542616}
+{"event": "tiny_overfit_step", "loss": 0.08101934939622879, "run_uid": "phase5p5_repair5g563_tiny_overfit_20260620_052744_e842255aae", "step": 300, "time_unix": 1781933271.5175486}
+{"event": "tiny_overfit_step", "loss": 0.08095218986272812, "run_uid": "phase5p5_repair5g563_tiny_overfit_20260620_052744_e842255aae", "step": 400, "time_unix": 1781933273.3917785}
+{"event": "tiny_overfit_step", "loss": 0.0809033066034317, "run_uid": "phase5p5_repair5g563_tiny_overfit_20260620_052744_e842255aae", "step": 500, "time_unix": 1781933275.4339485}

@@ -1,0 +1,28 @@
+{
+  "contexts": 1000,
+  "dataset_count": 1000,
+  "decision": "g563_validation_loss_scales_with_context_count",
+  "device": "cuda",
+  "elapsed_sec": 237.01053341664374,
+  "fixed_validation_contexts": 213,
+  "fixed_validation_manifest_sha256": "ab6ea31284197d361252d8419056ece31275ad0d85f7eeec9c9e4c024fdee37a",
+  "median_best_validation_loss_by_size": {
+    "64": 0.028361642733216286,
+    "128": 0.027901289984583855,
+    "256": 0.02779296226799488,
+    "512": 0.02782842330634594
+  },
+  "nonincreasing_adjacent_steps": 2,
+  "progress_jsonl": "outputs/reports/phase5p5_repair5g563_phase5p5_repair5g563_scaling_20260620_052801_5561944cd4_progress.jsonl",
+  "results_rows": 12,
+  "run_uid": "phase5p5_repair5g563_scaling_20260620_052801_5561944cd4",
+  "scaling_positive": true,
+  "schema_version": "phase5p5_repair5g563_scaling_study_summary_v1",
+  "sizes": [
+    64,
+    128,
+    256,
+    512
+  ],
+  "train_contexts_available": 643
+}

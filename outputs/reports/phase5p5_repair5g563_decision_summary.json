@@ -1,0 +1,26 @@
+{
+  "aaai_ready": false,
+  "candidate_rows": 65000,
+  "code_truth_gate": true,
+  "contexts": 1000,
+  "decision": "g563_tiny_overfit_failed_repair_model_or_loss",
+  "labelv52_dataset_decision": "g563_labelv52_set_dataset_ready",
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "scaling_decision": "g563_validation_loss_scales_with_context_count",
+  "scaling_gate": true,
+  "scaling_rows": 12,
+  "scaling_sizes": [
+    64,
+    128,
+    256,
+    512
+  ],
+  "schema_version": "phase5p5_repair5g563_decision_summary_v1",
+  "tiny_final_loss": 0.08067557215690613,
+  "tiny_initial_loss": 0.1267247200012207,
+  "tiny_overfit_decision": "g563_tiny_overfit_failed_repair_model_or_loss",
+  "tiny_overfit_gate": false
+}

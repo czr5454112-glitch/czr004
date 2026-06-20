@@ -1,0 +1,29 @@
+{
+  "candidate_rows": 65000,
+  "candidate_rows_count_as_independent_contexts": false,
+  "censored_contexts": 380,
+  "censored_rows_are_negative": false,
+  "context_dir": "/root/shared-nvme/czr004_g559_remote_artifacts/contexts",
+  "contexts": 1000,
+  "dataset_sha256": "b93f715c4e766d92b7da1db9165fe6edfb6ae0fad6af840fcc5796b71df8ca05",
+  "decision": "g563_labelv52_set_dataset_ready",
+  "fixed_validation_manifest_sha256": "ab6ea31284197d361252d8419056ece31275ad0d85f7eeec9c9e4c024fdee37a",
+  "grouped_split_hashes_disjoint": true,
+  "harmful_contexts": 620,
+  "independent_contexts": 1000,
+  "min_verified_coverage": 4,
+  "nested_scaling_subsets": true,
+  "no_positive_observed_is_automatically_noop": false,
+  "original_rows_losslessly_preserved": true,
+  "positive_contexts": 616,
+  "positive_set_is_not_averaged": true,
+  "quality_margin": 0.0,
+  "rows_path": "/root/czr004/outputs/tables/phase5p5_repair5g560_labelv51_training_rows.csv",
+  "schema_version": "phase5p5_repair5g563_labelv52_set_dataset_summary_v1",
+  "state_counts": {
+    "CENSORED_UNKNOWN": 368,
+    "HARMFUL_SUPPORTED": 16,
+    "MIXED_FRONTIER": 604,
+    "POSITIVE_SUPPORTED": 12
+  }
+}

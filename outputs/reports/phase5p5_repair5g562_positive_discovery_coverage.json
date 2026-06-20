@@ -1,0 +1,13 @@
+{
+  "aaai_ready": false,
+  "censored_contexts": 380,
+  "contexts": 1000,
+  "decision": "g562_real_graph_dataset_ready",
+  "harmful_contexts": 620,
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "positive_context_rate": 0.616,
+  "positive_contexts": 616,
+  "runtime_claim_allowed": false
+}

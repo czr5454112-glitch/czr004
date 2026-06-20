@@ -1,0 +1,3 @@
+component,critic_training_only,real_graph_conditioned_outcome_critic,has_theta_input,has_real_success_regression_target,has_quality_target,has_heldout_calibration,risk_pr_auc,evidence,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+g561_F7_flag,True,False,False,False,False,False,0.5,F7 is a training flag/regularizer path; calibration table is placeholder-level and deployment_includes_critic is false.,False,False,False,False,False
+g562_required_critic,True,required,required,required,required,required,,Must train a graph-conditioned theta-outcome critic for actor training only.,False,False,False,False,False

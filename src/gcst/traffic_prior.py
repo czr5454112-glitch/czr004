@@ -104,4 +104,22 @@ def compute_traffic_prior(graph: GraphData, assignment: dict[str, Any]) -> dict[
         "flow_mass_preservation_ratio": float(counts.sum() / max(1.0, expected_edge_use_total)),
         "nonzero_flow": bool(float(counts.sum()) > 0.0),
     }
-    return {"edge_features": edge_features, "summary": summary, "paths": paths}
+    node_counts = np.zeros((len(graph.cells),), dtype=np.float32)
+    for path in paths:
+        for node in path:
+            if 0 <= int(node) < len(node_counts):
+                node_counts[int(node)] += 1.0
+    if node_counts.size and node_counts.sum() > 0:
+        normalized_nodes = node_counts / max(float(node_counts.max()), 1.0)
+        wait_pressure = {
+            "vertex_wait_pressure_max": float(normalized_nodes.max()),
+            "vertex_wait_pressure_mean": float(normalized_nodes.mean()),
+            "vertex_wait_pressure_nonzero_rate": float((normalized_nodes > 0).mean()),
+        }
+    else:
+        wait_pressure = {
+            "vertex_wait_pressure_max": 0.0,
+            "vertex_wait_pressure_mean": 0.0,
+            "vertex_wait_pressure_nonzero_rate": 0.0,
+        }
+    return {"edge_features": edge_features, "summary": summary, "paths": paths, "wait_pressure": wait_pressure}

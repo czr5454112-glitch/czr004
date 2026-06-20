@@ -1,0 +1,11 @@
+{
+  "aaai_ready": false,
+  "decision": "g562_representation_pretraining_smoke_completed",
+  "heldout_and_blind_hashes_excluded_from_primary_train_split": true,
+  "learned_runtime_policy_validated": false,
+  "method": "shared graph/OD/C0/F0 branch warm start through real-label supervised training entrypoint",
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g562_pretraining_summary_v1"
+}

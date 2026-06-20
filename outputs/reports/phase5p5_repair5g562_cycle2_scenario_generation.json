@@ -1,0 +1,284 @@
+{
+  "agent_counts": [
+    96
+  ],
+  "created_at": "2026-06-20T07:02:04.619711",
+  "effective_instance_ids": [
+    7081,
+    7225,
+    7321,
+    7417,
+    7489,
+    7513,
+    7537,
+    7633,
+    7705,
+    7753,
+    7777,
+    7801,
+    7873,
+    7897,
+    7969,
+    8017,
+    8065,
+    8137,
+    8185,
+    8209,
+    8233,
+    8281,
+    8425,
+    8473,
+    8497,
+    8545,
+    8593,
+    8617,
+    8689,
+    8713,
+    8809,
+    8833,
+    8881,
+    8977
+  ],
+  "final_missing_count": 0,
+  "final_missing_examples": [],
+  "generated_count": 34,
+  "generated_examples": [
+    {
+      "instance_id": 7081,
+      "map": "room-40-32-8",
+      "path": "outputs/external/phase5p5_repair5g562_g559_remote_contexts/scenarios/room-40-32-8-random-7081.scen"
+    },
+    {
+      "instance_id": 7225,
+      "map": "room-40-32-8",
+      "path": "outputs/external/phase5p5_repair5g562_g559_remote_contexts/scenarios/room-40-32-8-random-7225.scen"
+    },
+    {
+      "instance_id": 7321,
+      "map": "room-40-32-8",
+      "path": "outputs/external/phase5p5_repair5g562_g559_remote_contexts/scenarios/room-40-32-8-random-7321.scen"
+    },
+    {
+      "instance_id": 7417,
+      "map": "room-40-32-8",
+      "path": "outputs/external/phase5p5_repair5g562_g559_remote_contexts/scenarios/room-40-32-8-random-7417.scen"
+    },
+    {
+      "instance_id": 7489,
+      "map": "room-40-32-8",
+      "path": "outputs/external/phase5p5_repair5g562_g559_remote_contexts/scenarios/room-40-32-8-random-7489.scen"
+    },
+    {
+      "instance_id": 7513,
+      "map": "room-40-32-8",
+      "path": "outputs/external/phase5p5_repair5g562_g559_remote_contexts/scenarios/room-40-32-8-random-7513.scen"
+    },
+    {
+      "instance_id": 7537,
+      "map": "room-40-32-8",
+      "path": "outputs/external/phase5p5_repair5g562_g559_remote_contexts/scenarios/room-40-32-8-random-7537.scen"
+    },
+    {
+      "instance_id": 7633,
+      "map": "room-40-32-8",
+      "path": "outputs/external/phase5p5_repair5g562_g559_remote_contexts/scenarios/room-40-32-8-random-7633.scen"
+    },
+    {
+      "instance_id": 7705,
+      "map": "room-40-32-8",
+      "path": "outputs/external/phase5p5_repair5g562_g559_remote_contexts/scenarios/room-40-32-8-random-7705.scen"
+    },
+    {
+      "instance_id": 7753,
+      "map": "room-40-32-8",
+      "path": "outputs/external/phase5p5_repair5g562_g559_remote_contexts/scenarios/room-40-32-8-random-7753.scen"
+    },
+    {
+      "instance_id": 7777,
+      "map": "room-40-32-8",
+      "path": "outputs/external/phase5p5_repair5g562_g559_remote_contexts/scenarios/room-40-32-8-random-7777.scen"
+    },
+    {
+      "instance_id": 7801,
+      "map": "room-40-32-8",
+      "path": "outputs/external/phase5p5_repair5g562_g559_remote_contexts/scenarios/room-40-32-8-random-7801.scen"
+    },
+    {
+      "instance_id": 7873,
+      "map": "room-40-32-8",
+      "path": "outputs/external/phase5p5_repair5g562_g559_remote_contexts/scenarios/room-40-32-8-random-7873.scen"
+    },
+    {
+      "instance_id": 7897,
+      "map": "room-40-32-8",
+      "path": "outputs/external/phase5p5_repair5g562_g559_remote_contexts/scenarios/room-40-32-8-random-7897.scen"
+    },
+    {
+      "instance_id": 7969,
+      "map": "room-40-32-8",
+      "path": "outputs/external/phase5p5_repair5g562_g559_remote_contexts/scenarios/room-40-32-8-random-7969.scen"
+    },
+    {
+      "instance_id": 8017,
+      "map": "room-40-32-8",
+      "path": "outputs/external/phase5p5_repair5g562_g559_remote_contexts/scenarios/room-40-32-8-random-8017.scen"
+    },
+    {
+      "instance_id": 8065,
+      "map": "room-40-32-8",
+      "path": "outputs/external/phase5p5_repair5g562_g559_remote_contexts/scenarios/room-40-32-8-random-8065.scen"
+    },
+    {
+      "instance_id": 8137,
+      "map": "room-40-32-8",
+      "path": "outputs/external/phase5p5_repair5g562_g559_remote_contexts/scenarios/room-40-32-8-random-8137.scen"
+    },
+    {
+      "instance_id": 8185,
+      "map": "room-40-32-8",
+      "path": "outputs/external/phase5p5_repair5g562_g559_remote_contexts/scenarios/room-40-32-8-random-8185.scen"
+    },
+    {
+      "instance_id": 8209,
+      "map": "room-40-32-8",
+      "path": "outputs/external/phase5p5_repair5g562_g559_remote_contexts/scenarios/room-40-32-8-random-8209.scen"
+    }
+  ],
+  "generated_missing_scenarios": true,
+  "generator_policy": {
+    "base_seed": 20260522,
+    "equivalent_command": "python scripts/generate_phase1a_scenarios.py --manifest <f4 maps with instances 26..45> --output-dir outputs/external/phase5p5_repair5g562_g559_remote_contexts/scenarios --base-seed 20260522",
+    "script_version": "phase1a-scenario-generator-v1",
+    "seed_function": "sha256(script_version|base_seed|map_name|instance_id)",
+    "source": "scripts/generate_phase1a_scenarios.py functions"
+  },
+  "initial_missing_count": 0,
+  "initial_missing_examples": [],
+  "reduced_scope_reason": "",
+  "requested_instance_ids": [
+    7081,
+    7225,
+    7321,
+    7417,
+    7489,
+    7513,
+    7537,
+    7633,
+    7705,
+    7753,
+    7777,
+    7801,
+    7873,
+    7897,
+    7969,
+    8017,
+    8065,
+    8137,
+    8185,
+    8209,
+    8233,
+    8281,
+    8425,
+    8473,
+    8497,
+    8545,
+    8593,
+    8617,
+    8689,
+    8713,
+    8809,
+    8833,
+    8881,
+    8977
+  ],
+  "requested_maps": [
+    "room-40-32-8"
+  ],
+  "scenario_dir": "outputs/external/phase5p5_repair5g562_g559_remote_contexts/scenarios",
+  "scenario_metadata": "outputs/reports/phase5p5_repair5g562_cycle2_scenario_generation.json",
+  "schema_version": "phase5p5_repair5f4_scenario_generation_v1",
+  "source_missing_count": 34,
+  "source_missing_examples": [
+    {
+      "instance_id": 7081,
+      "map": "room-40-32-8"
+    },
+    {
+      "instance_id": 7225,
+      "map": "room-40-32-8"
+    },
+    {
+      "instance_id": 7321,
+      "map": "room-40-32-8"
+    },
+    {
+      "instance_id": 7417,
+      "map": "room-40-32-8"
+    },
+    {
+      "instance_id": 7489,
+      "map": "room-40-32-8"
+    },
+    {
+      "instance_id": 7513,
+      "map": "room-40-32-8"
+    },
+    {
+      "instance_id": 7537,
+      "map": "room-40-32-8"
+    },
+    {
+      "instance_id": 7633,
+      "map": "room-40-32-8"
+    },
+    {
+      "instance_id": 7705,
+      "map": "room-40-32-8"
+    },
+    {
+      "instance_id": 7753,
+      "map": "room-40-32-8"
+    },
+    {
+      "instance_id": 7777,
+      "map": "room-40-32-8"
+    },
+    {
+      "instance_id": 7801,
+      "map": "room-40-32-8"
+    },
+    {
+      "instance_id": 7873,
+      "map": "room-40-32-8"
+    },
+    {
+      "instance_id": 7897,
+      "map": "room-40-32-8"
+    },
+    {
+      "instance_id": 7969,
+      "map": "room-40-32-8"
+    },
+    {
+      "instance_id": 8017,
+      "map": "room-40-32-8"
+    },
+    {
+      "instance_id": 8065,
+      "map": "room-40-32-8"
+    },
+    {
+      "instance_id": 8137,
+      "map": "room-40-32-8"
+    },
+    {
+      "instance_id": 8185,
+      "map": "room-40-32-8"
+    },
+    {
+      "instance_id": 8209,
+      "map": "room-40-32-8"
+    }
+  ],
+  "source_scenario_dir": "outputs/tmp/phase1a/generated/phase1a-generated-random"
+}

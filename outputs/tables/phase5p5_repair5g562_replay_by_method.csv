@@ -1,0 +1,10 @@
+method,pairs,success_regressions,success_gains,both_success,both_fail,mean_quality_delta_vs_g556,median_quality_delta_vs_g556,quality_delta_ci_upper_vs_g556,better_count_vs_g556,worse_count_vs_g556,tie_count_vs_g556,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+A1_seed562_dual_stream_c0_f0_graph_actor,1000,6,6,613,375,-0.10119481235057097,-0.007048872179999943,0.11795151363030994,340,263,10,False,False,False,False,False
+A1_seed563_dual_stream_c0_f0_graph_actor,1000,8,6,611,375,0.14420830593574469,-0.006622516550000013,0.5188296526440753,348,253,10,False,False,False,False,False
+A1_seed564_dual_stream_c0_f0_graph_actor,1000,9,4,610,377,-0.15883406167388525,-0.007663847784999955,0.0255959252919836,346,252,12,False,False,False,False,False
+A2_seed562_od_graph_cross_attention_actor,1000,7,4,612,377,-0.0029831313871732067,-0.00527941653999997,0.34113222367826795,338,264,10,False,False,False,False,False
+A2_seed563_od_graph_cross_attention_actor,1000,6,4,613,377,-0.026789296226199036,-0.00900681596999986,0.2786969079454649,357,249,7,False,False,False,False,False
+A2_seed564_od_graph_cross_attention_actor,1000,7,5,612,376,0.0068100688032679615,-0.0066264682299999045,0.3955908441962908,341,257,14,False,False,False,False,False
+A4_seed562_field_group_trust_safe_subspace_actor,1000,8,5,611,376,-0.1142965378742717,0.0,0.08481631033094927,303,263,45,False,False,False,False,False
+A4_seed563_field_group_trust_safe_subspace_actor,1000,13,8,606,373,-0.15599334481740923,-0.004439856600000014,0.02480122806234324,327,256,23,False,False,False,False,False
+A4_seed564_field_group_trust_safe_subspace_actor,1000,7,6,612,375,-0.13629638166534314,-0.0037585311499999108,0.03256663758542485,330,264,18,False,False,False,False,False

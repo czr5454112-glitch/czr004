@@ -1,0 +1,16 @@
+{
+  "aaai_ready": false,
+  "decision": "g562_g561_synthetic_target_training_confirmed",
+  "g561_critic_was_real_calibrated_graph_conditioned_outcome_critic": false,
+  "g561_hard_negative_finetune_was_safety_shrinkage_not_positive_frontier_learning": true,
+  "g561_primary_actor_training_used_valid_scenario_bank_as_main_dataset": false,
+  "g561_scenario_bank_valid_scenarios": 2600,
+  "g561_start_decision": "g561_goal_aware_actor_dev_replay_failed_continue_hard_negative_acquisition",
+  "g561_training_was_analytic_target_smoke": true,
+  "g562_requires_real_label_graph_dataset": true,
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g562_g561_training_truth_audit_summary_v1"
+}

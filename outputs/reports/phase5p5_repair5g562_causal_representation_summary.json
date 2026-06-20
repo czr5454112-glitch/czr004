@@ -1,0 +1,17 @@
+{
+  "aaai_ready": false,
+  "c0_intervention_exceeds_noise_floor": true,
+  "contexts": 42,
+  "decision": "g562_causal_representation_audit_completed",
+  "f0_intervention_exceeds_noise_floor": true,
+  "learned_runtime_policy_validated": false,
+  "node_order_permutation_invariance_ok": true,
+  "noise_floor": 6.5542584692934724e-09,
+  "paired_goal_shuffle_exceeds_noise_floor": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g562_causal_representation_summary_v1",
+  "selected_seed": "563",
+  "selected_variant_id": "A2"
+}

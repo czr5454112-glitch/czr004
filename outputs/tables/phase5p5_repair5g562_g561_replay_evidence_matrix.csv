@@ -1,0 +1,4 @@
+evidence_source,decision,actor_rows,replay_pairs,materialization_invalid_rows,success_regressions,mean_quality_delta_vs_g556,better,worse,interpretation,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+architecture_replay,g561_architecture_replay_executed_exact_materialization,400,400,0,0,0.020820868870525,139,258,small exact-materialized architecture panel,False,False,False,False,False
+development_replay,g561_development_replay_executed_exact_materialization,800,800,0,7,0.031032527612515893,329,447,larger heldout replay exposing success regressions and positive quality loss,False,False,False,False,False
+hard_negative_finetune_panel,g561_hard_negative_finetune_panel_executed_not_promotable,1600,1600,0,0,0.0178920199711875,681,875,fine-tune reduced regressions but remained not promotable,False,False,False,False,False

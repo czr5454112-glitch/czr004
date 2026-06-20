@@ -1,0 +1,13 @@
+{
+  "aaai_ready": false,
+  "contexts": 497,
+  "decision": "g562_optimizer_teacher_diagnostic_completed",
+  "deployed_optimizer": false,
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "safe_subspace_dimensions": 6,
+  "schema_version": "phase5p5_repair5g562_optimizer_teacher_summary_v1",
+  "teacher_rows": 980
+}

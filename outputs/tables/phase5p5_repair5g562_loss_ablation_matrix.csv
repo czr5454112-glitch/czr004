@@ -1,0 +1,2 @@
+loss_name,uses_real_solver_rows,uses_analytic_target,censored_rows_are_negative,no_positive_hard_g556_target,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+real_positive_safe_set_weighted_l1,True,False,False,False,False,False,False,False,False

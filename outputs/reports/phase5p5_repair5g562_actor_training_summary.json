@@ -1,0 +1,39 @@
+{
+  "aaai_ready": false,
+  "all_model_checkpoints_exist": true,
+  "analytic_target_rate": 0.0,
+  "collection_source": "outputs/reports/phase5p5_repair5g562_training_progress.jsonl",
+  "decision": "g562_real_safe_set_actor_training_completed",
+  "device": "cuda",
+  "examples": 616,
+  "hidden_dims": [
+    32
+  ],
+  "learned_runtime_policy_validated": false,
+  "max_contexts_requested": 1000,
+  "parallel_training_collected": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "positive_only_target_examples": 616,
+  "rich_attention_actor_rows": 9,
+  "rows": 10,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g562_actor_training_summary_v1",
+  "seeds": [
+    "562",
+    "563",
+    "564"
+  ],
+  "steps": 100,
+  "three_seed_top_rich_complete": true,
+  "top_two_rich_variants": [
+    "A2",
+    "A1"
+  ],
+  "variants": [
+    "C0",
+    "A1",
+    "A2",
+    "A4"
+  ]
+}

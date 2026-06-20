@@ -1,0 +1,3 @@
+component,scenario_rows,consumed_by_primary_actor_training,consumed_by_self_supervised_pretraining,consumed_by_critic_training,consumed_by_targeted_design,consumed_by_heldout_replay,evidence,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+g561_valid_scenario_bank,2600,False,False,False,False,True,G5.61 training used generated build_samples train=96 validation=32; development replay consumed heldout contexts.,False,False,False,False,False
+g562_required_real_graph_dataset,,required,required,required,required,required,Must record exact scenario IDs consumed by each loader.,False,False,False,False,False

@@ -1,0 +1,19 @@
+{
+  "aaai_ready": false,
+  "alpha_rows": 2485,
+  "alphas": [
+    0.0,
+    0.25,
+    0.5,
+    0.75,
+    1.0
+  ],
+  "contexts_with_positive_frontier": 497,
+  "decision": "g562_alpha_response_acquisition_designed_server_materialization_required",
+  "exact_materialized": false,
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g562_alpha_response_summary_v1"
+}

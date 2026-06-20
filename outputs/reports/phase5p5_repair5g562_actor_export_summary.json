@@ -1,0 +1,17 @@
+{
+  "aaai_ready": false,
+  "codebook_included_for_export": false,
+  "critic_included_for_export": false,
+  "decision": "g562_actor_exported_one_forward_one_theta",
+  "export_path": "artifacts/models/gcst/g562_exported_actor.pt",
+  "learned_runtime_policy_validated": false,
+  "one_forward_one_theta": true,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g562_actor_export_summary_v1",
+  "selected_model_path": "artifacts/models/gcst/g562_a2_od_graph_cross_attention_actor_seed563.pt",
+  "selected_seed": "563",
+  "selected_variant_id": "A2",
+  "theta_fixed_for_run": true
+}

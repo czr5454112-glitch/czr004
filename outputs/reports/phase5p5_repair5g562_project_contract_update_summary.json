@@ -1,0 +1,51 @@
+{
+  "aaai_ready": false,
+  "all_markers_present": true,
+  "decision": "g562_project_representation_floor_and_non_dagger_contract_recorded",
+  "forbidden_regressions": [
+    "agent action imitation",
+    "DAgger or learner-state expert action aggregation",
+    "learned priority ordering",
+    "learned restart selection",
+    "runtime-varying theta",
+    "candidate-ID retrieval or codebook selection as the production method",
+    "scalar-only primary actor"
+  ],
+  "learned_runtime_policy_validated": false,
+  "literature_sources": [
+    "aaai2024_tfo_lmapf",
+    "ijcai2024_ggo",
+    "icra2023_graph_transformer_mapf",
+    "aaai2026_lagat",
+    "qd_mapper"
+  ],
+  "minimum_inputs": [
+    "physical graph topology",
+    "actual paired starts/goals",
+    "paired OD tokens",
+    "directed C0 congestion prior",
+    "directed F0 goal-progress prior",
+    "solver budget",
+    "LTM iteration budget"
+  ],
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "required_evidence": [
+    "actual node tensor count and dimensions",
+    "actual directed edge tensor count and dimensions",
+    "actual paired OD token count",
+    "actual C0 tensor nonzero rate",
+    "actual F0 tensor nonzero rate",
+    "forward-hook evidence for graph, OD, C, F, scalar, fusion, and theta heads",
+    "nonzero graph, OD, C stream, F stream, fusion, and theta-head gradients",
+    "batch-composition, node-order, and agent-order invariance",
+    "paired-goal shuffle, C0, F0, topology, and scalar-shortcut interventions"
+  ],
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g562_project_contract_update_v1",
+  "updated_paths": [
+    "deep-research-report.md",
+    "phase4_6_laur_ltm_codex_execution_plan.md",
+    "docs/goal_aware_dual_channel_ltm_research_contract.md"
+  ]
+}

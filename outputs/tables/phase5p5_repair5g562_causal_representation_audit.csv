@@ -1,0 +1,6 @@
+intervention,contexts,normalized_theta_l1_mean,normalized_theta_l1_max,noise_floor_multiple,exceeds_noise_floor_10x,selected_variant_id,selected_seed,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+repeat_noise_floor,42,6.554258025204263e-09,4.768370942542788e-08,0.9999999322441719,False,A2,563,False,False,False,False,False
+paired_goal_shuffle,42,0.0015016719698905945,0.002136021386831999,229113.93820153538,True,A2,563,False,False,False,False,False
+zero_c0,42,0.00010046072566183284,0.0002582340675871819,15327.550192365572,True,A2,563,False,False,False,False,False
+zero_f0,42,7.954572356538847e-05,0.0002969384368043393,12136.49475956099,True,A2,563,False,False,False,False,False
+node_order_permutation,42,4.94373963988437e-09,1.8165225768029813e-08,0.7542790176868458,False,A2,563,False,False,False,False,False

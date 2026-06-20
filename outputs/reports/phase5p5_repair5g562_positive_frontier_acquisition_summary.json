@@ -1,0 +1,13 @@
+{
+  "aaai_ready": false,
+  "acquisition_contexts": 509,
+  "censored_contexts": 11,
+  "decision": "g562_positive_frontier_acquisition_designed_server_materialization_required",
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "positive_contexts": 497,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g562_positive_frontier_acquisition_summary_v1",
+  "unsafe_boundary_contexts": 498
+}

@@ -1,0 +1,33 @@
+{
+  "aaai_ready": false,
+  "actual_scenario_hash_match_rate": 1.0,
+  "actual_scenario_pairs_used_rate": 1.0,
+  "analytic_theta_target_rate": 0.0,
+  "c0_nonzero_mean": 0.29102555774133815,
+  "censored_contexts": 380,
+  "contexts": 1000,
+  "decision": "g562_real_graph_dataset_ready",
+  "external_context_bytes": 9170728,
+  "external_context_dir": "/root/shared-nvme/czr004_g562_real_label_graph_actor/outputs/external/phase5p5_repair5g562_g559_remote_contexts",
+  "external_context_files": 2034,
+  "f0_nonzero_mean": 0.29102555774133815,
+  "harmful_contexts": 620,
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "physical_map_hash_match_rate": 1.0,
+  "positive_context_rate": 0.616,
+  "positive_contexts": 616,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g562_real_graph_dataset_summary_v1",
+  "split_counts": {
+    "heldout": 77,
+    "train": 631,
+    "validation": 292
+  },
+  "training_rows_recovery": {
+    "path": "outputs/tables/phase5p5_repair5g560_labelv51_training_rows.csv",
+    "training_rows_already_present": true
+  },
+  "wait_pressure_mean": 0.16839090349152686
+}

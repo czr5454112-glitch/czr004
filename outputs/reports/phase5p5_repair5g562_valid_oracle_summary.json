@@ -1,0 +1,15 @@
+{
+  "aaai_ready": false,
+  "contexts": 1000,
+  "decision": "g562_valid_oracle_gap_present",
+  "learned_runtime_policy_validated": false,
+  "max_best_positive_quality_delta_vs_g556": 0.0,
+  "mean_best_positive_quality_delta_vs_g556": -0.3662582889681331,
+  "min_best_positive_quality_delta_vs_g556": -94.15226669747001,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "positive_context_rate": 0.616,
+  "positive_contexts": 616,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g562_valid_oracle_summary_v1"
+}

@@ -1,0 +1,4 @@
+component,target_source,real_solver_label_target,evidence,present,g562_allowed_primary_target,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+g561_initial_graph_actor_training,analytic_context_target_theta,False,train_repair5g561_goal_aware_actor.py calls build_samples and context_target_theta,True,False,False,False,False,False,False
+g561_hard_negative_finetune,harmful_actor_output_blended_toward_g556,partial_hard_negative_only,run_repair5g561_hard_negative_finetune_panel.py target_from_pair blends source theta toward BASELINE_G556,True,False,False,False,False,False,False
+g562_required_actor_training,real_label_v51_safe_improving_and_harmful_sets,True,G5.62 must build a new graph/OD/C0/F0 dataset from real solver-derived Label-v5.1 rows,False,True,False,False,False,False,False

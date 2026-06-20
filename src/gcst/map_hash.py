@@ -30,6 +30,7 @@ def known_map_candidates(map_name: str) -> list[Path]:
     roots = [
         ROOT / "maps",
         ROOT / "benchmarks",
+        ROOT / "outputs" / "external" / "phase5p5_repair5g562_g559_remote_contexts" / "maps",
         ROOT / "external" / "lacam2",
         ROOT / "external" / "lacam2" / "assets",
         ROOT / "external" / "lacam2" / "maps",

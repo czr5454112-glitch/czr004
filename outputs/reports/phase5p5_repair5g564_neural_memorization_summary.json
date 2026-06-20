@@ -1,0 +1,19 @@
+{
+  "branches_receive_gradients": true,
+  "c0_f0_interventions_change_prediction": true,
+  "c0_zero_mean_abs_theta_delta": 0.0004561310342978686,
+  "decision": "g564_neural_memorization_passed",
+  "device": "cuda",
+  "elapsed_sec": 261.5774736357853,
+  "eligible_contexts": 51,
+  "f0_zero_mean_abs_theta_delta": 0.0007865448133088648,
+  "loss_improved_one_and_four_contexts": true,
+  "max_contexts_loaded": 80,
+  "od_shuffle_changes_prediction": true,
+  "od_shuffle_mean_abs_theta_delta": 0.007071620784699917,
+  "rich_actor_used": true,
+  "scalar_model_is_primary": false,
+  "schema_version": "phase5p5_repair5g564_neural_memorization_summary_v1",
+  "seed": 564,
+  "steps": 80
+}

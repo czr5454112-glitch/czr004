@@ -1,0 +1,33 @@
+{
+  "methods": {
+    "rich_graph_actor": {
+      "log_size_loss_slope": -0.0006492158002983231,
+      "median_final_validation_loss_by_size": {
+        "16": 0.10968742147088051,
+        "32": 0.10923635587096214,
+        "34": 0.10919888690114021
+      },
+      "scaling_positive": true,
+      "sizes": [
+        16,
+        32,
+        34
+      ]
+    },
+    "scalar_pre_solver_control": {
+      "log_size_loss_slope": 0.00034024329216911865,
+      "median_final_validation_loss_by_size": {
+        "16": 0.19006986916065216,
+        "32": 0.19031214714050293,
+        "34": 0.19032133370637894
+      },
+      "scaling_positive": false,
+      "sizes": [
+        16,
+        32,
+        34
+      ]
+    }
+  },
+  "schema_version": "phase5p5_repair5g564_scaling_curve_fit_v1"
+}

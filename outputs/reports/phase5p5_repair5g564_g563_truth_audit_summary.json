@@ -1,0 +1,25 @@
+{
+  "aaai_ready": false,
+  "decision": "g564_g563_scaling_invalid_target_leakage",
+  "g563_candidate_rows": 65000,
+  "g563_contexts": 1000,
+  "g563_labelv52_dataset_valid": true,
+  "g563_leaking_scalar_features": [
+    "original_row_count",
+    "positive_rows",
+    "safe_rows",
+    "harmful_rows",
+    "censored_rows"
+  ],
+  "g563_reported_scaling_decision": "g563_validation_loss_scales_with_context_count",
+  "g563_reported_tiny_decision": "g563_tiny_overfit_failed_repair_model_or_loss",
+  "g563_scaling_invalid_reason": "scalar_context_set_mlp_control consumed label/outcome counts",
+  "g563_scaling_valid_primary_evidence": false,
+  "g563_tiny_overfit_failure_reinterpreted_as": "per_context_free_theta_loss_floor_or_optimizer_diagnostic",
+  "g563_tiny_overfit_valid_graph_actor_evidence": false,
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g564_g563_truth_audit_v1"
+}

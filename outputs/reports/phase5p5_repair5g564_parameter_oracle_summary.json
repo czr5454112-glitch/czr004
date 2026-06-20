@@ -1,0 +1,19 @@
+{
+  "conflicting_theta_pairs": 0,
+  "contexts": 256,
+  "contexts_improved": 132,
+  "decision": "g564_parameter_oracle_passed",
+  "device": "cuda",
+  "elapsed_sec": 64.85608676541597,
+  "improvement_rate": 0.515625,
+  "median_best_total_repaired_loss": 0.0,
+  "median_initial_total_repaired_loss": 0.00032459378911507686,
+  "optimizer": "AdamW",
+  "oracle_initialized_at_g556": true,
+  "projected_to_theta_bounds_each_step": true,
+  "schema_version": "phase5p5_repair5g564_parameter_oracle_summary_v1",
+  "seed": 564,
+  "steps": 120,
+  "uses_sigmoid_parameterization": false,
+  "weight_decay": 0.0
+}

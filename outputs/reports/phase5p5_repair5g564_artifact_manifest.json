@@ -1,0 +1,130 @@
+{
+  "artifacts": [
+    {
+      "bytes": 2314,
+      "path": "outputs/reports/phase5p5_repair5g564_5090_tmux.log",
+      "sha256": "6bc3cdc26d357f796456ceb2d07e102ccff8c3cc6eef937f47dcc256f0db4987"
+    },
+    {
+      "bytes": 753,
+      "path": "outputs/reports/phase5p5_repair5g564_decision.md",
+      "sha256": "92d090745ff6adff145fd2057fc0ebbf8996dd36bd497e98dc56b9a8e2eaf6c6"
+    },
+    {
+      "bytes": 1168,
+      "path": "outputs/reports/phase5p5_repair5g564_decision_summary.json",
+      "sha256": "71db855aaae019849342f6be0032b8cbfa02818ac215e84256142a7af4bdba0c"
+    },
+    {
+      "bytes": 530,
+      "path": "outputs/reports/phase5p5_repair5g564_failure_attribution.md",
+      "sha256": "87a4ac9f0cb17fbe29fef5e7cb3ff1bbf499f6b5adadb9d54b0edab4f2a0e289"
+    },
+    {
+      "bytes": 591,
+      "path": "outputs/reports/phase5p5_repair5g564_fixed_solver_panel_summary.json",
+      "sha256": "e3789df3ba7595c6474bb77fd7a60fc86f1570cfc53af5041dc5016d84c92a96"
+    },
+    {
+      "bytes": 650,
+      "path": "outputs/reports/phase5p5_repair5g564_g563_truth_audit.md",
+      "sha256": "224fe1e60d0ebe606fcdc07af07251cf86592413ec870a88b25b84901fd42936"
+    },
+    {
+      "bytes": 1003,
+      "path": "outputs/reports/phase5p5_repair5g564_g563_truth_audit_summary.json",
+      "sha256": "8ef22a5f46cf7d3b84b87cdc50ba6d27e0539b8aa98ea37f9d142697327823e9"
+    },
+    {
+      "bytes": 390,
+      "path": "outputs/reports/phase5p5_repair5g564_loss_geometry.md",
+      "sha256": "d2a67bb4c5cd5ae2c944aa5858d6888282408556a204d2da8b9e2c194cea9102"
+    },
+    {
+      "bytes": 730,
+      "path": "outputs/reports/phase5p5_repair5g564_loss_geometry_summary.json",
+      "sha256": "d913c53fcc57a3330ef71130c1be477759c4d1c0cee09dce5d036682394f24e3"
+    },
+    {
+      "bytes": 680,
+      "path": "outputs/reports/phase5p5_repair5g564_neural_memorization_summary.json",
+      "sha256": "3580dc2cc6c1d54f348dba55f7c74333a5869b59bcc2d23d272148ac50b6c240"
+    },
+    {
+      "bytes": 599,
+      "path": "outputs/reports/phase5p5_repair5g564_parameter_oracle_summary.json",
+      "sha256": "b26f6fbfed449782978d155594f6b9b0de056b935be03a087129990b9e74055b"
+    },
+    {
+      "bytes": 1198,
+      "path": "outputs/reports/phase5p5_repair5g564_replay_merge_summary.json",
+      "sha256": "292d6106cb23631333a1bba6770aa7218ae95e03a326942a11c2d4043cde66bb"
+    },
+    {
+      "bytes": 2204,
+      "path": "outputs/reports/phase5p5_repair5g564_rich_scaling_summary.json",
+      "sha256": "187a4096c80f72c60d9df855d4c65d63e8a9b7da600a5f0ffbdb22b0947e66fa"
+    },
+    {
+      "bytes": 775,
+      "path": "outputs/reports/phase5p5_repair5g564_scaling_curve_fit.json",
+      "sha256": "1ed9fa08506dc7d53cf97112690d06994441eecf001edd52d13c708d476f0668"
+    },
+    {
+      "bytes": 994,
+      "path": "outputs/reports/phase5p5_repair5g564_true_cycle_summary.json",
+      "sha256": "c35084af4d290df99666a1229f2a3d05446f6f1ea3cf0ff9f5a311401c831d39"
+    },
+    {
+      "bytes": 2,
+      "path": "outputs/tables/phase5p5_repair5g564_conflicting_theta_pairs.csv",
+      "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6"
+    },
+    {
+      "bytes": 165196,
+      "path": "outputs/tables/phase5p5_repair5g564_fixed_solver_panel_pairs.csv",
+      "sha256": "a372a5ab83a3d362b8bbc1c97c4286150424c52f9c24d7284978385ae690be74"
+    },
+    {
+      "bytes": 217331,
+      "path": "outputs/tables/phase5p5_repair5g564_loss_geometry_by_context.csv",
+      "sha256": "5444150b284e88249629d363dd50d3999a802ff100739a7ffbc53ff2a4537654"
+    },
+    {
+      "bytes": 108998,
+      "path": "outputs/tables/phase5p5_repair5g564_loss_repair_matrix.csv",
+      "sha256": "9f581517b33bc7c2b6f7abe01fcbbbfd4978b3f7376524cad2322fcd74e487b2"
+    },
+    {
+      "bytes": 823,
+      "path": "outputs/tables/phase5p5_repair5g564_neural_memorization_branch_gradient_audit.csv",
+      "sha256": "7f131ef43cedc0743562a08209271bed32d0d4d37399ad0d2d5d28b733a5165f"
+    },
+    {
+      "bytes": 108998,
+      "path": "outputs/tables/phase5p5_repair5g564_overfit_by_context.csv",
+      "sha256": "9f581517b33bc7c2b6f7abe01fcbbbfd4978b3f7376524cad2322fcd74e487b2"
+    },
+    {
+      "bytes": 3760,
+      "path": "outputs/tables/phase5p5_repair5g564_rich_scaling_results.csv",
+      "sha256": "33e751f320eb5cf0dd3b6839ca838058b59dff1241ccfb6e2c47046a8bb27086"
+    },
+    {
+      "bytes": 568,
+      "path": "outputs/tables/phase5p5_repair5g564_rich_vs_scalar_by_fold.csv",
+      "sha256": "2f808b7f3ddb565aa4bfec52211b9f496ea5dee4dcdc936befd54c6cbcb1230c"
+    },
+    {
+      "bytes": 11905,
+      "path": "artifacts/models/gcst/phase5p5_repair5g564_true_cycle_base_scalar_seed564.pt",
+      "sha256": "67e1ba87940cad25a8a5d793639b71bec849697e9e5a4b965ebb4ca9d9473431"
+    },
+    {
+      "bytes": 11931,
+      "path": "artifacts/models/gcst/phase5p5_repair5g564_true_cycle_merged_scalar_seed564.pt",
+      "sha256": "463a10da987a00e8c9c302f36389ad8eea1fb0c1d0c12d6afb25618239c12359"
+    }
+  ],
+  "schema_version": "phase5p5_repair5g564_artifact_manifest_v1"
+}

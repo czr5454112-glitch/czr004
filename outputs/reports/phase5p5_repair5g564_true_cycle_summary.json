@@ -1,0 +1,18 @@
+{
+  "base_checkpoint_path": "artifacts/models/gcst/phase5p5_repair5g564_true_cycle_base_scalar_seed564.pt",
+  "base_checkpoint_sha256": "67e1ba87940cad25a8a5d793639b71bec849697e9e5a4b965ebb4ca9d9473431",
+  "base_dataset_sha256": "9273f9e4484b27aa4b4ab0f8a650a0a8748c111ab8c2b11e113f47976c3334c6",
+  "base_train_loss": 0.24063777923583984,
+  "decision": "g564_true_retraining_cycle_completed",
+  "device": "cuda",
+  "elapsed_sec": 10.188172458671033,
+  "merged_checkpoint_path": "artifacts/models/gcst/phase5p5_repair5g564_true_cycle_merged_scalar_seed564.pt",
+  "merged_checkpoint_sha256": "463a10da987a00e8c9c302f36389ad8eea1fb0c1d0c12d6afb25618239c12359",
+  "merged_dataset_sha256": "3ca8661b6adf772968779b8952e25e8bf37e818896a1bd91779d7e5e6e9bb372",
+  "merged_train_loss": 0.23038478195667267,
+  "replay_merge_changes_dataset_hash": true,
+  "retraining_changes_checkpoint_hash": true,
+  "schema_version": "phase5p5_repair5g564_true_cycle_summary_v1",
+  "steps": 12,
+  "train_examples": 32
+}

@@ -1,0 +1,13 @@
+{
+  "aaai_ready": false,
+  "decision": "g564_offline_scaling_solver_transfer_blocked",
+  "fixed_solver_panel_pairs": 200,
+  "gate_block_reason": "G5.64 ran offline loss-geometry/rich-scaling repair; no new fixed solver panel was launched in this script.",
+  "learned_runtime_policy_validated": false,
+  "new_g564_solver_panel_ran": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g564_fixed_solver_panel_summary_v1",
+  "source_panel": "/root/czr004/outputs/tables/phase5p5_repair5g562_cycle3_pairs.csv"
+}

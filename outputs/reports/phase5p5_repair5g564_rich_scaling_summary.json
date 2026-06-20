@@ -1,0 +1,81 @@
+{
+  "contexts_loaded": 62,
+  "decision": "g564_rich_scaling_positive",
+  "device": "cuda",
+  "elapsed_sec": 565.8761591101065,
+  "feature_schema_audit": {
+    "allowed": true,
+    "feature_names": [
+      "agent_count",
+      "nominal_budget_ms",
+      "base_time_limit_sec",
+      "ltm_max_iterations",
+      "agent_density",
+      "path_found_rate",
+      "nonzero_flow"
+    ],
+    "forbidden_features": [],
+    "schema_sha256": "8e74665ebd907c07a267cdc3e5acbccd2bc3dfeafdc0fb2178f6fe686508b34a"
+  },
+  "fixed_validation_contexts": 8,
+  "fixed_validation_manifest_sha256": "e48786c95d8e8c1a107d622c5aef1e532cd3ff42d796d7333f4856a1ea7c320e",
+  "g563_leakage_audit": {
+    "actor_inputs_pre_solver_only": true,
+    "g563_forbidden_features": [
+      "censored_rows",
+      "harmful_rows",
+      "original_row_count",
+      "positive_rows",
+      "safe_rows"
+    ],
+    "g563_scalar_features": [
+      "agent_count",
+      "budget_ms",
+      "original_row_count",
+      "positive_rows",
+      "safe_rows",
+      "harmful_rows",
+      "censored_rows"
+    ],
+    "g563_scalar_scaling_valid_primary_evidence": false,
+    "g564_feature_schema_sha256": "8e74665ebd907c07a267cdc3e5acbccd2bc3dfeafdc0fb2178f6fe686508b34a",
+    "g564_forbidden_features": [],
+    "g564_pre_solver_scalar_features": [
+      "agent_count",
+      "nominal_budget_ms",
+      "base_time_limit_sec",
+      "ltm_max_iterations",
+      "agent_density",
+      "path_found_rate",
+      "nonzero_flow"
+    ],
+    "rich_actor_inputs": [
+      "graph_topology",
+      "paired_od",
+      "directed_c0",
+      "directed_f0",
+      "agent_count",
+      "solver_budget",
+      "ltm_iteration_budget",
+      "agent_density"
+    ],
+    "schema_version": "phase5p5_repair5g564_leakage_feature_contract_v1"
+  },
+  "results_rows": 12,
+  "rich_actor_used_for_primary": true,
+  "rich_beats_scalar_pair_win_rate": 1.0,
+  "rich_vs_scalar_decision": "g564_rich_actor_beats_scalar_control",
+  "rich_vs_scalar_pair_rows": 6,
+  "scalar_control_uses_label_leakage_features": false,
+  "schema_version": "phase5p5_repair5g564_rich_scaling_summary_v1",
+  "seeds": [
+    564,
+    565
+  ],
+  "sizes": [
+    16,
+    32,
+    34
+  ],
+  "train_contexts_available": 34
+}

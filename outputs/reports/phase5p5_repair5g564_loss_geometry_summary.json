@@ -1,0 +1,18 @@
+{
+  "censored_rows_are_negative": false,
+  "conflict_context_rate": 0.0,
+  "conflict_contexts": 0,
+  "conflict_distance_threshold": 0.015,
+  "conflicting_theta_pairs": 0,
+  "context_dir": "/root/shared-nvme/czr004_g559_remote_artifacts/contexts",
+  "contexts": 1000,
+  "decision": "g564_loss_geometry_audited",
+  "harmful_margin_requested": 0.12,
+  "max_baseline_floor_corrected_positive_loss": 0.25249508023262024,
+  "median_baseline_floor_corrected_positive_loss": 0.004481035058888493,
+  "positive_contexts": 616,
+  "rows_path": "/root/czr004/outputs/tables/phase5p5_repair5g560_labelv51_training_rows.csv",
+  "schema_version": "phase5p5_repair5g564_loss_geometry_summary_v1",
+  "softmin_floor_computed": true,
+  "tau": 0.05
+}

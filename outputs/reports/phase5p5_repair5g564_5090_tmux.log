@@ -1,0 +1,22 @@
+G564_START 2026-06-20T14:25:52+08:00
+NVIDIA GeForce RTX 5090, 32607 MiB, 580.105.08
+{"decision": "g564_g563_scaling_invalid_target_leakage", "g563_contexts": 1000}
+{"conflicts": 0, "contexts": 1000, "decision": "g564_loss_geometry_audited"}
+{"contexts": 256, "decision": "g564_parameter_oracle_passed", "median_best": 0.0}
+{"decision": "g564_neural_memorization_passed", "device": "cuda", "eligible_contexts": 51}
+{"event": "scaling_row", "final_validation_loss": 0.19201141595840454, "method": "scalar_pre_solver_control", "seed": 564, "size": 16}
+{"event": "scaling_row", "final_validation_loss": 0.10969045013189316, "method": "rich_graph_actor", "seed": 564, "size": 16}
+{"event": "scaling_row", "final_validation_loss": 0.18812832236289978, "method": "scalar_pre_solver_control", "seed": 565, "size": 16}
+{"event": "scaling_row", "final_validation_loss": 0.10968439280986786, "method": "rich_graph_actor", "seed": 565, "size": 16}
+{"event": "scaling_row", "final_validation_loss": 0.19224143028259277, "method": "scalar_pre_solver_control", "seed": 564, "size": 32}
+{"event": "scaling_row", "final_validation_loss": 0.10909660905599594, "method": "rich_graph_actor", "seed": 564, "size": 32}
+{"event": "scaling_row", "final_validation_loss": 0.18838286399841309, "method": "scalar_pre_solver_control", "seed": 565, "size": 32}
+{"event": "scaling_row", "final_validation_loss": 0.10937610268592834, "method": "rich_graph_actor", "seed": 565, "size": 32}
+{"event": "scaling_row", "final_validation_loss": 0.19230544567108154, "method": "scalar_pre_solver_control", "seed": 564, "size": 34}
+{"event": "scaling_row", "final_validation_loss": 0.10899828374385834, "method": "rich_graph_actor", "seed": 564, "size": 34}
+{"event": "scaling_row", "final_validation_loss": 0.18833722174167633, "method": "scalar_pre_solver_control", "seed": 565, "size": 34}
+{"event": "scaling_row", "final_validation_loss": 0.10939949005842209, "method": "rich_graph_actor", "seed": 565, "size": 34}
+{"decision": "g564_rich_scaling_positive", "rich_pair_win_rate": 1.0, "rows": 12}
+{"checkpoint_changed": true, "decision": "g564_true_retraining_cycle_completed", "replay_rows": 1152}
+{"decision": "g564_offline_scaling_solver_transfer_blocked", "fixed_solver_gate": false, "rich_scaling_rows": 12}
+G564_DONE 2026-06-20T14:41:15+08:00

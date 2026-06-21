@@ -1,0 +1,16 @@
+{
+  "configs": [
+    "P1_H1",
+    "P1_H2",
+    "P2_H1",
+    "P2_H2",
+    "P3_H1",
+    "P3_H2"
+  ],
+  "contexts": 1000,
+  "decision": "g565_repaired_loss_parity_passed",
+  "elapsed_sec": 43.175211464986205,
+  "loss_config_sha256": "7b6940ce50864c8c012cbb36adff0e9229c06e166922244e2f0f5749f254b470",
+  "opportunity_contexts": 256,
+  "schema_version": "phase5p5_repair5g565_loss_ablation_summary_v1"
+}

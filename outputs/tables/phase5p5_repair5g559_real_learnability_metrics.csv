@@ -1,7 +1,7 @@
 metric,value,required,passed,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
 real_solver_labels_available,True,True,True,False,False,False,False,False
-real_pair_rows,128000,128000,True,False,False,False,False,False
-unique_instance_uids,2000,2000,True,False,False,False,False,False
+real_pair_rows,320000,128000,True,False,False,False,False,False
+unique_instance_uids,5000,2000,True,False,False,False,False,False
 heldout_physical_map_examples,0,1,False,False,False,False,False,False
 synthetic_contract_passed,True,True,True,False,False,False,False,False
 main_gcst_model_available,False,True,False,False,False,False,False,False

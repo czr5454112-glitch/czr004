@@ -1,0 +1,25 @@
+{
+  "architectures": [
+    "E0",
+    "E1",
+    "E2"
+  ],
+  "base_dataset_sha256": "b93f715c4e766d92b7da1db9165fe6edfb6ae0fad6af840fcc5796b71df8ca05",
+  "cycle_rows": 18,
+  "dataset_sha_changed": true,
+  "decision": "g565_rich_retraining_no_gain",
+  "device": "cuda",
+  "elapsed_sec": 4584.783145473339,
+  "merged_dataset_sha256": "fc8e0fabaed8d5e58e81b3bc15b7a4e8781f3b0d11ed48dea5644ec50f4c410f",
+  "merged_rows_recorded_in_provenance": true,
+  "post_merge_validation_opportunity_regret_mean": 0.9972401567682881,
+  "post_merge_validation_opportunity_regret_reported": true,
+  "schema_version": "phase5p5_repair5g565_rich_retraining_cycle_summary_v1",
+  "seeds": [
+    565,
+    566,
+    567
+  ],
+  "validation_detail_rows": 3600,
+  "validation_manifest_unchanged": true
+}

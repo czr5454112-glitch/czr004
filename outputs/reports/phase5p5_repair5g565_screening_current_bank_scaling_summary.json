@@ -1,0 +1,43 @@
+{
+  "amp_bf16": true,
+  "artifact_prefix": "phase5p5_repair5g565_screening",
+  "contexts_loaded": 1000,
+  "decision": "g565_current_bank_rich_scaling_supported",
+  "device": "cuda",
+  "early_stop_patience": 10,
+  "elapsed_sec": 12339.54689537827,
+  "epochs": 100,
+  "fold_indices": [
+    0
+  ],
+  "folds": 4,
+  "hidden_dim": 64,
+  "loss_config_sha256": "7b6940ce50864c8c012cbb36adff0e9229c06e166922244e2f0f5749f254b470",
+  "matched_initialization": true,
+  "methods": [
+    "B0",
+    "B1",
+    "B2",
+    "E0",
+    "E1",
+    "E2"
+  ],
+  "min_epochs": 30,
+  "results_rows": 90,
+  "rich_beats_matched_controls_rate": 0.9333333333333333,
+  "rich_vs_control_decision": "g565_rich_actor_beats_matched_controls",
+  "schema_version": "phase5p5_repair5g565_current_bank_scaling_summary_v1",
+  "seeds": [
+    565,
+    566,
+    567
+  ],
+  "size_labels": [
+    "64",
+    "128",
+    "256",
+    "512",
+    "all"
+  ],
+  "stage_label": "screening"
+}

@@ -1,0 +1,33 @@
+{
+  "aaai_ready": false,
+  "decision": "g565_g564_rich_scaling_underpowered_anchor_confounded",
+  "g564_final_decision": "g564_offline_scaling_solver_transfer_blocked",
+  "g564_fixed_solver_decision": "g564_offline_scaling_solver_transfer_blocked",
+  "g564_neural_memorization_context_sizes": [
+    1,
+    4
+  ],
+  "g564_neural_memorization_decision": "g564_neural_memorization_passed",
+  "g564_neural_memorization_strong_gate": false,
+  "g564_new_solver_panel_ran": false,
+  "g564_oracle_actor_loss_parity": false,
+  "g564_parameter_oracle_decision": "g564_parameter_oracle_passed",
+  "g564_parameter_oracle_loss": "repaired_floor_corrected_objective",
+  "g564_rich_actor_loss": "old_g563_set_valued_actor_loss",
+  "g564_rich_scaling_folds": 1,
+  "g564_rich_scaling_seeds": 2,
+  "g564_rich_scaling_statistically_supported": false,
+  "g564_rich_scaling_steps": 30,
+  "g564_rich_scaling_train_contexts": 34,
+  "g564_rich_scaling_validation_contexts": 8,
+  "g564_rich_vs_scalar_output_parameterization_matched": false,
+  "g564_true_cycle_decision": "g564_true_retraining_cycle_completed",
+  "g564_true_cycle_model": "scalar",
+  "g564_true_cycle_rich_actor": false,
+  "historical_interpretation": "promising_underpowered_offline_probe_not_strict_rich_actor_feasibility_pass",
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g565_g564_truth_audit_summary_v1"
+}

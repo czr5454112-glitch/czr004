@@ -20,4 +20,5 @@ python scripts/run_repair5g559_5090.py \
   --codebook-size "${G559_CODEBOOK_SIZE:-1024}" \
   --row-limit "${G559_ROW_LIMIT:-0}" \
   --max-workers "${G559_MAX_WORKERS:-1}" \
+  --topology-count "${G559_TOPOLOGY_COUNT:-24}" \
   --binary "${G559_SOLVER_BINARY:-build/phase1a-batch/phase1a_batch}"

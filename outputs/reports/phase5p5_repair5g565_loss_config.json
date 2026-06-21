@@ -1,0 +1,16 @@
+{
+  "censored_support_margin": 0.35,
+  "censored_trust_weight": 0.01,
+  "cluster_distance": 0.025,
+  "context_balance": "context_mean",
+  "cvar_quantile": 0.8,
+  "harmful_loss": "nearest_adaptive",
+  "loss_config_sha256": "7b6940ce50864c8c012cbb36adff0e9229c06e166922244e2f0f5749f254b470",
+  "positive_loss": "floor_corrected_softmin",
+  "requested_harmful_margin": 0.12,
+  "safe_nonimproving_support_margin": 0.2,
+  "safe_nonimproving_trust_weight": 0.05,
+  "schema_version": "phase5p5_repair5g565_repaired_set_risk_config_v1",
+  "tau": 0.05,
+  "topk_harmful": 3
+}

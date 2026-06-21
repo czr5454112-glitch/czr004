@@ -148,14 +148,14 @@
     {
       "git_payload_candidate": true,
       "path": "outputs/reports/phase5p5_repair5g560_phase0_tmux.failed.20260619_181508.log",
-      "sha256": "584ef8053fcc9302dcd655f6a16329a3e6fa5620382637b15437d7dc39200c53",
-      "size_bytes": 6215
+      "sha256": "76aaf3e7a0371e94d1a37a2fe12de16ea010fef7c8c8da57052d5b018451f164",
+      "size_bytes": 6218
     },
     {
       "git_payload_candidate": true,
       "path": "outputs/reports/phase5p5_repair5g560_phase0_tmux.failed_tests.20260619_182632.log",
-      "sha256": "d698ddd79905a23584b485d8a2d83b82ee5ae8b51d2507c994e43f67b56debf1",
-      "size_bytes": 3806
+      "sha256": "3a34a5fe0ee619944c41fec55682ebd00c8c10758e214bd9a6786f9e0e5077c6",
+      "size_bytes": 3824
     },
     {
       "git_payload_candidate": true,
@@ -172,20 +172,20 @@
     {
       "git_payload_candidate": true,
       "path": "outputs/reports/phase5p5_repair5g560_scenario_validity.md",
-      "sha256": "98b99ed624a6d7ee8a86312302a6f3d32707a8132fcc69262b840b7edf389d31",
-      "size_bytes": 318
+      "sha256": "864aaf6f1b7ac77b0cb622166a1ea0366b252ce010256726af4fa99a143b66e5",
+      "size_bytes": 235
     },
     {
       "git_payload_candidate": true,
       "path": "outputs/reports/phase5p5_repair5g560_scenario_validity_summary.json",
-      "sha256": "a56c71f06c41c5580f55fa392233163cc254acd7da9c6057c491b51caa3facef",
-      "size_bytes": 501
+      "sha256": "bd3a043d38955bde61b05563fddda8fb35fcaacc7f08028a740c1b9f095b533e",
+      "size_bytes": 459
     },
     {
       "git_payload_candidate": true,
       "path": "outputs/reports/phase5p5_repair5g560_state.json",
-      "sha256": "7c16b20139a4b28a9781265daa57218590508864773a9bbd4b85c047c5220002",
-      "size_bytes": 40463
+      "sha256": "0243729fe4b179e1fcd825ff39922645264f49a6b52a3ca8c37da7f7077b7e25",
+      "size_bytes": 40415
     },
     {
       "git_payload_candidate": true,

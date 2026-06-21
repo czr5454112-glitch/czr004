@@ -1,0 +1,99 @@
+{
+  "artifact": "phase5p5_repair5g565_local_pull_manifest",
+  "created_at_local": "2026-06-21T20:31:41+0800",
+  "notes": [
+    "G5.65 experiment outputs were pulled from the RTX5090 server after final decision materialization.",
+    "Large G559/G560 CSVs are retained locally for analysis but excluded from ordinary GitHub push because each exceeds the normal 100MB file limit.",
+    "Context and log archives are small and suitable for GitHub; extracted directories are local convenience copies."
+  ],
+  "large_local_only_artifacts": [
+    {
+      "path": "outputs/tables/phase5p5_repair5g560_labelv51_training_rows.csv",
+      "present": true,
+      "bytes": 495394561,
+      "mb": 472.445,
+      "sha256": "ce7555727f3a9efe80e1f019ed579947d471276aa9dbaefac220702226c8bdd8",
+      "excluded_from_git": true,
+      "reason": "exceeds ordinary GitHub per-file limit; checksum recorded here"
+    },
+    {
+      "path": "outputs/tables/phase5p5_repair5g560_labelv51_join_audit.csv",
+      "present": true,
+      "bytes": 489703911,
+      "mb": 467.018,
+      "sha256": "f5ee4af2230fc855add18923dfde042410d3965fe61920a73966819440718dc3",
+      "excluded_from_git": true,
+      "reason": "exceeds ordinary GitHub per-file limit; checksum recorded here"
+    },
+    {
+      "path": "outputs/tables/phase5p5_repair5g560_identity_crosswalk.csv",
+      "present": true,
+      "bytes": 363549843,
+      "mb": 346.708,
+      "sha256": "f3be42c42596249cc0b0c19e79c0ef1141bc85be665738110e713674b79464e7",
+      "excluded_from_git": true,
+      "reason": "exceeds ordinary GitHub per-file limit; checksum recorded here"
+    },
+    {
+      "path": "outputs/tables/phase5p5_repair5g559_labelv5_pilot_plan.csv",
+      "present": true,
+      "bytes": 362795836,
+      "mb": 345.989,
+      "sha256": "74abc120cdc12c4d69bbc5cf3a9e0cc78d18603dbe5c11a88255b9476e2ab7ce",
+      "excluded_from_git": true,
+      "reason": "exceeds ordinary GitHub per-file limit; checksum recorded here"
+    },
+    {
+      "path": "outputs/tables/phase5p5_repair5g559_labelv5_pair_rows.csv",
+      "present": true,
+      "bytes": 139059065,
+      "mb": 132.617,
+      "sha256": "39327ccd803089d95d122e2d370922b449f97806b8e15162eed2568917b8a7ea",
+      "excluded_from_git": true,
+      "reason": "exceeds ordinary GitHub per-file limit; checksum recorded here"
+    },
+    {
+      "path": "outputs/tables/phase5p5_repair5g560_labelv51_valid_training_rows.csv",
+      "present": true,
+      "bytes": 118298105,
+      "mb": 112.818,
+      "sha256": "7ca7cbfb376d9e5b5bb525c2911670275169869e73975d184a506bf48c0acc57",
+      "excluded_from_git": true,
+      "reason": "exceeds ordinary GitHub per-file limit; checksum recorded here"
+    }
+  ],
+  "archives_for_git": [
+    {
+      "path": "outputs/external/phase5p5_repair5g565_remote_contexts.tgz",
+      "present": true,
+      "bytes": 4791500,
+      "mb": 4.57,
+      "sha256": "a7c8af183cd6b48e67a727b068dc90d67de53630150def46a625a12c09822d89",
+      "excluded_from_git": false,
+      "reason": "small archive of remote context/log artifacts"
+    },
+    {
+      "path": "outputs/external/phase5p5_repair5g565_remote_logs.tgz",
+      "present": true,
+      "bytes": 597094,
+      "mb": 0.569,
+      "sha256": "c9150142fa101b2aadcaa2c8c328567bba2e83804dc16bb3ec90562e2106327f",
+      "excluded_from_git": false,
+      "reason": "small archive of remote context/log artifacts"
+    }
+  ],
+  "context_extract": {
+    "path": "outputs/external/phase5p5_repair5g565_remote_contexts_flat",
+    "files": 6642,
+    "mb": 29.227,
+    "excluded_from_git": true,
+    "reason": "extracted convenience copy; tgz archive is the portable artifact"
+  },
+  "log_extract": {
+    "path": "outputs/external/phase5p5_repair5g565_remote_logs_flat",
+    "files": 2421,
+    "mb": 10.746,
+    "excluded_from_git": true,
+    "reason": "extracted convenience copy; tgz archive is the portable artifact"
+  }
+}

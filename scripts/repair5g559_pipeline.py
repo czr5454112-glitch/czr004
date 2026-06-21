@@ -305,6 +305,7 @@ def parser() -> argparse.ArgumentParser:
     p.add_argument("--row-limit", type=int, default=0)
     p.add_argument("--max-workers", type=int, default=1)
     p.add_argument("--seed", type=int, default=20260619)
+    p.add_argument("--topology-count", type=int, default=24)
     p.add_argument("--binary", type=Path, default=Path("build/phase1a-batch/phase1a_batch"))
     p.add_argument("--smoke", action="store_true")
     p.add_argument("--ids", nargs="*", type=int)
@@ -359,6 +360,22 @@ def default_topologies(limit: int = 24) -> list[dict[str, Any]]:
         ("g559-synth-city-boston-32", "city", 32, 32),
         ("g559-synth-city-paris-32", "city", 32, 32),
         ("g559-synth-game-lak-32", "game", 32, 32),
+        ("g565-synth-open-cross-40", "open_cross", 40, 40),
+        ("g565-synth-open-halls-44", "open_cross", 44, 40),
+        ("g565-synth-ring-a-40", "ring", 40, 40),
+        ("g565-synth-ring-b-48", "ring", 48, 40),
+        ("g565-synth-islands-a-40", "islands", 40, 40),
+        ("g565-synth-islands-b-48", "islands", 48, 40),
+        ("g565-synth-bridge-a-40", "narrow_bridge", 40, 40),
+        ("g565-synth-bridge-b-48", "narrow_bridge", 48, 40),
+        ("g565-synth-labyrinth-a-40", "labyrinth", 40, 40),
+        ("g565-synth-labyrinth-b-48", "labyrinth", 48, 40),
+        ("g565-synth-checker-a-40", "checker", 40, 40),
+        ("g565-synth-checker-b-48", "checker", 48, 40),
+        ("g565-synth-corridor-grid-a-44", "corridor_grid", 44, 44),
+        ("g565-synth-corridor-grid-b-52", "corridor_grid", 52, 44),
+        ("g565-synth-hub-spoke-a-44", "hub_spoke", 44, 44),
+        ("g565-synth-hub-spoke-b-52", "hub_spoke", 52, 44),
     ]
     return [
         {"topology_id": f"g559_topo_{idx:03d}", "map": name, "map_family": family, "width": width, "height": height}
@@ -566,7 +583,7 @@ def main_literature_code_audit(argv: list[str] | None = None) -> int:
 def main_build_corridor_graphs(argv: list[str] | None = None) -> int:
     args = parse_args_checked(argv, "G5.59 corridor graphs")
     rows = []
-    topologies = default_topologies(limit=24 if not args.smoke else 6)
+    topologies = default_topologies(limit=max(24, int(args.topology_count)) if not args.smoke else min(6, int(args.topology_count)))
     register_solver_maps(topologies)
     for topo in topologies:
         rows.append({**audit_corridor_graph(topo), **CLAIMS_CLOSED})
@@ -587,9 +604,9 @@ def main_build_corridor_graphs(argv: list[str] | None = None) -> int:
     return 0
 
 
-def build_instances(count: int, seed: int) -> list[dict[str, Any]]:
+def build_instances(count: int, seed: int, topology_count: int = 24) -> list[dict[str, Any]]:
     rng = random.Random(seed)
-    topologies = default_topologies(limit=24)
+    topologies = default_topologies(limit=max(24, int(topology_count)))
     register_solver_maps(topologies)
     regimes = ["uniform_random", "opposite_side_cross_flow", "room_to_room_door_bottleneck", "warehouse_aisle_to_aisle", "clustered_starts_to_dispersed_goals"]
     budgets = [500, 1000, 2000, 5000]
@@ -675,7 +692,7 @@ def build_instances(count: int, seed: int) -> list[dict[str, Any]]:
 
 def main_generate_real_instances(argv: list[str] | None = None) -> int:
     args = parse_args_checked(argv, "G5.59 instance generation")
-    rows = build_instances(effective_pilot_instances(args), args.seed)
+    rows = build_instances(effective_pilot_instances(args), args.seed, args.topology_count)
     summary = {
         "schema_version": f"{ROUND}_instance_generation_summary_v1",
         "decision": "g559_instance_manifest_ready",
@@ -683,6 +700,8 @@ def main_generate_real_instances(argv: list[str] | None = None) -> int:
         "unique_instance_uids": len({r["instance_uid"] for r in rows}),
         "unique_physical_map_hashes": len({r["adjacency_sha256"] for r in rows}),
         "map_families": len({r["map_family"] for r in rows}),
+        "requested_topology_count": args.topology_count,
+        "materialized_topologies": len({r["map"] for r in rows}),
         "pilot_min_instance_uids": PILOT_MIN_INSTANCE_UIDS,
         "pilot_min_physical_hashes": PILOT_MIN_PHYSICAL_HASHES,
         "pilot_min_map_families": PILOT_MIN_MAP_FAMILIES,
@@ -754,12 +773,12 @@ def main_plan_labelv5_pilot(argv: list[str] | None = None) -> int:
     effective_instances = effective_pilot_instances(args)
     effective_candidates = effective_candidates_per_instance(args)
     if not resolve(INSTANCE_CSV).exists():
-        main_generate_real_instances(["--pilot-instances", str(effective_instances), "--seed", str(args.seed)] + (["--smoke"] if args.smoke else []))
+        main_generate_real_instances(["--pilot-instances", str(effective_instances), "--seed", str(args.seed), "--topology-count", str(args.topology_count)] + (["--smoke"] if args.smoke else []))
     if not resolve(CODEBOOK_CSV).exists():
         main_build_codebook(["--codebook-size", str(effective_codebook_size(args)), "--seed", str(args.seed)] + (["--smoke"] if args.smoke else []))
     instances = read_rows(INSTANCE_CSV, limit=effective_instances)
     if len(instances) < effective_instances:
-        main_generate_real_instances(["--pilot-instances", str(effective_instances), "--seed", str(args.seed)] + (["--smoke"] if args.smoke else []))
+        main_generate_real_instances(["--pilot-instances", str(effective_instances), "--seed", str(args.seed), "--topology-count", str(args.topology_count)] + (["--smoke"] if args.smoke else []))
         instances = read_rows(INSTANCE_CSV, limit=effective_instances)
     candidates = [r for r in read_rows(CODEBOOK_CSV) if r.get("candidate_id") != PRIMARY_BASELINE]
     if len(candidates) < effective_candidates:
@@ -1480,6 +1499,7 @@ def main_write_artifact_bundle(argv: list[str] | None = None) -> int:
         f"--row-limit {args.row_limit} "
         f"--max-workers {args.max_workers} "
         f"--seed {args.seed} "
+        f"--topology-count {args.topology_count} "
         f"--binary {args.binary}"
     )
     if args.smoke:
@@ -1550,6 +1570,8 @@ def main_run_all(argv: list[str] | None = None) -> int:
         str(args.max_workers),
         "--seed",
         str(args.seed),
+        "--topology-count",
+        str(args.topology_count),
         "--binary",
         str(args.binary),
     ]

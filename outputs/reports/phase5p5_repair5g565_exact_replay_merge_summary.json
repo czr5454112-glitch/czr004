@@ -1,0 +1,33 @@
+{
+  "base_contexts": 1000,
+  "base_dataset_sha256": "b93f715c4e766d92b7da1db9165fe6edfb6ae0fad6af840fcc5796b71df8ca05",
+  "candidate_rows": 74000,
+  "candidate_rows_count_as_independent_contexts": false,
+  "censored_contexts": 381,
+  "censored_rows_are_negative": false,
+  "contexts": 1000,
+  "dataset_sha_changed": true,
+  "decision": "g565_exact_replay_merge_completed",
+  "expanded_existing_contexts": 1000,
+  "harmful_contexts": 620,
+  "independent_contexts": 1000,
+  "merged_contexts": 1000,
+  "merged_dataset_sha256": "fc8e0fabaed8d5e58e81b3bc15b7a4e8781f3b0d11ed48dea5644ec50f4c410f",
+  "merged_replay_rows": 9000,
+  "new_unique_contexts": 0,
+  "no_positive_observed_is_automatically_noop": false,
+  "original_rows_losslessly_preserved": true,
+  "positive_contexts": 620,
+  "positive_set_is_not_averaged": true,
+  "schema_version": "phase5p5_repair5g565_exact_replay_merge_summary_v1",
+  "source_files": [
+    "/root/czr004/outputs/tables/phase5p5_repair5g562_cycle3_pairs.csv"
+  ],
+  "state_counts": {
+    "CENSORED_UNKNOWN": 368,
+    "HARMFUL_SUPPORTED": 12,
+    "MIXED_FRONTIER": 608,
+    "POSITIVE_SUPPORTED": 12
+  },
+  "true_cycle_merge_semantics": true
+}

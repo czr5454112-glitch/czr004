@@ -7,10 +7,10 @@
   "phase6_allowed": false,
   "pilot_min_pair_rows": 128000,
   "pilot_underpowered": false,
-  "real_pair_rows": 128000,
+  "real_pair_rows": 320000,
   "runtime_claim_allowed": false,
   "schema_version": "phase5p5_repair5g559_real_learnability_summary_v1",
   "selector_eval_csv": "outputs/tables/phase5p5_repair5g559_real_learnability_selector_eval.csv",
   "split_manifest_csv": "outputs/tables/phase5p5_repair5g559_real_learnability_split_manifest.csv",
-  "unique_instance_uids": 2000
+  "unique_instance_uids": 5000
 }

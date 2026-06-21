@@ -1,0 +1,17 @@
+{
+  "decision": "g565_label_margin_calibrated",
+  "exact_pair_rows": 25522,
+  "finite_quality_delta_rows": 15236,
+  "fresh_g565_pairs_included": true,
+  "mad_quality_delta_vs_g556": 0.022049895340000014,
+  "median_quality_delta_vs_g556": -0.003928951350000043,
+  "near_tie_abs_delta_median": 0.021487603309999992,
+  "recommended_harmful_margin": 0.042975206619999984,
+  "recommended_positive_margin": 0.042975206619999984,
+  "schema_version": "phase5p5_repair5g565_label_margin_summary_v1",
+  "source_pair_files": [
+    "/root/czr004/outputs/tables/phase5p5_repair5g562_cycle3_pairs.csv",
+    "/root/czr004/outputs/tables/phase5p5_repair5g565_fresh_solver_panel_pairs.csv"
+  ],
+  "success_stability_rows": 15236
+}

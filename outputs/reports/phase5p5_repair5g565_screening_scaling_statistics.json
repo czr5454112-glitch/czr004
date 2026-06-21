@@ -1,0 +1,119 @@
+{
+  "methods": {
+    "B0_always_g556": {
+      "first_to_last_validation_risk_reduction": 0.0,
+      "folds_improved_fraction": null,
+      "median_validation_risk_by_size": {
+        "128": 0.012838442149542838,
+        "256": 0.012838442149542838,
+        "512": 0.012838442149542838,
+        "64": 0.012838442149542838,
+        "all": 0.012838442149542838
+      },
+      "scaling_positive": false,
+      "size_labels": [
+        "64",
+        "128",
+        "256",
+        "512",
+        "all"
+      ]
+    },
+    "B1": {
+      "first_to_last_validation_risk_reduction": 0.0001335932905121677,
+      "folds_improved_fraction": null,
+      "median_validation_risk_by_size": {
+        "128": 0.012671043327066315,
+        "256": 0.012690983795751098,
+        "512": 0.012645262463614202,
+        "64": 0.01272767834319711,
+        "all": 0.012594085052684943
+      },
+      "scaling_positive": true,
+      "size_labels": [
+        "64",
+        "128",
+        "256",
+        "512",
+        "all"
+      ]
+    },
+    "B2": {
+      "first_to_last_validation_risk_reduction": 0.00017546835776948225,
+      "folds_improved_fraction": null,
+      "median_validation_risk_by_size": {
+        "128": 0.012694451255265183,
+        "256": 0.012704311923985063,
+        "512": 0.012669704217936773,
+        "64": 0.012787933980003394,
+        "all": 0.012612465622233912
+      },
+      "scaling_positive": true,
+      "size_labels": [
+        "64",
+        "128",
+        "256",
+        "512",
+        "all"
+      ]
+    },
+    "E0": {
+      "first_to_last_validation_risk_reduction": 0.00012392810435527327,
+      "folds_improved_fraction": null,
+      "median_validation_risk_by_size": {
+        "128": 0.012656619814116176,
+        "256": 0.012662147064572834,
+        "512": 0.01262454601072568,
+        "64": 0.012720791648878798,
+        "all": 0.012596863544523525
+      },
+      "scaling_positive": true,
+      "size_labels": [
+        "64",
+        "128",
+        "256",
+        "512",
+        "all"
+      ]
+    },
+    "E1": {
+      "first_to_last_validation_risk_reduction": 0.00015789238727479359,
+      "folds_improved_fraction": null,
+      "median_validation_risk_by_size": {
+        "128": 0.012657188247971544,
+        "256": 0.012599552160947823,
+        "512": 0.012579341023961896,
+        "64": 0.012725191730401722,
+        "all": 0.012567299343126928
+      },
+      "scaling_positive": true,
+      "size_labels": [
+        "64",
+        "128",
+        "256",
+        "512",
+        "all"
+      ]
+    },
+    "E2": {
+      "first_to_last_validation_risk_reduction": 0.00013829282219553554,
+      "folds_improved_fraction": null,
+      "median_validation_risk_by_size": {
+        "128": 0.012651720853726747,
+        "256": 0.012684524896877433,
+        "512": 0.01260465263111752,
+        "64": 0.012723589790157502,
+        "all": 0.012585296967961967
+      },
+      "scaling_positive": true,
+      "size_labels": [
+        "64",
+        "128",
+        "256",
+        "512",
+        "all"
+      ]
+    }
+  },
+  "schema_version": "phase5p5_repair5g565_scaling_statistics_v1"
+}

@@ -1,6 +1,6 @@
 {
   "aaai_ready": false,
-  "actual_file_validation_complete": true,
+  "actual_file_validation_complete": false,
   "invalid_scenarios": 797,
   "learned_runtime_policy_validated": false,
   "phase5p5_allowed": false,
@@ -13,7 +13,6 @@
   "round": "phase5p5_repair5g560",
   "runtime_claim_allowed": false,
   "scenario_rows": 2000,
-  "scenario_validity_gate_passed": false,
   "valid_scenarios": 1203,
   "validity_rate": 0.6015
 }

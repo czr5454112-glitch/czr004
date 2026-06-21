@@ -1,0 +1,29 @@
+{
+  "amp_bf16": false,
+  "architectures": [
+    "E0",
+    "E1",
+    "E2"
+  ],
+  "decision": "g565_expanded_training_completed",
+  "device": "cuda",
+  "early_stop_patience": 10,
+  "effective_max_contexts": 5000,
+  "elapsed_sec": 11466.556840829551,
+  "epochs": 100,
+  "loaded_examples": 5000,
+  "manifest_rows": 5000,
+  "manifest_uids": 5000,
+  "matched_manifest_examples": 5000,
+  "min_epochs": 30,
+  "requested_max_contexts": 1000,
+  "rows": 9,
+  "schema_version": "phase5p5_repair5g565_expanded_training_summary_v1",
+  "seeds": [
+    565,
+    566,
+    567
+  ],
+  "train_contexts": 4000,
+  "validation_contexts": 1000
+}

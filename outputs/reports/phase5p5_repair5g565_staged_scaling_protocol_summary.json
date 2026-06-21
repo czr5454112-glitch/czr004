@@ -1,0 +1,26 @@
+{
+  "confirmatory_methods": [
+    "B0",
+    "B1",
+    "B2",
+    "E1",
+    "E2"
+  ],
+  "decision": "g565_staged_scaling_protocol_completed",
+  "schema_version": "phase5p5_repair5g565_staged_scaling_protocol_summary_v1",
+  "scientific_scope_downgraded": false,
+  "screening_artifact_prefix": "phase5p5_repair5g565_screening",
+  "screening_methods": [
+    "B0",
+    "B1",
+    "B2",
+    "E0",
+    "E1",
+    "E2"
+  ],
+  "selected_rich_methods": [
+    "E1",
+    "E2"
+  ],
+  "selection_uses_solver_outcomes": false
+}

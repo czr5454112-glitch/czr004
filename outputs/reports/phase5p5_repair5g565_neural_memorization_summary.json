@@ -1,0 +1,38 @@
+{
+  "amp_bf16": true,
+  "architectures": [
+    "B1",
+    "B2",
+    "E0",
+    "E1",
+    "E2"
+  ],
+  "context_rows": 1560,
+  "decision": "g565_neural_memorization_strong_pass",
+  "device": "cuda",
+  "early_stop_patience": 10,
+  "elapsed_sec": 4740.610880861059,
+  "eligible_contexts": 564,
+  "epochs": 100,
+  "hidden_dims": [
+    64,
+    96
+  ],
+  "loss_config_sha256": "7b6940ce50864c8c012cbb36adff0e9229c06e166922244e2f0f5749f254b470",
+  "median_16_32_opportunity_normalized_oracle_regret": 0.5712035079367324,
+  "min_epochs": 30,
+  "rows": 86,
+  "schema_version": "phase5p5_repair5g565_neural_memorization_summary_v1",
+  "seeds": [
+    565,
+    566,
+    567
+  ],
+  "sizes": [
+    1,
+    4,
+    8,
+    16,
+    32
+  ]
+}

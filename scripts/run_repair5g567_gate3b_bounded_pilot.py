@@ -176,23 +176,62 @@ def take_split_rows(
         return True
 
     public_target = int(math.ceil(count * min_public_fraction))
+    synthetic_target = count - public_target
+
+    def selected_source_count(public: bool) -> int:
+        return sum(1 for item in selected if row_is_public(item) is public)
+
+    def eligible_groups(public: bool | None) -> list[list[dict[str, Any]]]:
+        by_hash: dict[str, list[dict[str, Any]]] = {}
+        for row in ordered:
+            if public is not None and row_is_public(row) is not public:
+                continue
+            if not can_take(row):
+                continue
+            by_hash.setdefault(str(row.get("physical_map_sha256", "")), []).append(row)
+        return sorted(
+            by_hash.values(),
+            key=lambda group: (
+                -len({int(g567.number(row.get("agent_count"), 0)) for row in group}),
+                -len(group),
+                str(group[0].get("map_family", "")),
+                str(group[0].get("physical_map_sha256", "")),
+            ),
+        )
+
+    def fill_source(public: bool, target: int) -> None:
+        while len(selected) < count and selected_source_count(public) < target:
+            groups = eligible_groups(public)
+            if not groups:
+                break
+            for row in groups[0]:
+                if len(selected) >= count or selected_source_count(public) >= target:
+                    break
+                add(row)
+
     for tier in required_tiers:
         if len(selected) >= count:
             break
         tier_rows = [row for row in ordered if int(g567.number(row.get("agent_count"), 0)) == tier]
-        preferred = [row for row in tier_rows if row_is_public(row)] if sum(1 for row in selected if row_is_public(row)) < public_target else tier_rows
-        for row in preferred + tier_rows:
+        preferred_public = selected_source_count(True) < public_target
+        preferred = [row for row in tier_rows if row_is_public(row) is preferred_public]
+        fallback = [row for row in tier_rows if row_is_public(row) is not preferred_public]
+        for row in preferred + fallback:
             if add(row):
                 break
-    for row in ordered:
-        if len(selected) >= count:
+    fill_source(True, public_target)
+    fill_source(False, synthetic_target)
+    while len(selected) < count:
+        groups = eligible_groups(None)
+        if not groups:
             break
-        if row_is_public(row) and sum(1 for item in selected if row_is_public(item)) < public_target:
-            add(row)
-    for row in ordered:
-        if len(selected) >= count:
+        added = False
+        for row in groups[0]:
+            if len(selected) >= count:
+                break
+            added = add(row) or added
+        if not added:
             break
-        add(row)
     if len(selected) < count:
         raise RuntimeError(f"not enough Gate-3B rows for {split}: {len(selected)} < {count}")
     tiers = {int(g567.number(row.get("agent_count"), 0)) for row in selected}

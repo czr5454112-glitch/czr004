@@ -4,7 +4,7 @@ import torch
 
 from gcst.dual_stream_graph_actor import DualStreamGoalAwareActor, architecture_from_id
 from gcst.goal_aware_actor import GOAL_AWARE_SCALAR_FEATURES
-from gcst.graph_encoder import GraphBatch
+from gcst.graph_encoder import EdgeAwareAttentionLayer, GraphBatch
 
 
 def _model(hidden_dim: int = 64, latent_tokens: int = 16):
@@ -106,6 +106,24 @@ def test_a5_production_config_mixed_agent_batch_forward_backward() -> None:
     assert theta.shape == (3, 15)
     theta.sum().backward()
     assert any(param.grad is not None for param in model.parameters())
+
+
+def test_edge_attention_casts_autocast_softmax_weights_back_to_bf16(monkeypatch) -> None:
+    original_softmax = torch.softmax
+
+    def softmax_promoted_to_fp32(input, *args, **kwargs):
+        return original_softmax(input.float(), *args, **kwargs)
+
+    monkeypatch.setattr(torch, "softmax", softmax_promoted_to_fp32)
+    layer = EdgeAwareAttentionLayer(8, 3, dropout=0.0).to(torch.bfloat16)
+    h = torch.randn((3, 8), dtype=torch.bfloat16)
+    edge_index = torch.tensor([[0, 1, 2, 0], [1, 2, 0, 2]], dtype=torch.long)
+    edge_features = torch.randn((4, 3), dtype=torch.bfloat16)
+
+    out = layer(h, edge_index, edge_features)
+
+    assert out.dtype == torch.bfloat16
+    assert out.shape == h.shape
 
 
 def test_large_scale_actor_variants_disable_full_node_global_attention() -> None:

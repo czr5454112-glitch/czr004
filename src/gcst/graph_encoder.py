@@ -54,7 +54,7 @@ class EdgeAwareAttentionLayer(nn.Module):
         weights = torch.zeros_like(logits)
         for node in torch.unique(dst):
             mask = dst == node
-            weights[mask] = torch.softmax(logits[mask], dim=0)
+            weights[mask] = torch.softmax(logits[mask], dim=0).to(dtype=weights.dtype)
         msg = self.msg(torch.cat([h[src], e], dim=-1)) * weights.unsqueeze(-1)
         agg = torch.zeros_like(h)
         agg.index_add_(0, dst, msg)

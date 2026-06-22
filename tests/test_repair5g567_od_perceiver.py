@@ -126,6 +126,19 @@ def test_edge_attention_casts_autocast_softmax_weights_back_to_bf16(monkeypatch)
     assert out.shape == h.shape
 
 
+def test_edge_attention_casts_autocast_messages_to_accumulator_dtype() -> None:
+    layer = EdgeAwareAttentionLayer(8, 3, dropout=0.0)
+    h = torch.randn((3, 8), dtype=torch.float32)
+    edge_index = torch.tensor([[0, 1, 2, 0], [1, 2, 0, 2]], dtype=torch.long)
+    edge_features = torch.randn((4, 3), dtype=torch.float32)
+
+    with torch.autocast(device_type="cpu", dtype=torch.bfloat16):
+        out = layer(h, edge_index, edge_features)
+
+    assert out.dtype == torch.float32
+    assert out.shape == h.shape
+
+
 def test_large_scale_actor_variants_disable_full_node_global_attention() -> None:
     for variant_id in ["A5", "A6", "A7"]:
         arch = architecture_from_id(variant_id)

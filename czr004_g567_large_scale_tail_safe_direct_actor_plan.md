@@ -2475,35 +2475,15 @@ Tail handling:
   training until direct exact is stable, then reintroduce through curriculum.
 ```
 
-Critical manual-approval barrier:
+Full-campaign manual-approval barrier:
 
 ```text
-This plan does not authorize Gate-3B or the full G5.67 campaign, even if all
-technical gates later pass.
+The earlier stage-by-stage manual wait mechanism is revoked by the user. Stage-2A,
+true A5 Gate-3A, and Gate-3B should proceed only under the previously approved
+technical gate rules, fail-closed checks, and bounded-run limits.
 
-Required stopping points:
-
-STOP 1:
-  After timeout/nested-deadline repair and the targeted tunnel/cross/connector
-  reproducer, stop and report all evidence.
-
-STOP 2:
-  After Stage-2A reaches 256/256 completed rows, zero hard timeouts, valid rc,
-  valid final summary, and a true diagnostic A5 checkpoint, stop and report.
-  Do not automatically launch Gate-3A unless it was explicitly included in the
-  current approved bounded task.
-
-STOP 3:
-  After true A5 Gate-3A passes, stop all tmux sessions and solver/GPU processes,
-  sync artifacts to GitHub, and report the exact commit and evidence. Do not
-  launch Gate-3B automatically.
-
-STOP 4:
-  Gate-3B may run only after a new explicit user/GPT-Pro approval. After Gate-3B
-  completes, stop again and report exact HEAD, context and solver-row counts,
-  timeout/crash rates, public-map and official-scenario proportions,
-  Label-v5.4 distribution, critic calibration, A/B/C development results,
-  GPU-active hours, and full-campaign storage estimate.
+This does not authorize the full G5.67 campaign, even if Stage-2A, Gate-3A, or
+Gate-3B later pass.
 
 Absolute full-campaign lock:
   Under no circumstances may Codex launch server_start_repair5g567_full.sh,
@@ -2529,9 +2509,8 @@ Absolute full-campaign lock:
     G567_FULL_MANUAL_APPROVAL == APPROVE_G567_FULL_$(git rev-parse HEAD)
 
 Fixed execution order:
-  timeout repair -> targeted reproducer -> stop/report -> Stage-2A ->
-  stop/report -> true Gate-3A only after explicit bounded approval ->
-  stop/report -> user/GPT-Pro review -> Gate-3B only after new approval ->
-  stop/report -> final full review -> user-provided APPROVE_G567_FULL_<SHA> ->
-  full campaign may start.
+  timeout repair -> targeted reproducer -> Stage-2A under prior technical gates ->
+  true Gate-3A under prior technical gates -> Gate-3B under prior bounded-run
+  rules -> final full review -> user-provided APPROVE_G567_FULL_<SHA> -> full
+  campaign may start.
 ```

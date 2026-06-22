@@ -116,7 +116,8 @@
     "report": "outputs/reports/phase5p5_repair5g567_direct_exact_reproducer.md",
     "summary": "outputs/reports/phase5p5_repair5g567_direct_exact_reproducer_summary.json",
     "table": "outputs/tables/phase5p5_repair5g567_direct_exact_reproducer.csv",
-    "stop1_satisfied_report_required": true
+    "stage_by_stage_manual_wait_required": false,
+    "non_full_stages_follow_prior_technical_gates": true
   },
   "stage2a_direct_exact_attempt_after_reproducer": {
     "decision": "stage2a_blocked_missing_seed_actor_checkpoint",
@@ -132,6 +133,9 @@
     "approval_env_var": "G567_FULL_MANUAL_APPROVAL",
     "required_token_format": "APPROVE_G567_FULL_<EXACT_COMMIT_SHA>",
     "codex_must_not_set_guess_or_generate_approval": true,
+    "stage_by_stage_manual_wait_revoked": true,
+    "full_only_manual_stop": true,
+    "stage2a_gate3a_gate3b_follow_prior_technical_rules": true,
     "stage2a_pass_does_not_authorize_full": true,
     "gate3a_pass_does_not_authorize_full": true,
     "gate3b_pass_does_not_authorize_full": true
@@ -146,7 +150,7 @@
   },
   "open_risks": [
     "Direct-exact Stage-2A remote rerun has not yet completed after the nested-probe repair",
-    "Stage-2A direct-exact attempt after STOP1 failed closed because the seed actor checkpoint glob was missing",
+    "Stage-2A direct-exact attempt after the targeted reproducer failed closed because the seed actor checkpoint glob was missing",
     "tunnel/cross/connector extreme-tail contexts remain in timeout/tail audit until direct exact is stable",
     "Gate-3A true A5 checkpoint smoke has not been launched",
     "Gate-2 is bounded pilot evidence only"

@@ -159,11 +159,11 @@ Implemented local repair after this report:
 - C++ now skips UpdateLTM/callback work immediately after post-solve parent deadline expiry and records phase timings.
 - Stage-2A has a committed tmux runner wrapper that writes rc and atomic final summary.
 
-This report is historical evidence only. Gate-3A remains locked until the repaired direct-exact Stage-2A rerun completes 256/256 rows with zero hard timeouts and produces the true diagnostic A5 checkpoint.
+This report is historical evidence only. Gate-3A remains technically gated until the repaired direct-exact Stage-2A rerun completes 256/256 rows with zero hard timeouts and produces the true diagnostic A5 checkpoint.
 
 ## Direct-Exact Reproducer
 
-STOP 1 targeted reproducer was run on the RTX5090 server at commit `407cd6202c5f169ce0f6cfa98e9c3994b21ce6a6`.
+The targeted reproducer was run on the RTX5090 server at commit `407cd6202c5f169ce0f6cfa98e9c3994b21ce6a6`.
 
 Evidence:
 
@@ -181,6 +181,8 @@ Result:
 This confirms that the observed r5 timeout pattern belongs to the nested probe path, not direct exact primary-row execution.
 
 ## Manual Approval Lock
+
+The user revoked the stage-by-stage manual wait mechanism. Stage-2A, true A5 Gate-3A, and Gate-3B proceed only under the previously approved technical gates and bounded-run limits.
 
 Full G5.67 remains absolutely locked. `scripts/server_start_repair5g567_full.sh` now requires:
 

@@ -8,7 +8,7 @@ Commit under repair: `407cd6202c5f169ce0f6cfa98e9c3994b21ce6a6`
 
 `direct_exact_reproducer_completed`
 
-This is STOP 1 evidence only. It does not authorize Stage-2A, Gate-3A, Gate-3B, or the full campaign.
+This is targeted reproducer evidence. It does not authorize the full campaign. Stage-2A, true A5 Gate-3A, and Gate-3B remain governed by the previously approved technical gate rules.
 
 ## Compared Runs
 
@@ -42,4 +42,4 @@ Summary:
 
 The old timeout signature is reproduced by the nested static-flow outer plus counterfactual probe path. Direct exact additive rows on the same tail contexts do not hit the process hard timeout. This supports GPT Pro's diagnosis: the r5 timeout evidence must not be interpreted as direct additive/static/g556/A5 primary-row timeout evidence.
 
-Gate-3B and the full campaign remain locked.
+The full campaign remains locked behind fresh manual GPT-Pro approval. Non-full stages continue only under their previously approved bounded technical gates.

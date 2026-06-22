@@ -506,12 +506,14 @@ def enrich_or_placeholder(
     *,
     row_prefix: str,
     execution_mode: str,
+    command_row: dict[str, Any] | None = None,
 ) -> list[dict[str, Any]]:
     first = group_rows[0]
     map_name, agents_count, seed, nominal_budget, horizon_id = key
     if raw_probe:
         enriched = g546.enrich_probe_rows(raw_probe, group_rows, row_prefix=row_prefix)
     else:
+        timeout_exceeded = bool(command_row and command_row.get("process_hard_timeout_exceeded"))
         context_key = f"{map_name}|{agents_count}|{seed}|{nominal_budget}|no_probe|{horizon_id}"
         enriched = []
         for idx, plan in enumerate(group_rows):
@@ -532,8 +534,8 @@ def enrich_or_placeholder(
                     "seed": seed,
                     "budget_ms": nominal_budget,
                     "iteration": "",
-                    "solution_found": False,
-                    "probe_feasible": False,
+                    "solution_found": "" if timeout_exceeded else False,
+                    "probe_feasible": "" if timeout_exceeded else False,
                     "sum_of_loss_ratio": "",
                     "probe_sum_of_loss": "",
                     "probe_lower_bound": "",
@@ -541,7 +543,7 @@ def enrich_or_placeholder(
                     "expanded_nodes": "",
                     "low_level_pibt_calls": "",
                     "trace_event_count": "",
-                    "candidate_recognized": True,
+                    "candidate_recognized": not timeout_exceeded,
                     "updateparams_hash": "",
                     "updateparams_fingerprint": "",
                     "traffic_before_hash_full": "",
@@ -564,7 +566,39 @@ def enrich_or_placeholder(
         row["execution_mode"] = execution_mode
         row["counts_as_new_g549_solver_row"] = True
         row["probe_materialized"] = bool(raw_probe)
-        row["no_probe_reason"] = "" if raw_probe else "outer_static_flow_no_solution_or_no_counterfactual_checkpoint"
+        timeout_exceeded = bool(command_row and command_row.get("process_hard_timeout_exceeded"))
+        row["infrastructure_timeout"] = timeout_exceeded
+        row["scientific_result_valid"] = not timeout_exceeded
+        row["excluded_from_scientific_labels"] = timeout_exceeded
+        if timeout_exceeded:
+            row["solution_found"] = ""
+            row["probe_feasible"] = ""
+            row["candidate_recognized"] = False
+        row["no_probe_reason"] = (
+            ""
+            if raw_probe
+            else ("process_hard_timeout_exceeded" if timeout_exceeded else "outer_static_flow_no_solution_or_no_counterfactual_checkpoint")
+        )
+        if command_row:
+            for field in [
+                "returncode",
+                "returncode_classification",
+                "process_hard_timeout_sec",
+                "process_hard_timeout_exceeded",
+                "process_timeout_provenance",
+                "process_timeout_platform",
+                "process_timeout_term_grace_sec",
+                "process_started_unix",
+                "process_pid",
+                "process_group_id",
+                "process_group_termination_attempted",
+                "process_timeout_sigterm_sent",
+                "process_timeout_sigkill_sent",
+                "process_timeout_reason",
+                "process_elapsed_sec",
+                "process_returncode",
+            ]:
+                row[field] = command_row.get(field, "")
         for field in [
             "panel",
             "route",
@@ -584,7 +618,10 @@ def enrich_or_placeholder(
             row[field] = plan.get(field, first.get(field, ""))
         row["context_horizon_key"] = "|".join(map(str, key))
         if str(row.get("role", "")).startswith("generated_theta::"):
-            if not raw_probe:
+            if timeout_exceeded:
+                row["fulltheta_fingerprint_match"] = False
+                row["fulltheta_fingerprint_mismatched_fields"] = "process_hard_timeout_no_updateparams"
+            elif not raw_probe:
                 row["fulltheta_fingerprint_match"] = True
                 row["fulltheta_fingerprint_mismatched_fields"] = ""
             else:
@@ -592,8 +629,8 @@ def enrich_or_placeholder(
                 row["fulltheta_fingerprint_match"] = matched
                 row["fulltheta_fingerprint_mismatched_fields"] = ";".join(missing)
         else:
-            row["fulltheta_fingerprint_match"] = True
-            row["fulltheta_fingerprint_mismatched_fields"] = ""
+            row["fulltheta_fingerprint_match"] = not timeout_exceeded
+            row["fulltheta_fingerprint_mismatched_fields"] = "process_hard_timeout_no_updateparams" if timeout_exceeded else ""
     return enriched
 
 
@@ -676,6 +713,18 @@ def run_context_task(
         ltm_max_iterations=max(1, int(number(first.get("ltm_max_iterations"), 2))),
         spec=spec,
         manifest=f"phase5p5-{manifest_prefix}",
+        process_hard_timeout_sec=max(
+            0.01,
+            float(
+                number(
+                    first.get("process_hard_timeout_sec"),
+                    max(
+                        float(number(first.get("base_time_limit_sec"), 0.50)) + 0.25,
+                        float(number(first.get("base_time_limit_sec"), 0.50)) * 1.10,
+                    ),
+                )
+            ),
+        ),
     )
     task_run = log_dir / f"task_{stable_hash('|'.join(map(str, key)), modulo=10**12):012d}.runs.jsonl"
     write_jsonl(task_run, rows)
@@ -685,11 +734,6 @@ def run_context_task(
         "yes",
         "on",
     }
-    raw_probe = read_jsonl_tolerant(task_probe)
-    checkpoint_rows = [] if skip_aggregate_jsonl or not export_checkpoint_jsonl else read_jsonl_tolerant(task_checkpoint)
-    enriched = enrich_or_placeholder(raw_probe, group_rows, key, row_prefix=row_prefix, execution_mode=execution_mode)
-    for path in [task_probe, task_checkpoint, task_update]:
-        path.unlink(missing_ok=True)
     command_row.update(
         {
             "panel": first.get("panel", ""),
@@ -702,6 +746,18 @@ def run_context_task(
             "candidate_count": len(methods),
         }
     )
+    raw_probe = read_jsonl_tolerant(task_probe)
+    checkpoint_rows = [] if skip_aggregate_jsonl or not export_checkpoint_jsonl else read_jsonl_tolerant(task_checkpoint)
+    enriched = enrich_or_placeholder(
+        raw_probe,
+        group_rows,
+        key,
+        row_prefix=row_prefix,
+        execution_mode=execution_mode,
+        command_row=command_row,
+    )
+    for path in [task_probe, task_checkpoint, task_update]:
+        path.unlink(missing_ok=True)
     return {
         "key": key,
         "run_rows": rows,

@@ -33,6 +33,7 @@ from gcst.goal_aware_actor import make_graph_batch, pad_od_tokens, scalar_featur
 from gcst.graph_data import GraphData, build_graph  # noqa: E402
 from gcst.graph_encoder import GraphBatch  # noqa: E402
 from gcst.label_v5 import solver_ratio, solver_success  # noqa: E402
+from gcst.map_hash import read_movingai_map  # noqa: E402
 from gcst.real_label_graph_dataset import parse_movingai_scenario  # noqa: E402
 from gcst.theta_schema import (  # noqa: E402
     BASELINE_G556,
@@ -209,6 +210,14 @@ G567_BUDGET_PROFILES = [
     (20000, 20.0, 12),
 ]
 
+G567_LARGE_PRIMARY_AGENT_TIERS = {2000, 2500, 3000}
+G567_LARGE_PRIMARY_BUDGET_PROFILE = (30000, 30.0, 12, "large_agent_primary_30s_exact")
+G567_LARGE_SHORT_STRESS_PROFILE = (20000, 20.0, 12, "short_budget_stress_diagnostic")
+G567_LARGE_RECOVERY_PROFILES = {
+    45: (45000, 45.0, 12, "symmetric_recovery_curve_45s"),
+    60: (60000, 60.0, 12, "symmetric_recovery_curve_60s"),
+}
+
 
 @dataclass(frozen=True)
 class G567Context:
@@ -232,6 +241,8 @@ class G567Context:
     graph_with_traffic: GraphData
     assignment: dict[str, Any]
     feature_row: dict[str, Any]
+    budget_role: str = ""
+    process_hard_timeout_sec: float = 0.0
 
 
 @dataclass(frozen=True)
@@ -304,6 +315,69 @@ def sha256_file(path: str | Path) -> str:
     return digest.hexdigest()
 
 
+def budget_profile_for_agent_tier(agent_count: int, profile_index: int, purpose: str = "primary") -> tuple[int, float, int, str]:
+    if int(agent_count) in G567_LARGE_PRIMARY_AGENT_TIERS:
+        if purpose == "short_budget_stress_diagnostic":
+            return G567_LARGE_SHORT_STRESS_PROFILE
+        if purpose == "symmetric_recovery_curve_45s":
+            return G567_LARGE_RECOVERY_PROFILES[45]
+        if purpose == "symmetric_recovery_curve_60s":
+            return G567_LARGE_RECOVERY_PROFILES[60]
+        return G567_LARGE_PRIMARY_BUDGET_PROFILE
+    budget_ms, base_sec, ltm_iters = G567_BUDGET_PROFILES[profile_index % len(G567_BUDGET_PROFILES)]
+    role = "short_budget_stress_diagnostic" if float(base_sec) == 20.0 else "primary_exact"
+    return int(budget_ms), float(base_sec), int(ltm_iters), role
+
+
+def process_hard_timeout_for_internal_budget(internal_sec: float) -> float:
+    internal = float(internal_sec)
+    if abs(internal - 30.0) <= 1.0e-9:
+        return 60.0
+    return max(internal + 0.25, internal * 1.10)
+
+
+def discover_public_benchmark_map_specs(limit: int = 64) -> list[dict[str, Any]]:
+    roots = [
+        ROOT / "maps",
+        ROOT / "benchmarks",
+        ROOT / "external" / "lacam2" / "scripts" / "map",
+        ROOT / "external" / "lacam2" / "assets",
+        ROOT / "external" / "lacam2" / "maps",
+        ROOT / "external" / "lacam2" / "benchmark",
+    ]
+    specs: list[dict[str, Any]] = []
+    seen: set[str] = set()
+    for root in roots:
+        if not root.exists():
+            continue
+        for path in sorted(root.rglob("*.map")):
+            digest = sha256_file(path)
+            if not digest or digest in seen:
+                continue
+            seen.add(digest)
+            width, height, grid = read_movingai_map(path)
+            free_count = len(g561_bank.free_cells(grid))
+            if free_count < min(G567_AGENT_TIERS):
+                continue
+            family = f"public_benchmark_{safe_token(path.parent.name or 'maps')}"
+            specs.append(
+                {
+                    "map": safe_token(path.stem),
+                    "map_family": family,
+                    "width": width,
+                    "height": height,
+                    "grid": grid,
+                    "source_path": path,
+                    "source_sha256": digest,
+                    "free_cells": free_count,
+                    "map_source_type": "canonical_public_benchmark_map",
+                }
+            )
+            if len(specs) >= limit:
+                return specs
+    return specs
+
+
 def write_json(path: str | Path, data: dict[str, Any]) -> None:
     p = resolve(path)
     p.parent.mkdir(parents=True, exist_ok=True)
@@ -352,16 +426,66 @@ def git_capture(*args: str) -> str:
         return f"git_error:{exc}"
 
 
-def write_source_state() -> dict[str, Any]:
+def classify_source_state(
+    *,
+    inside_work_tree: str,
+    head: str,
+    status_short: str,
+    submodule_status: str,
+    source_plan_sha256: str,
+    expected_head: str = "",
+) -> list[str]:
+    failures: list[str] = []
+    if inside_work_tree != "true":
+        failures.append("missing_or_invalid_git_metadata")
+    if head.startswith("git_error:"):
+        failures.append("missing_head")
+    if expected_head and head != expected_head:
+        failures.append("wrong_head")
+    if status_short.startswith("git_error:"):
+        failures.append("dirty_status_unavailable")
+    elif status_short.strip():
+        failures.append("dirty_status")
+    if submodule_status.startswith("git_error:"):
+        failures.append("submodule_status_unavailable")
+    for line in submodule_status.splitlines():
+        if line[:1] in {"-", "+", "U"}:
+            failures.append("submodule_mismatch")
+            break
+    if not source_plan_sha256:
+        failures.append("missing_source_plan")
+    return failures
+
+
+def write_source_state(expected_head: str = "") -> dict[str, Any]:
+    inside_work_tree = git_capture("rev-parse", "--is-inside-work-tree")
+    head = git_capture("rev-parse", "HEAD")
+    status_short = git_capture("status", "--short")
+    submodule_status = git_capture("submodule", "status", "--recursive")
+    plan_sha = sha256_file(PLAN_FILE)
+    failures = classify_source_state(
+        inside_work_tree=inside_work_tree,
+        head=head,
+        status_short=status_short,
+        submodule_status=submodule_status,
+        source_plan_sha256=plan_sha,
+        expected_head=expected_head,
+    )
     summary = {
         "schema_version": f"{ROUND}_source_state_v1",
-        "decision": "g567_source_state_clean" if git_capture("status", "--short") == "" else "g567_source_state_dirty",
-        "head": git_capture("rev-parse", "HEAD"),
+        "decision": "g567_source_state_clean" if not failures else "g567_source_state_fail_closed",
+        "source_state_failures": failures,
+        "inside_work_tree": inside_work_tree,
+        "head": head,
+        "expected_head": expected_head,
+        "head_matches_expected": (not expected_head) or head == expected_head,
         "branch": git_capture("branch", "--show-current"),
-        "status_short": git_capture("status", "--short"),
+        "status_short": status_short,
+        "status_clean": status_short == "",
         "source_plan": PLAN_FILE,
-        "source_plan_sha256": sha256_file(PLAN_FILE),
-        "submodule_status": git_capture("submodule", "status"),
+        "source_plan_sha256": plan_sha,
+        "submodule_status": submodule_status,
+        "submodule_status_clean": "submodule_mismatch" not in failures,
         **claims(),
     }
     write_json(SOURCE_STATE, summary)
@@ -378,6 +502,14 @@ def write_protocol_documents() -> None:
         "- `repeatability_single_run_misreported`: G5.66 counted single executions as repeats and hard-coded worker contention. G5.67 records replicate IDs and reports contention only if measured.\n"
         "- `safe_theta_arithmetic_average`: G5.66 averaged multimodal safe thetas. G5.67 uses a conservative medoid target.\n"
         "- `agent_tier_cap_80`: G5.66 context generation reused 8..80 tiers. G5.67 includes tiers through 3000 and large maps that can host them.\n\n"
+        "## Confirmed P0 Bugs Added By Gate-3A Review\n\n"
+        "- `process_hard_timeout_not_enforced`: `process_hard_timeout_sec` was recorded in the replay plan but the solver subprocess used an unbounded `subprocess.run`; Gate-3A now uses a per-process hard timeout with process-group termination provenance.\n"
+        "- `source_state_not_fail_closed`: source HEAD/status/submodules were recorded but not enforced before execution; Gate-3A now blocks on missing Git metadata, dirty status, wrong HEAD, or submodule mismatch.\n\n"
+        "## Confirmed P0 Bugs Added By Budget/Training Review\n\n"
+        "- `large_agent_budget_underallocated`: 2000/2500/3000-agent primary rows used generic budget cycling, including 20s. G5.67 now requires 30s primary internal budget and 60s hard timeout for those tiers.\n"
+        "- `hard_timeout_polluted_scientific_labels`: timeout placeholders looked like ordinary no-solution rows. Timeout rows are now infrastructure failures and are excluded from scientific pairs/labels.\n"
+        "- `synthetic_only_final_bank`: final context validity could be satisfied with synthetic stress maps only. Full validity now requires a documented mixture of canonical/public benchmark maps and synthetic stress maps.\n"
+        "- `label_train_split_leakage`: actor training could draw from development/calibration contexts. G5.67 now separates `LABEL_TRAIN` and blocks full actor training below 24,000 unique exact-labeled training contexts.\n\n"
         "## Active Risks To Watch\n\n"
         "- `large_graph_memory`: existing graph encoders can be memory-heavy on large maps; the 3000-agent smoke artifact must pass before claims.\n"
         "- `critic_calibration_strength`: the critic must pass skill/calibration checks, not coverage alone.\n",
@@ -386,6 +518,7 @@ def write_protocol_documents() -> None:
         PROTOCOL_OVERVIEW,
         "# Repair5G.5.67 Protocol Overview\n\n"
         "- Run source from a complete Git worktree with recorded HEAD and plan hash.\n"
+        "- Fail closed before execution on missing Git metadata, dirty source state, wrong expected HEAD, or submodule mismatch.\n"
         "- Generate a valid context bank with large-agent tiers through 3000.\n"
         "- Use single-worker pinned repeatability for boundary adjudication; broad collection may use more workers but cannot certify regressions.\n"
         "- Build Label-v5.4 with explicit A/B/C safety, AB/ABC positives, replicate confidence, and safe-set preservation.\n"
@@ -395,7 +528,12 @@ def write_protocol_documents() -> None:
         TIME_BUDGET_SEMANTICS,
         "# Repair5G.5.67 Time Budget Semantics\n\n"
         "- `solver_internal_time_limit_sec`: the budget passed to the solver and kept equal across methods.\n"
-        "- `process_hard_timeout_sec`: symmetric outer allowance, recorded as `max(nominal + 0.25s, nominal * 1.10)` for provenance.\n"
+        "- Agent tiers `2000`, `2500`, and `3000` use `solver_internal_time_limit_sec = 30.0` for primary exact execution.\n"
+        "- For those large tiers, `20.0s` is short-budget stress diagnostic only; `45.0s` and `60.0s` are symmetric recovery-curve budgets only.\n"
+        "- `process_hard_timeout_sec`: symmetric outer allowance, recorded as `max(nominal + 0.25s, nominal * 1.10)` and enforced by the parent process.\n"
+        "- For a `30.0s` internal budget, `process_hard_timeout_sec` is fixed at `60.0`; timeout rows are infrastructure failures, not no-solution labels or success regressions.\n"
+        "- Linux solver subprocesses run in a new process group; timeout sends SIGTERM, waits the recorded grace interval, then SIGKILLs the group if needed.\n"
+        "- Large-tier 30s exploratory response surfaces are screened multi-fidelity; full 30s exact execution is reserved for selected candidates, calibration rows, boundary cases, development replay, and blind replay.\n"
         "- `actor inference time`: measured outside solver budget where available and reported as overhead, not extra search time.\n"
         "- `queueing/CPU contention`: broad parallel collection is diagnostic; success-regression adjudication uses one worker and recorded thread env.\n",
     )
@@ -485,6 +623,7 @@ def make_generated_contexts(target_valid: int, seed: int, tmp_root: Path) -> tup
     rng = random.Random(seed)
     map_dir = tmp_root / "maps"
     scenario_dir = tmp_root / "scenarios"
+    benchmark_specs = discover_public_benchmark_map_specs()
     audit_rows: list[dict[str, Any]] = []
     manifest_rows: list[dict[str, Any]] = []
     generated = 0
@@ -492,24 +631,45 @@ def make_generated_contexts(target_valid: int, seed: int, tmp_root: Path) -> tup
     while generated < target_valid and attempts < target_valid * 25:
         attempts += 1
         agent_count = G567_AGENT_TIERS[generated % len(G567_AGENT_TIERS)]
-        specs = [
+        public_candidates = [
             spec
-            for spec in G567_MAP_SPECS
-            if int(spec[2]) * int(spec[3]) >= max(agent_count * 2, agent_count + 64)
+            for spec in benchmark_specs
+            if int(spec["free_cells"]) >= agent_count and int(spec["width"]) * int(spec["height"]) >= max(agent_count * 2, agent_count + 64)
         ]
-        if not specs:
-            specs = list(G567_MAP_SPECS)
-        map_name, family, width, height = specs[(generated + attempts + seed) % len(specs)]
-        map_variant = attempts % 4
-        concrete_map = f"{map_name}-v{map_variant}"
-        grid = g561_bank.synthetic_grid(concrete_map, width, height)
+        use_public_benchmark = bool(public_candidates) and generated % 4 == 0
+        if use_public_benchmark:
+            spec_b = public_candidates[(generated + attempts + seed) % len(public_candidates)]
+            concrete_map = str(spec_b["map"])
+            family = str(spec_b["map_family"])
+            width = int(spec_b["width"])
+            height = int(spec_b["height"])
+            grid = list(spec_b["grid"])
+            map_source_type = str(spec_b["map_source_type"])
+            benchmark_source_path = rel(spec_b["source_path"])
+            benchmark_source_sha256 = str(spec_b["source_sha256"])
+        else:
+            specs = [
+                spec
+                for spec in G567_MAP_SPECS
+                if int(spec[2]) * int(spec[3]) >= max(agent_count * 2, agent_count + 64)
+            ]
+            if not specs:
+                specs = list(G567_MAP_SPECS)
+            map_name, family, width, height = specs[(generated + attempts + seed) % len(specs)]
+            map_variant = attempts % 4
+            concrete_map = f"{map_name}-v{map_variant}"
+            grid = g561_bank.synthetic_grid(concrete_map, width, height)
+            map_source_type = "synthetic_stress_map"
+            benchmark_source_path = ""
+            benchmark_source_sha256 = ""
         free_count = len(g561_bank.free_cells(grid))
         if free_count < min(G567_AGENT_TIERS):
             continue
         if agent_count > free_count:
             continue
         regime_name = g561_bank.REGIMES[(generated + seed) % len(g561_bank.REGIMES)]
-        budget_ms, base_sec, ltm_iters = G567_BUDGET_PROFILES[(generated + attempts) % len(G567_BUDGET_PROFILES)]
+        budget_ms, base_sec, ltm_iters, budget_role = budget_profile_for_agent_tier(agent_count, generated + attempts)
+        process_hard_timeout_sec = process_hard_timeout_for_internal_budget(base_sec)
         solver_seed = seed * 1_000_000 + attempts
         try:
             assignment = build_g567_assignment(grid, width, height, agent_count, regime_name, solver_seed)
@@ -548,9 +708,20 @@ def make_generated_contexts(target_valid: int, seed: int, tmp_root: Path) -> tup
             "start_goal_regime": regime_name,
             "nominal_budget_ms": budget_ms,
             "base_time_limit_sec": base_sec,
+            "solver_internal_time_limit_sec": base_sec,
+            "process_hard_timeout_sec": process_hard_timeout_sec,
+            "budget_role": budget_role,
+            "budget_contract": (
+                "agent_tier_2000_2500_3000_primary_30s_hard_timeout_60s"
+                if agent_count in G567_LARGE_PRIMARY_AGENT_TIERS
+                else "standard_primary_budget_profile"
+            ),
             "ltm_max_iterations": ltm_iters,
             "agent_density": density,
-            "scenario_bank_source": "generated_g567_component_aware",
+            "scenario_bank_source": "g567_component_aware_mixed_public_benchmark_and_synthetic",
+            "map_source_type": map_source_type,
+            "benchmark_source_path": benchmark_source_path,
+            "benchmark_source_sha256": benchmark_source_sha256,
             "context_generation_stage": "stage_a_component_validity_only",
             "feature_materialization_stage": "stage_b_deferred_c0_f0_traffic_prior",
             "raw_map_path": rel(map_path),
@@ -611,7 +782,7 @@ def split_roles_by_context_target(rows: list[dict[str, Any]]) -> dict[str, str]:
         "CALIBRATION": max(1, math.ceil(total * 0.10)),
         "VALIDATION": max(1, math.ceil(total * 0.15)),
     }
-    assigned_counts = {"TRAIN": 0, "VALIDATION": 0, "CALIBRATION": 0, "BLIND": 0}
+    assigned_counts = {"LABEL_TRAIN": 0, "VALIDATION": 0, "CALIBRATION": 0, "BLIND": 0}
     roles: dict[str, str] = {}
     ordered_hashes = sorted(by_hash, key=lambda h: (by_hash[h][0].get("map_family", ""), h))
     for role in ["BLIND", "CALIBRATION", "VALIDATION"]:
@@ -624,8 +795,8 @@ def split_roles_by_context_target(rows: list[dict[str, Any]]) -> dict[str, str]:
             assigned_counts[role] += len(by_hash[h])
     for h in ordered_hashes:
         if h not in roles:
-            roles[h] = "TRAIN"
-            assigned_counts["TRAIN"] += len(by_hash[h])
+            roles[h] = "LABEL_TRAIN"
+            assigned_counts["LABEL_TRAIN"] += len(by_hash[h])
     return roles
 
 
@@ -671,15 +842,24 @@ def materialize_valid_bank(target_valid: int, seed: int, *, overwrite: bool) -> 
     update_remote_map_registries(resolve(TMP_ROOT) / "maps")
     split_counts = Counter(row["split"] for row in valid_rows)
     families = Counter(row["map_family"] for row in valid_rows)
+    source_types = Counter(str(row.get("map_source_type", "")) for row in valid_rows)
     budgets = Counter(str(row["nominal_budget_ms"]) for row in valid_rows)
     agents = Counter(str(row["agent_count"]) for row in valid_rows)
     blind_hashes = {row["physical_map_sha256"] for row in valid_rows if row["split"] == "BLIND"}
+    benchmark_contexts = source_types.get("canonical_public_benchmark_map", 0)
+    synthetic_contexts = source_types.get("synthetic_stress_map", 0)
+    benchmark_mixture_ok = benchmark_contexts > 0 and synthetic_contexts > 0
+    ready = len(valid_rows) >= target_valid and benchmark_mixture_ok
     summary = {
         "schema_version": f"{ROUND}_validity_summary_v1",
-        "decision": "g567_valid_context_bank_ready" if len(valid_rows) >= target_valid else "g567_valid_context_bank_under_target",
+        "decision": "g567_valid_context_bank_ready" if ready else "g567_valid_context_bank_under_target_or_benchmark_mix_missing",
         "target_valid_contexts": target_valid,
         "valid_contexts": len(valid_rows),
         "invalid_quarantine_rows": len(invalid_rows),
+        "map_source_types": dict(sorted(source_types.items())),
+        "canonical_public_benchmark_contexts": benchmark_contexts,
+        "synthetic_stress_contexts": synthetic_contexts,
+        "benchmark_synthetic_mixture_target_met": benchmark_mixture_ok,
         "preferred_100000_target_met": len(valid_rows) >= 100000,
         "minimum_5000_target_met": len(valid_rows) >= 5000,
         "physical_map_hashes": len(by_hash),
@@ -710,6 +890,8 @@ def materialize_valid_bank(target_valid: int, seed: int, *, overwrite: bool) -> 
         f"- decision: `{summary['decision']}`\n"
         f"- valid contexts: `{summary['valid_contexts']}`\n"
         f"- physical map hashes: `{summary['physical_map_hashes']}`\n"
+        f"- canonical/public benchmark contexts: `{summary['canonical_public_benchmark_contexts']}`\n"
+        f"- synthetic stress contexts: `{summary['synthetic_stress_contexts']}`\n"
         f"- blind contexts: `{summary['blind_contexts']}`\n"
         f"- blind physical map hashes: `{summary['blind_physical_map_hashes']}`\n"
         f"- all path_found_rate == 1: `{summary['all_path_found_rate_one']}`\n\n"
@@ -784,6 +966,7 @@ def context_from_manifest_row(row: dict[str, Any]) -> G567Context | None:
             "width": row.get("width", 32),
             "height": row.get("height", 32),
             "free_cells": row.get("free_cells", ""),
+            "raw_map_path": row.get("raw_map_path", ""),
         }
     )
     traffic = g561_bank.compute_traffic_prior(graph, assignment)
@@ -822,6 +1005,8 @@ def context_from_manifest_row(row: dict[str, Any]) -> G567Context | None:
         graph_with_traffic=graph_t,
         assignment=assignment,
         feature_row=feature_row,
+        budget_role=str(row.get("budget_role", "")),
+        process_hard_timeout_sec=float(number(row.get("process_hard_timeout_sec"), 0.0)),
     )
 
 
@@ -1043,7 +1228,7 @@ def add_plan_row(
     generated_uid = "" if theta is None else generated_theta_uid(model_path or method, ctx.instance_uid, [theta[col] for col in THETA_NUMERIC_COLUMNS])
     identity = stable_uid("g567_replay_identity", phase, ctx.evaluation_uid, ctx.scenario_sha256, candidate_id, generated_uid)
     horizon_id = ctx.horizon_id
-    hard_timeout = max(float(ctx.base_time_limit_sec) + 0.25, float(ctx.base_time_limit_sec) * 1.10)
+    hard_timeout = ctx.process_hard_timeout_sec or process_hard_timeout_for_internal_budget(float(ctx.base_time_limit_sec))
     expected_fingerprint = ""
     if candidate_id == ADDITIVE_SOLVER_ALIAS:
         expected_fingerprint = TIER_A_ADDITIVE.fingerprint
@@ -1083,6 +1268,7 @@ def add_plan_row(
         "nominal_budget_ms": ctx.budget_ms,
         "short_budget_ms": ctx.budget_ms,
         "base_time_limit_sec": ctx.base_time_limit_sec,
+        "budget_role": ctx.budget_role,
         "ltm_max_iterations": ctx.ltm_max_iterations,
         "horizon_id": horizon_id,
         "scientific_horizon_id": ctx.horizon_id,
@@ -1263,6 +1449,22 @@ def audit_results(rows: list[dict[str, Any]], plan_rows: list[dict[str, Any]], p
             "host_load_snapshot",
             "solver_internal_time_limit_sec",
             "process_hard_timeout_sec",
+            "budget_role",
+            "process_hard_timeout_exceeded",
+            "process_timeout_provenance",
+            "process_timeout_platform",
+            "process_timeout_term_grace_sec",
+            "process_started_unix",
+            "process_pid",
+            "process_group_id",
+            "process_group_termination_attempted",
+            "process_timeout_sigterm_sent",
+            "process_timeout_sigkill_sent",
+            "process_timeout_reason",
+            "process_elapsed_sec",
+            "process_returncode",
+            "returncode",
+            "returncode_classification",
         ]:
             row[key] = plan.get(key, row.get(key, ""))
         row["g567_metadata_match_mode"] = metadata_match_mode
@@ -1310,6 +1512,7 @@ def audit_results(rows: list[dict[str, Any]], plan_rows: list[dict[str, Any]], p
                 "scenario_sha256_match": bool(scenario_actual) and scenario_actual == row.get("g567_scenario_sha256", ""),
                 "identity_digest_actual": identity_actual,
                 "identity_retained": bool(row.get("g567_identity_digest", "")) and identity_actual == row.get("g567_identity_digest", ""),
+                "process_hard_timeout_exceeded_bool": boolish(row.get("process_hard_timeout_exceeded")),
             }
         )
         out.append(row)
@@ -1346,6 +1549,8 @@ def delta_when_comparable(actor: dict[str, Any], base: dict[str, Any]) -> float:
 def build_three_tier_pairs(rows: list[dict[str, Any]], phase: str) -> list[dict[str, Any]]:
     grouped: dict[tuple[str, str, str, str, str, str], dict[str, dict[str, Any]]] = {}
     for row in rows:
+        if boolish(row.get("infrastructure_timeout")) or boolish(row.get("excluded_from_scientific_labels")):
+            continue
         grouped.setdefault(group_key(row), {})[str(row.get("materialized_method", ""))] = row
     pairs: list[dict[str, Any]] = []
     for key, by_method in sorted(grouped.items()):
@@ -1391,6 +1596,10 @@ def build_three_tier_pairs(rows: list[dict[str, Any]], phase: str) -> list[dict[
                     "host_load_snapshot": actor.get("host_load_snapshot", ""),
                     "solver_internal_time_limit_sec": actor.get("solver_internal_time_limit_sec", ""),
                     "process_hard_timeout_sec": actor.get("process_hard_timeout_sec", ""),
+                    "budget_role": actor.get("budget_role", ""),
+                    "process_hard_timeout_exceeded": actor.get("process_hard_timeout_exceeded", ""),
+                    "process_timeout_reason": actor.get("process_timeout_reason", ""),
+                    "process_timeout_provenance": actor.get("process_timeout_provenance", ""),
                     "theta_id": method,
                     "method": actor.get("sampling_policy", ""),
                     "variant_id": actor.get("variant_id", ""),
@@ -1443,7 +1652,8 @@ def summarize_pairs(pairs: list[dict[str, Any]], rows: list[dict[str, Any]], pla
     recognized = sum(boolish(row.get("candidate_recognized_bool")) for row in actor_rows)
     scenario = sum(boolish(row.get("scenario_sha256_match")) for row in actor_rows)
     identity = sum(boolish(row.get("identity_retained")) for row in actor_rows)
-    materialized = bool(actor_rows and exact == len(actor_rows) and recognized == len(actor_rows) and scenario == len(actor_rows) and identity == len(actor_rows))
+    timeout_rows = sum(boolish(row.get("process_hard_timeout_exceeded")) for row in rows)
+    materialized = bool(actor_rows and exact == len(actor_rows) and recognized == len(actor_rows) and scenario == len(actor_rows) and identity == len(actor_rows) and timeout_rows == 0)
     replicate_group_counts = Counter(
         str(row.get("replicate_group_id", ""))
         for row in pairs
@@ -1487,29 +1697,47 @@ def summarize_pairs(pairs: list[dict[str, Any]], rows: list[dict[str, Any]], pla
                 "variant_id": pair.get("variant_id", ""),
                 "model_path": pair.get("model_path", ""),
                 "pairs": 0,
+                "raw_success_regressions_vs_additive": 0,
+                "raw_success_regressions_vs_static_flow": 0,
                 "raw_success_regressions_vs_g556": 0,
+                "raw_success_gains_vs_additive": 0,
+                "raw_success_gains_vs_static_flow": 0,
                 "raw_success_gains_vs_g556": 0,
+                "deltas_vs_additive": [],
+                "deltas_vs_static_flow": [],
                 "deltas_vs_g556": [],
             },
         )
         bucket["pairs"] += 1
-        bucket["raw_success_regressions_vs_g556"] += int(boolish(pair.get("success_regression_vs_g556")))
-        bucket["raw_success_gains_vs_g556"] += int(boolish(pair.get("success_gain_vs_g556")))
-        value = number(pair.get("delta_vs_g556"), math.nan)
-        if math.isfinite(value):
-            bucket["deltas_vs_g556"].append(value)
+        for tier in ["additive", "static_flow", "g556"]:
+            bucket[f"raw_success_regressions_vs_{tier}"] += int(boolish(pair.get(f"success_regression_vs_{tier}")))
+            bucket[f"raw_success_gains_vs_{tier}"] += int(boolish(pair.get(f"success_gain_vs_{tier}")))
+            value = number(pair.get(f"delta_vs_{tier}"), math.nan)
+            if math.isfinite(value):
+                bucket[f"deltas_vs_{tier}"].append(value)
     for key, bucket in list(per_variant.items()):
-        values = bucket.pop("deltas_vs_g556")
-        bucket["mean_delta_vs_g556"] = float(np.mean(values)) if values else None
-        bucket["median_delta_vs_g556"] = float(np.median(values)) if values else None
-        bucket["supported_worse_outside_margin_vs_g556"] = sum(value > margin for value in values)
+        for tier in ["additive", "static_flow", "g556"]:
+            values = bucket.pop(f"deltas_vs_{tier}")
+            bucket[f"mean_delta_vs_{tier}"] = float(np.mean(values)) if values else None
+            bucket[f"median_delta_vs_{tier}"] = float(np.median(values)) if values else None
+            bucket[f"supported_worse_outside_margin_vs_{tier}"] = sum(value > margin for value in values)
 
     summary = {
         "schema_version": f"{ROUND}_{safe_token(phase)}_summary_v1",
-        "decision": "g567_three_tier_replay_materialized" if materialized else "g567_three_tier_materialization_blocked",
+        "decision": (
+            "g567_three_tier_replay_materialized"
+            if materialized
+            else ("g567_three_tier_materialization_blocked_process_hard_timeout" if timeout_rows else "g567_three_tier_materialization_blocked")
+        ),
         "replay_phase": phase,
         "planned_rows": len(plan_rows),
         "executed_rows": len(rows),
+        "process_hard_timeout_rows": timeout_rows,
+        "process_group_timeout_provenance_rows": sum(
+            str(row.get("process_timeout_provenance", "")).startswith("subprocess_popen_posix_start_new_session")
+            for row in rows
+            if str(row.get("process_hard_timeout_sec", "")).strip()
+        ),
         "contexts": len({row.get("g567_dataset_row_id") for row in plan_rows}),
         "actor_candidate_rows": len(actor_rows),
         "new_exact_materialized_candidate_rows": sum(
@@ -1656,6 +1884,7 @@ def run_replay_phase(
         f"- actor candidate rows: `{summary['actor_candidate_rows']}`\n"
         f"- three-tier pairs: `{summary['three_tier_pairs']}`\n"
         f"- static-flow rows present: `{summary['static_flow_rows_present']}`\n"
+        f"- process hard timeout rows: `{summary['process_hard_timeout_rows']}`\n"
         f"- exact materialization rate: `{summary['exact_materialization_rate']}`\n",
     )
     return summary
@@ -1695,6 +1924,7 @@ def generate_response_thetas(contexts: list[G567Context], raw_rows: list[dict[st
             clipped = np.minimum(np.maximum(vec, lo), hi)
             row = {col: float(clipped[idx]) for idx, col in enumerate(THETA_NUMERIC_COLUMNS)}
             row.update(mode_columns("flow_shield"))
+            large_exact_context = ctx.agents in G567_LARGE_PRIMARY_AGENT_TIERS and float(ctx.base_time_limit_sec) >= 30.0
             out.append(
                 {
                     "phase": phase,
@@ -1706,10 +1936,15 @@ def generate_response_thetas(contexts: list[G567Context], raw_rows: list[dict[st
                     "method": f"g567_response_{label}",
                     "model_path": str(raw.get("model_path", "")),
                     "raw_actor_variant_id": raw.get("variant_id", ""),
+                    "multi_fidelity_stage": "selected_30s_exact_candidate" if large_exact_context else "exploratory_response_surface",
+                    "large_agent_30s_exploratory_full_lattice_skipped": large_exact_context,
                     **row,
                 }
             )
 
+        if ctx.agents in G567_LARGE_PRIMARY_AGENT_TIERS and float(ctx.base_time_limit_sec) >= 30.0:
+            emit("SELECTED_ACTOR_PRIMARY_30S_EXACT", raw_vec)
+            continue
         for alpha in alphas:
             emit(f"GLOBAL_ALPHA_{str(alpha).replace('.', 'p')}", anchor + alpha * delta)
         for group_name, cols in FIELD_GROUPS.items():
@@ -1945,6 +2180,11 @@ def create_labelv54_from_pairs(pair_paths: list[Path], margin: float) -> dict[st
                         "joint_positive_ABC_theta_ids": [],
                     },
                 )["primary_training_theta_ids"].append(str(row.get("theta_id", "")))
+    label_train_uids = {
+        str(row.get("g567_evaluation_uid", ""))
+        for row in candidate_rows
+        if str(row.get("split", "")).upper() == "LABEL_TRAIN" and str(row.get("g567_evaluation_uid", "")).strip()
+    }
     write_rows(LABELV54_CONTEXTS, list(context_rows.values()))
     write_rows(LABELV54_CANDIDATES, candidate_rows)
     write_rows(LABELV54_REPLICATES, replicate_rows)
@@ -1967,6 +2207,9 @@ def create_labelv54_from_pairs(pair_paths: list[Path], margin: float) -> dict[st
         "single_run_boundary_uncertain_candidates": sum(row.get("measurement_confidence") == "single_run_boundary_uncertain" for row in candidate_rows),
         "primary_safe_AB_candidates": sum(boolish(row.get("primary_safe_AB")) for row in candidate_rows),
         "primary_training_candidates": sum(boolish(row.get("labelv54_primary_training_candidate")) for row in candidate_rows),
+        "label_train_unique_exact_labeled_contexts": len(label_train_uids),
+        "label_train_24000_unique_context_target_met": len(label_train_uids) >= 24000,
+        "development_calibration_blind_excluded_from_actor_training": True,
         "pareto_safe_AB_candidates": sum(boolish(row.get("pareto_safe_AB")) for row in candidate_rows),
         "stretch_safe_ABC_candidates": sum(boolish(row.get("stretch_safe_ABC")) for row in candidate_rows),
         "joint_positive_AB_candidates": sum(boolish(row.get("joint_positive_AB")) for row in candidate_rows),
@@ -2064,6 +2307,11 @@ def actor_examples_from_labelv54(contexts: list[G567Context]) -> list[ActorTrain
 
 
 def split_actor_examples(examples: list[ActorTrainExample]) -> tuple[list[ActorTrainExample], list[ActorTrainExample]]:
+    label_train = [ex for ex in examples if ex.split == "LABEL_TRAIN"]
+    if label_train:
+        valid = label_train[::5]
+        train = [ex for idx, ex in enumerate(label_train) if idx % 5 != 0]
+        return train or label_train, valid or label_train[-max(1, len(label_train) // 5) :]
     train = [ex for ex in examples if ex.split in {"TRAIN", "VALIDATION"}]
     valid = [ex for ex in examples if ex.split == "CALIBRATION"]
     if not valid:
@@ -2081,6 +2329,31 @@ def actor_tensor_batch(examples: list[ActorTrainExample], device: str):
     target = torch.tensor(np.stack([ex.target for ex in examples]), dtype=torch.float32, device=device)
     weights = torch.tensor(np.asarray([ex.weight for ex in examples], dtype=np.float32), device=device)
     return graph_batch, od_tokens.to(device), od_mask.to(device), scalars, target, weights
+
+
+def actor_example_token_count(example: ActorTrainExample) -> int:
+    graph_tokens = len(example.graph.cells) if example.graph is not None else 0
+    od_tokens = len(example.assignment.get("starts", [])) if isinstance(example.assignment, dict) else 0
+    return max(1, graph_tokens + od_tokens)
+
+
+def token_budget_batches(examples: list[ActorTrainExample], *, max_examples: int, max_tokens: int) -> list[list[ActorTrainExample]]:
+    batches: list[list[ActorTrainExample]] = []
+    current: list[ActorTrainExample] = []
+    current_tokens = 0
+    max_examples = max(1, int(max_examples))
+    max_tokens = max(1, int(max_tokens))
+    for example in examples:
+        tokens = actor_example_token_count(example)
+        if current and (len(current) >= max_examples or current_tokens + tokens > max_tokens):
+            batches.append(current)
+            current = []
+            current_tokens = 0
+        current.append(example)
+        current_tokens += tokens
+    if current:
+        batches.append(current)
+    return batches
 
 
 def actor_gradient_summary(model: Any) -> dict[str, float]:
@@ -2125,7 +2398,22 @@ def evaluate_actor_model(model: Any, examples: list[ActorTrainExample], device: 
     }
 
 
-def train_one_g567_actor(variant_id: str, seed: int, examples: list[ActorTrainExample], *, device: str, epochs: int, min_epochs: int, patience: int, batch_size: int, hidden_dim: int, lr: float) -> tuple[dict[str, Any], dict[str, Any]]:
+def train_one_g567_actor(
+    variant_id: str,
+    seed: int,
+    examples: list[ActorTrainExample],
+    *,
+    device: str,
+    epochs: int,
+    min_epochs: int,
+    patience: int,
+    batch_size: int,
+    token_budget: int,
+    hidden_dim: int,
+    lr: float,
+    checkpoint_interval_sec: float,
+    resume: bool,
+) -> tuple[dict[str, Any], dict[str, Any]]:
     import torch
 
     from gcst.dual_stream_graph_actor import DualStreamGoalAwareActor, architecture_from_id
@@ -2148,28 +2436,68 @@ def train_one_g567_actor(variant_id: str, seed: int, examples: list[ActorTrainEx
     opt = torch.optim.AdamW(model.parameters(), lr=lr, weight_decay=1.0e-4)
     train, valid = split_actor_examples(examples)
     span = torch.tensor(np.asarray(THETA_HI - THETA_LO, dtype=np.float32), device=device).clamp_min(1.0e-6)
+    out_path = resolve(MODEL_DIR / f"{ROUND}_{variant_id.lower()}_{arch.variant_name}_seed{seed}.pt")
+    resume_path = resolve(MODEL_DIR / f"{ROUND}_{variant_id.lower()}_{arch.variant_name}_seed{seed}.resume.pt")
     best_metric = math.inf
     best_epoch = 0
     best_state = {key: value.detach().cpu().clone() for key, value in model.state_dict().items()}
     stale = 0
     last_grad: dict[str, float] = {}
     final_train_loss = 0.0
-    for epoch in range(1, int(epochs) + 1):
+    start_epoch = 1
+    gpu_active_sec = 0.0
+    last_checkpoint_sec = time.perf_counter()
+    last_hourly_checkpoint_path = ""
+    use_bf16 = str(device).startswith("cuda")
+    if resume and resume_path.exists():
+        payload = torch.load(resume_path, map_location=device, weights_only=False)
+        model.load_state_dict(payload["model_state_dict"])
+        opt.load_state_dict(payload["optimizer_state_dict"])
+        best_state = payload.get("best_state_dict", best_state)
+        best_metric = float(payload.get("best_metric", best_metric))
+        best_epoch = int(payload.get("best_epoch", best_epoch))
+        stale = int(payload.get("stale", stale))
+        start_epoch = int(payload.get("epoch", 0)) + 1
+        gpu_active_sec = float(payload.get("gpu_active_sec", 0.0))
+    for epoch in range(start_epoch, int(epochs) + 1):
         rng.shuffle(train)
         epoch_losses = []
         model.train()
-        for start in range(0, len(train), batch_size):
-            batch = train[start : start + batch_size]
+        for batch in token_budget_batches(train, max_examples=batch_size, max_tokens=token_budget):
             graph_batch, od_tokens, od_mask, scalars, target, weights = actor_tensor_batch(batch, device)
-            pred = model(graph_batch, od_tokens, od_mask, scalars)
-            per = torch.mean(torch.abs((pred - target) / span), dim=1)
-            loss = torch.mean(per * weights)
+            step_started = time.perf_counter()
+            with torch.autocast(device_type="cuda", dtype=torch.bfloat16, enabled=use_bf16):
+                pred = model(graph_batch, od_tokens, od_mask, scalars)
+                per = torch.mean(torch.abs((pred - target) / span), dim=1)
+                loss = torch.mean(per * weights)
             opt.zero_grad(set_to_none=True)
             loss.backward()
+            if use_bf16:
+                gpu_active_sec += time.perf_counter() - step_started
             last_grad = actor_gradient_summary(model)
             torch.nn.utils.clip_grad_norm_(model.parameters(), 2.0)
             opt.step()
             epoch_losses.append(float(loss.detach().cpu()))
+            if checkpoint_interval_sec > 0 and time.perf_counter() - last_checkpoint_sec >= checkpoint_interval_sec:
+                resume_path.parent.mkdir(parents=True, exist_ok=True)
+                torch.save(
+                    {
+                        "schema_version": f"{ROUND}_actor_resume_checkpoint_v1",
+                        "variant_id": variant_id,
+                        "seed": seed,
+                        "epoch": epoch,
+                        "model_state_dict": model.state_dict(),
+                        "optimizer_state_dict": opt.state_dict(),
+                        "best_state_dict": best_state,
+                        "best_metric": best_metric,
+                        "best_epoch": best_epoch,
+                        "stale": stale,
+                        "gpu_active_sec": gpu_active_sec,
+                    },
+                    resume_path,
+                )
+                last_hourly_checkpoint_path = rel(resume_path)
+                last_checkpoint_sec = time.perf_counter()
         final_train_loss = float(np.mean(epoch_losses)) if epoch_losses else 0.0
         valid_metrics = evaluate_actor_model(model, valid, device, batch_size)
         metric = number(valid_metrics.get("validation_labelv54_normalized_l1"), math.inf)
@@ -2184,7 +2512,6 @@ def train_one_g567_actor(variant_id: str, seed: int, examples: list[ActorTrainEx
             break
     model.load_state_dict(best_state)
     final_metrics = evaluate_actor_model(model, valid, device, batch_size)
-    out_path = resolve(MODEL_DIR / f"{ROUND}_{variant_id.lower()}_{arch.variant_name}_seed{seed}.pt")
     out_path.parent.mkdir(parents=True, exist_ok=True)
     torch.save(
         {
@@ -2207,6 +2534,10 @@ def train_one_g567_actor(variant_id: str, seed: int, examples: list[ActorTrainEx
             "critic_included_for_export": False,
             "codebook_included_for_export": False,
             "theta_fixed_for_run": True,
+            "cuda_bf16_training": use_bf16,
+            "token_budget": int(token_budget),
+            "gpu_active_hours": gpu_active_sec / 3600.0,
+            "resume_checkpoint_path": rel(resume_path),
             "labelv54_summary": rel(LABELV54_SUMMARY),
         },
         out_path,
@@ -2225,6 +2556,15 @@ def train_one_g567_actor(variant_id: str, seed: int, examples: list[ActorTrainEx
         "final_train_loss": final_train_loss,
         "train_examples": len(train),
         "validation_examples": len(valid),
+        "training_split_source": "LABEL_TRAIN_internal_holdout" if any(ex.split == "LABEL_TRAIN" for ex in examples) else "legacy_split_fallback",
+        "cuda_bf16_training": use_bf16,
+        "token_budget_batching": True,
+        "token_budget": int(token_budget),
+        "gpu_active_hours": gpu_active_sec / 3600.0,
+        "hourly_checkpoint_interval_sec": checkpoint_interval_sec,
+        "resume_enabled": resume,
+        "resume_checkpoint_path": rel(resume_path),
+        "last_hourly_checkpoint_path": last_hourly_checkpoint_path,
         "scalar_only_control": arch.scalar_only_control,
         "uses_cross_attention": arch.use_cross_attention,
         "safe_subspace": arch.safe_subspace,
@@ -2241,7 +2581,23 @@ def train_one_g567_actor(variant_id: str, seed: int, examples: list[ActorTrainEx
     return row, grad
 
 
-def train_g567_actors(contexts: list[G567Context], *, device: str, seeds: list[int], variants: list[str], epochs: int, min_epochs: int, patience: int, batch_size: int, hidden_dim: int, lr: float, plan_only: bool) -> tuple[dict[str, Any], list[Path]]:
+def train_g567_actors(
+    contexts: list[G567Context],
+    *,
+    device: str,
+    seeds: list[int],
+    variants: list[str],
+    epochs: int,
+    min_epochs: int,
+    patience: int,
+    batch_size: int,
+    token_budget: int,
+    hidden_dim: int,
+    lr: float,
+    plan_only: bool,
+    checkpoint_interval_sec: float,
+    resume: bool,
+) -> tuple[dict[str, Any], list[Path]]:
     examples = actor_examples_from_labelv54(contexts)
     if plan_only:
         summary = {
@@ -2250,6 +2606,8 @@ def train_g567_actors(contexts: list[G567Context], *, device: str, seeds: list[i
             "planned_variants": variants,
             "planned_seeds": seeds,
             "label_examples_available": len(examples),
+            "requires_cuda_bf16_training": True,
+            "token_budget_batching": True,
             **claims(),
         }
         write_json(ACTOR_TRAINING_SUMMARY, summary)
@@ -2260,6 +2618,16 @@ def train_g567_actors(contexts: list[G567Context], *, device: str, seeds: list[i
         summary = {
             "schema_version": f"{ROUND}_actor_training_summary_v1",
             "decision": "g567_actor_training_blocked_no_labelv54_examples",
+            **claims(),
+        }
+        write_json(ACTOR_TRAINING_SUMMARY, summary)
+        return summary, []
+    if not str(device).startswith("cuda"):
+        summary = {
+            "schema_version": f"{ROUND}_actor_training_summary_v1",
+            "decision": "g567_actor_training_blocked_cuda_bf16_required",
+            "device": device,
+            "label_examples_available": len(examples),
             **claims(),
         }
         write_json(ACTOR_TRAINING_SUMMARY, summary)
@@ -2278,8 +2646,11 @@ def train_g567_actors(contexts: list[G567Context], *, device: str, seeds: list[i
                 min_epochs=min_epochs,
                 patience=patience,
                 batch_size=batch_size,
+                token_budget=token_budget,
                 hidden_dim=hidden_dim,
                 lr=lr,
+                checkpoint_interval_sec=checkpoint_interval_sec,
+                resume=resume,
             )
             rows.append(row)
             grads.append(grad)
@@ -2323,6 +2694,12 @@ def train_g567_actors(contexts: list[G567Context], *, device: str, seeds: list[i
         "selected_development_checkpoint_paths": [rel(path) for path in selected_paths],
         "critic_included_for_export": False,
         "codebook_included_for_export": False,
+        "cuda_bf16_training": all(boolish(row.get("cuda_bf16_training")) for row in rows),
+        "token_budget_batching": True,
+        "token_budget": int(token_budget),
+        "stage_gpu_active_hours": sum(number(row.get("gpu_active_hours"), 0.0) for row in rows),
+        "hourly_checkpoints_enabled": checkpoint_interval_sec > 0,
+        "resume_enabled": resume,
         "elapsed_sec": time.perf_counter() - started,
         **claims(),
     }
@@ -2964,6 +3341,64 @@ def write_final_decision(dev: dict[str, Any], blind: dict[str, Any], label: dict
     return summary
 
 
+def replay_block_summary(phase: str, summary: dict[str, Any]) -> dict[str, Any] | None:
+    if summary.get("decision") == "g567_three_tier_replay_materialized":
+        return None
+    return {
+        "schema_version": f"{ROUND}_final_decision_summary_v1",
+        "decision": f"g567_blocked_{safe_token(phase)}_replay_failed",
+        "replay_phase": phase,
+        "replay_decision": summary.get("decision", ""),
+        "process_hard_timeout_rows": summary.get("process_hard_timeout_rows", 0),
+        "planned_rows": summary.get("planned_rows", 0),
+        "executed_rows": summary.get("executed_rows", 0),
+        **claims(),
+    }
+
+
+def select_primary_actor_checkpoint(development: dict[str, Any]) -> dict[str, Any]:
+    per_variant = development.get("per_variant_transfer", {})
+    if not isinstance(per_variant, dict):
+        return {"decision": "g567_primary_actor_selection_blocked_missing_per_variant_transfer"}
+    candidates = [value for value in per_variant.values() if isinstance(value, dict) and value.get("model_path")]
+    if not candidates:
+        return {"decision": "g567_primary_actor_selection_blocked_no_candidate_paths"}
+
+    def score(row: dict[str, Any]) -> tuple[Any, ...]:
+        additive_reg = int(number(row.get("raw_success_regressions_vs_additive"), 999))
+        static_reg = int(number(row.get("raw_success_regressions_vs_static_flow"), 999))
+        additive_worse = int(number(row.get("supported_worse_outside_margin_vs_additive"), 999))
+        static_worse = int(number(row.get("supported_worse_outside_margin_vs_static_flow"), 999))
+        additive_med = number(row.get("median_delta_vs_additive"), 999.0)
+        static_med = number(row.get("median_delta_vs_static_flow"), 999.0)
+        g556_reg = int(number(row.get("raw_success_regressions_vs_g556"), 999))
+        g556_worse = int(number(row.get("supported_worse_outside_margin_vs_g556"), 999))
+        g556_med = number(row.get("median_delta_vs_g556"), 999.0)
+        return (
+            additive_reg + static_reg,
+            additive_worse + static_worse,
+            additive_med + static_med,
+            max(additive_med, static_med),
+            g556_reg,
+            g556_worse,
+            g556_med,
+            str(row.get("variant_id", "")),
+            str(row.get("model_path", "")),
+        )
+
+    ordered = sorted(candidates, key=score)
+    primary = ordered[0]
+    return {
+        "decision": "g567_one_primary_actor_selected",
+        "selection_rule": "additive_static_flow_safety_and_utility_primary_g556_secondary_tiebreak",
+        "primary_model_path": primary.get("model_path", ""),
+        "primary_variant_id": primary.get("variant_id", ""),
+        "candidate_count": len(candidates),
+        "g556_used_only_as_secondary_tiebreaker": True,
+        "selected_score": list(score(primary)),
+    }
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Run strict G5.67 valid-tail three-tier direct-actor pipeline.")
     parser.add_argument("--target-valid", type=int, default=100000)
@@ -2971,9 +3406,11 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--smoke-contexts", type=int, default=128)
     parser.add_argument("--repeat-contexts", type=int, default=2000)
     parser.add_argument("--repeat-count", type=int, default=10)
+    parser.add_argument("--label-train-contexts", type=int, default=24000)
+    parser.add_argument("--min-label-train-contexts", type=int, default=24000)
     parser.add_argument("--development-contexts", type=int, default=4000)
     parser.add_argument("--blind-contexts", type=int, default=5000)
-    parser.add_argument("--group-response-rows", type=int, default=1000000)
+    parser.add_argument("--group-response-rows", type=int, default=0)
     parser.add_argument("--checkpoint-glob", nargs="*", default=["artifacts/models/gcst/phase5p5_repair5g565_expanded_e1_seed565.pt", "artifacts/models/gcst/phase5p5_repair5g565_expanded_e0_seed565.pt", "artifacts/models/gcst/phase5p5_repair5g565_expanded_e2_seed565.pt"])
     parser.add_argument("--actor-variants", default="C0,A5,A6,A7")
     parser.add_argument("--actor-seeds", default="567,568,569")
@@ -2984,21 +3421,54 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--actor-lr", type=float, default=2.0e-4)
     parser.add_argument("--device", default="auto")
     parser.add_argument("--batch-size", type=int, default=1)
+    parser.add_argument("--train-token-budget", type=int, default=int(os.environ.get("G567_TRAIN_TOKEN_BUDGET", "12000")))
+    parser.add_argument("--actor-checkpoint-interval-sec", type=float, default=float(os.environ.get("G567_ACTOR_CHECKPOINT_INTERVAL_SEC", "3600")))
+    parser.add_argument("--resume-actor-training", action="store_true", default=boolish(os.environ.get("G567_RESUME_ACTOR_TRAINING", "")))
     parser.add_argument("--binary", type=Path, default=Path("build/phase1a-batch/phase1a_batch"))
     parser.add_argument("--max-workers", type=int, default=8)
     parser.add_argument("--single-worker-repeat", action="store_true")
     parser.add_argument("--plan-only", action="store_true")
     parser.add_argument("--overwrite", action="store_true")
+    parser.add_argument("--expected-head", default=os.environ.get("G567_EXPECTED_HEAD", ""))
     args = parser.parse_args(argv)
 
     import torch
 
     started = time.perf_counter()
     device = "cuda" if args.device == "auto" and torch.cuda.is_available() else ("cpu" if args.device == "auto" else args.device)
-    source_state = write_source_state()
+    source_state = write_source_state(args.expected_head)
+    if source_state.get("decision") != "g567_source_state_clean":
+        blocked = {
+            "schema_version": f"{ROUND}_final_decision_summary_v1",
+            "decision": "g567_blocked_source_state_fail_closed",
+            "source_state_decision": source_state.get("decision", ""),
+            "source_state_failures": source_state.get("source_state_failures", []),
+            "head": source_state.get("head", ""),
+            "expected_head": source_state.get("expected_head", ""),
+            "status_short": source_state.get("status_short", ""),
+            **claims(),
+        }
+        write_json(FINAL_DECISION_SUMMARY, blocked)
+        print(json.dumps(blocked, sort_keys=True))
+        return 2
     write_protocol_documents()
     truth = write_g565_truth_audit()
     validity = materialize_valid_bank(args.target_valid, args.seed, overwrite=bool(args.overwrite))
+    if not args.plan_only and validity.get("decision") != "g567_valid_context_bank_ready":
+        blocked = {
+            "schema_version": f"{ROUND}_final_decision_summary_v1",
+            "decision": "g567_blocked_valid_context_bank_not_ready",
+            "validity_decision": validity.get("decision", ""),
+            "valid_contexts": validity.get("valid_contexts", 0),
+            "target_valid_contexts": validity.get("target_valid_contexts", 0),
+            "benchmark_synthetic_mixture_target_met": validity.get("benchmark_synthetic_mixture_target_met", False),
+            "canonical_public_benchmark_contexts": validity.get("canonical_public_benchmark_contexts", 0),
+            "synthetic_stress_contexts": validity.get("synthetic_stress_contexts", 0),
+            **claims(),
+        }
+        write_json(FINAL_DECISION_SUMMARY, blocked)
+        print(json.dumps(blocked, sort_keys=True))
+        return 2
     memory_smoke = write_3000_agent_memory_smoke(device, args.actor_hidden_dim)
     if not args.plan_only and memory_smoke.get("decision") != "g567_3000_agent_contract_valid":
         blocked = {
@@ -3021,18 +3491,21 @@ def main(argv: list[str] | None = None) -> int:
         print(json.dumps(summary, sort_keys=True))
         return 2
 
-    smoke_contexts = contexts_from_manifest("TRAIN,VALIDATION,CALIBRATION", args.smoke_contexts)
+    smoke_contexts = contexts_from_manifest("LABEL_TRAIN,VALIDATION,CALIBRATION", args.smoke_contexts)
+    label_train_contexts = contexts_from_manifest("LABEL_TRAIN", args.label_train_contexts)
     repeat_contexts = contexts_from_manifest("CALIBRATION", args.repeat_contexts)
     development_contexts = contexts_from_manifest("VALIDATION,CALIBRATION", args.development_contexts)
     blind_contexts = contexts_from_manifest("BLIND", args.blind_contexts)
-    if len(smoke_contexts) < args.smoke_contexts or len(development_contexts) < args.development_contexts or len(blind_contexts) < args.blind_contexts:
+    if len(smoke_contexts) < args.smoke_contexts or len(label_train_contexts) < args.label_train_contexts or len(development_contexts) < args.development_contexts or len(blind_contexts) < args.blind_contexts:
         blocked = {
             "schema_version": f"{ROUND}_final_decision_summary_v1",
             "decision": "g567_blocked_insufficient_contexts_after_valid_generation",
             "smoke_contexts": len(smoke_contexts),
+            "label_train_contexts": len(label_train_contexts),
             "development_contexts": len(development_contexts),
             "blind_contexts": len(blind_contexts),
             "required_smoke_contexts": args.smoke_contexts,
+            "required_label_train_contexts": args.label_train_contexts,
             "required_development_contexts": args.development_contexts,
             "required_blind_contexts": args.blind_contexts,
             **claims(),
@@ -3052,6 +3525,11 @@ def main(argv: list[str] | None = None) -> int:
         margin=fallback_margin,
         plan_only=args.plan_only,
     )
+    blocked = replay_block_summary("three_tier_smoke", smoke) if not args.plan_only else None
+    if blocked:
+        write_json(FINAL_DECISION_SUMMARY, blocked)
+        print(json.dumps(blocked, sort_keys=True))
+        return 2
 
     repeat_theta = infer_checkpoint_thetas(repeat_contexts, ckpts[:1], device=device, batch_size=args.batch_size, phase="repeatability_single_worker")
     repeat = run_replay_phase(
@@ -3065,14 +3543,20 @@ def main(argv: list[str] | None = None) -> int:
         plan_only=args.plan_only,
         repeat_count=args.repeat_count,
     )
+    blocked = replay_block_summary("repeatability_single_worker", repeat) if not args.plan_only else None
+    if blocked:
+        write_json(FINAL_DECISION_SUMMARY, blocked)
+        print(json.dumps(blocked, sort_keys=True))
+        return 2
     repeat_margin = write_repeatability_summary(repeat, fallback_margin)
     applied_margin = number(repeat_margin.get("recommended_positive_margin"), fallback_margin)
 
-    seed_actor_raw = infer_checkpoint_thetas(development_contexts, ckpts[:3], device=device, batch_size=args.batch_size, phase="seed_actor_response_source")
-    response_rows = generate_response_thetas(development_contexts, seed_actor_raw, phase="field_group_response", target_rows=args.group_response_rows)
+    seed_actor_raw = infer_checkpoint_thetas(label_train_contexts, ckpts[:3], device=device, batch_size=args.batch_size, phase="seed_actor_response_source")
+    response_target_rows = int(args.group_response_rows) if int(args.group_response_rows) > 0 else max(50000, min(100000, len(label_train_contexts) * 4))
+    response_rows = generate_response_thetas(label_train_contexts, seed_actor_raw, phase="field_group_response", target_rows=response_target_rows)
     response = run_replay_phase(
         "field_group_response",
-        development_contexts,
+        label_train_contexts,
         response_rows,
         binary=args.binary,
         max_workers=args.max_workers,
@@ -3080,7 +3564,23 @@ def main(argv: list[str] | None = None) -> int:
         margin=applied_margin,
         plan_only=args.plan_only,
     )
+    blocked = replay_block_summary("field_group_response", response) if not args.plan_only else None
+    if blocked:
+        write_json(FINAL_DECISION_SUMMARY, blocked)
+        print(json.dumps(blocked, sort_keys=True))
+        return 2
     label = create_labelv54_from_pairs([plan_paths("field_group_response")["pairs"], plan_paths("repeatability_single_worker")["pairs"]], applied_margin)
+    if not args.plan_only and int(number(label.get("label_train_unique_exact_labeled_contexts"), 0)) < int(args.min_label_train_contexts):
+        blocked = {
+            "schema_version": f"{ROUND}_final_decision_summary_v1",
+            "decision": "g567_blocked_label_train_unique_exact_contexts_below_minimum",
+            "label_train_unique_exact_labeled_contexts": label.get("label_train_unique_exact_labeled_contexts", 0),
+            "required_min_label_train_contexts": int(args.min_label_train_contexts),
+            **claims(),
+        }
+        write_json(FINAL_DECISION_SUMMARY, blocked)
+        print(json.dumps(blocked, sort_keys=True))
+        return 2
     actor_variants = [token.strip().upper() for token in args.actor_variants.split(",") if token.strip()]
     actor_seeds = [int(token.strip()) for token in args.actor_seeds.split(",") if token.strip()]
     outcome = train_distributional_outcome_ensemble(
@@ -3099,7 +3599,7 @@ def main(argv: list[str] | None = None) -> int:
         print(json.dumps(blocked, sort_keys=True))
         return 2
     actor_training, trained_ckpts = train_g567_actors(
-        development_contexts,
+        label_train_contexts,
         device=device,
         seeds=actor_seeds,
         variants=actor_variants,
@@ -3107,9 +3607,12 @@ def main(argv: list[str] | None = None) -> int:
         min_epochs=args.actor_min_epochs,
         patience=args.actor_patience,
         batch_size=args.batch_size,
+        token_budget=args.train_token_budget,
         hidden_dim=args.actor_hidden_dim,
         lr=args.actor_lr,
         plan_only=args.plan_only,
+        checkpoint_interval_sec=args.actor_checkpoint_interval_sec,
+        resume=args.resume_actor_training,
     )
     if not args.plan_only and not trained_ckpts:
         blocked = {
@@ -3136,30 +3639,56 @@ def main(argv: list[str] | None = None) -> int:
         include_no_ltm=True,
     )
     write_json(DEVELOPMENT_SUMMARY, development)
+    blocked = replay_block_summary("development_three_tier", development) if not args.plan_only else None
+    if blocked:
+        write_json(FINAL_DECISION_SUMMARY, blocked)
+        print(json.dumps(blocked, sort_keys=True))
+        return 2
     scaling = write_scaling_summary(development)
+    if not args.plan_only and scaling.get("decision") != "g567_nested_scaling_study_completed":
+        blocked = {
+            "schema_version": f"{ROUND}_final_decision_summary_v1",
+            "decision": "g567_blocked_nested_scaling_study_not_completed",
+            "scaling_decision": scaling.get("decision", ""),
+            "required_nested_sizes": ["1k", "4k", "12k", "24k", "36k"],
+            **claims(),
+        }
+        write_json(FINAL_DECISION_SUMMARY, blocked)
+        print(json.dumps(blocked, sort_keys=True))
+        return 2
 
-    per_variant = development.get("per_variant_transfer", {})
-    selected = []
-    if isinstance(per_variant, dict):
-        selected = [
-            value.get("model_path")
-            for _key, value in sorted(
-                per_variant.items(),
-                key=lambda item: (
-                    int(item[1].get("raw_success_regressions_vs_g556", 999)),
-                    int(item[1].get("supported_worse_outside_margin_vs_g556", 999)),
-                    number(item[1].get("median_delta_vs_g556"), 999.0),
-                ),
-            )
-            if value.get("model_path")
-        ][:2]
-    blind_ckpts = [resolve(path) for path in selected if resolve(path).exists()] or (trained_ckpts[:2] if trained_ckpts else ckpts[:2])
+    primary_actor = select_primary_actor_checkpoint(development)
+    if not args.plan_only and primary_actor.get("decision") != "g567_one_primary_actor_selected":
+        blocked = {
+            "schema_version": f"{ROUND}_final_decision_summary_v1",
+            "decision": "g567_blocked_primary_actor_not_selected",
+            "primary_actor_selection": primary_actor,
+            **claims(),
+        }
+        write_json(FINAL_DECISION_SUMMARY, blocked)
+        print(json.dumps(blocked, sort_keys=True))
+        return 2
+    blind_ckpts = [resolve(primary_actor["primary_model_path"])] if primary_actor.get("primary_model_path") else []
+    blind_ckpts = [path for path in blind_ckpts if path.exists()]
+    if not args.plan_only and len(blind_ckpts) != 1:
+        blocked = {
+            "schema_version": f"{ROUND}_final_decision_summary_v1",
+            "decision": "g567_blocked_exactly_one_primary_actor_checkpoint_required",
+            "primary_actor_selection": primary_actor,
+            "resolved_primary_actor_checkpoints": [rel(path) for path in blind_ckpts],
+            **claims(),
+        }
+        write_json(FINAL_DECISION_SUMMARY, blocked)
+        print(json.dumps(blocked, sort_keys=True))
+        return 2
     blind_raw = infer_checkpoint_thetas(blind_contexts, blind_ckpts, device=device, batch_size=args.batch_size, phase="blind_three_tier")
     freeze = {
         "blind_manifest_sha256": sha256_file(VALID_CONTEXT_MANIFEST),
         "baseline_registry_sha256": sha256_file(BASELINE_REGISTRY),
         "candidate_checkpoints": [rel(path) for path in blind_ckpts],
         "candidate_checkpoint_hashes": {rel(path): sha256_file(path) for path in blind_ckpts},
+        "primary_actor_selection": primary_actor,
+        "exactly_one_primary_actor": len(blind_ckpts) == 1,
         "decision_rules_sha256": sha256_file(PLAN_FILE),
     }
     write_json(REPORTS / f"{ROUND}_blind_freeze_manifest.json", {**freeze, **claims()})
@@ -3175,6 +3704,11 @@ def main(argv: list[str] | None = None) -> int:
         include_no_ltm=True,
     )
     write_json(BLIND_SUMMARY, blind)
+    blocked = replay_block_summary("blind_three_tier", blind) if not args.plan_only else None
+    if blocked:
+        write_json(FINAL_DECISION_SUMMARY, blocked)
+        print(json.dumps(blocked, sort_keys=True))
+        return 2
 
     final_artifact_paths = [
         SOURCE_STATE,

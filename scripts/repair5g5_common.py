@@ -5,8 +5,12 @@ from __future__ import annotations
 import hashlib
 import json
 import math
+import os
+import signal
 import subprocess
+import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
@@ -175,6 +179,123 @@ def method_specs(methods: list[str], selector_spec: Path) -> list[MethodSpec]:
     return specs
 
 
+@dataclass(frozen=True)
+class ProcessRunResult:
+    returncode: int
+    stdout: str
+    stderr: str
+    provenance: dict[str, Any]
+
+
+def _env_float(name: str, default: float) -> float:
+    try:
+        return float(os.environ.get(name, default))
+    except (TypeError, ValueError):
+        return default
+
+
+def run_command_with_hard_timeout(
+    command: list[str],
+    *,
+    cwd: Path,
+    process_hard_timeout_sec: float | None = None,
+    timeout_term_grace_sec: float | None = None,
+) -> ProcessRunResult:
+    timeout = None if process_hard_timeout_sec is None else float(process_hard_timeout_sec)
+    if timeout is not None and timeout <= 0:
+        timeout = None
+    grace = _env_float("REPAIR5G_PROCESS_TIMEOUT_TERM_GRACE_SEC", 5.0)
+    if timeout_term_grace_sec is not None:
+        grace = float(timeout_term_grace_sec)
+    grace = max(0.0, grace)
+    start_wall = time.time()
+    start_perf = time.perf_counter()
+    if timeout is None:
+        provenance_mode = "subprocess_popen_no_timeout"
+    elif os.name == "posix":
+        provenance_mode = "subprocess_popen_posix_start_new_session_process_group"
+    elif os.name == "nt":
+        provenance_mode = "subprocess_popen_windows_create_new_process_group"
+    else:
+        provenance_mode = "subprocess_popen_platform_terminate"
+    provenance: dict[str, Any] = {
+        "process_hard_timeout_sec": "" if timeout is None else timeout,
+        "process_hard_timeout_exceeded": False,
+        "process_timeout_provenance": provenance_mode,
+        "process_timeout_platform": os.name,
+        "process_timeout_term_grace_sec": grace,
+        "process_started_unix": start_wall,
+        "process_pid": "",
+        "process_group_id": "",
+        "process_group_termination_attempted": False,
+        "process_timeout_sigterm_sent": False,
+        "process_timeout_sigkill_sent": False,
+        "process_timeout_reason": "",
+    }
+    popen_kwargs: dict[str, Any] = {}
+    if os.name == "posix":
+        popen_kwargs["start_new_session"] = True
+    elif os.name == "nt":
+        popen_kwargs["creationflags"] = subprocess.CREATE_NEW_PROCESS_GROUP
+    proc = subprocess.Popen(
+        command,
+        cwd=cwd,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        **popen_kwargs,
+    )
+    provenance["process_pid"] = proc.pid
+    if os.name == "posix":
+        try:
+            provenance["process_group_id"] = os.getpgid(proc.pid)
+        except OSError:
+            provenance["process_group_id"] = ""
+    stdout = ""
+    stderr = ""
+    try:
+        stdout, stderr = proc.communicate(timeout=timeout)
+    except subprocess.TimeoutExpired:
+        provenance["process_hard_timeout_exceeded"] = True
+        provenance["process_timeout_reason"] = "process_hard_timeout_sec_exceeded"
+        provenance["process_timeout_elapsed_before_term_sec"] = time.perf_counter() - start_perf
+        provenance["process_group_termination_attempted"] = True
+        try:
+            if os.name == "posix":
+                pgid = int(provenance["process_group_id"] or proc.pid)
+                os.killpg(pgid, signal.SIGTERM)
+            else:
+                proc.terminate()
+            provenance["process_timeout_sigterm_sent"] = True
+        except ProcessLookupError:
+            provenance["process_timeout_reason"] = "process_already_exited_after_timeout"
+        except OSError as exc:
+            provenance["process_timeout_reason"] = f"process_timeout_sigterm_failed:{exc}"
+        try:
+            stdout, stderr = proc.communicate(timeout=grace)
+        except subprocess.TimeoutExpired:
+            try:
+                if os.name == "posix":
+                    pgid = int(provenance["process_group_id"] or proc.pid)
+                    os.killpg(pgid, signal.SIGKILL)
+                else:
+                    proc.kill()
+                provenance["process_timeout_sigkill_sent"] = True
+            except ProcessLookupError:
+                pass
+            except OSError as exc:
+                provenance["process_timeout_reason"] = f"process_timeout_sigkill_failed:{exc}"
+            stdout, stderr = proc.communicate()
+    elapsed = time.perf_counter() - start_perf
+    provenance["process_elapsed_sec"] = elapsed
+    provenance["process_returncode"] = proc.returncode
+    if provenance["process_hard_timeout_exceeded"]:
+        stderr = (stderr or "") + f"\nprocess hard timeout exceeded after {timeout:.6f}s; returncode={proc.returncode}"
+    return ProcessRunResult(proc.returncode if proc.returncode is not None else -999, stdout or "", stderr or "", provenance)
+
+
 def run_one_solver_task(
     *,
     root: Path,
@@ -189,6 +310,7 @@ def run_one_solver_task(
     ltm_max_iterations: int,
     spec: MethodSpec,
     manifest: str,
+    process_hard_timeout_sec: float | None = None,
 ) -> tuple[list[dict[str, Any]], list[dict[str, Any]], dict[str, Any]]:
     map_path = root / MAP_PATHS[map_name]
     scen_path = scenario_path(scenario_dir, map_name, seed)
@@ -246,24 +368,23 @@ def run_one_solver_task(
         "Windows Repair5G.5 contextual flow-shield selector diagnostic",
         *extra_args,
     ]
-    completed = subprocess.run(
+    completed = run_command_with_hard_timeout(
         command,
         cwd=root,
-        text=True,
-        encoding="utf-8",
-        errors="replace",
-        capture_output=True,
+        process_hard_timeout_sec=process_hard_timeout_sec,
     )
+    hard_timeout_exceeded = bool(completed.provenance.get("process_hard_timeout_exceeded"))
     command_row = {
         "method": spec.alias,
         "map": map_name,
         "agents": int(agents),
         "seed": int(seed),
         "returncode": completed.returncode,
-        "returncode_classification": classify_returncode(completed.returncode),
+        "returncode_classification": "process_hard_timeout" if hard_timeout_exceeded else classify_returncode(completed.returncode),
         "stdout": completed.stdout.strip()[-500:],
         "stderr": completed.stderr.strip()[-500:],
         "command": command,
+        **completed.provenance,
     }
     rows = read_jsonl(task_jsonl)
     update_rows = read_jsonl(task_update)
@@ -271,7 +392,7 @@ def run_one_solver_task(
         append_jsonl(update_log, update_row)
     task_jsonl.unlink(missing_ok=True)
     task_update.unlink(missing_ok=True)
-    if completed.returncode == 1:
+    if completed.returncode == 1 and not hard_timeout_exceeded:
         raise RuntimeError(
             f"solver crashed for {spec.alias} {map_name} a{agents} i{seed}: {completed.stderr}"
         )

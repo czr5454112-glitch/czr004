@@ -119,6 +119,16 @@ def synthetic_grid(map_name: str, width: int, height: int, free_cells_hint: int 
 
 def load_grid(row: dict[str, Any]) -> tuple[int, int, list[str], str]:
     map_name = str(row.get("map") or row.get("map_name") or "unknown-map")
+    for key in ["raw_map_path", "solver_map_path", "map_path"]:
+        raw_path = str(row.get(key, "") or "").strip()
+        if not raw_path:
+            continue
+        path = Path(raw_path)
+        if not path.is_absolute():
+            path = ROOT / path
+        if path.exists() and path.is_file():
+            width, height, grid = read_movingai_map(path)
+            return width, height, grid, str(path)
     for path in known_map_candidates(map_name):
         if path.exists() and path.is_file():
             width, height, grid = read_movingai_map(path)

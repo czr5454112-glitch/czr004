@@ -10,6 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
 import run_repair5g567_strict_pipeline as g567  # noqa: E402
+import repair5g549_common as g549  # noqa: E402
 
 
 def _context(*, agents: int, base_sec: float, budget_ms: int = 30000, hard_timeout_sec: float | None = None) -> g567.G567Context:
@@ -101,6 +102,32 @@ def test_solver_budget_audit_rejects_any_non_30s_budget(tmp_path: Path, monkeypa
     assert summary["decision"] == "g567_solver_budget_audit_failed"
     assert summary["uniform_30s_rows_have_60s_hard_timeout"] is False
     assert any("non_uniform_30s_budget_contract" in item for item in summary["failures"])
+
+
+def test_g567_row_process_isolation_splits_candidate_group(monkeypatch: pytest.MonkeyPatch) -> None:
+    ctx = _context(agents=64, base_sec=30.0)
+    theta = {col: float(g567.BASELINE_G556[idx]) for idx, col in enumerate(g567.THETA_NUMERIC_COLUMNS)}
+    theta.update(g567.mode_columns("flow_shield"))
+    plan, _registry = g567.build_plan_and_registry(
+        [ctx],
+        [{"context_id": ctx.dataset_row_id, "variant_id": "A5", "seed": 567, "method": "unit_a5", "model_path": "unit.pt", **theta}],
+        "unit_row_isolation",
+    )
+    monkeypatch.delenv("G567_REPLAY_ROW_PROCESS_ISOLATION", raising=False)
+    grouped = g549.probe_execution_groups(plan)
+    assert len(grouped) == 1
+    assert len(grouped[0][1]) == 4
+
+    monkeypatch.setenv("G567_REPLAY_ROW_PROCESS_ISOLATION", "1")
+    isolated = g549.probe_execution_groups(plan)
+    assert len(isolated) == 4
+    assert all(len(group_rows) == 1 for _key, group_rows in isolated)
+    assert {group_rows[0]["candidate_id"] for _key, group_rows in isolated} == {
+        g567.ADDITIVE_SOLVER_ALIAS,
+        g567.STATIC_FLOW_SOLVER_ALIAS,
+        g567.G556_SOLVER_ALIAS,
+        next(row["candidate_id"] for row in plan if str(row["role"]).startswith("generated_theta::")),
+    }
 
 
 def test_primary_30s_response_generation_uses_selected_candidate_not_full_lattice() -> None:

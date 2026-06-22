@@ -2357,3 +2357,26 @@ Implemented contract:
 Status:
   This correction supersedes the invalid 8/12/16/24 diagnostic attempt.
 ```
+
+Remote Stage-2A uniform-30s first rerun finding:
+
+```text
+Observed failure:
+  Stage-2A used 64 contexts with tiers 32/64/128/256 and every row recorded
+  solver_internal_time_limit_sec=30.0 / process_hard_timeout_sec=60.0.
+  The replay still failed closed with process_hard_timeout_rows=24.
+
+Root cause:
+  The Python plan had one row per candidate, but the G5.49 probe runner grouped
+  additive, static-flow, g556, and actor candidates for the same context into one
+  C++ process. The outer process hard timeout was therefore 60s for four planned
+  rows combined, not 60s per row.
+
+Repair:
+  G5.67 replay now enables row-process isolation. Each planned solver row is
+  launched as its own subprocess, so the 60s hard timeout is scoped to the row
+  required by the budget contract.
+
+Status:
+  The failed rerun is not Gate-3A evidence and does not unlock Gate-3B.
+```

@@ -530,6 +530,7 @@ def write_protocol_documents() -> None:
         "- `label_train_split_leakage`: actor training could draw from development/calibration contexts. G5.67 now separates `LABEL_TRAIN` and blocks full actor training below 24,000 unique exact-labeled training contexts.\n\n"
         "## Confirmed P0 Bugs Added By Uniform-Budget Review\n\n"
         "- `nonuniform_small_tier_timeout_contract`: small and medium diagnostic tiers could still use legacy short internal budgets while large tiers used 30s, making cross-tier evidence non-comparable. G5.67 staged execution now assigns `30.0s` internal / `60.0s` hard timeout to every planned agent/map row and fails budget audit on any non-uniform row.\n\n"
+        "- `context_batched_candidate_hard_timeout_scope`: G5.67 planned one solver row per candidate, but the probe runner grouped additive/static/g556/actor candidates into one C++ process while applying a single 60s hard timeout. Slow contexts could therefore be falsely killed as infrastructure timeouts even when no individual row had exhausted its own 60s process allowance. G5.67 replay now enables row-process isolation so every planned solver row gets its own process hard timeout.\n\n"
         "## Confirmed P0 Bugs Added By Stage-2A/Gate-3A Review\n\n"
         "- `response_theta_front_loaded_context_coverage`: response-surface acquisition emitted up to 49 candidates for each early context before later LABEL_TRAIN contexts received any exact actor candidate. G5.67 now emits one coverage-first candidate for every context before exploratory alpha/group candidates.\n"
         "- `a5_attention_heads_checkpoint_load_mismatch`: A5 training saved `attention_heads=8`, but checkpoint loading only read `heads` and could reconstruct a 4-head model. G5.67 now saves both fields and loads either alias.\n"
@@ -564,6 +565,7 @@ def write_protocol_documents() -> None:
         "- `20.0s`, `45.0s`, and `60.0s` internal budgets are not emitted by the current staged execution path; they require separately approved diagnostic/recovery jobs.\n"
         "- `process_hard_timeout_sec`: explicit per-row outer allowance enforced by the parent process; G5.67 full execution blocks if any planned row is missing it.\n"
         "- For a `30.0s` internal budget, `process_hard_timeout_sec` is fixed at `60.0`; timeout rows are infrastructure failures, not no-solution labels or success regressions.\n"
+        "- G5.67 replay runs each planned solver row in its own subprocess; context-level multi-candidate batching is disabled for hard-timeout accounting.\n"
         "- Linux solver subprocesses run in a new process group; timeout sends SIGTERM, waits the recorded grace interval, then SIGKILLs the group if needed.\n"
         "- 30s exploratory response surfaces are screened multi-fidelity; full 30s exact execution is reserved for selected candidates, calibration rows, boundary cases, development replay, and blind replay.\n"
         "- `actor inference time`: measured outside solver budget where available and reported as overhead, not extra search time.\n"
@@ -2007,6 +2009,7 @@ def run_replay_phase(
     os.environ.setdefault("REPAIR5G_STREAM_RESULT_CSV", "1")
     os.environ.setdefault("REPAIR5G_SKIP_AGGREGATE_JSONL", "1")
     os.environ.setdefault("G567_REQUIRE_EXPLICIT_SOLVER_BUDGETS", "1")
+    os.environ.setdefault("G567_REPLAY_ROW_PROCESS_ISOLATION", "1")
 
     def execute_probe_subset(subset: list[dict[str, Any]], *, token: str, result_csv: Path, raw_csv: Path, log_dir: Path, scenario_metadata: Path) -> list[dict[str, Any]]:
         g549.run_probe_plan(

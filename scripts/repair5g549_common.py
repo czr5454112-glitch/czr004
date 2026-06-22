@@ -470,6 +470,21 @@ def probe_context_groups(plan_rows: list[dict[str, Any]]) -> list[tuple[tuple[st
     return sorted(grouped.items(), key=sort_key)
 
 
+def row_process_isolation_enabled() -> bool:
+    return str(os.environ.get("G567_REPLAY_ROW_PROCESS_ISOLATION", "")).lower() in {"1", "true", "yes", "on"}
+
+
+def probe_execution_groups(plan_rows: list[dict[str, Any]]) -> list[tuple[tuple[str, int, int, int, str], list[dict[str, Any]]]]:
+    context_groups = probe_context_groups(plan_rows)
+    if not row_process_isolation_enabled():
+        return context_groups
+    isolated: list[tuple[tuple[str, int, int, int, str], list[dict[str, Any]]]] = []
+    for key, group_rows in context_groups:
+        for row in group_rows:
+            isolated.append((key, [row]))
+    return isolated
+
+
 def completed_groups_from_results(plan_rows: list[dict[str, Any]], result_path: str) -> set[tuple[str, int, int, int, str]]:
     expected = {
         key: {str(row.get("materialized_method")) for row in rows if row.get("materialized_method")}
@@ -823,8 +838,8 @@ def run_probe_plan(
     if overwrite:
         for path in [result_csv, raw_csv, run_jsonl, command_jsonl, update_jsonl, probe_jsonl, checkpoint_jsonl]:
             resolve(path).unlink(missing_ok=True)
-    groups = probe_context_groups(plan_rows)
-    completed = set() if overwrite else completed_groups_from_results(plan_rows, result_csv)
+    groups = probe_execution_groups(plan_rows)
+    completed = set() if overwrite or row_process_isolation_enabled() else completed_groups_from_results(plan_rows, result_csv)
     scheduled = []
     estimated_rows = table_count(result_csv)
     for index, (key, group_rows) in enumerate(groups):

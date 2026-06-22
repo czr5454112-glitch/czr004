@@ -5,7 +5,7 @@ import time
 import numpy as np
 
 from gcst.graph_data import GraphData
-from gcst.traffic_prior import compute_traffic_prior, shortest_path
+from gcst.traffic_prior import build_traffic_prior_lookup, compute_traffic_prior, compute_traffic_prior_with_lookup, shortest_path
 
 
 def _grid_graph(width: int, height: int, blocked: set[tuple[int, int]] | None = None) -> GraphData:
@@ -59,6 +59,21 @@ def test_traffic_prior_defaults_to_bfs_and_astar_is_versioned_opt_in() -> None:
     assert astar["summary"]["traffic_prior_version"] == "traffic_prior_v2_astar"
     assert bfs["summary"]["path_found_count"] == astar["summary"]["path_found_count"] == 4
     assert bfs["summary"]["expected_edge_use_total"] == astar["summary"]["expected_edge_use_total"]
+
+
+def test_lookup_cached_traffic_prior_is_exact_bfs_equivalent() -> None:
+    graph = _grid_graph(6, 5, blocked={(2, 1), (2, 2), (3, 2)})
+    assignment = {
+        "starts": [(0, 0), (5, 0), (0, 4), (5, 4), (1, 3)],
+        "goals": [(5, 4), (0, 4), (5, 0), (0, 0), (4, 1)],
+    }
+    direct = compute_traffic_prior(graph, assignment)
+    lookup = build_traffic_prior_lookup(graph)
+    cached = compute_traffic_prior_with_lookup(graph, assignment, lookup)
+    assert cached["summary"] == direct["summary"]
+    assert cached["paths"] == direct["paths"]
+    assert cached["wait_pressure"] == direct["wait_pressure"]
+    np.testing.assert_array_equal(cached["edge_features"], direct["edge_features"])
 
 
 def test_bfs_astar_path_length_validity_and_determinism() -> None:

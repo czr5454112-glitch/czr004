@@ -122,6 +122,24 @@ Date: 2026-06-22 Asia/Shanghai
 
    Mitigation: reran Gate-3A with the committed public map/scenario registries preseeded into the isolated output root. The final Gate-3A evidence passed with 19 public-parent contexts and 13 synthetic contexts. Future isolated Gate-3A/Gate-3B roots should make this preseed step automatic.
 
+18. Gate-3B context materialization could silently collapse throughput before any solver row.
+
+   Symptom: the bounded Gate-3B r4 attempt selected and wrote the 2,000 LABEL_TRAIN plus 500 DEVELOPMENT context manifest, then spent more than 50 minutes CPU-bound before any solver/GPU work or progress artifact. This was not a LaCAM 30s internal-budget failure; it was pre-solver feature materialization.
+
+   Root cause: `context_from_manifest_row` rebuilt graph adjacency, cell lookup, edge lookup, and exact BFS traffic-prior state per context, then serialized all large-agent contexts in one Python process.
+
+   Fix: traffic prior now exposes an exact-BFS-preserving reusable lookup; G5.67 context materialization caches graph/lookup by physical map, and Gate-3B materialization uses a process pool with JSON progress events and summary fields. Gate-3B pass conditions now require materialization evidence showing `traffic_prior_v1_bfs`, so this does not switch the primary traffic-prior backend to `astar_v1`.
+
+   Regression tests: `tests/test_repair5g567_traffic_prior_backends.py` and `tests/test_repair5g567_gate3b_bounded.py`.
+
+19. Label-v4 analytic target theta could exceed the declared theta schema bounds.
+
+   Symptom: the local legacy GCST test `test_theta_bounds` generated `theta[5]=1.52` while `THETA_HI[5]=1.50`.
+
+   Fix: `context_target_theta` now applies the global `THETA_LO/THETA_HI` clamp before returning the target. This preserves the analytic direction but enforces the same schema contract used by downstream actors and audits.
+
+   Regression test: `tests/test_repair5g558_gcst.py::test_theta_bounds`.
+
 ## Existing Repairs Verified By Gates
 
 - A5 uses OD Perceiver instead of full OD self-attention for 3000 OD tokens.

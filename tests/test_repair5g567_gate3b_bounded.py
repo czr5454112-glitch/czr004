@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import sys
 from pathlib import Path
+from types import SimpleNamespace
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -54,6 +55,10 @@ def test_gate3b_pass_conditions_require_bounded_rows_and_no_blind() -> None:
         "public_benchmark_ingestion": {"ready": True},
         "label_train_contexts": 2000,
         "development_contexts": 500,
+        "context_materialization": {
+            "label_train": {"traffic_prior_versions": {"traffic_prior_v1_bfs": 2000}},
+            "development": {"traffic_prior_versions": {"traffic_prior_v1_bfs": 500}},
+        },
         "total_solver_rows": 60000,
         "selected_agent_tiers": list(gate3b.REQUIRED_AGENT_TIERS),
         "label_train_public_fraction": 0.50,
@@ -77,3 +82,21 @@ def test_gate3b_pass_conditions_require_bounded_rows_and_no_blind() -> None:
     summary["total_solver_rows"] = 60000
     summary["final_blind_panel_constructed_or_accessed"] = True
     assert gate3b.gate3b_pass_conditions(summary)["no_final_blind_access"] is False
+
+
+def test_gate3b_materialization_reports_bfs_meta(monkeypatch) -> None:
+    def fake_context_from_manifest_row(row: dict[str, object]) -> SimpleNamespace:
+        return SimpleNamespace(feature_row={"traffic_prior_version": "traffic_prior_v1_bfs"})
+
+    monkeypatch.setattr(gate3b.g567, "context_from_manifest_row", fake_context_from_manifest_row)
+    contexts, meta = gate3b.materialize_contexts(
+        [{"g567_dataset_row_id": "unit_00000"}],
+        phase="unit",
+        workers=1,
+        progress_interval_sec=0.01,
+    )
+
+    assert len(contexts) == 1
+    assert meta["workers"] == 1
+    assert meta["routing_backend_contract"] == "bfs"
+    assert meta["traffic_prior_versions"] == {"traffic_prior_v1_bfs": 1}

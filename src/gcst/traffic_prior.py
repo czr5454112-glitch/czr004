@@ -3,12 +3,22 @@
 from __future__ import annotations
 
 from collections import deque
+from dataclasses import dataclass
 from typing import Any
 
 import numpy as np
 import heapq
 
 from .graph_data import GraphData
+
+
+@dataclass(frozen=True)
+class TrafficPriorLookup:
+    adj: dict[int, list[int]]
+    cell_to_idx: dict[tuple[int, int], int]
+    edge_to_idx: dict[tuple[int, int], int]
+    node_count: int
+    edge_count: int
 
 
 def _adjacency(graph: GraphData) -> dict[int, list[int]]:
@@ -105,33 +115,49 @@ def _shortest_path_from_lookup(
 
 
 def shortest_path(graph: GraphData, start: tuple[int, int], goal: tuple[int, int], *, routing_backend: str = "bfs") -> list[int]:
-    cell_to_idx = {cell: i for i, cell in enumerate(graph.cells)}
-    return _shortest_path_from_lookup(_adjacency(graph), cell_to_idx, start, goal, routing_backend=routing_backend)
+    lookup = build_traffic_prior_lookup(graph)
+    return _shortest_path_from_lookup(lookup.adj, lookup.cell_to_idx, start, goal, routing_backend=routing_backend)
 
 
-def compute_traffic_prior(graph: GraphData, assignment: dict[str, Any], *, routing_backend: str = "bfs") -> dict[str, Any]:
+def build_traffic_prior_lookup(graph: GraphData) -> TrafficPriorLookup:
+    edge_to_idx = {(int(s), int(d)): i for i, (s, d) in enumerate(graph.edge_index.T)} if graph.edge_index.size else {}
+    return TrafficPriorLookup(
+        adj=_adjacency(graph),
+        cell_to_idx={cell: i for i, cell in enumerate(graph.cells)},
+        edge_to_idx=edge_to_idx,
+        node_count=len(graph.cells),
+        edge_count=int(graph.edge_features.shape[0]),
+    )
+
+
+def compute_traffic_prior_with_lookup(
+    graph: GraphData,
+    assignment: dict[str, Any],
+    lookup: TrafficPriorLookup,
+    *,
+    routing_backend: str = "bfs",
+) -> dict[str, Any]:
     backend = str(routing_backend or "bfs").lower()
     if backend not in {"bfs", "astar_v1"}:
         raise ValueError(f"unknown traffic prior routing backend: {routing_backend}")
-    adj = _adjacency(graph)
-    cell_to_idx = {cell: i for i, cell in enumerate(graph.cells)}
-    edge_to_idx = {(int(s), int(d)): i for i, (s, d) in enumerate(graph.edge_index.T)} if graph.edge_index.size else {}
+    if lookup.node_count != len(graph.cells) or lookup.edge_count != int(graph.edge_features.shape[0]):
+        raise ValueError("traffic prior lookup does not match graph shape")
     counts = np.zeros((graph.edge_features.shape[0],), dtype=np.float32)
     opposite = np.zeros_like(counts)
     paths = []
     path_found = 0
     expected_edge_use_total = 0.0
     for start, goal in zip(assignment["starts"], assignment["goals"]):
-        path = _shortest_path_from_lookup(adj, cell_to_idx, start, goal, routing_backend=backend)
+        path = _shortest_path_from_lookup(lookup.adj, lookup.cell_to_idx, start, goal, routing_backend=backend)
         paths.append(path)
         if path:
             path_found += 1
             expected_edge_use_total += max(0, len(path) - 1)
         for a, b in zip(path, path[1:]):
-            idx = edge_to_idx.get((a, b))
+            idx = lookup.edge_to_idx.get((a, b))
             if idx is not None:
                 counts[idx] += 1.0
-                rev = edge_to_idx.get((b, a))
+                rev = lookup.edge_to_idx.get((b, a))
                 if rev is not None:
                     opposite[rev] += 1.0
     if counts.size:
@@ -186,3 +212,8 @@ def compute_traffic_prior(graph: GraphData, assignment: dict[str, Any], *, routi
             "vertex_wait_pressure_nonzero_rate": 0.0,
         }
     return {"edge_features": edge_features, "summary": summary, "paths": paths, "wait_pressure": wait_pressure}
+
+
+def compute_traffic_prior(graph: GraphData, assignment: dict[str, Any], *, routing_backend: str = "bfs") -> dict[str, Any]:
+    lookup = build_traffic_prior_lookup(graph)
+    return compute_traffic_prior_with_lookup(graph, assignment, lookup, routing_backend=routing_backend)

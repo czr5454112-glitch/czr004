@@ -36,6 +36,7 @@ from gcst.graph_encoder import GraphBatch  # noqa: E402
 from gcst.label_v5 import solver_ratio, solver_success  # noqa: E402
 from gcst.map_hash import read_movingai_map  # noqa: E402
 from gcst.real_label_graph_dataset import parse_movingai_scenario  # noqa: E402
+from gcst.traffic_prior import build_traffic_prior_lookup, compute_traffic_prior_with_lookup  # noqa: E402
 from gcst.theta_schema import (  # noqa: E402
     BASELINE_G556,
     THETA_COLUMNS,
@@ -238,6 +239,41 @@ class G567Context:
     feature_row: dict[str, Any]
     budget_role: str = ""
     process_hard_timeout_sec: float = 0.0
+
+
+_CONTEXT_GRAPH_CACHE: dict[str, tuple[GraphData, Any]] = {}
+
+
+def _context_graph_cache_key(row: dict[str, Any]) -> str:
+    return "|".join(
+        [
+            str(row.get("physical_map_sha256", "")),
+            str(row.get("raw_map_path", "")),
+            str(row.get("map", "")),
+            str(row.get("width", "")),
+            str(row.get("height", "")),
+            str(row.get("free_cells", "")),
+        ]
+    )
+
+
+def _graph_and_traffic_lookup_for_context_row(row: dict[str, Any]) -> tuple[GraphData, Any]:
+    key = _context_graph_cache_key(row)
+    cached = _CONTEXT_GRAPH_CACHE.get(key)
+    if cached is not None:
+        return cached
+    graph = build_graph(
+        {
+            "map": row["map"],
+            "width": row.get("width", 32),
+            "height": row.get("height", 32),
+            "free_cells": row.get("free_cells", ""),
+            "raw_map_path": row.get("raw_map_path", ""),
+        }
+    )
+    cached = (graph, build_traffic_prior_lookup(graph))
+    _CONTEXT_GRAPH_CACHE[key] = cached
+    return cached
 
 
 @dataclass(frozen=True)
@@ -1077,16 +1113,8 @@ def write_baseline_registry() -> dict[str, Any]:
 def context_from_manifest_row(row: dict[str, Any]) -> G567Context | None:
     scen = resolve(row["replay_scenario_path"])
     assignment = parse_movingai_scenario(scen, int(number(row.get("agent_count"), 0)))
-    graph = build_graph(
-        {
-            "map": row["map"],
-            "width": row.get("width", 32),
-            "height": row.get("height", 32),
-            "free_cells": row.get("free_cells", ""),
-            "raw_map_path": row.get("raw_map_path", ""),
-        }
-    )
-    traffic = g561_bank.compute_traffic_prior(graph, assignment)
+    graph, traffic_lookup = _graph_and_traffic_lookup_for_context_row(row)
+    traffic = compute_traffic_prior_with_lookup(graph, assignment, traffic_lookup)
     if number(traffic["summary"].get("path_found_rate"), 0.0) != 1.0:
         return None
     graph_t = graph_with_edge_features(graph, traffic["edge_features"])

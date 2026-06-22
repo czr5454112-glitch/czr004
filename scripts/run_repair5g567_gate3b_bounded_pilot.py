@@ -4,10 +4,12 @@ import argparse
 import hashlib
 import json
 import math
+import os
 import shutil
 import sys
 import time
 from collections import Counter
+from concurrent.futures import FIRST_COMPLETED, ProcessPoolExecutor, wait
 from pathlib import Path
 from typing import Any
 
@@ -317,14 +319,106 @@ def prepare_rows(rows: list[dict[str, Any]], *, split: str, prefix: str) -> list
     return prepared
 
 
-def materialize_contexts(rows: list[dict[str, Any]]) -> list[g567.G567Context]:
-    contexts = []
-    for row in rows:
-        ctx = g567.context_from_manifest_row(row)
-        if ctx is None:
-            raise RuntimeError(f"Gate-3B context materialization failed: {row.get('g567_dataset_row_id')}")
-        contexts.append(ctx)
-    return contexts
+def emit_event(event: str, **fields: Any) -> None:
+    payload = {
+        "schema_version": f"{g567.ROUND}_{PHASE}_event_v1",
+        "event": event,
+        "unix": time.time(),
+        **fields,
+    }
+    print(json.dumps(payload, sort_keys=True), flush=True)
+
+
+def _materialize_one_context(index_row: tuple[int, dict[str, Any]]) -> tuple[int, g567.G567Context, str]:
+    index, row = index_row
+    ctx = g567.context_from_manifest_row(row)
+    if ctx is None:
+        raise RuntimeError(f"Gate-3B context materialization failed: {row.get('g567_dataset_row_id')}")
+    return index, ctx, str(ctx.feature_row.get("traffic_prior_version", ""))
+
+
+def materialize_contexts(
+    rows: list[dict[str, Any]],
+    *,
+    phase: str,
+    workers: int,
+    progress_interval_sec: float,
+) -> tuple[list[g567.G567Context], dict[str, Any]]:
+    total = len(rows)
+    started = time.perf_counter()
+    actual_workers = max(1, min(int(workers), max(1, total)))
+    if os.name == "nt":
+        actual_workers = 1
+    contexts: list[g567.G567Context | None] = [None] * total
+    traffic_versions: Counter[str] = Counter()
+    completed = 0
+    last_report = started
+    emit_event(
+        "gate3b_context_materialization_start",
+        phase=phase,
+        total_contexts=total,
+        workers=actual_workers,
+        requested_workers=int(workers),
+        routing_backend_contract="bfs",
+    )
+
+    def record_result(index: int, ctx: g567.G567Context, traffic_version: str) -> None:
+        nonlocal completed
+        contexts[index] = ctx
+        traffic_versions[traffic_version] += 1
+        completed += 1
+
+    def maybe_report(force: bool = False) -> None:
+        nonlocal last_report
+        now = time.perf_counter()
+        if not force and now - last_report < max(1.0, float(progress_interval_sec)):
+            return
+        elapsed = now - started
+        emit_event(
+            "gate3b_context_materialization_progress",
+            phase=phase,
+            completed_contexts=completed,
+            total_contexts=total,
+            workers=actual_workers,
+            elapsed_sec=elapsed,
+            contexts_per_sec=completed / max(1.0e-9, elapsed),
+            traffic_prior_versions=dict(traffic_versions),
+        )
+        last_report = now
+
+    if actual_workers <= 1:
+        for index, row in enumerate(rows):
+            out_index, ctx, traffic_version = _materialize_one_context((index, row))
+            record_result(out_index, ctx, traffic_version)
+            maybe_report()
+    else:
+        with ProcessPoolExecutor(max_workers=actual_workers) as executor:
+            pending = {executor.submit(_materialize_one_context, (index, row)) for index, row in enumerate(rows)}
+            while pending:
+                done, pending = wait(
+                    pending,
+                    timeout=max(1.0, float(progress_interval_sec)),
+                    return_when=FIRST_COMPLETED,
+                )
+                for future in done:
+                    index, ctx, traffic_version = future.result()
+                    record_result(index, ctx, traffic_version)
+                maybe_report(force=not done)
+    maybe_report(force=True)
+    materialized = [ctx for ctx in contexts if ctx is not None]
+    meta = {
+        "phase": phase,
+        "contexts": len(materialized),
+        "requested_workers": int(workers),
+        "workers": actual_workers,
+        "elapsed_sec": time.perf_counter() - started,
+        "contexts_per_sec": len(materialized) / max(1.0e-9, time.perf_counter() - started),
+        "traffic_prior_versions": dict(traffic_versions),
+        "routing_backend_contract": "bfs",
+        "exact_bfs_lookup_cache": True,
+    }
+    emit_event("gate3b_context_materialization_complete", **meta)
+    return materialized, meta
 
 
 def dataset_sha256(contexts: list[g567.G567Context], label_candidate_path: Path) -> str:
@@ -366,6 +460,12 @@ def crash_rows(rows: list[dict[str, str]]) -> int:
 
 
 def gate3b_pass_conditions(summary: dict[str, Any]) -> dict[str, bool]:
+    materialization = summary.get("context_materialization", {})
+    materialization_versions = [
+        set(meta.get("traffic_prior_versions", {}).keys())
+        for meta in materialization.values()
+        if isinstance(meta, dict)
+    ]
     return {
         "source_state_clean": summary.get("source_state", {}).get("decision") == "g567_source_state_clean",
         "public_benchmark_ingestion_ready": bool(summary.get("public_benchmark_ingestion", {}).get("ready")),
@@ -377,6 +477,7 @@ def gate3b_pass_conditions(summary: dict[str, Any]) -> dict[str, bool]:
         "development_public_fraction_min_met": float(g567.number(summary.get("development_public_fraction"), 0.0)) >= 0.70,
         "public_and_synthetic_mixture_present": {"canonical_public_benchmark_map", "synthetic_stress_map"}.issubset(set(summary.get("selected_map_source_types", {}).keys())),
         "parent_map_split_leakage_zero": int(g567.number(summary.get("parent_map_split_leakage_count"), 999)) == 0,
+        "traffic_prior_bfs_materialization": bool(materialization_versions) and all(versions == {"traffic_prior_v1_bfs"} for versions in materialization_versions),
         "label_replay_materialized": summary.get("label_replay", {}).get("decision") == "g567_three_tier_replay_materialized",
         "development_replay_materialized": summary.get("development_replay", {}).get("decision") == "g567_three_tier_replay_materialized",
         "zero_process_hard_timeouts": int(g567.number(summary.get("process_hard_timeout_rows"), 999)) == 0,
@@ -441,6 +542,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--device", default="auto")
     parser.add_argument("--binary", type=Path, default=Path("build/phase1a-batch/phase1a_batch"))
     parser.add_argument("--max-workers", type=int, default=8)
+    parser.add_argument("--materialize-workers", type=int, default=max(1, min(8, os.cpu_count() or 1)))
+    parser.add_argument("--materialize-progress-interval-sec", type=float, default=30.0)
     parser.add_argument("--margin", type=float, default=0.043)
     parser.add_argument("--expected-head", default="")
     parser.add_argument("--overwrite", action="store_true")
@@ -498,8 +601,18 @@ def main(argv: list[str] | None = None) -> int:
     g567.write_rows(g567.VALID_CONTEXT_MANIFEST, all_rows)
     g567.write_rows(g567.SCENARIO_VALIDITY, audit_rows)
     g567.write_rows(g567.TABLES / CONTEXT_MANIFEST_NAME, all_rows)
-    label_contexts = materialize_contexts(label_rows)
-    development_contexts = materialize_contexts(development_rows)
+    label_contexts, label_materialization = materialize_contexts(
+        label_rows,
+        phase="label_train",
+        workers=int(args.materialize_workers),
+        progress_interval_sec=float(args.materialize_progress_interval_sec),
+    )
+    development_contexts, development_materialization = materialize_contexts(
+        development_rows,
+        phase="development",
+        workers=int(args.materialize_workers),
+        progress_interval_sec=float(args.materialize_progress_interval_sec),
+    )
     memory_smoke = g567.write_3000_agent_memory_smoke(device, int(args.actor_hidden_dim))
     g567.write_baseline_registry()
     seed_ckpts = g567.checkpoint_paths(args.seed_checkpoint_glob)
@@ -623,6 +736,10 @@ def main(argv: list[str] | None = None) -> int:
         "generated_contexts": len(manifest_rows),
         "label_train_contexts": len(label_contexts),
         "development_contexts": len(development_contexts),
+        "context_materialization": {
+            "label_train": label_materialization,
+            "development": development_materialization,
+        },
         "label_train_unique_exact_labeled_contexts": exact_contexts,
         "selected_agent_tiers": selection_meta["selected_agent_tiers"],
         "selected_map_source_types": selection_meta["selected_map_source_types"],

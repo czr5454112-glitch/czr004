@@ -43,7 +43,7 @@ def context_target_theta(graph_summary: dict[str, Any], traffic_summary: dict[st
     target[9] = np.clip(0.45 + 1.2 * bottleneck, 0.0, 2.0)
     target[11] = np.clip(0.25 + 0.7 * opposing + 0.5 * head_on, 0.0, 1.0)
     target[12] = np.clip(0.65 + 0.5 * (bottleneck + opposing), 0.25, 1.5)
-    return target.astype(np.float32)
+    return np.minimum(np.maximum(target, THETA_LO), THETA_HI).astype(np.float32)
 
 
 def score_theta(theta: np.ndarray, target: np.ndarray, traffic_summary: dict[str, Any]) -> dict[str, Any]:

@@ -4,7 +4,7 @@ Date: 2026-06-22 Asia/Shanghai
 
 Branch: `codex/repair5g567-large-scale-tail-safe`
 
-Latest pushed commit at report time: `65c807b7`
+Latest pushed source commit for the new remote evidence: `ea2cb71b35b18553e7e3d71d98454c340e9066c7`
 
 Remote instance: RTX5090, 32 GB VRAM, Ubuntu 24.04, PyTorch image.
 
@@ -14,6 +14,9 @@ Executed only the GPT Pro approved scope:
 
 - Gate-1 remote preflight.
 - Gate-2 bounded pilot after Gate-1 passed.
+- Direct-exact timeout reproducer.
+- Stage-2A diagnostic A5 checkpoint run.
+- True A5 Gate-3A smoke.
 
 Not executed:
 
@@ -22,6 +25,7 @@ Not executed:
 - 48h training campaign.
 - Final blind panel construction or access.
 - `astar_v1` as primary traffic-prior backend.
+- Gate-3B bounded pilot.
 
 ## Gate-1 Result
 
@@ -159,7 +163,7 @@ Implemented local repair after this report:
 - C++ now skips UpdateLTM/callback work immediately after post-solve parent deadline expiry and records phase timings.
 - Stage-2A has a committed tmux runner wrapper that writes rc and atomic final summary.
 
-This report is historical evidence only. Gate-3A remains technically gated until the repaired direct-exact Stage-2A rerun completes 256/256 rows with zero hard timeouts and produces the true diagnostic A5 checkpoint.
+This section is historical evidence only. The repaired direct-exact Stage-2A rerun described below supersedes this block.
 
 ## Direct-Exact Reproducer
 
@@ -197,6 +201,117 @@ Repair: Stage-2A now defaults to a 2048-context pool while keeping 64 selected c
 The first true A5 Gate-3A attempt after Stage-2A generated the 2048-context pool but failed before replay because checkpoint inference passed `device=auto` directly into `torch.load(map_location=...)`.
 
 Repair: checkpoint inference now normalizes `auto` to `cuda` when available, otherwise `cpu`, before loading the checkpoint and moving tensors. This preserves the true A5 task and does not change the Gate-3A context or solver requirements.
+
+## Stage-2A Final Direct-Exact Diagnostic
+
+Decision: `stage2a_diagnostic_a5_checkpoint_ready`
+
+Evidence source commit:
+
+`ea2cb71b35b18553e7e3d71d98454c340e9066c7`
+
+Remote stage root:
+
+`/root/shared-nvme/g567_stage2a_direct_exact_ea2cb71b_tmux`
+
+Local evidence copy:
+
+`outputs/external/phase5p5_repair5g567_evidence_ea2cb71b/stage2a`
+
+Key checks:
+
+- Runner rc: `0`.
+- Generated contexts: `2048`.
+- Selected training contexts: `64`.
+- Agent-tier counts: `32=16`, `64=16`, `128=16`, `256=16`.
+- Direct-exact replay rows: `256`.
+- Process hard-timeout rows: `0`.
+- Replay mode: `direct_exact_solver_row`.
+- Counterfactual probe callback enabled: `false`.
+- Source state: clean checkout, exact HEAD match, sparse checkout disabled, submodule status clean.
+- Forbidden actions: full generation, million-row acquisition, 48h training, final blind access, and Gate-3B launch all `false`.
+
+Diagnostic A5 checkpoint:
+
+- Path: `/root/shared-nvme/g567_stage2a_direct_exact_ea2cb71b_tmux/models/gcst/phase5p5_repair5g567_a5_hierarchical_od_perceiver_actor_seed567.pt`
+- SHA256: `054df49ca406dca3b922f6055a75a93cd7b684154ec1299a4a4e9f2ce6ea26b3`
+- `labelv54_training=true`
+- `cuda_bf16_training=true`
+- `od_perceiver=true`
+- `graph_global_layers=0`
+- `diagnostic_only=true`
+- `no_performance_claim=true`
+- GPU-active diagnostic training hours: `0.07110763034783303`
+
+Label-v5.4 scope:
+
+- Exact labeled contexts: `64`.
+- Candidates: `64`.
+- Safe candidates: `64`.
+- Positive candidates: `6`.
+- Harmful candidates: `18`.
+- `label_train_24000_unique_context_target_met=false`.
+
+This is sufficient for the diagnostic Gate-3A checkpoint smoke. It is not a full training campaign and does not satisfy the eventual `>=24,000` unique exact-labeled LABEL_TRAIN target.
+
+## True A5 Gate-3A Smoke
+
+Decision: `gate3a_true_a5_checkpoint_smoke_pass`
+
+Evidence source commit:
+
+`ea2cb71b35b18553e7e3d71d98454c340e9066c7`
+
+Remote output root:
+
+`/root/shared-nvme/g567_gate3a_ea2cb71b_public_outputs`
+
+Local evidence copy:
+
+`outputs/external/phase5p5_repair5g567_evidence_ea2cb71b/gate3a`
+
+Key checks:
+
+- Runner rc: `0`.
+- Selected contexts: `32`.
+- Required tiers present: `32`, `256`, `1000`, `3000`.
+- A5 theta rows: `32`.
+- Direct-exact replay rows: `128`.
+- Process hard-timeout rows: `0`.
+- Replay decision: `g567_three_tier_replay_materialized`.
+- Exact materialization rate: `1.0`.
+- Candidate recognized rate: `1.0`.
+- Scenario hash match rate: `1.0`.
+- Identity retention rate: `1.0`.
+- Source state: clean checkout, exact HEAD match, sparse checkout disabled, submodule status clean.
+- Forbidden actions: full generation, million-row acquisition, 48h training, final blind access, and `astar_v1` primary all `false`.
+
+Map/source mixture:
+
+- Public/canonical parent contexts: `19`.
+- Synthetic stress contexts: `13`.
+- Scenario source types: `czr004_derived_on_public_parent_map=19`, `czr004_synthetic_derived_scenario=13`.
+- Map families: `chambers=5`, `city=3`, `cross=1`, `empty=4`, `game=4`, `islands=4`, `large_connector=3`, `maze=6`, `public_other=1`, `warehouse=1`.
+
+Checkpoint audit:
+
+- Decision: `true_a5_checkpoint`.
+- SHA256: `054df49ca406dca3b922f6055a75a93cd7b684154ec1299a4a4e9f2ce6ea26b3`.
+- Source commit matched expected.
+- `has_actor_state_dict=true`.
+- `labelv54_training=true`.
+- `cuda_bf16_training=true`.
+- `od_perceiver=true`.
+- `graph_global_layers_zero=true`.
+- `forbidden_g556_or_untrained_smoke_marker=false`.
+
+Gate-3A pass conditions were all `true`, including public parent coverage, synthetic coverage, non-blind contexts, true A5 checkpoint, no g556 smoke theta, and zero process hard timeouts.
+
+## Additional Bug Notes From Final Remote Runs
+
+1. A Stage-2A/Gate-3A launch command was initially quoted incorrectly and started a non-tmux Stage-2A process. I stopped it, preserved its `rc=143` summary, checked for residual solver/GPU processes, and reran the stage under tmux. This was an operational launch bug, not accepted evidence.
+
+2. The first isolated-output Gate-3A rerun at `ea2cb71b` passed replay materialization but failed `has_public_parent_context=false`, because the isolated output root did not include the frozen public benchmark registries. The passing Gate-3A rerun preseeded the committed public registries into the isolated output root. This should be made automatic if future isolated Gate-3A/Gate-3B roots are used.
 
 ## Manual Approval Lock
 

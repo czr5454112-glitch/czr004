@@ -1,0 +1,481 @@
+{
+  "a5_theta_methods": [
+    "g567_A5_phase5p5_repair5g567_a5_hierarchical_od_perceiver_actor_seed567"
+  ],
+  "a5_theta_rows": 32,
+  "aaai_ready": false,
+  "audit_rows": 2048,
+  "checkpoint_audit": {
+    "artifact_type": "phase5p5_repair5g567_labelv54_direct_actor",
+    "audit_failures": [],
+    "checkpoint_path": "/root/shared-nvme/g567_stage2a_direct_exact_ea2cb71b_tmux/models/gcst/phase5p5_repair5g567_a5_hierarchical_od_perceiver_actor_seed567.pt",
+    "checkpoint_sha256": "054df49ca406dca3b922f6055a75a93cd7b684154ec1299a4a4e9f2ce6ea26b3",
+    "cuda_bf16_training": true,
+    "decision": "true_a5_checkpoint",
+    "diagnostic_only": true,
+    "forbidden_g556_or_untrained_smoke_marker": false,
+    "graph_global_layers_zero": true,
+    "has_actor_state_dict": true,
+    "labelv54_training": true,
+    "od_perceiver": true,
+    "source_commit": "ea2cb71b35b18553e7e3d71d98454c340e9066c7",
+    "source_commit_matches_expected": true,
+    "training_context_count": 64,
+    "training_dataset_sha256": "b56a7b872ba1d0a5a5527f67822aa8f2c644f4d64df1913a26be2d04b080299f",
+    "variant_id": "A5"
+  },
+  "context_manifest": "/root/shared-nvme/g567_gate3a_ea2cb71b_public_outputs/tables/phase5p5_repair5g567_gate3a_true_a5_checkpoint_smoke_contexts.csv",
+  "context_materialization_timings": [
+    {
+      "agent_count": 32,
+      "elapsed_sec": 0.030001402832567692,
+      "g567_dataset_row_id": "g567_gate3a_a5_00000",
+      "map": "g567-chambers-48x32-a-v0",
+      "map_family": "chambers",
+      "materialized": true
+    },
+    {
+      "agent_count": 32,
+      "elapsed_sec": 0.03009338304400444,
+      "g567_dataset_row_id": "g567_gate3a_a5_00001",
+      "map": "g567-chambers-48x32-a-v1",
+      "map_family": "chambers",
+      "materialized": true
+    },
+    {
+      "agent_count": 32,
+      "elapsed_sec": 0.028632374480366707,
+      "g567_dataset_row_id": "g567_gate3a_a5_00002",
+      "map": "g567-chambers-48x32-a-v1",
+      "map_family": "chambers",
+      "materialized": true
+    },
+    {
+      "agent_count": 32,
+      "elapsed_sec": 0.056155016645789146,
+      "g567_dataset_row_id": "g567_gate3a_a5_00003",
+      "map": "g567-chambers-64x48-a-v0",
+      "map_family": "chambers",
+      "materialized": true
+    },
+    {
+      "agent_count": 32,
+      "elapsed_sec": 0.052561476826667786,
+      "g567_dataset_row_id": "g567_gate3a_a5_00004",
+      "map": "g567-chambers-64x48-a-v1",
+      "map_family": "chambers",
+      "materialized": true
+    },
+    {
+      "agent_count": 32,
+      "elapsed_sec": 1.5838991403579712,
+      "g567_dataset_row_id": "g567_gate3a_a5_00005",
+      "map": "boston_0_256",
+      "map_family": "city",
+      "materialized": true
+    },
+    {
+      "agent_count": 32,
+      "elapsed_sec": 1.6601382624357939,
+      "g567_dataset_row_id": "g567_gate3a_a5_00006",
+      "map": "boston_0_256",
+      "map_family": "city",
+      "materialized": true
+    },
+    {
+      "agent_count": 32,
+      "elapsed_sec": 1.6901906235143542,
+      "g567_dataset_row_id": "g567_gate3a_a5_00007",
+      "map": "boston_0_256",
+      "map_family": "city",
+      "materialized": true
+    },
+    {
+      "agent_count": 256,
+      "elapsed_sec": 0.18404213339090347,
+      "g567_dataset_row_id": "g567_gate3a_a5_00008",
+      "map": "empty_48_48",
+      "map_family": "empty",
+      "materialized": true
+    },
+    {
+      "agent_count": 256,
+      "elapsed_sec": 0.19130503293126822,
+      "g567_dataset_row_id": "g567_gate3a_a5_00009",
+      "map": "empty_48_48",
+      "map_family": "empty",
+      "materialized": true
+    },
+    {
+      "agent_count": 256,
+      "elapsed_sec": 0.1941434759646654,
+      "g567_dataset_row_id": "g567_gate3a_a5_00010",
+      "map": "empty_48_48",
+      "map_family": "empty",
+      "materialized": true
+    },
+    {
+      "agent_count": 256,
+      "elapsed_sec": 0.1836650101467967,
+      "g567_dataset_row_id": "g567_gate3a_a5_00011",
+      "map": "empty_48_48",
+      "map_family": "empty",
+      "materialized": true
+    },
+    {
+      "agent_count": 256,
+      "elapsed_sec": 0.1623460678383708,
+      "g567_dataset_row_id": "g567_gate3a_a5_00012",
+      "map": "den312d",
+      "map_family": "game",
+      "materialized": true
+    },
+    {
+      "agent_count": 256,
+      "elapsed_sec": 1.9935830440372229,
+      "g567_dataset_row_id": "g567_gate3a_a5_00013",
+      "map": "den520d",
+      "map_family": "game",
+      "materialized": true
+    },
+    {
+      "agent_count": 256,
+      "elapsed_sec": 0.5629151640459895,
+      "g567_dataset_row_id": "g567_gate3a_a5_00014",
+      "map": "ht_mansion_n",
+      "map_family": "game",
+      "materialized": true
+    },
+    {
+      "agent_count": 256,
+      "elapsed_sec": 0.6117639802396297,
+      "g567_dataset_row_id": "g567_gate3a_a5_00015",
+      "map": "ht_mansion_n",
+      "map_family": "game",
+      "materialized": true
+    },
+    {
+      "agent_count": 1000,
+      "elapsed_sec": 0.3913239724934101,
+      "g567_dataset_row_id": "g567_gate3a_a5_00016",
+      "map": "g567-cross-64x40-a-v0",
+      "map_family": "cross",
+      "materialized": true
+    },
+    {
+      "agent_count": 1000,
+      "elapsed_sec": 0.3239873079583049,
+      "g567_dataset_row_id": "g567_gate3a_a5_00017",
+      "map": "g567-islands-48x48-a-v0",
+      "map_family": "islands",
+      "materialized": true
+    },
+    {
+      "agent_count": 1000,
+      "elapsed_sec": 0.3337057363241911,
+      "g567_dataset_row_id": "g567_gate3a_a5_00018",
+      "map": "g567-islands-48x48-a-v0",
+      "map_family": "islands",
+      "materialized": true
+    },
+    {
+      "agent_count": 1000,
+      "elapsed_sec": 0.3661222066730261,
+      "g567_dataset_row_id": "g567_gate3a_a5_00019",
+      "map": "g567-islands-48x48-a-v0",
+      "map_family": "islands",
+      "materialized": true
+    },
+    {
+      "agent_count": 1000,
+      "elapsed_sec": 0.4192588133737445,
+      "g567_dataset_row_id": "g567_gate3a_a5_00020",
+      "map": "g567-islands-72x48-a-v1",
+      "map_family": "islands",
+      "materialized": true
+    },
+    {
+      "agent_count": 1000,
+      "elapsed_sec": 0.4531640959903598,
+      "g567_dataset_row_id": "g567_gate3a_a5_00021",
+      "map": "g567-large-connector-160x128-a-v1",
+      "map_family": "large_connector",
+      "materialized": true
+    },
+    {
+      "agent_count": 1000,
+      "elapsed_sec": 0.435909790918231,
+      "g567_dataset_row_id": "g567_gate3a_a5_00022",
+      "map": "g567-large-connector-160x128-a-v2",
+      "map_family": "large_connector",
+      "materialized": true
+    },
+    {
+      "agent_count": 1000,
+      "elapsed_sec": 0.4179870346561074,
+      "g567_dataset_row_id": "g567_gate3a_a5_00023",
+      "map": "g567-large-connector-160x128-a-v2",
+      "map_family": "large_connector",
+      "materialized": true
+    },
+    {
+      "agent_count": 3000,
+      "elapsed_sec": 5.97226819396019,
+      "g567_dataset_row_id": "g567_gate3a_a5_00024",
+      "map": "maze_128_128_1",
+      "map_family": "maze",
+      "materialized": true
+    },
+    {
+      "agent_count": 3000,
+      "elapsed_sec": 5.923409438692033,
+      "g567_dataset_row_id": "g567_gate3a_a5_00025",
+      "map": "maze_128_128_1",
+      "map_family": "maze",
+      "materialized": true
+    },
+    {
+      "agent_count": 3000,
+      "elapsed_sec": 5.982825055718422,
+      "g567_dataset_row_id": "g567_gate3a_a5_00026",
+      "map": "maze_128_128_1",
+      "map_family": "maze",
+      "materialized": true
+    },
+    {
+      "agent_count": 3000,
+      "elapsed_sec": 7.417582447640598,
+      "g567_dataset_row_id": "g567_gate3a_a5_00027",
+      "map": "maze_128_128_1",
+      "map_family": "maze",
+      "materialized": true
+    },
+    {
+      "agent_count": 3000,
+      "elapsed_sec": 13.127331635914743,
+      "g567_dataset_row_id": "g567_gate3a_a5_00028",
+      "map": "maze_128_128_2",
+      "map_family": "maze",
+      "materialized": true
+    },
+    {
+      "agent_count": 3000,
+      "elapsed_sec": 12.856288849376142,
+      "g567_dataset_row_id": "g567_gate3a_a5_00029",
+      "map": "maze_128_128_2",
+      "map_family": "maze",
+      "materialized": true
+    },
+    {
+      "agent_count": 3000,
+      "elapsed_sec": 19.89203952625394,
+      "g567_dataset_row_id": "g567_gate3a_a5_00030",
+      "map": "sortation_large",
+      "map_family": "public_other",
+      "materialized": true
+    },
+    {
+      "agent_count": 3000,
+      "elapsed_sec": 4.537090542726219,
+      "g567_dataset_row_id": "g567_gate3a_a5_00031",
+      "map": "warehouse_10_20_10_2_2",
+      "map_family": "warehouse",
+      "materialized": true
+    }
+  ],
+  "decision": "gate3a_true_a5_checkpoint_smoke_pass",
+  "elapsed_sec": 2746.254751337692,
+  "forbidden_actions": {
+    "astar_v1_primary_enabled": false,
+    "final_blind_panel_constructed_or_accessed": false,
+    "forty_eight_hour_training_launched": false,
+    "full_100k_generation_launched": false,
+    "million_row_solver_acquisition_launched": false
+  },
+  "generated_contexts": 2048,
+  "generator_attempts": 2200,
+  "learned_runtime_policy_validated": false,
+  "pass_conditions": {
+    "a5_inference_rows_equal_contexts": true,
+    "a5_inference_variant_only": true,
+    "all_contexts_non_blind": true,
+    "all_forbidden_actions_false": true,
+    "at_least_32_contexts": true,
+    "candidate_recognized_rate_one": true,
+    "exact_materialization_rate_one": true,
+    "has_public_parent_context": true,
+    "has_synthetic_context": true,
+    "identity_retention_rate_one": true,
+    "no_g556_registry_smoke_theta": true,
+    "no_process_hard_timeouts": true,
+    "replay_materialized": true,
+    "required_agent_tiers_present": true,
+    "scenario_hash_match_rate_one": true,
+    "scenario_source_types_documented": true,
+    "several_agent_tiers": true,
+    "several_map_families": true,
+    "source_state_clean": true,
+    "true_a5_checkpoint": true
+  },
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "replay_summary": {
+    "aaai_ready": false,
+    "actor_candidate_rows": 32,
+    "additive_rows_present": 32,
+    "applied_quality_margin": 0.043,
+    "better_outside_margin_vs_additive": 1,
+    "better_outside_margin_vs_g556": 0,
+    "better_outside_margin_vs_static_flow": 0,
+    "candidate_recognized_rate": 1.0,
+    "contexts": 32,
+    "counterfactual_probe_callback_enabled": false,
+    "counterfactual_probe_rows_are_diagnostic_only": true,
+    "decision": "g567_three_tier_replay_materialized",
+    "exact_execution_mode": "direct_exact_solver_row",
+    "exact_materialization_rate": 1.0,
+    "executed_rows": 128,
+    "g556_rows_present": 32,
+    "identity_retention_rate": 1.0,
+    "learned_runtime_policy_validated": false,
+    "mean_delta_vs_additive": -0.013407723324374995,
+    "mean_delta_vs_g556": 0.005916769487500015,
+    "mean_delta_vs_static_flow": 0.000708663023750028,
+    "median_delta_vs_additive": -0.017089447360000065,
+    "median_delta_vs_g556": 0.00011720581500007654,
+    "median_delta_vs_static_flow": -0.007681249040000004,
+    "median_relative_improvement_vs_additive": 0.016075649765569775,
+    "median_relative_improvement_vs_g556": -0.00010911244965339046,
+    "median_relative_improvement_vs_static_flow": 0.00734602448807029,
+    "new_exact_materialized_candidate_rows": 32,
+    "per_variant_transfer": {
+      "A5::/root/shared-nvme/g567_stage2a_direct_exact_ea2cb71b_tmux/models/gcst/phase5p5_repair5g567_a5_hierarchical_od_perceiver_actor_seed567.pt": {
+        "mean_delta_vs_additive": -0.013407723324374995,
+        "mean_delta_vs_g556": 0.005916769487500015,
+        "mean_delta_vs_static_flow": 0.000708663023750028,
+        "median_delta_vs_additive": -0.017089447360000065,
+        "median_delta_vs_g556": 0.00011720581500007654,
+        "median_delta_vs_static_flow": -0.007681249040000004,
+        "model_path": "/root/shared-nvme/g567_stage2a_direct_exact_ea2cb71b_tmux/models/gcst/phase5p5_repair5g567_a5_hierarchical_od_perceiver_actor_seed567.pt",
+        "pairs": 32,
+        "raw_success_gains_vs_additive": 0,
+        "raw_success_gains_vs_g556": 0,
+        "raw_success_gains_vs_static_flow": 0,
+        "raw_success_regressions_vs_additive": 0,
+        "raw_success_regressions_vs_g556": 0,
+        "raw_success_regressions_vs_static_flow": 0,
+        "supported_worse_outside_margin_vs_additive": 1,
+        "supported_worse_outside_margin_vs_g556": 1,
+        "supported_worse_outside_margin_vs_static_flow": 1,
+        "variant_id": "A5"
+      }
+    },
+    "phase5p5_allowed": false,
+    "phase6_allowed": false,
+    "planned_rows": 128,
+    "process_group_timeout_provenance_rows": 128,
+    "process_hard_timeout_rows": 0,
+    "q95_harmful_delta_vs_additive": 0.02392617696999999,
+    "q95_harmful_delta_vs_g556": 0.02989194574249998,
+    "q95_harmful_delta_vs_static_flow": 0.03491385282000009,
+    "raw_quality_worse_vs_additive": 1,
+    "raw_quality_worse_vs_g556": 8,
+    "raw_quality_worse_vs_static_flow": 2,
+    "raw_success_gains_vs_additive": 0,
+    "raw_success_gains_vs_g556": 0,
+    "raw_success_gains_vs_static_flow": 0,
+    "raw_success_regressions_vs_additive": 0,
+    "raw_success_regressions_vs_g556": 0,
+    "raw_success_regressions_vs_static_flow": 0,
+    "replay_phase": "gate3a_true_a5_checkpoint_smoke",
+    "replicate_count_max": 1,
+    "replicate_count_mean": 1.0,
+    "replicate_count_min": 1,
+    "replicate_groups": 32,
+    "runtime_claim_allowed": false,
+    "same_pair_groups_with_at_least_10_repeats": 0,
+    "same_pair_groups_with_at_least_5_repeats": 0,
+    "scenario_hash_match_rate": 1.0,
+    "schema_version": "phase5p5_repair5g567_gate3a_true_a5_checkpoint_smoke_summary_v1",
+    "static_flow_rows_present": 32,
+    "supported_quality_worse_outside_margin_vs_additive": 1,
+    "supported_quality_worse_outside_margin_vs_g556": 1,
+    "supported_quality_worse_outside_margin_vs_static_flow": 1,
+    "three_tier_pairs": 32,
+    "worker_count_values": [
+      "1"
+    ]
+  },
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g567_gate3a_true_a5_checkpoint_smoke_summary_v1",
+  "selected_agent_tiers": [
+    32,
+    256,
+    1000,
+    3000
+  ],
+  "selected_contexts": 32,
+  "selected_map_families": {
+    "chambers": 5,
+    "city": 3,
+    "cross": 1,
+    "empty": 4,
+    "game": 4,
+    "islands": 4,
+    "large_connector": 3,
+    "maze": 6,
+    "public_other": 1,
+    "warehouse": 1
+  },
+  "selected_map_source_types": {
+    "canonical_public_benchmark_map": 19,
+    "synthetic_stress_map": 13
+  },
+  "selected_maps": [
+    "boston_0_256",
+    "den312d",
+    "den520d",
+    "empty_48_48",
+    "g567-chambers-48x32-a-v0",
+    "g567-chambers-48x32-a-v1",
+    "g567-chambers-64x48-a-v0",
+    "g567-chambers-64x48-a-v1",
+    "g567-cross-64x40-a-v0",
+    "g567-islands-48x48-a-v0",
+    "g567-islands-72x48-a-v1",
+    "g567-large-connector-160x128-a-v1",
+    "g567-large-connector-160x128-a-v2",
+    "ht_mansion_n",
+    "maze_128_128_1",
+    "maze_128_128_2",
+    "sortation_large",
+    "warehouse_10_20_10_2_2"
+  ],
+  "selected_scenario_source_types": {
+    "czr004_derived_on_public_parent_map": 19,
+    "czr004_synthetic_derived_scenario": 13
+  },
+  "source_state": {
+    "aaai_ready": false,
+    "branch": "codex/repair5g567-large-scale-tail-safe",
+    "decision": "g567_source_state_clean",
+    "expected_head": "ea2cb71b35b18553e7e3d71d98454c340e9066c7",
+    "head": "ea2cb71b35b18553e7e3d71d98454c340e9066c7",
+    "head_matches_expected": true,
+    "inside_work_tree": "true",
+    "learned_runtime_policy_validated": false,
+    "phase5p5_allowed": false,
+    "phase6_allowed": false,
+    "runtime_claim_allowed": false,
+    "schema_version": "phase5p5_repair5g567_source_state_v1",
+    "source_plan": "czr004_g567_large_scale_tail_safe_direct_actor_plan.md",
+    "source_plan_sha256": "ed4a3185ee931656ff359a5a45c3d3b1d1bace37508205a58681abf5742fa542",
+    "source_state_failures": [],
+    "sparse_checkout": "false",
+    "sparse_checkout_disabled": true,
+    "status_clean": true,
+    "status_short": "",
+    "submodule_status": "61a4c40ce91ce18c06eb2fe070aa9f1951eecb8d external/lacam2 (v0.1-13-g61a4c40)\n 09a158196e513252cfb468ad46e33568787c1e92 external/lacam2/scripts (09a1581)\n e9ae471ea46a0f3dcd2bbbd26fa3d14433ec7884 external/lacam2/third_party/argparse (v2.9-5-ge9ae471)\n 5376968f6948923e2411081fd9372e71a59d8e77 external/lacam2/third_party/googletest (release-1.8.0-2986-g5376968f)",
+    "submodule_status_clean": true
+  }
+}

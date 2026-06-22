@@ -108,6 +108,20 @@ Date: 2026-06-22 Asia/Shanghai
 
    Regression test: `tests/test_repair5g567_gate3a_preflight.py`.
 
+## Operational Bugs Recorded During RTX5090 Runs
+
+16. Stage-2A was briefly launched outside tmux because of incorrect shell quoting.
+
+   Symptom: a Stage-2A command intended for tmux started as a foreground/non-tmux process.
+
+   Mitigation: stopped the run, preserved the runner final summary with `rc=143`, checked for residual solver/GPU processes, and reran Stage-2A under tmux. This aborted run is not counted as pass evidence.
+
+17. Isolated Gate-3A output root did not automatically carry frozen public benchmark registries.
+
+   Symptom: the first isolated-output Gate-3A rerun at `ea2cb71b` replayed 128 rows with zero hard timeouts, but failed `has_public_parent_context=false` because the isolated output root only saw synthetic generated context metadata.
+
+   Mitigation: reran Gate-3A with the committed public map/scenario registries preseeded into the isolated output root. The final Gate-3A evidence passed with 19 public-parent contexts and 13 synthetic contexts. Future isolated Gate-3A/Gate-3B roots should make this preseed step automatic.
+
 ## Existing Repairs Verified By Gates
 
 - A5 uses OD Perceiver instead of full OD self-attention for 3000 OD tokens.
@@ -118,30 +132,26 @@ Date: 2026-06-22 Asia/Shanghai
 
 ## Open Risks Before Any Full Run
 
-1. Probe runner does not visibly enforce per-process hard timeout.
-
-   During Gate-2, a `phase1a_batch --time-limit-sec 20.0` child process ran much longer than 20 seconds before returning. The bounded wrapper still completed, but `process_hard_timeout_sec` should be enforced by the outer runner before full solver acquisition.
-
-2. Remote provenance is incomplete in the current minimal extraction.
-
-   The Gate logs contain `fatal: not a git repository` warnings. Full runs should use a complete clean Git checkout at the pushed commit, not a source tar extraction.
-
-3. Gate-2 was a bounded pilot only.
+1. Gate-2 was a bounded pilot only.
 
    It proves the large-tier solver/materialization/A5 BF16 path on 2 contexts, not full data scalability, final training quality, or blind performance.
 
-4. 1000-agent short-budget contexts can produce no LTM update checkpoint.
+2. 1000-agent short-budget contexts can produce no LTM update checkpoint.
 
    This is not necessarily a solver bug, but exact full-theta fingerprint checks are not meaningful on rows with no update checkpoint. Future summaries should distinguish "no checkpoint to audit" from true fingerprint mismatch.
 
-5. Direct-exact Stage-2A has not yet been remotely rerun after the nested-probe repair.
+3. Stage-2A is diagnostic only.
 
-   The `uniform30_r5` timeout rows are now classified as old-path nested-probe evidence, not direct exact additive/static/g556/A5 evidence. Stage-2A remains blocked until the direct-exact rerun completes 256/256 rows with zero process hard timeouts, rc/final summary, and a true diagnostic A5 checkpoint.
+   The final Stage-2A rerun completed 256/256 direct-exact rows with zero hard timeouts and produced a true A5 checkpoint, but it has only 64 unique exact-labeled training contexts. It does not satisfy the eventual `>=24,000` unique LABEL_TRAIN requirement.
 
-6. Extreme-tail contexts remain an audit panel until direct exact is stable.
+4. Extreme-tail contexts remain an audit panel until direct exact is stable at larger scale.
 
    Do not delete `tunnel`, `cross`, or `connector`. Keep failed high-density combinations in the timeout/tail audit and reintroduce them through curriculum after direct exact execution is stable.
 
-7. Full campaign remains under absolute manual lock.
+5. Gate-3B has not yet been run.
+
+   Gate-3A passed on 32 contexts and 128 solver rows. The bounded Gate-3B pilot still needs 2,000-4,000 unique exact-labeled contexts, 50,000-100,000 solver rows, 2-4 GPU-active training hours, 500-1,000 development contexts, and one primary actor.
+
+6. Full campaign remains under absolute manual lock.
 
    Gate pass status, available GPU time, clean worktree, or disk availability must never be treated as full-campaign approval. Full can only start after Gate-3B evidence is reviewed and a new user message provides `APPROVE_G567_FULL_<EXACT_COMMIT_SHA>`.

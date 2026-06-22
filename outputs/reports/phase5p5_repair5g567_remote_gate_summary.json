@@ -2,7 +2,7 @@
   "schema_version": "phase5p5_repair5g567_remote_gate_summary_v1",
   "date": "2026-06-22",
   "branch": "codex/repair5g567-large-scale-tail-safe",
-  "latest_pushed_commit": "65c807b7",
+  "latest_pushed_commit": "ea2cb71b35b18553e7e3d71d98454c340e9066c7",
   "gate1": {
     "decision": "gate1_pass",
     "artifact_dir": "/root/shared-nvme/g567_gate_work/artifacts_gate1_20260622_173238",
@@ -151,6 +151,100 @@
     "failure": "torch_load_map_location_auto",
     "fix": "normalize auto to cuda when available otherwise cpu before torch.load and tensor placement"
   },
+  "stage2a_direct_exact_final": {
+    "decision": "stage2a_diagnostic_a5_checkpoint_ready",
+    "commit": "ea2cb71b35b18553e7e3d71d98454c340e9066c7",
+    "remote_stage_root": "/root/shared-nvme/g567_stage2a_direct_exact_ea2cb71b_tmux",
+    "local_evidence_dir": "outputs/external/phase5p5_repair5g567_evidence_ea2cb71b/stage2a",
+    "runner_rc": 0,
+    "generated_contexts": 2048,
+    "selected_contexts": 64,
+    "selected_agent_tiers": {
+      "32": 16,
+      "64": 16,
+      "128": 16,
+      "256": 16
+    },
+    "planned_rows": 256,
+    "executed_rows": 256,
+    "process_hard_timeout_rows": 0,
+    "exact_execution_mode": "direct_exact_solver_row",
+    "counterfactual_probe_callback_enabled": false,
+    "counterfactual_probe_rows_are_diagnostic_only": true,
+    "labelv54_exact_labeled_contexts": 64,
+    "labelv54_safe_candidates": 64,
+    "labelv54_positive_candidates": 6,
+    "labelv54_harmful_candidates": 18,
+    "label_train_24000_unique_context_target_met": false,
+    "checkpoint_path": "/root/shared-nvme/g567_stage2a_direct_exact_ea2cb71b_tmux/models/gcst/phase5p5_repair5g567_a5_hierarchical_od_perceiver_actor_seed567.pt",
+    "checkpoint_sha256": "054df49ca406dca3b922f6055a75a93cd7b684154ec1299a4a4e9f2ce6ea26b3",
+    "checkpoint_true_a5": true,
+    "labelv54_training": true,
+    "cuda_bf16_training": true,
+    "od_perceiver": true,
+    "graph_global_layers": 0,
+    "diagnostic_only": true,
+    "no_performance_claim": true,
+    "gpu_active_hours": 0.07110763034783303,
+    "source_state_clean": true,
+    "sparse_checkout_disabled": true,
+    "submodule_status_clean": true,
+    "forbidden_actions_all_false": true
+  },
+  "gate3a_true_a5_final": {
+    "decision": "gate3a_true_a5_checkpoint_smoke_pass",
+    "commit": "ea2cb71b35b18553e7e3d71d98454c340e9066c7",
+    "remote_output_root": "/root/shared-nvme/g567_gate3a_ea2cb71b_public_outputs",
+    "local_evidence_dir": "outputs/external/phase5p5_repair5g567_evidence_ea2cb71b/gate3a",
+    "runner_rc": 0,
+    "selected_contexts": 32,
+    "selected_agent_tiers": [
+      32,
+      256,
+      1000,
+      3000
+    ],
+    "selected_map_source_types": {
+      "canonical_public_benchmark_map": 19,
+      "synthetic_stress_map": 13
+    },
+    "selected_scenario_source_types": {
+      "czr004_derived_on_public_parent_map": 19,
+      "czr004_synthetic_derived_scenario": 13
+    },
+    "a5_theta_rows": 32,
+    "planned_rows": 128,
+    "executed_rows": 128,
+    "process_hard_timeout_rows": 0,
+    "exact_execution_mode": "direct_exact_solver_row",
+    "counterfactual_probe_callback_enabled": false,
+    "candidate_recognized_rate": 1.0,
+    "exact_materialization_rate": 1.0,
+    "scenario_hash_match_rate": 1.0,
+    "identity_retention_rate": 1.0,
+    "checkpoint_sha256": "054df49ca406dca3b922f6055a75a93cd7b684154ec1299a4a4e9f2ce6ea26b3",
+    "checkpoint_true_a5": true,
+    "labelv54_training": true,
+    "cuda_bf16_training": true,
+    "od_perceiver": true,
+    "graph_global_layers_zero": true,
+    "all_pass_conditions_true": true,
+    "source_state_clean": true,
+    "sparse_checkout_disabled": true,
+    "submodule_status_clean": true,
+    "forbidden_actions_all_false": true,
+    "full_campaign_launched": false,
+    "final_blind_panel_constructed_or_accessed": false
+  },
+  "operational_notes_after_gate3a": {
+    "non_tmux_stage2a_launch_aborted": true,
+    "non_tmux_stage2a_aborted_rc": 143,
+    "non_tmux_stage2a_counted_as_evidence": false,
+    "gate3a_first_isolated_output_replay_zero_hard_timeouts": true,
+    "gate3a_first_isolated_output_failed_has_public_parent_context": true,
+    "gate3a_public_registry_preseeded_for_final_pass": true,
+    "future_isolated_roots_should_preseed_public_registries": true
+  },
   "manual_approval_barrier": {
     "decision_without_token": "g567_full_campaign_waiting_for_manual_gptpro_review",
     "full_launcher_guard_added": true,
@@ -170,14 +264,13 @@
     "forty_eight_hour_training": true,
     "final_blind_panel": true,
     "astar_v1_primary": true,
-    "gate3a_after_failed_stage2a": true
+    "gate3b_bounded_pilot": true
   },
   "open_risks": [
-    "Direct-exact Stage-2A remote rerun has not yet completed after the nested-probe repair",
-    "Stage-2A must be rerun with sparse checkout disabled and expanded 2048 context pool",
-    "Gate-3A must be rerun after auto-device normalization repair",
-    "tunnel/cross/connector extreme-tail contexts remain in timeout/tail audit until direct exact is stable",
-    "Gate-3A true A5 checkpoint smoke has not been launched",
-    "Gate-2 is bounded pilot evidence only"
+    "Gate-3B bounded pilot has not yet run",
+    "Stage-2A is diagnostic only: 64 unique exact-labeled training contexts, not the eventual >=24000 LABEL_TRAIN target",
+    "tunnel/cross/connector extreme-tail contexts remain in timeout/tail audit until direct exact is stable at larger scale",
+    "Gate-2 is bounded pilot evidence only",
+    "Full campaign remains locked pending fresh APPROVE_G567_FULL_<EXACT_COMMIT_SHA> after Gate-3B review"
   ]
 }

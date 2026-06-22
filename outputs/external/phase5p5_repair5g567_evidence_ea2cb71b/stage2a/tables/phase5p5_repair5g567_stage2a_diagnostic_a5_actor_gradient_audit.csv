@@ -1,0 +1,2 @@
+variant_id,seed,topology_grad_norm,c0_grad_norm,f0_grad_norm,od_grad_norm,scalar_grad_norm,fusion_grad_norm,theta_head_grad_norm,phase5p5_allowed,phase6_allowed,runtime_claim_allowed,learned_runtime_policy_validated,aaai_ready
+A5,567,0.0012454165304518483,0.001181919598778336,0.0011571063112256752,0.001359580395728699,0.0001676962522623171,0.009643065990530886,0.01084615578292869,False,False,False,False,False

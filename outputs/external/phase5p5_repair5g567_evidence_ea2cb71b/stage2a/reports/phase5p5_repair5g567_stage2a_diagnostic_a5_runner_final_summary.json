@@ -1,0 +1,20 @@
+{
+  "completed_unix": 1782145581.5325418,
+  "expected_head": "ea2cb71b35b18553e7e3d71d98454c340e9066c7",
+  "forbidden_actions": {
+    "final_blind_panel_constructed_or_accessed": false,
+    "forty_eight_hour_training_launched": false,
+    "full_100k_generation_launched": false,
+    "gate3b_launched": false,
+    "million_row_solver_acquisition_launched": false
+  },
+  "head": "ea2cb71b35b18553e7e3d71d98454c340e9066c7",
+  "phase": "stage2a_diagnostic_a5",
+  "rc": 0,
+  "reason": "python_stage2a_exited",
+  "schema_version": "phase5p5_repair5g567_stage2a_runner_final_summary_v1",
+  "stage_root": "/root/shared-nvme/g567_stage2a_direct_exact_ea2cb71b_tmux",
+  "status_short": "",
+  "stderr_log": "/root/shared-nvme/g567_stage2a_direct_exact_ea2cb71b_tmux/logs/phase5p5_repair5g567_stage2a_diagnostic_a5_runner.stderr.log",
+  "stdout_log": "/root/shared-nvme/g567_stage2a_direct_exact_ea2cb71b_tmux/logs/phase5p5_repair5g567_stage2a_diagnostic_a5_runner.stdout.log"
+}

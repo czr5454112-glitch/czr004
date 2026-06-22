@@ -1,0 +1,18 @@
+{
+  "aaai_ready": false,
+  "all_rows_have_explicit_hard_timeout": true,
+  "all_rows_have_explicit_internal_budget": true,
+  "decision": "g567_solver_budget_audit_passed",
+  "failure_count": 0,
+  "failures": [],
+  "large_30s_rows_have_60s_hard_timeout": true,
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "planned_rows": 256,
+  "replay_phase": "stage2a_diagnostic_a5_label_train",
+  "runtime_claim_allowed": false,
+  "same_context_methods_same_budget": true,
+  "schema_version": "phase5p5_repair5g567_solver_budget_audit_summary_v1",
+  "uniform_30s_rows_have_60s_hard_timeout": true
+}

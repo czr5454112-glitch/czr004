@@ -209,9 +209,11 @@ def read_rows(path: str | Path) -> list[dict[str, str]]:
 
 
 def source_license_status(root: Path, default: str) -> str:
-    for name in ["LICENSE", "LICENSE.md", "LICENSE.txt", "COPYING", "README.md", "README.txt"]:
-        path = root / name
-        if path.exists() and path.is_file():
+    preferred = ["LICENSE", "LICENSE.md", "LICENSE.txt", "COPYING", "README.md", "README.txt"]
+    entries = {path.name.lower(): path for path in root.iterdir()} if root.exists() else {}
+    for name in preferred:
+        path = entries.get(name.lower())
+        if path is not None and path.exists() and path.is_file():
             digest = sha256_file(path)
             return f"metadata_only_raw_not_committed; license_file={rel(path)}; license_sha256={digest}"
     return default

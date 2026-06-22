@@ -1,6 +1,6 @@
 {
   "benchmark_root": "external/benchmarks",
-  "created_unix": 1782127298.0372043,
+  "created_unix": 1782129581.4793482,
   "decision": "g567_public_benchmark_ingestion_ready",
   "failure_count": 0,
   "failures": [],
@@ -56,7 +56,7 @@
     {
       "git_branch_requested": "init-LNS",
       "git_commit": "1369823985a15944f9a339226d521f61605a6d17",
-      "license_and_redistribution_status": "metadata_only_raw_not_committed; license_file=external/benchmarks/mapf_lns2/LICENSE.txt; license_sha256=c1d5fa9610af1878c49a8334dda7c450db913a8a49fdfb19cd0abd0d704bc2ea",
+      "license_and_redistribution_status": "metadata_only_raw_not_committed; license_file=external/benchmarks/mapf_lns2/license.txt; license_sha256=c1d5fa9610af1878c49a8334dda7c450db913a8a49fdfb19cd0abd0d704bc2ea",
       "local_source_path": "external/benchmarks/mapf_lns2",
       "source_key": "mapf_lns2",
       "source_provenance": "1369823985a15944f9a339226d521f61605a6d17",

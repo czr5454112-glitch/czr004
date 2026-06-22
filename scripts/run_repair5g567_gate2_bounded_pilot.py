@@ -210,7 +210,7 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Run bounded Gate-2 pilot after G5.67 Gate-1 passes.")
     parser.add_argument("--context-count", type=int, default=76)
     parser.add_argument("--seed", type=int, default=2567)
-    parser.add_argument("--agent-tiers", default="1000,2000,3000")
+    parser.add_argument("--agent-tiers", default="2000,3000")
     parser.add_argument("--binary", type=Path, default=Path("build/phase1a-batch/phase1a_batch"))
     parser.add_argument("--max-workers", type=int, default=1)
     parser.add_argument("--device", default="auto")

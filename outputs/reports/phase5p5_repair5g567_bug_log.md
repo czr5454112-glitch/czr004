@@ -76,6 +76,14 @@ Date: 2026-06-22 Asia/Shanghai
 
    Fix: added `scripts/server_start_repair5g567_stage2a_direct_exact.sh`, which requires `G567_EXPECTED_HEAD`, writes rc and atomic final summary on normal exit/fail-closed/exception/SIGTERM, records forbidden full-run actions as false, and writes stale-marker evidence if a previous run died without final summary.
 
+12. Full launcher did not have a fresh manual GPT-Pro approval barrier.
+
+   Symptom: `scripts/server_start_repair5g567_full.sh` had source/disk gates, but if invoked after technical gates it would proceed directly into 100k context generation and the full campaign. This was too easy to misinterpret as "all automated gates passed, so continue."
+
+   Fix: full launch now requires `G567_FULL_MANUAL_APPROVAL` to exactly equal `APPROVE_G567_FULL_$(git rev-parse HEAD)`. Without that fresh user-provided token it exits with decision `g567_full_campaign_waiting_for_manual_gptpro_review`. Codex must not set, guess, or generate this variable.
+
+   Regression test: `tests/test_repair5g567_full_manual_approval.py`.
+
 ## Existing Repairs Verified By Gates
 
 - A5 uses OD Perceiver instead of full OD self-attention for 3000 OD tokens.
@@ -109,3 +117,7 @@ Date: 2026-06-22 Asia/Shanghai
 6. Extreme-tail contexts remain an audit panel until direct exact is stable.
 
    Do not delete `tunnel`, `cross`, or `connector`. Keep failed high-density combinations in the timeout/tail audit and reintroduce them through curriculum after direct exact execution is stable.
+
+7. Full campaign remains under absolute manual lock.
+
+   Gate pass status, available GPU time, clean worktree, or disk availability must never be treated as full-campaign approval. Full can only start after Gate-3B evidence is reviewed and a new user message provides `APPROVE_G567_FULL_<EXACT_COMMIT_SHA>`.

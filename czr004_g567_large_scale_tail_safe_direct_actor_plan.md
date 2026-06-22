@@ -2474,3 +2474,64 @@ Tail handling:
   combinations as an extreme-tail audit panel, exclude them from diagnostic
   training until direct exact is stable, then reintroduce through curriculum.
 ```
+
+Critical manual-approval barrier:
+
+```text
+This plan does not authorize Gate-3B or the full G5.67 campaign, even if all
+technical gates later pass.
+
+Required stopping points:
+
+STOP 1:
+  After timeout/nested-deadline repair and the targeted tunnel/cross/connector
+  reproducer, stop and report all evidence.
+
+STOP 2:
+  After Stage-2A reaches 256/256 completed rows, zero hard timeouts, valid rc,
+  valid final summary, and a true diagnostic A5 checkpoint, stop and report.
+  Do not automatically launch Gate-3A unless it was explicitly included in the
+  current approved bounded task.
+
+STOP 3:
+  After true A5 Gate-3A passes, stop all tmux sessions and solver/GPU processes,
+  sync artifacts to GitHub, and report the exact commit and evidence. Do not
+  launch Gate-3B automatically.
+
+STOP 4:
+  Gate-3B may run only after a new explicit user/GPT-Pro approval. After Gate-3B
+  completes, stop again and report exact HEAD, context and solver-row counts,
+  timeout/crash rates, public-map and official-scenario proportions,
+  Label-v5.4 distribution, critic calibration, A/B/C development results,
+  GPU-active hours, and full-campaign storage estimate.
+
+Absolute full-campaign lock:
+  Under no circumstances may Codex launch server_start_repair5g567_full.sh,
+  100k+ context generation, 1M+ solver acquisition, 48h+ training, final blind
+  feature materialization, or final blind solver replay unless a new user
+  message is received after GPT Pro reviews Gate-3B evidence.
+
+  Passing Stage-2A, Gate-3A, or Gate-3B does not grant full-campaign permission.
+  Approval cannot be inferred from an earlier plan, previous prompt, automated
+  gates passing, available GPU time, available disk, or an existing tmux session.
+
+  The exact full approval must contain:
+    APPROVE_G567_FULL_<EXACT_COMMIT_SHA>
+
+  Without that exact fresh approval token, the required decision is:
+    g567_full_campaign_waiting_for_manual_gptpro_review
+
+  Codex must not set, guess, or generate G567_FULL_MANUAL_APPROVAL. That
+  environment variable can only be provided explicitly by the user after
+  Gate-3B evidence is reviewed.
+
+  server_start_repair5g567_full.sh now enforces this in code by comparing:
+    G567_FULL_MANUAL_APPROVAL == APPROVE_G567_FULL_$(git rev-parse HEAD)
+
+Fixed execution order:
+  timeout repair -> targeted reproducer -> stop/report -> Stage-2A ->
+  stop/report -> true Gate-3A only after explicit bounded approval ->
+  stop/report -> user/GPT-Pro review -> Gate-3B only after new approval ->
+  stop/report -> final full review -> user-provided APPROVE_G567_FULL_<SHA> ->
+  full campaign may start.
+```

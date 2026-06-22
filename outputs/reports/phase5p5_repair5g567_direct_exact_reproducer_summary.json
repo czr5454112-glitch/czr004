@@ -1,0 +1,14 @@
+{
+  "contexts": 3,
+  "current_clipped_probe_hard_timeouts": 0,
+  "decision": "direct_exact_reproducer_completed",
+  "direct_exact_hard_timeouts": 0,
+  "max_current_clipped_probe_wall_elapsed_sec": 41.786764,
+  "max_direct_exact_wall_elapsed_sec": 38.352189,
+  "max_old_outer_probe_wall_elapsed_sec": 76.195668,
+  "notes": "A uses old cae91e4c static-flow outer plus additive counterfactual probe; B uses current 407cd620 direct additive primary with no probe; C uses current static-flow outer plus requested 3s diagnostic probe clipped to parent deadline.",
+  "old_outer_probe_hard_timeouts": 2,
+  "rows": 9,
+  "schema_version": "phase5p5_repair5g567_direct_exact_reproducer_v1",
+  "table": "outputs/tables/phase5p5_repair5g567_direct_exact_reproducer.csv"
+}

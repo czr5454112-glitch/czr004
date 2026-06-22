@@ -160,3 +160,38 @@ Implemented local repair after this report:
 - Stage-2A has a committed tmux runner wrapper that writes rc and atomic final summary.
 
 This report is historical evidence only. Gate-3A remains locked until the repaired direct-exact Stage-2A rerun completes 256/256 rows with zero hard timeouts and produces the true diagnostic A5 checkpoint.
+
+## Direct-Exact Reproducer
+
+STOP 1 targeted reproducer was run on the RTX5090 server at commit `407cd6202c5f169ce0f6cfa98e9c3994b21ce6a6`.
+
+Evidence:
+
+- `outputs/reports/phase5p5_repair5g567_direct_exact_reproducer.md`
+- `outputs/reports/phase5p5_repair5g567_direct_exact_reproducer_summary.json`
+- `outputs/tables/phase5p5_repair5g567_direct_exact_reproducer.csv`
+- `outputs/reports/phase5p5_repair5g567_direct_exact_reproducer/`
+
+Result:
+
+- Old static-flow outer + additive 30s counterfactual probe hard-timeout rows: `2/3`
+- Current direct additive exact rows hard-timeout rows: `0/3`
+- Current parent-clipped diagnostic probe rows hard-timeout rows: `0/3`
+
+This confirms that the observed r5 timeout pattern belongs to the nested probe path, not direct exact primary-row execution.
+
+## Manual Approval Lock
+
+Full G5.67 remains absolutely locked. `scripts/server_start_repair5g567_full.sh` now requires:
+
+```bash
+G567_FULL_MANUAL_APPROVAL == APPROVE_G567_FULL_$(git rev-parse HEAD)
+```
+
+Codex must not set, guess, or generate this variable. Without a fresh user-provided approval token after GPT Pro reviews Gate-3B evidence, the required decision is:
+
+```text
+g567_full_campaign_waiting_for_manual_gptpro_review
+```
+
+Passing Stage-2A, Gate-3A, or Gate-3B does not grant full-campaign permission.

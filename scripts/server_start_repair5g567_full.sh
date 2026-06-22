@@ -13,6 +13,12 @@ fail_source_gate() {
 git rev-parse --is-inside-work-tree >/dev/null 2>&1 || fail_source_gate "missing Git metadata"
 actual_head="$(git rev-parse HEAD)" || fail_source_gate "unable to read HEAD"
 [[ "$actual_head" == "$G567_EXPECTED_HEAD" ]] || fail_source_gate "wrong HEAD actual=$actual_head expected=$G567_EXPECTED_HEAD"
+expected_approval="APPROVE_G567_FULL_${actual_head}"
+if [[ "${G567_FULL_MANUAL_APPROVAL:-}" != "$expected_approval" ]]; then
+  echo "G5.67 full campaign blocked: fresh manual GPT-Pro approval required" >&2
+  echo "decision=g567_full_campaign_waiting_for_manual_gptpro_review" >&2
+  exit 2
+fi
 status_short="$(git status --short)" || fail_source_gate "unable to read git status"
 [[ -z "$status_short" ]] || fail_source_gate "dirty git status: $status_short"
 submodule_status="$(git submodule status --recursive)" || fail_source_gate "unable to read submodule status"

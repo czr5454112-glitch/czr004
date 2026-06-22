@@ -102,6 +102,40 @@
     "gate3b_launched_after_repair": false,
     "full_campaign_launched_after_repair": false
   },
+  "direct_exact_reproducer": {
+    "decision": "direct_exact_reproducer_completed",
+    "commit": "407cd6202c5f169ce0f6cfa98e9c3994b21ce6a6",
+    "contexts": 3,
+    "rows": 9,
+    "old_outer_probe_hard_timeouts": 2,
+    "direct_exact_hard_timeouts": 0,
+    "current_clipped_probe_hard_timeouts": 0,
+    "max_old_outer_probe_wall_elapsed_sec": 76.195668,
+    "max_direct_exact_wall_elapsed_sec": 38.352189,
+    "max_current_clipped_probe_wall_elapsed_sec": 41.786764,
+    "report": "outputs/reports/phase5p5_repair5g567_direct_exact_reproducer.md",
+    "summary": "outputs/reports/phase5p5_repair5g567_direct_exact_reproducer_summary.json",
+    "table": "outputs/tables/phase5p5_repair5g567_direct_exact_reproducer.csv",
+    "stop1_satisfied_report_required": true
+  },
+  "stage2a_direct_exact_attempt_after_reproducer": {
+    "decision": "stage2a_blocked_missing_seed_actor_checkpoint",
+    "rc": 2,
+    "head": "407cd6202c5f169ce0f6cfa98e9c3994b21ce6a6",
+    "full_campaign_launched": false,
+    "gate3a_launched": false,
+    "gate3b_launched": false
+  },
+  "manual_approval_barrier": {
+    "decision_without_token": "g567_full_campaign_waiting_for_manual_gptpro_review",
+    "full_launcher_guard_added": true,
+    "approval_env_var": "G567_FULL_MANUAL_APPROVAL",
+    "required_token_format": "APPROVE_G567_FULL_<EXACT_COMMIT_SHA>",
+    "codex_must_not_set_guess_or_generate_approval": true,
+    "stage2a_pass_does_not_authorize_full": true,
+    "gate3a_pass_does_not_authorize_full": true,
+    "gate3b_pass_does_not_authorize_full": true
+  },
   "not_run": {
     "full_100k_context_generation": true,
     "million_row_solver_acquisition": true,
@@ -112,6 +146,7 @@
   },
   "open_risks": [
     "Direct-exact Stage-2A remote rerun has not yet completed after the nested-probe repair",
+    "Stage-2A direct-exact attempt after STOP1 failed closed because the seed actor checkpoint glob was missing",
     "tunnel/cross/connector extreme-tail contexts remain in timeout/tail audit until direct exact is stable",
     "Gate-3A true A5 checkpoint smoke has not been launched",
     "Gate-2 is bounded pilot evidence only"

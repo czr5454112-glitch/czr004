@@ -1,0 +1,47 @@
+{
+  "aaai_ready": false,
+  "actor_export_includes_critic": false,
+  "binary_brier_mean": 0.026927984462927473,
+  "crossfit_folds": 5,
+  "crossfit_unit": "physical_map_hash",
+  "decision": "g566_distributional_critic_calibrated",
+  "delta_oof_mae_mean": 0.36327527057113085,
+  "effort_log_oof_mae_mean": 1.1908387856515852,
+  "ensemble_seeds": [
+    566,
+    567,
+    568
+  ],
+  "labelv53_candidates": 50048,
+  "learned_runtime_policy_validated": false,
+  "outputs": [
+    "P(success regression vs additive/static_flow/g556) with UCB",
+    "P(success gain) with LCB",
+    "quality delta q10/q50/q90/q95 for all three tiers",
+    "harmful_quality_cvar",
+    "runtime/search-effort q50/q90",
+    "epistemic_uncertainty"
+  ],
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "physical_map_leakage_violations": 0,
+  "physical_maps": 35,
+  "prediction_coverage_rows": 50048,
+  "prediction_rows": 50048,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g566_distributional_critic_summary_v1",
+  "targets": [
+    "success_regression_vs_additive",
+    "success_regression_vs_static_flow",
+    "success_regression_vs_g556",
+    "success_gain",
+    "delta_vs_additive",
+    "delta_vs_static_flow",
+    "delta_vs_g556",
+    "log_actor_runtime_ms",
+    "log_actor_expanded_nodes",
+    "log_actor_low_level_pibt_calls"
+  ],
+  "training_only_critic": true,
+  "usable_rows": 50048
+}

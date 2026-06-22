@@ -26,6 +26,7 @@ ARCHITECTURES = {
     "A0": ActorArchitecture("A0", "f6_lite_goal_aware_graph_actor"),
     "A1": ActorArchitecture("A1", "dual_stream_c0_f0_graph_actor"),
     "A2": ActorArchitecture("A2", "od_graph_cross_attention_actor", use_cross_attention=True),
+    "A3": ActorArchitecture("A3", "safe_residual_subspace_actor", use_cross_attention=True, safe_subspace=True),
     "A4": ActorArchitecture("A4", "field_group_trust_safe_subspace_actor", use_cross_attention=True, safe_subspace=True, field_group_trust=True),
 }
 

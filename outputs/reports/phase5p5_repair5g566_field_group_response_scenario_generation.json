@@ -1,0 +1,258 @@
+{
+  "agent_counts": [
+    8
+  ],
+  "created_at": "2026-06-22T11:20:21.460925",
+  "effective_instance_ids": [
+    566000139,
+    566000399,
+    566000659,
+    566000919,
+    566001179,
+    566001439,
+    566001699,
+    566001959,
+    566002219,
+    566002479,
+    566002739,
+    566002999,
+    566003259,
+    566003519,
+    566003779,
+    566004039,
+    566004299,
+    566004559,
+    566004819,
+    566005079,
+    566005339
+  ],
+  "final_missing_count": 0,
+  "final_missing_examples": [],
+  "generated_count": 21,
+  "generated_examples": [
+    {
+      "instance_id": 566000139,
+      "map": "g566-tree-32x32-a-v3",
+      "path": "outputs/tmp/phase5p5_repair5g566_replay_scenarios/g566-tree-32x32-a-v3-random-566000139.scen"
+    },
+    {
+      "instance_id": 566000399,
+      "map": "g566-tree-32x32-a-v3",
+      "path": "outputs/tmp/phase5p5_repair5g566_replay_scenarios/g566-tree-32x32-a-v3-random-566000399.scen"
+    },
+    {
+      "instance_id": 566000659,
+      "map": "g566-tree-32x32-a-v3",
+      "path": "outputs/tmp/phase5p5_repair5g566_replay_scenarios/g566-tree-32x32-a-v3-random-566000659.scen"
+    },
+    {
+      "instance_id": 566000919,
+      "map": "g566-tree-32x32-a-v3",
+      "path": "outputs/tmp/phase5p5_repair5g566_replay_scenarios/g566-tree-32x32-a-v3-random-566000919.scen"
+    },
+    {
+      "instance_id": 566001179,
+      "map": "g566-tree-32x32-a-v3",
+      "path": "outputs/tmp/phase5p5_repair5g566_replay_scenarios/g566-tree-32x32-a-v3-random-566001179.scen"
+    },
+    {
+      "instance_id": 566001439,
+      "map": "g566-tree-32x32-a-v3",
+      "path": "outputs/tmp/phase5p5_repair5g566_replay_scenarios/g566-tree-32x32-a-v3-random-566001439.scen"
+    },
+    {
+      "instance_id": 566001699,
+      "map": "g566-tree-32x32-a-v3",
+      "path": "outputs/tmp/phase5p5_repair5g566_replay_scenarios/g566-tree-32x32-a-v3-random-566001699.scen"
+    },
+    {
+      "instance_id": 566001959,
+      "map": "g566-tree-32x32-a-v3",
+      "path": "outputs/tmp/phase5p5_repair5g566_replay_scenarios/g566-tree-32x32-a-v3-random-566001959.scen"
+    },
+    {
+      "instance_id": 566002219,
+      "map": "g566-tree-32x32-a-v3",
+      "path": "outputs/tmp/phase5p5_repair5g566_replay_scenarios/g566-tree-32x32-a-v3-random-566002219.scen"
+    },
+    {
+      "instance_id": 566002479,
+      "map": "g566-tree-32x32-a-v3",
+      "path": "outputs/tmp/phase5p5_repair5g566_replay_scenarios/g566-tree-32x32-a-v3-random-566002479.scen"
+    },
+    {
+      "instance_id": 566002739,
+      "map": "g566-tree-32x32-a-v3",
+      "path": "outputs/tmp/phase5p5_repair5g566_replay_scenarios/g566-tree-32x32-a-v3-random-566002739.scen"
+    },
+    {
+      "instance_id": 566002999,
+      "map": "g566-tree-32x32-a-v3",
+      "path": "outputs/tmp/phase5p5_repair5g566_replay_scenarios/g566-tree-32x32-a-v3-random-566002999.scen"
+    },
+    {
+      "instance_id": 566003259,
+      "map": "g566-tree-32x32-a-v3",
+      "path": "outputs/tmp/phase5p5_repair5g566_replay_scenarios/g566-tree-32x32-a-v3-random-566003259.scen"
+    },
+    {
+      "instance_id": 566003519,
+      "map": "g566-tree-32x32-a-v3",
+      "path": "outputs/tmp/phase5p5_repair5g566_replay_scenarios/g566-tree-32x32-a-v3-random-566003519.scen"
+    },
+    {
+      "instance_id": 566003779,
+      "map": "g566-tree-32x32-a-v3",
+      "path": "outputs/tmp/phase5p5_repair5g566_replay_scenarios/g566-tree-32x32-a-v3-random-566003779.scen"
+    },
+    {
+      "instance_id": 566004039,
+      "map": "g566-tree-32x32-a-v3",
+      "path": "outputs/tmp/phase5p5_repair5g566_replay_scenarios/g566-tree-32x32-a-v3-random-566004039.scen"
+    },
+    {
+      "instance_id": 566004299,
+      "map": "g566-tree-32x32-a-v3",
+      "path": "outputs/tmp/phase5p5_repair5g566_replay_scenarios/g566-tree-32x32-a-v3-random-566004299.scen"
+    },
+    {
+      "instance_id": 566004559,
+      "map": "g566-tree-32x32-a-v3",
+      "path": "outputs/tmp/phase5p5_repair5g566_replay_scenarios/g566-tree-32x32-a-v3-random-566004559.scen"
+    },
+    {
+      "instance_id": 566004819,
+      "map": "g566-tree-32x32-a-v3",
+      "path": "outputs/tmp/phase5p5_repair5g566_replay_scenarios/g566-tree-32x32-a-v3-random-566004819.scen"
+    },
+    {
+      "instance_id": 566005079,
+      "map": "g566-tree-32x32-a-v3",
+      "path": "outputs/tmp/phase5p5_repair5g566_replay_scenarios/g566-tree-32x32-a-v3-random-566005079.scen"
+    }
+  ],
+  "generated_missing_scenarios": true,
+  "generator_policy": {
+    "base_seed": 20260522,
+    "equivalent_command": "python scripts/generate_phase1a_scenarios.py --manifest <f4 maps with instances 26..45> --output-dir outputs/tmp/phase5p5_repair5g566_replay_scenarios --base-seed 20260522",
+    "script_version": "phase1a-scenario-generator-v1",
+    "seed_function": "sha256(script_version|base_seed|map_name|instance_id)",
+    "source": "scripts/generate_phase1a_scenarios.py functions"
+  },
+  "initial_missing_count": 0,
+  "initial_missing_examples": [],
+  "reduced_scope_reason": "",
+  "requested_instance_ids": [
+    566000139,
+    566000399,
+    566000659,
+    566000919,
+    566001179,
+    566001439,
+    566001699,
+    566001959,
+    566002219,
+    566002479,
+    566002739,
+    566002999,
+    566003259,
+    566003519,
+    566003779,
+    566004039,
+    566004299,
+    566004559,
+    566004819,
+    566005079,
+    566005339
+  ],
+  "requested_maps": [
+    "g566-tree-32x32-a-v3"
+  ],
+  "scenario_dir": "outputs/tmp/phase5p5_repair5g566_replay_scenarios",
+  "scenario_metadata": "outputs/reports/phase5p5_repair5g566_field_group_response_scenario_generation.json",
+  "schema_version": "phase5p5_repair5f4_scenario_generation_v1",
+  "source_missing_count": 21,
+  "source_missing_examples": [
+    {
+      "instance_id": 566000139,
+      "map": "g566-tree-32x32-a-v3"
+    },
+    {
+      "instance_id": 566000399,
+      "map": "g566-tree-32x32-a-v3"
+    },
+    {
+      "instance_id": 566000659,
+      "map": "g566-tree-32x32-a-v3"
+    },
+    {
+      "instance_id": 566000919,
+      "map": "g566-tree-32x32-a-v3"
+    },
+    {
+      "instance_id": 566001179,
+      "map": "g566-tree-32x32-a-v3"
+    },
+    {
+      "instance_id": 566001439,
+      "map": "g566-tree-32x32-a-v3"
+    },
+    {
+      "instance_id": 566001699,
+      "map": "g566-tree-32x32-a-v3"
+    },
+    {
+      "instance_id": 566001959,
+      "map": "g566-tree-32x32-a-v3"
+    },
+    {
+      "instance_id": 566002219,
+      "map": "g566-tree-32x32-a-v3"
+    },
+    {
+      "instance_id": 566002479,
+      "map": "g566-tree-32x32-a-v3"
+    },
+    {
+      "instance_id": 566002739,
+      "map": "g566-tree-32x32-a-v3"
+    },
+    {
+      "instance_id": 566002999,
+      "map": "g566-tree-32x32-a-v3"
+    },
+    {
+      "instance_id": 566003259,
+      "map": "g566-tree-32x32-a-v3"
+    },
+    {
+      "instance_id": 566003519,
+      "map": "g566-tree-32x32-a-v3"
+    },
+    {
+      "instance_id": 566003779,
+      "map": "g566-tree-32x32-a-v3"
+    },
+    {
+      "instance_id": 566004039,
+      "map": "g566-tree-32x32-a-v3"
+    },
+    {
+      "instance_id": 566004299,
+      "map": "g566-tree-32x32-a-v3"
+    },
+    {
+      "instance_id": 566004559,
+      "map": "g566-tree-32x32-a-v3"
+    },
+    {
+      "instance_id": 566004819,
+      "map": "g566-tree-32x32-a-v3"
+    },
+    {
+      "instance_id": 566005079,
+      "map": "g566-tree-32x32-a-v3"
+    }
+  ],
+  "source_scenario_dir": "outputs/tmp/phase1a/generated/phase1a-generated-random"
+}

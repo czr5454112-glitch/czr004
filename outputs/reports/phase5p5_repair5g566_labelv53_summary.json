@@ -1,0 +1,21 @@
+{
+  "aaai_ready": false,
+  "applied_margin": 0.05,
+  "applied_margin_source": "outputs/reports/phase5p5_repair5g566_repeatability_summary.json",
+  "candidates": 50048,
+  "contexts": 1021,
+  "decision": "g566_labelv53_valid_replicated_tail_materialized",
+  "harmful_candidates": 2532,
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "positive_candidates": 41969,
+  "replicate_rows": 48,
+  "runtime_claim_allowed": false,
+  "safe_candidates": 50018,
+  "schema_version": "phase5p5_repair5g566_labelv53_summary_v1",
+  "source_pair_files": [
+    "outputs/tables/phase5p5_repair5g566_field_group_response_pairs.csv",
+    "outputs/tables/phase5p5_repair5g566_repeatability_single_worker_pairs.csv"
+  ]
+}

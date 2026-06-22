@@ -1,0 +1,8 @@
+{
+  "completed_context_horizon_tasks": 1500,
+  "completed_solver_rows": 12000,
+  "last_task": {},
+  "phase": "solver_complete",
+  "schema_version": "phase5p5_repair5g549_run_status_v1",
+  "total_context_horizon_tasks": 1500
+}

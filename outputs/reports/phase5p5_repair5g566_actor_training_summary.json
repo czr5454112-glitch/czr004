@@ -1,0 +1,44 @@
+{
+  "aaai_ready": false,
+  "codebook_included_for_export": false,
+  "critic_included_for_export": false,
+  "decision": "g566_labelv53_direct_actor_training_completed",
+  "device": "cuda",
+  "elapsed_sec": 5466.807711985894,
+  "examples": 1021,
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "positive_example_contexts": 958,
+  "rows": 18,
+  "runtime_claim_allowed": false,
+  "safe_example_contexts": 1021,
+  "schema_version": "phase5p5_repair5g566_actor_training_summary_v1",
+  "seeds": [
+    566,
+    567,
+    568
+  ],
+  "selected_development_checkpoint_paths": [
+    "artifacts/models/gcst/phase5p5_repair5g566_c0_scalar_context_control_seed568.pt",
+    "artifacts/models/gcst/phase5p5_repair5g566_a2_od_graph_cross_attention_actor_seed568.pt",
+    "artifacts/models/gcst/phase5p5_repair5g566_a0_f6_lite_goal_aware_graph_actor_seed568.pt",
+    "artifacts/models/gcst/phase5p5_repair5g566_a1_dual_stream_c0_f0_graph_actor_seed568.pt"
+  ],
+  "selected_rich_actor_paths": [
+    "artifacts/models/gcst/phase5p5_repair5g566_a2_od_graph_cross_attention_actor_seed568.pt",
+    "artifacts/models/gcst/phase5p5_repair5g566_a0_f6_lite_goal_aware_graph_actor_seed568.pt",
+    "artifacts/models/gcst/phase5p5_repair5g566_a1_dual_stream_c0_f0_graph_actor_seed568.pt"
+  ],
+  "selected_scalar_control_paths": [
+    "artifacts/models/gcst/phase5p5_repair5g566_c0_scalar_context_control_seed568.pt"
+  ],
+  "variants": [
+    "C0",
+    "A0",
+    "A1",
+    "A2",
+    "A3",
+    "A4"
+  ]
+}

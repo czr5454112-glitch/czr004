@@ -1,0 +1,27 @@
+{
+  "aaai_ready": false,
+  "decision": "g566_valid_scaling_recorded_from_development_replay",
+  "learned_runtime_policy_validated": false,
+  "matrix_path": "outputs/tables/phase5p5_repair5g566_valid_scaling_matrix.csv",
+  "methods": [
+    "B0",
+    "B1",
+    "B2",
+    "A0",
+    "A1",
+    "A2",
+    "A3",
+    "A4"
+  ],
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "rows": 32,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g566_valid_scaling_summary_v1",
+  "sizes": [
+    "512",
+    "1000",
+    "2000",
+    "all-valid"
+  ]
+}

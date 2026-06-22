@@ -1,0 +1,18 @@
+{
+  "aaai_ready": false,
+  "baseline_registry_sha256": "7a13c68754941129a943f993655c1c9feb592484aae47fe89792968ab8099fcd",
+  "blind_manifest_sha256": "d1aaf8cfd05aef7c6c3f7ce9e8ee8811e5c40d7895a1da4f39d0b7c4404e2b71",
+  "candidate_checkpoint_hashes": {
+    "artifacts/models/gcst/phase5p5_repair5g566_a1_dual_stream_c0_f0_graph_actor_seed568.pt": "58f1e3dcdba887c3f76df2fbaa6d37685d2000d58537da05d8f86e6f9f64acc4",
+    "artifacts/models/gcst/phase5p5_repair5g566_a2_od_graph_cross_attention_actor_seed568.pt": "6e4470c3f9454987132e9aff998b03390d2ea9b5ec2d3c3bc4e87dadb1ad27f2"
+  },
+  "candidate_checkpoints": [
+    "artifacts/models/gcst/phase5p5_repair5g566_a1_dual_stream_c0_f0_graph_actor_seed568.pt",
+    "artifacts/models/gcst/phase5p5_repair5g566_a2_od_graph_cross_attention_actor_seed568.pt"
+  ],
+  "decision_rules_sha256": "cc7aa95bbc38210f0dc2c63368dbc5da99e58cc760a4075104ec6d165354f1fc",
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false
+}

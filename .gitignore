@@ -45,3 +45,9 @@ external/**/build*/
 
 repair5g511_*.tar
 repair5g511_*.tar.gz
+
+# G5.66 raw CSVs exceed GitHub's normal 100 MB object limit; commit the
+# matching .csv.gz archives instead.
+outputs/tables/phase5p5_repair5g566_field_group_response_plan.csv
+outputs/tables/phase5p5_repair5g566_field_group_response_results.csv
+outputs/tables/phase5p5_repair5g566_field_group_response_results.raw.csv

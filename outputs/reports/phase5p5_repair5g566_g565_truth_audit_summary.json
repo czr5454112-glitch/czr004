@@ -1,0 +1,23 @@
+{
+  "aaai_ready": false,
+  "alpha_response_decision": "g565_alpha_calibration_no_gain",
+  "decision": "g565_complete_but_g566_requires_new_three_tier_valid_blind",
+  "expanded_solver_decision": "g565_expanded_solver_panel_tail_blocked",
+  "fresh_solver_decision": "g565_fresh_solver_transfer_tail_blocked",
+  "g565_alpha_trust_head_trained": false,
+  "g565_applied_quality_margin": 0,
+  "g565_blind_panel_still_available": false,
+  "g565_complete": true,
+  "g565_expanded_split_physical_map_grouped": false,
+  "g565_merge_includes_fresh_expanded_alpha": false,
+  "g565_reported_margin": 0.042975206619999984,
+  "g565_tierA_retrospective_signal": "strong",
+  "g565_tierB_explicit_replay": false,
+  "g565_tierC_deployment_supported": false,
+  "g565_valid_only_enforced": false,
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g566_g565_truth_audit_summary_v1"
+}

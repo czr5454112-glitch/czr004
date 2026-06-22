@@ -1,0 +1,15 @@
+{
+  "aaai_ready": false,
+  "decision": "g566_repeatability_margin_calibrated",
+  "fallback_g565_margin": 0.042975206619999984,
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "recommended_harmful_margin": 0.05,
+  "recommended_positive_margin": 0.05,
+  "runtime_claim_allowed": false,
+  "same_pair_repeats": 48,
+  "schema_version": "phase5p5_repair5g566_repeatability_summary_v1",
+  "source_replay_phase": "repeatability_single_worker",
+  "worker_contention_compared": true
+}

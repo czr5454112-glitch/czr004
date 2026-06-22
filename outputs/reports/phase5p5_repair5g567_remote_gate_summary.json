@@ -144,6 +144,13 @@
     "new_default_context_pool": 2048,
     "tiers_or_row_count_reduced": false
   },
+  "gate3a_device_normalization_repair": {
+    "decision": "gate3a_auto_device_now_normalized",
+    "failed_attempt_head": "a9f5d8b8f73ba6ab628d025ffe7d183d67ae767b",
+    "failed_before_solver_replay": true,
+    "failure": "torch_load_map_location_auto",
+    "fix": "normalize auto to cuda when available otherwise cpu before torch.load and tensor placement"
+  },
   "manual_approval_barrier": {
     "decision_without_token": "g567_full_campaign_waiting_for_manual_gptpro_review",
     "full_launcher_guard_added": true,
@@ -168,6 +175,7 @@
   "open_risks": [
     "Direct-exact Stage-2A remote rerun has not yet completed after the nested-probe repair",
     "Stage-2A must be rerun with sparse checkout disabled and expanded 2048 context pool",
+    "Gate-3A must be rerun after auto-device normalization repair",
     "tunnel/cross/connector extreme-tail contexts remain in timeout/tail audit until direct exact is stable",
     "Gate-3A true A5 checkpoint smoke has not been launched",
     "Gate-2 is bounded pilot evidence only"

@@ -192,6 +192,12 @@ After the sparse checkout repair, Stage-2A still failed before solver execution 
 
 Repair: Stage-2A now defaults to a 2048-context pool while keeping 64 selected contexts, 4 diagnostic tiers, 256 direct-exact rows, and uniform 30s/60s budget semantics.
 
+## Gate-3A Device Normalization Repair
+
+The first true A5 Gate-3A attempt after Stage-2A generated the 2048-context pool but failed before replay because checkpoint inference passed `device=auto` directly into `torch.load(map_location=...)`.
+
+Repair: checkpoint inference now normalizes `auto` to `cuda` when available, otherwise `cpu`, before loading the checkpoint and moving tensors. This preserves the true A5 task and does not change the Gate-3A context or solver requirements.
+
 ## Manual Approval Lock
 
 The user revoked the stage-by-stage manual wait mechanism. Stage-2A, true A5 Gate-3A, and Gate-3B proceed only under the previously approved technical gates and bounded-run limits.

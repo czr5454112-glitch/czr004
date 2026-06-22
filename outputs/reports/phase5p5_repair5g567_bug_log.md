@@ -100,6 +100,14 @@ Date: 2026-06-22 Asia/Shanghai
 
    Regression test: `tests/test_repair5g567_stage2a_diagnostic.py`.
 
+15. Gate-3A checkpoint inference passed `auto` directly to `torch.load`.
+
+   Symptom: true A5 Gate-3A generated the context pool but failed before replay with `RuntimeError: don't know how to restore data location ... tagged with auto`, because `infer_checkpoint_thetas(..., device="auto")` used `torch.load(..., map_location="auto")`.
+
+   Fix: `infer_checkpoint_thetas` now normalizes `auto` to `cuda` when CUDA is available, otherwise `cpu`, before checkpoint loading and tensor placement.
+
+   Regression test: `tests/test_repair5g567_gate3a_preflight.py`.
+
 ## Existing Repairs Verified By Gates
 
 - A5 uses OD Perceiver instead of full OD self-attention for 3000 OD tokens.

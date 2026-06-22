@@ -1271,13 +1271,21 @@ def load_model_for_payload(payload: dict[str, Any], path: Path, device: str):
     return model, kind
 
 
+def normalize_torch_device(device: str, *, cuda_available: bool) -> str:
+    requested = str(device or "auto")
+    if requested == "auto":
+        return "cuda" if cuda_available else "cpu"
+    return requested
+
+
 def infer_checkpoint_thetas(contexts: list[G567Context], checkpoint_paths: list[Path], *, device: str, batch_size: int, phase: str) -> list[dict[str, Any]]:
     import torch
 
+    resolved_device = normalize_torch_device(device, cuda_available=torch.cuda.is_available())
     rows: list[dict[str, Any]] = []
     for path in checkpoint_paths:
-        payload = torch.load(resolve(path), map_location=device, weights_only=False)
-        model, kind = load_model_for_payload(payload, resolve(path), device)
+        payload = torch.load(resolve(path), map_location=resolved_device, weights_only=False)
+        model, kind = load_model_for_payload(payload, resolve(path), resolved_device)
         for start in range(0, len(contexts), batch_size):
             batch = contexts[start : start + batch_size]
             with torch.no_grad():
@@ -1286,13 +1294,13 @@ def infer_checkpoint_thetas(contexts: list[G567Context], checkpoint_paths: list[
                 elif kind == "B2":
                     from gcst.leakage_free_features import leakage_free_scalar_vector
 
-                    scalar_x = torch.tensor(np.stack([leakage_free_scalar_vector(ctx.feature_row) for ctx in batch]), dtype=torch.float32, device=device)
+                    scalar_x = torch.tensor(np.stack([leakage_free_scalar_vector(ctx.feature_row) for ctx in batch]), dtype=torch.float32, device=resolved_device)
                     theta = model(scalar_x).detach().cpu().numpy()
                 else:
-                    graph_batch = move_graph_batch(make_graph_batch([ctx.graph_with_traffic for ctx in batch]), device)
+                    graph_batch = move_graph_batch(make_graph_batch([ctx.graph_with_traffic for ctx in batch]), resolved_device)
                     od_tokens, od_mask = pad_od_tokens([ctx.assignment for ctx in batch])
-                    scalar_x = torch.tensor(np.stack([scalar_features(ctx.feature_row) for ctx in batch]), dtype=torch.float32, device=device)
-                    theta = model(graph_batch, od_tokens.to(device), od_mask.to(device), scalar_x).detach().cpu().numpy()
+                    scalar_x = torch.tensor(np.stack([scalar_features(ctx.feature_row) for ctx in batch]), dtype=torch.float32, device=resolved_device)
+                    theta = model(graph_batch, od_tokens.to(resolved_device), od_mask.to(resolved_device), scalar_x).detach().cpu().numpy()
             for ctx, values in zip(batch, theta):
                 row = {col: float(values[idx]) for idx, col in enumerate(THETA_NUMERIC_COLUMNS)}
                 row.update(mode_columns("flow_shield"))

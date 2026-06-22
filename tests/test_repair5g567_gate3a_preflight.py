@@ -11,6 +11,12 @@ sys.path.insert(0, str(ROOT / "scripts"))
 import run_repair5g567_gate3a_preflight as gate3a  # noqa: E402
 
 
+def test_auto_device_is_resolved_before_checkpoint_load() -> None:
+    assert gate3a.g567.normalize_torch_device("auto", cuda_available=True) == "cuda"
+    assert gate3a.g567.normalize_torch_device("auto", cuda_available=False) == "cpu"
+    assert gate3a.g567.normalize_torch_device("cuda:0", cuda_available=False) == "cuda:0"
+
+
 def test_true_a5_checkpoint_audit_rejects_g556_registry_smoke_marker() -> None:
     audit = gate3a.true_a5_checkpoint_audit(
         {

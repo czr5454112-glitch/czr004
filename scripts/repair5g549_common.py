@@ -622,6 +622,10 @@ def enrich_or_placeholder(
                 "process_timeout_reason",
                 "process_elapsed_sec",
                 "process_returncode",
+                "counterfactual_probe_row_diagnostic_only",
+                "counterfactual_probe_requested_budget_ms",
+                "counterfactual_probe_effective_budget_ms",
+                "counterfactual_probe_budget_clipped_to_diagnostic_cap",
             ]:
                 row[field] = command_row.get(field, "")
         for field in [
@@ -706,6 +710,13 @@ def run_context_task(
             str(task_checkpoint),
             *checkpoint_args,
         ]
+    requested_probe_budget_ms = float(number(first.get("short_budget_ms"), nominal_budget))
+    diagnostic_probe_budget_cap_ms = float(
+        number(os.environ.get("REPAIR5G_COUNTERFACTUAL_DIAGNOSTIC_MAX_BUDGET_MS", "5000"), 5000.0)
+    )
+    if diagnostic_probe_budget_cap_ms <= 0.0:
+        diagnostic_probe_budget_cap_ms = 5000.0
+    effective_probe_budget_ms = min(requested_probe_budget_ms, diagnostic_probe_budget_cap_ms)
     spec = MethodSpec(
         STATIC_FLOW,
         alias,
@@ -718,7 +729,7 @@ def run_context_task(
             "--repair5g-counterfactual-updateparams-registry",
             str(registry_path),
             "--repair5g-counterfactual-short-budget-ms",
-            str(float(number(first.get("short_budget_ms"), nominal_budget))),
+            str(float(effective_probe_budget_ms)),
             "--repair5g-counterfactual-max-contexts",
             "1",
             "--repair5g-runtime-audit-mode",
@@ -770,6 +781,10 @@ def run_context_task(
             "horizon_id": horizon_id,
             "nominal_budget_ms": nominal_budget,
             "short_budget_ms": first.get("short_budget_ms", ""),
+            "counterfactual_probe_row_diagnostic_only": True,
+            "counterfactual_probe_requested_budget_ms": requested_probe_budget_ms,
+            "counterfactual_probe_effective_budget_ms": effective_probe_budget_ms,
+            "counterfactual_probe_budget_clipped_to_diagnostic_cap": effective_probe_budget_ms < requested_probe_budget_ms,
             "base_time_limit_sec": first.get("base_time_limit_sec", ""),
             "ltm_max_iterations": first.get("ltm_max_iterations", ""),
             "candidate_count": len(methods),

@@ -12,6 +12,7 @@ import statistics
 import subprocess
 import sys
 import time
+from concurrent.futures import FIRST_COMPLETED, ThreadPoolExecutor, wait
 from collections import Counter, defaultdict
 from dataclasses import dataclass
 from pathlib import Path
@@ -58,6 +59,9 @@ from gcst.three_tier_baselines import (  # noqa: E402
     updateparams_fingerprint,
 )
 from repair5g2_common import scenario_path  # noqa: E402
+from repair5g3_common import MethodSpec  # noqa: E402
+from repair5g5_common import DEFAULT_SOURCE_SCENARIO_DIR, run_one_solver_task  # noqa: E402
+from repair5g532_common import map_family as infer_map_family  # noqa: E402
 from run_repair5f4_static_updateparams_validation import MAPS as MAP_PATHS  # noqa: E402
 
 
@@ -1906,6 +1910,9 @@ def summarize_pairs(pairs: list[dict[str, Any]], rows: list[dict[str, Any]], pla
             else ("g567_three_tier_materialization_blocked_process_hard_timeout" if timeout_rows else "g567_three_tier_materialization_blocked")
         ),
         "replay_phase": phase,
+        "exact_execution_mode": DIRECT_EXACT_EXECUTION_MODE,
+        "counterfactual_probe_rows_are_diagnostic_only": True,
+        "counterfactual_probe_callback_enabled": False,
         "planned_rows": len(plan_rows),
         "executed_rows": len(rows),
         "process_hard_timeout_rows": timeout_rows,
@@ -1954,6 +1961,462 @@ def solver_binary(arg: Path) -> Path:
         if path.exists():
             return path
     return resolve(arg)
+
+
+DIRECT_EXACT_EXECUTION_MODE = "direct_exact_solver_row"
+COUNTERFACTUAL_DIAGNOSTIC_EXECUTION_MODE = "counterfactual_probe_row_diagnostic_only"
+
+
+DIRECT_COMMAND_FIELDS = [
+    "returncode",
+    "returncode_classification",
+    "process_hard_timeout_sec",
+    "process_hard_timeout_exceeded",
+    "process_timeout_provenance",
+    "process_timeout_platform",
+    "process_timeout_term_grace_sec",
+    "process_started_unix",
+    "process_pid",
+    "process_group_id",
+    "process_group_termination_attempted",
+    "process_timeout_sigterm_sent",
+    "process_timeout_sigterm_unix",
+    "process_timeout_sigterm_elapsed_sec",
+    "process_timeout_sigkill_sent",
+    "process_timeout_sigkill_unix",
+    "process_timeout_sigkill_elapsed_sec",
+    "child_process_group_killed",
+    "child_process_group_kill_method",
+    "process_partial_stdout_preserved",
+    "process_partial_stderr_preserved",
+    "process_partial_stdout_chars",
+    "process_partial_stderr_chars",
+    "process_timeout_reason",
+    "process_elapsed_sec",
+    "process_returncode",
+]
+
+
+def direct_exact_command_extra_args(registry_path: Path) -> tuple[str, ...]:
+    return (
+        "--repair5g-counterfactual-updateparams-registry",
+        str(registry_path),
+        "--repair5g-runtime-audit-mode",
+        "perf",
+    )
+
+
+def direct_exact_candidate_recognized(raw: dict[str, Any], plan: dict[str, Any], timeout_exceeded: bool) -> bool:
+    if timeout_exceeded:
+        return False
+    materialized = str(plan.get("materialized_method", ""))
+    if materialized == NO_LTM_DIAGNOSTIC:
+        return str(raw.get("method", "")).strip() != ""
+    actual = str(raw.get("repair5g_candidate_id", "")).strip()
+    return bool(actual and actual == materialized)
+
+
+def enrich_direct_exact_rows(
+    raw_rows: list[dict[str, Any]],
+    plan: dict[str, Any],
+    *,
+    row_prefix: str,
+    execution_mode: str,
+    command_row: dict[str, Any],
+) -> list[dict[str, Any]]:
+    timeout_exceeded = bool(command_row.get("process_hard_timeout_exceeded"))
+    raw_inputs = raw_rows if raw_rows else [{}]
+    rows: list[dict[str, Any]] = []
+    for raw_idx, raw in enumerate(raw_inputs):
+        raw_success = raw.get("success", "")
+        raw_feasible = raw.get("feasible", "")
+        has_raw = bool(raw)
+        recognized = direct_exact_candidate_recognized(raw, plan, timeout_exceeded) if has_raw else False
+        expected_fp = str(plan.get("expected_updateparams_fingerprint", ""))
+        solver_fp = str(raw.get("updateparams_fingerprint", "")).strip()
+        trace_events = int(number(raw.get("committed_events"), 0)) + int(number(raw.get("blocked_events"), 0))
+        out = {
+            f"{row_prefix}_row_id": f"{row_prefix}_direct_{raw_idx:02d}_{stable_uid(plan.get('plan_row_id', ''), raw_idx)[:16]}",
+            "execution_mode": execution_mode,
+            "exact_execution_mode": DIRECT_EXACT_EXECUTION_MODE,
+            "plan_row_id": plan.get("plan_row_id", ""),
+            "replay_phase": plan.get("replay_phase", ""),
+            "g567_dataset_row_id": plan.get("g567_dataset_row_id", ""),
+            "g567_instance_uid": plan.get("g567_instance_uid", ""),
+            "g567_evaluation_uid": plan.get("g567_evaluation_uid", ""),
+            "g567_identity_digest": plan.get("g567_identity_digest", ""),
+            "g567_scenario_sha256": plan.get("g567_scenario_sha256", ""),
+            "g567_physical_map_sha256": plan.get("g567_physical_map_sha256", ""),
+            "g567_assignment_sha256": plan.get("g567_assignment_sha256", ""),
+            "split": plan.get("split", ""),
+            "generated_theta_uid": plan.get("generated_theta_uid", ""),
+            "expected_updateparams_fingerprint": plan.get("expected_updateparams_fingerprint", ""),
+            "model_path": plan.get("model_path", ""),
+            "variant_id": plan.get("variant_id", ""),
+            "actor_training_seed": plan.get("actor_training_seed", ""),
+            "replicate_id": plan.get("replicate_id", ""),
+            "replicate_group_id": plan.get("replicate_group_id", ""),
+            "horizon_id": plan.get("horizon_id", ""),
+            "scientific_horizon_id": plan.get("scientific_horizon_id", plan.get("horizon_id", "")),
+            "solver_execution_id": plan.get("solver_execution_id", ""),
+            "execution_order_index": plan.get("execution_order_index", ""),
+            "cpu_affinity": plan.get("cpu_affinity", ""),
+            "worker_count": plan.get("worker_count", ""),
+            "OMP_NUM_THREADS": plan.get("OMP_NUM_THREADS", ""),
+            "MKL_NUM_THREADS": plan.get("MKL_NUM_THREADS", ""),
+            "OPENBLAS_NUM_THREADS": plan.get("OPENBLAS_NUM_THREADS", ""),
+            "host_load_snapshot": plan.get("host_load_snapshot", ""),
+            "solver_internal_time_limit_sec": plan.get("solver_internal_time_limit_sec", ""),
+            "process_hard_timeout_sec": plan.get("process_hard_timeout_sec", ""),
+            "budget_role": plan.get("budget_role", ""),
+            "counts_as_exact_labelv54_solver_row": not timeout_exceeded,
+            "counts_as_counterfactual_probe_row": False,
+            "counterfactual_probe_callback_enabled": False,
+            "real_solver_execution": True,
+            "context_key": "|".join(
+                map(
+                    str,
+                    [
+                        plan.get("map", ""),
+                        plan.get("agents", ""),
+                        plan.get("seed", ""),
+                        plan.get("budget_ms", ""),
+                        plan.get("horizon_id", ""),
+                    ],
+                )
+            ),
+            "context_id": plan.get("context_id", ""),
+            "role": plan.get("role", ""),
+            "candidate_id": plan.get("candidate_id", ""),
+            "materialized_method": plan.get("materialized_method", ""),
+            "sampling_policy": plan.get("sampling_policy", ""),
+            "map": plan.get("map", raw.get("map", "")),
+            "map_family": plan.get("map_family", infer_map_family(str(plan.get("map", raw.get("map", ""))))),
+            "agents": plan.get("agents", raw.get("agents", "")),
+            "seed": plan.get("seed", raw.get("seed", "")),
+            "budget_ms": plan.get("budget_ms", ""),
+            "iteration": "",
+            "solution_found": "" if timeout_exceeded else raw_success,
+            "probe_feasible": "" if timeout_exceeded else raw_feasible,
+            "sum_of_loss_ratio": raw.get("sum_of_loss_ratio", ""),
+            "probe_sum_of_loss": raw.get("sum_of_loss", ""),
+            "probe_lower_bound": raw.get("lower_bound", ""),
+            "probe_runtime_ms": raw.get("runtime_ms", ""),
+            "direct_runtime_ms": raw.get("runtime_ms", ""),
+            "expanded_nodes": raw.get("expanded_nodes", ""),
+            "high_level_expansions": raw.get("high_level_expansions", ""),
+            "low_level_pibt_calls": raw.get("low_level_pibt_calls", ""),
+            "trace_event_count": trace_events if has_raw else "",
+            "candidate_recognized": recognized,
+            "repair5g_candidate_id_actual": raw.get("repair5g_candidate_id", ""),
+            "repair5g_update_mode_actual": raw.get("repair5g_update_mode", ""),
+            "updateparams_hash": raw.get("updateparams_hash", ""),
+            "updateparams_fingerprint": solver_fp or expected_fp,
+            "updateparams_fingerprint_source": "solver_output" if solver_fp else "plan_expected_fallback_missing_solver_field",
+            "traffic_before_hash_full": "",
+            "direct_exact_output_method": raw.get("method", ""),
+            "direct_exact_success": raw_success,
+            "direct_exact_feasible": raw_feasible,
+            "direct_exact_sum_of_loss": raw.get("sum_of_loss", ""),
+            "direct_exact_lower_bound": raw.get("lower_bound", ""),
+            "direct_exact_sum_of_loss_ratio": raw.get("sum_of_loss_ratio", ""),
+            "direct_exact_makespan": raw.get("makespan", ""),
+            "direct_exact_ltm_iterations": raw.get("ltm_iterations", ""),
+            "direct_exact_loop_cnt": raw.get("loop_cnt", ""),
+            "direct_exact_returned_solutions_count": raw.get("returned_solutions_count", ""),
+            "infrastructure_timeout": timeout_exceeded,
+            "scientific_result_valid": not timeout_exceeded,
+            "excluded_from_scientific_labels": timeout_exceeded,
+            "no_probe_reason": "",
+            "probe_materialized": False,
+            "probe_skipped_by_direct_exact": True,
+            "counterfactual_probe_requested_budget_ms": "",
+            "counterfactual_probe_effective_budget_ms": "",
+            "probe_skipped_parent_deadline": "",
+            "instance_load_ms": raw.get("instance_load_ms", ""),
+            "dist_table_ms": raw.get("dist_table_ms", ""),
+            "outer_solve_ms": raw.get("outer_solve_ms", raw.get("runtime_ms", "")),
+            "update_ms": raw.get("update_ms", ""),
+            "callback_ms": raw.get("callback_ms", ""),
+            "counterfactual_probe_ms": raw.get("counterfactual_probe_ms", ""),
+            "cost_audit_ms": raw.get("cost_audit_ms", ""),
+            "output_write_ms": raw.get("output_write_ms", ""),
+            **{col: plan.get(col, "") for col in THETA_COLUMNS},
+            **claims(),
+        }
+        if timeout_exceeded:
+            out.update(
+                {
+                    "solution_found": "",
+                    "probe_feasible": "",
+                    "candidate_recognized": False,
+                    "updateparams_fingerprint": "",
+                    "updateparams_fingerprint_source": "missing_process_hard_timeout",
+                    "fulltheta_fingerprint_match": False,
+                    "fulltheta_fingerprint_mismatched_fields": "process_hard_timeout_no_updateparams",
+                    "no_probe_reason": "direct_exact_process_hard_timeout_exceeded",
+                }
+            )
+        for field in DIRECT_COMMAND_FIELDS:
+            out[field] = command_row.get(field, "")
+        rows.append(out)
+    return rows
+
+
+def run_direct_exact_task(
+    *,
+    index: int,
+    plan: dict[str, Any],
+    binary: Path,
+    log_dir: Path,
+    temp_dir: Path,
+    scenario_dir: Path,
+    registry_path: Path,
+    manifest_prefix: str,
+    row_prefix: str,
+    execution_mode: str,
+) -> dict[str, Any]:
+    map_name = str(plan.get("map", ""))
+    agents_count = int(number(plan.get("agents"), 0))
+    seed = int(number(plan.get("seed"), 0))
+    materialized_method = str(plan.get("materialized_method", ""))
+    if not materialized_method:
+        raise RuntimeError(f"G5.67 direct exact row missing materialized_method: {plan.get('plan_row_id')}")
+    internal_budget_raw = plan.get("solver_internal_time_limit_sec", plan.get("base_time_limit_sec", ""))
+    hard_timeout_raw = plan.get("process_hard_timeout_sec", "")
+    if not str(internal_budget_raw).strip():
+        raise RuntimeError(f"G5.67 direct exact row missing internal budget: {plan.get('plan_row_id')}")
+    if not str(hard_timeout_raw).strip():
+        raise RuntimeError(f"G5.67 direct exact row missing hard timeout: {plan.get('plan_row_id')}")
+    internal_budget_sec = float(number(internal_budget_raw, 0.0))
+    process_hard_timeout_sec = float(number(hard_timeout_raw, 0.0))
+    if internal_budget_sec <= 0.0 or process_hard_timeout_sec <= 0.0:
+        raise RuntimeError(f"G5.67 direct exact row has nonpositive budget: {plan.get('plan_row_id')}")
+
+    alias = (
+        f"{manifest_prefix}_{safe_token(materialized_method)}_"
+        f"{safe_token(plan.get('plan_row_id', index))}_{index:08d}"
+    )
+    spec = MethodSpec(
+        materialized_method,
+        alias,
+        direct_exact_command_extra_args(registry_path),
+    )
+    task_update = temp_dir / f"direct_exact_{index:08d}.updates.aggregate.jsonl"
+    rows, update_rows, command_row = run_one_solver_task(
+        root=ROOT,
+        binary=binary,
+        scenario_dir=scenario_dir,
+        temp_dir=temp_dir,
+        update_log=task_update,
+        map_name=map_name,
+        agents=agents_count,
+        seed=seed,
+        time_limit_sec=internal_budget_sec,
+        ltm_max_iterations=max(1, int(number(plan.get("ltm_max_iterations"), 2))),
+        spec=spec,
+        manifest=f"phase5p5-{manifest_prefix}",
+        process_hard_timeout_sec=process_hard_timeout_sec,
+    )
+    command_row.update(
+        {
+            "plan_row_id": plan.get("plan_row_id", ""),
+            "context_id": plan.get("context_id", ""),
+            "candidate_id": plan.get("candidate_id", ""),
+            "materialized_method": materialized_method,
+            "execution_mode": execution_mode,
+            "exact_execution_mode": DIRECT_EXACT_EXECUTION_MODE,
+            "counterfactual_probe_callback_enabled": False,
+            "panel": plan.get("panel", ""),
+            "route": plan.get("route", ""),
+            "horizon_id": plan.get("horizon_id", ""),
+            "nominal_budget_ms": plan.get("nominal_budget_ms", plan.get("budget_ms", "")),
+            "short_budget_ms": "",
+            "base_time_limit_sec": plan.get("base_time_limit_sec", ""),
+            "ltm_max_iterations": plan.get("ltm_max_iterations", ""),
+            "candidate_count": 1,
+            "solver_internal_time_limit_sec": internal_budget_sec,
+            "process_hard_timeout_sec": process_hard_timeout_sec,
+        }
+    )
+    task_run = log_dir / f"direct_exact_{stable_uid(plan.get('plan_row_id', ''), index)[:16]}.runs.jsonl"
+    g549.write_jsonl(task_run, rows)
+    enriched = enrich_direct_exact_rows(
+        rows,
+        plan,
+        row_prefix=row_prefix,
+        execution_mode=execution_mode,
+        command_row=command_row,
+    )
+    task_update.unlink(missing_ok=True)
+    return {
+        "run_rows": rows,
+        "update_rows": update_rows,
+        "command_row": command_row,
+        "enriched_rows": enriched,
+    }
+
+
+def write_direct_exact_status(
+    path: Path,
+    result_path: Path,
+    total: int,
+    completed: int,
+    phase: str,
+    last: dict[str, Any] | None = None,
+) -> None:
+    write_json(
+        path,
+        {
+            "schema_version": f"{ROUND}_direct_exact_status_v1",
+            "phase": phase,
+            "execution_mode": DIRECT_EXACT_EXECUTION_MODE,
+            "total_solver_rows": total,
+            "completed_solver_rows": completed,
+            "result_csv_rows": len(read_rows(result_path)),
+            "last_task": last or {},
+            **claims(),
+        },
+    )
+
+
+def run_direct_exact_plan(
+    plan_rows: list[dict[str, Any]],
+    *,
+    binary: Path,
+    overwrite: bool,
+    max_workers: int,
+    registry_path: Path,
+    result_csv: Path,
+    raw_csv: Path,
+    log_dir: Path,
+    scenario_dir: Path,
+    scenario_metadata: Path,
+    manifest_prefix: str,
+    row_prefix: str,
+    execution_mode: str,
+) -> list[dict[str, Any]]:
+    if overwrite:
+        for path in [
+            result_csv,
+            raw_csv,
+            log_dir / "runs.jsonl",
+            log_dir / "commands.jsonl",
+            log_dir / "updates.jsonl",
+            log_dir / "status.json",
+        ]:
+            resolve(path).unlink(missing_ok=True)
+    maps_in_plan = sorted({str(row.get("map", "")) for row in plan_rows if str(row.get("map", "")).strip()})
+    for map_name in maps_in_plan:
+        g549.prepare_scenarios(
+            root=ROOT,
+            source_scenario_dir=resolve(DEFAULT_SOURCE_SCENARIO_DIR),
+            scenario_dir=resolve(scenario_dir),
+            scenario_metadata=resolve(scenario_metadata),
+            maps=[map_name],
+            agent_counts=sorted({int(number(row.get("agents"), 0)) for row in plan_rows if str(row.get("map", "")) == map_name}),
+            instance_ids=sorted({int(number(row.get("seed"), 0)) for row in plan_rows if str(row.get("map", "")) == map_name}),
+        )
+
+    log_root = resolve(log_dir)
+    temp_dir = log_root / "_direct_exact_tmp"
+    temp_dir.mkdir(parents=True, exist_ok=True)
+    completed_plan_ids = set()
+    if not overwrite:
+        completed_plan_ids = {
+            str(row.get("plan_row_id", ""))
+            for row in read_rows(result_csv)
+            if str(row.get("plan_row_id", "")).strip()
+        }
+    scheduled = [(idx, row) for idx, row in enumerate(plan_rows) if str(row.get("plan_row_id", "")) not in completed_plan_ids]
+    all_results = [] if overwrite else read_rows(result_csv)
+    all_runs = g549.read_jsonl_tolerant(log_root / "runs.jsonl") if not overwrite else []
+    all_commands = g549.read_jsonl_tolerant(log_root / "commands.jsonl") if not overwrite else []
+    all_updates = g549.read_jsonl_tolerant(log_root / "updates.jsonl") if not overwrite else []
+    done = len(plan_rows) - len(scheduled)
+    status_json = log_root / "status.json"
+    write_direct_exact_status(status_json, result_csv, len(plan_rows), done, "running")
+    pending_flush = 0
+
+    def flush(last: dict[str, Any] | None, phase: str) -> None:
+        g549.write_rows_atomic(result_csv, all_results)
+        if phase == "solver_complete":
+            g549.write_rows_atomic(raw_csv, all_results)
+        g549.write_jsonl(log_root / "runs.jsonl", all_runs)
+        g549.write_jsonl(log_root / "commands.jsonl", all_commands)
+        g549.write_jsonl(log_root / "updates.jsonl", all_updates)
+        write_direct_exact_status(status_json, result_csv, len(plan_rows), done, phase, last or {})
+
+    def merge(result: dict[str, Any]) -> None:
+        nonlocal all_results, all_runs, all_commands, all_updates, done, pending_flush
+        done += 1
+        all_results = g549.append_rows(
+            all_results,
+            result["enriched_rows"],
+            ["plan_row_id", "context_key", "materialized_method", "exact_execution_mode"],
+        )
+        all_runs.extend(result["run_rows"])
+        all_commands.append(result["command_row"])
+        all_updates.extend(result["update_rows"])
+        pending_flush += 1
+        if pending_flush >= 16:
+            flush(result["command_row"], "running")
+            pending_flush = 0
+
+    workers = max(1, int(max_workers))
+    if workers == 1:
+        for index, plan in scheduled:
+            merge(
+                run_direct_exact_task(
+                    index=index,
+                    plan=plan,
+                    binary=binary,
+                    log_dir=log_root,
+                    temp_dir=temp_dir,
+                    scenario_dir=resolve(scenario_dir),
+                    registry_path=resolve(registry_path),
+                    manifest_prefix=manifest_prefix,
+                    row_prefix=row_prefix,
+                    execution_mode=execution_mode,
+                )
+            )
+    else:
+        with ThreadPoolExecutor(max_workers=workers) as pool:
+            scheduled_iter = iter(scheduled)
+            futures = set()
+            max_in_flight = max(workers, workers * 2)
+
+            def submit_next() -> bool:
+                try:
+                    index, plan = next(scheduled_iter)
+                except StopIteration:
+                    return False
+                futures.add(
+                    pool.submit(
+                        run_direct_exact_task,
+                        index=index,
+                        plan=plan,
+                        binary=binary,
+                        log_dir=log_root,
+                        temp_dir=temp_dir,
+                        scenario_dir=resolve(scenario_dir),
+                        registry_path=resolve(registry_path),
+                        manifest_prefix=manifest_prefix,
+                        row_prefix=row_prefix,
+                        execution_mode=execution_mode,
+                    )
+                )
+                return True
+
+            for _ in range(min(max_in_flight, len(scheduled))):
+                submit_next()
+            while futures:
+                done_futures, futures = wait(futures, return_when=FIRST_COMPLETED)
+                for future in done_futures:
+                    merge(future.result())
+                    submit_next()
+    flush(None, "solver_complete")
+    return all_results
 
 
 def run_replay_phase(
@@ -2011,7 +2474,7 @@ def run_replay_phase(
     os.environ.setdefault("G567_REQUIRE_EXPLICIT_SOLVER_BUDGETS", "1")
     os.environ.setdefault("G567_REPLAY_ROW_PROCESS_ISOLATION", "1")
 
-    def execute_probe_subset(subset: list[dict[str, Any]], *, token: str, result_csv: Path, raw_csv: Path, log_dir: Path, scenario_metadata: Path) -> list[dict[str, Any]]:
+    def execute_counterfactual_diagnostic_subset(subset: list[dict[str, Any]], *, token: str, result_csv: Path, raw_csv: Path, log_dir: Path, scenario_metadata: Path) -> list[dict[str, Any]]:
         g549.run_probe_plan(
             subset,
             binary=binary_path,
@@ -2032,9 +2495,27 @@ def run_replay_phase(
             scenario_metadata=str(resolve(scenario_metadata)),
             manifest_prefix=f"g567_{safe_token(phase)}_{token}",
             row_prefix=f"g567_{safe_token(phase)}_{token}",
-            execution_mode=f"g567_{safe_token(phase)}_real_solver_row",
+            execution_mode=f"g567_{safe_token(phase)}_{COUNTERFACTUAL_DIAGNOSTIC_EXECUTION_MODE}",
         )
         return audit_results(read_rows(result_csv), subset, phase)
+
+    def execute_direct_exact_subset(subset: list[dict[str, Any]], *, token: str, result_csv: Path, raw_csv: Path, log_dir: Path, scenario_metadata: Path) -> list[dict[str, Any]]:
+        direct_rows = run_direct_exact_plan(
+            subset,
+            binary=binary_path,
+            overwrite=overwrite,
+            max_workers=max(1, int(max_workers)),
+            registry_path=paths["registry"],
+            result_csv=result_csv,
+            raw_csv=raw_csv,
+            log_dir=log_dir,
+            scenario_dir=paths["scenario_dir"],
+            scenario_metadata=scenario_metadata,
+            manifest_prefix=f"g567_{safe_token(phase)}_{token}",
+            row_prefix=f"g567_{safe_token(phase)}_{token}",
+            execution_mode=f"g567_{safe_token(phase)}_{DIRECT_EXACT_EXECUTION_MODE}",
+        )
+        return audit_results(direct_rows, subset, phase)
 
     if repeat_count > 1 and "repeat" in safe_token(phase):
         rows = []
@@ -2043,7 +2524,7 @@ def run_replay_phase(
             token = f"rep{int(number(replicate_id, 0)):02d}"
             subset = [row for row in plan_rows if str(row.get("replicate_id", "0")) == replicate_id]
             rows.extend(
-                execute_probe_subset(
+                execute_direct_exact_subset(
                     subset,
                     token=token,
                     result_csv=paths["results"].with_name(f"{paths['results'].stem}_{token}{paths['results'].suffix}"),
@@ -2053,7 +2534,7 @@ def run_replay_phase(
                 )
             )
     else:
-        rows = execute_probe_subset(
+        rows = execute_direct_exact_subset(
             plan_rows,
             token="main",
             result_csv=paths["results"],
@@ -2070,6 +2551,8 @@ def run_replay_phase(
         paths["report"],
         f"# G5.67 {phase} Three-Tier Replay\n\n"
         f"- decision: `{summary['decision']}`\n"
+        f"- exact execution mode: `{summary['exact_execution_mode']}`\n"
+        f"- counterfactual probe callback enabled: `{summary['counterfactual_probe_callback_enabled']}`\n"
         f"- contexts: `{summary['contexts']}`\n"
         f"- actor candidate rows: `{summary['actor_candidate_rows']}`\n"
         f"- three-tier pairs: `{summary['three_tier_pairs']}`\n"

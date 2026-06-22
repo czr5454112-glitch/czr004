@@ -1300,6 +1300,13 @@ LtmRunResult solve_with_ltm(const Instance& instance, const LtmOptions& options)
     result.trace_summary.committed += summary.committed;
     result.trace_summary.blocked += summary.blocked;
 
+    if (is_expired(&deadline)) {
+      result.timeout = true;
+      result.additional_info +=
+          "ltm_parent_deadline_expired_after_solve=1\n";
+      break;
+    }
+
     auto update_params = options.update_params;
     if (options.update_policy) {
       LtmIterationStats stats;

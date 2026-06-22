@@ -2407,3 +2407,70 @@ Decision:
   Do not launch Gate-3A, Gate-3B, or any full campaign until the true row-level
   hard timeouts and no-rc/no-summary runner termination are repaired and rerun.
 ```
+
+Post-r5 GPT Pro diagnosis and direct-exact repair:
+
+```text
+Important reinterpretation:
+  The r5 60.8-61.3s timeout pattern is not valid evidence that direct additive,
+  direct static-flow, direct g556, or direct A5 rows cannot terminate in a 30s
+  solver budget. The row-isolated replay still used the old static-flow outer
+  solver with a counterfactual candidate callback. Therefore a reported
+  "additive timeout" was a static-flow primary execution plus an additive
+  counterfactual probe, not a direct additive primary run.
+
+Repair implemented locally:
+  run_replay_phase now uses direct_exact_solver_row for exact G5.67 replay.
+  Each planned row launches exactly one solver subprocess with:
+    --method = materialized_method for that row
+    solver_internal_time_limit_sec = 30.0
+    process_hard_timeout_sec = 60.0
+    registry passed only for generated-theta materialization
+    counterfactual probe callback disabled
+
+  The old counterfactual-probe path remains diagnostic-only:
+    requested budget is capped to <=5000 ms
+    C++ clips effective probe budget to parent deadline remaining time minus guard
+    skipped probes record probe_skipped_parent_deadline=true
+    probe rows never count as exact Label-v5.4 solver rows
+
+  C++ solve_with_ltm now checks the parent deadline immediately after
+  one_shot.solve. If expired, it preserves incumbent/basic stats, skips
+  UpdateLTM/callback, and returns normally. phase1a_batch perf mode also skips
+  full traffic cost_audit after post-solve deadline expiry and records phase
+  timing fields.
+
+  A Stage-2A tmux runner wrapper now writes rc and an atomic final summary on
+  normal exit, fail-closed exit, exception, and SIGTERM; it records stale-marker
+  evidence if a previous run died without final summary. SIGKILL cannot execute
+  a trap, so recovery is represented by the stale marker.
+
+Local verification:
+  python -m py_compile passed for the modified Python scripts.
+  pytest over tests/test_repair5g567*.py: 53 passed, 1 skipped.
+  Windows C++ build_phase1a_batch.ps1 succeeded.
+  Local direct additive smoke on empty-8-8 wrote updateparams_fingerprint,
+  counterfactual_probe_ms=0, and phase timings.
+
+Remote status:
+  Not yet rerun after this repair in this document state.
+  Gate-3A, Gate-3B, full 100k/1M/48h, and final blind remain locked.
+
+Next allowed remote step:
+  Build on the RTX5090 server, run targeted reproducer on:
+    tunnel-24x24 a64
+    cross-32x32 a256
+    connector-48x48 a256
+  Compare:
+    A. historical old 30s outer + 30s probe path
+    B. direct exact 30s, no probe
+    C. parent-clipped 3s diagnostic probe
+  Then rerun Stage-2A only. It must complete 256/256 rows, zero hard-timeout
+  rows, rc and final summary present, true A5 checkpoint produced, before
+  Gate-3A can run.
+
+Tail handling:
+  Do not delete tunnel/cross/connector. Reclassify extreme map-agent-density
+  combinations as an extreme-tail audit panel, exclude them from diagnostic
+  training until direct exact is stable, then reintroduce through curriculum.
+```

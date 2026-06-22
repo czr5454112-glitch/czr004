@@ -88,6 +88,20 @@
       "gate3a_launched": false
     }
   },
+  "post_r5_correction": {
+    "decision": "direct_exact_repair_implemented_locally_remote_rerun_required",
+    "r5_timeout_reinterpretation": "old_static_flow_outer_plus_counterfactual_probe_path_not_direct_exact_rows",
+    "direct_exact_solver_row_implemented": true,
+    "counterfactual_probe_diagnostic_only": true,
+    "counterfactual_probe_budget_cap_ms": 5000,
+    "cpp_parent_deadline_guard_implemented": true,
+    "stage2a_runner_finalization_wrapper_added": true,
+    "local_pytest_repair5g567": "53 passed, 1 skipped",
+    "local_cpp_phase1a_batch_build": "passed",
+    "gate3a_launched_after_repair": false,
+    "gate3b_launched_after_repair": false,
+    "full_campaign_launched_after_repair": false
+  },
   "not_run": {
     "full_100k_context_generation": true,
     "million_row_solver_acquisition": true,
@@ -97,8 +111,8 @@
     "gate3a_after_failed_stage2a": true
   },
   "open_risks": [
-    "Stage-2A row-isolated replay still has true 60s process hard timeouts on selected stress contexts",
-    "Stage-2A r5 tmux runner exited without rc file or final summary after 248/256 streamed rows",
+    "Direct-exact Stage-2A remote rerun has not yet completed after the nested-probe repair",
+    "tunnel/cross/connector extreme-tail contexts remain in timeout/tail audit until direct exact is stable",
     "Gate-3A true A5 checkpoint smoke has not been launched",
     "Gate-2 is bounded pilot evidence only"
   ]

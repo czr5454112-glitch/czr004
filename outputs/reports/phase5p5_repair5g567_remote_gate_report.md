@@ -147,3 +147,16 @@ Failed Stage-2A attempts:
 Current block:
 
 Gate-3A was not launched. Gate-3B and full campaign remain locked. The remaining issues are true row-level solver hard timeouts on selected stress contexts and an abnormal runner termination without rc/summary provenance.
+
+## Post-r5 Correction
+
+GPT Pro review identified that the r5 "row-level" timeout evidence was still produced by the old static-flow outer solver plus counterfactual probe callback. Therefore those rows are not direct additive/static/g556/A5 exact executions.
+
+Implemented local repair after this report:
+
+- `run_replay_phase` now uses `direct_exact_solver_row`: one subprocess, one primary `materialized_method`, 30s internal budget, 60s hard timeout, counterfactual callback disabled.
+- Counterfactual probes are diagnostic-only, capped to <=5s and clipped to the parent deadline.
+- C++ now skips UpdateLTM/callback work immediately after post-solve parent deadline expiry and records phase timings.
+- Stage-2A has a committed tmux runner wrapper that writes rc and atomic final summary.
+
+This report is historical evidence only. Gate-3A remains locked until the repaired direct-exact Stage-2A rerun completes 256/256 rows with zero hard timeouts and produces the true diagnostic A5 checkpoint.

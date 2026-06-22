@@ -50,6 +50,32 @@ Date: 2026-06-22 Asia/Shanghai
 
    Fix: commit `65c807b7` enables `G567_REPLAY_ROW_PROCESS_ISOLATION=1` for G5.67 replay. Each planned row is launched as its own subprocess, and the row-isolation unit test verifies the four-candidate group splits into four single-row tasks.
 
+8. G5.67 row-isolated replay still used the old static-flow counterfactual-probe path.
+
+   Symptom: Stage-2A `uniform30_r5` reported additive/static/g556/A5 hard timeouts near 60.8-61.3s, but inspection showed the subprocess primary method was still static-flow with a counterfactual candidate callback. A "candidate_count=1" row was isolated by process, but it was not a direct additive/static/g556/A5 primary solver execution.
+
+   Fix: `scripts/run_repair5g567_strict_pipeline.py` now executes `direct_exact_solver_row`: `--method` is the row's `materialized_method`, the registry is passed only to materialize generated theta, and no `--repair5g-counterfactual-update-probe-jsonl` callback is passed. Direct rows are marked `counts_as_exact_labelv54_solver_row`; counterfactual probe rows are marked diagnostic-only and do not count as exact labels.
+
+   Regression test: `tests/test_repair5g567_direct_exact.py`.
+
+9. Counterfactual probe diagnostics could consume a second full budget.
+
+   Symptom: the old path could run a 30s outer static-flow solve and then launch an independent 30s counterfactual probe, producing the observed 60s hard-timeout pattern.
+
+   Fix: diagnostic probe budget is capped to <=5000 ms in `scripts/repair5g549_common.py`, and C++ clips the effective probe budget to the parent deadline remaining time minus a guard. If no safe time remains, the probe row records `probe_skipped_parent_deadline=true` instead of launching another solver.
+
+10. C++ LTM could do update/callback/cost-audit work after the solver deadline.
+
+   Symptom: after `one_shot.solve`, `solve_with_ltm` still proceeded into UpdateLTM/callback work, and `phase1a_batch` always ran full `traffic_map.cost_audit(&instance)`.
+
+   Fix: `cpp/ltm/ltm.cpp` now breaks immediately after a post-solve parent deadline expiry while preserving incumbent/basic stats. In perf mode, `cpp/tools/phase1a_batch.cpp` skips full cost audit after that deadline and records phase timings (`instance_load_ms`, `dist_table_ms`, `outer_solve_ms`, `update_ms`, `callback_ms`, `counterfactual_probe_ms`, `cost_audit_ms`, `output_write_ms`).
+
+11. Stage-2A tmux execution relied on ad hoc runner finalization.
+
+   Symptom: `uniform30_r5` ended without rc and without a final summary, leaving no atomic provenance for success/failure.
+
+   Fix: added `scripts/server_start_repair5g567_stage2a_direct_exact.sh`, which requires `G567_EXPECTED_HEAD`, writes rc and atomic final summary on normal exit/fail-closed/exception/SIGTERM, records forbidden full-run actions as false, and writes stale-marker evidence if a previous run died without final summary.
+
 ## Existing Repairs Verified By Gates
 
 - A5 uses OD Perceiver instead of full OD self-attention for 3000 OD tokens.
@@ -76,10 +102,10 @@ Date: 2026-06-22 Asia/Shanghai
 
    This is not necessarily a solver bug, but exact full-theta fingerprint checks are not meaningful on rows with no update checkpoint. Future summaries should distinguish "no checkpoint to audit" from true fingerprint mismatch.
 
-5. Stage-2A row-isolated replay still has true hard timeouts.
+5. Direct-exact Stage-2A has not yet been remotely rerun after the nested-probe repair.
 
-   After row isolation, Stage-2A `uniform30_r5` streamed `248/256` rows and observed `8` real row-level hard timeouts on selected stress contexts (`g567-tunnel-24x24-a-v0`, `g567-cross-32x32-a-v3`, `g567-connector-48x48-a-v3`). This blocks Gate-3A.
+   The `uniform30_r5` timeout rows are now classified as old-path nested-probe evidence, not direct exact additive/static/g556/A5 evidence. Stage-2A remains blocked until the direct-exact rerun completes 256/256 rows with zero process hard timeouts, rc/final summary, and a true diagnostic A5 checkpoint.
 
-6. Stage-2A runner exited without rc or final summary.
+6. Extreme-tail contexts remain an audit panel until direct exact is stable.
 
-   The `uniform30_r5` tmux session ended with no active Python/solver process, no rc file, and no final Stage-2A summary. Treat this as an infrastructure provenance failure until reproduced and fixed.
+   Do not delete `tunnel`, `cross`, or `connector`. Keep failed high-density combinations in the timeout/tail audit and reintroduce them through curriculum after direct exact execution is stable.

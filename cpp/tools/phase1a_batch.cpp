@@ -2016,6 +2016,17 @@ struct RunStats {
   bool repair5g_cost_bounds_respected = true;
   double repair5g_min_traversal_cost = std::numeric_limits<double>::quiet_NaN();
   double repair5g_max_traversal_cost = std::numeric_limits<double>::quiet_NaN();
+  double instance_load_ms = std::numeric_limits<double>::quiet_NaN();
+  double dist_table_ms = std::numeric_limits<double>::quiet_NaN();
+  double outer_solve_ms = std::numeric_limits<double>::quiet_NaN();
+  double update_ms = 0.0;
+  double callback_ms = 0.0;
+  double counterfactual_probe_ms = 0.0;
+  double cost_audit_ms = 0.0;
+  double output_write_ms = std::numeric_limits<double>::quiet_NaN();
+  bool parent_deadline_expired_after_solve = false;
+  bool cost_audit_skipped_parent_deadline = false;
+  uint probe_skipped_parent_deadline_count = 0;
 };
 
 std::string default_traffic_map_run_id(const Args& args)
@@ -3126,6 +3137,80 @@ bool append_repair5g54_counterfactual_probe_jsonl(
   const auto candidates = repair5g54_candidate_list(args);
   if (candidates.empty()) return false;
 
+  const auto requested_probe_ms = args.repair5g_counterfactual_short_budget_ms;
+  const auto diagnostic_probe_cap_ms = 5000.0;
+  const auto parent_remaining_ms =
+      std::max(0.0, checkpoint.time_remaining_sec * 1000.0);
+  const auto parent_guard_ms = 250.0;
+  const auto capped_probe_ms =
+      std::min(requested_probe_ms, diagnostic_probe_cap_ms);
+  const auto effective_probe_ms =
+      std::min(capped_probe_ms,
+               std::max(0.0, parent_remaining_ms - parent_guard_ms));
+  if (effective_probe_ms <= 0.0) {
+    std::ofstream out(output_path, std::ios::app);
+    if (!out) throw std::runtime_error("cannot open Repair5G.5.4 counterfactual probe JSONL");
+    const auto output_method =
+        args.method_alias.empty() ? args.method : args.method_alias;
+    const auto context_id = args.map_name + "|a" + std::to_string(args.agents) +
+                            "|s" + std::to_string(args.seed) + "|it" +
+                            std::to_string(checkpoint.iteration) + "|" +
+                            output_method;
+    for (const auto& candidate : candidates) {
+      std::string resolved_candidate_id;
+      bool candidate_recognized = false;
+      const auto params = repair5g54_params_for_candidate(
+          candidate, args, checkpoint, &resolved_candidate_id,
+          &candidate_recognized);
+      out << "{";
+      out << "\"schema_version\":\"phase5p5_repair5g54_counterfactual_update_probe_v1\"";
+      out << ",\"method\":" << json_string(output_method);
+      out << ",\"map\":" << json_string(args.map_name);
+      out << ",\"scen\":" << json_string(args.scen_id);
+      out << ",\"agents\":" << args.agents;
+      out << ",\"seed\":" << args.seed;
+      out << ",\"iteration\":" << checkpoint.iteration;
+      out << ",\"context_id\":" << json_string(context_id);
+      out << ",\"candidate_id\":" << json_string(candidate);
+      out << ",\"resolved_candidate_id\":"
+          << json_string(resolved_candidate_id);
+      out << ",\"candidate_recognized\":"
+          << (candidate_recognized ? "true" : "false");
+      out << ",\"updateparams_hash\":"
+          << json_string(update_params_hash(params));
+      out << ",\"updateparams_fingerprint\":"
+          << json_string(update_params_fingerprint(params));
+      out << ",\"probe_solution_found\":null";
+      out << ",\"probe_feasible\":null";
+      out << ",\"probe_sum_of_loss\":null";
+      out << ",\"probe_lower_bound\":null";
+      out << ",\"probe_sum_of_loss_ratio\":null";
+      out << ",\"probe_runtime_ms\":0";
+      out << ",\"probe_expanded_nodes\":0";
+      out << ",\"probe_low_level_pibt_calls\":0";
+      out << ",\"probe_skipped_parent_deadline\":true";
+      out << ",\"counterfactual_probe_requested_budget_ms\":"
+          << json_number_or_null(requested_probe_ms);
+      out << ",\"counterfactual_probe_effective_budget_ms\":0";
+      out << ",\"counterfactual_probe_parent_remaining_ms\":"
+          << json_number_or_null(parent_remaining_ms);
+      out << ",\"counterfactual_probe_guard_ms\":"
+          << json_number_or_null(parent_guard_ms);
+      out << ",\"counterfactual_probe_budget_clipped_to_diagnostic_cap\":"
+          << (requested_probe_ms > diagnostic_probe_cap_ms ? "true" : "false");
+      out << ",\"traffic_before_hash_full\":"
+          << json_string(traffic_map_hash(checkpoint.traffic_before_map.get()));
+      out << ",\"trace_event_count\":" << checkpoint.trace_events.size();
+      out << ",\"short_budget_ms\":0";
+      out << ",\"forbidden_feature_audit_passed\":true";
+      out << ",\"phase5p5_allowed\":false";
+      out << ",\"phase6_allowed\":false";
+      out << ",\"aaai_ready\":false";
+      out << "}\n";
+    }
+    return true;
+  }
+
   auto rows = std::vector<Repair5G54ProbeRow>();
   rows.reserve(candidates.size());
   auto additive_score = std::numeric_limits<double>::infinity();
@@ -3141,7 +3226,7 @@ bool append_repair5g54_counterfactual_probe_jsonl(
         &row.candidate_recognized);
     czr004::ltm::LtmOneShotProbeOptions probe_options;
     probe_options.objective = Objective::OBJ_SUM_OF_LOSS;
-    probe_options.short_budget_ms = args.repair5g_counterfactual_short_budget_ms;
+    probe_options.short_budget_ms = effective_probe_ms;
     probe_options.node_budget = 0;
     probe_options.verbose = args.verbose;
     probe_options.seed = args.seed + checkpoint.iteration;
@@ -3243,7 +3328,18 @@ bool append_repair5g54_counterfactual_probe_jsonl(
         << json_string(traffic_map_hash(checkpoint.traffic_before_map.get()));
     out << ",\"trace_event_count\":" << checkpoint.trace_events.size();
     out << ",\"short_budget_ms\":"
-        << json_number_or_null(args.repair5g_counterfactual_short_budget_ms);
+        << json_number_or_null(effective_probe_ms);
+    out << ",\"probe_skipped_parent_deadline\":false";
+    out << ",\"counterfactual_probe_requested_budget_ms\":"
+        << json_number_or_null(requested_probe_ms);
+    out << ",\"counterfactual_probe_effective_budget_ms\":"
+        << json_number_or_null(effective_probe_ms);
+    out << ",\"counterfactual_probe_parent_remaining_ms\":"
+        << json_number_or_null(parent_remaining_ms);
+    out << ",\"counterfactual_probe_guard_ms\":"
+        << json_number_or_null(parent_guard_ms);
+    out << ",\"counterfactual_probe_budget_clipped_to_diagnostic_cap\":"
+        << (requested_probe_ms > diagnostic_probe_cap_ms ? "true" : "false");
     out << ",\"forbidden_feature_audit_passed\":true";
     out << ",\"phase5p5_allowed\":false";
     out << ",\"phase6_allowed\":false";
@@ -3265,6 +3361,7 @@ RunStats run_lacam_star(const Instance& instance, const Args& args)
   const auto ended = std::chrono::steady_clock::now();
   stats.runtime_ms =
       std::chrono::duration<double, std::milli>(ended - started).count();
+  stats.outer_solve_ms = stats.runtime_ms;
   if (!stats.solution.empty()) {
     stats.time_to_first_solution_ms = stats.runtime_ms;
   }
@@ -3349,17 +3446,32 @@ RunStats run_lacam_star_ltm(const Instance& instance, const Args& args)
     options.retain_iteration_traffic_maps = true;
     options.iteration_callback =
         [&](const czr004::ltm::LtmIterationCheckpoint& checkpoint) {
+          const auto callback_started = std::chrono::steady_clock::now();
           append_repair5g_update_checkpoint_jsonl(args, instance, checkpoint);
           append_repair5g53_transform_audit_jsonl(args, instance, checkpoint);
           if (!args.repair5g_counterfactual_update_probe_jsonl.empty() &&
               (args.repair5g_counterfactual_max_contexts == 0 ||
-               repair5g54_counterfactual_contexts <
+                   repair5g54_counterfactual_contexts <
                    args.repair5g_counterfactual_max_contexts)) {
+            const auto probe_started = std::chrono::steady_clock::now();
+            const auto probe_parent_deadline_will_skip =
+                checkpoint.time_remaining_sec * 1000.0 <= 250.0;
             if (append_repair5g54_counterfactual_probe_jsonl(args, instance,
                                                              checkpoint)) {
               ++repair5g54_counterfactual_contexts;
+              if (probe_parent_deadline_will_skip) {
+                ++stats.probe_skipped_parent_deadline_count;
+              }
             }
+            stats.counterfactual_probe_ms +=
+                std::chrono::duration<double, std::milli>(
+                    std::chrono::steady_clock::now() - probe_started)
+                    .count();
           }
+          stats.callback_ms +=
+              std::chrono::duration<double, std::milli>(
+                  std::chrono::steady_clock::now() - callback_started)
+                  .count();
         };
   }
   if (args.repair5g_enabled) {
@@ -3807,6 +3919,7 @@ RunStats run_lacam_star_ltm(const Instance& instance, const Args& args)
   const auto ended = std::chrono::steady_clock::now();
   stats.runtime_ms =
       std::chrono::duration<double, std::milli>(ended - started).count();
+  stats.outer_solve_ms = stats.runtime_ms;
   stats.solution = result.best_solution;
   stats.time_to_first_solution_ms = result.time_to_first_solution_ms;
   stats.additional_info = result.additional_info;
@@ -3829,7 +3942,25 @@ RunStats run_lacam_star_ltm(const Instance& instance, const Args& args)
   }
   stats.repair5g53_update_apply_ms =
       sum_info_double_values(stats.additional_info, "ltm_update_apply_ms");
-  const auto cost_audit = result.traffic_map.cost_audit(&instance);
+  stats.update_ms = stats.repair5g53_update_policy_total_ms +
+                    stats.repair5g53_update_apply_ms;
+  stats.parent_deadline_expired_after_solve =
+      sum_info_values(stats.additional_info,
+                      "ltm_parent_deadline_expired_after_solve") > 0;
+  const auto skip_cost_audit =
+      args.repair5g_runtime_audit_mode == "perf" &&
+      stats.parent_deadline_expired_after_solve;
+  czr004::ltm::TrafficCostAudit cost_audit;
+  if (skip_cost_audit) {
+    stats.cost_audit_skipped_parent_deadline = true;
+  } else {
+    const auto cost_audit_started = std::chrono::steady_clock::now();
+    cost_audit = result.traffic_map.cost_audit(&instance);
+    stats.cost_audit_ms =
+        std::chrono::duration<double, std::milli>(
+            std::chrono::steady_clock::now() - cost_audit_started)
+            .count();
+  }
   stats.repair5g_congestion_update_count =
       result.dual_channel_update_stats.congestion_update_count;
   stats.repair5g_flow_update_count =
@@ -3851,10 +3982,12 @@ RunStats run_lacam_star_ltm(const Instance& instance, const Args& args)
   stats.repair5g_congestion_nonzero_edges =
       result.traffic_map.nonzero_raw_edges();
   stats.repair5g_flow_nonzero_edges = result.traffic_map.nonzero_flow_edges();
-  stats.repair5g_costs_finite = cost_audit.all_finite;
-  stats.repair5g_cost_bounds_respected = cost_audit.within_configured_bounds;
-  stats.repair5g_min_traversal_cost = cost_audit.min_cost;
-  stats.repair5g_max_traversal_cost = cost_audit.max_cost;
+  if (!skip_cost_audit) {
+    stats.repair5g_costs_finite = cost_audit.all_finite;
+    stats.repair5g_cost_bounds_respected = cost_audit.within_configured_bounds;
+    stats.repair5g_min_traversal_cost = cost_audit.min_cost;
+    stats.repair5g_max_traversal_cost = cost_audit.max_cost;
+  }
   append_traffic_map_jsonl(args, instance, result.traffic_map);
   return stats;
 }
@@ -3899,6 +4032,21 @@ void append_jsonl(const Args& args, const std::filesystem::path& binary_path,
   out << ",\"sum_of_loss_ratio\":" << json_number_or_null(ratio);
   out << ",\"makespan\":" << (success ? std::to_string(makespan) : "null");
   out << ",\"runtime_ms\":" << json_number_or_null(stats.runtime_ms);
+  out << ",\"instance_load_ms\":" << json_number_or_null(stats.instance_load_ms);
+  out << ",\"dist_table_ms\":" << json_number_or_null(stats.dist_table_ms);
+  out << ",\"outer_solve_ms\":" << json_number_or_null(stats.outer_solve_ms);
+  out << ",\"update_ms\":" << json_number_or_null(stats.update_ms);
+  out << ",\"callback_ms\":" << json_number_or_null(stats.callback_ms);
+  out << ",\"counterfactual_probe_ms\":"
+      << json_number_or_null(stats.counterfactual_probe_ms);
+  out << ",\"cost_audit_ms\":" << json_number_or_null(stats.cost_audit_ms);
+  out << ",\"output_write_ms\":" << json_number_or_null(stats.output_write_ms);
+  out << ",\"parent_deadline_expired_after_solve\":"
+      << (stats.parent_deadline_expired_after_solve ? "true" : "false");
+  out << ",\"cost_audit_skipped_parent_deadline\":"
+      << (stats.cost_audit_skipped_parent_deadline ? "true" : "false");
+  out << ",\"probe_skipped_parent_deadline_count\":"
+      << stats.probe_skipped_parent_deadline_count;
   out << ",\"time_to_first_solution_ms\":"
       << json_number_or_null(stats.time_to_first_solution_ms);
   out << ",\"returned_solutions_count\":" << stats.returned_solutions_count;
@@ -3985,6 +4133,14 @@ void append_jsonl(const Args& args, const std::filesystem::path& binary_path,
       << json_string(stats.repair5g_candidate_id);
   out << ",\"repair5g_update_mode\":"
       << json_string(stats.repair5g_update_mode);
+  out << ",\"updateparams_hash\":"
+      << json_string(stats.repair5g_enabled
+                         ? update_params_hash(args.repair5g_update_params)
+                         : "");
+  out << ",\"updateparams_fingerprint\":"
+      << json_string(stats.repair5g_enabled
+                         ? update_params_fingerprint(args.repair5g_update_params)
+                         : "");
   out << ",\"repair5g_lambda_cong\":"
       << json_number_or_null(stats.repair5g_lambda_cong);
   out << ",\"repair5g_lambda_flow\":"
@@ -4063,9 +4219,15 @@ int main(int argc, char** argv)
     const auto args = parse_args(argc, argv);
     const auto binary_path = std::filesystem::absolute(argv[0]);
 
+    RunStats stats;
+    const auto instance_started = std::chrono::steady_clock::now();
     const auto instance = Instance(args.scen, args.map, args.agents);
     const auto valid_instance = instance.is_valid(args.verbose);
-    RunStats stats;
+    stats.instance_load_ms =
+        std::chrono::duration<double, std::milli>(
+            std::chrono::steady_clock::now() - instance_started)
+            .count();
+    const auto measured_instance_load_ms = stats.instance_load_ms;
     bool success = false;
     bool feasible = false;
     int sum_of_loss = 0;
@@ -4078,16 +4240,23 @@ int main(int argc, char** argv)
       } else {
         stats = run_lacam_star_ltm(instance, args);
       }
+      stats.instance_load_ms = measured_instance_load_ms;
       success = !stats.solution.empty();
       feasible = success && is_feasible_solution(instance, stats.solution, 1);
       if (success) {
+        const auto dist_started = std::chrono::steady_clock::now();
         auto dist_table = DistTable(instance);
+        stats.dist_table_ms =
+            std::chrono::duration<double, std::milli>(
+                std::chrono::steady_clock::now() - dist_started)
+                .count();
         sum_of_loss = get_sum_of_loss(stats.solution);
         lower_bound = get_sum_of_costs_lower_bound(instance, dist_table);
         makespan = get_makespan(stats.solution);
       }
     }
 
+    stats.output_write_ms = 0.0;
     append_jsonl(args, binary_path, valid_instance, success, feasible,
                  sum_of_loss, lower_bound, makespan, stats);
 

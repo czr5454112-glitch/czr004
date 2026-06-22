@@ -58,6 +58,9 @@ def select_large_rows(rows: list[dict[str, Any]], tiers: list[int]) -> list[dict
         candidates.sort(
             key=lambda row: (
                 family_counts[str(row.get("map_family", ""))],
+                int("empty" in str(row.get("map_family", "")).lower()),
+                -float(g567.number(row.get("base_time_limit_sec"), 0.0)),
+                -int(g567.number(row.get("nominal_budget_ms"), 0)),
                 -int(g567.number(row.get("width"), 0)) * int(g567.number(row.get("height"), 0)),
                 str(row.get("map", "")),
             )
@@ -191,6 +194,7 @@ def write_report(summary: dict[str, Any]) -> None:
         f"- generated contexts: `{summary['generated_contexts']}`\n"
         f"- selected contexts: `{summary['selected_contexts']}`\n"
         f"- requested agent tiers: `{summary['requested_agent_tiers']}`\n"
+        f"- selected budgets ms: `{summary['selected_budget_ms']}`\n"
         f"- selected map families: `{summary['selected_map_families']}`\n"
         f"- blind split constructed: `{summary['blind_split_constructed']}`\n"
         f"- replay planned rows: `{summary.get('replay_summary', {}).get('planned_rows')}`\n"
@@ -276,6 +280,7 @@ def main(argv: list[str] | None = None) -> int:
         "selected_contexts": len(contexts),
         "requested_agent_tiers": tiers,
         "selected_agent_tiers": [ctx.agents for ctx in contexts],
+        "selected_budget_ms": [ctx.budget_ms for ctx in contexts],
         "selected_map_families": dict(Counter(ctx.map_family for ctx in contexts)),
         "selected_maps": [ctx.map for ctx in contexts],
         "blind_split_constructed": False,

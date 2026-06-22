@@ -1,7 +1,14 @@
 from __future__ import annotations
 
+import sys
+from pathlib import Path
+
 import torch
 
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "scripts"))
+
+import run_repair5g567_strict_pipeline as g567  # noqa: E402
 from gcst.dual_stream_graph_actor import DualStreamGoalAwareActor, architecture_from_id
 from gcst.goal_aware_actor import GOAL_AWARE_SCALAR_FEATURES
 from gcst.graph_encoder import EdgeAwareAttentionLayer, GraphBatch
@@ -144,3 +151,34 @@ def test_large_scale_actor_variants_disable_full_node_global_attention() -> None
         arch = architecture_from_id(variant_id)
         assert arch.od_perceiver
         assert arch.graph_global_layers == 0
+
+
+def test_load_model_for_payload_honors_attention_heads_alias() -> None:
+    arch = architecture_from_id("A5")
+    model = DualStreamGoalAwareActor(
+        hidden_dim=64,
+        use_cross_attention=arch.use_cross_attention,
+        safe_subspace=arch.safe_subspace,
+        field_group_trust=arch.field_group_trust,
+        od_perceiver=arch.od_perceiver,
+        graph_local_layers=arch.graph_local_layers,
+        graph_global_layers=arch.graph_global_layers,
+        heads=arch.heads,
+        latent_tokens=16,
+    ).module()
+    payload = {
+        "variant_id": "A5",
+        "hidden_dim": 64,
+        "use_cross_attention": True,
+        "safe_subspace": True,
+        "field_group_trust": True,
+        "od_perceiver": True,
+        "graph_local_layers": arch.graph_local_layers,
+        "graph_global_layers": arch.graph_global_layers,
+        "attention_heads": arch.heads,
+        "latent_tokens": 16,
+        "actor_state_dict": model.state_dict(),
+    }
+    loaded, kind = g567.load_model_for_payload(payload, Path("unit_a5_attention_heads_alias.pt"), "cpu")
+    assert kind == "A5"
+    assert loaded.od_latents.shape[0] == 16

@@ -17,6 +17,13 @@ def test_true_a5_checkpoint_audit_rejects_g556_registry_smoke_marker() -> None:
             "artifact_type": "phase5p5_repair5g567_labelv54_direct_actor",
             "variant_id": "GATE2_G556_REGISTRY_SMOKE",
             "labelv54_training": True,
+            "diagnostic_only": True,
+            "cuda_bf16_training": True,
+            "training_context_uids": ["ctx-1"],
+            "training_dataset_sha256": "a" * 64,
+            "source_commit": "b" * 40,
+            "od_perceiver": True,
+            "graph_global_layers": 0,
             "actor_state_dict": {"weight": object()},
         },
         Path("gate2_pilot_no_trained_checkpoint.pt"),
@@ -31,12 +38,20 @@ def test_true_a5_checkpoint_audit_accepts_trained_a5_payload() -> None:
             "artifact_type": "phase5p5_repair5g567_labelv54_direct_actor",
             "variant_id": "A5",
             "labelv54_training": True,
+            "diagnostic_only": True,
+            "cuda_bf16_training": True,
+            "training_context_uids": ["ctx-1", "ctx-2"],
+            "training_dataset_sha256": "a" * 64,
+            "source_commit": "b" * 40,
+            "od_perceiver": True,
+            "graph_global_layers": 0,
             "actor_state_dict": {"layer.weight": object()},
         },
         Path("phase5p5_repair5g567_a5_hierarchical_od_perceiver_actor_seed567.pt"),
     )
     assert audit["decision"] == "true_a5_checkpoint"
-    assert audit["trained_actor_marker"] is True
+    assert audit["labelv54_training"] is True
+    assert audit["diagnostic_only"] is True
 
 
 def test_gate3a_pass_conditions_require_real_a5_inference_not_g556_smoke() -> None:
@@ -53,6 +68,14 @@ def test_gate3a_pass_conditions_require_real_a5_inference_not_g556_smoke() -> No
         "identity_retention_rate": 1.0,
         "process_hard_timeout_rows": 0,
     }
+    selected_rows = [
+        {"map_source_type": source, "scenario_source_type": scenario}
+        for source, scenario in [
+            ("canonical_public_benchmark_map", "czr004_derived_on_public_parent_map"),
+            ("synthetic_stress_map", "czr004_synthetic_derived_scenario"),
+        ]
+        for _ in range(16)
+    ]
     passing = gate3a.gate3a_pass_conditions(
         checkpoint_audit={"decision": "true_a5_checkpoint"},
         contexts=contexts,
@@ -60,6 +83,8 @@ def test_gate3a_pass_conditions_require_real_a5_inference_not_g556_smoke() -> No
         replay_summary=replay_summary,
         source_state={"decision": "g567_source_state_clean"},
         forbidden_actions={"final_blind_panel_constructed_or_accessed": False},
+        required_tiers=[32, 256, 1000, 3000],
+        selected_rows=selected_rows,
     )
     assert all(passing.values())
 
@@ -70,6 +95,8 @@ def test_gate3a_pass_conditions_require_real_a5_inference_not_g556_smoke() -> No
         replay_summary=replay_summary,
         source_state={"decision": "g567_source_state_clean"},
         forbidden_actions={"final_blind_panel_constructed_or_accessed": False},
+        required_tiers=[32, 256, 1000, 3000],
+        selected_rows=selected_rows,
     )
     assert failing["a5_inference_variant_only"] is False
     assert failing["no_g556_registry_smoke_theta"] is False

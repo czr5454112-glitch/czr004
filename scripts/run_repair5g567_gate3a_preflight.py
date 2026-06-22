@@ -42,34 +42,79 @@ def ensure_output_dirs() -> None:
 
 def parse_agent_tiers(text: str) -> list[int]:
     tiers = [int(token.strip()) for token in text.split(",") if token.strip()]
-    if len(set(tiers)) < 3:
-        raise ValueError("Gate-3A requires at least three distinct agent tiers")
+    if len(set(tiers)) < 4:
+        raise ValueError("Gate-3A requires at least four distinct agent tiers")
     return tiers
 
 
-def true_a5_checkpoint_audit(payload: dict[str, Any], path: Path) -> dict[str, Any]:
+def true_a5_checkpoint_audit(payload: dict[str, Any], path: Path, expected_head: str = "") -> dict[str, Any]:
     variant_id = g567.model_kind_from_payload(payload, path)
     artifact_type = str(payload.get("artifact_type", ""))
     has_state = isinstance(payload.get("actor_state_dict"), dict) and bool(payload.get("actor_state_dict"))
-    trained_marker = bool(payload.get("labelv54_training")) or artifact_type == "phase5p5_repair5g567_labelv54_direct_actor"
+    labelv54_training = bool(payload.get("labelv54_training"))
+    diagnostic_only = bool(payload.get("diagnostic_only"))
+    training_context_uids = payload.get("training_context_uids", [])
+    has_training_contexts = isinstance(training_context_uids, list) and bool(training_context_uids)
+    dataset_hash = str(payload.get("training_dataset_sha256") or payload.get("dataset_sha256") or "")
+    source_commit = str(payload.get("source_commit") or "")
+    source_commit_matches_expected = (not expected_head) or source_commit == expected_head
+    cuda_bf16_training = bool(payload.get("cuda_bf16_training"))
+    od_perceiver = bool(payload.get("od_perceiver"))
+    graph_global_layers_zero = int(g567.number(payload.get("graph_global_layers"), -1)) == 0
     forbidden_smoke = any(
         token in str(value).upper()
         for token in ["G556_REGISTRY_SMOKE", "NO_TRAINED_CHECKPOINT", "GATE2_G556"]
         for value in [path, payload.get("variant_id", ""), payload.get("variant_name", ""), payload.get("artifact_type", "")]
     )
+    failures = []
+    if variant_id != "A5":
+        failures.append("variant_not_a5")
+    if artifact_type != "phase5p5_repair5g567_labelv54_direct_actor":
+        failures.append("artifact_type_not_labelv54_direct_actor")
+    if not has_state:
+        failures.append("missing_actor_state_dict")
+    if not labelv54_training:
+        failures.append("labelv54_training_not_true")
+    if not diagnostic_only:
+        failures.append("diagnostic_only_not_true")
+    if not has_training_contexts:
+        failures.append("missing_training_context_uids")
+    if not dataset_hash:
+        failures.append("missing_training_dataset_sha256")
+    if not source_commit or source_commit.startswith("git_error:"):
+        failures.append("missing_source_commit")
+    if not source_commit_matches_expected:
+        failures.append("source_commit_mismatch")
+    if not cuda_bf16_training:
+        failures.append("cuda_bf16_training_not_true")
+    if not od_perceiver:
+        failures.append("od_perceiver_not_true")
+    if not graph_global_layers_zero:
+        failures.append("graph_global_layers_not_zero")
+    if forbidden_smoke:
+        failures.append("forbidden_g556_or_smoke_marker")
     return {
         "checkpoint_path": g567.rel(path),
         "checkpoint_sha256": g567.sha256_file(path),
         "variant_id": variant_id,
         "artifact_type": artifact_type,
         "has_actor_state_dict": has_state,
-        "trained_actor_marker": trained_marker,
+        "labelv54_training": labelv54_training,
+        "diagnostic_only": diagnostic_only,
+        "training_context_count": len(training_context_uids) if isinstance(training_context_uids, list) else 0,
+        "training_dataset_sha256": dataset_hash,
+        "source_commit": source_commit,
+        "source_commit_matches_expected": source_commit_matches_expected,
+        "cuda_bf16_training": cuda_bf16_training,
+        "od_perceiver": od_perceiver,
+        "graph_global_layers_zero": graph_global_layers_zero,
         "forbidden_g556_or_untrained_smoke_marker": forbidden_smoke,
-        "decision": "true_a5_checkpoint" if variant_id == "A5" and has_state and trained_marker and not forbidden_smoke else "not_true_a5_checkpoint",
+        "audit_failures": failures,
+        "decision": "true_a5_checkpoint" if not failures else "not_true_a5_checkpoint",
     }
 
 
-def load_true_a5_checkpoint(path: Path) -> tuple[Path, dict[str, Any], dict[str, Any]]:
+def load_true_a5_checkpoint(path: Path, expected_head: str = "") -> tuple[Path, dict[str, Any], dict[str, Any]]:
     import torch
 
     resolved = g567.resolve(path)
@@ -78,7 +123,7 @@ def load_true_a5_checkpoint(path: Path) -> tuple[Path, dict[str, Any], dict[str,
     payload = torch.load(resolved, map_location="cpu", weights_only=False)
     if not isinstance(payload, dict):
         raise RuntimeError(f"A5 checkpoint payload is not a dict: {resolved}")
-    audit = true_a5_checkpoint_audit(payload, resolved)
+    audit = true_a5_checkpoint_audit(payload, resolved, expected_head=expected_head)
     if audit["decision"] != "true_a5_checkpoint":
         raise RuntimeError(f"Gate-3A requires a real trained A5 checkpoint, got {audit}")
     return resolved, payload, audit
@@ -87,12 +132,14 @@ def load_true_a5_checkpoint(path: Path) -> tuple[Path, dict[str, Any], dict[str,
 def select_gate3a_rows(rows: list[dict[str, Any]], tiers: list[int], contexts_per_tier: int) -> list[dict[str, Any]]:
     selected: list[dict[str, Any]] = []
     family_counts: Counter[str] = Counter()
+    source_counts: Counter[str] = Counter()
     for tier in tiers:
         candidates = [row for row in rows if int(g567.number(row.get("agent_count"), 0)) == tier]
         if len(candidates) < contexts_per_tier:
             raise RuntimeError(f"not enough generated contexts for tier {tier}: {len(candidates)} < {contexts_per_tier}")
         candidates.sort(
             key=lambda row: (
+                source_counts[str(row.get("map_source_type", ""))],
                 family_counts[str(row.get("map_family", ""))],
                 -int(g567.number(row.get("nominal_budget_ms"), 0)),
                 -float(g567.number(row.get("base_time_limit_sec"), 0.0)),
@@ -104,7 +151,37 @@ def select_gate3a_rows(rows: list[dict[str, Any]], tiers: list[int], contexts_pe
         for row in candidates[:contexts_per_tier]:
             selected.append(dict(row))
             family_counts[str(row.get("map_family", ""))] += 1
+            source_counts[str(row.get("map_source_type", ""))] += 1
+    selected_ids = {str(row.get("g567_instance_uid", "")) for row in selected}
+    for required_source in ["canonical_public_benchmark_map", "synthetic_stress_map"]:
+        if any(str(row.get("map_source_type", "")) == required_source for row in selected):
+            continue
+        replacement = next(
+            (
+                dict(row)
+                for row in rows
+                if str(row.get("map_source_type", "")) == required_source
+                and int(g567.number(row.get("agent_count"), 0)) in set(tiers)
+                and str(row.get("g567_instance_uid", "")) not in selected_ids
+            ),
+            None,
+        )
+        if replacement is None:
+            continue
+        replacement_tier = int(g567.number(replacement.get("agent_count"), 0))
+        for idx, row in enumerate(selected):
+            if int(g567.number(row.get("agent_count"), 0)) == replacement_tier and str(row.get("map_source_type", "")) != required_source:
+                selected_ids.discard(str(row.get("g567_instance_uid", "")))
+                selected[idx] = replacement
+                selected_ids.add(str(replacement.get("g567_instance_uid", "")))
+                break
     return selected
+
+
+def scenario_source_type(row: dict[str, Any]) -> str:
+    if str(row.get("map_source_type", "")) == "canonical_public_benchmark_map":
+        return "czr004_derived_on_public_parent_map"
+    return "czr004_synthetic_derived_scenario"
 
 
 def prepare_rows_for_gate3a(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -114,6 +191,8 @@ def prepare_rows_for_gate3a(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
         row = dict(row)
         row["split"] = "GATE3A_PREFLIGHT"
         row["blind_locked"] = False
+        row["scenario_source_type"] = scenario_source_type(row)
+        row["official_scenario_consumed"] = False
         row["g567_dataset_row_id"] = f"g567_gate3a_a5_{idx:05d}"
         replay = g567.copy_for_replay(row, g567.resolve(row["raw_scenario_path"]), replay_dir)
         row["replay_scenario_path"] = g567.rel(replay)
@@ -154,15 +233,24 @@ def gate3a_pass_conditions(
     replay_summary: dict[str, Any],
     source_state: dict[str, Any],
     forbidden_actions: dict[str, bool],
+    required_tiers: list[int],
+    selected_rows: list[dict[str, Any]],
 ) -> dict[str, bool]:
     families = {ctx.map_family for ctx in contexts}
     tiers = {ctx.agents for ctx in contexts}
+    map_source_types = {str(row.get("map_source_type", "")) for row in selected_rows}
+    scenario_source_types = {str(row.get("scenario_source_type", "")) for row in selected_rows}
     return {
         "source_state_clean": source_state.get("decision") == "g567_source_state_clean",
         "true_a5_checkpoint": checkpoint_audit.get("decision") == "true_a5_checkpoint",
         "at_least_32_contexts": len(contexts) >= 32,
-        "several_agent_tiers": len(tiers) >= 3,
+        "required_agent_tiers_present": set(required_tiers).issubset(tiers),
+        "several_agent_tiers": len(tiers) >= 4,
         "several_map_families": len(families) >= 2,
+        "has_public_parent_context": "canonical_public_benchmark_map" in map_source_types,
+        "has_synthetic_context": "synthetic_stress_map" in map_source_types,
+        "scenario_source_types_documented": bool(scenario_source_types)
+        and all(value in {"czr004_derived_on_public_parent_map", "czr004_synthetic_derived_scenario"} for value in scenario_source_types),
         "all_contexts_non_blind": all(ctx.split == "GATE3A_PREFLIGHT" for ctx in contexts),
         "a5_inference_rows_equal_contexts": len(theta_rows) == len(contexts),
         "a5_inference_variant_only": {str(row.get("variant_id", "")).upper() for row in theta_rows} == {"A5"},
@@ -188,6 +276,8 @@ def write_report(summary: dict[str, Any]) -> None:
         f"- selected contexts: `{summary['selected_contexts']}`\n"
         f"- selected agent tiers: `{summary['selected_agent_tiers']}`\n"
         f"- selected map families: `{summary['selected_map_families']}`\n"
+        f"- selected map source types: `{summary['selected_map_source_types']}`\n"
+        f"- selected scenario source types: `{summary['selected_scenario_source_types']}`\n"
         f"- A5 theta rows: `{summary['a5_theta_rows']}`\n"
         f"- replay decision: `{summary.get('replay_summary', {}).get('decision')}`\n"
         f"- process hard timeout rows: `{summary.get('replay_summary', {}).get('process_hard_timeout_rows')}`\n\n"
@@ -230,11 +320,21 @@ def main(argv: list[str] | None = None) -> int:
             **g567.claims(),
         }
         g567.write_json(g567.REPORTS / SUMMARY_NAME, summary)
-        write_report({**summary, "selected_contexts": 0, "selected_agent_tiers": [], "selected_map_families": {}, "a5_theta_rows": 0})
+        write_report(
+            {
+                **summary,
+                "selected_contexts": 0,
+                "selected_agent_tiers": [],
+                "selected_map_families": {},
+                "selected_map_source_types": {},
+                "selected_scenario_source_types": {},
+                "a5_theta_rows": 0,
+            }
+        )
         print(json.dumps({"decision": summary["decision"]}, sort_keys=True))
         return 2
 
-    checkpoint_path, _payload, checkpoint_audit = load_true_a5_checkpoint(args.a5_checkpoint)
+    checkpoint_path, _payload, checkpoint_audit = load_true_a5_checkpoint(args.a5_checkpoint, expected_head=args.expected_head)
     tiers = parse_agent_tiers(args.agent_tiers)
     required_contexts = len(tiers) * max(1, int(args.contexts_per_tier))
     if required_contexts < 32:
@@ -270,6 +370,8 @@ def main(argv: list[str] | None = None) -> int:
         replay_summary=replay_summary,
         source_state=source_state,
         forbidden_actions=forbidden_actions,
+        required_tiers=tiers,
+        selected_rows=selected_rows,
     )
     summary = {
         "schema_version": f"{g567.ROUND}_{PHASE}_summary_v1",
@@ -283,6 +385,8 @@ def main(argv: list[str] | None = None) -> int:
         "selected_contexts": len(contexts),
         "selected_agent_tiers": sorted({ctx.agents for ctx in contexts}),
         "selected_map_families": dict(Counter(ctx.map_family for ctx in contexts)),
+        "selected_map_source_types": dict(Counter(str(row.get("map_source_type", "")) for row in selected_rows)),
+        "selected_scenario_source_types": dict(Counter(str(row.get("scenario_source_type", "")) for row in selected_rows)),
         "selected_maps": sorted({ctx.map for ctx in contexts}),
         "context_manifest": g567.rel(g567.TABLES / CONTEXT_MANIFEST_NAME),
         "context_materialization_timings": materialization_timings,

@@ -2243,3 +2243,77 @@ Primary sources to inspect before implementation:
 
 5. MovingAI MAPF Benchmarks  
    https://movingai.com/benchmarks/mapf.html
+
+---
+
+# 22. Execution addendum, 2026-06-22
+
+GPT Pro decision state:
+
+```text
+g567_stage2_true_a5_and_gate3a_approved
+g567_gate3b_blocked_pending_pipeline_repairs
+g567_full_campaign_locked
+```
+
+Accepted as complete before this addendum:
+
+```text
+Stage 0 source/timeout closure
+Stage 1 public benchmark ingestion
+remote HEAD a2489c91f34bf16d7460f6591672821ba1dbce08 evidence accepted
+```
+
+Allowed next execution:
+
+```text
+Train one diagnostic-only true A5 checkpoint on 64-256 non-blind contexts.
+Run true Gate-3A on >=32 contexts and tiers 32/256/1000/3000.
+Gate-3A must prove:
+  A5 inference -> continuous theta -> registry -> C++ UpdateLTM -> solver
+  public-parent and synthetic contexts both present
+  no blind access
+  no hard-timeout rows
+  exact materialization, candidate recognition, identity retention, and scenario hash rates all 1.0
+```
+
+Still forbidden:
+
+```text
+server_start_repair5g567_full.sh
+100k+ context generation
+1M+ solver acquisition
+48h+ training campaign
+final blind construction/access
+astar_v1 as the primary traffic-prior backend
+```
+
+Stage-2/Gate-3A repair notes now implemented or fail-closed:
+
+```text
+1. response_theta_front_loaded_context_coverage
+   Fixed with coverage-first acquisition: every context receives one exact actor candidate before exploratory alpha/group candidates.
+
+2. a5_attention_heads_checkpoint_load_mismatch
+   Fixed by saving both heads and attention_heads and loading either alias.
+
+3. true A5 checkpoint audit too weak
+   Fixed: Gate-3A now requires artifact_type, variant_id=A5, actor_state_dict,
+   labelv54_training=true, diagnostic_only=true, CUDA BF16 training,
+   training_context_uids, dataset hash, source commit, OD Perceiver, and graph_global_layers=0.
+
+4. critic_development_split_mismatch
+   Corrected in the full main path to fit critic candidates from LABEL_TRAIN,
+   with CALIBRATION reserved for calibration evidence.
+
+5. blind_feature_preload_before_primary_freeze
+   Fixed: before primary actor freeze, only blind map/scenario/assignment hash manifest is summarized.
+   BLIND graph/C0/F0 materialization is delayed until after one primary actor is selected.
+
+6. public_ratio_and_official_scenario_gate_too_weak
+   Full validity now fails closed unless LABEL_TRAIN public/canonical >=50%,
+   development/blind public/canonical >=70%, parent physical-map hashes >=256,
+   and the official MovingAI/MAPF-LNS2 scenario-prefix consumer is ready.
+```
+
+Gate-3B remains blocked until all GPT Pro repairs are complete and true Gate-3A passes.

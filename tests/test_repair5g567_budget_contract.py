@@ -120,6 +120,45 @@ def test_large_30s_response_generation_uses_selected_candidate_not_full_lattice(
     assert rows[0]["large_agent_30s_exploratory_full_lattice_skipped"] is True
 
 
+def test_response_generation_is_coverage_first_across_contexts() -> None:
+    contexts = [
+        _context(agents=32, base_sec=1.0, budget_ms=1000),
+        _context(agents=64, base_sec=1.0, budget_ms=1000),
+        _context(agents=128, base_sec=1.0, budget_ms=1000),
+    ]
+    raw_rows = [
+        {
+            "context_id": ctx.dataset_row_id,
+            "variant_id": "A5",
+            "model_path": "unit.pt",
+            **{col: float(g567.BASELINE_G556[idx]) for idx, col in enumerate(g567.THETA_NUMERIC_COLUMNS)},
+        }
+        for ctx in contexts
+    ]
+    rows = g567.generate_response_thetas(contexts, raw_rows, phase="field_group_response", target_rows=len(contexts))
+    assert {row["context_id"] for row in rows} == {ctx.dataset_row_id for ctx in contexts}
+    assert all(row["coverage_first_candidate"] is True for row in rows)
+    assert {row["multi_fidelity_stage"] for row in rows} == {"coverage_first_exact_candidate"}
+
+
+def test_response_generation_fails_closed_when_target_rows_cannot_cover_contexts() -> None:
+    contexts = [
+        _context(agents=32, base_sec=1.0, budget_ms=1000),
+        _context(agents=64, base_sec=1.0, budget_ms=1000),
+    ]
+    raw_rows = [
+        {
+            "context_id": ctx.dataset_row_id,
+            "variant_id": "A5",
+            "model_path": "unit.pt",
+            **{col: float(g567.BASELINE_G556[idx]) for idx, col in enumerate(g567.THETA_NUMERIC_COLUMNS)},
+        }
+        for ctx in contexts
+    ]
+    with pytest.raises(ValueError, match="coverage-first"):
+        g567.generate_response_thetas(contexts, raw_rows, phase="field_group_response", target_rows=1)
+
+
 def test_split_roles_uses_label_train_not_train() -> None:
     rows = [
         {"physical_map_sha256": f"hash-{idx}", "map_family": f"family-{idx % 4}"}

@@ -547,6 +547,12 @@ def write_protocol_documents() -> None:
         "- `hard_timeout_polluted_scientific_labels`: timeout placeholders looked like ordinary no-solution rows. Timeout rows are now infrastructure failures and are excluded from scientific pairs/labels.\n"
         "- `synthetic_only_final_bank`: final context validity could be satisfied with synthetic stress maps only. Full validity now requires a documented mixture of canonical/public benchmark maps and synthetic stress maps.\n"
         "- `label_train_split_leakage`: actor training could draw from development/calibration contexts. G5.67 now separates `LABEL_TRAIN` and blocks full actor training below 24,000 unique exact-labeled training contexts.\n\n"
+        "## Confirmed P0 Bugs Added By Stage-2A/Gate-3A Review\n\n"
+        "- `response_theta_front_loaded_context_coverage`: response-surface acquisition emitted up to 49 candidates for each early context before later LABEL_TRAIN contexts received any exact actor candidate. G5.67 now emits one coverage-first candidate for every context before exploratory alpha/group candidates.\n"
+        "- `a5_attention_heads_checkpoint_load_mismatch`: A5 training saved `attention_heads=8`, but checkpoint loading only read `heads` and could reconstruct a 4-head model. G5.67 now saves both fields and loads either alias.\n"
+        "- `critic_development_split_mismatch`: the distributional critic was called with `development_contexts`, while Label-v5.4 candidates are produced on `LABEL_TRAIN`. G5.67 now routes critic candidate fitting through `LABEL_TRAIN` and reserves CALIBRATION for calibration evidence.\n"
+        "- `blind_feature_preload_before_primary_freeze`: the full main path materialized BLIND graph/C0/F0 features before one primary actor was selected. G5.67 now records only blind map/scenario/assignment hashes before freeze and materializes BLIND features only afterward.\n"
+        "- `public_ratio_and_official_scenario_gate_too_weak`: the validity gate accepted any nonzero public/synthetic mixture. G5.67 now blocks full validity unless LABEL_TRAIN public/canonical >=50%, development/blind >=70%, parent-map hashes >=256, and the official MovingAI/MAPF-LNS2 scenario-prefix consumer is ready.\n\n"
         "## Active Risks To Watch\n\n"
         "- `official_scenario_prefix_not_yet_consumed_by_generator`: public benchmark ingestion freezes official MovingAI/MAPF-LNS2 scenarios, but the current valid-context generator still materializes czr004-derived scenarios on public parent maps. Do not report those derived contexts as official MovingAI scenario results until the official prefix consumer is wired and tested.\n"
         "- `large_graph_memory`: existing graph encoders can be memory-heavy on large maps; the 3000-agent smoke artifact must pass before claims.\n"
@@ -895,10 +901,40 @@ def materialize_valid_bank(target_valid: int, seed: int, *, overwrite: bool) -> 
     synthetic_contexts = source_types.get("synthetic_stress_map", 0)
     ingestion_state = public_benchmark_ingestion_state()
     benchmark_mixture_ok = bool(ingestion_state.get("ready")) and benchmark_contexts > 0 and synthetic_contexts > 0
-    ready = len(valid_rows) >= target_valid and benchmark_mixture_ok
+    split_source_counts: dict[str, Counter[str]] = defaultdict(Counter)
+    split_totals: Counter[str] = Counter()
+    for row in valid_rows:
+        split = str(row.get("split", ""))
+        split_totals[split] += 1
+        split_source_counts[split][str(row.get("map_source_type", ""))] += 1
+
+    def public_fraction(split: str) -> float:
+        total = max(1, split_totals.get(split, 0))
+        return split_source_counts[split].get("canonical_public_benchmark_map", 0) / total
+
+    label_train_public_fraction = public_fraction("LABEL_TRAIN")
+    development_public_fraction = (
+        (split_source_counts["VALIDATION"].get("canonical_public_benchmark_map", 0) + split_source_counts["CALIBRATION"].get("canonical_public_benchmark_map", 0))
+        / max(1, split_totals.get("VALIDATION", 0) + split_totals.get("CALIBRATION", 0))
+    )
+    blind_public_fraction = public_fraction("BLIND")
+    source_ratio_targets_met = (
+        label_train_public_fraction >= 0.50
+        and development_public_fraction >= 0.70
+        and blind_public_fraction >= 0.70
+    )
+    physical_map_hash_target_met = len(by_hash) >= 256
+    official_scenario_prefix_consumer_ready = False
+    ready = (
+        len(valid_rows) >= target_valid
+        and benchmark_mixture_ok
+        and source_ratio_targets_met
+        and physical_map_hash_target_met
+        and official_scenario_prefix_consumer_ready
+    )
     summary = {
         "schema_version": f"{ROUND}_validity_summary_v1",
-        "decision": "g567_valid_context_bank_ready" if ready else "g567_valid_context_bank_under_target_or_benchmark_mix_missing",
+        "decision": "g567_valid_context_bank_ready" if ready else "g567_valid_context_bank_blocked_by_target_public_ratio_hash_or_official_scenario_gate",
         "target_valid_contexts": target_valid,
         "valid_contexts": len(valid_rows),
         "invalid_quarantine_rows": len(invalid_rows),
@@ -913,10 +949,17 @@ def materialize_valid_bank(target_valid: int, seed: int, *, overwrite: bool) -> 
         "canonical_public_benchmark_contexts": benchmark_contexts,
         "synthetic_stress_contexts": synthetic_contexts,
         "benchmark_synthetic_mixture_target_met": benchmark_mixture_ok,
+        "label_train_public_canonical_fraction": label_train_public_fraction,
+        "development_public_canonical_fraction": development_public_fraction,
+        "blind_public_canonical_fraction": blind_public_fraction,
+        "source_ratio_targets_met": source_ratio_targets_met,
+        "official_scenario_prefix_consumer_ready": official_scenario_prefix_consumer_ready,
+        "official_scenario_prefix_consumer_blocker": "movingai_random_even_and_mapf_lns2_prefix_consumer_not_yet_wired",
         "preferred_100000_target_met": len(valid_rows) >= 100000,
         "minimum_5000_target_met": len(valid_rows) >= 5000,
         "physical_map_hashes": len(by_hash),
-        "physical_map_hash_target_met": len(by_hash) >= 40,
+        "physical_map_hash_target_met": physical_map_hash_target_met,
+        "physical_map_hash_minimum_required": 256,
         "map_families": dict(sorted(families.items())),
         "map_family_target_met": len(families) >= 16,
         "agent_tiers": dict(sorted(agents.items())),
@@ -1202,7 +1245,7 @@ def load_model_for_payload(payload: dict[str, Any], path: Path, device: str):
         od_perceiver=boolish(payload.get("od_perceiver")),
         graph_local_layers=int(number(payload.get("graph_local_layers"), 2)),
         graph_global_layers=int(number(payload.get("graph_global_layers"), 1)),
-        heads=int(number(payload.get("heads"), 4)),
+        heads=int(number(payload.get("heads", payload.get("attention_heads")), 4)),
         latent_tokens=int(number(payload.get("latent_tokens"), 64)),
     ).module().to(device)
     model.load_state_dict(payload["actor_state_dict"])
@@ -2072,52 +2115,92 @@ def generate_response_thetas(contexts: list[G567Context], raw_rows: list[dict[st
     anchor = np.asarray(BASELINE_G556, dtype=np.float32)
     lo = np.asarray(THETA_LO, dtype=np.float32)
     hi = np.asarray(THETA_HI, dtype=np.float32)
+    prepared: list[tuple[G567Context, dict[str, Any], np.ndarray, np.ndarray, bool]] = []
     for ctx in contexts:
         raw = raw_by_context.get(ctx.dataset_row_id)
         if not raw:
             continue
         raw_vec = np.asarray([number(raw.get(col), float(anchor[idx])) for idx, col in enumerate(THETA_NUMERIC_COLUMNS)], dtype=np.float32)
-        delta = raw_vec - anchor
+        large_exact_context = ctx.agents in G567_LARGE_PRIMARY_AGENT_TIERS and float(ctx.base_time_limit_sec) >= 30.0
+        prepared.append((ctx, raw, raw_vec, raw_vec - anchor, large_exact_context))
+    if target_rows < len(prepared):
+        raise ValueError(
+            f"coverage-first response generation needs target_rows >= contexts_with_raw "
+            f"({target_rows} < {len(prepared)})"
+        )
 
-        def emit(label: str, vec: np.ndarray) -> None:
-            clipped = np.minimum(np.maximum(vec, lo), hi)
-            row = {col: float(clipped[idx]) for idx, col in enumerate(THETA_NUMERIC_COLUMNS)}
-            row.update(mode_columns("flow_shield"))
-            large_exact_context = ctx.agents in G567_LARGE_PRIMARY_AGENT_TIERS and float(ctx.base_time_limit_sec) >= 30.0
-            out.append(
-                {
-                    "phase": phase,
-                    "context_id": ctx.dataset_row_id,
-                    "g567_evaluation_uid": ctx.evaluation_uid,
-                    "variant_id": label,
-                    "variant_name": "field_group_response",
-                    "seed": "566",
-                    "method": f"g567_response_{label}",
-                    "model_path": str(raw.get("model_path", "")),
-                    "raw_actor_variant_id": raw.get("variant_id", ""),
-                    "multi_fidelity_stage": "selected_30s_exact_candidate" if large_exact_context else "exploratory_response_surface",
-                    "large_agent_30s_exploratory_full_lattice_skipped": large_exact_context,
-                    **row,
-                }
-            )
+    def emit(
+        ctx: G567Context,
+        raw: dict[str, Any],
+        label: str,
+        vec: np.ndarray,
+        *,
+        large_exact_context: bool,
+        coverage_first: bool,
+        pass_index: int,
+    ) -> None:
+        clipped = np.minimum(np.maximum(vec, lo), hi)
+        row = {col: float(clipped[idx]) for idx, col in enumerate(THETA_NUMERIC_COLUMNS)}
+        row.update(mode_columns("flow_shield"))
+        out.append(
+            {
+                "phase": phase,
+                "context_id": ctx.dataset_row_id,
+                "g567_evaluation_uid": ctx.evaluation_uid,
+                "variant_id": label,
+                "variant_name": "field_group_response",
+                "seed": "566",
+                "method": f"g567_response_{label}",
+                "model_path": str(raw.get("model_path", "")),
+                "raw_actor_variant_id": raw.get("variant_id", ""),
+                "multi_fidelity_stage": (
+                    "selected_30s_exact_candidate"
+                    if large_exact_context
+                    else ("coverage_first_exact_candidate" if coverage_first else f"exploratory_response_surface_pass_{pass_index:02d}")
+                ),
+                "coverage_first_candidate": coverage_first,
+                "response_candidate_pass": pass_index,
+                "large_agent_30s_exploratory_full_lattice_skipped": large_exact_context,
+                **row,
+            }
+        )
 
-        if ctx.agents in G567_LARGE_PRIMARY_AGENT_TIERS and float(ctx.base_time_limit_sec) >= 30.0:
-            emit("SELECTED_ACTOR_PRIMARY_30S_EXACT", raw_vec)
+    for ctx, raw, raw_vec, _delta, large_exact_context in prepared:
+        label = "SELECTED_ACTOR_PRIMARY_30S_EXACT" if large_exact_context else "GLOBAL_ALPHA_1p0"
+        emit(ctx, raw, label, raw_vec, large_exact_context=large_exact_context, coverage_first=True, pass_index=0)
+    if len(out) >= target_rows:
+        return out[:target_rows]
+
+    extra_specs: list[tuple[str, str, Any]] = []
+    for alpha in alphas:
+        if abs(alpha - 1.0) <= 1.0e-12:
             continue
-        for alpha in alphas:
-            emit(f"GLOBAL_ALPHA_{str(alpha).replace('.', 'p')}", anchor + alpha * delta)
-        for group_name, cols in FIELD_GROUPS.items():
-            mask = np.zeros_like(delta)
-            mask[cols] = delta[cols]
-            for alpha in group_alphas:
-                emit(f"{group_name}_ONLY_ALPHA_{str(alpha).replace('.', 'p')}", anchor + alpha * mask)
-        for group_name, cols in FIELD_GROUPS.items():
-            for alpha in leave_alphas:
+        extra_specs.append(("global", f"GLOBAL_ALPHA_{str(alpha).replace('.', 'p')}", alpha))
+    for group_name, cols in FIELD_GROUPS.items():
+        for alpha in group_alphas:
+            extra_specs.append(("group", f"{group_name}_ONLY_ALPHA_{str(alpha).replace('.', 'p')}", (cols, alpha)))
+    for group_name, cols in FIELD_GROUPS.items():
+        for alpha in leave_alphas:
+            extra_specs.append(("leave", f"LEAVE_{group_name}_ALPHA_{str(alpha).replace('.', 'p')}", (cols, alpha)))
+    for pass_index, (kind, label, spec) in enumerate(extra_specs, start=1):
+        for ctx, raw, raw_vec, delta, large_exact_context in prepared:
+            if large_exact_context:
+                continue
+            if kind == "global":
+                vec = anchor + float(spec) * delta
+            elif kind == "group":
+                cols, alpha = spec
+                mask = np.zeros_like(delta)
+                mask[cols] = delta[cols]
+                vec = anchor + float(alpha) * mask
+            else:
+                cols, alpha = spec
                 mask = delta.copy()
-                mask[cols] *= alpha
-                emit(f"LEAVE_{group_name}_ALPHA_{str(alpha).replace('.', 'p')}", anchor + mask)
-        if len(out) >= target_rows:
-            break
+                mask[cols] *= float(alpha)
+                vec = anchor + mask
+            emit(ctx, raw, label, vec, large_exact_context=False, coverage_first=False, pass_index=pass_index)
+            if len(out) >= target_rows:
+                return out[:target_rows]
     return out[:target_rows]
 
 
@@ -2572,6 +2655,11 @@ def train_one_g567_actor(
     lr: float,
     checkpoint_interval_sec: float,
     resume: bool,
+    diagnostic_only: bool = False,
+    training_context_uids: list[str] | None = None,
+    training_dataset_sha256: str = "",
+    source_commit: str = "",
+    no_performance_claim: bool = False,
 ) -> tuple[dict[str, Any], dict[str, Any]]:
     import torch
 
@@ -2672,8 +2760,7 @@ def train_one_g567_actor(
     model.load_state_dict(best_state)
     final_metrics = evaluate_actor_model(model, valid, device, batch_size)
     out_path.parent.mkdir(parents=True, exist_ok=True)
-    torch.save(
-        {
+    checkpoint_payload = {
             "artifact_type": "phase5p5_repair5g567_labelv54_direct_actor",
             "variant_id": variant_id,
             "variant_name": arch.variant_name,
@@ -2687,9 +2774,17 @@ def train_one_g567_actor(
             "od_perceiver": arch.od_perceiver,
             "graph_local_layers": arch.graph_local_layers,
             "graph_global_layers": arch.graph_global_layers,
+            "heads": arch.heads,
             "attention_heads": arch.heads,
             "latent_tokens": arch.latent_tokens,
             "labelv54_training": True,
+            "diagnostic_only": bool(diagnostic_only),
+            "no_performance_claim": bool(no_performance_claim),
+            "training_context_uids": list(training_context_uids or []),
+            "training_context_count": len(training_context_uids or []),
+            "training_dataset_sha256": training_dataset_sha256,
+            "dataset_sha256": training_dataset_sha256,
+            "source_commit": source_commit or git_capture("rev-parse", "HEAD"),
             "critic_included_for_export": False,
             "codebook_included_for_export": False,
             "theta_fixed_for_run": True,
@@ -2698,9 +2793,8 @@ def train_one_g567_actor(
             "gpu_active_hours": gpu_active_sec / 3600.0,
             "resume_checkpoint_path": rel(resume_path),
             "labelv54_summary": rel(LABELV54_SUMMARY),
-        },
-        out_path,
-    )
+        }
+    torch.save(checkpoint_payload, out_path)
     row = {
         "variant_id": variant_id,
         "variant_name": arch.variant_name,
@@ -2716,6 +2810,11 @@ def train_one_g567_actor(
         "train_examples": len(train),
         "validation_examples": len(valid),
         "training_split_source": "LABEL_TRAIN_internal_holdout" if any(ex.split == "LABEL_TRAIN" for ex in examples) else "legacy_split_fallback",
+        "diagnostic_only": bool(diagnostic_only),
+        "no_performance_claim": bool(no_performance_claim),
+        "training_context_count": len(training_context_uids or []),
+        "training_dataset_sha256": training_dataset_sha256,
+        "source_commit": source_commit or git_capture("rev-parse", "HEAD"),
         "cuda_bf16_training": use_bf16,
         "token_budget_batching": True,
         "token_budget": int(token_budget),
@@ -3435,6 +3534,42 @@ def freeze_hashes(paths: list[Path]) -> dict[str, str]:
     return {rel(path): sha256_file(path) for path in paths if resolve(path).exists()}
 
 
+def summarize_blind_hash_manifest(limit: int) -> dict[str, Any]:
+    rows = [row for row in read_rows(VALID_CONTEXT_MANIFEST) if str(row.get("split", "")).upper() == "BLIND"]
+    selected = rows[: max(0, int(limit))]
+    hash_rows = [
+        {
+            "g567_dataset_row_id": row.get("g567_dataset_row_id", ""),
+            "g567_evaluation_uid": row.get("g567_evaluation_uid", ""),
+            "map": row.get("map", ""),
+            "map_family": row.get("map_family", ""),
+            "agent_count": row.get("agent_count", ""),
+            "physical_map_sha256": row.get("physical_map_sha256", ""),
+            "scenario_sha256": row.get("scenario_sha256", ""),
+            "assignment_sha256": row.get("assignment_sha256", ""),
+            "replay_scenario_sha256": row.get("replay_scenario_sha256", ""),
+            "map_source_type": row.get("map_source_type", ""),
+        }
+        for row in selected
+    ]
+    payload = json.dumps(hash_rows, ensure_ascii=True, sort_keys=True, separators=(",", ":"))
+    return {
+        "blind_context_rows_available": len(rows),
+        "blind_context_hash_rows_selected": len(selected),
+        "blind_hash_manifest_sha256": hashlib.sha256(payload.encode("utf-8")).hexdigest(),
+        "blind_hash_manifest_fields": [
+            "dataset/evaluation ids",
+            "map family/name",
+            "agent count",
+            "physical map sha256",
+            "scenario sha256",
+            "assignment sha256",
+            "source type",
+        ],
+        "blind_features_materialized_pre_primary_freeze": False,
+    }
+
+
 def write_artifact_manifest(artifact_paths: list[Path]) -> dict[str, Any]:
     manifest = {
         "schema_version": f"{ROUND}_artifact_manifest_v1",
@@ -3654,19 +3789,25 @@ def main(argv: list[str] | None = None) -> int:
     label_train_contexts = contexts_from_manifest("LABEL_TRAIN", args.label_train_contexts)
     repeat_contexts = contexts_from_manifest("CALIBRATION", args.repeat_contexts)
     development_contexts = contexts_from_manifest("VALIDATION,CALIBRATION", args.development_contexts)
-    blind_contexts = contexts_from_manifest("BLIND", args.blind_contexts)
-    if len(smoke_contexts) < args.smoke_contexts or len(label_train_contexts) < args.label_train_contexts or len(development_contexts) < args.development_contexts or len(blind_contexts) < args.blind_contexts:
+    blind_hash_manifest = summarize_blind_hash_manifest(args.blind_contexts)
+    if (
+        len(smoke_contexts) < args.smoke_contexts
+        or len(label_train_contexts) < args.label_train_contexts
+        or len(development_contexts) < args.development_contexts
+        or int(blind_hash_manifest.get("blind_context_rows_available", 0)) < args.blind_contexts
+    ):
         blocked = {
             "schema_version": f"{ROUND}_final_decision_summary_v1",
             "decision": "g567_blocked_insufficient_contexts_after_valid_generation",
             "smoke_contexts": len(smoke_contexts),
             "label_train_contexts": len(label_train_contexts),
             "development_contexts": len(development_contexts),
-            "blind_contexts": len(blind_contexts),
+            "blind_context_hash_rows_available": blind_hash_manifest.get("blind_context_rows_available", 0),
             "required_smoke_contexts": args.smoke_contexts,
             "required_label_train_contexts": args.label_train_contexts,
             "required_development_contexts": args.development_contexts,
             "required_blind_contexts": args.blind_contexts,
+            "blind_features_materialized_pre_primary_freeze": False,
             **claims(),
         }
         write_json(FINAL_DECISION_SUMMARY, blocked)
@@ -3742,11 +3883,17 @@ def main(argv: list[str] | None = None) -> int:
         return 2
     actor_variants = [token.strip().upper() for token in args.actor_variants.split(",") if token.strip()]
     actor_seeds = [int(token.strip()) for token in args.actor_seeds.split(",") if token.strip()]
+    calibration_contexts = contexts_from_manifest("CALIBRATION", min(args.repeat_contexts, max(1, args.development_contexts)))
     outcome = train_distributional_outcome_ensemble(
-        development_contexts,
+        label_train_contexts,
         seeds=actor_seeds,
         plan_only=args.plan_only,
     )
+    outcome["critic_candidate_source_split"] = "LABEL_TRAIN"
+    outcome["critic_calibration_contexts_reserved"] = len(calibration_contexts)
+    outcome["development_contexts_used_for_critic_fit"] = False
+    write_json(DISTRIBUTIONAL_CRITIC_SUMMARY, outcome)
+    write_json(OUTCOME_ENSEMBLE_SUMMARY, outcome)
     if not args.plan_only and outcome.get("decision") != "g567_distributional_critic_calibrated":
         blocked = {
             "schema_version": f"{ROUND}_final_decision_summary_v1",
@@ -3817,11 +3964,13 @@ def main(argv: list[str] | None = None) -> int:
         return 2
 
     primary_actor = select_primary_actor_checkpoint(development)
-    if not args.plan_only and primary_actor.get("decision") != "g567_one_primary_actor_selected":
+    if primary_actor.get("decision") != "g567_one_primary_actor_selected":
         blocked = {
             "schema_version": f"{ROUND}_final_decision_summary_v1",
             "decision": "g567_blocked_primary_actor_not_selected",
             "primary_actor_selection": primary_actor,
+            "blind_hash_manifest": blind_hash_manifest,
+            "blind_features_materialized_pre_primary_freeze": False,
             **claims(),
         }
         write_json(FINAL_DECISION_SUMMARY, blocked)
@@ -3840,8 +3989,22 @@ def main(argv: list[str] | None = None) -> int:
         write_json(FINAL_DECISION_SUMMARY, blocked)
         print(json.dumps(blocked, sort_keys=True))
         return 2
+    blind_contexts = contexts_from_manifest("BLIND", args.blind_contexts)
+    if len(blind_contexts) < args.blind_contexts:
+        blocked = {
+            "schema_version": f"{ROUND}_final_decision_summary_v1",
+            "decision": "g567_blocked_blind_materialization_after_freeze_insufficient",
+            "blind_contexts_materialized_after_primary_freeze": len(blind_contexts),
+            "required_blind_contexts": args.blind_contexts,
+            "blind_hash_manifest": blind_hash_manifest,
+            **claims(),
+        }
+        write_json(FINAL_DECISION_SUMMARY, blocked)
+        print(json.dumps(blocked, sort_keys=True))
+        return 2
     blind_raw = infer_checkpoint_thetas(blind_contexts, blind_ckpts, device=device, batch_size=args.batch_size, phase="blind_three_tier")
     freeze = {
+        "blind_context_hash_manifest": blind_hash_manifest,
         "blind_manifest_sha256": sha256_file(VALID_CONTEXT_MANIFEST),
         "baseline_registry_sha256": sha256_file(BASELINE_REGISTRY),
         "candidate_checkpoints": [rel(path) for path in blind_ckpts],
@@ -3849,6 +4012,7 @@ def main(argv: list[str] | None = None) -> int:
         "primary_actor_selection": primary_actor,
         "exactly_one_primary_actor": len(blind_ckpts) == 1,
         "decision_rules_sha256": sha256_file(PLAN_FILE),
+        "blind_features_materialized_after_primary_actor_freeze": True,
     }
     write_json(REPORTS / f"{ROUND}_blind_freeze_manifest.json", {**freeze, **claims()})
     blind = run_replay_phase(

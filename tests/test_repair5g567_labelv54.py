@@ -103,3 +103,17 @@ def test_single_run_boundary_is_uncertain_not_stable_safe(monkeypatch, tmp_path:
     assert rows[0]["measurement_confidence"] == "single_run_boundary_uncertain"
     assert not g567.boolish(rows[0]["stable_label_supported"])
     assert not g567.boolish(rows[0]["primary_safe_AB"])
+
+
+def test_label_train_unique_context_count_uses_context_rows_and_candidate_split_is_preserved(monkeypatch, tmp_path: Path) -> None:
+    _patch_outputs(monkeypatch, tmp_path)
+    pair_path = tmp_path / "pairs.csv"
+    g567.write_rows(pair_path, [_row(split="LABEL_TRAIN", replay_phase="field_group_response", delta_vs_additive="-0.20")])
+
+    summary = g567.create_labelv54_from_pairs([pair_path], 0.05)
+    candidates = g567.read_rows(tmp_path / "candidates.csv")
+
+    assert summary["label_train_unique_exact_labeled_contexts"] == 1
+    assert candidates[0]["split"] == "LABEL_TRAIN"
+    assert candidates[0]["map"] == "m"
+    assert candidates[0]["agents"] == "32"

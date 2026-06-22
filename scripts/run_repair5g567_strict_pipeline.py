@@ -553,6 +553,10 @@ def write_protocol_documents() -> None:
         "- `critic_development_split_mismatch`: the distributional critic was called with `development_contexts`, while Label-v5.4 candidates are produced on `LABEL_TRAIN`. G5.67 now routes critic candidate fitting through `LABEL_TRAIN` and reserves CALIBRATION for calibration evidence.\n"
         "- `blind_feature_preload_before_primary_freeze`: the full main path materialized BLIND graph/C0/F0 features before one primary actor was selected. G5.67 now records only blind map/scenario/assignment hashes before freeze and materializes BLIND features only afterward.\n"
         "- `public_ratio_and_official_scenario_gate_too_weak`: the validity gate accepted any nonzero public/synthetic mixture. G5.67 now blocks full validity unless LABEL_TRAIN public/canonical >=50%, development/blind >=70%, parent-map hashes >=256, and the official MovingAI/MAPF-LNS2 scenario-prefix consumer is ready.\n\n"
+        "## Confirmed P0 Bugs Added By Stage-2A Remote Run\n\n"
+        "- `stage2a_replay_failure_not_fail_closed`: the diagnostic A5 training script continued into Label-v5.4 construction and training even when its replay summary reported process hard-timeout rows. Stage-2A now blocks before labels/training unless replay materialization, recognition, identity, scenario hash, and hard-timeout gates all pass.\n"
+        "- `labelv54_candidate_split_not_preserved`: Label-v5.4 candidate rows omitted split/map/agent metadata, making `label_train_unique_exact_labeled_contexts` report 0 even when pair/context rows were LABEL_TRAIN. Candidate rows now preserve context metadata and the unique LABEL_TRAIN count is derived from context rows.\n"
+        "- `stage2a_unbounded_diagnostic_graph_size`: diagnostic training selected huge public maps such as orz900d/paris/sortation_large, causing RTX5090 OOM during A5 graph encoder backprop. Stage-2A now has explicit diagnostic graph-size bounds and reports them; this is not a full-campaign large-graph throughput proof.\n\n"
         "## Active Risks To Watch\n\n"
         "- `official_scenario_prefix_not_yet_consumed_by_generator`: public benchmark ingestion freezes official MovingAI/MAPF-LNS2 scenarios, but the current valid-context generator still materializes czr004-derived scenarios on public parent maps. Do not report those derived contexts as official MovingAI scenario results until the official prefix consumer is wired and tested.\n"
         "- `large_graph_memory`: existing graph encoders can be memory-heavy on large maps; the 3000-agent smoke artifact must pass before claims.\n"
@@ -2296,6 +2300,12 @@ def create_labelv54_from_pairs(pair_paths: list[Path], margin: float) -> dict[st
         candidate_rows.append(
             {
                 "g567_evaluation_uid": uid,
+                "g567_dataset_row_id": row.get("g567_dataset_row_id", ""),
+                "split": row.get("split", ""),
+                "map": row.get("map", ""),
+                "map_family": row.get("map_family", ""),
+                "agents": row.get("agents", ""),
+                "budget_ms": row.get("budget_ms", ""),
                 "candidate_uid": theta_id,
                 "theta_id": theta_id,
                 "variant_id": row.get("variant_id", ""),
@@ -2424,7 +2434,7 @@ def create_labelv54_from_pairs(pair_paths: list[Path], margin: float) -> dict[st
                 )["primary_training_theta_ids"].append(str(row.get("theta_id", "")))
     label_train_uids = {
         str(row.get("g567_evaluation_uid", ""))
-        for row in candidate_rows
+        for row in context_rows.values()
         if str(row.get("split", "")).upper() == "LABEL_TRAIN" and str(row.get("g567_evaluation_uid", "")).strip()
     }
     write_rows(LABELV54_CONTEXTS, list(context_rows.values()))

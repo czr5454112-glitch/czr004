@@ -2317,3 +2317,21 @@ Stage-2/Gate-3A repair notes now implemented or fail-closed:
 ```
 
 Gate-3B remains blocked until all GPT Pro repairs are complete and true Gate-3A passes.
+
+Remote Stage-2A first-attempt findings:
+
+```text
+The first remote Stage-2A attempt correctly reached real replay/Label-v5.4/training,
+but it did not pass:
+  replay process_hard_timeout_rows = 92
+  A5 training then hit RTX5090 CUDA OOM on huge diagnostic public maps
+  Label-v5.4 candidate rows omitted split metadata, making LABEL_TRAIN unique count report 0
+
+Follow-up repair:
+  Stage-2A now blocks before labels/training unless replay is fully materialized with zero hard timeouts.
+  Label-v5.4 candidate rows preserve split/map/agent metadata.
+  Stage-2A diagnostic training has explicit graph-size bounds and reports them.
+
+This first failed attempt is evidence for an active large-graph training/memory risk.
+It is not a Gate-3A pass and it does not unlock Gate-3B or full execution.
+```

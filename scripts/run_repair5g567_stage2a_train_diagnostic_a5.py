@@ -83,7 +83,14 @@ def parse_tiers(text: str) -> list[int]:
     return tiers
 
 
-def select_training_rows(rows: list[dict[str, Any]], *, context_count: int, tiers: list[int]) -> list[dict[str, Any]]:
+def select_training_rows(
+    rows: list[dict[str, Any]],
+    *,
+    context_count: int,
+    tiers: list[int],
+    max_free_cells: int,
+    max_area: int,
+) -> list[dict[str, Any]]:
     selected: list[dict[str, Any]] = []
     per_tier = max(1, math.ceil(context_count / len(tiers)))
     family_counts: Counter[str] = Counter()
@@ -91,12 +98,16 @@ def select_training_rows(rows: list[dict[str, Any]], *, context_count: int, tier
         candidates = [
             row for row in rows
             if int(g567.number(row.get("agent_count"), 0)) == tier
+            and int(g567.number(row.get("free_cells"), 0)) <= max_free_cells
+            and int(g567.number(row.get("width"), 0)) * int(g567.number(row.get("height"), 0)) <= max_area
         ]
         if len(candidates) < per_tier:
             raise RuntimeError(f"not enough Stage-2A contexts for tier {tier}: {len(candidates)} < {per_tier}")
         candidates.sort(
             key=lambda row: (
                 family_counts[str(row.get("map_family", ""))],
+                int(g567.number(row.get("free_cells"), 0)),
+                int(g567.number(row.get("width"), 0)) * int(g567.number(row.get("height"), 0)),
                 str(row.get("map_source_type", "")) != "canonical_public_benchmark_map",
                 str(row.get("map_family", "")),
                 str(row.get("map", "")),
@@ -166,6 +177,17 @@ def dataset_sha256(contexts: list[g567.G567Context], label_candidate_path: Path)
     return hashlib.sha256(text.encode("utf-8")).hexdigest()
 
 
+def replay_summary_passes_stage2a_label_gate(replay_summary: dict[str, Any]) -> bool:
+    return (
+        replay_summary.get("decision") == "g567_three_tier_replay_materialized"
+        and int(g567.number(replay_summary.get("process_hard_timeout_rows"), 0)) == 0
+        and float(g567.number(replay_summary.get("exact_materialization_rate"), 0.0)) == 1.0
+        and float(g567.number(replay_summary.get("candidate_recognized_rate"), 0.0)) == 1.0
+        and float(g567.number(replay_summary.get("scenario_hash_match_rate"), 0.0)) == 1.0
+        and float(g567.number(replay_summary.get("identity_retention_rate"), 0.0)) == 1.0
+    )
+
+
 def write_report(summary: dict[str, Any]) -> None:
     g567.write_text(
         g567.REPORTS / REPORT_NAME,
@@ -177,6 +199,7 @@ def write_report(summary: dict[str, Any]) -> None:
         f"- label-train contexts: `{summary.get('training_contexts', 0)}`\n"
         f"- candidate rows: `{summary.get('labelv54_summary', {}).get('candidates', 0)}`\n"
         f"- replay decision: `{summary.get('replay_summary', {}).get('decision')}`\n"
+        f"- replay hard-timeout rows: `{summary.get('replay_summary', {}).get('process_hard_timeout_rows')}`\n"
         f"- CUDA BF16 training: `{summary.get('actor_training_row', {}).get('cuda_bf16_training')}`\n"
         f"- diagnostic_only: `{summary.get('checkpoint_metadata', {}).get('diagnostic_only')}`\n\n"
         "This artifact is diagnostic-only and makes no performance claim. It is only intended to prove the "
@@ -189,6 +212,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--contexts", type=int, default=64)
     parser.add_argument("--context-pool", type=int, default=384)
     parser.add_argument("--train-agent-tiers", default="32,64,128,256")
+    parser.add_argument("--max-train-free-cells", type=int, default=12000)
+    parser.add_argument("--max-train-area", type=int, default=20000)
     parser.add_argument("--seed", type=int, default=567)
     parser.add_argument("--seed-checkpoint-glob", nargs="*", default=["artifacts/models/gcst/phase5p5_repair5g565_expanded_e1_seed565.pt"])
     parser.add_argument("--candidates-per-context", type=int, default=1)
@@ -264,7 +289,15 @@ def main(argv: list[str] | None = None) -> int:
 
     tiers = parse_tiers(args.train_agent_tiers)
     audit_rows, manifest_rows, meta = g567.make_generated_contexts(max(args.context_pool, args.contexts * 4), args.seed, g567.resolve(g567.TMP_ROOT))
-    selected_rows = prepare_rows(select_training_rows(manifest_rows, context_count=args.contexts, tiers=tiers))
+    selected_rows = prepare_rows(
+        select_training_rows(
+            manifest_rows,
+            context_count=args.contexts,
+            tiers=tiers,
+            max_free_cells=max(int(args.max_train_free_cells), max(tiers)),
+            max_area=max(int(args.max_train_area), max(tiers) * 2),
+        )
+    )
     if any(str(row.get("split", "")).upper() == "BLIND" or g567.boolish(row.get("blind_locked")) for row in selected_rows):
         raise RuntimeError("Stage-2A training must not use BLIND contexts")
     g567.write_rows(g567.TABLES / CONTEXT_MANIFEST_NAME, selected_rows)
@@ -287,7 +320,51 @@ def main(argv: list[str] | None = None) -> int:
         margin=float(args.margin),
         plan_only=False,
     )
+    replay_pass = replay_summary_passes_stage2a_label_gate(replay_summary)
+    if not replay_pass:
+        summary = {
+            "schema_version": f"{g567.ROUND}_{PHASE}_summary_v1",
+            "decision": "stage2a_blocked_label_replay_not_materialized",
+            "elapsed_sec": time.perf_counter() - started,
+            "source_state": source_state,
+            "stage_root": g567.rel(args.stage_root),
+            "seed_checkpoint": g567.rel(seed_ckpts[0]),
+            "training_contexts": len(contexts),
+            "training_agent_tiers": dict(sorted(Counter(ctx.agents for ctx in contexts).items())),
+            "training_map_source_types": dict(sorted(Counter(row.get("map_source_type", "") for row in selected_rows).items())),
+            "training_scenario_source_types": dict(sorted(Counter(row.get("scenario_source_type", "") for row in selected_rows).items())),
+            "max_train_free_cells": int(args.max_train_free_cells),
+            "max_train_area": int(args.max_train_area),
+            "replay_summary": replay_summary,
+            "forbidden_actions": {
+                "blind_contexts_loaded": False,
+                "full_100k_generation_launched": False,
+                "million_row_solver_acquisition_launched": False,
+                "forty_eight_hour_training_launched": False,
+                "final_blind_panel_constructed_or_accessed": False,
+            },
+            **g567.claims(),
+        }
+        g567.write_json(g567.REPORTS / SUMMARY_NAME, summary)
+        write_report({**summary, "checkpoint_metadata": {}})
+        print(json.dumps({"decision": summary["decision"], "process_hard_timeout_rows": replay_summary.get("process_hard_timeout_rows")}, sort_keys=True))
+        return 2
     label_summary = g567.create_labelv54_from_pairs([g567.plan_paths(LABEL_PHASE)["pairs"]], float(args.margin))
+    if int(g567.number(label_summary.get("label_train_unique_exact_labeled_contexts"), 0)) < len(contexts):
+        summary = {
+            "schema_version": f"{g567.ROUND}_{PHASE}_summary_v1",
+            "decision": "stage2a_blocked_label_train_unique_contexts_incomplete",
+            "elapsed_sec": time.perf_counter() - started,
+            "source_state": source_state,
+            "training_contexts": len(contexts),
+            "labelv54_summary": label_summary,
+            "replay_summary": replay_summary,
+            **g567.claims(),
+        }
+        g567.write_json(g567.REPORTS / SUMMARY_NAME, summary)
+        write_report({**summary, "checkpoint_metadata": {}})
+        print(json.dumps({"decision": summary["decision"]}, sort_keys=True))
+        return 2
     training_dataset_sha = dataset_sha256(contexts, g567.LABELV54_CANDIDATES)
     training_uids = [ctx.evaluation_uid for ctx in contexts]
     examples = g567.actor_examples_from_labelv54(contexts)
@@ -374,6 +451,8 @@ def main(argv: list[str] | None = None) -> int:
         "training_agent_tiers": dict(sorted(Counter(ctx.agents for ctx in contexts).items())),
         "training_map_source_types": dict(sorted(Counter(row.get("map_source_type", "") for row in selected_rows).items())),
         "training_scenario_source_types": dict(sorted(Counter(row.get("scenario_source_type", "") for row in selected_rows).items())),
+        "max_train_free_cells": int(args.max_train_free_cells),
+        "max_train_area": int(args.max_train_area),
         "context_manifest": g567.rel(g567.TABLES / CONTEXT_MANIFEST_NAME),
         "response_theta_rows": len(response_rows),
         "replay_summary": replay_summary,

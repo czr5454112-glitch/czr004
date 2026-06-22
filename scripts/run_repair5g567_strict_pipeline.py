@@ -3172,6 +3172,8 @@ def train_one_g567_actor(
     training_dataset_sha256: str = "",
     source_commit: str = "",
     no_performance_claim: bool = False,
+    min_gpu_active_hours: float = 0.0,
+    max_gpu_active_hours: float = 0.0,
 ) -> tuple[dict[str, Any], dict[str, Any]]:
     import torch
 
@@ -3218,7 +3220,15 @@ def train_one_g567_actor(
         stale = int(payload.get("stale", stale))
         start_epoch = int(payload.get("epoch", 0)) + 1
         gpu_active_sec = float(payload.get("gpu_active_sec", 0.0))
-    for epoch in range(start_epoch, int(epochs) + 1):
+    min_gpu_active_sec = max(0.0, float(min_gpu_active_hours)) * 3600.0
+    max_gpu_active_sec = max(0.0, float(max_gpu_active_hours)) * 3600.0
+    epoch = start_epoch - 1
+    while True:
+        if epoch >= int(epochs) and gpu_active_sec >= min_gpu_active_sec:
+            break
+        if max_gpu_active_sec > 0.0 and gpu_active_sec >= max_gpu_active_sec and epoch >= int(min_epochs):
+            break
+        epoch += 1
         rng.shuffle(train)
         epoch_losses = []
         model.train()
@@ -3237,6 +3247,8 @@ def train_one_g567_actor(
             torch.nn.utils.clip_grad_norm_(model.parameters(), 2.0)
             opt.step()
             epoch_losses.append(float(loss.detach().cpu()))
+            if max_gpu_active_sec > 0.0 and gpu_active_sec >= max_gpu_active_sec:
+                break
             if checkpoint_interval_sec > 0 and time.perf_counter() - last_checkpoint_sec >= checkpoint_interval_sec:
                 resume_path.parent.mkdir(parents=True, exist_ok=True)
                 torch.save(
@@ -3267,7 +3279,9 @@ def train_one_g567_actor(
             stale = 0
         else:
             stale += 1
-        if epoch >= min_epochs and stale >= patience:
+        if epoch >= min_epochs and stale >= patience and gpu_active_sec >= min_gpu_active_sec:
+            break
+        if max_gpu_active_sec > 0.0 and gpu_active_sec >= max_gpu_active_sec and epoch >= int(min_epochs):
             break
     model.load_state_dict(best_state)
     final_metrics = evaluate_actor_model(model, valid, device, batch_size)
@@ -3303,6 +3317,10 @@ def train_one_g567_actor(
             "cuda_bf16_training": use_bf16,
             "token_budget": int(token_budget),
             "gpu_active_hours": gpu_active_sec / 3600.0,
+            "min_gpu_active_hours": float(min_gpu_active_hours),
+            "max_gpu_active_hours": float(max_gpu_active_hours),
+            "gpu_active_hour_target_met": gpu_active_sec >= min_gpu_active_sec,
+            "gpu_active_hour_cap_respected": (max_gpu_active_sec <= 0.0) or (gpu_active_sec <= max_gpu_active_sec * 1.10),
             "resume_checkpoint_path": rel(resume_path),
             "labelv54_summary": rel(LABELV54_SUMMARY),
         }
@@ -3331,6 +3349,10 @@ def train_one_g567_actor(
         "token_budget_batching": True,
         "token_budget": int(token_budget),
         "gpu_active_hours": gpu_active_sec / 3600.0,
+        "min_gpu_active_hours": float(min_gpu_active_hours),
+        "max_gpu_active_hours": float(max_gpu_active_hours),
+        "gpu_active_hour_target_met": gpu_active_sec >= min_gpu_active_sec,
+        "gpu_active_hour_cap_respected": (max_gpu_active_sec <= 0.0) or (gpu_active_sec <= max_gpu_active_sec * 1.10),
         "hourly_checkpoint_interval_sec": checkpoint_interval_sec,
         "resume_enabled": resume,
         "resume_checkpoint_path": rel(resume_path),

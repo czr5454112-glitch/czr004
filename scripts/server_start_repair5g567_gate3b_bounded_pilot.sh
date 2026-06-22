@@ -111,6 +111,9 @@ python scripts/run_repair5g567_gate3b_bounded_pilot.py \
   --max-workers "${G567_GATE3B_MAX_WORKERS:-8}" \
   --materialize-workers "${G567_GATE3B_MATERIALIZE_WORKERS:-8}" \
   --materialize-progress-interval-sec "${G567_GATE3B_MATERIALIZE_PROGRESS_INTERVAL_SEC:-30}" \
+  --batch-size "${G567_GATE3B_BATCH_SIZE:-4}" \
+  --inference-token-budget "${G567_GATE3B_INFERENCE_TOKEN_BUDGET:-6000}" \
+  --inference-progress-interval-sec "${G567_GATE3B_INFERENCE_PROGRESS_INTERVAL_SEC:-30}" \
   --binary "${G567_SOLVER_BINARY:-build/phase1a-batch/phase1a_batch}" \
   --min-gpu-active-hours "${G567_GATE3B_MIN_GPU_ACTIVE_HOURS:-2.0}" \
   --max-gpu-active-hours "${G567_GATE3B_MAX_GPU_ACTIVE_HOURS:-4.0}" \

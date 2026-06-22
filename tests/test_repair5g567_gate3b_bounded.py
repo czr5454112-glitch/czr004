@@ -100,3 +100,17 @@ def test_gate3b_materialization_reports_bfs_meta(monkeypatch) -> None:
     assert meta["workers"] == 1
     assert meta["routing_backend_contract"] == "bfs"
     assert meta["traffic_prior_versions"] == {"traffic_prior_v1_bfs": 1}
+
+
+def test_inference_context_batches_respect_od_token_budget() -> None:
+    contexts = [
+        SimpleNamespace(assignment={"starts": list(range(1000))}),
+        SimpleNamespace(assignment={"starts": list(range(2500))}),
+        SimpleNamespace(assignment={"starts": list(range(3000))}),
+        SimpleNamespace(assignment={"starts": list(range(64))}),
+    ]
+
+    batches = gate3b.g567.inference_context_batches(contexts, max_contexts=4, max_od_tokens=3000)
+
+    assert [len(batch) for batch in batches] == [1, 1, 1, 1]
+    assert all(sum(gate3b.g567.context_od_token_count(ctx) for ctx in batch) <= 3000 for batch in batches)

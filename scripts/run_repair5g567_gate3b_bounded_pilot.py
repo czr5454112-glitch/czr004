@@ -538,7 +538,9 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--max-gpu-active-hours", type=float, default=4.0)
     parser.add_argument("--actor-checkpoint-interval-sec", type=float, default=3600.0)
     parser.add_argument("--train-token-budget", type=int, default=12000)
-    parser.add_argument("--batch-size", type=int, default=1)
+    parser.add_argument("--batch-size", type=int, default=4)
+    parser.add_argument("--inference-token-budget", type=int, default=6000)
+    parser.add_argument("--inference-progress-interval-sec", type=float, default=30.0)
     parser.add_argument("--device", default="auto")
     parser.add_argument("--binary", type=Path, default=Path("build/phase1a-batch/phase1a_batch"))
     parser.add_argument("--max-workers", type=int, default=8)
@@ -618,7 +620,15 @@ def main(argv: list[str] | None = None) -> int:
     seed_ckpts = g567.checkpoint_paths(args.seed_checkpoint_glob)
     if not seed_ckpts:
         raise RuntimeError(f"Gate-3B missing seed actor checkpoint: {args.seed_checkpoint_glob}")
-    seed_raw = g567.infer_checkpoint_thetas(label_contexts, seed_ckpts[:1], device=device, batch_size=max(1, int(args.batch_size)), phase=SEED_PHASE)
+    seed_raw = g567.infer_checkpoint_thetas(
+        label_contexts,
+        seed_ckpts[:1],
+        device=device,
+        batch_size=max(1, int(args.batch_size)),
+        phase=SEED_PHASE,
+        token_budget=max(0, int(args.inference_token_budget)),
+        progress_interval_sec=float(args.inference_progress_interval_sec),
+    )
     label_baseline_rows = len(label_contexts) * 3
     response_target_rows = max(len(label_contexts), int(args.label_replay_solver_rows) - label_baseline_rows)
     response_rows = g567.generate_response_thetas(label_contexts, seed_raw, phase=LABEL_PHASE, target_rows=response_target_rows)
@@ -699,7 +709,15 @@ def main(argv: list[str] | None = None) -> int:
     }
     g567.write_json(g567.ACTOR_TRAINING_SUMMARY, actor_training_summary)
     actor_ckpt = g567.resolve(actor_row["model_path"])
-    dev_raw = g567.infer_checkpoint_thetas(development_contexts, [actor_ckpt], device=device, batch_size=max(1, int(args.batch_size)), phase=DEV_PHASE)
+    dev_raw = g567.infer_checkpoint_thetas(
+        development_contexts,
+        [actor_ckpt],
+        device=device,
+        batch_size=max(1, int(args.batch_size)),
+        phase=DEV_PHASE,
+        token_budget=max(0, int(args.inference_token_budget)),
+        progress_interval_sec=float(args.inference_progress_interval_sec),
+    )
     development_replay = g567.run_replay_phase(
         DEV_PHASE,
         development_contexts,
@@ -739,6 +757,11 @@ def main(argv: list[str] | None = None) -> int:
         "context_materialization": {
             "label_train": label_materialization,
             "development": development_materialization,
+        },
+        "inference_batching": {
+            "batch_size": max(1, int(args.batch_size)),
+            "token_budget": max(0, int(args.inference_token_budget)),
+            "progress_interval_sec": float(args.inference_progress_interval_sec),
         },
         "label_train_unique_exact_labeled_contexts": exact_contexts,
         "selected_agent_tiers": selection_meta["selected_agent_tiers"],

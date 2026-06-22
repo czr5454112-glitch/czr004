@@ -1306,16 +1306,90 @@ def normalize_torch_device(device: str, *, cuda_available: bool) -> str:
     return requested
 
 
-def infer_checkpoint_thetas(contexts: list[G567Context], checkpoint_paths: list[Path], *, device: str, batch_size: int, phase: str) -> list[dict[str, Any]]:
+def context_od_token_count(ctx: Any) -> int:
+    assignment = getattr(ctx, "assignment", {}) or {}
+    tokens = assignment.get("od_tokens")
+    if tokens is not None:
+        try:
+            return int(np.asarray(tokens).shape[0])
+        except Exception:
+            pass
+    starts = assignment.get("starts", [])
+    try:
+        return int(len(starts))
+    except Exception:
+        return int(number(getattr(ctx, "agents", 0), 0))
+
+
+def inference_context_batches(contexts: list[Any], *, max_contexts: int, max_od_tokens: int) -> list[list[Any]]:
+    max_contexts = max(1, int(max_contexts))
+    max_od_tokens = max(0, int(max_od_tokens))
+    batches: list[list[Any]] = []
+    current: list[Any] = []
+    current_tokens = 0
+    for ctx in contexts:
+        ctx_tokens = max(1, context_od_token_count(ctx))
+        would_exceed_contexts = len(current) >= max_contexts
+        would_exceed_tokens = bool(max_od_tokens and current and current_tokens + ctx_tokens > max_od_tokens)
+        if would_exceed_contexts or would_exceed_tokens:
+            batches.append(current)
+            current = []
+            current_tokens = 0
+        current.append(ctx)
+        current_tokens += ctx_tokens
+    if current:
+        batches.append(current)
+    return batches
+
+
+def emit_inference_event(event: str, **fields: Any) -> None:
+    payload = {
+        "schema_version": f"{ROUND}_checkpoint_inference_event_v1",
+        "event": event,
+        "unix": time.time(),
+        **fields,
+    }
+    print(json.dumps(payload, sort_keys=True), flush=True)
+
+
+def infer_checkpoint_thetas(
+    contexts: list[G567Context],
+    checkpoint_paths: list[Path],
+    *,
+    device: str,
+    batch_size: int,
+    phase: str,
+    token_budget: int = 0,
+    progress_interval_sec: float = 0.0,
+) -> list[dict[str, Any]]:
     import torch
 
     resolved_device = normalize_torch_device(device, cuda_available=torch.cuda.is_available())
     rows: list[dict[str, Any]] = []
-    for path in checkpoint_paths:
+    total_contexts = len(contexts)
+    total_checkpoints = len(checkpoint_paths)
+    progress_interval = max(0.0, float(progress_interval_sec))
+    for checkpoint_index, path in enumerate(checkpoint_paths, start=1):
         payload = torch.load(resolve(path), map_location=resolved_device, weights_only=False)
         model, kind = load_model_for_payload(payload, resolve(path), resolved_device)
-        for start in range(0, len(contexts), batch_size):
-            batch = contexts[start : start + batch_size]
+        batches = inference_context_batches(contexts, max_contexts=max(1, int(batch_size)), max_od_tokens=max(0, int(token_budget)))
+        checkpoint_started = time.perf_counter()
+        last_report = checkpoint_started
+        processed_contexts = 0
+        emit_inference_event(
+            "g567_checkpoint_inference_start",
+            phase=phase,
+            checkpoint_index=checkpoint_index,
+            total_checkpoints=total_checkpoints,
+            checkpoint_path=rel(path),
+            variant_id=kind,
+            total_contexts=total_contexts,
+            batches=len(batches),
+            batch_size=max(1, int(batch_size)),
+            token_budget=max(0, int(token_budget)),
+            device=resolved_device,
+        )
+        for batch_index, batch in enumerate(batches, start=1):
             with torch.no_grad():
                 if kind == "B1":
                     theta = model(len(batch)).detach().cpu().numpy()
@@ -1329,6 +1403,28 @@ def infer_checkpoint_thetas(contexts: list[G567Context], checkpoint_paths: list[
                     od_tokens, od_mask = pad_od_tokens([ctx.assignment for ctx in batch])
                     scalar_x = torch.tensor(np.stack([scalar_features(ctx.feature_row) for ctx in batch]), dtype=torch.float32, device=resolved_device)
                     theta = model(graph_batch, od_tokens.to(resolved_device), od_mask.to(resolved_device), scalar_x).detach().cpu().numpy()
+            processed_contexts += len(batch)
+            if progress_interval and (time.perf_counter() - last_report >= progress_interval or processed_contexts == total_contexts):
+                elapsed = time.perf_counter() - checkpoint_started
+                emit_inference_event(
+                    "g567_checkpoint_inference_progress",
+                    phase=phase,
+                    checkpoint_index=checkpoint_index,
+                    total_checkpoints=total_checkpoints,
+                    checkpoint_path=rel(path),
+                    variant_id=kind,
+                    processed_contexts=processed_contexts,
+                    total_contexts=total_contexts,
+                    batch_index=batch_index,
+                    batches=len(batches),
+                    last_batch_contexts=len(batch),
+                    last_batch_od_tokens=sum(context_od_token_count(ctx) for ctx in batch),
+                    elapsed_sec=elapsed,
+                    contexts_per_sec=processed_contexts / max(1.0e-9, elapsed),
+                    rows_written=len(rows),
+                    device=resolved_device,
+                )
+                last_report = time.perf_counter()
             for ctx, values in zip(batch, theta):
                 row = {col: float(values[idx]) for idx, col in enumerate(THETA_NUMERIC_COLUMNS)}
                 row.update(mode_columns("flow_shield"))
@@ -1345,6 +1441,22 @@ def infer_checkpoint_thetas(contexts: list[G567Context], checkpoint_paths: list[
                         **clamp_theta_row(row),
                     }
                 )
+        elapsed = time.perf_counter() - checkpoint_started
+        emit_inference_event(
+            "g567_checkpoint_inference_complete",
+            phase=phase,
+            checkpoint_index=checkpoint_index,
+            total_checkpoints=total_checkpoints,
+            checkpoint_path=rel(path),
+            variant_id=kind,
+            processed_contexts=processed_contexts,
+            total_contexts=total_contexts,
+            batches=len(batches),
+            elapsed_sec=elapsed,
+            contexts_per_sec=processed_contexts / max(1.0e-9, elapsed),
+            rows_written=len(rows),
+            device=resolved_device,
+        )
     return rows
 
 

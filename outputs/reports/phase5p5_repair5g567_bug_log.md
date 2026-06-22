@@ -140,6 +140,16 @@ Date: 2026-06-22 Asia/Shanghai
 
    Regression test: `tests/test_repair5g558_gcst.py::test_theta_bounds`.
 
+20. Gate-3B A5 checkpoint inference had no progress provenance and used one context per batch.
+
+   Symptom: Gate-3B r5 completed 20,000 context generation and exact-BFS materialization for 2,500 selected contexts, then spent roughly 50 minutes in seed A5 inference with GPU activity but no batch progress events and no new artifact. This made it impossible to distinguish slow but valid graph/OD inference from a throughput collapse.
+
+   Mitigation: r5 was stopped with runner `rc=143`, final summary preserved, and forbidden full-run actions remained false.
+
+   Fix: checkpoint inference now emits start/progress/complete JSON events, and Gate-3B uses token-budget batching for inference (`batch_size=4`, `inference_token_budget=6000` by default). This keeps A5/OD Perceiver semantics intact and does not change the solver task, traffic-prior backend, or label target.
+
+   Regression test: `tests/test_repair5g567_gate3b_bounded.py::test_inference_context_batches_respect_od_token_budget`.
+
 ## Existing Repairs Verified By Gates
 
 - A5 uses OD Perceiver instead of full OD self-attention for 3000 OD tokens.

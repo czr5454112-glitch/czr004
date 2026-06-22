@@ -62,7 +62,8 @@ def read_movingai_map(path: Path) -> tuple[int, int, list[str]]:
 
 def _synthetic_obstacle(map_name: str, x: int, y: int, width: int, height: int) -> bool:
     lower = map_name.lower()
-    if lower.startswith("empty"):
+    tokens = lower.replace("-", "_").split("_")
+    if lower.startswith("empty") or "empty" in tokens:
         return False
     if "warehouse" in lower:
         aisle = (x % 8) in {0, 1, 6, 7}

@@ -6,6 +6,7 @@ from collections import deque
 from typing import Any
 
 import numpy as np
+import heapq
 
 from .graph_data import GraphData
 
@@ -18,7 +19,7 @@ def _adjacency(graph: GraphData) -> dict[int, list[int]]:
     return out
 
 
-def _shortest_path_from_lookup(
+def _bfs_shortest_path_from_lookup(
     adj: dict[int, list[int]],
     cell_to_idx: dict[tuple[int, int], int],
     start: tuple[int, int],
@@ -29,15 +30,16 @@ def _shortest_path_from_lookup(
     src = cell_to_idx[start]
     dst = cell_to_idx[goal]
     parent = {src: -1}
-    q: deque[int] = deque([src])
-    while q:
-        cur = q.popleft()
+    queue: deque[int] = deque([src])
+    while queue:
+        cur = queue.popleft()
         if cur == dst:
             break
         for nxt in adj.get(cur, []):
-            if nxt not in parent:
-                parent[nxt] = cur
-                q.append(nxt)
+            if nxt in parent:
+                continue
+            parent[nxt] = cur
+            queue.append(nxt)
     if dst not in parent:
         return []
     path = [dst]
@@ -46,12 +48,71 @@ def _shortest_path_from_lookup(
     return list(reversed(path))
 
 
-def shortest_path(graph: GraphData, start: tuple[int, int], goal: tuple[int, int]) -> list[int]:
+def _astar_shortest_path_from_lookup(
+    adj: dict[int, list[int]],
+    cell_to_idx: dict[tuple[int, int], int],
+    start: tuple[int, int],
+    goal: tuple[int, int],
+) -> list[int]:
+    if start not in cell_to_idx or goal not in cell_to_idx:
+        return []
+    src = cell_to_idx[start]
+    dst = cell_to_idx[goal]
+    idx_to_cell = {idx: cell for cell, idx in cell_to_idx.items()}
+
+    def heuristic(node: int) -> int:
+        x, y = idx_to_cell.get(node, start)
+        gx, gy = goal
+        return abs(x - gx) + abs(y - gy)
+
+    parent = {src: -1}
+    distance = {src: 0}
+    queue: list[tuple[int, int, int]] = [(heuristic(src), 0, src)]
+    while queue:
+        _priority, dist, cur = heapq.heappop(queue)
+        if dist != distance.get(cur):
+            continue
+        if cur == dst:
+            break
+        for nxt in adj.get(cur, []):
+            nd = dist + 1
+            if nd < distance.get(nxt, 1_000_000_000):
+                distance[nxt] = nd
+                parent[nxt] = cur
+                heapq.heappush(queue, (nd + heuristic(nxt), nd, nxt))
+    if dst not in parent:
+        return []
+    path = [dst]
+    while path[-1] != src:
+        path.append(parent[path[-1]])
+    return list(reversed(path))
+
+
+def _shortest_path_from_lookup(
+    adj: dict[int, list[int]],
+    cell_to_idx: dict[tuple[int, int], int],
+    start: tuple[int, int],
+    goal: tuple[int, int],
+    *,
+    routing_backend: str = "bfs",
+) -> list[int]:
+    backend = str(routing_backend or "bfs").lower()
+    if backend == "bfs":
+        return _bfs_shortest_path_from_lookup(adj, cell_to_idx, start, goal)
+    if backend == "astar_v1":
+        return _astar_shortest_path_from_lookup(adj, cell_to_idx, start, goal)
+    raise ValueError(f"unknown traffic prior routing backend: {routing_backend}")
+
+
+def shortest_path(graph: GraphData, start: tuple[int, int], goal: tuple[int, int], *, routing_backend: str = "bfs") -> list[int]:
     cell_to_idx = {cell: i for i, cell in enumerate(graph.cells)}
-    return _shortest_path_from_lookup(_adjacency(graph), cell_to_idx, start, goal)
+    return _shortest_path_from_lookup(_adjacency(graph), cell_to_idx, start, goal, routing_backend=routing_backend)
 
 
-def compute_traffic_prior(graph: GraphData, assignment: dict[str, Any]) -> dict[str, Any]:
+def compute_traffic_prior(graph: GraphData, assignment: dict[str, Any], *, routing_backend: str = "bfs") -> dict[str, Any]:
+    backend = str(routing_backend or "bfs").lower()
+    if backend not in {"bfs", "astar_v1"}:
+        raise ValueError(f"unknown traffic prior routing backend: {routing_backend}")
     adj = _adjacency(graph)
     cell_to_idx = {cell: i for i, cell in enumerate(graph.cells)}
     edge_to_idx = {(int(s), int(d)): i for i, (s, d) in enumerate(graph.edge_index.T)} if graph.edge_index.size else {}
@@ -61,7 +122,7 @@ def compute_traffic_prior(graph: GraphData, assignment: dict[str, Any]) -> dict[
     path_found = 0
     expected_edge_use_total = 0.0
     for start, goal in zip(assignment["starts"], assignment["goals"]):
-        path = _shortest_path_from_lookup(adj, cell_to_idx, start, goal)
+        path = _shortest_path_from_lookup(adj, cell_to_idx, start, goal, routing_backend=backend)
         paths.append(path)
         if path:
             path_found += 1
@@ -88,6 +149,8 @@ def compute_traffic_prior(graph: GraphData, assignment: dict[str, Any]) -> dict[
         edge_features = graph.edge_features.copy()
         flow = opp = imbalance = head_on = np.zeros((0,), dtype=np.float32)
     summary = {
+        "routing_backend": backend,
+        "traffic_prior_version": "traffic_prior_v1_bfs" if backend == "bfs" else "traffic_prior_v2_astar",
         "edge_use_total": float(counts.sum()),
         "edge_use_max": float(counts.max()) if counts.size else 0.0,
         "edge_use_mean": float(counts.mean()) if counts.size else 0.0,

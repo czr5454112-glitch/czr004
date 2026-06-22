@@ -19,6 +19,11 @@ class ActorArchitecture:
     use_cross_attention: bool = False
     safe_subspace: bool = False
     field_group_trust: bool = False
+    od_perceiver: bool = False
+    graph_local_layers: int = 2
+    graph_global_layers: int = 1
+    heads: int = 4
+    latent_tokens: int = 64
 
 
 ARCHITECTURES = {
@@ -28,6 +33,9 @@ ARCHITECTURES = {
     "A2": ActorArchitecture("A2", "od_graph_cross_attention_actor", use_cross_attention=True),
     "A3": ActorArchitecture("A3", "safe_residual_subspace_actor", use_cross_attention=True, safe_subspace=True),
     "A4": ActorArchitecture("A4", "field_group_trust_safe_subspace_actor", use_cross_attention=True, safe_subspace=True, field_group_trust=True),
+    "A5": ActorArchitecture("A5", "hierarchical_od_perceiver_actor", use_cross_attention=True, safe_subspace=True, field_group_trust=True, od_perceiver=True, graph_global_layers=0, heads=8, latent_tokens=96),
+    "A6": ActorArchitecture("A6", "multiscale_topology_c0_f0_actor", use_cross_attention=True, safe_subspace=True, field_group_trust=True, od_perceiver=True, graph_local_layers=3, graph_global_layers=0, heads=8, latent_tokens=128),
+    "A7": ActorArchitecture("A7", "od_flow_hypergraph_ablation_actor", use_cross_attention=True, safe_subspace=True, field_group_trust=True, od_perceiver=True, graph_local_layers=2, graph_global_layers=0, heads=8, latent_tokens=64),
 }
 
 
@@ -71,6 +79,11 @@ class DualStreamGoalAwareActor:
         use_cross_attention: bool = False,
         safe_subspace: bool = False,
         field_group_trust: bool = False,
+        od_perceiver: bool = False,
+        graph_local_layers: int = 2,
+        graph_global_layers: int = 1,
+        heads: int = 4,
+        latent_tokens: int = 64,
     ) -> None:
         import torch
 
@@ -86,17 +99,36 @@ class DualStreamGoalAwareActor:
         self.use_cross_attention = bool(use_cross_attention)
         self.safe_subspace = bool(safe_subspace)
         self.field_group_trust = bool(field_group_trust)
+        self.od_perceiver = bool(od_perceiver)
+        self.latent_tokens = int(latent_tokens)
         self.theta_dim = len(THETA_NUMERIC_COLUMNS)
         self.anchor = torch.tensor(BASELINE_G556, dtype=torch.float32)
         self.lo = torch.tensor(THETA_LO, dtype=torch.float32)
         self.hi = torch.tensor(THETA_HI, dtype=torch.float32)
         self.span = self.hi - self.lo
-        self.topology_encoder = GraphGPSLiteEncoder(node_dim=node_dim, edge_dim=edge_dim, hidden_dim=hidden_dim, local_layers=2, global_layers=1, heads=4, dropout=0.0)
-        self.c0_encoder = GraphGPSLiteEncoder(node_dim=node_dim, edge_dim=edge_dim, hidden_dim=hidden_dim, local_layers=2, global_layers=1, heads=4, dropout=0.0)
-        self.f0_encoder = GraphGPSLiteEncoder(node_dim=node_dim, edge_dim=edge_dim, hidden_dim=hidden_dim, local_layers=2, global_layers=1, heads=4, dropout=0.0)
+        self.topology_encoder = GraphGPSLiteEncoder(node_dim=node_dim, edge_dim=edge_dim, hidden_dim=hidden_dim, local_layers=graph_local_layers, global_layers=graph_global_layers, heads=heads, dropout=0.0)
+        self.c0_encoder = GraphGPSLiteEncoder(node_dim=node_dim, edge_dim=edge_dim, hidden_dim=hidden_dim, local_layers=graph_local_layers, global_layers=graph_global_layers, heads=heads, dropout=0.0)
+        self.f0_encoder = GraphGPSLiteEncoder(node_dim=node_dim, edge_dim=edge_dim, hidden_dim=hidden_dim, local_layers=graph_local_layers, global_layers=graph_global_layers, heads=heads, dropout=0.0)
         self.od_encoder = ODSetEncoder(input_dim=6, hidden_dim=hidden_dim, heads=4, dropout=0.0)
         self.od_token_proj = torch.nn.Linear(6, hidden_dim)
-        self.cross_attn = torch.nn.MultiheadAttention(hidden_dim, num_heads=4, dropout=0.0, batch_first=True)
+        self.cross_attn = torch.nn.MultiheadAttention(hidden_dim, num_heads=heads, dropout=0.0, batch_first=True)
+        if self.od_perceiver:
+            self.od_latents = torch.nn.Parameter(torch.randn(self.latent_tokens, hidden_dim) * 0.02)
+            self.od_latent_cross_attn = torch.nn.MultiheadAttention(hidden_dim, num_heads=heads, dropout=0.0, batch_first=True)
+            self.od_latent_self = torch.nn.TransformerEncoderLayer(
+                d_model=hidden_dim,
+                nhead=heads,
+                dim_feedforward=hidden_dim * 2,
+                dropout=0.0,
+                activation="gelu",
+                batch_first=True,
+            )
+            self.od_latent_norm = torch.nn.LayerNorm(hidden_dim)
+        else:
+            self.od_latents = None
+            self.od_latent_cross_attn = None
+            self.od_latent_self = None
+            self.od_latent_norm = None
         self.scalar_encoder = torch.nn.Sequential(
             torch.nn.Linear(scalar_dim, hidden_dim),
             torch.nn.LayerNorm(hidden_dim),
@@ -143,6 +175,12 @@ class DualStreamGoalAwareActor:
                 self.od_encoder = outer.od_encoder
                 self.od_token_proj = outer.od_token_proj
                 self.cross_attn = outer.cross_attn
+                self.od_perceiver = outer.od_perceiver
+                if outer.od_latents is not None:
+                    self.od_latents = outer.od_latents
+                    self.od_latent_cross_attn = outer.od_latent_cross_attn
+                    self.od_latent_self = outer.od_latent_self
+                    self.od_latent_norm = outer.od_latent_norm
                 self.scalar_encoder = outer.scalar_encoder
                 self.fusion = outer.fusion
                 self.delta_head = outer.delta_head
@@ -180,6 +218,17 @@ class DualStreamGoalAwareActor:
                     out[:, cols] = trust[:, idx : idx + 1]
                 return out
 
+            def _od_repr(self, od_tokens, od_mask):
+                if not self.od_perceiver:
+                    return self.od_encoder(od_tokens, od_mask)
+                batch = od_tokens.shape[0]
+                kv = self.od_token_proj(od_tokens.float())
+                latents = self.od_latents.unsqueeze(0).expand(batch, -1, -1)
+                key_padding_mask = ~od_mask.bool()
+                latents = self.od_latent_cross_attn(latents, kv, kv, key_padding_mask=key_padding_mask, need_weights=False)[0]
+                latents = self.od_latent_self(latents)
+                return self.od_latent_norm(latents.mean(dim=1))
+
             def forward(self, graph_batch, od_tokens, od_mask, scalar_x):
                 scalar_repr = self.scalar_encoder(scalar_x.float())
                 if self.scalar_only_control:
@@ -188,7 +237,7 @@ class DualStreamGoalAwareActor:
                     topo_repr = self.topology_encoder(make_masked_graph_batch(graph_batch, "topology"))
                     c0_repr = self.c0_encoder(make_masked_graph_batch(graph_batch, "c0"))
                     f0_repr = self.f0_encoder(make_masked_graph_batch(graph_batch, "f0"))
-                    od_repr = self.od_encoder(od_tokens, od_mask)
+                    od_repr = self._od_repr(od_tokens, od_mask)
                     if self.use_cross_attention:
                         q = (topo_repr + c0_repr + f0_repr).unsqueeze(1)
                         kv = self.od_token_proj(od_tokens.float())

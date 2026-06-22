@@ -204,26 +204,10 @@ G567_AGENT_TIERS = [
     3000,
 ]
 
-G567_BUDGET_PROFILES = [
-    (500, 0.5, 2),
-    (750, 0.75, 2),
-    (1000, 1.0, 3),
-    (1500, 1.5, 3),
-    (2000, 2.0, 4),
-    (3000, 3.0, 4),
-    (5000, 5.0, 6),
-    (8000, 8.0, 8),
-    (12000, 12.0, 10),
-    (20000, 20.0, 12),
-]
-
+G567_BUDGET_PROFILES = [(30000, 30.0, 12)]
 G567_LARGE_PRIMARY_AGENT_TIERS = {2000, 2500, 3000}
-G567_LARGE_PRIMARY_BUDGET_PROFILE = (30000, 30.0, 12, "large_agent_primary_30s_exact")
-G567_LARGE_SHORT_STRESS_PROFILE = (20000, 20.0, 12, "short_budget_stress_diagnostic")
-G567_LARGE_RECOVERY_PROFILES = {
-    45: (45000, 45.0, 12, "symmetric_recovery_curve_45s"),
-    60: (60000, 60.0, 12, "symmetric_recovery_curve_60s"),
-}
+G567_UNIFORM_30S_PRIMARY_BUDGET_PROFILE = (30000, 30.0, 12, "uniform_30s_all_agent_tiers_primary_exact")
+G567_LARGE_PRIMARY_BUDGET_PROFILE = G567_UNIFORM_30S_PRIMARY_BUDGET_PROFILE
 
 
 @dataclass(frozen=True)
@@ -323,17 +307,14 @@ def sha256_file(path: str | Path) -> str:
 
 
 def budget_profile_for_agent_tier(agent_count: int, profile_index: int, purpose: str = "primary") -> tuple[int, float, int, str]:
-    if int(agent_count) in G567_LARGE_PRIMARY_AGENT_TIERS:
-        if purpose == "short_budget_stress_diagnostic":
-            return G567_LARGE_SHORT_STRESS_PROFILE
-        if purpose == "symmetric_recovery_curve_45s":
-            return G567_LARGE_RECOVERY_PROFILES[45]
-        if purpose == "symmetric_recovery_curve_60s":
-            return G567_LARGE_RECOVERY_PROFILES[60]
-        return G567_LARGE_PRIMARY_BUDGET_PROFILE
-    budget_ms, base_sec, ltm_iters = G567_BUDGET_PROFILES[profile_index % len(G567_BUDGET_PROFILES)]
-    role = "short_budget_stress_diagnostic" if float(base_sec) == 20.0 else "primary_exact"
-    return int(budget_ms), float(base_sec), int(ltm_iters), role
+    """Return the fail-closed G5.67 primary budget contract.
+
+    GPT Pro/user Gate-3A policy requires every planned solver row to use the
+    same 30s internal budget and 60s outer hard timeout across agent/map tiers.
+    Short-budget stress and recovery-curve probes must be separate explicit
+    diagnostics; they are not produced by this staged execution path.
+    """
+    return G567_UNIFORM_30S_PRIMARY_BUDGET_PROFILE
 
 
 def process_hard_timeout_for_internal_budget(internal_sec: float) -> float:
@@ -547,6 +528,8 @@ def write_protocol_documents() -> None:
         "- `hard_timeout_polluted_scientific_labels`: timeout placeholders looked like ordinary no-solution rows. Timeout rows are now infrastructure failures and are excluded from scientific pairs/labels.\n"
         "- `synthetic_only_final_bank`: final context validity could be satisfied with synthetic stress maps only. Full validity now requires a documented mixture of canonical/public benchmark maps and synthetic stress maps.\n"
         "- `label_train_split_leakage`: actor training could draw from development/calibration contexts. G5.67 now separates `LABEL_TRAIN` and blocks full actor training below 24,000 unique exact-labeled training contexts.\n\n"
+        "## Confirmed P0 Bugs Added By Uniform-Budget Review\n\n"
+        "- `nonuniform_small_tier_timeout_contract`: small and medium diagnostic tiers could still use legacy short internal budgets while large tiers used 30s, making cross-tier evidence non-comparable. G5.67 staged execution now assigns `30.0s` internal / `60.0s` hard timeout to every planned agent/map row and fails budget audit on any non-uniform row.\n\n"
         "## Confirmed P0 Bugs Added By Stage-2A/Gate-3A Review\n\n"
         "- `response_theta_front_loaded_context_coverage`: response-surface acquisition emitted up to 49 candidates for each early context before later LABEL_TRAIN contexts received any exact actor candidate. G5.67 now emits one coverage-first candidate for every context before exploratory alpha/group candidates.\n"
         "- `a5_attention_heads_checkpoint_load_mismatch`: A5 training saved `attention_heads=8`, but checkpoint loading only read `heads` and could reconstruct a 4-head model. G5.67 now saves both fields and loads either alias.\n"
@@ -577,13 +560,12 @@ def write_protocol_documents() -> None:
         TIME_BUDGET_SEMANTICS,
         "# Repair5G.5.67 Time Budget Semantics\n\n"
         "- `solver_internal_time_limit_sec`: the budget passed to the solver and kept equal across methods.\n"
-        "- Agent tiers `2000`, `2500`, and `3000` use `solver_internal_time_limit_sec = 30.0` for primary exact execution.\n"
-        "- For those large tiers, `20.0s` is short-budget stress diagnostic only; `45.0s` and `60.0s` are symmetric recovery-curve budgets only.\n"
+        "- Every staged G5.67 primary row, across all agent counts and all maps, uses `solver_internal_time_limit_sec = 30.0`.\n"
+        "- `20.0s`, `45.0s`, and `60.0s` internal budgets are not emitted by the current staged execution path; they require separately approved diagnostic/recovery jobs.\n"
         "- `process_hard_timeout_sec`: explicit per-row outer allowance enforced by the parent process; G5.67 full execution blocks if any planned row is missing it.\n"
-        "- Non-30s diagnostic/recovery budgets use the generated symmetric allowance `max(nominal + 0.25s, nominal * 1.10)` only after it has been materialized into the plan row.\n"
         "- For a `30.0s` internal budget, `process_hard_timeout_sec` is fixed at `60.0`; timeout rows are infrastructure failures, not no-solution labels or success regressions.\n"
         "- Linux solver subprocesses run in a new process group; timeout sends SIGTERM, waits the recorded grace interval, then SIGKILLs the group if needed.\n"
-        "- Large-tier 30s exploratory response surfaces are screened multi-fidelity; full 30s exact execution is reserved for selected candidates, calibration rows, boundary cases, development replay, and blind replay.\n"
+        "- 30s exploratory response surfaces are screened multi-fidelity; full 30s exact execution is reserved for selected candidates, calibration rows, boundary cases, development replay, and blind replay.\n"
         "- `actor inference time`: measured outside solver budget where available and reported as overhead, not extra search time.\n"
         "- `queueing/CPU contention`: broad parallel collection is diagnostic; success-regression adjudication uses one worker and recorded thread env.\n",
     )
@@ -761,11 +743,7 @@ def make_generated_contexts(target_valid: int, seed: int, tmp_root: Path) -> tup
             "solver_internal_time_limit_sec": base_sec,
             "process_hard_timeout_sec": process_hard_timeout_sec,
             "budget_role": budget_role,
-            "budget_contract": (
-                "agent_tier_2000_2500_3000_primary_30s_hard_timeout_60s"
-                if agent_count in G567_LARGE_PRIMARY_AGENT_TIERS
-                else "standard_primary_budget_profile"
-            ),
+            "budget_contract": "uniform_all_agent_tiers_primary_30s_hard_timeout_60s",
             "ltm_max_iterations": ltm_iters,
             "agent_density": density,
             "scenario_bank_source": "g567_component_aware_mixed_public_benchmark_and_synthetic",
@@ -927,12 +905,14 @@ def materialize_valid_bank(target_valid: int, seed: int, *, overwrite: bool) -> 
         and development_public_fraction >= 0.70
         and blind_public_fraction >= 0.70
     )
+    uniform_30s_budget_target_met = set(budgets) == {"30000"} if valid_rows else False
     physical_map_hash_target_met = len(by_hash) >= 256
     official_scenario_prefix_consumer_ready = False
     ready = (
         len(valid_rows) >= target_valid
         and benchmark_mixture_ok
         and source_ratio_targets_met
+        and uniform_30s_budget_target_met
         and physical_map_hash_target_met
         and official_scenario_prefix_consumer_ready
     )
@@ -970,7 +950,9 @@ def materialize_valid_bank(target_valid: int, seed: int, *, overwrite: bool) -> 
         "agent_tier_target_met": len(agents) >= len(G567_AGENT_TIERS),
         "large_agent_tier_contract_met": all(str(tier) in agents for tier in [1000, 1500, 2000, 2500, 3000]),
         "budget_profiles": dict(sorted(budgets.items())),
-        "budget_target_met": len(budgets) >= 4,
+        "budget_target_description": "all planned staged contexts use nominal_budget_ms=30000 / solver_internal_time_limit_sec=30.0 / process_hard_timeout_sec=60.0",
+        "uniform_30s_budget_target_met": uniform_30s_budget_target_met,
+        "budget_target_met": uniform_30s_budget_target_met,
         "split_counts": dict(sorted(split_counts.items())),
         "blind_contexts": split_counts.get("BLIND", 0),
         "blind_physical_map_hashes": len(blind_hashes),
@@ -1425,19 +1407,16 @@ def audit_plan_explicit_budgets(plan_rows: list[dict[str, Any]], phase: str) -> 
         context_id = str(row.get("context_id", ""))
         context_budgets[context_id].add((internal, hard))
         expected_hard = process_hard_timeout_for_internal_budget(internal) if explicit_internal else 0.0
-        large_30s_ok = True
-        if agents in G567_LARGE_PRIMARY_AGENT_TIERS and abs(internal - 30.0) <= 1.0e-9:
-            large_30s_ok = abs(hard - 60.0) <= 1.0e-9
+        uniform_30s_ok = explicit_internal and explicit_hard and abs(internal - 30.0) <= 1.0e-9 and abs(hard - 60.0) <= 1.0e-9
         row_failures = []
         if not explicit_internal:
             row_failures.append("missing_explicit_solver_internal_time_limit_sec")
         if not explicit_hard:
             row_failures.append("missing_explicit_process_hard_timeout_sec")
         if explicit_internal and explicit_hard and abs(hard - expected_hard) > 1.0e-9:
-            if not (abs(internal - 45.0) <= 1.0e-9 and abs(hard - process_hard_timeout_for_internal_budget(45.0)) <= 1.0e-9):
-                row_failures.append("hard_timeout_does_not_match_budget_contract")
-        if not large_30s_ok:
-            row_failures.append("large_agent_30s_budget_missing_60s_hard_timeout")
+            row_failures.append("hard_timeout_does_not_match_budget_contract")
+        if explicit_internal and explicit_hard and not uniform_30s_ok:
+            row_failures.append("non_uniform_30s_budget_contract")
         if row_failures:
             failures.extend(f"{row.get('plan_row_id', idx)}:{failure}" for failure in row_failures)
         audit_rows.append(
@@ -1453,7 +1432,8 @@ def audit_plan_explicit_budgets(plan_rows: list[dict[str, Any]], phase: str) -> 
                 "expected_process_hard_timeout_sec": expected_hard if explicit_internal else "",
                 "explicit_internal_budget": explicit_internal,
                 "explicit_hard_timeout": explicit_hard,
-                "large_agent_30s_budget_contract_met": large_30s_ok,
+                "uniform_30s_budget_contract_met": uniform_30s_ok,
+                "large_agent_30s_budget_contract_met": uniform_30s_ok,
                 "row_budget_audit_decision": "pass" if not row_failures else "fail",
                 "row_budget_audit_failures": ";".join(row_failures),
                 **claims(),
@@ -1479,6 +1459,7 @@ def audit_plan_explicit_budgets(plan_rows: list[dict[str, Any]], phase: str) -> 
         "all_rows_have_explicit_internal_budget": all(boolish(row.get("explicit_internal_budget")) for row in audit_rows),
         "all_rows_have_explicit_hard_timeout": all(boolish(row.get("explicit_hard_timeout")) for row in audit_rows),
         "same_context_methods_same_budget": all(len(pairs) == 1 for pairs in context_budgets.values()),
+        "uniform_30s_rows_have_60s_hard_timeout": all(boolish(row.get("uniform_30s_budget_contract_met")) for row in audit_rows),
         "large_30s_rows_have_60s_hard_timeout": all(boolish(row.get("large_agent_30s_budget_contract_met")) for row in audit_rows),
         **claims(),
     }
@@ -2125,8 +2106,8 @@ def generate_response_thetas(contexts: list[G567Context], raw_rows: list[dict[st
         if not raw:
             continue
         raw_vec = np.asarray([number(raw.get(col), float(anchor[idx])) for idx, col in enumerate(THETA_NUMERIC_COLUMNS)], dtype=np.float32)
-        large_exact_context = ctx.agents in G567_LARGE_PRIMARY_AGENT_TIERS and float(ctx.base_time_limit_sec) >= 30.0
-        prepared.append((ctx, raw, raw_vec, raw_vec - anchor, large_exact_context))
+        primary_30s_exact_context = float(ctx.base_time_limit_sec) >= 30.0
+        prepared.append((ctx, raw, raw_vec, raw_vec - anchor, primary_30s_exact_context))
     if target_rows < len(prepared):
         raise ValueError(
             f"coverage-first response generation needs target_rows >= contexts_with_raw "
@@ -2139,7 +2120,7 @@ def generate_response_thetas(contexts: list[G567Context], raw_rows: list[dict[st
         label: str,
         vec: np.ndarray,
         *,
-        large_exact_context: bool,
+        primary_30s_exact_context: bool,
         coverage_first: bool,
         pass_index: int,
     ) -> None:
@@ -2159,19 +2140,20 @@ def generate_response_thetas(contexts: list[G567Context], raw_rows: list[dict[st
                 "raw_actor_variant_id": raw.get("variant_id", ""),
                 "multi_fidelity_stage": (
                     "selected_30s_exact_candidate"
-                    if large_exact_context
+                    if primary_30s_exact_context
                     else ("coverage_first_exact_candidate" if coverage_first else f"exploratory_response_surface_pass_{pass_index:02d}")
                 ),
                 "coverage_first_candidate": coverage_first,
                 "response_candidate_pass": pass_index,
-                "large_agent_30s_exploratory_full_lattice_skipped": large_exact_context,
+                "primary_30s_exploratory_full_lattice_skipped": primary_30s_exact_context,
+                "large_agent_30s_exploratory_full_lattice_skipped": primary_30s_exact_context and ctx.agents in G567_LARGE_PRIMARY_AGENT_TIERS,
                 **row,
             }
         )
 
-    for ctx, raw, raw_vec, _delta, large_exact_context in prepared:
-        label = "SELECTED_ACTOR_PRIMARY_30S_EXACT" if large_exact_context else "GLOBAL_ALPHA_1p0"
-        emit(ctx, raw, label, raw_vec, large_exact_context=large_exact_context, coverage_first=True, pass_index=0)
+    for ctx, raw, raw_vec, _delta, primary_30s_exact_context in prepared:
+        label = "SELECTED_ACTOR_PRIMARY_30S_EXACT" if primary_30s_exact_context else "GLOBAL_ALPHA_1p0"
+        emit(ctx, raw, label, raw_vec, primary_30s_exact_context=primary_30s_exact_context, coverage_first=True, pass_index=0)
     if len(out) >= target_rows:
         return out[:target_rows]
 
@@ -2187,8 +2169,8 @@ def generate_response_thetas(contexts: list[G567Context], raw_rows: list[dict[st
         for alpha in leave_alphas:
             extra_specs.append(("leave", f"LEAVE_{group_name}_ALPHA_{str(alpha).replace('.', 'p')}", (cols, alpha)))
     for pass_index, (kind, label, spec) in enumerate(extra_specs, start=1):
-        for ctx, raw, raw_vec, delta, large_exact_context in prepared:
-            if large_exact_context:
+        for ctx, raw, raw_vec, delta, primary_30s_exact_context in prepared:
+            if primary_30s_exact_context:
                 continue
             if kind == "global":
                 vec = anchor + float(spec) * delta
@@ -2202,7 +2184,7 @@ def generate_response_thetas(contexts: list[G567Context], raw_rows: list[dict[st
                 mask = delta.copy()
                 mask[cols] *= float(alpha)
                 vec = anchor + mask
-            emit(ctx, raw, label, vec, large_exact_context=False, coverage_first=False, pass_index=pass_index)
+            emit(ctx, raw, label, vec, primary_30s_exact_context=False, coverage_first=False, pass_index=pass_index)
             if len(out) >= target_rows:
                 return out[:target_rows]
     return out[:target_rows]

@@ -2335,3 +2335,25 @@ Follow-up repair:
 This first failed attempt is evidence for an active large-graph training/memory risk.
 It is not a Gate-3A pass and it does not unlock Gate-3B or full execution.
 ```
+
+Uniform-budget correction after operator review:
+
+```text
+Operator correction:
+  Do not shrink diagnostic training evidence to tiny tiers such as 8/12/16/24.
+  Do not use tier-dependent short internal budgets for small/medium maps.
+  Use 30.0s solver_internal_time_limit_sec and 60.0s process_hard_timeout_sec
+  for every staged primary solver row across all agent counts and all maps.
+
+Implemented contract:
+  budget_profile_for_agent_tier now returns 30000 ms / 30.0s / 12 LTM iterations
+  with role uniform_30s_all_agent_tiers_primary_exact for every tier and purpose.
+  The solver budget audit fails closed on any planned row not using 30.0s/60.0s.
+  The valid-context bank summary treats the budget target as uniform 30000 ms,
+  not as legacy multi-budget coverage.
+  Response-theta generation treats every 30s primary context as selected exact
+  evidence and does not expand a full exploratory 30s lattice for smaller tiers.
+
+Status:
+  This correction supersedes the invalid 8/12/16/24 diagnostic attempt.
+```

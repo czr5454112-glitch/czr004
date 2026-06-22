@@ -42,6 +42,7 @@ artifacts/checkpoints/
 third_party/**/build/
 external/**/build/
 external/**/build*/
+external/benchmarks/
 
 repair5g511_*.tar
 repair5g511_*.tar.gz

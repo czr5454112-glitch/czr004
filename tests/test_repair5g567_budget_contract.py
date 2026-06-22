@@ -3,6 +3,8 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
+import pytest
+
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
@@ -10,7 +12,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 import run_repair5g567_strict_pipeline as g567  # noqa: E402
 
 
-def _context(*, agents: int, base_sec: float, budget_ms: int = 30000) -> g567.G567Context:
+def _context(*, agents: int, base_sec: float, budget_ms: int = 30000, hard_timeout_sec: float | None = None) -> g567.G567Context:
     return g567.G567Context(
         dataset_row_id=f"ctx-{agents}",
         evaluation_uid=f"eval-{agents}",
@@ -33,7 +35,11 @@ def _context(*, agents: int, base_sec: float, budget_ms: int = 30000) -> g567.G5
         assignment={},
         feature_row={},
         budget_role="large_agent_primary_30s_exact" if agents in g567.G567_LARGE_PRIMARY_AGENT_TIERS else "primary_exact",
-        process_hard_timeout_sec=g567.process_hard_timeout_for_internal_budget(base_sec),
+        process_hard_timeout_sec=(
+            g567.process_hard_timeout_for_internal_budget(base_sec)
+            if hard_timeout_sec is None
+            else hard_timeout_sec
+        ),
     )
 
 
@@ -80,6 +86,23 @@ def test_plan_rows_keep_same_large_context_budget_for_all_methods() -> None:
     assert {row["solver_internal_time_limit_sec"] for row in plan} == {30.0}
     assert {row["process_hard_timeout_sec"] for row in plan} == {60.0}
     assert {row["budget_role"] for row in plan} == {"large_agent_primary_30s_exact"}
+
+
+def test_plan_generation_fails_closed_without_explicit_hard_timeout() -> None:
+    ctx = _context(agents=3000, base_sec=30.0, hard_timeout_sec=0.0)
+    with pytest.raises(ValueError, match="missing explicit process hard timeout"):
+        g567.build_plan_and_registry([ctx], [], "unit_missing_timeout")
+
+
+def test_solver_budget_audit_rejects_mixed_context_budgets(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr(g567, "SOLVER_BUDGET_AUDIT", tmp_path / "budget_audit.csv")
+    monkeypatch.setattr(g567, "SOLVER_BUDGET_AUDIT_SUMMARY", tmp_path / "budget_audit.json")
+    ctx = _context(agents=3000, base_sec=30.0)
+    rows, _registry = g567.build_plan_and_registry([ctx], [], "unit_budget_audit")
+    rows[0]["process_hard_timeout_sec"] = 61.0
+    summary = g567.audit_plan_explicit_budgets(rows, "unit_budget_audit")
+    assert summary["decision"] == "g567_solver_budget_audit_failed"
+    assert any("context_methods_do_not_share_same_budget" in item for item in summary["failures"])
 
 
 def test_large_30s_response_generation_uses_selected_candidate_not_full_lattice() -> None:

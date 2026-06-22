@@ -106,6 +106,13 @@ BLIND_SUMMARY = REPORTS / f"{ROUND}_blind_three_tier_summary.json"
 FINAL_DECISION_SUMMARY = REPORTS / f"{ROUND}_final_decision_summary.json"
 FINAL_DECISION_MD = REPORTS / f"{ROUND}_final_decision.md"
 ARTIFACT_MANIFEST = REPORTS / f"{ROUND}_artifact_manifest.json"
+SOLVER_BUDGET_AUDIT = TABLES / f"{ROUND}_solver_budget_audit.csv"
+SOLVER_BUDGET_AUDIT_SUMMARY = REPORTS / f"{ROUND}_solver_budget_audit_summary.json"
+PUBLIC_BENCHMARK_INGESTION_MD = REPORTS / f"{ROUND}_public_benchmark_ingestion.md"
+PUBLIC_BENCHMARK_INGESTION_SUMMARY = REPORTS / f"{ROUND}_public_benchmark_ingestion_summary.json"
+PUBLIC_MAP_REGISTRY = TABLES / f"{ROUND}_public_map_registry.csv"
+PUBLIC_SCENARIO_REGISTRY = TABLES / f"{ROUND}_public_scenario_registry.csv"
+PARENT_MAP_SPLIT_AUDIT = TABLES / f"{ROUND}_parent_map_split_audit.csv"
 
 NO_LTM_DIAGNOSTIC = "lacam_star"
 FIELD_GROUPS = {
@@ -336,45 +343,75 @@ def process_hard_timeout_for_internal_budget(internal_sec: float) -> float:
     return max(internal + 0.25, internal * 1.10)
 
 
+def public_benchmark_ingestion_state() -> dict[str, Any]:
+    summary = read_json(PUBLIC_BENCHMARK_INGESTION_SUMMARY)
+    map_rows = read_rows(PUBLIC_MAP_REGISTRY)
+    scenario_rows = read_rows(PUBLIC_SCENARIO_REGISTRY)
+    split_rows = read_rows(PARENT_MAP_SPLIT_AUDIT)
+    decision = str(summary.get("decision", ""))
+    ready = decision == "g567_public_benchmark_ingestion_ready"
+    if not summary:
+        decision = "g567_public_benchmark_ingestion_missing"
+    return {
+        "decision": decision,
+        "ready": ready,
+        "summary_path": rel(PUBLIC_BENCHMARK_INGESTION_SUMMARY),
+        "map_registry_path": rel(PUBLIC_MAP_REGISTRY),
+        "scenario_registry_path": rel(PUBLIC_SCENARIO_REGISTRY),
+        "parent_split_audit_path": rel(PARENT_MAP_SPLIT_AUDIT),
+        "map_registry_rows": len(map_rows),
+        "scenario_registry_rows": len(scenario_rows),
+        "parent_split_audit_rows": len(split_rows),
+        "failure_count": summary.get("failure_count", 0),
+        "failures": summary.get("failures", []),
+        "required_panels_present": summary.get("required_panels_present", False),
+    }
+
+
 def discover_public_benchmark_map_specs(limit: int = 64) -> list[dict[str, Any]]:
-    roots = [
-        ROOT / "maps",
-        ROOT / "benchmarks",
-        ROOT / "external" / "lacam2" / "scripts" / "map",
-        ROOT / "external" / "lacam2" / "assets",
-        ROOT / "external" / "lacam2" / "maps",
-        ROOT / "external" / "lacam2" / "benchmark",
-    ]
+    state = public_benchmark_ingestion_state()
+    if not state["ready"]:
+        return []
+    registry_rows = read_rows(PUBLIC_MAP_REGISTRY)
     specs: list[dict[str, Any]] = []
     seen: set[str] = set()
-    for root in roots:
-        if not root.exists():
+    for row in registry_rows:
+        if str(row.get("validation_result", "")).strip().lower() != "pass":
             continue
-        for path in sorted(root.rglob("*.map")):
-            digest = sha256_file(path)
-            if not digest or digest in seen:
-                continue
-            seen.add(digest)
-            width, height, grid = read_movingai_map(path)
-            free_count = len(g561_bank.free_cells(grid))
-            if free_count < min(G567_AGENT_TIERS):
-                continue
-            family = f"public_benchmark_{safe_token(path.parent.name or 'maps')}"
-            specs.append(
-                {
-                    "map": safe_token(path.stem),
-                    "map_family": family,
-                    "width": width,
-                    "height": height,
-                    "grid": grid,
-                    "source_path": path,
-                    "source_sha256": digest,
-                    "free_cells": free_count,
-                    "map_source_type": "canonical_public_benchmark_map",
-                }
-            )
-            if len(specs) >= limit:
-                return specs
+        if not boolish(row.get("use_in_g567", "true")):
+            continue
+        if str(row.get("map_source_type", "")) != "canonical_public_benchmark_map":
+            continue
+        path = resolve(row.get("local_map_path", ""))
+        if not path.exists():
+            continue
+        digest = sha256_file(path)
+        expected = str(row.get("physical_map_sha256") or row.get("parent_physical_map_sha256") or "")
+        if not digest or (expected and digest != expected) or digest in seen:
+            continue
+        seen.add(digest)
+        width, height, grid = read_movingai_map(path)
+        free_count = len(g561_bank.free_cells(grid))
+        if free_count < min(G567_AGENT_TIERS):
+            continue
+        specs.append(
+            {
+                "map": safe_token(row.get("map_name") or path.stem),
+                "map_family": str(row.get("map_family") or f"public_benchmark_{safe_token(row.get('source_category') or path.parent.name)}"),
+                "width": width,
+                "height": height,
+                "grid": grid,
+                "source_path": path,
+                "source_sha256": digest,
+                "free_cells": free_count,
+                "map_source_type": "canonical_public_benchmark_map",
+                "source_category": row.get("source_category", ""),
+                "panel": row.get("panel", ""),
+                "public_registry_source": rel(PUBLIC_MAP_REGISTRY),
+            }
+        )
+        if len(specs) >= limit:
+            return specs
     return specs
 
 
@@ -511,6 +548,7 @@ def write_protocol_documents() -> None:
         "- `synthetic_only_final_bank`: final context validity could be satisfied with synthetic stress maps only. Full validity now requires a documented mixture of canonical/public benchmark maps and synthetic stress maps.\n"
         "- `label_train_split_leakage`: actor training could draw from development/calibration contexts. G5.67 now separates `LABEL_TRAIN` and blocks full actor training below 24,000 unique exact-labeled training contexts.\n\n"
         "## Active Risks To Watch\n\n"
+        "- `official_scenario_prefix_not_yet_consumed_by_generator`: public benchmark ingestion freezes official MovingAI/MAPF-LNS2 scenarios, but the current valid-context generator still materializes czr004-derived scenarios on public parent maps. Do not report those derived contexts as official MovingAI scenario results until the official prefix consumer is wired and tested.\n"
         "- `large_graph_memory`: existing graph encoders can be memory-heavy on large maps; the 3000-agent smoke artifact must pass before claims.\n"
         "- `critic_calibration_strength`: the critic must pass skill/calibration checks, not coverage alone.\n",
     )
@@ -519,6 +557,7 @@ def write_protocol_documents() -> None:
         "# Repair5G.5.67 Protocol Overview\n\n"
         "- Run source from a complete Git worktree with recorded HEAD and plan hash.\n"
         "- Fail closed before execution on missing Git metadata, dirty source state, wrong expected HEAD, or submodule mismatch.\n"
+        "- Require `phase5p5_repair5g567_public_benchmark_ingestion_summary.json` to be ready before a public/synthetic context bank can pass.\n"
         "- Generate a valid context bank with large-agent tiers through 3000.\n"
         "- Use single-worker pinned repeatability for boundary adjudication; broad collection may use more workers but cannot certify regressions.\n"
         "- Build Label-v5.4 with explicit A/B/C safety, AB/ABC positives, replicate confidence, and safe-set preservation.\n"
@@ -530,7 +569,8 @@ def write_protocol_documents() -> None:
         "- `solver_internal_time_limit_sec`: the budget passed to the solver and kept equal across methods.\n"
         "- Agent tiers `2000`, `2500`, and `3000` use `solver_internal_time_limit_sec = 30.0` for primary exact execution.\n"
         "- For those large tiers, `20.0s` is short-budget stress diagnostic only; `45.0s` and `60.0s` are symmetric recovery-curve budgets only.\n"
-        "- `process_hard_timeout_sec`: symmetric outer allowance, recorded as `max(nominal + 0.25s, nominal * 1.10)` and enforced by the parent process.\n"
+        "- `process_hard_timeout_sec`: explicit per-row outer allowance enforced by the parent process; G5.67 full execution blocks if any planned row is missing it.\n"
+        "- Non-30s diagnostic/recovery budgets use the generated symmetric allowance `max(nominal + 0.25s, nominal * 1.10)` only after it has been materialized into the plan row.\n"
         "- For a `30.0s` internal budget, `process_hard_timeout_sec` is fixed at `60.0`; timeout rows are infrastructure failures, not no-solution labels or success regressions.\n"
         "- Linux solver subprocesses run in a new process group; timeout sends SIGTERM, waits the recorded grace interval, then SIGKILLs the group if needed.\n"
         "- Large-tier 30s exploratory response surfaces are screened multi-fidelity; full 30s exact execution is reserved for selected candidates, calibration rows, boundary cases, development replay, and blind replay.\n"
@@ -769,7 +809,12 @@ def make_generated_contexts(target_valid: int, seed: int, tmp_root: Path) -> tup
         generated += 1
         if generated % 500 == 0:
             print(json.dumps({"event": "g567_valid_generation_progress", "generated": generated, "attempts": attempts}), flush=True)
-    return audit_rows, manifest_rows, {"attempts": attempts, "generated": generated}
+    return audit_rows, manifest_rows, {
+        "attempts": attempts,
+        "generated": generated,
+        "benchmark_map_specs": len(benchmark_specs),
+        "public_benchmark_ingestion_state": public_benchmark_ingestion_state(),
+    }
 
 
 def split_roles_by_context_target(rows: list[dict[str, Any]]) -> dict[str, str]:
@@ -848,7 +893,8 @@ def materialize_valid_bank(target_valid: int, seed: int, *, overwrite: bool) -> 
     blind_hashes = {row["physical_map_sha256"] for row in valid_rows if row["split"] == "BLIND"}
     benchmark_contexts = source_types.get("canonical_public_benchmark_map", 0)
     synthetic_contexts = source_types.get("synthetic_stress_map", 0)
-    benchmark_mixture_ok = benchmark_contexts > 0 and synthetic_contexts > 0
+    ingestion_state = public_benchmark_ingestion_state()
+    benchmark_mixture_ok = bool(ingestion_state.get("ready")) and benchmark_contexts > 0 and synthetic_contexts > 0
     ready = len(valid_rows) >= target_valid and benchmark_mixture_ok
     summary = {
         "schema_version": f"{ROUND}_validity_summary_v1",
@@ -857,6 +903,13 @@ def materialize_valid_bank(target_valid: int, seed: int, *, overwrite: bool) -> 
         "valid_contexts": len(valid_rows),
         "invalid_quarantine_rows": len(invalid_rows),
         "map_source_types": dict(sorted(source_types.items())),
+        "public_benchmark_ingestion_decision": ingestion_state.get("decision", ""),
+        "public_benchmark_ingestion_ready": ingestion_state.get("ready", False),
+        "public_map_registry_rows": ingestion_state.get("map_registry_rows", 0),
+        "public_scenario_registry_rows": ingestion_state.get("scenario_registry_rows", 0),
+        "public_parent_split_audit_rows": ingestion_state.get("parent_split_audit_rows", 0),
+        "public_required_panels_present": ingestion_state.get("required_panels_present", False),
+        "public_benchmark_ingestion_failure_count": ingestion_state.get("failure_count", 0),
         "canonical_public_benchmark_contexts": benchmark_contexts,
         "synthetic_stress_contexts": synthetic_contexts,
         "benchmark_synthetic_mixture_target_met": benchmark_mixture_ok,
@@ -880,6 +933,7 @@ def materialize_valid_bank(target_valid: int, seed: int, *, overwrite: bool) -> 
         "scenario_replay_dir": rel(REPLAY_SCENARIO_DIR),
         "map_dir": rel(resolve(TMP_ROOT) / "maps"),
         "generator_attempts": meta["attempts"],
+        "benchmark_map_specs": meta.get("benchmark_map_specs", 0),
         "generator_seed": seed,
         **claims(),
     }
@@ -889,6 +943,8 @@ def materialize_valid_bank(target_valid: int, seed: int, *, overwrite: bool) -> 
         "# Repair5G.5.67 Valid Context Bank\n\n"
         f"- decision: `{summary['decision']}`\n"
         f"- valid contexts: `{summary['valid_contexts']}`\n"
+        f"- public benchmark ingestion: `{summary['public_benchmark_ingestion_decision']}`\n"
+        f"- public registry rows: `{summary['public_map_registry_rows']}` maps, `{summary['public_scenario_registry_rows']}` scenarios\n"
         f"- physical map hashes: `{summary['physical_map_hashes']}`\n"
         f"- canonical/public benchmark contexts: `{summary['canonical_public_benchmark_contexts']}`\n"
         f"- synthetic stress contexts: `{summary['synthetic_stress_contexts']}`\n"
@@ -1228,7 +1284,11 @@ def add_plan_row(
     generated_uid = "" if theta is None else generated_theta_uid(model_path or method, ctx.instance_uid, [theta[col] for col in THETA_NUMERIC_COLUMNS])
     identity = stable_uid("g567_replay_identity", phase, ctx.evaluation_uid, ctx.scenario_sha256, candidate_id, generated_uid)
     horizon_id = ctx.horizon_id
-    hard_timeout = ctx.process_hard_timeout_sec or process_hard_timeout_for_internal_budget(float(ctx.base_time_limit_sec))
+    if float(ctx.base_time_limit_sec) <= 0.0:
+        raise ValueError(f"G5.67 plan row missing explicit solver internal budget for context {ctx.dataset_row_id}")
+    if float(ctx.process_hard_timeout_sec) <= 0.0:
+        raise ValueError(f"G5.67 plan row missing explicit process hard timeout for context {ctx.dataset_row_id}")
+    hard_timeout = float(ctx.process_hard_timeout_sec)
     expected_fingerprint = ""
     if candidate_id == ADDITIVE_SOLVER_ALIAS:
         expected_fingerprint = TIER_A_ADDITIVE.fingerprint
@@ -1301,6 +1361,82 @@ def add_plan_row(
     if theta is not None:
         row.update({col: theta.get(col, "") for col in THETA_COLUMNS})
     plan.append(row)
+
+
+def audit_plan_explicit_budgets(plan_rows: list[dict[str, Any]], phase: str) -> dict[str, Any]:
+    audit_rows: list[dict[str, Any]] = []
+    failures: list[str] = []
+    context_budgets: dict[str, set[tuple[float, float]]] = defaultdict(set)
+    for idx, row in enumerate(plan_rows):
+        internal_raw = str(row.get("solver_internal_time_limit_sec", "")).strip()
+        hard_raw = str(row.get("process_hard_timeout_sec", "")).strip()
+        internal = float(number(internal_raw, 0.0))
+        hard = float(number(hard_raw, 0.0))
+        explicit_internal = bool(internal_raw) and internal > 0.0
+        explicit_hard = bool(hard_raw) and hard > 0.0
+        agents = int(number(row.get("agent_count", row.get("agents")), 0))
+        context_id = str(row.get("context_id", ""))
+        context_budgets[context_id].add((internal, hard))
+        expected_hard = process_hard_timeout_for_internal_budget(internal) if explicit_internal else 0.0
+        large_30s_ok = True
+        if agents in G567_LARGE_PRIMARY_AGENT_TIERS and abs(internal - 30.0) <= 1.0e-9:
+            large_30s_ok = abs(hard - 60.0) <= 1.0e-9
+        row_failures = []
+        if not explicit_internal:
+            row_failures.append("missing_explicit_solver_internal_time_limit_sec")
+        if not explicit_hard:
+            row_failures.append("missing_explicit_process_hard_timeout_sec")
+        if explicit_internal and explicit_hard and abs(hard - expected_hard) > 1.0e-9:
+            if not (abs(internal - 45.0) <= 1.0e-9 and abs(hard - process_hard_timeout_for_internal_budget(45.0)) <= 1.0e-9):
+                row_failures.append("hard_timeout_does_not_match_budget_contract")
+        if not large_30s_ok:
+            row_failures.append("large_agent_30s_budget_missing_60s_hard_timeout")
+        if row_failures:
+            failures.extend(f"{row.get('plan_row_id', idx)}:{failure}" for failure in row_failures)
+        audit_rows.append(
+            {
+                "replay_phase": phase,
+                "plan_row_id": row.get("plan_row_id", ""),
+                "context_id": context_id,
+                "candidate_id": row.get("candidate_id", ""),
+                "agent_count": agents,
+                "budget_role": row.get("budget_role", ""),
+                "solver_internal_time_limit_sec": internal_raw,
+                "process_hard_timeout_sec": hard_raw,
+                "expected_process_hard_timeout_sec": expected_hard if explicit_internal else "",
+                "explicit_internal_budget": explicit_internal,
+                "explicit_hard_timeout": explicit_hard,
+                "large_agent_30s_budget_contract_met": large_30s_ok,
+                "row_budget_audit_decision": "pass" if not row_failures else "fail",
+                "row_budget_audit_failures": ";".join(row_failures),
+                **claims(),
+            }
+        )
+    for context_id, pairs in context_budgets.items():
+        if len(pairs) > 1:
+            failures.append(f"{context_id}:context_methods_do_not_share_same_budget")
+            for row in audit_rows:
+                if row["context_id"] == context_id:
+                    row["row_budget_audit_decision"] = "fail"
+                    existing = str(row.get("row_budget_audit_failures", ""))
+                    row["row_budget_audit_failures"] = ";".join(filter(None, [existing, "context_methods_do_not_share_same_budget"]))
+    existing = [row for row in read_rows(SOLVER_BUDGET_AUDIT) if row.get("replay_phase") != phase]
+    write_rows(SOLVER_BUDGET_AUDIT, existing + audit_rows)
+    summary = {
+        "schema_version": f"{ROUND}_solver_budget_audit_summary_v1",
+        "decision": "g567_solver_budget_audit_passed" if not failures else "g567_solver_budget_audit_failed",
+        "replay_phase": phase,
+        "planned_rows": len(plan_rows),
+        "failure_count": len(failures),
+        "failures": failures[:50],
+        "all_rows_have_explicit_internal_budget": all(boolish(row.get("explicit_internal_budget")) for row in audit_rows),
+        "all_rows_have_explicit_hard_timeout": all(boolish(row.get("explicit_hard_timeout")) for row in audit_rows),
+        "same_context_methods_same_budget": all(len(pairs) == 1 for pairs in context_budgets.values()),
+        "large_30s_rows_have_60s_hard_timeout": all(boolish(row.get("large_agent_30s_budget_contract_met")) for row in audit_rows),
+        **claims(),
+    }
+    write_json(SOLVER_BUDGET_AUDIT_SUMMARY, summary)
+    return summary
 
 
 def build_plan_and_registry(
@@ -1459,7 +1595,17 @@ def audit_results(rows: list[dict[str, Any]], plan_rows: list[dict[str, Any]], p
             "process_group_id",
             "process_group_termination_attempted",
             "process_timeout_sigterm_sent",
+            "process_timeout_sigterm_unix",
+            "process_timeout_sigterm_elapsed_sec",
             "process_timeout_sigkill_sent",
+            "process_timeout_sigkill_unix",
+            "process_timeout_sigkill_elapsed_sec",
+            "child_process_group_killed",
+            "child_process_group_kill_method",
+            "process_partial_stdout_preserved",
+            "process_partial_stderr_preserved",
+            "process_partial_stdout_chars",
+            "process_partial_stderr_chars",
             "process_timeout_reason",
             "process_elapsed_sec",
             "process_returncode",
@@ -1798,8 +1944,20 @@ def run_replay_phase(
     for order, row in enumerate(plan_rows):
         row["execution_order_index"] = order
         row["worker_count"] = max(1, int(max_workers))
+    budget_audit = audit_plan_explicit_budgets(plan_rows, phase)
     write_rows(paths["plan"], plan_rows)
     write_rows(paths["registry"], registry_rows)
+    if budget_audit.get("decision") != "g567_solver_budget_audit_passed":
+        summary = {
+            "schema_version": f"{ROUND}_{safe_token(phase)}_summary_v1",
+            "decision": "g567_blocked_solver_budget_audit_failed",
+            "replay_phase": phase,
+            "planned_rows": len(plan_rows),
+            "budget_audit_failures": budget_audit.get("failures", []),
+            **claims(),
+        }
+        write_json(paths["summary"], summary)
+        return summary
     if plan_only:
         summary = {
             "schema_version": f"{ROUND}_{safe_token(phase)}_summary_v1",
@@ -1820,6 +1978,7 @@ def run_replay_phase(
         return summary
     os.environ.setdefault("REPAIR5G_STREAM_RESULT_CSV", "1")
     os.environ.setdefault("REPAIR5G_SKIP_AGGREGATE_JSONL", "1")
+    os.environ.setdefault("G567_REQUIRE_EXPLICIT_SOLVER_BUDGETS", "1")
 
     def execute_probe_subset(subset: list[dict[str, Any]], *, token: str, result_csv: Path, raw_csv: Path, log_dir: Path, scenario_metadata: Path) -> list[dict[str, Any]]:
         g549.run_probe_plan(

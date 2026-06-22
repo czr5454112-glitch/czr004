@@ -1,0 +1,93 @@
+{
+  "benchmark_root": "external/benchmarks",
+  "created_unix": 1782127298.0372043,
+  "decision": "g567_public_benchmark_ingestion_ready",
+  "failure_count": 0,
+  "failures": [],
+  "final_blind_accessed": false,
+  "map_registry_rows": 82,
+  "panel_map_counts": {
+    "G": 1,
+    "L": 49,
+    "M": 32
+  },
+  "panel_scenario_counts": {
+    "G": 7,
+    "H": 250,
+    "M": 870
+  },
+  "parent_split_audit_rows": 47,
+  "raw_archives_committed": false,
+  "required_panels_present": true,
+  "scenario_registry_rows": 1127,
+  "schema_version": "phase5p5_repair5g567_public_benchmark_ingestion_summary_v1",
+  "source_count": 6,
+  "sources": [
+    {
+      "archive_sha256": "9da2e4c5ce03aa4e063b3a283ce874590b36cc4f31a297fe7ecb00d105abf288",
+      "license_and_redistribution_status": "MovingAI public MAPF benchmark archive; metadata committed only; raw archive not committed",
+      "local_archive_path": "external/benchmarks/movingai_mapf/archives/mapf-map.zip",
+      "source_key": "mapf-map",
+      "source_provenance": "9da2e4c5ce03aa4e063b3a283ce874590b36cc4f31a297fe7ecb00d105abf288",
+      "source_required": true,
+      "source_status": "available",
+      "source_url": "https://movingai.com/benchmarks/mapf/mapf-map.zip"
+    },
+    {
+      "archive_sha256": "20b7838f7a51f13e90a63ee138e9435fb4e41b0381becbc7313b7d3a7d859276",
+      "license_and_redistribution_status": "MovingAI public MAPF benchmark archive; metadata committed only; raw archive not committed",
+      "local_archive_path": "external/benchmarks/movingai_mapf/archives/mapf-scen-random.zip",
+      "source_key": "mapf-scen-random",
+      "source_provenance": "20b7838f7a51f13e90a63ee138e9435fb4e41b0381becbc7313b7d3a7d859276",
+      "source_required": true,
+      "source_status": "available",
+      "source_url": "https://movingai.com/benchmarks/mapf/mapf-scen-random.zip"
+    },
+    {
+      "archive_sha256": "249896aaf15ef2d9beb378f954f0b7ca17189c6dec1b76a78965bbdbe714ad75",
+      "license_and_redistribution_status": "MovingAI public MAPF benchmark archive; metadata committed only; raw archive not committed",
+      "local_archive_path": "external/benchmarks/movingai_mapf/archives/mapf-scen-even.zip",
+      "source_key": "mapf-scen-even",
+      "source_provenance": "249896aaf15ef2d9beb378f954f0b7ca17189c6dec1b76a78965bbdbe714ad75",
+      "source_required": true,
+      "source_status": "available",
+      "source_url": "https://movingai.com/benchmarks/mapf/mapf-scen-even.zip"
+    },
+    {
+      "git_branch_requested": "init-LNS",
+      "git_commit": "1369823985a15944f9a339226d521f61605a6d17",
+      "license_and_redistribution_status": "metadata_only_raw_not_committed; license_file=external/benchmarks/mapf_lns2/LICENSE.txt; license_sha256=c1d5fa9610af1878c49a8334dda7c450db913a8a49fdfb19cd0abd0d704bc2ea",
+      "local_source_path": "external/benchmarks/mapf_lns2",
+      "source_key": "mapf_lns2",
+      "source_provenance": "1369823985a15944f9a339226d521f61605a6d17",
+      "source_required": true,
+      "source_status": "available",
+      "source_url": "https://github.com/Jiaoyang-Li/MAPF-LNS2"
+    },
+    {
+      "git_branch_requested": "",
+      "git_commit": "d8de695dbd95c912ee59e8e626d63e511da684a7",
+      "license_and_redistribution_status": "metadata_only_raw_not_committed; license_file=external/benchmarks/ggo_public/README.md; license_sha256=385acd7de81281a1b887e1e91b64283bdff2d5391c24cec6986c8e24837b4e27",
+      "local_source_path": "external/benchmarks/ggo_public",
+      "source_key": "ggo_public",
+      "source_provenance": "d8de695dbd95c912ee59e8e626d63e511da684a7",
+      "source_required": true,
+      "source_status": "available",
+      "source_url": "https://github.com/lunjohnzhang/ggo_public"
+    },
+    {
+      "git_branch_requested": "",
+      "git_commit": "25ffd5b6a39b6fe30e5bc6cb5e22720a9531ea8a",
+      "license_and_redistribution_status": "metadata_only_raw_not_committed; license_file=external/benchmarks/lorr_benchmark_archive/README.md; license_sha256=4a959adfa0d5bd5b955b713fc107b6a2b4f32b36294f706a720e3a5acfa9fd36",
+      "local_source_path": "external/benchmarks/lorr_benchmark_archive",
+      "source_key": "lorr_benchmark_archive",
+      "source_provenance": "25ffd5b6a39b6fe30e5bc6cb5e22720a9531ea8a",
+      "source_required": true,
+      "source_status": "available",
+      "source_url": "https://github.com/MAPF-Competition/Benchmark-Archive"
+    }
+  ],
+  "sources_available": 6,
+  "valid_map_registry_rows": 82,
+  "valid_scenario_registry_rows": 1127
+}

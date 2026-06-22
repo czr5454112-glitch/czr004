@@ -187,6 +187,26 @@ class ProcessRunResult:
     provenance: dict[str, Any]
 
 
+def _process_text(fragment: Any) -> str:
+    if fragment is None:
+        return ""
+    if isinstance(fragment, bytes):
+        return fragment.decode("utf-8", errors="replace")
+    return str(fragment)
+
+
+def _merge_process_text(partial: Any, final: Any) -> str:
+    first = _process_text(partial)
+    second = _process_text(final)
+    if not first:
+        return second
+    if not second:
+        return first
+    if second.startswith(first):
+        return second
+    return first + second
+
+
 def _env_float(name: str, default: float) -> float:
     try:
         return float(os.environ.get(name, default))
@@ -229,7 +249,17 @@ def run_command_with_hard_timeout(
         "process_group_id": "",
         "process_group_termination_attempted": False,
         "process_timeout_sigterm_sent": False,
+        "process_timeout_sigterm_unix": "",
+        "process_timeout_sigterm_elapsed_sec": "",
         "process_timeout_sigkill_sent": False,
+        "process_timeout_sigkill_unix": "",
+        "process_timeout_sigkill_elapsed_sec": "",
+        "child_process_group_killed": False,
+        "child_process_group_kill_method": "",
+        "process_partial_stdout_preserved": False,
+        "process_partial_stderr_preserved": False,
+        "process_partial_stdout_chars": 0,
+        "process_partial_stderr_chars": 0,
         "process_timeout_reason": "",
     }
     popen_kwargs: dict[str, Any] = {}
@@ -257,7 +287,13 @@ def run_command_with_hard_timeout(
     stderr = ""
     try:
         stdout, stderr = proc.communicate(timeout=timeout)
-    except subprocess.TimeoutExpired:
+    except subprocess.TimeoutExpired as exc:
+        partial_stdout = _process_text(getattr(exc, "stdout", None) or getattr(exc, "output", None))
+        partial_stderr = _process_text(getattr(exc, "stderr", None))
+        provenance["process_partial_stdout_preserved"] = bool(partial_stdout)
+        provenance["process_partial_stderr_preserved"] = bool(partial_stderr)
+        provenance["process_partial_stdout_chars"] = len(partial_stdout)
+        provenance["process_partial_stderr_chars"] = len(partial_stderr)
         provenance["process_hard_timeout_exceeded"] = True
         provenance["process_timeout_reason"] = "process_hard_timeout_sec_exceeded"
         provenance["process_timeout_elapsed_before_term_sec"] = time.perf_counter() - start_perf
@@ -269,13 +305,25 @@ def run_command_with_hard_timeout(
             else:
                 proc.terminate()
             provenance["process_timeout_sigterm_sent"] = True
+            provenance["process_timeout_sigterm_unix"] = time.time()
+            provenance["process_timeout_sigterm_elapsed_sec"] = time.perf_counter() - start_perf
         except ProcessLookupError:
             provenance["process_timeout_reason"] = "process_already_exited_after_timeout"
         except OSError as exc:
             provenance["process_timeout_reason"] = f"process_timeout_sigterm_failed:{exc}"
         try:
-            stdout, stderr = proc.communicate(timeout=grace)
-        except subprocess.TimeoutExpired:
+            final_stdout, final_stderr = proc.communicate(timeout=grace)
+            stdout = _merge_process_text(partial_stdout, final_stdout)
+            stderr = _merge_process_text(partial_stderr, final_stderr)
+            provenance["child_process_group_killed"] = True
+            provenance["child_process_group_kill_method"] = "sigterm" if os.name == "posix" else "terminate"
+        except subprocess.TimeoutExpired as exc2:
+            partial_stdout = _merge_process_text(partial_stdout, getattr(exc2, "stdout", None) or getattr(exc2, "output", None))
+            partial_stderr = _merge_process_text(partial_stderr, getattr(exc2, "stderr", None))
+            provenance["process_partial_stdout_preserved"] = bool(partial_stdout)
+            provenance["process_partial_stderr_preserved"] = bool(partial_stderr)
+            provenance["process_partial_stdout_chars"] = len(partial_stdout)
+            provenance["process_partial_stderr_chars"] = len(partial_stderr)
             try:
                 if os.name == "posix":
                     pgid = int(provenance["process_group_id"] or proc.pid)
@@ -283,15 +331,25 @@ def run_command_with_hard_timeout(
                 else:
                     proc.kill()
                 provenance["process_timeout_sigkill_sent"] = True
+                provenance["process_timeout_sigkill_unix"] = time.time()
+                provenance["process_timeout_sigkill_elapsed_sec"] = time.perf_counter() - start_perf
             except ProcessLookupError:
                 pass
             except OSError as exc:
                 provenance["process_timeout_reason"] = f"process_timeout_sigkill_failed:{exc}"
-            stdout, stderr = proc.communicate()
+            final_stdout, final_stderr = proc.communicate()
+            stdout = _merge_process_text(partial_stdout, final_stdout)
+            stderr = _merge_process_text(partial_stderr, final_stderr)
+            provenance["child_process_group_killed"] = True
+            provenance["child_process_group_kill_method"] = "sigkill" if os.name == "posix" else "kill"
     elapsed = time.perf_counter() - start_perf
     provenance["process_elapsed_sec"] = elapsed
     provenance["process_returncode"] = proc.returncode
     if provenance["process_hard_timeout_exceeded"]:
+        provenance["process_partial_stdout_preserved"] = bool(stdout)
+        provenance["process_partial_stderr_preserved"] = bool(stderr)
+        provenance["process_partial_stdout_chars"] = len(stdout or "")
+        provenance["process_partial_stderr_chars"] = len(stderr or "")
         stderr = (stderr or "") + f"\nprocess hard timeout exceeded after {timeout:.6f}s; returncode={proc.returncode}"
     return ProcessRunResult(proc.returncode if proc.returncode is not None else -999, stdout or "", stderr or "", provenance)
 

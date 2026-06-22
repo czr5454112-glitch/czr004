@@ -33,6 +33,12 @@ def test_process_hard_timeout_records_timeout_provenance() -> None:
         "process_hard_timeout_sec_exceeded",
         "process_already_exited_after_timeout",
     }
+    assert result.provenance["process_timeout_sigterm_sent"] is True
+    assert result.provenance["process_timeout_sigterm_unix"]
+    assert result.provenance["child_process_group_killed"] is True
+    assert result.provenance["child_process_group_kill_method"] in {"sigterm", "terminate", "sigkill", "kill"}
+    assert result.provenance["process_partial_stdout_preserved"] is True
+    assert result.provenance["process_partial_stdout_chars"] >= len("started")
     assert "process hard timeout exceeded" in result.stderr
 
 
@@ -58,6 +64,11 @@ def test_timeout_provenance_is_preserved_on_no_probe_placeholder() -> None:
             "process_hard_timeout_exceeded": True,
             "process_timeout_provenance": "subprocess_popen_posix_start_new_session_process_group",
             "process_timeout_reason": "process_hard_timeout_sec_exceeded",
+            "process_timeout_sigterm_unix": 123.0,
+            "child_process_group_killed": True,
+            "child_process_group_kill_method": "sigterm",
+            "process_partial_stdout_preserved": True,
+            "process_partial_stdout_chars": 7,
         },
     )
     assert rows[0]["no_probe_reason"] == "process_hard_timeout_exceeded"
@@ -70,6 +81,11 @@ def test_timeout_provenance_is_preserved_on_no_probe_placeholder() -> None:
     assert rows[0]["scientific_result_valid"] is False
     assert rows[0]["excluded_from_scientific_labels"] is True
     assert rows[0]["fulltheta_fingerprint_match"] is False
+    assert rows[0]["process_timeout_sigterm_unix"] == 123.0
+    assert rows[0]["child_process_group_killed"] is True
+    assert rows[0]["child_process_group_kill_method"] == "sigterm"
+    assert rows[0]["process_partial_stdout_preserved"] is True
+    assert rows[0]["process_partial_stdout_chars"] == 7
 
 
 @pytest.mark.skipif(os.name != "posix", reason="Linux process-group semantics only")
@@ -99,6 +115,8 @@ def test_process_hard_timeout_uses_posix_process_group(tmp_path: Path) -> None:
     assert result.provenance["process_hard_timeout_exceeded"] is True
     assert result.provenance["process_group_id"]
     assert result.provenance["process_group_termination_attempted"] is True
+    assert result.provenance["child_process_group_killed"] is True
+    assert result.provenance["child_process_group_kill_method"] in {"sigterm", "sigkill"}
     child_pid = int(child_pid_path.read_text(encoding="utf-8"))
     for _ in range(30):
         status = subprocess.run(["ps", "-o", "stat=", "-p", str(child_pid)], text=True, capture_output=True, check=False)

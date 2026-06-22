@@ -53,6 +53,8 @@ def _context() -> g567.G567Context:
         graph_with_traffic=graph,
         assignment=assignment,
         feature_row={"agent_count": 8, "budget_ms": 1000},
+        budget_role="primary_exact",
+        process_hard_timeout_sec=g567.process_hard_timeout_for_internal_budget(1.0),
     )
 
 

@@ -593,7 +593,17 @@ def enrich_or_placeholder(
                 "process_group_id",
                 "process_group_termination_attempted",
                 "process_timeout_sigterm_sent",
+                "process_timeout_sigterm_unix",
+                "process_timeout_sigterm_elapsed_sec",
                 "process_timeout_sigkill_sent",
+                "process_timeout_sigkill_unix",
+                "process_timeout_sigkill_elapsed_sec",
+                "child_process_group_killed",
+                "child_process_group_kill_method",
+                "process_partial_stdout_preserved",
+                "process_partial_stderr_preserved",
+                "process_partial_stdout_chars",
+                "process_partial_stderr_chars",
                 "process_timeout_reason",
                 "process_elapsed_sec",
                 "process_returncode",
@@ -700,6 +710,21 @@ def run_context_task(
             "perf",
         ),
     )
+    require_explicit_budgets = str(os.environ.get("G567_REQUIRE_EXPLICIT_SOLVER_BUDGETS", "")).lower() in {
+        "1",
+        "true",
+        "yes",
+        "on",
+    }
+    internal_budget_raw = first.get("solver_internal_time_limit_sec", first.get("base_time_limit_sec", ""))
+    hard_timeout_raw = first.get("process_hard_timeout_sec", "")
+    if require_explicit_budgets and not str(internal_budget_raw).strip():
+        raise RuntimeError(f"G5.67 explicit solver internal budget missing for task {key}")
+    if require_explicit_budgets and not str(hard_timeout_raw).strip():
+        raise RuntimeError(f"G5.67 explicit process hard timeout missing for task {key}")
+    internal_budget_sec = max(0.01, float(number(internal_budget_raw, number(first.get("base_time_limit_sec"), 0.50))))
+    hard_timeout_fallback = max(internal_budget_sec + 0.25, internal_budget_sec * 1.10)
+    process_hard_timeout_sec = max(0.01, float(number(hard_timeout_raw, hard_timeout_fallback)))
     rows, update_rows, command_row = run_one_solver_task(
         root=ROOT,
         binary=binary,
@@ -709,22 +734,11 @@ def run_context_task(
         map_name=map_name,
         agents=agents_count,
         seed=seed,
-        time_limit_sec=max(0.01, float(number(first.get("base_time_limit_sec"), 0.50))),
+        time_limit_sec=internal_budget_sec,
         ltm_max_iterations=max(1, int(number(first.get("ltm_max_iterations"), 2))),
         spec=spec,
         manifest=f"phase5p5-{manifest_prefix}",
-        process_hard_timeout_sec=max(
-            0.01,
-            float(
-                number(
-                    first.get("process_hard_timeout_sec"),
-                    max(
-                        float(number(first.get("base_time_limit_sec"), 0.50)) + 0.25,
-                        float(number(first.get("base_time_limit_sec"), 0.50)) * 1.10,
-                    ),
-                )
-            ),
-        ),
+        process_hard_timeout_sec=process_hard_timeout_sec,
     )
     task_run = log_dir / f"task_{stable_hash('|'.join(map(str, key)), modulo=10**12):012d}.runs.jsonl"
     write_jsonl(task_run, rows)

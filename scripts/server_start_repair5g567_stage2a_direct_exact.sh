@@ -105,7 +105,7 @@ python scripts/run_repair5g567_stage2a_train_diagnostic_a5.py \
   --stage-root "${STAGE_ROOT}" \
   --expected-head "${G567_EXPECTED_HEAD}" \
   --contexts "${G567_STAGE2A_CONTEXTS:-64}" \
-  --context-pool "${G567_STAGE2A_CONTEXT_POOL:-384}" \
+  --context-pool "${G567_STAGE2A_CONTEXT_POOL:-2048}" \
   --train-agent-tiers "${G567_STAGE2A_TRAIN_AGENT_TIERS:-32,64,128,256}" \
   --max-workers "${G567_STAGE2A_MAX_WORKERS:-1}" \
   --binary "${G567_SOLVER_BINARY:-build/phase1a-batch/phase1a_batch}" \

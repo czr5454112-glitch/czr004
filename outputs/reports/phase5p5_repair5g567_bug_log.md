@@ -92,6 +92,14 @@ Date: 2026-06-22 Asia/Shanghai
 
    Regression test: `tests/test_repair5g567_source_state_gate.py`.
 
+14. Stage-2A default context pool under-sampled the 256-agent diagnostic tier.
+
+   Symptom: with the default 64 contexts and 384 context pool, the RTX5090 Stage-2A rerun found only 13 valid tier-256 contexts while the balanced 4-tier diagnostic requires 16 per tier, so it failed before solver execution with `not enough Stage-2A contexts for tier 256: 13 < 16`.
+
+   Fix: Stage-2A default context pool is now 2048, preserving the 64-context/4-tier/256-row diagnostic target rather than shrinking tiers or row counts.
+
+   Regression test: `tests/test_repair5g567_stage2a_diagnostic.py`.
+
 ## Existing Repairs Verified By Gates
 
 - A5 uses OD Perceiver instead of full OD self-attention for 3000 OD tokens.

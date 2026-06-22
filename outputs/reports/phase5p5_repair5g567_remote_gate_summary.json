@@ -134,6 +134,16 @@
     "full_launcher_refuses_sparse_checkout": true,
     "stage2a_gate3a_source_state_refuses_sparse_checkout": true
   },
+  "stage2a_context_pool_repair": {
+    "decision": "stage2a_default_context_pool_expanded",
+    "failed_attempt_head": "cc651d2b88e278629d2a01e53da2151aab8aadd0",
+    "failed_default_context_pool": 384,
+    "failed_tier": 256,
+    "valid_contexts_found_for_failed_tier": 13,
+    "required_contexts_per_tier": 16,
+    "new_default_context_pool": 2048,
+    "tiers_or_row_count_reduced": false
+  },
   "manual_approval_barrier": {
     "decision_without_token": "g567_full_campaign_waiting_for_manual_gptpro_review",
     "full_launcher_guard_added": true,
@@ -157,7 +167,7 @@
   },
   "open_risks": [
     "Direct-exact Stage-2A remote rerun has not yet completed after the nested-probe repair",
-    "Remote sparse checkout must be disabled before the Stage-2A rerun; source gate now rejects sparse checkout",
+    "Stage-2A must be rerun with sparse checkout disabled and expanded 2048 context pool",
     "tunnel/cross/connector extreme-tail contexts remain in timeout/tail audit until direct exact is stable",
     "Gate-3A true A5 checkpoint smoke has not been launched",
     "Gate-2 is bounded pilot evidence only"

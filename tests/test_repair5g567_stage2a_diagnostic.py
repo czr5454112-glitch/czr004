@@ -10,6 +10,11 @@ sys.path.insert(0, str(ROOT / "scripts"))
 import run_repair5g567_stage2a_train_diagnostic_a5 as stage2a  # noqa: E402
 
 
+def test_stage2a_default_context_pool_keeps_tail_tier_coverage_margin() -> None:
+    assert stage2a.DEFAULT_CONTEXTS == 64
+    assert stage2a.DEFAULT_CONTEXT_POOL >= stage2a.DEFAULT_CONTEXTS * 32
+
+
 def test_stage2a_training_row_selection_filters_huge_public_maps() -> None:
     rows = [
         {

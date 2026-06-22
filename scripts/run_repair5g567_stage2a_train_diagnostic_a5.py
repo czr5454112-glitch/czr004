@@ -23,6 +23,8 @@ PHASE = "stage2a_diagnostic_a5"
 LABEL_PHASE = "stage2a_diagnostic_a5_label_train"
 SEED_PHASE = "stage2a_diagnostic_seed_actor_response"
 DEFAULT_STAGE_ROOT = Path(f"outputs/tmp/{g567.ROUND}_{PHASE}")
+DEFAULT_CONTEXTS = 64
+DEFAULT_CONTEXT_POOL = 2048
 SUMMARY_NAME = f"{g567.ROUND}_{PHASE}_summary.json"
 REPORT_NAME = f"{g567.ROUND}_{PHASE}.md"
 CONTEXT_MANIFEST_NAME = f"{g567.ROUND}_{PHASE}_label_train_contexts.csv"
@@ -209,8 +211,8 @@ def write_report(summary: dict[str, Any]) -> None:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Train a small diagnostic-only true A5 checkpoint for G5.67 Gate-3A.")
-    parser.add_argument("--contexts", type=int, default=64)
-    parser.add_argument("--context-pool", type=int, default=384)
+    parser.add_argument("--contexts", type=int, default=DEFAULT_CONTEXTS)
+    parser.add_argument("--context-pool", type=int, default=DEFAULT_CONTEXT_POOL)
     parser.add_argument("--train-agent-tiers", default="32,64,128,256")
     parser.add_argument("--max-train-free-cells", type=int, default=12000)
     parser.add_argument("--max-train-area", type=int, default=20000)

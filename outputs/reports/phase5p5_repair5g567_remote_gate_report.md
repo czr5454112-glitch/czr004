@@ -186,6 +186,12 @@ The Stage-2A fail-closed attempt after the targeted reproducer was traced to the
 
 Repair: source-state classification now records and rejects `core.sparseCheckout=true`; the full launcher also refuses sparse checkout before any full command can run. This makes "complete clean Git checkout" machine-checkable before bounded stages or full launch.
 
+## Stage-2A Context Pool Repair
+
+After the sparse checkout repair, Stage-2A still failed before solver execution because the default context pool of 384 yielded only 13 valid tier-256 contexts, while the balanced 64-context diagnostic needs 16 per tier across 32/64/128/256. This was a sampling-capacity bug, not evidence against the 256-agent direct-exact path.
+
+Repair: Stage-2A now defaults to a 2048-context pool while keeping 64 selected contexts, 4 diagnostic tiers, 256 direct-exact rows, and uniform 30s/60s budget semantics.
+
 ## Manual Approval Lock
 
 The user revoked the stage-by-stage manual wait mechanism. Stage-2A, true A5 Gate-3A, and Gate-3B proceed only under the previously approved technical gates and bounded-run limits.

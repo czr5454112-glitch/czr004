@@ -52,3 +52,16 @@ def test_source_state_gate_fails_closed_on_missing_git_metadata_or_plan() -> Non
     assert "dirty_status_unavailable" in failures
     assert "submodule_status_unavailable" in failures
     assert "missing_source_plan" in failures
+
+
+def test_source_state_gate_fails_closed_on_sparse_checkout() -> None:
+    failures = g567.classify_source_state(
+        inside_work_tree="true",
+        head="abc123",
+        expected_head="abc123",
+        status_short="",
+        submodule_status="",
+        source_plan_sha256="f" * 64,
+        sparse_checkout="true",
+    )
+    assert "sparse_checkout_enabled" in failures

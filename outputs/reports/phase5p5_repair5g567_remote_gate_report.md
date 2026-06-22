@@ -180,6 +180,12 @@ Result:
 
 This confirms that the observed r5 timeout pattern belongs to the nested probe path, not direct exact primary-row execution.
 
+## Sparse Checkout Source-Gate Repair
+
+The Stage-2A fail-closed attempt after the targeted reproducer was traced to the RTX5090 worktree using sparse checkout rules that excluded `artifacts/models/gcst/`. The default G5.65 seed actor checkpoint is tracked, but it was not present in the sparse remote checkout.
+
+Repair: source-state classification now records and rejects `core.sparseCheckout=true`; the full launcher also refuses sparse checkout before any full command can run. This makes "complete clean Git checkout" machine-checkable before bounded stages or full launch.
+
 ## Manual Approval Lock
 
 The user revoked the stage-by-stage manual wait mechanism. Stage-2A, true A5 Gate-3A, and Gate-3B proceed only under the previously approved technical gates and bounded-run limits.

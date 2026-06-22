@@ -123,9 +123,16 @@
     "decision": "stage2a_blocked_missing_seed_actor_checkpoint",
     "rc": 2,
     "head": "407cd6202c5f169ce0f6cfa98e9c3994b21ce6a6",
+    "root_cause_found_afterward": "remote_sparse_checkout_excluded_artifacts_models_gcst",
     "full_campaign_launched": false,
     "gate3a_launched": false,
     "gate3b_launched": false
+  },
+  "sparse_checkout_source_gate_repair": {
+    "decision": "sparse_checkout_now_fail_closed",
+    "source_state_failure": "sparse_checkout_enabled",
+    "full_launcher_refuses_sparse_checkout": true,
+    "stage2a_gate3a_source_state_refuses_sparse_checkout": true
   },
   "manual_approval_barrier": {
     "decision_without_token": "g567_full_campaign_waiting_for_manual_gptpro_review",
@@ -150,7 +157,7 @@
   },
   "open_risks": [
     "Direct-exact Stage-2A remote rerun has not yet completed after the nested-probe repair",
-    "Stage-2A direct-exact attempt after the targeted reproducer failed closed because the seed actor checkpoint glob was missing",
+    "Remote sparse checkout must be disabled before the Stage-2A rerun; source gate now rejects sparse checkout",
     "tunnel/cross/connector extreme-tail contexts remain in timeout/tail audit until direct exact is stable",
     "Gate-3A true A5 checkpoint smoke has not been launched",
     "Gate-2 is bounded pilot evidence only"

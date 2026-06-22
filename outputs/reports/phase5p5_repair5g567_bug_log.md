@@ -84,6 +84,14 @@ Date: 2026-06-22 Asia/Shanghai
 
    Regression test: `tests/test_repair5g567_full_manual_approval.py`.
 
+13. Sparse checkout was not treated as an incomplete source checkout.
+
+   Symptom: the RTX5090 worktree was sparse and excluded `artifacts/models/gcst/`, so the tracked G5.65 seed actor checkpoint was absent and Stage-2A failed closed as `stage2a_blocked_missing_seed_actor_checkpoint`. The existing source-state gate checked HEAD, dirty status, and submodules, but did not reject sparse checkout.
+
+   Fix: `classify_source_state` now records and rejects `core.sparseCheckout=true` with `sparse_checkout_enabled`; the full launcher also refuses sparse checkout before any full command can run.
+
+   Regression test: `tests/test_repair5g567_source_state_gate.py`.
+
 ## Existing Repairs Verified By Gates
 
 - A5 uses OD Perceiver instead of full OD self-attention for 3000 OD tokens.

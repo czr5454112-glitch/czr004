@@ -448,6 +448,22 @@ def git_capture(*args: str) -> str:
         return f"git_error:{exc}"
 
 
+def git_config_bool_default_false(key: str) -> str:
+    try:
+        return subprocess.check_output(
+            ["git", "config", "--bool", "--get", key],
+            cwd=ROOT,
+            text=True,
+            stderr=subprocess.STDOUT,
+        ).strip() or "false"
+    except subprocess.CalledProcessError as exc:
+        if exc.returncode == 1:
+            return "false"
+        return f"git_error:{exc}"
+    except Exception as exc:
+        return f"git_error:{exc}"
+
+
 def classify_source_state(
     *,
     inside_work_tree: str,
@@ -456,6 +472,7 @@ def classify_source_state(
     submodule_status: str,
     source_plan_sha256: str,
     expected_head: str = "",
+    sparse_checkout: str = "false",
 ) -> list[str]:
     failures: list[str] = []
     if inside_work_tree != "true":
@@ -474,6 +491,11 @@ def classify_source_state(
         if line[:1] in {"-", "+", "U"}:
             failures.append("submodule_mismatch")
             break
+    sparse_value = sparse_checkout.strip().lower()
+    if sparse_value.startswith("git_error:"):
+        failures.append("sparse_checkout_status_unavailable")
+    elif sparse_value in {"1", "true", "yes", "on"}:
+        failures.append("sparse_checkout_enabled")
     if not source_plan_sha256:
         failures.append("missing_source_plan")
     return failures
@@ -484,6 +506,7 @@ def write_source_state(expected_head: str = "") -> dict[str, Any]:
     head = git_capture("rev-parse", "HEAD")
     status_short = git_capture("status", "--short")
     submodule_status = git_capture("submodule", "status", "--recursive")
+    sparse_checkout = git_config_bool_default_false("core.sparseCheckout")
     plan_sha = sha256_file(PLAN_FILE)
     failures = classify_source_state(
         inside_work_tree=inside_work_tree,
@@ -492,6 +515,7 @@ def write_source_state(expected_head: str = "") -> dict[str, Any]:
         submodule_status=submodule_status,
         source_plan_sha256=plan_sha,
         expected_head=expected_head,
+        sparse_checkout=sparse_checkout,
     )
     summary = {
         "schema_version": f"{ROUND}_source_state_v1",
@@ -504,6 +528,8 @@ def write_source_state(expected_head: str = "") -> dict[str, Any]:
         "branch": git_capture("branch", "--show-current"),
         "status_short": status_short,
         "status_clean": status_short == "",
+        "sparse_checkout": sparse_checkout,
+        "sparse_checkout_disabled": "sparse_checkout_enabled" not in failures,
         "source_plan": PLAN_FILE,
         "source_plan_sha256": plan_sha,
         "submodule_status": submodule_status,
@@ -526,7 +552,7 @@ def write_protocol_documents() -> None:
         "- `agent_tier_cap_80`: G5.66 context generation reused 8..80 tiers. G5.67 includes tiers through 3000 and large maps that can host them.\n\n"
         "## Confirmed P0 Bugs Added By Gate-3A Review\n\n"
         "- `process_hard_timeout_not_enforced`: `process_hard_timeout_sec` was recorded in the replay plan but the solver subprocess used an unbounded `subprocess.run`; Gate-3A now uses a per-process hard timeout with process-group termination provenance.\n"
-        "- `source_state_not_fail_closed`: source HEAD/status/submodules were recorded but not enforced before execution; Gate-3A now blocks on missing Git metadata, dirty status, wrong HEAD, or submodule mismatch.\n\n"
+        "- `source_state_not_fail_closed`: source HEAD/status/submodules were recorded but not enforced before execution; Gate-3A now blocks on missing Git metadata, dirty status, wrong HEAD, submodule mismatch, or sparse checkout.\n\n"
         "## Confirmed P0 Bugs Added By Budget/Training Review\n\n"
         "- `large_agent_budget_underallocated`: 2000/2500/3000-agent primary rows used generic budget cycling, including 20s. G5.67 now requires 30s primary internal budget and 60s hard timeout for those tiers.\n"
         "- `hard_timeout_polluted_scientific_labels`: timeout placeholders looked like ordinary no-solution rows. Timeout rows are now infrastructure failures and are excluded from scientific pairs/labels.\n"
@@ -554,7 +580,7 @@ def write_protocol_documents() -> None:
         PROTOCOL_OVERVIEW,
         "# Repair5G.5.67 Protocol Overview\n\n"
         "- Run source from a complete Git worktree with recorded HEAD and plan hash.\n"
-        "- Fail closed before execution on missing Git metadata, dirty source state, wrong expected HEAD, or submodule mismatch.\n"
+        "- Fail closed before execution on missing Git metadata, dirty source state, wrong expected HEAD, submodule mismatch, or sparse checkout.\n"
         "- Require `phase5p5_repair5g567_public_benchmark_ingestion_summary.json` to be ready before a public/synthetic context bank can pass.\n"
         "- Generate a valid context bank with large-agent tiers through 3000.\n"
         "- Use single-worker pinned repeatability for boundary adjudication; broad collection may use more workers but cannot certify regressions.\n"

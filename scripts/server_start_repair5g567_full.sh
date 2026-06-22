@@ -21,6 +21,10 @@ if [[ "${G567_FULL_MANUAL_APPROVAL:-}" != "$expected_approval" ]]; then
 fi
 status_short="$(git status --short)" || fail_source_gate "unable to read git status"
 [[ -z "$status_short" ]] || fail_source_gate "dirty git status: $status_short"
+sparse_checkout="$(git config --bool --get core.sparseCheckout 2>/dev/null || true)"
+if [[ "${sparse_checkout,,}" =~ ^(1|true|yes|on)$ ]]; then
+  fail_source_gate "sparse checkout enabled; complete clean checkout required"
+fi
 submodule_status="$(git submodule status --recursive)" || fail_source_gate "unable to read submodule status"
 if grep -Eq '^[-+U]' <<<"$submodule_status"; then
   fail_source_gate "submodule mismatch: $submodule_status"

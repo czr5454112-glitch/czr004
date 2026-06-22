@@ -13,6 +13,8 @@ def test_full_launcher_requires_fresh_manual_gptpro_approval() -> None:
     assert "g567_full_campaign_waiting_for_manual_gptpro_review" in script
     assert "fresh manual GPT-Pro approval required" in script
     assert script.index("expected_approval=") < script.index("status_short=")
+    assert "core.sparseCheckout" in script
+    assert "complete clean checkout required" in script
     assert "echo \"expected_approval=" not in script
 
 

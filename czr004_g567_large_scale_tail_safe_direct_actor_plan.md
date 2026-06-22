@@ -518,7 +518,8 @@ Required fix:
 ```text
 run from a complete clean Git worktree
 at a recorded commit;
-do not upload only a partial source subset.
+do not upload only a partial source subset;
+do not use sparse checkout.
 ```
 
 ---

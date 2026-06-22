@@ -38,6 +38,18 @@ Date: 2026-06-22 Asia/Shanghai
 
    Fix used for preflight: remote Gate-1 launcher overrode pytest addopts/cache/basetemp with Linux paths under the Gate artifact dir.
 
+6. Small/medium staged contexts still used non-uniform legacy budgets.
+
+   Symptom: after the large-tier budget repair, smaller diagnostic tiers could still cycle through short internal budgets, making cross-tier evidence non-comparable.
+
+   Fix: commit `a245b791` makes every staged G5.67 row use `solver_internal_time_limit_sec=30.0` and `process_hard_timeout_sec=60.0`; non-primary purpose arguments no longer override the uniform contract.
+
+7. G5.67 replay applied one hard timeout to a context-batched candidate group.
+
+   Symptom: Stage-2A `uniform30_r4` planned one row per candidate but executed additive/static/g556/actor together in one subprocess, so four rows shared a single 60s hard timeout and produced 24 infrastructure timeout rows.
+
+   Fix: commit `65c807b7` enables `G567_REPLAY_ROW_PROCESS_ISOLATION=1` for G5.67 replay. Each planned row is launched as its own subprocess, and the row-isolation unit test verifies the four-candidate group splits into four single-row tasks.
+
 ## Existing Repairs Verified By Gates
 
 - A5 uses OD Perceiver instead of full OD self-attention for 3000 OD tokens.
@@ -63,3 +75,11 @@ Date: 2026-06-22 Asia/Shanghai
 4. 1000-agent short-budget contexts can produce no LTM update checkpoint.
 
    This is not necessarily a solver bug, but exact full-theta fingerprint checks are not meaningful on rows with no update checkpoint. Future summaries should distinguish "no checkpoint to audit" from true fingerprint mismatch.
+
+5. Stage-2A row-isolated replay still has true hard timeouts.
+
+   After row isolation, Stage-2A `uniform30_r5` streamed `248/256` rows and observed `8` real row-level hard timeouts on selected stress contexts (`g567-tunnel-24x24-a-v0`, `g567-cross-32x32-a-v3`, `g567-connector-48x48-a-v3`). This blocks Gate-3A.
+
+6. Stage-2A runner exited without rc or final summary.
+
+   The `uniform30_r5` tmux session ended with no active Python/solver process, no rc file, and no final Stage-2A summary. Treat this as an infrastructure provenance failure until reproduced and fixed.

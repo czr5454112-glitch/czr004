@@ -2380,3 +2380,30 @@ Repair:
 Status:
   The failed rerun is not Gate-3A evidence and does not unlock Gate-3B.
 ```
+
+Remote Stage-2A row-isolated r5 finding:
+
+```text
+Observed after row-process isolation:
+  Remote P0 passed at commit 65c807b7: 52 passed.
+  Stage-2A r5 used the same 64 contexts and tiers 32/64/128/256.
+  The probe status confirmed candidate_count=1, so the earlier context-batched
+  hard-timeout-scope bug was fixed for this run.
+
+Remaining failure:
+  The run streamed 248/256 result rows and observed 8 true row-level hard
+  timeouts at process_elapsed_sec ~= 60.8-61.3s.
+  Timeout contexts:
+    g567-tunnel-24x24-a-v0, 64 agents, additive
+    g567-cross-32x32-a-v3, 256 agents, additive/static/g556
+    g567-connector-48x48-a-v3, 256 agents, additive/static/g556/A5 actor
+
+Infrastructure anomaly:
+  The tmux session ended without an rc file and without a final Stage-2A summary.
+  No active Python or phase1a_batch process remained when checked.
+
+Decision:
+  Stop. This is not a Stage-2A pass.
+  Do not launch Gate-3A, Gate-3B, or any full campaign until the true row-level
+  hard timeouts and no-rc/no-summary runner termination are repaired and rerun.
+```

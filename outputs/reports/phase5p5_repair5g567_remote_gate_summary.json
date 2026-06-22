@@ -2,7 +2,7 @@
   "schema_version": "phase5p5_repair5g567_remote_gate_summary_v1",
   "date": "2026-06-22",
   "branch": "codex/repair5g567-large-scale-tail-safe",
-  "latest_pushed_commit": "fb3af544",
+  "latest_pushed_commit": "65c807b7",
   "gate1": {
     "decision": "gate1_pass",
     "artifact_dir": "/root/shared-nvme/g567_gate_work/artifacts_gate1_20260622_173238",
@@ -55,16 +55,51 @@
     "a5_bf16_elapsed_sec": 25.7799653429538,
     "a5_bf16_peak_memory_bytes": 8386809856
   },
+  "stage3a_closure_attempt": {
+    "decision": "stage2a_blocked_no_gate3a_launch",
+    "remote_repo": "/root/shared-nvme/czr004-g567",
+    "remote_head": "65c807b7b68b87e69c343062307baa9c0e567bdf",
+    "remote_p0_after_fixes": "52 passed",
+    "uniform_budget_commit": "a245b791",
+    "row_process_isolation_commit": "65c807b7",
+    "stage2a_uniform30_r4": {
+      "decision": "stage2a_blocked_label_replay_not_materialized",
+      "contexts": 64,
+      "agent_tiers": [
+        32,
+        64,
+        128,
+        256
+      ],
+      "process_hard_timeout_rows": 24,
+      "root_cause": "context_batched_candidate_hard_timeout_scope"
+    },
+    "stage2a_uniform30_r5": {
+      "decision": "stage2a_abnormal_runner_exit_without_rc_or_summary",
+      "planned_rows": 256,
+      "streamed_result_rows": 248,
+      "row_process_isolation_observed": true,
+      "process_hard_timeout_rows_observed": 8,
+      "timeout_contexts": {
+        "g567_stage2a_label_train_00031": "g567-tunnel-24x24-a-v0 a64 additive",
+        "g567_stage2a_label_train_00050": "g567-connector-48x48-a-v3 a256 additive/static/g556/A5",
+        "g567_stage2a_label_train_00058": "g567-cross-32x32-a-v3 a256 additive/static/g556"
+      },
+      "gate3a_launched": false
+    }
+  },
   "not_run": {
     "full_100k_context_generation": true,
     "million_row_solver_acquisition": true,
     "forty_eight_hour_training": true,
     "final_blind_panel": true,
-    "astar_v1_primary": true
+    "astar_v1_primary": true,
+    "gate3a_after_failed_stage2a": true
   },
   "open_risks": [
-    "probe runner per-process hard timeout enforcement not proven",
-    "remote minimal extraction lacks full Git provenance",
+    "Stage-2A row-isolated replay still has true 60s process hard timeouts on selected stress contexts",
+    "Stage-2A r5 tmux runner exited without rc file or final summary after 248/256 streamed rows",
+    "Gate-3A true A5 checkpoint smoke has not been launched",
     "Gate-2 is bounded pilot evidence only"
   ]
 }

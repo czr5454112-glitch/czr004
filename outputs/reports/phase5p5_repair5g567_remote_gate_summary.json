@@ -1,0 +1,70 @@
+{
+  "schema_version": "phase5p5_repair5g567_remote_gate_summary_v1",
+  "date": "2026-06-22",
+  "branch": "codex/repair5g567-large-scale-tail-safe",
+  "latest_pushed_commit": "fb3af544",
+  "gate1": {
+    "decision": "gate1_pass",
+    "artifact_dir": "/root/shared-nvme/g567_gate_work/artifacts_gate1_20260622_173238",
+    "local_evidence_dir": "outputs/evidence/phase5p5_repair5g567_remote_gates/gate1_20260622_173238",
+    "remote_p0": "27 passed",
+    "traffic_prior_default": "traffic_prior_v1_bfs",
+    "stage_a_traffic_prior_calls": 0,
+    "rows3000": 4,
+    "families3000": {
+      "large_empty": 1,
+      "large_maze": 1,
+      "large_warehouse": 2
+    },
+    "manhattan_consumer_parity": true,
+    "exact_real_solver_replicates": 3,
+    "rtx5090_bf16_large_elapsed_sec": 13.732703821733594,
+    "rtx5090_bf16_large_peak_memory_bytes": 3317451264,
+    "large_vs_small_elapsed_ratio": 2.0006409091160897
+  },
+  "gate2": {
+    "decision": "gate2_bounded_pilot_pass",
+    "artifact_dir": "/root/shared-nvme/g567_gate_work/artifacts_gate2_20260622_175228",
+    "local_evidence_dir": "outputs/evidence/phase5p5_repair5g567_remote_gates/gate2_20260622_175228",
+    "generated_contexts": 76,
+    "selected_contexts": 2,
+    "selected_agent_tiers": [
+      2000,
+      3000
+    ],
+    "selected_budget_ms": [
+      8000,
+      20000
+    ],
+    "selected_map_families": {
+      "large_maze": 1,
+      "large_room": 1
+    },
+    "blind_split_constructed": false,
+    "forbidden_actions_all_false": true,
+    "planned_rows": 8,
+    "executed_rows": 8,
+    "candidate_recognized_rate": 1.0,
+    "exact_materialization_rate": 1.0,
+    "identity_retention_rate": 1.0,
+    "scenario_hash_match_rate": 1.0,
+    "a5_bf16_agent_count": 3000,
+    "a5_bf16_map": "g567-large-room-128x128-a-v2",
+    "a5_bf16_graph_nodes": 16133,
+    "a5_bf16_graph_edges": 63516,
+    "a5_bf16_elapsed_sec": 25.7799653429538,
+    "a5_bf16_peak_memory_bytes": 8386809856
+  },
+  "not_run": {
+    "full_100k_context_generation": true,
+    "million_row_solver_acquisition": true,
+    "forty_eight_hour_training": true,
+    "final_blind_panel": true,
+    "astar_v1_primary": true
+  },
+  "open_risks": [
+    "probe runner per-process hard timeout enforcement not proven",
+    "remote minimal extraction lacks full Git provenance",
+    "Gate-2 is bounded pilot evidence only"
+  ]
+}

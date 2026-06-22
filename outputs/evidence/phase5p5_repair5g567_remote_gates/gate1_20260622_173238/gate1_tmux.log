@@ -1,0 +1,15 @@
+gate1_start=2026-06-22T17:32:38+08:00
+repo=/root/shared-nvme/g567_gate_work/czr004
+artifact_dir=/root/shared-nvme/g567_gate_work/artifacts_gate1_20260622_173238
+Python 3.12.3
+NVIDIA GeForce RTX 5090, 32607 MiB, 32109 MiB
+Running 27 items in this shard
+...........................                                              [100%]
+27 passed in 3.66s
+{"name": "traffic_prior_default_bfs", "passed": true, "summary": {"bottleneck_demand": 0.95, "edge_use_max": 1.0, "edge_use_mean": 0.5, "edge_use_total": 1.0, "expected_edge_use_total": 1.0, "flow_imbalance_mean": 1.0, "flow_mass_preservation_ratio": 1.0, "head_on_pressure": 0.0, "nonzero_flow": true, "opposing_flow_ratio": 1.0, "opposing_flow_total": 1.0, "path_found_count": 1, "path_found_rate": 1.0, "path_overlap_concentration": 1.0, "paths_computed": 1, "routing_backend": "bfs", "traffic_prior_version": "traffic_prior_v1_bfs"}}
+{"bad_scenarios": [], "families3000": {"large_empty": 1, "large_maze": 1, "large_warehouse": 2}, "meta": {"attempts": 90, "generated": 80}, "name": "non_collapsed_3000_agent_map_family_distribution", "passed": true, "rows3000": 4, "scenario_count_ok": true, "traffic_prior_calls": 0}
+{"exact_distance": 21, "exact_returncode": 0, "exact_stderr_tail": "", "manhattan_distance": 7, "manhattan_returncode": 0, "manhattan_stderr_tail": "", "name": "manhattan_scenario_distance_consumer_parity", "parity": {"lower_bound": [21, 21], "makespan": [21, 21], "solution_found": [null, null], "sum_of_loss": [21, 21], "sum_of_loss_ratio": [1, 1]}, "passed": true}
+{"name": "exact_real_solver_replicate_preservation", "passed": true, "replicate_group_id": "gate1_same_scientific_pair", "returns": [0, 0, 0], "rows": 3, "stable_outcomes": true, "stderr_tails": ["", "", ""]}
+{"gpu_name": "NVIDIA GeForce RTX 5090", "name": "rtx5090_cuda_available", "passed": true}
+{"collapse_ratio_large_vs_small": 2.0006409091160897, "gpu_name": "NVIDIA GeForce RTX 5090", "large": {"agents": 3000, "cuda_peak_memory_bytes": 3317451264, "edges": 36480, "elapsed_sec": 13.732703821733594, "graph_global_layers": 0, "height": 96, "nodes": 9216, "od_perceiver": true, "samples_per_sec": 0.07281887186829036, "variant": "A5", "width": 96}, "name": "rtx5090_bf16_memory_and_large_map_throughput", "passed": true, "small": {"agents": 3000, "cuda_peak_memory_bytes": 986082304, "edges": 16128, "elapsed_sec": 6.8641522619873285, "graph_global_layers": 0, "height": 64, "nodes": 4096, "od_perceiver": true, "samples_per_sec": 0.1456844140153845, "variant": "A5", "width": 64}}
+gate1_end=2026-06-22T17:33:10+08:00

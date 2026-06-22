@@ -1,0 +1,15 @@
+{
+  "bad_scenarios": [],
+  "families3000": {
+    "large_empty": 1,
+    "large_maze": 1,
+    "large_warehouse": 2
+  },
+  "meta": {
+    "attempts": 90,
+    "generated": 80
+  },
+  "rows3000": 4,
+  "scenario_count_ok": true,
+  "traffic_prior_calls": 0
+}

@@ -1,0 +1,30 @@
+{
+  "exact_distance": 21,
+  "exact_returncode": 0,
+  "exact_stderr_tail": "",
+  "manhattan_distance": 7,
+  "manhattan_returncode": 0,
+  "manhattan_stderr_tail": "",
+  "parity": {
+    "lower_bound": [
+      21,
+      21
+    ],
+    "makespan": [
+      21,
+      21
+    ],
+    "solution_found": [
+      null,
+      null
+    ],
+    "sum_of_loss": [
+      21,
+      21
+    ],
+    "sum_of_loss_ratio": [
+      1,
+      1
+    ]
+  }
+}

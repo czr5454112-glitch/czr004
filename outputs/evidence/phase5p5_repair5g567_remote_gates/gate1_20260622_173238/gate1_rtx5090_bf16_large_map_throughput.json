@@ -1,0 +1,30 @@
+{
+  "collapse_ratio_large_vs_small": 2.0006409091160897,
+  "gpu_name": "NVIDIA GeForce RTX 5090",
+  "large": {
+    "agents": 3000,
+    "cuda_peak_memory_bytes": 3317451264,
+    "edges": 36480,
+    "elapsed_sec": 13.732703821733594,
+    "graph_global_layers": 0,
+    "height": 96,
+    "nodes": 9216,
+    "od_perceiver": true,
+    "samples_per_sec": 0.07281887186829036,
+    "variant": "A5",
+    "width": 96
+  },
+  "small": {
+    "agents": 3000,
+    "cuda_peak_memory_bytes": 986082304,
+    "edges": 16128,
+    "elapsed_sec": 6.8641522619873285,
+    "graph_global_layers": 0,
+    "height": 64,
+    "nodes": 4096,
+    "od_perceiver": true,
+    "samples_per_sec": 0.1456844140153845,
+    "variant": "A5",
+    "width": 64
+  }
+}

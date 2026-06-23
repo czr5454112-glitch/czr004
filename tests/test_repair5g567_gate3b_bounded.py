@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import random
 import sys
+import pickle
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -311,6 +312,54 @@ def test_gate3b_materialization_reports_bfs_meta(monkeypatch) -> None:
     assert meta["workers"] == 1
     assert meta["routing_backend_contract"] == "bfs"
     assert meta["traffic_prior_versions"] == {"traffic_prior_v1_bfs": 1}
+
+
+def test_gate3b_materialization_invalidates_stale_budget_cache(tmp_path, monkeypatch) -> None:
+    stale_ctx = SimpleNamespace(
+        base_time_limit_sec=30.0,
+        process_hard_timeout_sec=60.0,
+        budget_ms=30000,
+        budget_role="uniform_30s_all_agent_tiers_primary_exact",
+        feature_row={"traffic_prior_version": "traffic_prior_v1_bfs"},
+    )
+    cache_path = tmp_path / "contexts.pkl"
+    with cache_path.open("wb") as handle:
+        pickle.dump({"row_ids": ["ctx-3000"], "contexts": [stale_ctx]}, handle)
+
+    def fake_materialize(payload):
+        index, _row = payload
+        return (
+            index,
+            SimpleNamespace(
+                base_time_limit_sec=40.0,
+                process_hard_timeout_sec=80.0,
+                budget_ms=40000,
+                budget_role="large_agent_40s_primary_exact",
+                feature_row={"traffic_prior_version": "traffic_prior_v1_bfs"},
+            ),
+            "traffic_prior_v1_bfs",
+        )
+
+    monkeypatch.setattr(gate3b, "_materialize_one_context", fake_materialize)
+    contexts, meta = gate3b.materialize_contexts(
+        [
+            {
+                "g567_dataset_row_id": "ctx-3000",
+                "base_time_limit_sec": 40.0,
+                "process_hard_timeout_sec": 80.0,
+                "nominal_budget_ms": 40000,
+                "budget_role": "large_agent_40s_primary_exact",
+            }
+        ],
+        phase="unit",
+        workers=1,
+        progress_interval_sec=0.01,
+        cache_path=cache_path,
+    )
+
+    assert meta["resume_cache_hit"] is False
+    assert contexts[0].base_time_limit_sec == 40.0
+    assert contexts[0].process_hard_timeout_sec == 80.0
 
 
 def test_inference_context_batches_respect_od_token_budget() -> None:

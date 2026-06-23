@@ -1457,28 +1457,60 @@ def materialize_contexts(
     started = time.perf_counter()
     row_ids = [str(row.get("g567_dataset_row_id", "")) for row in rows]
     cache = g567.resolve(cache_path) if cache_path is not None else None
+    def cache_contract_matches(contexts_cached: list[g567.G567Context]) -> tuple[bool, list[str]]:
+        mismatches: list[str] = []
+        for index, (row, ctx) in enumerate(zip(rows, contexts_cached)):
+            expected_internal = float(g567.number(row.get("base_time_limit_sec"), 0.0))
+            expected_hard = float(g567.number(row.get("process_hard_timeout_sec"), 0.0))
+            expected_budget_ms = int(g567.number(row.get("nominal_budget_ms"), 0))
+            checks = [
+                ("base_time_limit_sec", float(ctx.base_time_limit_sec), expected_internal),
+                ("process_hard_timeout_sec", float(ctx.process_hard_timeout_sec), expected_hard),
+                ("budget_ms", float(ctx.budget_ms), float(expected_budget_ms)),
+            ]
+            for field, actual, expected in checks:
+                if abs(actual - expected) > 1.0e-9:
+                    mismatches.append(f"{index}:{row_ids[index]}:{field}:{actual}!={expected}")
+            expected_role = str(row.get("budget_role", ""))
+            if expected_role and str(ctx.budget_role) != expected_role:
+                mismatches.append(f"{index}:{row_ids[index]}:budget_role:{ctx.budget_role}!={expected_role}")
+            if len(mismatches) >= 10:
+                break
+        return not mismatches, mismatches
+
     if cache is not None and cache.exists():
         with cache.open("rb") as handle:
             cached = pickle.load(handle)
         contexts_cached = list(cached.get("contexts", []))
         cached_ids = list(cached.get("row_ids", []))
         if cached_ids == row_ids and len(contexts_cached) == total:
-            traffic_versions = Counter(str(ctx.feature_row.get("traffic_prior_version", "")) for ctx in contexts_cached)
-            meta = {
-                "phase": phase,
-                "contexts": len(contexts_cached),
-                "requested_workers": int(workers),
-                "workers": 0,
-                "elapsed_sec": time.perf_counter() - started,
-                "contexts_per_sec": 0.0,
-                "traffic_prior_versions": dict(traffic_versions),
-                "routing_backend_contract": "bfs",
-                "exact_bfs_lookup_cache": True,
-                "resume_cache_hit": True,
-                "cache_path": g567.rel(cache),
-            }
-            emit_event("gate3b_context_materialization_resume_cache_hit", **meta)
-            return contexts_cached, meta
+            cache_ok, cache_mismatches = cache_contract_matches(contexts_cached)
+            if not cache_ok:
+                emit_event(
+                    "gate3b_context_materialization_cache_invalidated",
+                    phase=phase,
+                    total_contexts=total,
+                    cache_path=g567.rel(cache),
+                    reason="cached_context_budget_contract_mismatch",
+                    mismatch_examples=cache_mismatches,
+                )
+            else:
+                traffic_versions = Counter(str(ctx.feature_row.get("traffic_prior_version", "")) for ctx in contexts_cached)
+                meta = {
+                    "phase": phase,
+                    "contexts": len(contexts_cached),
+                    "requested_workers": int(workers),
+                    "workers": 0,
+                    "elapsed_sec": time.perf_counter() - started,
+                    "contexts_per_sec": 0.0,
+                    "traffic_prior_versions": dict(traffic_versions),
+                    "routing_backend_contract": "bfs",
+                    "exact_bfs_lookup_cache": True,
+                    "resume_cache_hit": True,
+                    "cache_path": g567.rel(cache),
+                }
+                emit_event("gate3b_context_materialization_resume_cache_hit", **meta)
+                return contexts_cached, meta
     actual_workers = max(1, min(int(workers), max(1, total)))
     if os.name == "nt":
         actual_workers = 1

@@ -458,6 +458,9 @@ def test_gate3b_runner_finalizes_on_unexpected_shell_exit() -> None:
     assert 'RUNNER_SHELL_PID="$$"' in script
     assert 'PYTHON_PID="$!"' in script
     assert "heartbeat_loop &" in script
+    assert "terminate_python_tree" in script
+    assert 'pgrep -P "${PYTHON_PID}"' in script
+    assert 'if [[ "${reason}" != "python_gate3b_exited" ]]' in script
     assert "runner_shell_pid" in script
     assert "python_orchestrator_pid" in script
     assert "completed_solver_rows" in script

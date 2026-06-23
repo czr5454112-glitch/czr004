@@ -26,6 +26,7 @@ RUNNER_SID="$(ps -o sid= -p "$$" 2>/dev/null | tr -d ' ' || true)"
 RUNNER_CGROUP="$(tr '\n' ';' < "/proc/$$/cgroup" 2>/dev/null || true)"
 PYTHON_PID=""
 HEARTBEAT_PID=""
+PYTHON_TREE_TERMINATED=0
 
 tmux_server_pid() {
   if command -v tmux >/dev/null 2>&1 && [[ -n "${TMUX:-}" ]]; then
@@ -270,6 +271,46 @@ heartbeat_loop() {
   done
 }
 
+terminate_python_tree() {
+  if [[ "${PYTHON_TREE_TERMINATED}" == "1" ]]; then
+    return 0
+  fi
+  PYTHON_TREE_TERMINATED=1
+  if [[ -z "${PYTHON_PID:-}" ]]; then
+    return 0
+  fi
+  if ! kill -0 "${PYTHON_PID}" >/dev/null 2>&1; then
+    return 0
+  fi
+  local child child_pgid
+  while read -r child; do
+    [[ -n "${child}" ]] || continue
+    child_pgid="$(ps -o pgid= -p "${child}" 2>/dev/null | tr -d ' ' || true)"
+    if [[ -n "${child_pgid}" && "${child_pgid}" != "$(ps -o pgid= -p "$$" 2>/dev/null | tr -d ' ' || true)" ]]; then
+      kill -TERM "-${child_pgid}" >/dev/null 2>&1 || true
+    else
+      kill -TERM "${child}" >/dev/null 2>&1 || true
+    fi
+  done < <(pgrep -P "${PYTHON_PID}" 2>/dev/null || true)
+  kill -TERM "${PYTHON_PID}" >/dev/null 2>&1 || true
+  for _ in $(seq 1 10); do
+    if ! kill -0 "${PYTHON_PID}" >/dev/null 2>&1; then
+      return 0
+    fi
+    sleep 1
+  done
+  while read -r child; do
+    [[ -n "${child}" ]] || continue
+    child_pgid="$(ps -o pgid= -p "${child}" 2>/dev/null | tr -d ' ' || true)"
+    if [[ -n "${child_pgid}" && "${child_pgid}" != "$(ps -o pgid= -p "$$" 2>/dev/null | tr -d ' ' || true)" ]]; then
+      kill -KILL "-${child_pgid}" >/dev/null 2>&1 || true
+    else
+      kill -KILL "${child}" >/dev/null 2>&1 || true
+    fi
+  done < <(pgrep -P "${PYTHON_PID}" 2>/dev/null || true)
+  kill -KILL "${PYTHON_PID}" >/dev/null 2>&1 || true
+}
+
 finalize() {
   local rc="$1"
   local reason="$2"
@@ -278,6 +319,9 @@ finalize() {
   fi
   RUNNER_FINALIZED=1
   set +e
+  if [[ "${reason}" != "python_gate3b_exited" ]]; then
+    terminate_python_tree
+  fi
   if [[ -n "${HEARTBEAT_PID:-}" ]]; then
     kill "${HEARTBEAT_PID}" >/dev/null 2>&1 || true
     wait "${HEARTBEAT_PID}" >/dev/null 2>&1 || true

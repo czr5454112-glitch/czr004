@@ -223,11 +223,23 @@ def take_split_rows(
         families = selected_families()
         need_parent = len(hashes) < int(min_parent_maps)
         need_family = len(families) < int(min_map_families)
+        def parent_key(row: dict[str, Any]) -> int:
+            value = str(row.get("physical_map_sha256", ""))
+            if need_parent:
+                return 0 if value not in hashes else 1
+            return 0 if value in hashes else 1
+
+        def family_key(row: dict[str, Any]) -> int:
+            value = str(row.get("map_family", ""))
+            if need_family:
+                return 0 if value not in families else 1
+            return 0 if value in families else 1
+
         return sorted(
             candidates,
             key=lambda row: (
-                0 if need_parent and str(row.get("physical_map_sha256", "")) not in hashes else 1,
-                0 if need_family and str(row.get("map_family", "")) not in families else 1,
+                parent_key(row),
+                family_key(row),
                 0 if row_is_public(row) else 1,
                 0 if row_is_official_scenario(row) else 1,
                 int(g567.number(row.get("agent_count"), 0)),

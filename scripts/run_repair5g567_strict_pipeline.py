@@ -2818,10 +2818,10 @@ def direct_exact_extreme_tail_map(plan_row: dict[str, Any]) -> bool:
 def direct_exact_weight_reason(plan_row: dict[str, Any]) -> str:
     agents = int(number(plan_row.get("agents", plan_row.get("agent_count", 0)), 0))
     extreme_tail = direct_exact_extreme_tail_map(plan_row)
-    if agents >= 3000:
-        return "agent3000_serial_weight"
     if extreme_tail and agents >= 256:
         return "extreme_tail_256plus_serial_weight"
+    if agents >= 3000:
+        return "agent3000_non_tail_dual_weight"
     if agents >= 1000:
         return "large_agent_1000plus_dual_weight"
     if extreme_tail and agents >= 128:
@@ -2833,10 +2833,10 @@ def direct_exact_weight_reason(plan_row: dict[str, Any]) -> str:
 
 def direct_exact_row_weight(plan_row: dict[str, Any]) -> int:
     reason = direct_exact_weight_reason(plan_row)
-    if reason == "agent3000_serial_weight":
-        return 8
     if reason == "extreme_tail_256plus_serial_weight":
         return 8
+    if reason == "agent3000_non_tail_dual_weight":
+        return 4
     if reason == "large_agent_1000plus_dual_weight":
         return 4
     if reason == "extreme_tail_128plus_dual_weight":

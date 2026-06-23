@@ -189,10 +189,12 @@ def test_direct_exact_row_weights_match_large_agent_tiers() -> None:
     assert g567.direct_exact_row_weight({"agents": 256}) == 2
     assert g567.direct_exact_row_weight({"agents": 1000}) == 4
     assert g567.direct_exact_row_weight({"agents": 2500}) == 4
-    assert g567.direct_exact_row_weight({"agents": 3000}) == 8
+    assert g567.direct_exact_row_weight({"agents": 3000}) == 4
     assert g567.direct_exact_row_weight({"agents": 128, "map": "g567-tunnel-64x32-a-v1"}) == 4
     assert g567.direct_exact_row_weight({"agents": 256, "map": "g567-tunnel-64x32-a-v1"}) == 8
+    assert g567.direct_exact_row_weight({"agents": 3000, "map": "g567-tunnel-64x32-a-v1"}) == 8
     assert g567.direct_exact_weight_reason({"agents": 256, "map": "g567-tunnel-64x32-a-v1"}) == "extreme_tail_256plus_serial_weight"
+    assert g567.direct_exact_weight_reason({"agents": 3000, "map": "g567-large-room-128x128-a-v0"}) == "agent3000_non_tail_dual_weight"
 
 
 def test_direct_exact_shards_recover_without_rerunning_completed_rows(tmp_path, monkeypatch) -> None:

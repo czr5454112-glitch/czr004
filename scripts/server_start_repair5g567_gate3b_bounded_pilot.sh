@@ -16,6 +16,7 @@ PREVIOUS_FINAL_SUMMARY="${REPORT_DIR}/phase5p5_repair5g567_gate3b_bounded_pilot_
 PREVIOUS_RC_PATH="${REPORT_DIR}/phase5p5_repair5g567_gate3b_bounded_pilot_runner.previous.rc"
 STDOUT_LOG="${LOG_DIR}/phase5p5_repair5g567_gate3b_bounded_pilot_runner.stdout.log"
 STDERR_LOG="${LOG_DIR}/phase5p5_repair5g567_gate3b_bounded_pilot_runner.stderr.log"
+RUNNER_FINALIZED=0
 
 write_json_atomic() {
   local target="$1"
@@ -57,10 +58,22 @@ PY
 finalize() {
   local rc="$1"
   local reason="$2"
+  if [[ "${RUNNER_FINALIZED}" == "1" ]]; then
+    return 0
+  fi
+  RUNNER_FINALIZED=1
+  set +e
   printf '%s\n' "$rc" > "${RC_PATH}.tmp.$$"
   mv -f "${RC_PATH}.tmp.$$" "${RC_PATH}"
   write_json_atomic "${FINAL_SUMMARY}" "gate3b_bounded_pilot" "$rc" "$reason" "${G567_EXPECTED_HEAD:-}"
   rm -f "${RUNNING_MARKER}"
+}
+
+on_exit() {
+  local rc="$?"
+  if [[ "${RUNNER_FINALIZED}" != "1" ]]; then
+    finalize "$rc" "runner_exit_trap"
+  fi
 }
 
 on_term() {
@@ -68,6 +81,7 @@ on_term() {
   exit 143
 }
 
+trap on_exit EXIT
 trap on_term TERM INT HUP
 
 export G567_STAGE_ROOT="${STAGE_ROOT}"

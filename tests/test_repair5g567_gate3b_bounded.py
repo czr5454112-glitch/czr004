@@ -354,3 +354,11 @@ def test_actor_split_uses_calibration_without_parent_hash_leakage() -> None:
     assert {ex.split for ex in train} == {"LABEL_TRAIN"}
     assert {ex.split for ex in valid} == {"CALIBRATION"}
     assert audit["actor_train_validation_physical_map_overlap"] == 0
+
+
+def test_gate3b_runner_finalizes_on_unexpected_shell_exit() -> None:
+    script = (ROOT / "scripts/server_start_repair5g567_gate3b_bounded_pilot.sh").read_text(encoding="utf-8")
+    assert "RUNNER_FINALIZED=0" in script
+    assert 'trap on_exit EXIT' in script
+    assert 'finalize "$rc" "runner_exit_trap"' in script
+    assert script.index("trap on_exit EXIT") < script.index("python scripts/run_repair5g567_gate3b_bounded_pilot.py")

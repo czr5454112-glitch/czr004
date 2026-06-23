@@ -289,6 +289,7 @@ class ActorTrainExample:
     weight: float
     positive_count: int
     safe_count: int
+    physical_map_sha256: str = ""
 
 
 def claims() -> dict[str, bool]:
@@ -429,6 +430,74 @@ def discover_public_benchmark_map_specs(limit: int = 64) -> list[dict[str, Any]]
                 "source_category": row.get("source_category", ""),
                 "panel": row.get("panel", ""),
                 "public_registry_source": rel(PUBLIC_MAP_REGISTRY),
+            }
+        )
+        if len(specs) >= limit:
+            return specs
+    return specs
+
+
+def discover_public_official_scenario_specs(limit: int = 1024) -> list[dict[str, Any]]:
+    state = public_benchmark_ingestion_state()
+    if not state["ready"]:
+        return []
+    map_family_by_hash: dict[str, str] = {}
+    for row in read_rows(PUBLIC_MAP_REGISTRY):
+        digest = str(row.get("physical_map_sha256") or row.get("parent_physical_map_sha256") or "")
+        if digest:
+            map_family_by_hash[digest] = str(row.get("map_family") or infer_map_family(str(row.get("map_name", ""))))
+    specs: list[dict[str, Any]] = []
+    seen: set[tuple[str, int]] = set()
+    for row in read_rows(PUBLIC_SCENARIO_REGISTRY):
+        if str(row.get("validation_result", "")).strip().lower() != "pass":
+            continue
+        if not boolish(row.get("official_scenario")):
+            continue
+        map_path = resolve(row.get("local_map_path", ""))
+        scen_path = resolve(row.get("local_scenario_path", ""))
+        if not map_path.exists() or not scen_path.exists():
+            continue
+        requested_tier = int(number(row.get("requested_agent_tier"), 0))
+        prefix_rows = int(number(row.get("prefix_rows_validated"), 0))
+        if requested_tier <= 0 or prefix_rows < requested_tier:
+            continue
+        scenario_digest = sha256_file(scen_path)
+        expected_scenario = str(row.get("scenario_sha256", ""))
+        if expected_scenario and scenario_digest != expected_scenario:
+            continue
+        map_digest = sha256_file(map_path)
+        expected_map = str(row.get("physical_map_sha256") or row.get("parent_physical_map_sha256") or "")
+        if expected_map and map_digest != expected_map:
+            continue
+        key = (scenario_digest, requested_tier)
+        if key in seen:
+            continue
+        seen.add(key)
+        width, height, grid = read_movingai_map(map_path)
+        specs.append(
+            {
+                "map": safe_token(row.get("map_name") or map_path.stem),
+                "map_family": map_family_by_hash.get(map_digest, infer_map_family(str(row.get("map_name") or map_path.stem))),
+                "width": width,
+                "height": height,
+                "grid": grid,
+                "free_cells": len(g561_bank.free_cells(grid)),
+                "source_path": map_path,
+                "source_sha256": map_digest,
+                "scenario_path": scen_path,
+                "scenario_sha256": scenario_digest,
+                "map_source_type": "canonical_public_benchmark_map",
+                "scenario_source_type": str(row.get("scenario_source_type") or "official_public_scenario"),
+                "official_scenario": True,
+                "source_category": row.get("source_category", ""),
+                "panel": row.get("panel", ""),
+                "scenario_prefix_family": row.get("scenario_prefix_family", ""),
+                "requested_agent_tier": requested_tier,
+                "agent_count_capacity": int(number(row.get("agent_count_capacity"), requested_tier)),
+                "scenario_rows_available": int(number(row.get("scenario_rows_available"), prefix_rows)),
+                "prefix_rows_validated": prefix_rows,
+                "parent_physical_map_sha256": str(row.get("parent_physical_map_sha256") or map_digest),
+                "public_scenario_registry_source": rel(PUBLIC_SCENARIO_REGISTRY),
             }
         )
         if len(specs) >= limit:
@@ -762,6 +831,7 @@ def make_generated_contexts(target_valid: int, seed: int, tmp_root: Path) -> tup
     map_dir = tmp_root / "maps"
     scenario_dir = tmp_root / "scenarios"
     benchmark_specs = discover_public_benchmark_map_specs()
+    official_specs = discover_public_official_scenario_specs()
     audit_rows: list[dict[str, Any]] = []
     manifest_rows: list[dict[str, Any]] = []
     generated = 0
@@ -769,13 +839,61 @@ def make_generated_contexts(target_valid: int, seed: int, tmp_root: Path) -> tup
     while generated < target_valid and attempts < target_valid * 25:
         attempts += 1
         agent_count = G567_AGENT_TIERS[generated % len(G567_AGENT_TIERS)]
+        official_candidates = [
+            spec
+            for spec in official_specs
+            if int(spec["requested_agent_tier"]) == agent_count
+            and int(spec["prefix_rows_validated"]) >= agent_count
+            and int(spec["free_cells"]) >= agent_count
+        ]
         public_candidates = [
             spec
             for spec in benchmark_specs
             if int(spec["free_cells"]) >= agent_count and int(spec["width"]) * int(spec["height"]) >= max(agent_count * 2, agent_count + 64)
         ]
-        use_public_benchmark = bool(public_candidates) and generated % 4 == 0
-        if use_public_benchmark:
+        use_official_scenario = bool(official_candidates) and target_valid >= len(G567_AGENT_TIERS) and generated % 3 == 0
+        use_public_benchmark = bool(public_candidates) and not use_official_scenario and generated % 4 == 0
+        official_scenario = False
+        scenario_source_type = "czr004_synthetic_derived_scenario"
+        public_registry_source = ""
+        official_prefix_family = ""
+        if use_official_scenario:
+            spec_o = official_candidates[(generated + attempts + seed) % len(official_candidates)]
+            concrete_map = str(spec_o["map"])
+            family = str(spec_o["map_family"])
+            width = int(spec_o["width"])
+            height = int(spec_o["height"])
+            grid = list(spec_o["grid"])
+            map_source_type = str(spec_o["map_source_type"])
+            benchmark_source_path = rel(spec_o["source_path"])
+            benchmark_source_sha256 = str(spec_o["source_sha256"])
+            scen_path = resolve(spec_o["scenario_path"])
+            map_path = resolve(spec_o["source_path"])
+            parsed_assignment = parse_movingai_scenario(scen_path, agent_count)
+            if parsed_assignment.get("assignment_capacity_limited") or not parsed_assignment.get("assignment_valid"):
+                continue
+            assignment = {
+                "starts": parsed_assignment["starts"],
+                "goals": parsed_assignment["goals"],
+                "distances": [abs(s[0] - g[0]) + abs(s[1] - g[1]) for s, g in zip(parsed_assignment["starts"], parsed_assignment["goals"])],
+                "pairs": list(zip(parsed_assignment["starts"], parsed_assignment["goals"])),
+                "distance_mode": "movingai_official_prefix_manhattan_distance",
+                "component_size": len(g561_bank.free_cells(grid)),
+                "reachability_mode": "official_scenario_registry_validated",
+                "unique_start_count": int(parsed_assignment["unique_start_count"]),
+                "unique_goal_count": int(parsed_assignment["unique_goal_count"]),
+                "start_goal_overlap_count": len(set(parsed_assignment["starts"]) & set(parsed_assignment["goals"])),
+                "own_start_goal_match_count": sum(start == goal for start, goal in zip(parsed_assignment["starts"], parsed_assignment["goals"])),
+                "assignment_sha256": movingai_assignment_hash(parsed_assignment["starts"], parsed_assignment["goals"]),
+            }
+            map_sha = str(spec_o["source_sha256"])
+            scenario_sha = str(spec_o["scenario_sha256"])
+            solver_seed = seed * 1_000_000 + attempts
+            scenario_source_type = str(spec_o["scenario_source_type"])
+            official_scenario = True
+            public_registry_source = str(spec_o.get("public_scenario_registry_source", ""))
+            official_prefix_family = str(spec_o.get("scenario_prefix_family", ""))
+        elif use_public_benchmark:
             spec_b = public_candidates[(generated + attempts + seed) % len(public_candidates)]
             concrete_map = str(spec_b["map"])
             family = str(spec_b["map_family"])
@@ -785,6 +903,7 @@ def make_generated_contexts(target_valid: int, seed: int, tmp_root: Path) -> tup
             map_source_type = str(spec_b["map_source_type"])
             benchmark_source_path = rel(spec_b["source_path"])
             benchmark_source_sha256 = str(spec_b["source_sha256"])
+            scenario_source_type = "czr004_derived_on_public_parent_map"
         else:
             specs = [
                 spec
@@ -800,6 +919,7 @@ def make_generated_contexts(target_valid: int, seed: int, tmp_root: Path) -> tup
             map_source_type = "synthetic_stress_map"
             benchmark_source_path = ""
             benchmark_source_sha256 = ""
+            scenario_source_type = "czr004_synthetic_derived_scenario"
         free_count = len(g561_bank.free_cells(grid))
         if free_count < min(G567_AGENT_TIERS):
             continue
@@ -808,15 +928,16 @@ def make_generated_contexts(target_valid: int, seed: int, tmp_root: Path) -> tup
         regime_name = g561_bank.REGIMES[(generated + seed) % len(g561_bank.REGIMES)]
         budget_ms, base_sec, ltm_iters, budget_role = budget_profile_for_agent_tier(agent_count, generated + attempts)
         process_hard_timeout_sec = process_hard_timeout_for_internal_budget(base_sec)
-        solver_seed = seed * 1_000_000 + attempts
-        try:
-            assignment = build_g567_assignment(grid, width, height, agent_count, regime_name, solver_seed)
-        except ValueError:
-            continue
-        map_path = map_dir / f"{concrete_map}.map"
-        scen_path = scenario_dir / f"{concrete_map}-random-{solver_seed}.scen"
-        map_sha = g561_bank.write_map(map_path, grid)
-        scenario_sha = g561_bank.write_scenario(scen_path, concrete_map, width, height, assignment)
+        if not use_official_scenario:
+            solver_seed = seed * 1_000_000 + attempts
+            try:
+                assignment = build_g567_assignment(grid, width, height, agent_count, regime_name, solver_seed)
+            except ValueError:
+                continue
+            map_path = map_dir / f"{concrete_map}.map"
+            scen_path = scenario_dir / f"{concrete_map}-random-{solver_seed}.scen"
+            map_sha = g561_bank.write_map(map_path, grid)
+            scenario_sha = g561_bank.write_scenario(scen_path, concrete_map, width, height, assignment)
         instance_uid = stable_uid(
             "g567_valid_instance",
             concrete_map,
@@ -854,6 +975,10 @@ def make_generated_contexts(target_valid: int, seed: int, tmp_root: Path) -> tup
             "agent_density": density,
             "scenario_bank_source": "g567_component_aware_mixed_public_benchmark_and_synthetic",
             "map_source_type": map_source_type,
+            "scenario_source_type": scenario_source_type,
+            "official_scenario": official_scenario,
+            "public_scenario_registry_source": public_registry_source,
+            "scenario_prefix_family": official_prefix_family,
             "benchmark_source_path": benchmark_source_path,
             "benchmark_source_sha256": benchmark_source_sha256,
             "context_generation_stage": "stage_a_component_validity_only",
@@ -861,7 +986,7 @@ def make_generated_contexts(target_valid: int, seed: int, tmp_root: Path) -> tup
             "raw_map_path": rel(map_path),
             "raw_scenario_path": rel(scen_path),
             "path_found_rate": 1.0,
-            "path_found_rate_source": "same_connected_component_no_path_materialization",
+            "path_found_rate_source": "official_scenario_registry_validated_no_path_materialization" if official_scenario else "same_connected_component_no_path_materialization",
             "component_size": assignment["component_size"],
             "reachability_mode": assignment["reachability_mode"],
             "distance_mode": assignment["distance_mode"],
@@ -1401,29 +1526,44 @@ def infer_checkpoint_thetas(
     phase: str,
     token_budget: int = 0,
     progress_interval_sec: float = 0.0,
+    output_path: Path | None = None,
+    resume: bool = True,
 ) -> list[dict[str, Any]]:
     import torch
 
     resolved_device = normalize_torch_device(device, cuda_available=torch.cuda.is_available())
-    rows: list[dict[str, Any]] = []
+    output = resolve(output_path) if output_path is not None else None
+    rows: list[dict[str, Any]] = read_rows(output) if output is not None and resume and output.exists() else []
     total_contexts = len(contexts)
     total_checkpoints = len(checkpoint_paths)
     progress_interval = max(0.0, float(progress_interval_sec))
+    expected_keys = {(ctx.dataset_row_id, rel(path)) for ctx in contexts for path in checkpoint_paths}
+    existing_keys = {
+        (str(row.get("context_id", "")), str(row.get("model_path", "")))
+        for row in rows
+        if str(row.get("context_id", "")).strip() and str(row.get("model_path", "")).strip()
+    }
+    if output is not None and expected_keys and expected_keys.issubset(existing_keys):
+        return [row for row in rows if (str(row.get("context_id", "")), str(row.get("model_path", ""))) in expected_keys]
     for checkpoint_index, path in enumerate(checkpoint_paths, start=1):
         payload = torch.load(resolve(path), map_location=resolved_device, weights_only=False)
         model, kind = load_model_for_payload(payload, resolve(path), resolved_device)
-        batches = inference_context_batches(contexts, max_contexts=max(1, int(batch_size)), max_od_tokens=max(0, int(token_budget)))
+        checkpoint_rel = rel(path)
+        pending_contexts = [ctx for ctx in contexts if (ctx.dataset_row_id, checkpoint_rel) not in existing_keys]
+        batches = inference_context_batches(pending_contexts, max_contexts=max(1, int(batch_size)), max_od_tokens=max(0, int(token_budget)))
         checkpoint_started = time.perf_counter()
         last_report = checkpoint_started
-        processed_contexts = 0
+        processed_contexts = total_contexts - len(pending_contexts)
         emit_inference_event(
             "g567_checkpoint_inference_start",
             phase=phase,
             checkpoint_index=checkpoint_index,
             total_checkpoints=total_checkpoints,
-            checkpoint_path=rel(path),
+            checkpoint_path=checkpoint_rel,
             variant_id=kind,
             total_contexts=total_contexts,
+            pending_contexts=len(pending_contexts),
+            resumed_contexts=processed_contexts,
             batches=len(batches),
             batch_size=max(1, int(batch_size)),
             token_budget=max(0, int(token_budget)),
@@ -1451,7 +1591,7 @@ def infer_checkpoint_thetas(
                     phase=phase,
                     checkpoint_index=checkpoint_index,
                     total_checkpoints=total_checkpoints,
-                    checkpoint_path=rel(path),
+                    checkpoint_path=checkpoint_rel,
                     variant_id=kind,
                     processed_contexts=processed_contexts,
                     total_contexts=total_contexts,
@@ -1477,26 +1617,32 @@ def infer_checkpoint_thetas(
                         "variant_name": str(payload.get("variant_name") or payload.get("model_kind") or kind),
                         "seed": payload.get("seed", payload.get("metrics", {}).get("seed", "")),
                         "method": f"g567_{kind}_{path.stem}",
-                        "model_path": rel(path),
+                        "model_path": checkpoint_rel,
                         **clamp_theta_row(row),
                     }
                 )
+                existing_keys.add((ctx.dataset_row_id, checkpoint_rel))
+            if output is not None:
+                write_rows(output, rows)
         elapsed = time.perf_counter() - checkpoint_started
         emit_inference_event(
             "g567_checkpoint_inference_complete",
             phase=phase,
             checkpoint_index=checkpoint_index,
             total_checkpoints=total_checkpoints,
-            checkpoint_path=rel(path),
+            checkpoint_path=checkpoint_rel,
             variant_id=kind,
             processed_contexts=processed_contexts,
             total_contexts=total_contexts,
+            pending_contexts=0,
             batches=len(batches),
             elapsed_sec=elapsed,
             contexts_per_sec=processed_contexts / max(1.0e-9, elapsed),
             rows_written=len(rows),
             device=resolved_device,
         )
+    if output is not None:
+        write_rows(output, rows)
     return rows
 
 
@@ -1976,6 +2122,7 @@ def build_three_tier_pairs(rows: list[dict[str, Any]], phase: str) -> list[dict[
                     "scientific_horizon_id": actor.get("scientific_horizon_id", actor.get("horizon_id", "")),
                     "split": actor.get("split", ""),
                     "map_family": actor.get("map_family", ""),
+                    "physical_map_sha256": actor.get("g567_physical_map_sha256", ""),
                     "g567_dataset_row_id": actor.get("g567_dataset_row_id", ""),
                     "g567_evaluation_uid": actor.get("g567_evaluation_uid", ""),
                     "g567_identity_digest": actor.get("g567_identity_digest", ""),
@@ -2049,7 +2196,23 @@ def summarize_pairs(pairs: list[dict[str, Any]], rows: list[dict[str, Any]], pla
     scenario = sum(boolish(row.get("scenario_sha256_match")) for row in actor_rows)
     identity = sum(boolish(row.get("identity_retained")) for row in actor_rows)
     timeout_rows = sum(boolish(row.get("process_hard_timeout_exceeded")) for row in rows)
-    materialized = bool(actor_rows and exact == len(actor_rows) and recognized == len(actor_rows) and scenario == len(actor_rows) and identity == len(actor_rows) and timeout_rows == 0)
+    expected_method_counts = Counter(str(row.get("candidate_id", "")) for row in plan_rows)
+    executed_method_counts = Counter(str(row.get("materialized_method", "")) for row in rows)
+    baseline_count_exact = all(
+        executed_method_counts.get(alias, 0) == expected_method_counts.get(alias, 0)
+        for alias in [ADDITIVE_SOLVER_ALIAS, STATIC_FLOW_SOLVER_ALIAS, G556_SOLVER_ALIAS]
+    )
+    planned_executed_exact = len(plan_rows) == len(rows)
+    materialized = bool(
+        actor_rows
+        and exact == len(actor_rows)
+        and recognized == len(actor_rows)
+        and scenario == len(actor_rows)
+        and identity == len(actor_rows)
+        and timeout_rows == 0
+        and planned_executed_exact
+        and baseline_count_exact
+    )
     replicate_group_counts = Counter(
         str(row.get("replicate_group_id", ""))
         for row in pairs
@@ -2099,15 +2262,24 @@ def summarize_pairs(pairs: list[dict[str, Any]], rows: list[dict[str, Any]], pla
                 "raw_success_gains_vs_additive": 0,
                 "raw_success_gains_vs_static_flow": 0,
                 "raw_success_gains_vs_g556": 0,
+                "supported_success_regressions_vs_additive": 0,
+                "supported_success_regressions_vs_static_flow": 0,
+                "supported_success_regressions_vs_g556": 0,
+                "supported_success_gains_vs_additive": 0,
+                "supported_success_gains_vs_static_flow": 0,
+                "supported_success_gains_vs_g556": 0,
                 "deltas_vs_additive": [],
                 "deltas_vs_static_flow": [],
                 "deltas_vs_g556": [],
             },
         )
         bucket["pairs"] += 1
+        supported = int(number(pair.get("replicate_count"), 1)) >= 5 or str(pair.get("measurement_confidence", "")) != "single_run_boundary_uncertain"
         for tier in ["additive", "static_flow", "g556"]:
             bucket[f"raw_success_regressions_vs_{tier}"] += int(boolish(pair.get(f"success_regression_vs_{tier}")))
             bucket[f"raw_success_gains_vs_{tier}"] += int(boolish(pair.get(f"success_gain_vs_{tier}")))
+            bucket[f"supported_success_regressions_vs_{tier}"] += int(supported and boolish(pair.get(f"success_regression_vs_{tier}")))
+            bucket[f"supported_success_gains_vs_{tier}"] += int(supported and boolish(pair.get(f"success_gain_vs_{tier}")))
             value = number(pair.get(f"delta_vs_{tier}"), math.nan)
             if math.isfinite(value):
                 bucket[f"deltas_vs_{tier}"].append(value)
@@ -2131,6 +2303,11 @@ def summarize_pairs(pairs: list[dict[str, Any]], rows: list[dict[str, Any]], pla
         "counterfactual_probe_callback_enabled": False,
         "planned_rows": len(plan_rows),
         "executed_rows": len(rows),
+        "planned_executed_exact": planned_executed_exact,
+        "expected_additive_rows": expected_method_counts.get(ADDITIVE_SOLVER_ALIAS, 0),
+        "expected_static_flow_rows": expected_method_counts.get(STATIC_FLOW_SOLVER_ALIAS, 0),
+        "expected_g556_rows": expected_method_counts.get(G556_SOLVER_ALIAS, 0),
+        "expected_baseline_rows_exact": baseline_count_exact,
         "process_hard_timeout_rows": timeout_rows,
         "process_group_timeout_provenance_rows": sum(
             str(row.get("process_timeout_provenance", "")).startswith("subprocess_popen_posix_start_new_session")
@@ -2808,6 +2985,7 @@ def generate_response_thetas(
     leave_alphas = [0.0, 0.50, 1.0]
     out: list[dict[str, Any]] = []
     anchor = np.asarray(BASELINE_G556, dtype=np.float32)
+    static_anchor = np.asarray([TIER_B_STATIC_FLOW.theta[col] for col in THETA_NUMERIC_COLUMNS], dtype=np.float32)
     lo = np.asarray(THETA_LO, dtype=np.float32)
     hi = np.asarray(THETA_HI, dtype=np.float32)
     prepared: list[tuple[G567Context, dict[str, Any], np.ndarray, np.ndarray, bool]] = []
@@ -2830,6 +3008,7 @@ def generate_response_thetas(
         label: str,
         vec: np.ndarray,
         *,
+        acquisition_family: str,
         primary_30s_exact_context: bool,
         coverage_first: bool,
         pass_index: int,
@@ -2848,6 +3027,8 @@ def generate_response_thetas(
                 "method": f"g567_response_{label}",
                 "model_path": str(raw.get("model_path", "")),
                 "raw_actor_variant_id": raw.get("variant_id", ""),
+                "acquisition_family": acquisition_family,
+                "candidate_source_family": acquisition_family,
                 "multi_fidelity_stage": (
                     "selected_30s_exact_candidate"
                     if primary_30s_exact_context and coverage_first
@@ -2868,7 +3049,7 @@ def generate_response_thetas(
 
     for ctx, raw, raw_vec, _delta, primary_30s_exact_context in prepared:
         label = "SELECTED_ACTOR_PRIMARY_30S_EXACT" if primary_30s_exact_context else "GLOBAL_ALPHA_1p0"
-        emit(ctx, raw, label, raw_vec, primary_30s_exact_context=primary_30s_exact_context, coverage_first=True, pass_index=0)
+        emit(ctx, raw, label, raw_vec, acquisition_family="actor_direct", primary_30s_exact_context=primary_30s_exact_context, coverage_first=True, pass_index=0)
     if len(out) >= target_rows:
         return out[:target_rows]
 
@@ -2876,7 +3057,11 @@ def generate_response_thetas(
     for alpha in alphas:
         if abs(alpha - 1.0) <= 1.0e-12:
             continue
-        extra_specs.append(("global", f"GLOBAL_ALPHA_{str(alpha).replace('.', 'p')}", alpha))
+        extra_specs.append(("global_g556_anchor", f"G556_GLOBAL_ALPHA_{str(alpha).replace('.', 'p')}", alpha))
+    for alpha in [0.25, 0.50, 0.75, 1.0, 1.25]:
+        extra_specs.append(("global_static_anchor", f"STATIC_GLOBAL_ALPHA_{str(alpha).replace('.', 'p')}", alpha))
+    for jitter_idx in range(12):
+        extra_specs.append(("deterministic_jitter", f"DET_JITTER_{jitter_idx:02d}", jitter_idx))
     for group_name, cols in FIELD_GROUPS.items():
         for alpha in group_alphas:
             extra_specs.append(("group", f"{group_name}_ONLY_ALPHA_{str(alpha).replace('.', 'p')}", (cols, alpha)))
@@ -2887,8 +3072,15 @@ def generate_response_thetas(
         for ctx, raw, raw_vec, delta, primary_30s_exact_context in prepared:
             if primary_30s_exact_context and not allow_selected_primary_30s_surface:
                 continue
-            if kind == "global":
+            acquisition_family = kind
+            if kind == "global_g556_anchor":
                 vec = anchor + float(spec) * delta
+            elif kind == "global_static_anchor":
+                vec = static_anchor + float(spec) * (raw_vec - static_anchor)
+            elif kind == "deterministic_jitter":
+                digest = hashlib.sha256(f"{ctx.instance_uid}|{label}|{spec}".encode("utf-8")).digest()
+                noise = np.asarray([(byte / 255.0) * 2.0 - 1.0 for byte in digest[: len(anchor)]], dtype=np.float32)
+                vec = anchor + 0.18 * noise * (hi - lo)
             elif kind == "group":
                 cols, alpha = spec
                 mask = np.zeros_like(delta)
@@ -2904,6 +3096,7 @@ def generate_response_thetas(
                 raw,
                 label,
                 vec,
+                acquisition_family=acquisition_family,
                 primary_30s_exact_context=primary_30s_exact_context,
                 coverage_first=False,
                 pass_index=pass_index,
@@ -2946,6 +3139,7 @@ def create_labelv54_from_pairs(pair_paths: list[Path], margin: float) -> dict[st
                 "split": row.get("split", ""),
                 "map": row.get("map", ""),
                 "map_family": row.get("map_family", ""),
+                "physical_map_sha256": row.get("physical_map_sha256", ""),
                 "agents": row.get("agents", ""),
                 "budget_ms": row.get("budget_ms", ""),
                 **claims(),
@@ -3009,6 +3203,7 @@ def create_labelv54_from_pairs(pair_paths: list[Path], margin: float) -> dict[st
                 "split": row.get("split", ""),
                 "map": row.get("map", ""),
                 "map_family": row.get("map_family", ""),
+                "physical_map_sha256": row.get("physical_map_sha256", ""),
                 "agents": row.get("agents", ""),
                 "budget_ms": row.get("budget_ms", ""),
                 "candidate_uid": theta_id,
@@ -3251,6 +3446,7 @@ def actor_examples_from_labelv54(contexts: list[G567Context]) -> list[ActorTrain
                 evaluation_uid=uid,
                 split=ctx.split,
                 map_family=ctx.map_family,
+                physical_map_sha256=ctx.physical_map_sha256,
                 graph=ctx.graph_with_traffic,
                 assignment=ctx.assignment,
                 feature_row=ctx.feature_row,
@@ -3265,16 +3461,40 @@ def actor_examples_from_labelv54(contexts: list[G567Context]) -> list[ActorTrain
 
 def split_actor_examples(examples: list[ActorTrainExample]) -> tuple[list[ActorTrainExample], list[ActorTrainExample]]:
     label_train = [ex for ex in examples if ex.split == "LABEL_TRAIN"]
-    if label_train:
-        valid = label_train[::5]
-        train = [ex for idx, ex in enumerate(label_train) if idx % 5 != 0]
-        return train or label_train, valid or label_train[-max(1, len(label_train) // 5) :]
-    train = [ex for ex in examples if ex.split in {"TRAIN", "VALIDATION"}]
-    valid = [ex for ex in examples if ex.split == "CALIBRATION"]
-    if not valid:
-        valid = examples[::5]
-        train = [ex for idx, ex in enumerate(examples) if idx % 5 != 0]
-    return train or examples, valid or examples[-max(1, len(examples) // 5) :]
+    calibration = [ex for ex in examples if ex.split == "CALIBRATION"]
+    if label_train and calibration:
+        train_hashes = {ex.physical_map_sha256 for ex in label_train}
+        valid = [ex for ex in calibration if ex.physical_map_sha256 not in train_hashes]
+        if valid:
+            return label_train, valid
+        raise RuntimeError("Actor CALIBRATION split leaks LABEL_TRAIN physical-map hashes")
+    source = label_train or [ex for ex in examples if ex.split in {"TRAIN", "VALIDATION"}] or examples
+    by_hash: dict[str, list[ActorTrainExample]] = defaultdict(list)
+    for ex in source:
+        by_hash[ex.physical_map_sha256].append(ex)
+    ordered_hashes = sorted(by_hash, key=lambda h: (by_hash[h][0].map_family, h))
+    valid_hash_count = max(1, math.ceil(len(ordered_hashes) * 0.20))
+    valid_hashes = set(ordered_hashes[:: max(1, len(ordered_hashes) // valid_hash_count)][:valid_hash_count])
+    valid = [ex for ex in source if ex.physical_map_sha256 in valid_hashes]
+    train = [ex for ex in source if ex.physical_map_sha256 not in valid_hashes]
+    if not train or not valid:
+        raise RuntimeError("Actor grouped split requires at least two physical-map groups")
+    return train, valid
+
+
+def actor_split_audit(train: list[ActorTrainExample], valid: list[ActorTrainExample]) -> dict[str, Any]:
+    train_hashes = {ex.physical_map_sha256 for ex in train}
+    valid_hashes = {ex.physical_map_sha256 for ex in valid}
+    return {
+        "actor_train_examples": len(train),
+        "actor_validation_examples": len(valid),
+        "actor_train_physical_maps": len(train_hashes),
+        "actor_validation_physical_maps": len(valid_hashes),
+        "actor_train_validation_physical_map_overlap": len(train_hashes & valid_hashes),
+        "actor_train_splits": dict(Counter(ex.split for ex in train)),
+        "actor_validation_splits": dict(Counter(ex.split for ex in valid)),
+        "actor_split_grouped_by_physical_map": True,
+    }
 
 
 def actor_tensor_batch(examples: list[ActorTrainExample], device: str):
@@ -3399,6 +3619,7 @@ def train_one_g567_actor(
     ).module().to(device)
     opt = torch.optim.AdamW(model.parameters(), lr=lr, weight_decay=1.0e-4)
     train, valid = split_actor_examples(examples)
+    split_audit = actor_split_audit(train, valid)
     span = torch.tensor(np.asarray(THETA_HI - THETA_LO, dtype=np.float32), device=device).clamp_min(1.0e-6)
     out_path = resolve(MODEL_DIR / f"{ROUND}_{variant_id.lower()}_{arch.variant_name}_seed{seed}.pt")
     resume_path = resolve(MODEL_DIR / f"{ROUND}_{variant_id.lower()}_{arch.variant_name}_seed{seed}.resume.pt")
@@ -3526,6 +3747,7 @@ def train_one_g567_actor(
             "gpu_active_hour_cap_respected": (max_gpu_active_sec <= 0.0) or (gpu_active_sec <= max_gpu_active_sec * 1.10),
             "resume_checkpoint_path": rel(resume_path),
             "labelv54_summary": rel(LABELV54_SUMMARY),
+            "actor_split_audit": split_audit,
         }
     torch.save(checkpoint_payload, out_path)
     row = {
@@ -3542,7 +3764,8 @@ def train_one_g567_actor(
         "final_train_loss": final_train_loss,
         "train_examples": len(train),
         "validation_examples": len(valid),
-        "training_split_source": "LABEL_TRAIN_internal_holdout" if any(ex.split == "LABEL_TRAIN" for ex in examples) else "legacy_split_fallback",
+        "training_split_source": "LABEL_TRAIN_with_CALIBRATION_validation" if any(ex.split == "CALIBRATION" for ex in valid) else "physical_map_grouped_holdout",
+        **split_audit,
         "diagnostic_only": bool(diagnostic_only),
         "no_performance_claim": bool(no_performance_claim),
         "training_context_count": len(training_context_uids or []),
@@ -4107,10 +4330,12 @@ def train_distributional_outcome_ensemble(contexts: list[G567Context], *, seeds:
         fold_positive_gate_by_target[target] = bool(counts and min(counts) >= 3)
     tier_positive_min_by_target = {}
     family_positive_min_by_target = {}
+    all_agent_tiers = sorted({str(ctx.agents) for ctx in context_by_uid.values()}, key=lambda value: int(number(value, 0)))
+    all_map_families = sorted({str(ctx.map_family) for ctx in context_by_uid.values()})
     for target in regression_targets:
         target_idx = CRITIC_TARGETS.index(target)
-        tier_counts: dict[str, int] = defaultdict(int)
-        family_counts: dict[str, int] = defaultdict(int)
+        tier_counts: dict[str, int] = {tier: 0 for tier in all_agent_tiers}
+        family_counts: dict[str, int] = {family: 0 for family in all_map_families}
         for row_idx, row in enumerate(rows):
             if number(y[row_idx, target_idx], 0.0) >= 1.0:
                 ctx = context_by_uid[row["g567_evaluation_uid"]]
@@ -4209,6 +4434,8 @@ def train_distributional_outcome_ensemble(contexts: list[G567Context], *, seeds:
         "fold_positive_min_by_target": fold_positive_min_by_target,
         "per_agent_tier_positive_min_by_target": tier_positive_min_by_target,
         "per_map_family_positive_min_by_target": family_positive_min_by_target,
+        "zero_event_agent_tiers_enumerated": all_agent_tiers,
+        "zero_event_map_families_enumerated": all_map_families,
         "auprc_lift_min_vs_prevalence": min(auprc_lift_values) if auprc_lift_values else None,
         "fixed_fpr_05_recall_min": min(fixed_fpr_recall_values) if fixed_fpr_recall_values else None,
         "delta_quantile_empirical_coverage": delta_coverage,
@@ -4396,13 +4623,18 @@ def select_primary_actor_checkpoint(development: dict[str, Any]) -> dict[str, An
         return {"decision": "g567_primary_actor_selection_blocked_no_candidate_paths"}
 
     def score(row: dict[str, Any]) -> tuple[Any, ...]:
-        additive_reg = int(number(row.get("raw_success_regressions_vs_additive"), 999))
-        static_reg = int(number(row.get("raw_success_regressions_vs_static_flow"), 999))
+        def supported_or_raw(supported_key: str, raw_key: str, default: int = 999) -> int:
+            if str(row.get(supported_key, "")).strip():
+                return int(number(row.get(supported_key), default))
+            return int(number(row.get(raw_key), default))
+
+        additive_reg = supported_or_raw("supported_success_regressions_vs_additive", "raw_success_regressions_vs_additive")
+        static_reg = supported_or_raw("supported_success_regressions_vs_static_flow", "raw_success_regressions_vs_static_flow")
         additive_worse = int(number(row.get("supported_worse_outside_margin_vs_additive"), 999))
         static_worse = int(number(row.get("supported_worse_outside_margin_vs_static_flow"), 999))
         additive_med = number(row.get("median_delta_vs_additive"), 999.0)
         static_med = number(row.get("median_delta_vs_static_flow"), 999.0)
-        g556_reg = int(number(row.get("raw_success_regressions_vs_g556"), 999))
+        g556_reg = supported_or_raw("supported_success_regressions_vs_g556", "raw_success_regressions_vs_g556")
         g556_worse = int(number(row.get("supported_worse_outside_margin_vs_g556"), 999))
         g556_med = number(row.get("median_delta_vs_g556"), 999.0)
         return (
@@ -4421,7 +4653,7 @@ def select_primary_actor_checkpoint(development: dict[str, Any]) -> dict[str, An
     primary = ordered[0]
     return {
         "decision": "g567_one_primary_actor_selected",
-        "selection_rule": "additive_static_flow_safety_and_utility_primary_g556_secondary_tiebreak",
+        "selection_rule": "supported_additive_static_flow_safety_and_utility_primary_g556_secondary_tiebreak",
         "primary_model_path": primary.get("model_path", ""),
         "primary_variant_id": primary.get("variant_id", ""),
         "candidate_count": len(candidates),

@@ -101,13 +101,21 @@ with open(path, "w", encoding="utf-8", newline="\n") as handle:
 PY
 
 set +e
+overwrite_args=()
+if [[ "${G567_GATE3B_OVERWRITE:-0}" == "1" ]]; then
+  overwrite_args+=(--overwrite)
+fi
 python scripts/run_repair5g567_gate3b_bounded_pilot.py \
   --stage-root "${STAGE_ROOT}" \
   --expected-head "${G567_EXPECTED_HEAD}" \
   --context-pool "${G567_GATE3B_CONTEXT_POOL:-8000}" \
   --label-train-contexts "${G567_GATE3B_LABEL_TRAIN_CONTEXTS:-2000}" \
+  --calibration-contexts "${G567_GATE3B_CALIBRATION_CONTEXTS:-500}" \
   --development-contexts "${G567_GATE3B_DEVELOPMENT_CONTEXTS:-500}" \
   --label-replay-solver-rows "${G567_GATE3B_LABEL_REPLAY_SOLVER_ROWS:-60000}" \
+  --label-official-scenario-fraction-min "${G567_GATE3B_LABEL_OFFICIAL_SCENARIO_FRACTION_MIN:-0.20}" \
+  --calibration-official-scenario-fraction-min "${G567_GATE3B_CALIBRATION_OFFICIAL_SCENARIO_FRACTION_MIN:-0.30}" \
+  --development-official-scenario-fraction-min "${G567_GATE3B_DEVELOPMENT_OFFICIAL_SCENARIO_FRACTION_MIN:-0.30}" \
   --max-workers "${G567_GATE3B_MAX_WORKERS:-8}" \
   --materialize-workers "${G567_GATE3B_MATERIALIZE_WORKERS:-8}" \
   --materialize-progress-interval-sec "${G567_GATE3B_MATERIALIZE_PROGRESS_INTERVAL_SEC:-30}" \
@@ -117,7 +125,7 @@ python scripts/run_repair5g567_gate3b_bounded_pilot.py \
   --binary "${G567_SOLVER_BINARY:-build/phase1a-batch/phase1a_batch}" \
   --min-gpu-active-hours "${G567_GATE3B_MIN_GPU_ACTIVE_HOURS:-2.0}" \
   --max-gpu-active-hours "${G567_GATE3B_MAX_GPU_ACTIVE_HOURS:-4.0}" \
-  --overwrite \
+  "${overwrite_args[@]}" \
   "$@" > >(tee -a "${STDOUT_LOG}") 2> >(tee -a "${STDERR_LOG}" >&2)
 rc=$?
 set -e

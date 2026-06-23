@@ -30,6 +30,35 @@ def scatter_mean(values: torch.Tensor, index: torch.Tensor, dim_size: int) -> to
     return out / count.clamp_min(1.0)
 
 
+def segmented_softmax_by_dst(logits: torch.Tensor, dst: torch.Tensor, dim_size: int) -> torch.Tensor:
+    if logits.numel() == 0:
+        return logits
+    dst = dst.long()
+    work = logits.float()
+    if hasattr(torch.Tensor, "scatter_reduce_"):
+        max_per_dst = work.new_full((dim_size,), -torch.inf)
+        max_per_dst.scatter_reduce_(0, dst, work, reduce="amax", include_self=True)
+    else:
+        # Older torch fallback for local/unit environments; production PyTorch 2.7 uses the vectorized path above.
+        max_per_dst = work.new_full((dim_size,), -torch.inf)
+        for node in torch.unique(dst):
+            mask = dst == node
+            max_per_dst[node] = torch.max(work[mask])
+    exp = torch.exp(work - max_per_dst[dst])
+    denom = work.new_zeros((dim_size,))
+    denom.index_add_(0, dst, exp)
+    weights = exp / denom[dst].clamp_min(torch.finfo(exp.dtype).tiny)
+    return weights.to(dtype=logits.dtype)
+
+
+def reference_segmented_softmax_by_dst(logits: torch.Tensor, dst: torch.Tensor, dim_size: int) -> torch.Tensor:
+    weights = torch.zeros_like(logits)
+    for node in torch.unique(dst.long()):
+        mask = dst == node
+        weights[mask] = torch.softmax(logits[mask], dim=0).to(dtype=weights.dtype)
+    return weights
+
+
 class EdgeAwareAttentionLayer(nn.Module):
     def __init__(self, hidden_dim: int, edge_dim: int, dropout: float = 0.1) -> None:
         super().__init__()
@@ -51,10 +80,7 @@ class EdgeAwareAttentionLayer(nn.Module):
         src, dst = edge_index[0].long(), edge_index[1].long()
         e = self.edge_proj(edge_features)
         logits = self.attn(torch.cat([h[src], h[dst], e], dim=-1)).squeeze(-1)
-        weights = torch.zeros_like(logits)
-        for node in torch.unique(dst):
-            mask = dst == node
-            weights[mask] = torch.softmax(logits[mask], dim=0).to(dtype=weights.dtype)
+        weights = segmented_softmax_by_dst(logits, dst, h.size(0))
         msg = self.msg(torch.cat([h[src], e], dim=-1)) * weights.unsqueeze(-1)
         agg = torch.zeros_like(h)
         agg.index_add_(0, dst, msg.to(dtype=agg.dtype))

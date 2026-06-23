@@ -4,6 +4,8 @@ import sys
 from pathlib import Path
 from types import SimpleNamespace
 
+import numpy as np
+
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
@@ -12,6 +14,7 @@ import run_repair5g567_gate3b_bounded_pilot as gate3b  # noqa: E402
 
 
 def _fake_row(tier: int, idx: int, source: str) -> dict[str, object]:
+    official = source == "canonical_public_benchmark_map" and idx % 2 == 0
     return {
         "g567_instance_uid": f"{source}-{tier}-{idx}",
         "agent_count": tier,
@@ -20,6 +23,8 @@ def _fake_row(tier: int, idx: int, source: str) -> dict[str, object]:
         "free_cells": max(4096, tier + 64),
         "map_family": "public" if source == "canonical_public_benchmark_map" else "synthetic",
         "map_source_type": source,
+        "scenario_source_type": "movingai_official_random" if official else "czr004_synthetic_derived_scenario",
+        "official_scenario": official,
         "physical_map_sha256": f"{source}-hash-{tier}-{idx}",
     }
 
@@ -31,17 +36,29 @@ def test_gate3b_split_selection_preserves_parent_hash_and_public_mix() -> None:
             rows.append(_fake_row(tier, idx, "canonical_public_benchmark_map"))
             rows.append(_fake_row(tier, idx, "synthetic_stress_map"))
 
-    label_rows, dev_rows, meta = gate3b.select_gate3b_rows(
+    label_rows, cal_rows, dev_rows, meta = gate3b.select_gate3b_rows(
         rows,
         label_contexts=len(gate3b.REQUIRED_AGENT_TIERS) * 2,
+        calibration_contexts=len(gate3b.REQUIRED_AGENT_TIERS),
         development_contexts=len(gate3b.REQUIRED_AGENT_TIERS),
         label_public_fraction_min=0.50,
+        calibration_public_fraction_min=0.70,
         development_public_fraction_min=0.70,
+        label_official_scenario_fraction_min=0.0,
+        calibration_official_scenario_fraction_min=0.0,
+        development_official_scenario_fraction_min=0.0,
+        label_min_parent_maps=1,
+        calibration_min_parent_maps=1,
+        development_min_parent_maps=1,
+        label_min_map_families=1,
+        calibration_min_map_families=1,
+        development_min_map_families=1,
         max_train_free_cells=24000,
         max_train_area=32000,
     )
 
     assert len(label_rows) == len(gate3b.REQUIRED_AGENT_TIERS) * 2
+    assert len(cal_rows) == len(gate3b.REQUIRED_AGENT_TIERS)
     assert len(dev_rows) == len(gate3b.REQUIRED_AGENT_TIERS)
     assert meta["parent_map_split_leakage_count"] == 0
     assert meta["label_train_public_fraction"] >= 0.50
@@ -54,22 +71,35 @@ def test_gate3b_pass_conditions_require_bounded_rows_and_no_blind() -> None:
         "source_state": {"decision": "g567_source_state_clean"},
         "public_benchmark_ingestion": {"ready": True},
         "label_train_contexts": 2000,
+        "calibration_contexts": 500,
         "development_contexts": 500,
         "context_materialization": {
             "label_train": {"traffic_prior_versions": {"traffic_prior_v1_bfs": 2000}},
+            "calibration": {"traffic_prior_versions": {"traffic_prior_v1_bfs": 500}},
             "development": {"traffic_prior_versions": {"traffic_prior_v1_bfs": 500}},
         },
         "total_solver_rows": 60000,
         "selected_agent_tiers": list(gate3b.REQUIRED_AGENT_TIERS),
         "label_train_public_fraction": 0.50,
+        "calibration_public_fraction": 0.70,
         "development_public_fraction": 0.70,
+        "label_train_official_scenario_fraction": 0.20,
+        "calibration_official_scenario_fraction": 0.30,
+        "development_official_scenario_fraction": 0.30,
         "selected_map_source_types": {"canonical_public_benchmark_map": 1, "synthetic_stress_map": 1},
         "parent_map_split_leakage_count": 0,
-        "label_replay": {"decision": "g567_three_tier_replay_materialized"},
-        "development_replay": {"decision": "g567_three_tier_replay_materialized"},
+        "split_diversity": {
+            "LABEL_TRAIN": {"parent_map_count": 32, "map_family_count": 10},
+            "CALIBRATION": {"parent_map_count": 12, "map_family_count": 8},
+            "DEVELOPMENT": {"parent_map_count": 16, "map_family_count": 8},
+        },
+        "label_replay": {"decision": "g567_three_tier_replay_materialized", "planned_executed_exact": True, "expected_baseline_rows_exact": True},
+        "boundary_repeat": {"decision": "gate3b_no_boundary_repeats_required"},
+        "development_replay": {"decision": "g567_three_tier_replay_materialized", "planned_executed_exact": True},
         "process_hard_timeout_rows": 0,
-        "critic_calibration": {"binary_calibration_by_target": {"success_regression_vs_additive": {}}},
-        "actor_training_row": {"cuda_bf16_training": True, "gpu_active_hours": 2.1},
+        "critic_calibration": {"decision": "g567_distributional_critic_calibrated", "calibration_blockers": []},
+        "actor_training_rows": [{"cuda_bf16_training": True}, {"cuda_bf16_training": True}],
+        "gpu_active_hours": 2.1,
         "primary_actor_selection": {"decision": "g567_one_primary_actor_selected"},
         "forbidden_actions": {"full_100k_generation_launched": False, "final_blind_panel_constructed_or_accessed": False},
         "final_blind_panel_constructed_or_accessed": False,
@@ -114,3 +144,32 @@ def test_inference_context_batches_respect_od_token_budget() -> None:
 
     assert [len(batch) for batch in batches] == [1, 1, 1, 1]
     assert all(sum(gate3b.g567.context_od_token_count(ctx) for ctx in batch) <= 3000 for batch in batches)
+
+
+def test_actor_split_uses_calibration_without_parent_hash_leakage() -> None:
+    examples = []
+    for idx in range(6):
+        split = "LABEL_TRAIN" if idx < 3 else "CALIBRATION"
+        examples.append(
+            gate3b.g567.ActorTrainExample(
+                example_id=f"ex{idx}",
+                evaluation_uid=f"uid{idx}",
+                split=split,
+                map_family="fam",
+                physical_map_sha256=f"hash-{idx}",
+                graph=None,
+                assignment={"starts": []},
+                feature_row={},
+                target=np.zeros(len(gate3b.g567.THETA_NUMERIC_COLUMNS), dtype=np.float32),
+                weight=1.0,
+                positive_count=0,
+                safe_count=1,
+            )
+        )
+
+    train, valid = gate3b.g567.split_actor_examples(examples)
+    audit = gate3b.g567.actor_split_audit(train, valid)
+
+    assert {ex.split for ex in train} == {"LABEL_TRAIN"}
+    assert {ex.split for ex in valid} == {"CALIBRATION"}
+    assert audit["actor_train_validation_physical_map_overlap"] == 0

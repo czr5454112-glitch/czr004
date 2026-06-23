@@ -11,7 +11,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 import run_repair5g567_strict_pipeline as g567  # noqa: E402
 from gcst.dual_stream_graph_actor import DualStreamGoalAwareActor, architecture_from_id
 from gcst.goal_aware_actor import GOAL_AWARE_SCALAR_FEATURES
-from gcst.graph_encoder import EdgeAwareAttentionLayer, GraphBatch
+from gcst.graph_encoder import EdgeAwareAttentionLayer, GraphBatch, reference_segmented_softmax_by_dst, segmented_softmax_by_dst
 
 
 def _model(hidden_dim: int = 64, latent_tokens: int = 16):
@@ -144,6 +144,40 @@ def test_edge_attention_casts_autocast_messages_to_accumulator_dtype() -> None:
 
     assert out.dtype == torch.float32
     assert out.shape == h.shape
+
+
+def test_edge_attention_segmented_softmax_matches_reference() -> None:
+    torch.manual_seed(571)
+    logits = torch.randn(256, dtype=torch.float32)
+    dst = torch.randint(0, 37, (256,), dtype=torch.long)
+
+    expected = reference_segmented_softmax_by_dst(logits, dst, 37)
+    actual = segmented_softmax_by_dst(logits, dst, 37)
+
+    assert torch.allclose(actual, expected, atol=1.0e-6, rtol=1.0e-6)
+
+
+def test_edge_attention_vectorized_forward_matches_reference_math() -> None:
+    torch.manual_seed(572)
+    layer = EdgeAwareAttentionLayer(16, 5, dropout=0.0)
+    h = torch.randn((64, 16), dtype=torch.float32)
+    src = torch.randint(0, 64, (512,), dtype=torch.long)
+    dst = torch.randint(0, 64, (512,), dtype=torch.long)
+    edge_index = torch.stack([src, dst], dim=0)
+    edge_features = torch.randn((512, 5), dtype=torch.float32)
+
+    with torch.no_grad():
+        e = layer.edge_proj(edge_features)
+        logits = layer.attn(torch.cat([h[src], h[dst], e], dim=-1)).squeeze(-1)
+        weights = reference_segmented_softmax_by_dst(logits, dst, h.size(0))
+        msg = layer.msg(torch.cat([h[src], e], dim=-1)) * weights.unsqueeze(-1)
+        agg = torch.zeros_like(h)
+        agg.index_add_(0, dst, msg)
+        expected = layer.norm(h + layer.drop(agg))
+        expected = layer.norm(expected + layer.drop(layer.ff(expected)))
+        actual = layer(h, edge_index, edge_features)
+
+    assert torch.allclose(actual, expected, atol=1.0e-5, rtol=1.0e-5)
 
 
 def test_large_scale_actor_variants_disable_full_node_global_attention() -> None:

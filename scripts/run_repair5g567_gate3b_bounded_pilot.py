@@ -588,6 +588,7 @@ def main(argv: list[str] | None = None) -> int:
 
     start_size = directory_size_bytes(g567.resolve(args.stage_root))
     audit_rows, manifest_rows, generation_meta = g567.make_generated_contexts(int(args.context_pool), int(args.seed), g567.resolve(g567.TMP_ROOT))
+    g567.update_remote_map_registries(g567.resolve(g567.TMP_ROOT) / "maps")
     label_rows_raw, development_rows_raw, selection_meta = select_gate3b_rows(
         manifest_rows,
         label_contexts=int(args.label_train_contexts),

@@ -150,6 +150,16 @@ Date: 2026-06-22 Asia/Shanghai
 
    Regression test: `tests/test_repair5g567_gate3b_bounded.py::test_inference_context_batches_respect_od_token_budget`.
 
+21. Gate-3B direct-exact replay still depended on legacy static MAP_PATHS.
+
+   Symptom: Gate-3B r6 completed seed A5 inference for 2,000/2,000 LABEL_TRAIN contexts, then fail-closed during label replay with `KeyError: 'maze_128_128_2'`. Runner rc and final summary were written; no full-campaign action was launched.
+
+   Root cause: `run_direct_exact_plan` entered the legacy `repair5g5_common.run_one_solver_task` path, which resolves maps through `MAP_PATHS[map_name]`. Gate-3B had materialized the generated/public parent map files under its scenario bank, but the direct-exact replay layer had not registered those paths before calling the legacy solver helper.
+
+   Fix: G5.67 now registers and validates replay plan map paths from the scenario bank and each plan row's `raw_map_path` before scenario preparation or solver subprocess execution. The generated map paths are synchronized into both `run_repair5f4_static_updateparams_validation.MAPS` and `repair5g5_common.MAP_PATHS`; missing or stale registrations fail closed before any solver row is launched.
+
+   Regression test: `tests/test_repair5g567_direct_exact.py::test_direct_exact_registers_generated_gate3b_map_paths`.
+
 ## Existing Repairs Verified By Gates
 
 - A5 uses OD Perceiver instead of full OD self-attention for 3000 OD tokens.

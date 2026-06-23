@@ -639,13 +639,7 @@ def write_protocol_documents() -> None:
     )
 
 
-def update_remote_map_registries(map_dir: Path) -> None:
-    for path in sorted(resolve(map_dir).glob("*.map")):
-        try:
-            value = str(path.relative_to(ROOT)).replace("\\", "/")
-        except ValueError:
-            value = str(path)
-        MAP_PATHS[path.stem] = value
+def _sync_map_path_globals() -> None:
     try:
         import repair5g5_common as g5
 
@@ -658,6 +652,50 @@ def update_remote_map_registries(map_dir: Path) -> None:
         f4.MAPS.update(MAP_PATHS)
     except Exception:
         pass
+
+
+def _register_map_path(map_name: str, path: Path) -> str:
+    resolved = resolve(path)
+    try:
+        value = str(resolved.relative_to(ROOT)).replace("\\", "/")
+    except ValueError:
+        value = str(resolved)
+    MAP_PATHS[map_name] = value
+    return value
+
+
+def update_remote_map_registries(map_dir: Path) -> None:
+    for path in sorted(resolve(map_dir).glob("*.map")):
+        _register_map_path(path.stem, path)
+    _sync_map_path_globals()
+
+
+def register_replay_plan_map_paths(plan_rows: list[dict[str, Any]]) -> None:
+    """Register generated/public replay maps before legacy solver helpers run."""
+    update_remote_map_registries(resolve(TMP_ROOT) / "maps")
+    missing_explicit_paths: list[str] = []
+    for row in plan_rows:
+        map_name = str(row.get("map", "")).strip()
+        raw_map_path = str(row.get("raw_map_path", "")).strip()
+        if not map_name or not raw_map_path:
+            continue
+        path = resolve(raw_map_path)
+        if not path.exists():
+            missing_explicit_paths.append(f"{map_name}:{raw_map_path}")
+            continue
+        _register_map_path(map_name, path)
+    _sync_map_path_globals()
+    unresolved: list[str] = []
+    for map_name in sorted({str(row.get("map", "")).strip() for row in plan_rows if str(row.get("map", "")).strip()}):
+        value = MAP_PATHS.get(map_name)
+        if not value:
+            unresolved.append(f"{map_name}:missing_map_path_registration")
+            continue
+        if not resolve(value).exists():
+            unresolved.append(f"{map_name}:registered_path_missing:{value}")
+    if missing_explicit_paths or unresolved:
+        details = "; ".join(missing_explicit_paths + unresolved)
+        raise RuntimeError(f"G5.67 direct exact replay map path registration failed: {details}")
 
 
 def movingai_assignment_hash(starts: Iterable[Any], goals: Iterable[Any]) -> str:
@@ -1126,6 +1164,8 @@ def context_from_manifest_row(row: dict[str, Any]) -> G567Context | None:
         "base_time_limit_sec": float(number(row.get("base_time_limit_sec"), max(0.5, number(row.get("nominal_budget_ms"), 500) / 1000.0))),
         "ltm_max_iterations": int(number(row.get("ltm_max_iterations"), 3)),
         "agent_density": float(number(row.get("agent_density"), 0.0)),
+        "raw_map_path": row.get("raw_map_path", ""),
+        "replay_scenario_path": row.get("replay_scenario_path", ""),
         **traffic["summary"],
         **traffic["wait_pressure"],
     }
@@ -1530,6 +1570,8 @@ def add_plan_row(
         "split": ctx.split,
         "map": ctx.map,
         "map_family": ctx.map_family,
+        "raw_map_path": ctx.feature_row.get("raw_map_path", ""),
+        "replay_scenario_path": rel(ctx.replay_scenario_path),
         "agents": ctx.agents,
         "agent_count": ctx.agents,
         "seed": ctx.seed,
@@ -2481,6 +2523,7 @@ def run_direct_exact_plan(
         ]:
             resolve(path).unlink(missing_ok=True)
     maps_in_plan = sorted({str(row.get("map", "")) for row in plan_rows if str(row.get("map", "")).strip()})
+    register_replay_plan_map_paths(plan_rows)
     for map_name in maps_in_plan:
         g549.prepare_scenarios(
             root=ROOT,

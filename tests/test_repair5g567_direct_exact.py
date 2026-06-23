@@ -6,6 +6,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
+import repair5g5_common as g5  # noqa: E402
 import run_repair5g567_strict_pipeline as g567  # noqa: E402
 
 
@@ -102,3 +103,82 @@ def test_direct_exact_timeout_placeholder_is_infrastructure_only() -> None:
     assert row["solution_found"] == ""
     assert row["updateparams_fingerprint"] == ""
     assert row["updateparams_fingerprint_source"] == "missing_process_hard_timeout"
+
+
+def test_direct_exact_registers_generated_gate3b_map_paths(tmp_path, monkeypatch) -> None:
+    map_name = "maze_128_128_2"
+    bank_maps = tmp_path / "scenario_bank" / "maps"
+    bank_maps.mkdir(parents=True)
+    map_path = bank_maps / f"{map_name}.map"
+    map_path.write_text("type octile\nheight 2\nwidth 2\nmap\n..\n..\n", encoding="utf-8")
+    scenario_dir = tmp_path / "replay_scenarios"
+    result_csv = tmp_path / "results.csv"
+    raw_csv = tmp_path / "raw.csv"
+    log_dir = tmp_path / "logs"
+
+    plan = _plan_row()
+    plan.update(
+        {
+            "plan_row_id": "generated-map-plan",
+            "map": map_name,
+            "raw_map_path": str(map_path),
+            "seed": 4567001,
+        }
+    )
+    monkeypatch.setattr(g567, "TMP_ROOT", tmp_path / "scenario_bank")
+    monkeypatch.delitem(g567.MAP_PATHS, map_name, raising=False)
+    monkeypatch.delitem(g5.MAP_PATHS, map_name, raising=False)
+
+    def fake_prepare_scenarios(**kwargs):
+        target = g567.scenario_path(Path(kwargs["scenario_dir"]), map_name, int(plan["seed"]))
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text("version 1\n0 generated.map 2 2 0 0 1 1 2\n", encoding="utf-8")
+
+    def fake_run_one_solver_task(**kwargs):
+        assert kwargs["map_name"] == map_name
+        assert map_name in g5.MAP_PATHS
+        assert g567.resolve(g5.MAP_PATHS[map_name]).resolve() == map_path.resolve()
+        return (
+            [
+                {
+                    "success": True,
+                    "feasible": True,
+                    "sum_of_loss": 2,
+                    "lower_bound": 2,
+                    "sum_of_loss_ratio": 1.0,
+                    "runtime_ms": 1.0,
+                    "repair5g_candidate_id": g567.STATIC_FLOW_SOLVER_ALIAS,
+                    "repair5g_update_mode": "dual_channel_static",
+                    "updateparams_fingerprint": g567.TIER_B_STATIC_FLOW.fingerprint,
+                }
+            ],
+            [],
+            {"process_hard_timeout_exceeded": False, "returncode_classification": "solver_success"},
+        )
+
+    monkeypatch.setattr(g567.g549, "prepare_scenarios", fake_prepare_scenarios)
+    monkeypatch.setattr(g567, "run_one_solver_task", fake_run_one_solver_task)
+
+    try:
+        rows = g567.run_direct_exact_plan(
+            [plan],
+            binary=tmp_path / "phase1a_batch",
+            overwrite=True,
+            max_workers=1,
+            registry_path=tmp_path / "registry.csv",
+            result_csv=result_csv,
+            raw_csv=raw_csv,
+            log_dir=log_dir,
+            scenario_dir=scenario_dir,
+            scenario_metadata=tmp_path / "scenario_metadata.json",
+            manifest_prefix="unit",
+            row_prefix="unit",
+            execution_mode="unit_direct_exact_solver_row",
+        )
+    finally:
+        g567.MAP_PATHS.pop(map_name, None)
+        g5.MAP_PATHS.pop(map_name, None)
+
+    assert rows
+    assert rows[0]["map"] == map_name
+    assert rows[0]["candidate_recognized"] is True

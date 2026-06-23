@@ -1136,6 +1136,30 @@ def prepare_rows(rows: list[dict[str, Any]], *, split: str, prefix: str) -> list
         row["split"] = split
         row["g567_dataset_row_id"] = f"{prefix}_{idx:05d}"
         row["scenario_source_type"] = scenario_source_type(row)
+        agents = int(g567.number(row.get("agent_count"), 0))
+        budget_ms, base_sec, ltm_iters, budget_role = g567.budget_profile_for_agent_tier(agents, idx)
+        row["nominal_budget_ms"] = budget_ms
+        row["base_time_limit_sec"] = base_sec
+        row["solver_internal_time_limit_sec"] = base_sec
+        row["process_hard_timeout_sec"] = g567.process_hard_timeout_for_internal_budget(base_sec)
+        row["budget_role"] = budget_role
+        row["budget_contract"] = "tier_conditioned_primary_30s_small_40s_1000to2500_60s_3000_hard_timeout_2x"
+        row["ltm_max_iterations"] = ltm_iters
+        row["horizon_id"] = f"budget{budget_ms}_ltm{ltm_iters}"
+        row["scientific_horizon_id"] = row["horizon_id"]
+        instance_uid = g567.stable_uid(
+            "g567_valid_instance",
+            row.get("map", ""),
+            row.get("solver_seed", ""),
+            row.get("scenario_sha256", ""),
+            row.get("physical_map_sha256", ""),
+            row.get("assignment_sha256", ""),
+            agents,
+            budget_ms,
+            ltm_iters,
+        )
+        row["g567_instance_uid"] = instance_uid
+        row["g567_evaluation_uid"] = g567.stable_uid("g567_eval", instance_uid, budget_ms, ltm_iters)
         replay = g567.copy_for_replay(row, g567.resolve(row["raw_scenario_path"]), replay_dir)
         row["replay_scenario_path"] = g567.rel(replay)
         row["replay_scenario_sha256"] = g567.sha256_file(replay)

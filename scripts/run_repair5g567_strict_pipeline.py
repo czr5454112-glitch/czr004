@@ -209,11 +209,13 @@ G567_AGENT_TIERS = [
     3000,
 ]
 
-G567_BUDGET_PROFILES = [(30000, 30.0, 12), (40000, 40.0, 12)]
+G567_BUDGET_PROFILES = [(30000, 30.0, 12), (40000, 40.0, 12), (60000, 60.0, 12)]
 G567_LARGE_PRIMARY_AGENT_TIERS = {tier for tier in G567_AGENT_TIERS if tier >= 1000}
 G567_UNIFORM_30S_PRIMARY_BUDGET_PROFILE = (30000, 30.0, 12, "uniform_30s_all_agent_tiers_primary_exact")
 G567_LARGE_AGENT_40S_MIN_AGENT_COUNT = 1000
+G567_AGENT_3000_60S_MIN_AGENT_COUNT = 3000
 G567_LARGE_PRIMARY_BUDGET_PROFILE = (40000, 40.0, 12, "large_agent_40s_primary_exact")
+G567_AGENT_3000_PRIMARY_BUDGET_PROFILE = (60000, 60.0, 12, "agent3000_60s_primary_exact")
 
 
 @dataclass(frozen=True)
@@ -374,9 +376,12 @@ def sha256_file(path: str | Path) -> str:
 def budget_profile_for_agent_tier(agent_count: int, profile_index: int, purpose: str = "primary") -> tuple[int, float, int, str]:
     """Return the fail-closed G5.67 primary budget contract.
 
-    Large-agent rows now use 40s internal / 80s hard timeout. Smaller tiers
-    keep the 30s internal / 60s hard-timeout primary budget.
+    Large-agent rows now use tiered primary budgets: 1000..2500 agents use
+    40s internal / 80s hard timeout, while the 3000-agent tier uses
+    60s internal / 120s hard timeout. Smaller tiers keep 30s / 60s.
     """
+    if int(agent_count) >= G567_AGENT_3000_60S_MIN_AGENT_COUNT:
+        return G567_AGENT_3000_PRIMARY_BUDGET_PROFILE
     if int(agent_count) >= G567_LARGE_AGENT_40S_MIN_AGENT_COUNT:
         return G567_LARGE_PRIMARY_BUDGET_PROFILE
     return G567_UNIFORM_30S_PRIMARY_BUDGET_PROFILE
@@ -388,6 +393,8 @@ def process_hard_timeout_for_internal_budget(internal_sec: float) -> float:
         return 60.0
     if abs(internal - 40.0) <= 1.0e-9:
         return 80.0
+    if abs(internal - 60.0) <= 1.0e-9:
+        return 120.0
     return max(internal + 0.25, internal * 1.10)
 
 
@@ -690,7 +697,7 @@ def write_protocol_documents() -> None:
         "- `process_hard_timeout_not_enforced`: `process_hard_timeout_sec` was recorded in the replay plan but the solver subprocess used an unbounded `subprocess.run`; Gate-3A now uses a per-process hard timeout with process-group termination provenance.\n"
         "- `source_state_not_fail_closed`: source HEAD/status/submodules were recorded but not enforced before execution; Gate-3A now blocks on missing Git metadata, dirty status, wrong HEAD, submodule mismatch, or sparse checkout.\n\n"
         "## Confirmed P0 Bugs Added By Budget/Training Review\n\n"
-        "- `large_agent_budget_underallocated`: 2000/2500/3000-agent primary rows used generic budget cycling, including 20s. G5.67 now requires 30s primary internal budget and 60s hard timeout for those tiers.\n"
+        "- `large_agent_budget_underallocated`: 2000/2500/3000-agent primary rows used generic budget cycling, including 20s. G5.67 now requires explicit tier-conditioned primary budgets, with the 3000-agent tier using 60s internal / 120s hard timeout.\n"
         "- `hard_timeout_polluted_scientific_labels`: timeout placeholders looked like ordinary no-solution rows. Timeout rows are now infrastructure failures and are excluded from scientific pairs/labels.\n"
         "- `synthetic_only_final_bank`: final context validity could be satisfied with synthetic stress maps only. Full validity now requires a documented mixture of canonical/public benchmark maps and synthetic stress maps.\n"
         "- `label_train_split_leakage`: actor training could draw from development/calibration contexts. G5.67 now separates `LABEL_TRAIN` and blocks full actor training below 24,000 unique exact-labeled training contexts.\n\n"
@@ -727,10 +734,10 @@ def write_protocol_documents() -> None:
         TIME_BUDGET_SEMANTICS,
         "# Repair5G.5.67 Time Budget Semantics\n\n"
         "- `solver_internal_time_limit_sec`: the budget passed to the solver and kept equal across methods.\n"
-        "- Staged G5.67 primary rows use `30.0s` internal budget below 1000 agents and `40.0s` internal budget for agent_count >= 1000.\n"
-        "- `20.0s`, `45.0s`, and `60.0s` internal budgets are not emitted by the current staged execution path; they require separately approved diagnostic/recovery jobs.\n"
+        "- Staged G5.67 primary rows use `30.0s` internal budget below 1000 agents, `40.0s` for 1000/1500/2000/2500 agents, and `60.0s` for the 3000-agent tier.\n"
+        "- `20.0s` and `45.0s` internal budgets are not emitted by the current staged execution path; `60.0s` is emitted only for the primary 3000-agent tier under the current Gate-3B budget contract.\n"
         "- `process_hard_timeout_sec`: explicit per-row outer allowance enforced by the parent process; G5.67 full execution blocks if any planned row is missing it.\n"
-        "- For a `30.0s` internal budget, `process_hard_timeout_sec` is fixed at `60.0`; for a `40.0s` internal budget, it is fixed at `80.0`. Timeout rows are infrastructure failures, not no-solution labels or success regressions.\n"
+        "- For `30.0s`, `40.0s`, and `60.0s` internal budgets, `process_hard_timeout_sec` is fixed at `60.0`, `80.0`, and `120.0` respectively. Timeout rows are infrastructure failures, not no-solution labels or success regressions.\n"
         "- G5.67 replay runs each planned solver row in its own subprocess; context-level multi-candidate batching is disabled for hard-timeout accounting.\n"
         "- Linux solver subprocesses run in a new process group; timeout sends SIGTERM, waits the recorded grace interval, then SIGKILLs the group if needed.\n"
         "- 30s exploratory response surfaces are screened multi-fidelity; full 30s exact execution is reserved for selected candidates, calibration rows, boundary cases, development replay, and blind replay.\n"
@@ -1002,7 +1009,7 @@ def make_generated_contexts(target_valid: int, seed: int, tmp_root: Path) -> tup
             "solver_internal_time_limit_sec": base_sec,
             "process_hard_timeout_sec": process_hard_timeout_sec,
             "budget_role": budget_role,
-            "budget_contract": "tier_conditioned_primary_30s_small_40s_large_hard_timeout_2x",
+            "budget_contract": "tier_conditioned_primary_30s_small_40s_1000to2500_60s_3000_hard_timeout_2x",
             "ltm_max_iterations": ltm_iters,
             "agent_density": density,
             "scenario_bank_source": "g567_component_aware_mixed_public_benchmark_and_synthetic",
@@ -1218,7 +1225,7 @@ def materialize_valid_bank(target_valid: int, seed: int, *, overwrite: bool) -> 
         "agent_tier_target_met": len(agents) >= len(G567_AGENT_TIERS),
         "large_agent_tier_contract_met": all(str(tier) in agents for tier in [1000, 1500, 2000, 2500, 3000]),
         "budget_profiles": dict(sorted(budgets.items())),
-        "budget_target_description": "planned staged contexts use agent-tier-conditioned primary budgets: <1000 agents => 30.0s internal / 60.0s hard timeout; >=1000 agents => 40.0s internal / 80.0s hard timeout",
+        "budget_target_description": "planned staged contexts use agent-tier-conditioned primary budgets: <1000 agents => 30.0s internal / 60.0s hard timeout; 1000/1500/2000/2500 agents => 40.0s internal / 80.0s hard timeout; 3000 agents => 60.0s internal / 120.0s hard timeout",
         "legacy_uniform_30s_budget_target_met": legacy_uniform_30s_budget_target_met,
         "agent_tier_conditioned_budget_target_met": agent_tier_conditioned_budget_target_met,
         "budget_target_met": agent_tier_conditioned_budget_target_met,
@@ -1823,7 +1830,8 @@ def audit_plan_explicit_budgets(plan_rows: list[dict[str, Any]], phase: str) -> 
             and abs(hard - expected_hard) <= 1.0e-9
         )
         small_30s_ok = agents < G567_LARGE_AGENT_40S_MIN_AGENT_COUNT and row_budget_contract_ok
-        large_40s_ok = agents >= G567_LARGE_AGENT_40S_MIN_AGENT_COUNT and row_budget_contract_ok
+        large_40s_ok = G567_LARGE_AGENT_40S_MIN_AGENT_COUNT <= agents < G567_AGENT_3000_60S_MIN_AGENT_COUNT and row_budget_contract_ok
+        agent3000_60s_ok = agents >= G567_AGENT_3000_60S_MIN_AGENT_COUNT and row_budget_contract_ok
         row_failures = []
         if not explicit_internal:
             row_failures.append("missing_explicit_solver_internal_time_limit_sec")
@@ -1854,7 +1862,8 @@ def audit_plan_explicit_budgets(plan_rows: list[dict[str, Any]], phase: str) -> 
                 "explicit_hard_timeout": explicit_hard,
                 "agent_tier_conditioned_budget_contract_met": row_budget_contract_ok,
                 "small_agent_30s_budget_contract_met": small_30s_ok,
-                "large_agent_40s_budget_contract_met": large_40s_ok,
+                "agent_1000_to_2500_40s_budget_contract_met": large_40s_ok,
+                "agent3000_60s_budget_contract_met": agent3000_60s_ok,
                 "row_budget_audit_decision": "pass" if not row_failures else "fail",
                 "row_budget_audit_failures": ";".join(row_failures),
                 **claims(),
@@ -1886,10 +1895,15 @@ def audit_plan_explicit_budgets(plan_rows: list[dict[str, Any]], phase: str) -> 
             for row in audit_rows
             if int(number(row.get("agent_count"), 0)) < G567_LARGE_AGENT_40S_MIN_AGENT_COUNT
         ),
-        "large_agent_rows_have_40s_internal_80s_hard_timeout": all(
-            boolish(row.get("large_agent_40s_budget_contract_met"))
+        "agent_1000_to_2500_rows_have_40s_internal_80s_hard_timeout": all(
+            boolish(row.get("agent_1000_to_2500_40s_budget_contract_met"))
             for row in audit_rows
-            if int(number(row.get("agent_count"), 0)) >= G567_LARGE_AGENT_40S_MIN_AGENT_COUNT
+            if G567_LARGE_AGENT_40S_MIN_AGENT_COUNT <= int(number(row.get("agent_count"), 0)) < G567_AGENT_3000_60S_MIN_AGENT_COUNT
+        ),
+        "agent3000_rows_have_60s_internal_120s_hard_timeout": all(
+            boolish(row.get("agent3000_60s_budget_contract_met"))
+            for row in audit_rows
+            if int(number(row.get("agent_count"), 0)) >= G567_AGENT_3000_60S_MIN_AGENT_COUNT
         ),
         **claims(),
     }

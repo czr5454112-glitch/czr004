@@ -146,6 +146,51 @@ def test_gate3b_split_selection_does_not_starve_label_public_capacity(monkeypatc
     assert meta["development_public_fraction"] >= 0.70
 
 
+def test_gate3b_prepare_rows_rewrites_reused_large_agent_budget(tmp_path, monkeypatch) -> None:
+    scen = tmp_path / "unit.scen"
+    scen.write_text("version 1\n", encoding="utf-8")
+    monkeypatch.setattr(gate3b.g567, "REPLAY_SCENARIO_DIR", tmp_path / "replay")
+    stale_row = {
+        "g567_instance_uid": "old",
+        "g567_evaluation_uid": "old-eval",
+        "map": "den312d",
+        "map_family": "city",
+        "solver_seed": 4567,
+        "scenario_sha256": "scenario",
+        "physical_map_sha256": "physical",
+        "assignment_sha256": "assignment",
+        "raw_scenario_path": str(scen),
+        "scenario_source_type": "czr004_synthetic_derived_scenario",
+        "nominal_budget_ms": 30000,
+        "base_time_limit_sec": 30.0,
+        "solver_internal_time_limit_sec": 30.0,
+        "process_hard_timeout_sec": 60.0,
+        "budget_role": "uniform_30s_all_agent_tiers_primary_exact",
+    }
+    rows = gate3b.prepare_rows(
+        [
+            {**stale_row, "agent_count": 1500},
+            {**stale_row, "agent_count": 3000},
+        ],
+        split="LABEL_TRAIN",
+        prefix="unit",
+    )
+
+    row_1500, row_3000 = rows
+    assert row_1500["nominal_budget_ms"] == 40000
+    assert row_1500["solver_internal_time_limit_sec"] == 40.0
+    assert row_1500["process_hard_timeout_sec"] == 80.0
+    assert row_1500["budget_role"] == "large_agent_40s_primary_exact"
+    assert row_1500["horizon_id"] == "budget40000_ltm12"
+    assert row_1500["g567_instance_uid"] != "old"
+    assert row_3000["nominal_budget_ms"] == 60000
+    assert row_3000["solver_internal_time_limit_sec"] == 60.0
+    assert row_3000["process_hard_timeout_sec"] == 120.0
+    assert row_3000["budget_role"] == "agent3000_60s_primary_exact"
+    assert row_3000["horizon_id"] == "budget60000_ltm12"
+    assert row_3000["g567_instance_uid"] != "old"
+
+
 def test_gate3b_joint_allocator_is_deterministic_under_input_shuffle(monkeypatch) -> None:
     monkeypatch.setattr(gate3b, "REQUIRED_AGENT_TIERS", (8, 12, 16, 24))
     rows = []
@@ -331,10 +376,10 @@ def test_gate3b_materialization_invalidates_stale_budget_cache(tmp_path, monkeyp
         return (
             index,
             SimpleNamespace(
-                base_time_limit_sec=40.0,
-                process_hard_timeout_sec=80.0,
-                budget_ms=40000,
-                budget_role="large_agent_40s_primary_exact",
+                base_time_limit_sec=60.0,
+                process_hard_timeout_sec=120.0,
+                budget_ms=60000,
+                budget_role="agent3000_60s_primary_exact",
                 feature_row={"traffic_prior_version": "traffic_prior_v1_bfs"},
             ),
             "traffic_prior_v1_bfs",
@@ -345,10 +390,10 @@ def test_gate3b_materialization_invalidates_stale_budget_cache(tmp_path, monkeyp
         [
             {
                 "g567_dataset_row_id": "ctx-3000",
-                "base_time_limit_sec": 40.0,
-                "process_hard_timeout_sec": 80.0,
-                "nominal_budget_ms": 40000,
-                "budget_role": "large_agent_40s_primary_exact",
+                "base_time_limit_sec": 60.0,
+                "process_hard_timeout_sec": 120.0,
+                "nominal_budget_ms": 60000,
+                "budget_role": "agent3000_60s_primary_exact",
             }
         ],
         phase="unit",
@@ -358,8 +403,8 @@ def test_gate3b_materialization_invalidates_stale_budget_cache(tmp_path, monkeyp
     )
 
     assert meta["resume_cache_hit"] is False
-    assert contexts[0].base_time_limit_sec == 40.0
-    assert contexts[0].process_hard_timeout_sec == 80.0
+    assert contexts[0].base_time_limit_sec == 60.0
+    assert contexts[0].process_hard_timeout_sec == 120.0
 
 
 def test_inference_context_batches_respect_od_token_budget() -> None:

@@ -934,7 +934,8 @@ def make_generated_contexts(target_valid: int, seed: int, tmp_root: Path) -> tup
                 assignment = build_g567_assignment(grid, width, height, agent_count, regime_name, solver_seed)
             except ValueError:
                 continue
-            map_path = map_dir / f"{concrete_map}.map"
+            map_identity = stable_uid("g567_map_file", concrete_map, benchmark_source_sha256, width, height)[:16]
+            map_path = map_dir / f"{concrete_map}-{map_identity}.map"
             scen_path = scenario_dir / f"{concrete_map}-random-{solver_seed}.scen"
             map_sha = g561_bank.write_map(map_path, grid)
             scenario_sha = g561_bank.write_scenario(scen_path, concrete_map, width, height, assignment)

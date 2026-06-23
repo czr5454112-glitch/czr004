@@ -1144,11 +1144,91 @@ def prepare_rows(rows: list[dict[str, Any]], *, split: str, prefix: str) -> list
     return prepared
 
 
+def canonicalize_reused_candidate_pool_map_paths(rows: list[dict[str, Any]]) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    path_to_hashes: dict[str, set[str]] = {}
+    for row in rows:
+        raw_map_path = str(row.get("raw_map_path", "")).strip()
+        expected = row_parent_hash(row)
+        if raw_map_path and expected:
+            path_to_hashes.setdefault(raw_map_path, set()).add(expected)
+    collision_paths = {path for path, hashes in path_to_hashes.items() if len(hashes) > 1}
+    map_dir = g567.resolve(g567.TMP_ROOT) / "maps"
+    map_dir.mkdir(parents=True, exist_ok=True)
+    canonicalized: list[dict[str, Any]] = []
+    audit_rows: list[dict[str, Any]] = []
+    cache: dict[tuple[str, str], tuple[Path, str]] = {}
+    for source in rows:
+        row = dict(source)
+        raw_map_path = str(row.get("raw_map_path", "")).strip()
+        expected = row_parent_hash(row)
+        if not raw_map_path or not expected:
+            canonicalized.append(row)
+            continue
+        resolved = g567.resolve(raw_map_path)
+        current_sha = g567.sha256_file(resolved)
+        needs_canonical = raw_map_path in collision_paths or (current_sha and current_sha != expected)
+        if not needs_canonical:
+            canonicalized.append(row)
+            continue
+        benchmark_path = str(row.get("benchmark_source_path", "")).strip()
+        benchmark_sha = str(row.get("benchmark_source_sha256", "")).strip()
+        can_rebuild_public = (
+            row_is_public(row)
+            and str(row.get("scenario_source_type", "")) == "czr004_derived_on_public_parent_map"
+            and bool(benchmark_path)
+        )
+        if not can_rebuild_public:
+            canonicalized.append(row)
+            continue
+        cache_key = (benchmark_path, expected)
+        if cache_key not in cache:
+            source_path = g567.resolve(benchmark_path)
+            if not source_path.exists():
+                canonicalized.append(row)
+                continue
+            width, height, grid = g567.read_movingai_map(source_path)
+            target = map_dir / f"{g567.safe_token(row.get('map', source_path.stem))}-{expected[:16]}.map"
+            actual = g567.g561_bank.write_map(target, grid)
+            cache[cache_key] = (target, actual)
+        target, actual = cache[cache_key]
+        if actual != expected:
+            canonicalized.append(row)
+            continue
+        row["raw_map_path_canonicalized_from"] = raw_map_path
+        row["raw_map_path_canonicalization_reason"] = "public_derived_parent_hash_collision_or_stale_copy"
+        row["raw_map_path"] = g567.rel(target)
+        audit_rows.append(
+            {
+                "g567_instance_uid": row_uid(row),
+                "map": row.get("map", ""),
+                "physical_map_sha256": expected,
+                "old_raw_map_path": raw_map_path,
+                "old_raw_map_sha256": current_sha,
+                "new_raw_map_path": row["raw_map_path"],
+                "new_raw_map_sha256": actual,
+                "benchmark_source_path": benchmark_path,
+                "benchmark_source_sha256": benchmark_sha,
+            }
+        )
+        canonicalized.append(row)
+    meta = {
+        "raw_map_path_collision_paths": len(collision_paths),
+        "raw_map_path_collision_examples": sorted(collision_paths)[:10],
+        "raw_map_path_canonicalized_rows": len(audit_rows),
+        "raw_map_path_canonicalized_unique_maps": len({row["new_raw_map_path"] for row in audit_rows}),
+        "raw_map_path_canonicalization_audit_rows": audit_rows,
+    }
+    return canonicalized, meta
+
+
 def verify_candidate_pool_contract(
     rows: list[dict[str, Any]],
     *,
     candidate_pool_path: Path,
     candidate_audit_path: Path,
+    canonicalized_candidate_pool_path: Path | None,
+    canonicalized_candidate_audit_path: Path | None,
+    canonicalization_meta: dict[str, Any],
     seed: int,
     context_pool: int,
     candidate_pool_reused: bool,
@@ -1175,6 +1255,15 @@ def verify_candidate_pool_contract(
         "candidate_pool_manifest_sha256": g567.sha256_file(candidate_pool_path),
         "candidate_pool_validity_path": g567.rel(candidate_audit_path),
         "candidate_pool_validity_sha256": g567.sha256_file(candidate_audit_path),
+        "canonicalized_candidate_pool_path": g567.rel(canonicalized_candidate_pool_path) if canonicalized_candidate_pool_path is not None else "",
+        "canonicalized_candidate_pool_sha256": g567.sha256_file(canonicalized_candidate_pool_path) if canonicalized_candidate_pool_path is not None else "",
+        "canonicalized_candidate_validity_path": g567.rel(canonicalized_candidate_audit_path) if canonicalized_candidate_audit_path is not None else "",
+        "canonicalized_candidate_validity_sha256": g567.sha256_file(canonicalized_candidate_audit_path) if canonicalized_candidate_audit_path is not None else "",
+        "raw_map_path_canonicalization": {
+            key: value
+            for key, value in canonicalization_meta.items()
+            if key != "raw_map_path_canonicalization_audit_rows"
+        },
         "candidate_pool_source_commit": source_commit,
         "selection_allocator_commit": str(source_state.get("head", "")),
         "generation_seed": int(seed),
@@ -1802,6 +1891,9 @@ def main(argv: list[str] | None = None) -> int:
     context_manifest_path = g567.TABLES / CONTEXT_MANIFEST_NAME
     candidate_pool_path = g567.TABLES / f"{g567.ROUND}_{PHASE}_candidate_pool_manifest.csv"
     candidate_audit_path = g567.TABLES / f"{g567.ROUND}_{PHASE}_candidate_pool_validity.csv"
+    canonicalized_candidate_pool_path = g567.TABLES / f"{g567.ROUND}_{PHASE}_candidate_pool_manifest_canonicalized.csv"
+    canonicalized_candidate_audit_path = g567.TABLES / f"{g567.ROUND}_{PHASE}_candidate_pool_validity_canonicalized.csv"
+    canonicalization_audit_path = g567.TABLES / f"{g567.ROUND}_{PHASE}_raw_map_path_canonicalization_audit.csv"
     candidate_pool_contract: dict[str, Any] = {}
     if context_manifest_path.exists() and not bool(args.overwrite):
         all_rows = g567.read_rows(context_manifest_path)
@@ -1859,10 +1951,26 @@ def main(argv: list[str] | None = None) -> int:
             g567.write_rows(candidate_pool_path, manifest_rows)
             g567.write_rows(candidate_audit_path, audit_rows)
             candidate_pool_reused = False
+        manifest_rows, canonicalization_meta = canonicalize_reused_candidate_pool_map_paths(manifest_rows)
+        audit_rows, audit_canonicalization_meta = canonicalize_reused_candidate_pool_map_paths(audit_rows)
+        if canonicalization_meta.get("raw_map_path_canonicalized_rows") or audit_canonicalization_meta.get("raw_map_path_canonicalized_rows"):
+            g567.write_rows(canonicalized_candidate_pool_path, manifest_rows)
+            g567.write_rows(canonicalized_candidate_audit_path, audit_rows)
+            g567.write_rows(
+                canonicalization_audit_path,
+                list(canonicalization_meta.get("raw_map_path_canonicalization_audit_rows", []))
+                + list(audit_canonicalization_meta.get("raw_map_path_canonicalization_audit_rows", [])),
+            )
+        else:
+            canonicalized_candidate_pool_path = None
+            canonicalized_candidate_audit_path = None
         candidate_pool_contract = verify_candidate_pool_contract(
             manifest_rows,
             candidate_pool_path=candidate_pool_path,
             candidate_audit_path=candidate_audit_path,
+            canonicalized_candidate_pool_path=canonicalized_candidate_pool_path,
+            canonicalized_candidate_audit_path=canonicalized_candidate_audit_path,
+            canonicalization_meta=canonicalization_meta,
             seed=int(args.seed),
             context_pool=int(args.context_pool),
             candidate_pool_reused=candidate_pool_reused,

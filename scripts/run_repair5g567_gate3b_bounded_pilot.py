@@ -269,37 +269,23 @@ def take_split_rows(
 
     def fill_source(public: bool, target: int) -> None:
         while len(selected) < count and selected_source_count(public) < target:
-            groups = eligible_groups(public)
-            if not groups:
-                break
             added = False
-            for group in groups:
-                if len(selected) >= count or selected_source_count(public) >= target:
+            candidates = [row for row in ordered if row_is_public(row) is public and can_take(row)]
+            for row in diversity_order(candidates):
+                if add(row):
+                    added = True
                     break
-                for row in diversity_order(group):
-                    if add(row):
-                        added = True
-                        break
             if not added:
                 break
 
     def fill_official(target: int) -> None:
         while len(selected) < count and selected_official_count() < target:
-            groups = []
-            for group in eligible_groups(True):
-                official_group = [row for row in group if row_is_official_scenario(row)]
-                if official_group:
-                    groups.append(official_group)
-            if not groups:
-                break
             added = False
-            for group in groups:
-                if len(selected) >= count or selected_official_count() >= target:
+            candidates = [row for row in ordered if row_is_public(row) and row_is_official_scenario(row) and can_take(row)]
+            for row in diversity_order(candidates):
+                if add(row):
+                    added = True
                     break
-                for row in diversity_order(group):
-                    if add(row):
-                        added = True
-                        break
             if not added:
                 break
 
@@ -317,17 +303,12 @@ def take_split_rows(
     fill_source(True, public_target)
     fill_source(False, synthetic_target)
     while len(selected) < count:
-        groups = eligible_groups(None)
-        if not groups:
-            break
         added = False
-        for group in groups:
-            if len(selected) >= count:
+        candidates = [row for row in ordered if can_take(row)]
+        for row in diversity_order(candidates):
+            if add(row):
+                added = True
                 break
-            for row in diversity_order(group):
-                if add(row):
-                    added = True
-                    break
         if not added:
             break
     if len(selected) < count:

@@ -2980,11 +2980,11 @@ def generate_response_thetas(
     target_rows: int,
     allow_selected_primary_30s_surface: bool = False,
 ) -> list[dict[str, Any]]:
+    screening_backend = "deterministic_surrogate_multi_fidelity_screen_v1"
     raw_by_context = {str(row["context_id"]): row for row in raw_rows}
     alphas = [0.0, 0.25, 0.50, 0.75, 1.0, 1.25, 1.50]
     group_alphas = [0.0, 0.50, 1.0, 1.50]
     leave_alphas = [0.0, 0.50, 1.0]
-    out: list[dict[str, Any]] = []
     anchor = np.asarray(BASELINE_G556, dtype=np.float32)
     static_anchor = np.asarray([TIER_B_STATIC_FLOW.theta[col] for col in THETA_NUMERIC_COLUMNS], dtype=np.float32)
     lo = np.asarray(THETA_LO, dtype=np.float32)
@@ -3003,7 +3003,33 @@ def generate_response_thetas(
             f"({target_rows} < {len(prepared)})"
         )
 
-    def emit(
+    def screen_score(ctx: G567Context, label: str, kind: str, vec: np.ndarray, delta: np.ndarray, pass_index: int) -> float:
+        span = np.maximum(hi - lo, 1.0e-6)
+        normalized_step = float(np.linalg.norm((vec - anchor) / span) / max(1.0, math.sqrt(len(anchor))))
+        normalized_static_step = float(np.linalg.norm((vec - static_anchor) / span) / max(1.0, math.sqrt(len(anchor))))
+        raw_step = float(np.linalg.norm(delta / span) / max(1.0, math.sqrt(len(anchor))))
+        family_priority = {
+            "global_static_anchor": 5.0,
+            "global_g556_anchor": 4.5,
+            "group": 4.0,
+            "leave": 3.5,
+            "deterministic_jitter": 2.5,
+        }.get(kind, 1.0)
+        moderate_step_bonus = 1.0 - min(1.0, abs(normalized_step - 0.35))
+        raw_alignment_bonus = 1.0 - min(1.0, abs(normalized_step - raw_step))
+        large_agent_bonus = 0.15 if ctx.agents in G567_LARGE_PRIMARY_AGENT_TIERS else 0.0
+        digest = hashlib.sha256(f"{ctx.evaluation_uid}|{label}|{kind}|{pass_index}".encode("utf-8")).hexdigest()
+        deterministic_tiebreak = int(digest[:8], 16) / 0xFFFFFFFF
+        return (
+            family_priority
+            + 0.75 * moderate_step_bonus
+            + 0.35 * raw_alignment_bonus
+            - 0.20 * normalized_static_step
+            + large_agent_bonus
+            + deterministic_tiebreak * 1.0e-6
+        )
+
+    def make_row(
         ctx: G567Context,
         raw: dict[str, Any],
         label: str,
@@ -3013,46 +3039,72 @@ def generate_response_thetas(
         primary_30s_exact_context: bool,
         coverage_first: bool,
         pass_index: int,
-    ) -> None:
+        screened_from_surface: bool,
+        response_screening_score: float | str = "",
+        response_surface_selected_rank: int | str = "",
+        response_context_selected_rank: int | str = "",
+        response_context_candidate_pool_rows: int | str = "",
+        response_surface_candidate_pool_rows: int | str = "",
+        response_surface_selected_rows: int | str = "",
+    ) -> dict[str, Any]:
         clipped = np.minimum(np.maximum(vec, lo), hi)
         row = {col: float(clipped[idx]) for idx, col in enumerate(THETA_NUMERIC_COLUMNS)}
         row.update(mode_columns("flow_shield"))
-        out.append(
-            {
-                "phase": phase,
-                "context_id": ctx.dataset_row_id,
-                "g567_evaluation_uid": ctx.evaluation_uid,
-                "variant_id": label,
-                "variant_name": "field_group_response",
-                "seed": "566",
-                "method": f"g567_response_{label}",
-                "model_path": str(raw.get("model_path", "")),
-                "raw_actor_variant_id": raw.get("variant_id", ""),
-                "acquisition_family": acquisition_family,
-                "candidate_source_family": acquisition_family,
-                "multi_fidelity_stage": (
-                    "selected_30s_exact_candidate"
-                    if primary_30s_exact_context and coverage_first
-                    else (
-                        f"selected_30s_exact_response_surface_pass_{pass_index:02d}"
-                        if primary_30s_exact_context
-                        else ("coverage_first_exact_candidate" if coverage_first else f"exploratory_response_surface_pass_{pass_index:02d}")
-                    )
-                ),
-                "coverage_first_candidate": coverage_first,
-                "response_candidate_pass": pass_index,
-                "primary_30s_exploratory_full_lattice_skipped": primary_30s_exact_context,
-                "large_agent_30s_exploratory_full_lattice_skipped": primary_30s_exact_context and ctx.agents in G567_LARGE_PRIMARY_AGENT_TIERS,
-                "selected_for_30s_exact_acquisition": primary_30s_exact_context,
-                **row,
-            }
-        )
+        return {
+            "phase": phase,
+            "context_id": ctx.dataset_row_id,
+            "g567_evaluation_uid": ctx.evaluation_uid,
+            "variant_id": label,
+            "variant_name": "field_group_response",
+            "seed": "566",
+            "method": f"g567_response_{label}",
+            "model_path": str(raw.get("model_path", "")),
+            "raw_actor_variant_id": raw.get("variant_id", ""),
+            "acquisition_family": acquisition_family,
+            "candidate_source_family": acquisition_family,
+            "multi_fidelity_stage": (
+                "selected_30s_exact_candidate"
+                if primary_30s_exact_context and coverage_first
+                else (
+                    f"selected_30s_exact_response_surface_pass_{pass_index:02d}"
+                    if primary_30s_exact_context
+                    else ("coverage_first_exact_candidate" if coverage_first else f"exploratory_response_surface_pass_{pass_index:02d}")
+                )
+            ),
+            "multi_fidelity_screening_backend": "coverage_first_actor_direct_v1" if coverage_first else screening_backend,
+            "screened_from_full_response_surface": screened_from_surface,
+            "response_screening_score": response_screening_score,
+            "response_surface_selected_rank": response_surface_selected_rank,
+            "response_context_selected_rank": response_context_selected_rank,
+            "response_context_candidate_pool_rows": response_context_candidate_pool_rows,
+            "response_surface_candidate_pool_rows": response_surface_candidate_pool_rows,
+            "response_surface_selected_rows": response_surface_selected_rows,
+            "coverage_first_candidate": coverage_first,
+            "response_candidate_pass": pass_index,
+            "primary_30s_exploratory_full_lattice_skipped": primary_30s_exact_context,
+            "large_agent_30s_exploratory_full_lattice_skipped": primary_30s_exact_context and ctx.agents in G567_LARGE_PRIMARY_AGENT_TIERS,
+            "selected_for_30s_exact_acquisition": primary_30s_exact_context,
+            **row,
+        }
 
+    coverage_rows: list[dict[str, Any]] = []
     for ctx, raw, raw_vec, _delta, primary_30s_exact_context in prepared:
         label = "SELECTED_ACTOR_PRIMARY_30S_EXACT" if primary_30s_exact_context else "GLOBAL_ALPHA_1p0"
-        emit(ctx, raw, label, raw_vec, acquisition_family="actor_direct", primary_30s_exact_context=primary_30s_exact_context, coverage_first=True, pass_index=0)
-    if len(out) >= target_rows:
-        return out[:target_rows]
+        coverage_rows.append(
+            make_row(
+                ctx,
+                raw,
+                label,
+                raw_vec,
+                acquisition_family="actor_direct",
+                primary_30s_exact_context=primary_30s_exact_context,
+                coverage_first=True,
+                pass_index=0,
+                screened_from_surface=False,
+                response_surface_selected_rank=0,
+                response_context_selected_rank=0,
+            )
+        )
 
     extra_specs: list[tuple[str, str, Any]] = []
     for alpha in alphas:
@@ -3069,6 +3121,9 @@ def generate_response_thetas(
     for group_name, cols in FIELD_GROUPS.items():
         for alpha in leave_alphas:
             extra_specs.append(("leave", f"LEAVE_{group_name}_ALPHA_{str(alpha).replace('.', 'p')}", (cols, alpha)))
+
+    screened_candidates: list[tuple[str, float, int, str, dict[str, Any]]] = []
+    context_candidate_counts: Counter[str] = Counter()
     for pass_index, (kind, label, spec) in enumerate(extra_specs, start=1):
         for ctx, raw, raw_vec, delta, primary_30s_exact_context in prepared:
             if primary_30s_exact_context and not allow_selected_primary_30s_surface:
@@ -3092,19 +3147,64 @@ def generate_response_thetas(
                 mask = delta.copy()
                 mask[cols] *= float(alpha)
                 vec = anchor + mask
-            emit(
+            clipped = np.minimum(np.maximum(vec, lo), hi)
+            score = screen_score(ctx, label, kind, clipped, delta, pass_index)
+            row = make_row(
                 ctx,
                 raw,
                 label,
-                vec,
+                clipped,
                 acquisition_family=acquisition_family,
                 primary_30s_exact_context=primary_30s_exact_context,
                 coverage_first=False,
                 pass_index=pass_index,
+                screened_from_surface=True,
+                response_screening_score=score,
             )
-            if len(out) >= target_rows:
-                return out[:target_rows]
-    return out[:target_rows]
+            context_id = ctx.dataset_row_id
+            context_candidate_counts[context_id] += 1
+            screened_candidates.append((context_id, score, pass_index, label, row))
+
+    surface_candidate_pool_rows = len(coverage_rows) + len(screened_candidates)
+    for row in coverage_rows:
+        context_id = str(row.get("context_id", ""))
+        row["response_context_candidate_pool_rows"] = context_candidate_counts.get(context_id, 0)
+        row["response_surface_candidate_pool_rows"] = surface_candidate_pool_rows
+        row["response_surface_selected_rows"] = min(target_rows, surface_candidate_pool_rows)
+    if len(coverage_rows) >= target_rows:
+        return coverage_rows[:target_rows]
+
+    by_context: dict[str, list[tuple[str, float, int, str, dict[str, Any]]]] = defaultdict(list)
+    for candidate in screened_candidates:
+        by_context[candidate[0]].append(candidate)
+    for context_id, candidates in by_context.items():
+        candidates.sort(key=lambda item: (-item[1], item[2], item[3]))
+        for rank, item in enumerate(candidates, start=1):
+            item[4]["response_context_selected_rank"] = rank
+            item[4]["response_context_candidate_pool_rows"] = len(candidates)
+            item[4]["response_surface_candidate_pool_rows"] = surface_candidate_pool_rows
+            item[4]["response_surface_selected_rows"] = min(target_rows, surface_candidate_pool_rows)
+
+    selected_screened: list[dict[str, Any]] = []
+    remaining = max(0, int(target_rows) - len(coverage_rows))
+    context_order = [ctx.dataset_row_id for ctx, *_rest in prepared if ctx.dataset_row_id in by_context]
+    rank = 0
+    while len(selected_screened) < remaining:
+        made_progress = False
+        for context_id in context_order:
+            candidates = by_context.get(context_id, [])
+            if rank >= len(candidates):
+                continue
+            row = candidates[rank][4]
+            row["response_surface_selected_rank"] = len(selected_screened) + 1
+            selected_screened.append(row)
+            made_progress = True
+            if len(selected_screened) >= remaining:
+                break
+        if not made_progress:
+            break
+        rank += 1
+    return (coverage_rows + selected_screened)[:target_rows]
 
 
 def _candidate_replicate_key(row: dict[str, Any]) -> str:

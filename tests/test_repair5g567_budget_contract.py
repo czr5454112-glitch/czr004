@@ -174,6 +174,43 @@ def test_gate3b_selected_30s_acquisition_can_hit_response_row_target() -> None:
     assert any(str(row["multi_fidelity_stage"]).startswith("selected_30s_exact_response_surface_pass_") for row in rows)
     assert {row["primary_30s_exploratory_full_lattice_skipped"] for row in rows} == {True}
     assert {row["selected_for_30s_exact_acquisition"] for row in rows} == {True}
+    screened = [row for row in rows if not row["coverage_first_candidate"]]
+    assert screened
+    assert {row["multi_fidelity_screening_backend"] for row in screened} == {
+        "deterministic_surrogate_multi_fidelity_screen_v1"
+    }
+    assert all(row["screened_from_full_response_surface"] is True for row in screened)
+    assert min(int(row["response_surface_candidate_pool_rows"]) for row in screened) > len(rows)
+    assert all(float(row["response_screening_score"]) > 0.0 for row in screened)
+    assert all(int(row["response_context_selected_rank"]) >= 1 for row in screened)
+
+
+def test_gate3b_response_surface_is_screened_not_prefix_swept() -> None:
+    contexts = [
+        _context(agents=32, base_sec=30.0),
+        _context(agents=3000, base_sec=30.0),
+    ]
+    raw_rows = []
+    for ctx in contexts:
+        theta = {
+            col: float(g567.BASELINE_G556[idx] + (0.01 * (idx + 1)))
+            for idx, col in enumerate(g567.THETA_NUMERIC_COLUMNS)
+        }
+        raw_rows.append({"context_id": ctx.dataset_row_id, "variant_id": "A5", "model_path": "unit.pt", **theta})
+
+    rows = g567.generate_response_thetas(
+        contexts,
+        raw_rows,
+        phase="gate3b_label_train",
+        target_rows=8,
+        allow_selected_primary_30s_surface=True,
+    )
+
+    screened = [row for row in rows if not row["coverage_first_candidate"]]
+    assert len(screened) == 6
+    assert min(int(row["response_surface_candidate_pool_rows"]) for row in screened) > len(rows)
+    selected_passes = [int(row["response_candidate_pass"]) for row in screened]
+    assert min(selected_passes) > 1
 
 
 def test_response_generation_is_coverage_first_across_contexts() -> None:

@@ -12,6 +12,8 @@ mkdir -p "${REPORT_DIR}" "${LOG_DIR}"
 RC_PATH="${REPORT_DIR}/phase5p5_repair5g567_gate3b_bounded_pilot_runner.rc"
 FINAL_SUMMARY="${REPORT_DIR}/phase5p5_repair5g567_gate3b_bounded_pilot_runner_final_summary.json"
 RUNNING_MARKER="${REPORT_DIR}/phase5p5_repair5g567_gate3b_bounded_pilot_runner.running.json"
+PREVIOUS_FINAL_SUMMARY="${REPORT_DIR}/phase5p5_repair5g567_gate3b_bounded_pilot_runner_previous_final_summary.json"
+PREVIOUS_RC_PATH="${REPORT_DIR}/phase5p5_repair5g567_gate3b_bounded_pilot_runner.previous.rc"
 STDOUT_LOG="${LOG_DIR}/phase5p5_repair5g567_gate3b_bounded_pilot_runner.stdout.log"
 STDERR_LOG="${LOG_DIR}/phase5p5_repair5g567_gate3b_bounded_pilot_runner.stderr.log"
 
@@ -77,6 +79,13 @@ if [[ -z "${G567_EXPECTED_HEAD:-}" ]]; then
   exit 2
 fi
 
+if [[ -f "${FINAL_SUMMARY}" ]]; then
+  mv -f "${FINAL_SUMMARY}" "${PREVIOUS_FINAL_SUMMARY}"
+fi
+if [[ -f "${RC_PATH}" ]]; then
+  mv -f "${RC_PATH}" "${PREVIOUS_RC_PATH}"
+fi
+
 if [[ -f "${RUNNING_MARKER}" && ! -f "${FINAL_SUMMARY}" ]]; then
   write_json_atomic "${REPORT_DIR}/phase5p5_repair5g567_gate3b_bounded_pilot_runner_stale_previous.json" "gate3b_bounded_pilot" 124 "stale_previous_runner_marker_without_final_summary" "${G567_EXPECTED_HEAD}"
 fi
@@ -99,6 +108,10 @@ with open(path, "w", encoding="utf-8", newline="\n") as handle:
     json.dump(payload, handle, indent=2, sort_keys=True)
     handle.write("\n")
 PY
+
+launch_unix="$(python -c 'import time; print(time.time())')"
+printf '\n{"event":"gate3b_runner_launch","expected_head":"%s","stage_root":"%s","unix":%s}\n' \
+  "${G567_EXPECTED_HEAD}" "${STAGE_ROOT}" "${launch_unix}" >> "${STDOUT_LOG}"
 
 set +e
 overwrite_args=()

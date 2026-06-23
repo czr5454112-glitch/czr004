@@ -114,6 +114,9 @@ def test_process_hard_timeout_uses_posix_process_group(tmp_path: Path) -> None:
     )
     assert result.provenance["process_hard_timeout_exceeded"] is True
     assert result.provenance["process_group_id"]
+    assert result.provenance["child_session_id"]
+    assert result.provenance["process_group_isolation_verified"] is True
+    assert result.provenance["process_group_isolation_failure"] == ""
     assert result.provenance["process_group_termination_attempted"] is True
     assert result.provenance["child_process_group_killed"] is True
     assert result.provenance["child_process_group_kill_method"] in {"sigterm", "sigkill"}

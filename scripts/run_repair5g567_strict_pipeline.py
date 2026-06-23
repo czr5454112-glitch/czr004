@@ -2449,7 +2449,15 @@ DIRECT_COMMAND_FIELDS = [
     "process_started_unix",
     "process_pid",
     "process_group_id",
+    "child_session_id",
+    "parent_process_id",
+    "parent_process_group_id",
+    "parent_session_id",
+    "process_group_isolation_verified",
+    "process_group_isolation_failure",
     "process_group_termination_attempted",
+    "process_group_killpg_target",
+    "process_timeout_kill_scope",
     "process_timeout_sigterm_sent",
     "process_timeout_sigterm_unix",
     "process_timeout_sigterm_elapsed_sec",
@@ -2465,6 +2473,15 @@ DIRECT_COMMAND_FIELDS = [
     "process_timeout_reason",
     "process_elapsed_sec",
     "process_returncode",
+    "process_cgroup_path",
+    "cgroup_memory_current_bytes_before",
+    "cgroup_memory_peak_bytes_before",
+    "cgroup_memory_max_bytes_before",
+    "cgroup_memory_events_before",
+    "cgroup_memory_current_bytes_after",
+    "cgroup_memory_peak_bytes_after",
+    "cgroup_memory_max_bytes_after",
+    "cgroup_memory_events_after",
 ]
 
 
@@ -2774,6 +2791,55 @@ def direct_exact_resume_result_matches_plan(result_row: dict[str, Any], plan_row
     return True
 
 
+def direct_exact_shard_size() -> int:
+    return max(1, int(number(os.environ.get("G567_DIRECT_EXACT_SHARD_SIZE", "512"), 512)))
+
+
+def direct_exact_worker_capacity(workers: int) -> int:
+    return max(1, int(number(os.environ.get("G567_DIRECT_EXACT_WORKER_CAPACITY", "8"), 8)))
+
+
+def direct_exact_row_weight(plan_row: dict[str, Any]) -> int:
+    agents = int(number(plan_row.get("agents", plan_row.get("agent_count", 0)), 0))
+    if agents >= 3000:
+        return 4
+    if agents >= 1000:
+        return 2
+    return 1
+
+
+def recover_direct_exact_shard_results(
+    shard_root: Path,
+    plan_by_id: dict[str, dict[str, Any]],
+) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    recovered: list[dict[str, Any]] = []
+    stale: list[dict[str, Any]] = []
+    seen: set[tuple[str, str, str, str]] = set()
+    for shard_csv in sorted(resolve(shard_root).glob("shard_*/shard_results.csv")):
+        for row in read_rows(shard_csv):
+            plan_id = str(row.get("plan_row_id", "")).strip()
+            plan = plan_by_id.get(plan_id)
+            if plan and direct_exact_resume_result_matches_plan(row, plan):
+                key = (
+                    plan_id,
+                    str(row.get("context_key", "")),
+                    str(row.get("materialized_method", "")),
+                    str(row.get("exact_execution_mode", "")),
+                )
+                if key in seen:
+                    continue
+                seen.add(key)
+                recovered_row = dict(row)
+                recovered_row["direct_exact_recovered_from_shard_result"] = str(shard_csv)
+                recovered.append(recovered_row)
+            else:
+                stale_row = dict(row)
+                stale_row["stale_resume_reason"] = "shard_result_row_does_not_match_current_plan_or_budget_contract"
+                stale_row["stale_resume_source"] = str(shard_csv)
+                stale.append(stale_row)
+    return recovered, stale
+
+
 def run_direct_exact_plan(
     plan_rows: list[dict[str, Any]],
     *,
@@ -2790,6 +2856,8 @@ def run_direct_exact_plan(
     row_prefix: str,
     execution_mode: str,
 ) -> list[dict[str, Any]]:
+    log_root = resolve(log_dir)
+    shard_root = log_root / "direct_exact_shards"
     if overwrite:
         for path in [
             result_csv,
@@ -2800,6 +2868,8 @@ def run_direct_exact_plan(
             log_dir / "status.json",
         ]:
             resolve(path).unlink(missing_ok=True)
+        if shard_root.exists():
+            shutil.rmtree(shard_root)
     maps_in_plan = sorted({str(row.get("map", "")) for row in plan_rows if str(row.get("map", "")).strip()})
     register_replay_plan_map_paths(plan_rows)
     for map_name in maps_in_plan:
@@ -2813,9 +2883,9 @@ def run_direct_exact_plan(
             instance_ids=sorted({int(number(row.get("seed"), 0)) for row in plan_rows if str(row.get("map", "")) == map_name}),
         )
 
-    log_root = resolve(log_dir)
     temp_dir = log_root / "_direct_exact_tmp"
     temp_dir.mkdir(parents=True, exist_ok=True)
+    shard_root.mkdir(parents=True, exist_ok=True)
     plan_by_id = {str(row.get("plan_row_id", "")): row for row in plan_rows if str(row.get("plan_row_id", "")).strip()}
     existing_results = [] if overwrite else read_rows(result_csv)
     stale_resume_rows = []
@@ -2833,15 +2903,26 @@ def run_direct_exact_plan(
             stale_path = result_csv.with_name(f"{result_csv.stem}_stale_resume_mismatches{result_csv.suffix}")
             write_rows(stale_path, stale_resume_rows)
         existing_results = filtered_results
+    shard_recovered_rows: list[dict[str, Any]] = []
+    stale_shard_rows: list[dict[str, Any]] = []
+    if not overwrite:
+        shard_recovered_rows, stale_shard_rows = recover_direct_exact_shard_results(shard_root, plan_by_id)
+        if stale_shard_rows:
+            stale_path = result_csv.with_name(f"{result_csv.stem}_stale_shard_result_mismatches{result_csv.suffix}")
+            write_rows(stale_path, stale_shard_rows)
+    all_results = [] if overwrite else g549.append_rows(
+        existing_results,
+        shard_recovered_rows,
+        ["plan_row_id", "context_key", "materialized_method", "exact_execution_mode"],
+    )
+    if stale_resume_rows or shard_recovered_rows:
+        g549.write_rows_atomic(result_csv, all_results)
     completed_plan_ids = {
         str(row.get("plan_row_id", ""))
-        for row in existing_results
+        for row in all_results
         if str(row.get("plan_row_id", "")).strip()
     }
     scheduled = [(idx, row) for idx, row in enumerate(plan_rows) if str(row.get("plan_row_id", "")) not in completed_plan_ids]
-    all_results = [] if overwrite else existing_results
-    if stale_resume_rows:
-        g549.write_rows_atomic(result_csv, all_results)
     all_runs = g549.read_jsonl_tolerant(log_root / "runs.jsonl") if not overwrite else []
     all_commands = g549.read_jsonl_tolerant(log_root / "commands.jsonl") if not overwrite else []
     all_updates = g549.read_jsonl_tolerant(log_root / "updates.jsonl") if not overwrite else []
@@ -2862,6 +2943,9 @@ def run_direct_exact_plan(
     def merge(result: dict[str, Any]) -> None:
         nonlocal all_results, all_runs, all_commands, all_updates, done, pending_flush
         done += 1
+        plan_id = str(result.get("command_row", {}).get("plan_row_id", "")).strip()
+        if plan_id:
+            completed_plan_ids.add(plan_id)
         all_results = g549.append_rows(
             all_results,
             result["enriched_rows"],
@@ -2876,36 +2960,28 @@ def run_direct_exact_plan(
             pending_flush = 0
 
     workers = max(1, int(max_workers))
-    if workers == 1:
-        for index, plan in scheduled:
-            merge(
-                run_direct_exact_task(
-                    index=index,
-                    plan=plan,
-                    binary=binary,
-                    log_dir=log_root,
-                    temp_dir=temp_dir,
-                    scenario_dir=resolve(scenario_dir),
-                    registry_path=resolve(registry_path),
-                    manifest_prefix=manifest_prefix,
-                    row_prefix=row_prefix,
-                    execution_mode=execution_mode,
-                )
-            )
-    else:
-        with ThreadPoolExecutor(max_workers=workers) as pool:
-            scheduled_iter = iter(scheduled)
-            futures = set()
-            max_in_flight = max(workers, workers * 2)
+    worker_capacity = direct_exact_worker_capacity(workers)
 
-            def submit_next() -> bool:
-                try:
-                    index, plan = next(scheduled_iter)
-                except StopIteration:
-                    return False
-                futures.add(
-                    pool.submit(
-                        run_direct_exact_task,
+    def submit_direct_exact(pool: ThreadPoolExecutor, index: int, plan: dict[str, Any]):
+        return pool.submit(
+            run_direct_exact_task,
+            index=index,
+            plan=plan,
+            binary=binary,
+            log_dir=log_root,
+            temp_dir=temp_dir,
+            scenario_dir=resolve(scenario_dir),
+            registry_path=resolve(registry_path),
+            manifest_prefix=manifest_prefix,
+            row_prefix=row_prefix,
+            execution_mode=execution_mode,
+        )
+
+    def run_scheduled_items(items: list[tuple[int, dict[str, Any]]], on_result: Any) -> None:
+        if workers == 1:
+            for index, plan in items:
+                on_result(
+                    run_direct_exact_task(
                         index=index,
                         plan=plan,
                         binary=binary,
@@ -2918,15 +2994,156 @@ def run_direct_exact_plan(
                         execution_mode=execution_mode,
                     )
                 )
+            return
+        with ThreadPoolExecutor(max_workers=workers) as pool:
+            futures: dict[Any, int] = {}
+            active_weight = 0
+            next_item = 0
+
+            def submit_one() -> bool:
+                nonlocal active_weight, next_item
+                if next_item >= len(items) or len(futures) >= workers:
+                    return False
+                index, plan = items[next_item]
+                weight = direct_exact_row_weight(plan)
+                if futures and active_weight + weight > worker_capacity:
+                    return False
+                future = submit_direct_exact(pool, index, plan)
+                futures[future] = weight
+                active_weight += weight
+                next_item += 1
                 return True
 
-            for _ in range(min(max_in_flight, len(scheduled))):
-                submit_next()
-            while futures:
-                done_futures, futures = wait(futures, return_when=FIRST_COMPLETED)
+            while next_item < len(items) or futures:
+                while submit_one():
+                    pass
+                if not futures:
+                    continue
+                done_futures, _ = wait(set(futures), return_when=FIRST_COMPLETED)
                 for future in done_futures:
-                    merge(future.result())
-                    submit_next()
+                    active_weight -= futures.pop(future)
+                    on_result(future.result())
+
+    shard_size = direct_exact_shard_size()
+    enumerated_plan_rows = list(enumerate(plan_rows))
+    shard_plan_items = [
+        enumerated_plan_rows[start : start + shard_size]
+        for start in range(0, len(plan_rows), shard_size)
+    ]
+    for shard_index, full_shard in enumerate(shard_plan_items):
+        shard_items = [
+            (idx, row)
+            for idx, row in full_shard
+            if str(row.get("plan_row_id", "")).strip() not in completed_plan_ids
+        ]
+        if not shard_items:
+            continue
+        first_index = full_shard[0][0]
+        last_index = full_shard[-1][0]
+        shard_dir = shard_root / f"shard_{shard_index:05d}_{first_index:08d}_{last_index:08d}"
+        shard_dir.mkdir(parents=True, exist_ok=True)
+        shard_plan_ids = {str(row.get("plan_row_id", "")).strip() for _idx, row in full_shard}
+        shard_results = [
+            row for row in all_results if str(row.get("plan_row_id", "")).strip() in shard_plan_ids
+        ]
+        write_rows(shard_dir / "shard_plan.csv", [row for _idx, row in full_shard])
+        write_rows(shard_dir / "shard_pending_plan.csv", [row for _idx, row in shard_items])
+        write_json(
+            shard_dir / "shard_started.json",
+            {
+                "schema_version": f"{ROUND}_direct_exact_shard_started_v1",
+                "execution_mode": DIRECT_EXACT_EXECUTION_MODE,
+                "shard_index": shard_index,
+                "first_execution_order_index": first_index,
+                "last_execution_order_index": last_index,
+                "total_plan_rows": len(full_shard),
+                "pending_plan_rows": len(shard_items),
+                "started_unix": time.time(),
+                "worker_count": workers,
+                "weighted_worker_capacity": worker_capacity,
+                "shard_size": shard_size,
+                **claims(),
+            },
+        )
+
+        def write_shard_heartbeat(last: dict[str, Any] | None, phase: str) -> None:
+            write_json(
+                shard_dir / "shard_heartbeat.json",
+                {
+                    "schema_version": f"{ROUND}_direct_exact_shard_heartbeat_v1",
+                    "execution_mode": DIRECT_EXACT_EXECUTION_MODE,
+                    "shard_index": shard_index,
+                    "phase": phase,
+                    "heartbeat_unix": time.time(),
+                    "completed_shard_rows": len(shard_results),
+                    "pending_plan_rows": len(shard_items),
+                    "completed_global_solver_rows": done,
+                    "total_global_solver_rows": len(plan_rows),
+                    "last_task": last or {},
+                    **claims(),
+                },
+            )
+
+        def record_shard_result(result: dict[str, Any]) -> None:
+            nonlocal shard_results
+            merge(result)
+            shard_results = g549.append_rows(
+                shard_results,
+                result["enriched_rows"],
+                ["plan_row_id", "context_key", "materialized_method", "exact_execution_mode"],
+            )
+            g549.write_rows_atomic(shard_dir / "shard_results.csv", shard_results)
+            write_shard_heartbeat(result["command_row"], "running")
+
+        write_shard_heartbeat(None, "running")
+        try:
+            run_scheduled_items(shard_items, record_shard_result)
+        except BaseException as exc:
+            (shard_dir / "shard.rc").write_text("1\n", encoding="utf-8")
+            write_json(
+                shard_dir / "shard_final_summary.json",
+                {
+                    "schema_version": f"{ROUND}_direct_exact_shard_final_summary_v1",
+                    "execution_mode": DIRECT_EXACT_EXECUTION_MODE,
+                    "shard_index": shard_index,
+                    "rc": 1,
+                    "reason": f"direct_exact_shard_exception:{type(exc).__name__}",
+                    "completed_shard_rows": len(shard_results),
+                    "pending_plan_rows": len(shard_items),
+                    "completed_global_solver_rows": done,
+                    "completed_unix": time.time(),
+                    **claims(),
+                },
+            )
+            flush({"shard_index": shard_index, "exception": type(exc).__name__}, "shard_exception")
+            raise
+        (shard_dir / "shard.rc").write_text("0\n", encoding="utf-8")
+        write_json(
+            shard_dir / "shard_final_summary.json",
+            {
+                "schema_version": f"{ROUND}_direct_exact_shard_final_summary_v1",
+                "execution_mode": DIRECT_EXACT_EXECUTION_MODE,
+                "shard_index": shard_index,
+                "rc": 0,
+                "reason": "direct_exact_shard_complete",
+                "completed_shard_rows": len(shard_results),
+                "pending_plan_rows": len(shard_items),
+                "completed_global_solver_rows": done,
+                "completed_unix": time.time(),
+                **claims(),
+            },
+        )
+        write_json(
+            shard_dir / "shard.done.json",
+            {
+                "schema_version": f"{ROUND}_direct_exact_shard_done_v1",
+                "execution_mode": DIRECT_EXACT_EXECUTION_MODE,
+                "shard_index": shard_index,
+                "completed_unix": time.time(),
+                **claims(),
+            },
+        )
+        flush({"shard_index": shard_index}, "running")
     flush(None, "solver_complete")
     return all_results
 

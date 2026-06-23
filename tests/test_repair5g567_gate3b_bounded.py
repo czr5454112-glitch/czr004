@@ -455,4 +455,19 @@ def test_gate3b_runner_finalizes_on_unexpected_shell_exit() -> None:
     assert "RUNNER_FINALIZED=0" in script
     assert 'trap on_exit EXIT' in script
     assert 'finalize "$rc" "runner_exit_trap"' in script
+    assert 'RUNNER_SHELL_PID="$$"' in script
+    assert 'PYTHON_PID="$!"' in script
+    assert "heartbeat_loop &" in script
+    assert "runner_shell_pid" in script
+    assert "python_orchestrator_pid" in script
+    assert "completed_solver_rows" in script
+    assert "os.getpid()" not in script
     assert script.index("trap on_exit EXIT") < script.index("python scripts/run_repair5g567_gate3b_bounded_pilot.py")
+
+
+def test_gate3b_watchdog_records_external_runner_loss_without_restart() -> None:
+    script = (ROOT / "scripts/watch_repair5g567_gate3b_bounded_pilot.sh").read_text(encoding="utf-8")
+    assert "external_watchdog_detected_runner_process_tree_missing" in script
+    assert "phase5p5_repair5g567_gate3b_bounded_pilot_runner_final_summary.json" in script
+    assert "tmux new-session" not in script
+    assert "server_start_repair5g567_full.sh" not in script

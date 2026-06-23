@@ -182,3 +182,110 @@ def test_direct_exact_registers_generated_gate3b_map_paths(tmp_path, monkeypatch
     assert rows
     assert rows[0]["map"] == map_name
     assert rows[0]["candidate_recognized"] is True
+
+
+def test_direct_exact_row_weights_match_large_agent_tiers() -> None:
+    assert g567.direct_exact_row_weight({"agents": 64}) == 1
+    assert g567.direct_exact_row_weight({"agents": 1000}) == 2
+    assert g567.direct_exact_row_weight({"agents": 2500}) == 2
+    assert g567.direct_exact_row_weight({"agents": 3000}) == 4
+
+
+def test_direct_exact_shards_recover_without_rerunning_completed_rows(tmp_path, monkeypatch) -> None:
+    scenario_dir = tmp_path / "replay_scenarios"
+    result_csv = tmp_path / "results.csv"
+    raw_csv = tmp_path / "raw.csv"
+    log_dir = tmp_path / "logs"
+    plans = []
+    for idx in range(2):
+        row = _plan_row()
+        row.update(
+            {
+                "plan_row_id": f"shard-plan-{idx}",
+                "context_id": f"ctx-{idx}",
+                "g567_dataset_row_id": f"ctx-{idx}",
+                "g567_evaluation_uid": f"eval-{idx}",
+                "g567_identity_digest": f"identity-{idx}",
+                "seed": idx + 1,
+            }
+        )
+        plans.append(row)
+
+    def fake_prepare_scenarios(**kwargs):
+        for seed in kwargs["instance_ids"]:
+            target = g567.scenario_path(Path(kwargs["scenario_dir"]), "random-32-32-20", int(seed))
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_text("version 1\n0 random.map 32 32 0 0 1 1 2\n", encoding="utf-8")
+
+    calls: list[str] = []
+
+    def fake_run_one_solver_task(**kwargs):
+        calls.append(str(kwargs["seed"]))
+        return (
+            [
+                {
+                    "success": True,
+                    "feasible": True,
+                    "sum_of_loss": 2,
+                    "lower_bound": 2,
+                    "sum_of_loss_ratio": 1.0,
+                    "runtime_ms": 1.0,
+                    "repair5g_candidate_id": g567.STATIC_FLOW_SOLVER_ALIAS,
+                    "repair5g_update_mode": "dual_channel_static",
+                    "updateparams_fingerprint": g567.TIER_B_STATIC_FLOW.fingerprint,
+                }
+            ],
+            [],
+            {"process_hard_timeout_exceeded": False, "returncode_classification": "solver_success"},
+        )
+
+    monkeypatch.setenv("G567_DIRECT_EXACT_SHARD_SIZE", "1")
+    monkeypatch.setattr(g567.g549, "prepare_scenarios", fake_prepare_scenarios)
+    monkeypatch.setattr(g567, "run_one_solver_task", fake_run_one_solver_task)
+
+    rows = g567.run_direct_exact_plan(
+        plans,
+        binary=tmp_path / "phase1a_batch",
+        overwrite=True,
+        max_workers=1,
+        registry_path=tmp_path / "registry.csv",
+        result_csv=result_csv,
+        raw_csv=raw_csv,
+        log_dir=log_dir,
+        scenario_dir=scenario_dir,
+        scenario_metadata=tmp_path / "scenario_metadata.json",
+        manifest_prefix="unit",
+        row_prefix="unit",
+        execution_mode="unit_direct_exact_solver_row",
+    )
+
+    assert len(rows) == 2
+    assert calls == ["1", "2"]
+    assert len(list((log_dir / "direct_exact_shards").glob("shard_*/shard.done.json"))) == 2
+    result_csv.unlink()
+    raw_csv.unlink()
+    calls.clear()
+
+    def fail_if_rerun(**kwargs):
+        raise AssertionError("completed shard rows should have been recovered, not rerun")
+
+    monkeypatch.setattr(g567, "run_one_solver_task", fail_if_rerun)
+    recovered = g567.run_direct_exact_plan(
+        plans,
+        binary=tmp_path / "phase1a_batch",
+        overwrite=False,
+        max_workers=1,
+        registry_path=tmp_path / "registry.csv",
+        result_csv=result_csv,
+        raw_csv=raw_csv,
+        log_dir=log_dir,
+        scenario_dir=scenario_dir,
+        scenario_metadata=tmp_path / "scenario_metadata.json",
+        manifest_prefix="unit",
+        row_prefix="unit",
+        execution_mode="unit_direct_exact_solver_row",
+    )
+
+    assert len(recovered) == 2
+    assert calls == []
+    assert result_csv.exists()

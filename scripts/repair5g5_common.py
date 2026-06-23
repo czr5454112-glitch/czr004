@@ -214,6 +214,134 @@ def _env_float(name: str, default: float) -> float:
         return default
 
 
+def _read_int_file(path: Path) -> int | str:
+    try:
+        text = path.read_text(encoding="utf-8").strip()
+    except OSError:
+        return ""
+    if not text or text == "max":
+        return text
+    try:
+        return int(text)
+    except ValueError:
+        return text
+
+
+def _read_cgroup_memory_snapshot(prefix: str) -> dict[str, Any]:
+    snapshot: dict[str, Any] = {
+        f"cgroup_memory_current_bytes_{prefix}": "",
+        f"cgroup_memory_peak_bytes_{prefix}": "",
+        f"cgroup_memory_max_bytes_{prefix}": "",
+        f"cgroup_memory_events_{prefix}": "",
+    }
+    if os.name != "posix":
+        return snapshot
+    cgroup_path = ""
+    try:
+        for line in Path("/proc/self/cgroup").read_text(encoding="utf-8").splitlines():
+            parts = line.split(":", 2)
+            if len(parts) == 3 and (parts[1] == "" or "memory" in parts[1].split(",")):
+                cgroup_path = parts[2].strip()
+                if parts[1] == "":
+                    break
+    except OSError:
+        cgroup_path = ""
+    if not cgroup_path:
+        return snapshot
+    cgroup_dir = Path("/sys/fs/cgroup") / cgroup_path.lstrip("/")
+    if not cgroup_dir.exists():
+        cgroup_dir = Path("/sys/fs/cgroup")
+    events: dict[str, str] = {}
+    try:
+        for line in (cgroup_dir / "memory.events").read_text(encoding="utf-8").splitlines():
+            parts = line.split()
+            if len(parts) == 2:
+                events[parts[0]] = parts[1]
+    except OSError:
+        events = {}
+    snapshot.update(
+        {
+            "process_cgroup_path": cgroup_path,
+            f"cgroup_memory_current_bytes_{prefix}": _read_int_file(cgroup_dir / "memory.current"),
+            f"cgroup_memory_peak_bytes_{prefix}": _read_int_file(cgroup_dir / "memory.peak"),
+            f"cgroup_memory_max_bytes_{prefix}": _read_int_file(cgroup_dir / "memory.max"),
+            f"cgroup_memory_events_{prefix}": json.dumps(events, sort_keys=True) if events else "",
+        }
+    )
+    return snapshot
+
+
+def _record_posix_process_group_identity(provenance: dict[str, Any], proc: subprocess.Popen[Any]) -> None:
+    if os.name != "posix":
+        return
+    try:
+        parent_pgid = os.getpgrp()
+    except OSError:
+        parent_pgid = ""
+    try:
+        parent_sid = os.getsid(0)
+    except OSError:
+        parent_sid = ""
+    provenance.update(
+        {
+            "parent_process_id": os.getpid(),
+            "parent_process_group_id": parent_pgid,
+            "parent_session_id": parent_sid,
+        }
+    )
+    try:
+        child_pgid = os.getpgid(proc.pid)
+        child_sid = os.getsid(proc.pid)
+    except OSError as exc:
+        provenance["process_group_isolation_verified"] = False
+        provenance["process_group_isolation_failure"] = f"identity_read_failed:{exc}"
+        return
+    provenance.update(
+        {
+            "process_group_id": child_pgid,
+            "child_session_id": child_sid,
+        }
+    )
+    problems = []
+    if child_pgid != proc.pid:
+        problems.append(f"child_pgid_{child_pgid}_not_pid_{proc.pid}")
+    if child_sid != proc.pid:
+        problems.append(f"child_sid_{child_sid}_not_pid_{proc.pid}")
+    if parent_pgid != "" and child_pgid == parent_pgid:
+        problems.append("child_pgid_matches_parent")
+    if parent_sid != "" and child_sid == parent_sid:
+        problems.append("child_sid_matches_parent")
+    provenance["process_group_isolation_verified"] = not problems
+    provenance["process_group_isolation_failure"] = ";".join(problems)
+
+
+def _timeout_signal_process(
+    proc: subprocess.Popen[Any],
+    provenance: dict[str, Any],
+    *,
+    sig: signal.Signals,
+) -> str:
+    if os.name == "posix":
+        if provenance.get("process_group_isolation_verified") is True:
+            pgid = int(provenance["process_group_id"] or proc.pid)
+            provenance["process_group_termination_attempted"] = True
+            provenance["process_group_killpg_target"] = pgid
+            os.killpg(pgid, sig)
+            return "sigterm" if sig == signal.SIGTERM else "sigkill"
+        provenance["process_group_termination_attempted"] = False
+        provenance["process_timeout_kill_scope"] = "child_process_only_unverified_process_group"
+        if sig == signal.SIGTERM:
+            proc.terminate()
+            return "terminate"
+        proc.kill()
+        return "kill"
+    if sig == signal.SIGTERM:
+        proc.terminate()
+        return "terminate"
+    proc.kill()
+    return "kill"
+
+
 def run_command_with_hard_timeout(
     command: list[str],
     *,
@@ -247,7 +375,15 @@ def run_command_with_hard_timeout(
         "process_started_unix": start_wall,
         "process_pid": "",
         "process_group_id": "",
+        "child_session_id": "",
+        "parent_process_id": os.getpid(),
+        "parent_process_group_id": "",
+        "parent_session_id": "",
+        "process_group_isolation_verified": False,
+        "process_group_isolation_failure": "",
         "process_group_termination_attempted": False,
+        "process_group_killpg_target": "",
+        "process_timeout_kill_scope": "",
         "process_timeout_sigterm_sent": False,
         "process_timeout_sigterm_unix": "",
         "process_timeout_sigterm_elapsed_sec": "",
@@ -262,6 +398,7 @@ def run_command_with_hard_timeout(
         "process_partial_stderr_chars": 0,
         "process_timeout_reason": "",
     }
+    provenance.update(_read_cgroup_memory_snapshot("before"))
     popen_kwargs: dict[str, Any] = {}
     if os.name == "posix":
         popen_kwargs["start_new_session"] = True
@@ -279,10 +416,7 @@ def run_command_with_hard_timeout(
     )
     provenance["process_pid"] = proc.pid
     if os.name == "posix":
-        try:
-            provenance["process_group_id"] = os.getpgid(proc.pid)
-        except OSError:
-            provenance["process_group_id"] = ""
+        _record_posix_process_group_identity(provenance, proc)
     stdout = ""
     stderr = ""
     try:
@@ -297,16 +431,12 @@ def run_command_with_hard_timeout(
         provenance["process_hard_timeout_exceeded"] = True
         provenance["process_timeout_reason"] = "process_hard_timeout_sec_exceeded"
         provenance["process_timeout_elapsed_before_term_sec"] = time.perf_counter() - start_perf
-        provenance["process_group_termination_attempted"] = True
         try:
-            if os.name == "posix":
-                pgid = int(provenance["process_group_id"] or proc.pid)
-                os.killpg(pgid, signal.SIGTERM)
-            else:
-                proc.terminate()
+            method = _timeout_signal_process(proc, provenance, sig=signal.SIGTERM)
             provenance["process_timeout_sigterm_sent"] = True
             provenance["process_timeout_sigterm_unix"] = time.time()
             provenance["process_timeout_sigterm_elapsed_sec"] = time.perf_counter() - start_perf
+            provenance["child_process_group_kill_method"] = method
         except ProcessLookupError:
             provenance["process_timeout_reason"] = "process_already_exited_after_timeout"
         except OSError as exc:
@@ -316,7 +446,8 @@ def run_command_with_hard_timeout(
             stdout = _merge_process_text(partial_stdout, final_stdout)
             stderr = _merge_process_text(partial_stderr, final_stderr)
             provenance["child_process_group_killed"] = True
-            provenance["child_process_group_kill_method"] = "sigterm" if os.name == "posix" else "terminate"
+            if not provenance["child_process_group_kill_method"]:
+                provenance["child_process_group_kill_method"] = "sigterm" if os.name == "posix" else "terminate"
         except subprocess.TimeoutExpired as exc2:
             partial_stdout = _merge_process_text(partial_stdout, getattr(exc2, "stdout", None) or getattr(exc2, "output", None))
             partial_stderr = _merge_process_text(partial_stderr, getattr(exc2, "stderr", None))
@@ -325,14 +456,11 @@ def run_command_with_hard_timeout(
             provenance["process_partial_stdout_chars"] = len(partial_stdout)
             provenance["process_partial_stderr_chars"] = len(partial_stderr)
             try:
-                if os.name == "posix":
-                    pgid = int(provenance["process_group_id"] or proc.pid)
-                    os.killpg(pgid, signal.SIGKILL)
-                else:
-                    proc.kill()
+                method = _timeout_signal_process(proc, provenance, sig=signal.SIGKILL)
                 provenance["process_timeout_sigkill_sent"] = True
                 provenance["process_timeout_sigkill_unix"] = time.time()
                 provenance["process_timeout_sigkill_elapsed_sec"] = time.perf_counter() - start_perf
+                provenance["child_process_group_kill_method"] = method
             except ProcessLookupError:
                 pass
             except OSError as exc:
@@ -341,10 +469,12 @@ def run_command_with_hard_timeout(
             stdout = _merge_process_text(partial_stdout, final_stdout)
             stderr = _merge_process_text(partial_stderr, final_stderr)
             provenance["child_process_group_killed"] = True
-            provenance["child_process_group_kill_method"] = "sigkill" if os.name == "posix" else "kill"
+            if not provenance["child_process_group_kill_method"]:
+                provenance["child_process_group_kill_method"] = "sigkill" if os.name == "posix" else "kill"
     elapsed = time.perf_counter() - start_perf
     provenance["process_elapsed_sec"] = elapsed
     provenance["process_returncode"] = proc.returncode
+    provenance.update(_read_cgroup_memory_snapshot("after"))
     if provenance["process_hard_timeout_exceeded"]:
         provenance["process_partial_stdout_preserved"] = bool(stdout)
         provenance["process_partial_stderr_preserved"] = bool(stderr)

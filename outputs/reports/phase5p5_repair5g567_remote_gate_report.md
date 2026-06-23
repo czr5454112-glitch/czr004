@@ -313,6 +313,49 @@ Gate-3A pass conditions were all `true`, including public parent coverage, synth
 
 2. The first isolated-output Gate-3A rerun at `ea2cb71b` passed replay materialization but failed `has_public_parent_context=false`, because the isolated output root did not include the frozen public benchmark registries. The passing Gate-3A rerun preseeded the committed public registries into the isolated output root. This should be made automatic if future isolated Gate-3A/Gate-3B roots are used.
 
+## Gate-3B Bounded Pilot Attempts After Gate-3A
+
+Current source HEAD under bounded Gate-3B review:
+
+`a7bf614e3c92e9d96955dd3dd33274c68b08e30a`
+
+Remote P0 at this HEAD:
+
+- Focused Gate-3B/direct-exact/budget tests: `21 passed`.
+- Full `test_repair5g567_*` suite: `66 passed`.
+- Remote checkout was clean, with submodules initialized.
+
+Attempt summary:
+
+- r6 at `0cacc264`: seed A5 inference completed for 2,000/2,000 contexts, then label replay failed closed with `KeyError: 'maze_128_128_2'` because generated map paths were not registered into the legacy direct-exact replay path. No full-campaign actions were launched.
+- r7 at `16bb8faa`: map-path registration passed the r6 failure point and label replay started, but the planned replay count was only `8,000` rows despite a requested `60,000`. I stopped it deliberately with runner `rc=143`; no full-campaign actions were launched.
+- r8 at `a7bf614e`: the launch command was incorrectly quoted and the runner started under the SSH process group instead of inside tmux. I stopped it deliberately with runner `rc=143`; no full-campaign actions were launched. This is recorded as operational bug 23.
+- r9 at `a7bf614e`: relaunched with an explicit wrapper script as the tmux command. The user then requested a pause for GPT Pro review, so r9 was stopped before Gate-3B completion.
+
+r9 pause evidence:
+
+- Remote stage root: `/root/shared-nvme/g567_gate3b_bounded_a7bf614e_tmux_r9_pool20000`
+- Local evidence copy: `outputs/external/phase5p5_repair5g567_gate3b_r9_pause_a7bf614e`
+- Runner rc/reason: `143` / `runner_received_signal`
+- Forbidden full-campaign action flags: all `false`
+- stderr log size: `0` bytes
+- Context generation: `20,000` valid contexts from `21,437` attempts
+- LABEL_TRAIN materialization: `2,000` contexts, `536.8s`, `traffic_prior_v1_bfs=2000`, `exact_bfs_lookup_cache=true`
+- DEVELOPMENT materialization: `500` contexts, `68.9s`, `traffic_prior_v1_bfs=500`, `exact_bfs_lookup_cache=true`
+- A5 seed actor inference started on CUDA with `batch_size=4`, `token_budget=6000`, and the true diagnostic A5 checkpoint.
+- Last A5 inference progress before pause: `318/2000` contexts, batch `96/602`, rows written `314`.
+
+Not reached in r9:
+
+- 60,000-row direct-exact label replay
+- 2-4 GPU-active-hour BF16 training
+- development replay
+- one primary actor selection
+- Gate-3B pass report
+- full campaign
+
+Therefore r9 is useful pre-Gate-3B progress evidence, but it is not Gate-3B pass evidence.
+
 ## Manual Approval Lock
 
 The user revoked the stage-by-stage manual wait mechanism. Stage-2A, true A5 Gate-3A, and Gate-3B proceed only under the previously approved technical gates and bounded-run limits.

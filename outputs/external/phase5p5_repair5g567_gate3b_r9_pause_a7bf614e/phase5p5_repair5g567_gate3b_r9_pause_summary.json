@@ -1,0 +1,81 @@
+{
+  "a5_seed_actor_inference": {
+    "batch_size": 4,
+    "batches": 602,
+    "checkpoint_path": "outputs/external/phase5p5_repair5g567_evidence_ea2cb71b/stage2a/models/gcst/phase5p5_repair5g567_a5_hierarchical_od_perceiver_actor_seed567.pt",
+    "completed": false,
+    "device": "cuda",
+    "last_batch_index": 96,
+    "last_contexts_per_sec": 0.27717151369861265,
+    "last_elapsed_sec": 1147.3040492385626,
+    "last_processed_contexts": 318,
+    "last_rows_written": 314,
+    "started": true,
+    "token_budget": 6000,
+    "total_contexts": 2000,
+    "variant_id": "A5"
+  },
+  "context_generation": {
+    "acceptance_rate": 0.9329663665624854,
+    "attempts": 21437,
+    "generated": 20000
+  },
+  "copied_artifacts": [
+    "launch_gate3b_r9.sh",
+    "logs/phase5p5_repair5g567_gate3b_bounded_pilot_runner.stderr.log",
+    "logs/phase5p5_repair5g567_gate3b_bounded_pilot_runner.stdout.log",
+    "reports/phase5p5_repair5g567_gate3b_bounded_pilot_public_benchmark_ingestion_summary.json",
+    "reports/phase5p5_repair5g567_gate3b_bounded_pilot_runner.rc",
+    "reports/phase5p5_repair5g567_gate3b_bounded_pilot_runner_final_summary.json",
+    "reports/phase5p5_repair5g567_gate3b_bounded_pilot_source_state.json"
+  ],
+  "created_utc": "2026-06-23T04:24:44.509547+00:00",
+  "expected_head": "a7bf614e3c92e9d96955dd3dd33274c68b08e30a",
+  "forbidden_actions": {
+    "final_blind_panel_constructed_or_accessed": false,
+    "final_blind_solver_replay_launched": false,
+    "forty_eight_hour_training_launched": false,
+    "full_100k_generation_launched": false,
+    "million_row_solver_acquisition_launched": false
+  },
+  "head": "a7bf614e3c92e9d96955dd3dd33274c68b08e30a",
+  "is_gate3b_pass_evidence": false,
+  "materialization": {
+    "development": {
+      "contexts": 500,
+      "contexts_per_sec": 7.26039013081126,
+      "elapsed_sec": 68.86682110093534,
+      "exact_bfs_lookup_cache": true,
+      "routing_backend_contract": "bfs",
+      "traffic_prior_versions": {
+        "traffic_prior_v1_bfs": 500
+      }
+    },
+    "label_train": {
+      "contexts": 2000,
+      "contexts_per_sec": 3.725802399111243,
+      "elapsed_sec": 536.7971199182793,
+      "exact_bfs_lookup_cache": true,
+      "routing_backend_contract": "bfs",
+      "traffic_prior_versions": {
+        "traffic_prior_v1_bfs": 2000
+      }
+    }
+  },
+  "not_reached": [
+    "direct_exact_label_replay_60000_rows",
+    "bf16_training_2_to_4_gpu_active_hours",
+    "development_replay_500_to_1000_contexts",
+    "one_primary_actor_selection",
+    "gate3b_pass_report",
+    "full_campaign"
+  ],
+  "runner_rc": 143,
+  "runner_reason": "runner_received_signal",
+  "schema_version": "phase5p5_repair5g567_gate3b_r9_pause_summary_v1",
+  "source_state_status_short": "",
+  "stage_root_remote": "/root/shared-nvme/g567_gate3b_bounded_a7bf614e_tmux_r9_pool20000",
+  "status": "paused_by_user_before_gate3b_completion",
+  "stderr_bytes": 0,
+  "stdout_event_count": 97
+}

@@ -1,8 +1,8 @@
 {
   "schema_version": "phase5p5_repair5g567_remote_gate_summary_v1",
-  "date": "2026-06-22",
+  "date": "2026-06-23",
   "branch": "codex/repair5g567-large-scale-tail-safe",
-  "latest_pushed_commit": "ea2cb71b35b18553e7e3d71d98454c340e9066c7",
+  "latest_pushed_commit": "a7bf614e3c92e9d96955dd3dd33274c68b08e30a",
   "gate1": {
     "decision": "gate1_pass",
     "artifact_dir": "/root/shared-nvme/g567_gate_work/artifacts_gate1_20260622_173238",
@@ -264,13 +264,95 @@
     "forty_eight_hour_training": true,
     "final_blind_panel": true,
     "astar_v1_primary": true,
-    "gate3b_bounded_pilot": true
+    "gate3b_bounded_pilot": false,
+    "gate3b_bounded_pilot_completed_or_passed": true
   },
   "open_risks": [
-    "Gate-3B bounded pilot has not yet run",
+    "r9 was paused by user before 60,000-row replay, BF16 training, development replay, and one-primary-actor selection",
+    "Gate-3B bounded pilot has been attempted but has not yet completed or passed",
     "Stage-2A is diagnostic only: 64 unique exact-labeled training contexts, not the eventual >=24000 LABEL_TRAIN target",
     "tunnel/cross/connector extreme-tail contexts remain in timeout/tail audit until direct exact is stable at larger scale",
     "Gate-2 is bounded pilot evidence only",
     "Full campaign remains locked pending fresh APPROVE_G567_FULL_<EXACT_COMMIT_SHA> after Gate-3B review"
-  ]
+  ],
+  "latest_executed_commit": "a7bf614e3c92e9d96955dd3dd33274c68b08e30a",
+  "gate3b_prelaunch_a7bf": {
+    "decision": "remote_p0_pass_before_bounded_gate3b_relaunch",
+    "commit": "a7bf614e3c92e9d96955dd3dd33274c68b08e30a",
+    "remote_head": "a7bf614e3c92e9d96955dd3dd33274c68b08e30a",
+    "remote_status_short": "",
+    "remote_focused_tests": "21 passed",
+    "remote_full_repair5g567_tests": "66 passed",
+    "submodules_initialized": true,
+    "full_campaign_launched": false
+  },
+  "gate3b_bounded_attempts": {
+    "decision": "gate3b_not_yet_completed_or_passed",
+    "r6": {
+      "commit": "0cacc26444692857065f0f89d5f9533d30b0e48c",
+      "decision": "failed_closed_after_seed_a5_inference",
+      "seed_a5_inference_contexts": 2000,
+      "failure": "KeyError: 'maze_128_128_2'",
+      "root_cause": "generated map paths not registered into legacy direct-exact replay map registry",
+      "forbidden_actions_all_false": true
+    },
+    "r7": {
+      "commit": "16bb8faae5148387b5e2ab996d4bb87f6d68049d",
+      "decision": "stopped_deliberately_before_invalid_under_target_replay_continued",
+      "requested_solver_rows": 60000,
+      "planned_solver_rows_observed": 8000,
+      "runner_rc": 143,
+      "root_cause": "response theta generator skipped selected 30s exact response-surface candidates",
+      "forbidden_actions_all_false": true
+    },
+    "r8": {
+      "commit": "a7bf614e3c92e9d96955dd3dd33274c68b08e30a",
+      "decision": "stopped_deliberately_due_to_non_tmux_launch_wrapper_bug",
+      "runner_rc": 143,
+      "root_cause": "tmux command quoting allowed runner to execute under SSH process group",
+      "forbidden_actions_all_false": true
+    },
+    "r9": {
+      "commit": "a7bf614e3c92e9d96955dd3dd33274c68b08e30a",
+      "decision": "paused_by_user_before_gate3b_completion_for_gptpro_review",
+      "remote_stage_root": "/root/shared-nvme/g567_gate3b_bounded_a7bf614e_tmux_r9_pool20000",
+      "local_evidence_dir": "outputs/external/phase5p5_repair5g567_gate3b_r9_pause_a7bf614e",
+      "runner_rc": 143,
+      "runner_reason": "runner_received_signal",
+      "forbidden_actions_all_false": true,
+      "stderr_bytes": 0,
+      "generated_contexts": 20000,
+      "generation_attempts": 21437,
+      "label_train_materialized_contexts": 2000,
+      "label_train_materialization_elapsed_sec": 536.7971199182793,
+      "development_materialized_contexts": 500,
+      "development_materialization_elapsed_sec": 68.86682110093534,
+      "traffic_prior_versions": {
+        "traffic_prior_v1_bfs": {
+          "label_train": 2000,
+          "development": 500
+        }
+      },
+      "exact_bfs_lookup_cache": true,
+      "a5_seed_actor_inference_started": true,
+      "a5_seed_actor_inference_completed": false,
+      "a5_seed_actor_device": "cuda",
+      "a5_seed_actor_batch_size": 4,
+      "a5_seed_actor_token_budget": 6000,
+      "a5_seed_actor_last_processed_contexts": 318,
+      "a5_seed_actor_total_contexts": 2000,
+      "a5_seed_actor_last_batch_index": 96,
+      "a5_seed_actor_total_batches": 602,
+      "not_reached": [
+        "direct_exact_label_replay_60000_rows",
+        "bf16_training_2_to_4_gpu_active_hours",
+        "development_replay",
+        "one_primary_actor_selection",
+        "gate3b_pass_report",
+        "full_campaign"
+      ],
+      "is_gate3b_pass_evidence": false
+    }
+  },
+  "gate3b_status": "attempted_but_not_completed_or_passed"
 }

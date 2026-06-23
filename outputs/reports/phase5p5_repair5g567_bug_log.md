@@ -170,6 +170,14 @@ Date: 2026-06-22 Asia/Shanghai
 
    Regression test: `tests/test_repair5g567_budget_contract.py::test_gate3b_selected_30s_acquisition_can_hit_response_row_target`.
 
+23. Gate-3B r8 was launched outside the intended tmux session because of shell quoting.
+
+   Symptom: the r8 launch created the bounded Gate-3B stage root and started context generation, but `tmux ls` was empty while the runner process was still alive under the SSH command process group. This violated the operational requirement that long remote runs stay inside tmux.
+
+   Root cause: the `tmux new-session` command was not quoted as one complete tmux command string, so only the initial `cd` was associated with tmux and the later `unset/export && bash scripts/server_start_repair5g567_gate3b_bounded_pilot.sh` executed in the parent SSH shell.
+
+   Mitigation: r8 was terminated deliberately with SIGTERM; runner `rc=143` and final summary were preserved, and all forbidden full-campaign action flags remained false. The replacement r9 launch uses an explicit remote wrapper script as the tmux command, and process inspection confirmed the runner and Python child are under the tmux session.
+
 ## Existing Repairs Verified By Gates
 
 - A5 uses OD Perceiver instead of full OD self-attention for 3000 OD tokens.
@@ -196,9 +204,9 @@ Date: 2026-06-22 Asia/Shanghai
 
    Do not delete `tunnel`, `cross`, or `connector`. Keep failed high-density combinations in the timeout/tail audit and reintroduce them through curriculum after direct exact execution is stable.
 
-5. Gate-3B has not yet been run.
+5. Gate-3B has not yet passed.
 
-   Gate-3A passed on 32 contexts and 128 solver rows. The bounded Gate-3B pilot still needs 2,000-4,000 unique exact-labeled contexts, 50,000-100,000 solver rows, 2-4 GPU-active training hours, 500-1,000 development contexts, and one primary actor.
+   Gate-3A passed on 32 contexts and 128 solver rows. The bounded Gate-3B pilot still needs a successful run with 2,000-4,000 unique exact-labeled contexts, 50,000-100,000 solver rows, 2-4 GPU-active training hours, 500-1,000 development contexts, and one primary actor.
 
 6. Full campaign remains under absolute manual lock.
 

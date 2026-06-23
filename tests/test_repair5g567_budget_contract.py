@@ -76,6 +76,36 @@ def test_plan_rows_keep_same_uniform_30s_budget_for_all_methods() -> None:
     assert {row["budget_role"] for row in plan} == {"uniform_30s_all_agent_tiers_primary_exact"}
 
 
+def test_response_acquisition_metadata_is_preserved_in_plan_and_registry() -> None:
+    ctx = _context(agents=3000, base_sec=30.0)
+    theta = {col: float(g567.BASELINE_G556[idx]) for idx, col in enumerate(g567.THETA_NUMERIC_COLUMNS)}
+    theta.update(g567.mode_columns("flow_shield"))
+    theta_row = {
+        "context_id": ctx.dataset_row_id,
+        "variant_id": "SCREENED",
+        "seed": 567,
+        "method": "unit_screened_actor",
+        "model_path": "unit.pt",
+        "multi_fidelity_screening_backend": "deterministic_surrogate_multi_fidelity_screen_v1",
+        "screened_from_full_response_surface": True,
+        "response_surface_candidate_pool_rows": 512,
+        "response_surface_selected_rank": 7,
+        "selected_for_30s_exact_acquisition": True,
+        **theta,
+    }
+
+    plan, registry = g567.build_plan_and_registry([ctx], [theta_row], "unit_metadata")
+
+    actor_plan = next(row for row in plan if str(row["role"]).startswith("generated_theta::"))
+    actor_registry = next(row for row in registry if row.get("registry_role") == "g567_actor_generated_theta")
+    for row in [actor_plan, actor_registry]:
+        assert row["multi_fidelity_screening_backend"] == "deterministic_surrogate_multi_fidelity_screen_v1"
+        assert row["screened_from_full_response_surface"] is True
+        assert row["response_surface_candidate_pool_rows"] == 512
+        assert row["response_surface_selected_rank"] == 7
+        assert row["selected_for_30s_exact_acquisition"] is True
+
+
 def test_plan_generation_fails_closed_without_explicit_hard_timeout() -> None:
     ctx = _context(agents=3000, base_sec=30.0, hard_timeout_sec=0.0)
     with pytest.raises(ValueError, match="missing explicit process hard timeout"):

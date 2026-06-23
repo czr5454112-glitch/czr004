@@ -243,6 +243,26 @@ class G567Context:
 
 _CONTEXT_GRAPH_CACHE: dict[str, tuple[GraphData, Any]] = {}
 
+RESPONSE_ACQUISITION_METADATA_COLUMNS = [
+    "acquisition_family",
+    "candidate_source_family",
+    "multi_fidelity_stage",
+    "multi_fidelity_screening_backend",
+    "screened_from_full_response_surface",
+    "response_screening_score",
+    "response_surface_selected_rank",
+    "response_context_selected_rank",
+    "response_context_candidate_pool_rows",
+    "response_surface_candidate_pool_rows",
+    "response_surface_selected_rows",
+    "coverage_first_candidate",
+    "response_candidate_pass",
+    "primary_30s_exploratory_full_lattice_skipped",
+    "large_agent_30s_exploratory_full_lattice_skipped",
+    "selected_for_30s_exact_acquisition",
+    "raw_actor_variant_id",
+]
+
 
 def _context_graph_cache_key(row: dict[str, Any]) -> str:
     return "|".join(
@@ -1758,6 +1778,9 @@ def add_plan_row(
     }
     if theta is not None:
         row.update({col: theta.get(col, "") for col in THETA_COLUMNS})
+    if actor_row is not None:
+        for key in RESPONSE_ACQUISITION_METADATA_COLUMNS:
+            row[key] = actor_row.get(key, "")
     plan.append(row)
 
 
@@ -1871,6 +1894,7 @@ def build_plan_and_registry(
                 "method": theta_row.get("method", ""),
                 "variant_id": theta_row.get("variant_id", ""),
                 "actor_training_seed": theta_row.get("seed", ""),
+                **{key: theta_row.get(key, "") for key in RESPONSE_ACQUISITION_METADATA_COLUMNS},
                 **{col: theta.get(col, "") for col in THETA_COLUMNS},
                 **claims(),
             }
@@ -1968,6 +1992,7 @@ def audit_results(rows: list[dict[str, Any]], plan_rows: list[dict[str, Any]], p
             "model_path",
             "variant_id",
             "actor_training_seed",
+            *RESPONSE_ACQUISITION_METADATA_COLUMNS,
             "role",
             "replicate_id",
             "replicate_group_id",

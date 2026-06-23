@@ -166,6 +166,8 @@ def take_split_rows(
     count: int,
     min_public_fraction: float,
     min_official_fraction: float,
+    min_parent_maps: int,
+    min_map_families: int,
     required_tiers: tuple[int, ...],
     hash_owner: dict[str, str],
     used_uids: set[str],
@@ -210,6 +212,31 @@ def take_split_rows(
     def selected_official_count() -> int:
         return sum(1 for item in selected if row_is_official_scenario(item))
 
+    def selected_parent_hashes() -> set[str]:
+        return {str(item.get("physical_map_sha256", "")) for item in selected}
+
+    def selected_families() -> set[str]:
+        return {str(item.get("map_family", "")) for item in selected}
+
+    def diversity_order(candidates: list[dict[str, Any]]) -> list[dict[str, Any]]:
+        hashes = selected_parent_hashes()
+        families = selected_families()
+        need_parent = len(hashes) < int(min_parent_maps)
+        need_family = len(families) < int(min_map_families)
+        return sorted(
+            candidates,
+            key=lambda row: (
+                0 if need_parent and str(row.get("physical_map_sha256", "")) not in hashes else 1,
+                0 if need_family and str(row.get("map_family", "")) not in families else 1,
+                0 if row_is_public(row) else 1,
+                0 if row_is_official_scenario(row) else 1,
+                int(g567.number(row.get("agent_count"), 0)),
+                str(row.get("map_family", "")),
+                str(row.get("physical_map_sha256", "")),
+                row_uid(row),
+            ),
+        )
+
     def eligible_groups(public: bool | None) -> list[list[dict[str, Any]]]:
         by_hash: dict[str, list[dict[str, Any]]] = {}
         for row in ordered:
@@ -233,10 +260,16 @@ def take_split_rows(
             groups = eligible_groups(public)
             if not groups:
                 break
-            for row in groups[0]:
+            added = False
+            for group in groups:
                 if len(selected) >= count or selected_source_count(public) >= target:
                     break
-                add(row)
+                for row in diversity_order(group):
+                    if add(row):
+                        added = True
+                        break
+            if not added:
+                break
 
     def fill_official(target: int) -> None:
         while len(selected) < count and selected_official_count() < target:
@@ -247,10 +280,16 @@ def take_split_rows(
                     groups.append(official_group)
             if not groups:
                 break
-            for row in groups[0]:
+            added = False
+            for group in groups:
                 if len(selected) >= count or selected_official_count() >= target:
                     break
-                add(row)
+                for row in diversity_order(group):
+                    if add(row):
+                        added = True
+                        break
+            if not added:
+                break
 
     for tier in required_tiers:
         if len(selected) >= count:
@@ -259,7 +298,7 @@ def take_split_rows(
         preferred_public = selected_source_count(True) < public_target
         preferred = [row for row in tier_rows if row_is_public(row) is preferred_public]
         fallback = [row for row in tier_rows if row_is_public(row) is not preferred_public]
-        for row in preferred + fallback:
+        for row in diversity_order(preferred + fallback):
             if add(row):
                 break
     fill_official(official_target)
@@ -270,10 +309,13 @@ def take_split_rows(
         if not groups:
             break
         added = False
-        for row in groups[0]:
+        for group in groups:
             if len(selected) >= count:
                 break
-            added = add(row) or added
+            for row in diversity_order(group):
+                if add(row):
+                    added = True
+                    break
         if not added:
             break
     if len(selected) < count:
@@ -286,6 +328,10 @@ def take_split_rows(
         raise RuntimeError(f"Gate-3B {split} public fraction below target: {public_fraction(selected)} < {min_public_fraction}")
     if official_scenario_fraction(selected) + 1.0e-12 < min_official_fraction:
         raise RuntimeError(f"Gate-3B {split} official scenario fraction below target: {official_scenario_fraction(selected)} < {min_official_fraction}")
+    if parent_map_count(selected) < int(min_parent_maps):
+        raise RuntimeError(f"Gate-3B {split} parent-map count below target: {parent_map_count(selected)} < {min_parent_maps}")
+    if map_family_count(selected) < int(min_map_families):
+        raise RuntimeError(f"Gate-3B {split} map-family count below target: {map_family_count(selected)} < {min_map_families}")
     used_uids.update(selected_uids)
     return selected
 
@@ -320,6 +366,8 @@ def select_gate3b_rows(
         count=development_contexts,
         min_public_fraction=development_public_fraction_min,
         min_official_fraction=development_official_scenario_fraction_min,
+        min_parent_maps=development_min_parent_maps,
+        min_map_families=development_min_map_families,
         required_tiers=REQUIRED_AGENT_TIERS,
         hash_owner=hash_owner,
         used_uids=used_uids,
@@ -330,6 +378,8 @@ def select_gate3b_rows(
         count=calibration_contexts,
         min_public_fraction=calibration_public_fraction_min,
         min_official_fraction=calibration_official_scenario_fraction_min,
+        min_parent_maps=calibration_min_parent_maps,
+        min_map_families=calibration_min_map_families,
         required_tiers=REQUIRED_AGENT_TIERS,
         hash_owner=hash_owner,
         used_uids=used_uids,
@@ -340,6 +390,8 @@ def select_gate3b_rows(
         count=label_contexts,
         min_public_fraction=label_public_fraction_min,
         min_official_fraction=label_official_scenario_fraction_min,
+        min_parent_maps=label_min_parent_maps,
+        min_map_families=label_min_map_families,
         required_tiers=REQUIRED_AGENT_TIERS,
         hash_owner=hash_owner,
         used_uids=used_uids,

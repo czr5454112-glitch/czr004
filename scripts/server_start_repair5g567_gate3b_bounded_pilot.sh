@@ -112,6 +112,8 @@ PY
 launch_unix="$(python -c 'import time; print(time.time())')"
 printf '\n{"event":"gate3b_runner_launch","expected_head":"%s","stage_root":"%s","unix":%s}\n' \
   "${G567_EXPECTED_HEAD}" "${STAGE_ROOT}" "${launch_unix}" >> "${STDOUT_LOG}"
+printf '\n{"event":"gate3b_runner_launch","expected_head":"%s","stage_root":"%s","unix":%s}\n' \
+  "${G567_EXPECTED_HEAD}" "${STAGE_ROOT}" "${launch_unix}" >> "${STDERR_LOG}"
 
 set +e
 overwrite_args=()

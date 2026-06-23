@@ -105,6 +105,12 @@ overwrite_args=()
 if [[ "${G567_GATE3B_OVERWRITE:-0}" == "1" ]]; then
   overwrite_args+=(--overwrite)
 fi
+if [[ "${G567_GATE3B_SPLIT_SELECTION_ONLY:-0}" == "1" ]]; then
+  overwrite_args+=(--split-selection-only)
+fi
+if [[ "${G567_GATE3B_SKIP_CANDIDATE_POOL_FILE_HASH_CHECK:-0}" == "1" ]]; then
+  overwrite_args+=(--skip-candidate-pool-file-hash-check)
+fi
 python scripts/run_repair5g567_gate3b_bounded_pilot.py \
   --stage-root "${STAGE_ROOT}" \
   --expected-head "${G567_EXPECTED_HEAD}" \
@@ -116,6 +122,10 @@ python scripts/run_repair5g567_gate3b_bounded_pilot.py \
   --label-official-scenario-fraction-min "${G567_GATE3B_LABEL_OFFICIAL_SCENARIO_FRACTION_MIN:-0.20}" \
   --calibration-official-scenario-fraction-min "${G567_GATE3B_CALIBRATION_OFFICIAL_SCENARIO_FRACTION_MIN:-0.30}" \
   --development-official-scenario-fraction-min "${G567_GATE3B_DEVELOPMENT_OFFICIAL_SCENARIO_FRACTION_MIN:-0.30}" \
+  --parent-concentration-cap-fraction "${G567_GATE3B_PARENT_CONCENTRATION_CAP_FRACTION:-0.15}" \
+  --family-concentration-cap-fraction "${G567_GATE3B_FAMILY_CONCENTRATION_CAP_FRACTION:-0.30}" \
+  --split-selection-milp-time-limit-sec "${G567_GATE3B_SPLIT_SELECTION_MILP_TIME_LIMIT_SEC:-120}" \
+  --candidate-pool-source-commit "${G567_GATE3B_CANDIDATE_POOL_SOURCE_COMMIT:-}" \
   --max-workers "${G567_GATE3B_MAX_WORKERS:-8}" \
   --materialize-workers "${G567_GATE3B_MATERIALIZE_WORKERS:-8}" \
   --materialize-progress-interval-sec "${G567_GATE3B_MATERIALIZE_PROGRESS_INTERVAL_SEC:-30}" \

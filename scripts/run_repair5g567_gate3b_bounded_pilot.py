@@ -159,6 +159,553 @@ def map_family_count(rows: list[dict[str, Any]]) -> int:
     return len({str(row.get("map_family", "")) for row in rows if str(row.get("map_family", "")).strip()})
 
 
+def row_parent_hash(row: dict[str, Any]) -> str:
+    return str(row.get("physical_map_sha256", ""))
+
+
+def row_agent_tier(row: dict[str, Any]) -> int:
+    return int(g567.number(row.get("agent_count"), 0))
+
+
+def build_parent_groups(rows: list[dict[str, Any]]) -> dict[str, dict[str, Any]]:
+    groups: dict[str, dict[str, Any]] = {}
+    for row in rows:
+        parent = row_parent_hash(row)
+        if not parent:
+            continue
+        group = groups.setdefault(
+            parent,
+            {
+                "parent_hash": parent,
+                "rows": [],
+                "families": set(),
+                "tiers": set(),
+                "total_rows": 0,
+                "public_rows": 0,
+                "official_rows": 0,
+            },
+        )
+        group["rows"].append(row)
+        group["families"].add(str(row.get("map_family", "")))
+        group["tiers"].add(row_agent_tier(row))
+        group["total_rows"] += 1
+        if row_is_public(row):
+            group["public_rows"] += 1
+        if row_is_official_scenario(row):
+            group["official_rows"] += 1
+    return groups
+
+
+def allocate_gate3b_parent_hashes(
+    rows: list[dict[str, Any]],
+    *,
+    requirements: dict[str, dict[str, Any]],
+    required_tiers: tuple[int, ...],
+) -> tuple[dict[str, set[str]], dict[str, Any]]:
+    groups = build_parent_groups(rows)
+    assigned: dict[str, set[str]] = {split: set() for split in requirements}
+    owner: dict[str, str] = {}
+
+    def split_groups(split: str) -> list[dict[str, Any]]:
+        return [groups[parent] for parent in assigned[split]]
+
+    def capacity(split: str, field: str) -> int:
+        return sum(int(group[field]) for group in split_groups(split))
+
+    def families(split: str) -> set[str]:
+        output: set[str] = set()
+        for group in split_groups(split):
+            output.update(group["families"])
+        return output
+
+    def tiers(split: str) -> set[int]:
+        output: set[int] = set()
+        for group in split_groups(split):
+            output.update(group["tiers"])
+        return output
+
+    def split_metrics(split: str) -> dict[str, Any]:
+        req = requirements[split]
+        return {
+            "parent_map_count": len(assigned[split]),
+            "map_family_count": len(families(split)),
+            "tier_count": len(tiers(split) & set(required_tiers)),
+            "missing_tiers": sorted(set(required_tiers) - tiers(split)),
+            "total_rows_capacity": capacity(split, "total_rows"),
+            "public_rows_capacity": capacity(split, "public_rows"),
+            "official_rows_capacity": capacity(split, "official_rows"),
+            "count_target": int(req["count"]),
+            "public_target": int(req["public_target"]),
+            "official_target": int(req["official_target"]),
+            "min_parent_maps": int(req["min_parent_maps"]),
+            "min_map_families": int(req["min_map_families"]),
+        }
+
+    def deficit(split: str, field: str, target: int) -> int:
+        return max(0, target - int(split_metrics(split)[field]))
+
+    def unassigned_groups() -> list[dict[str, Any]]:
+        return [groups[parent] for parent in groups if parent not in owner]
+
+    def add_parent(split: str, group: dict[str, Any]) -> None:
+        parent = str(group["parent_hash"])
+        if parent in owner and owner[parent] != split:
+            raise RuntimeError(f"Gate-3B parent hash allocation conflict for {parent}")
+        assigned[split].add(parent)
+        owner[parent] = split
+
+    def choose_deficit_split(metric_field: str, target_key: str) -> str | None:
+        candidates = []
+        for split, req in requirements.items():
+            target = int(req[target_key])
+            gap = deficit(split, metric_field, target)
+            if gap <= 0:
+                continue
+            candidates.append((gap / max(1, target), gap, target, split))
+        if not candidates:
+            return None
+        return max(candidates)[3]
+
+    def group_score(split: str, group: dict[str, Any], *, purpose: str) -> tuple[Any, ...]:
+        req = requirements[split]
+        current = split_metrics(split)
+        public_gap = max(0, int(req["public_target"]) - int(current["public_rows_capacity"]))
+        official_gap = max(0, int(req["official_target"]) - int(current["official_rows_capacity"]))
+        total_gap = max(0, int(req["count"]) - int(current["total_rows_capacity"]))
+        parent_gap = max(0, int(req["min_parent_maps"]) - int(current["parent_map_count"]))
+        family_gap = max(0, int(req["min_map_families"]) - int(current["map_family_count"]))
+        new_families = set(group["families"]) - families(split)
+        missing = set(required_tiers) - tiers(split)
+        tier_gain = len(missing & set(group["tiers"]))
+        public_gain = min(int(group["public_rows"]), public_gap)
+        official_gain = min(int(group["official_rows"]), official_gap)
+        total_gain = min(int(group["total_rows"]), total_gap)
+        public_overshoot = max(0, int(group["public_rows"]) - max(1, public_gap))
+        prefer_synthetic = public_gap <= 0
+        return (
+            0 if purpose != "official" or int(group["official_rows"]) > 0 else 1,
+            0 if purpose != "public" or int(group["public_rows"]) > 0 else 1,
+            official_gain / max(1, int(req["official_target"])),
+            public_gain / max(1, int(req["public_target"])),
+            total_gain / max(1, int(req["count"])),
+            min(parent_gap, 1),
+            min(family_gap, len(new_families)),
+            tier_gain,
+            1 if prefer_synthetic and int(group["public_rows"]) == 0 else 0,
+            -public_overshoot / max(1, int(req["public_target"])),
+            -abs(int(group["total_rows"]) - max(1, total_gap)),
+            -int(group["total_rows"]),
+            str(next(iter(sorted(group["families"])), "")),
+            str(group["parent_hash"]),
+        )
+
+    def assign_best(split: str, *, purpose: str, predicate: Any) -> bool:
+        candidates = [group for group in unassigned_groups() if predicate(group)]
+        if not candidates:
+            return False
+        best = max(candidates, key=lambda group: group_score(split, group, purpose=purpose))
+        add_parent(split, best)
+        return True
+
+    for metric_field, target_key, purpose, predicate in [
+        ("official_rows_capacity", "official_target", "official", lambda group: int(group["official_rows"]) > 0),
+        ("public_rows_capacity", "public_target", "public", lambda group: int(group["public_rows"]) > 0),
+    ]:
+        while True:
+            split = choose_deficit_split(metric_field, target_key)
+            if split is None:
+                break
+            if not assign_best(split, purpose=purpose, predicate=predicate):
+                raise RuntimeError(f"Gate-3B global parent allocation lacks {purpose} parent capacity for {split}")
+
+    while True:
+        splits_with_missing = [
+            (len(set(required_tiers) - tiers(split)), split)
+            for split in requirements
+            if set(required_tiers) - tiers(split)
+        ]
+        if not splits_with_missing:
+            break
+        _missing_count, split = max(splits_with_missing)
+        missing = set(required_tiers) - tiers(split)
+        if not assign_best(split, purpose="tier", predicate=lambda group, missing=missing: bool(set(group["tiers"]) & missing)):
+            raise RuntimeError(f"Gate-3B global parent allocation lacks tier coverage for {split}: {sorted(missing)}")
+
+    for metric_field, target_key, purpose in [
+        ("parent_map_count", "min_parent_maps", "parent"),
+        ("map_family_count", "min_map_families", "family"),
+        ("total_rows_capacity", "count", "total"),
+    ]:
+        while True:
+            split = choose_deficit_split(metric_field, target_key)
+            if split is None:
+                break
+            if purpose == "family":
+                existing = families(split)
+                predicate = lambda group, existing=existing: bool(set(group["families"]) - existing)
+            else:
+                predicate = lambda group: True
+            if not assign_best(split, purpose=purpose, predicate=predicate):
+                raise RuntimeError(f"Gate-3B global parent allocation lacks {purpose} capacity for {split}")
+
+    allocation_blockers = []
+    for split, req in requirements.items():
+        metrics = split_metrics(split)
+        if metrics["public_rows_capacity"] < int(req["public_target"]):
+            allocation_blockers.append(f"{split}_public_capacity_{metrics['public_rows_capacity']}_lt_{req['public_target']}")
+        if metrics["official_rows_capacity"] < int(req["official_target"]):
+            allocation_blockers.append(f"{split}_official_capacity_{metrics['official_rows_capacity']}_lt_{req['official_target']}")
+        if metrics["total_rows_capacity"] < int(req["count"]):
+            allocation_blockers.append(f"{split}_row_capacity_{metrics['total_rows_capacity']}_lt_{req['count']}")
+        if metrics["parent_map_count"] < int(req["min_parent_maps"]):
+            allocation_blockers.append(f"{split}_parent_capacity_{metrics['parent_map_count']}_lt_{req['min_parent_maps']}")
+        if metrics["map_family_count"] < int(req["min_map_families"]):
+            allocation_blockers.append(f"{split}_family_capacity_{metrics['map_family_count']}_lt_{req['min_map_families']}")
+        missing_tiers = metrics["missing_tiers"]
+        if missing_tiers:
+            allocation_blockers.append(f"{split}_missing_tiers_{missing_tiers}")
+    if allocation_blockers:
+        raise RuntimeError("Gate-3B global parent allocation blockers: " + ",".join(allocation_blockers))
+
+    meta = {
+        "strategy": "simultaneous_global_parent_hash_allocation_v1",
+        "unassigned_parent_maps": len(groups) - len(owner),
+        "split_parent_allocation": {
+            split: {
+                **split_metrics(split),
+                "parent_hashes": sorted(assigned[split])[:12],
+                "parent_hash_count": len(assigned[split]),
+            }
+            for split in requirements
+        },
+    }
+    return assigned, meta
+
+
+def solve_gate3b_joint_split_allocation(
+    rows: list[dict[str, Any]],
+    *,
+    requirements: dict[str, dict[str, Any]],
+    required_tiers: tuple[int, ...],
+    parent_concentration_cap_fraction: float = 0.0,
+    family_concentration_cap_fraction: float = 0.0,
+    milp_time_limit_sec: float = 120.0,
+) -> tuple[dict[str, list[dict[str, Any]]], dict[str, Any]]:
+    try:
+        from scipy.optimize import Bounds, LinearConstraint, milp
+        from scipy.sparse import coo_matrix
+    except Exception as exc:  # pragma: no cover - exercised only on missing runtime dependency
+        raise RuntimeError(f"gate3b_candidate_pool_joint_split_infeasible: scipy_milp_unavailable:{exc}") from exc
+
+    started = time.perf_counter()
+    split_order = [split for split in ["LABEL_TRAIN", "CALIBRATION", "DEVELOPMENT"] if split in requirements]
+    groups = build_parent_groups(rows)
+    parent_order = sorted(groups)
+    family_by_parent = {
+        parent: (sorted(str(value) for value in groups[parent]["families"] if str(value).strip()) or ["unknown"])[0]
+        for parent in parent_order
+    }
+    family_order = sorted(set(family_by_parent.values()))
+    official_nonpublic_rows = [row_uid(row) for row in rows if row_is_official_scenario(row) and not row_is_public(row)]
+    if official_nonpublic_rows:
+        raise RuntimeError(
+            "gate3b_candidate_pool_joint_split_infeasible:"
+            f"official_rows_on_non_public_parent:{len(official_nonpublic_rows)}"
+        )
+
+    bucket_rows: dict[tuple[str, int, bool, bool], list[dict[str, Any]]] = {}
+    for row in rows:
+        parent = row_parent_hash(row)
+        if not parent:
+            continue
+        key = (parent, row_agent_tier(row), bool(row_is_public(row)), bool(row_is_official_scenario(row)))
+        bucket_rows.setdefault(key, []).append(row)
+    for key in list(bucket_rows):
+        bucket_rows[key] = sorted(bucket_rows[key], key=row_uid)
+    bucket_keys = sorted(bucket_rows, key=lambda item: (item[0], item[1], int(item[2]), int(item[3])))
+
+    index: dict[tuple[Any, ...], int] = {}
+    lower: list[float] = []
+    upper: list[float] = []
+    integrality: list[int] = []
+    objective: list[float] = []
+
+    def add_var(key: tuple[Any, ...], *, ub: float, obj: float = 0.0) -> int:
+        idx = len(lower)
+        index[key] = idx
+        lower.append(0.0)
+        upper.append(float(ub))
+        integrality.append(1)
+        objective.append(float(obj))
+        return idx
+
+    for parent in parent_order:
+        for split in split_order:
+            add_var(("x", parent, split), ub=1.0, obj=1.0e-4)
+    for parent, tier, public, official in bucket_keys:
+        cap = len(bucket_rows[(parent, tier, public, official)])
+        for split in split_order:
+            add_var(("n", parent, split, tier, public, official), ub=float(cap), obj=0.0)
+    for family in family_order:
+        for split in split_order:
+            add_var(("y", family, split), ub=1.0, obj=1.0e-5)
+
+    row_indices: list[int] = []
+    col_indices: list[int] = []
+    data: list[float] = []
+    lbs: list[float] = []
+    ubs: list[float] = []
+
+    def add_constraint(coeffs: list[tuple[int, float]], lb: float, ub: float) -> None:
+        constraint_index = len(lbs)
+        for col, value in coeffs:
+            if abs(float(value)) > 0.0:
+                row_indices.append(constraint_index)
+                col_indices.append(int(col))
+                data.append(float(value))
+        lbs.append(float(lb))
+        ubs.append(float(ub))
+
+    for parent in parent_order:
+        add_constraint([(index[("x", parent, split)], 1.0) for split in split_order], 0.0, 1.0)
+
+    n_by_parent_split: dict[tuple[str, str], list[int]] = {}
+    n_by_split: dict[str, list[int]] = {split: [] for split in split_order}
+    n_by_split_public: dict[str, list[int]] = {split: [] for split in split_order}
+    n_by_split_official: dict[str, list[int]] = {split: [] for split in split_order}
+    n_by_split_tier: dict[tuple[str, int], list[int]] = {(split, tier): [] for split in split_order for tier in required_tiers}
+    n_by_split_family: dict[tuple[str, str], list[int]] = {(split, family): [] for split in split_order for family in family_order}
+    for parent, tier, public, official in bucket_keys:
+        cap = len(bucket_rows[(parent, tier, public, official)])
+        family = family_by_parent[parent]
+        for split in split_order:
+            n_idx = index[("n", parent, split, tier, public, official)]
+            x_idx = index[("x", parent, split)]
+            add_constraint([(n_idx, 1.0), (x_idx, -float(cap))], -math.inf, 0.0)
+            n_by_parent_split.setdefault((parent, split), []).append(n_idx)
+            n_by_split[split].append(n_idx)
+            n_by_split_family[(split, family)].append(n_idx)
+            if public:
+                n_by_split_public[split].append(n_idx)
+            if official:
+                n_by_split_official[split].append(n_idx)
+            if tier in required_tiers:
+                n_by_split_tier[(split, tier)].append(n_idx)
+
+    for parent in parent_order:
+        for split in split_order:
+            coeffs = [(idx, 1.0) for idx in n_by_parent_split.get((parent, split), [])]
+            coeffs.append((index[("x", parent, split)], -1.0))
+            add_constraint(coeffs, 0.0, math.inf)
+
+    for split in split_order:
+        req = requirements[split]
+        count = int(req["count"])
+        public_target = int(req["public_target"])
+        official_target = int(req["official_target"])
+        add_constraint([(idx, 1.0) for idx in n_by_split[split]], float(count), float(count))
+        add_constraint([(idx, 1.0) for idx in n_by_split_public[split]], float(public_target), math.inf)
+        add_constraint([(idx, 1.0) for idx in n_by_split_official[split]], float(official_target), math.inf)
+        for tier in required_tiers:
+            add_constraint([(idx, 1.0) for idx in n_by_split_tier[(split, tier)]], 1.0, math.inf)
+        add_constraint([(index[("x", parent, split)], 1.0) for parent in parent_order], float(req["min_parent_maps"]), math.inf)
+        if float(parent_concentration_cap_fraction) > 0.0:
+            parent_cap = max(1, int(math.floor(count * float(parent_concentration_cap_fraction))))
+            for parent in parent_order:
+                add_constraint([(idx, 1.0) for idx in n_by_parent_split.get((parent, split), [])], 0.0, float(parent_cap))
+        if float(family_concentration_cap_fraction) > 0.0:
+            family_cap = max(1, int(math.floor(count * float(family_concentration_cap_fraction))))
+            for family in family_order:
+                add_constraint([(idx, 1.0) for idx in n_by_split_family[(split, family)]], 0.0, float(family_cap))
+
+    parents_by_family: dict[str, list[str]] = {family: [] for family in family_order}
+    for parent, family in family_by_parent.items():
+        parents_by_family[family].append(parent)
+    for split in split_order:
+        for family in family_order:
+            y_idx = index[("y", family, split)]
+            parent_x = [index[("x", parent, split)] for parent in parents_by_family[family]]
+            for x_idx in parent_x:
+                add_constraint([(x_idx, 1.0), (y_idx, -1.0)], -math.inf, 0.0)
+            add_constraint([(y_idx, 1.0), *[(x_idx, -1.0) for x_idx in parent_x]], -math.inf, 0.0)
+        add_constraint([(index[("y", family, split)], 1.0) for family in family_order], float(requirements[split]["min_map_families"]), math.inf)
+
+    matrix = coo_matrix((data, (row_indices, col_indices)), shape=(len(lbs), len(lower))).tocsr()
+    result = milp(
+        c=np.asarray(objective, dtype=np.float64),
+        integrality=np.asarray(integrality, dtype=np.int8),
+        bounds=Bounds(np.asarray(lower, dtype=np.float64), np.asarray(upper, dtype=np.float64)),
+        constraints=LinearConstraint(matrix, np.asarray(lbs, dtype=np.float64), np.asarray(ubs, dtype=np.float64)),
+        options={
+            "time_limit": float(milp_time_limit_sec),
+            "mip_rel_gap": 0.0,
+            "disp": False,
+        },
+    )
+    runtime = time.perf_counter() - started
+    if not result.success or result.x is None:
+        status = getattr(result, "status", "")
+        message = getattr(result, "message", "")
+        raise RuntimeError(
+            "gate3b_candidate_pool_joint_split_infeasible:"
+            f"milp_status={status}:message={message}:runtime_sec={runtime:.3f}"
+        )
+
+    solution = np.rint(result.x).astype(np.int64)
+    selected_by_split: dict[str, list[dict[str, Any]]] = {split: [] for split in split_order}
+    row_allocation: list[dict[str, Any]] = []
+    for parent, tier, public, official in bucket_keys:
+        capacity = len(bucket_rows[(parent, tier, public, official)])
+        for split in split_order:
+            n_idx = index[("n", parent, split, tier, public, official)]
+            allocated = int(solution[n_idx])
+            if allocated <= 0:
+                continue
+            if allocated > capacity:
+                raise RuntimeError(f"gate3b_candidate_pool_joint_split_infeasible:bucket_overallocated:{parent}:{tier}:{public}:{official}")
+            chosen = bucket_rows[(parent, tier, public, official)][:allocated]
+            selected_by_split[split].extend(chosen)
+            row_allocation.append(
+                {
+                    "split": split,
+                    "physical_map_sha256": parent,
+                    "map_family": family_by_parent[parent],
+                    "map_source_type": "canonical_public_benchmark_map" if public else "synthetic_stress_map",
+                    "agent_count": tier,
+                    "public_row": bool(public),
+                    "official_scenario": bool(official),
+                    "allocated_rows": allocated,
+                    "capacity_rows": capacity,
+                    "first_row_uid": row_uid(chosen[0]),
+                    "last_row_uid": row_uid(chosen[-1]),
+                }
+            )
+
+    parent_capacity_rows = []
+    for parent in parent_order:
+        group = groups[parent]
+        tier_capacity = {
+            str(tier): sum(len(bucket_rows.get((parent, tier, public, official), [])) for public in [False, True] for official in [False, True])
+            for tier in required_tiers
+        }
+        official_tier_capacity = {
+            str(tier): sum(len(bucket_rows.get((parent, tier, public, True), [])) for public in [False, True])
+            for tier in required_tiers
+        }
+        parent_capacity_rows.append(
+            {
+                "physical_map_sha256": parent,
+                "map_family": family_by_parent[parent],
+                "map_source_type": "canonical_public_benchmark_map" if int(group["public_rows"]) > 0 else "synthetic_stress_map",
+                "total_rows": int(group["total_rows"]),
+                "public_rows": int(group["public_rows"]),
+                "official_rows": int(group["official_rows"]),
+                "nonofficial_rows": int(group["total_rows"]) - int(group["official_rows"]),
+                "tier_capacity_json": json.dumps(tier_capacity, sort_keys=True, separators=(",", ":")),
+                "official_tier_capacity_json": json.dumps(official_tier_capacity, sort_keys=True, separators=(",", ":")),
+            }
+        )
+
+    parent_assignment_rows = []
+    for split in split_order:
+        selected = selected_by_split[split]
+        selected_by_parent = Counter(row_parent_hash(row) for row in selected)
+        public_by_parent = Counter(row_parent_hash(row) for row in selected if row_is_public(row))
+        official_by_parent = Counter(row_parent_hash(row) for row in selected if row_is_official_scenario(row))
+        for parent, rows_selected in sorted(selected_by_parent.items()):
+            parent_assignment_rows.append(
+                {
+                    "split": split,
+                    "physical_map_sha256": parent,
+                    "map_family": family_by_parent[parent],
+                    "map_source_type": "canonical_public_benchmark_map" if int(groups[parent]["public_rows"]) > 0 else "synthetic_stress_map",
+                    "selected_rows": int(rows_selected),
+                    "selected_public_rows": int(public_by_parent[parent]),
+                    "selected_official_rows": int(official_by_parent[parent]),
+                    "capacity_rows": int(groups[parent]["total_rows"]),
+                    "capacity_public_rows": int(groups[parent]["public_rows"]),
+                    "capacity_official_rows": int(groups[parent]["official_rows"]),
+                }
+            )
+
+    def split_selection_metrics(split: str) -> dict[str, Any]:
+        selected = selected_by_split[split]
+        parent_counts = Counter(row_parent_hash(row) for row in selected)
+        family_counts = Counter(str(row.get("map_family", "")) for row in selected)
+        tier_counts = Counter(str(row_agent_tier(row)) for row in selected)
+        public_rows = sum(1 for row in selected if row_is_public(row))
+        official_rows = sum(1 for row in selected if row_is_official_scenario(row))
+        return {
+            "rows": len(selected),
+            "public_rows": public_rows,
+            "official_rows": official_rows,
+            "public_fraction": public_rows / max(1, len(selected)),
+            "official_scenario_fraction": official_rows / max(1, len(selected)),
+            "parent_map_count": len(parent_counts),
+            "map_family_count": len(family_counts),
+            "agent_tier_counts": dict(sorted(tier_counts.items(), key=lambda item: int(item[0]))),
+            "missing_tiers": sorted(set(required_tiers) - {int(key) for key in tier_counts}),
+            "public_parent_count": len({row_parent_hash(row) for row in selected if row_is_public(row)}),
+            "official_parent_count": len({row_parent_hash(row) for row in selected if row_is_official_scenario(row)}),
+            "max_parent_share": max(parent_counts.values(), default=0) / max(1, len(selected)),
+            "max_family_share": max(family_counts.values(), default=0) / max(1, len(selected)),
+        }
+
+    split_metrics = {split: split_selection_metrics(split) for split in split_order}
+    split_by_hash: dict[str, set[str]] = {}
+    for split, selected in selected_by_split.items():
+        for row in selected:
+            split_by_hash.setdefault(row_parent_hash(row), set()).add(split)
+    leakage = {key: sorted(value) for key, value in split_by_hash.items() if len(value) > 1}
+    blockers = []
+    for split, req in requirements.items():
+        metrics = split_metrics[split]
+        if metrics["rows"] != int(req["count"]):
+            blockers.append(f"{split}_rows_{metrics['rows']}_ne_{req['count']}")
+        if metrics["public_rows"] < int(req["public_target"]):
+            blockers.append(f"{split}_public_{metrics['public_rows']}_lt_{req['public_target']}")
+        if metrics["official_rows"] < int(req["official_target"]):
+            blockers.append(f"{split}_official_{metrics['official_rows']}_lt_{req['official_target']}")
+        if metrics["parent_map_count"] < int(req["min_parent_maps"]):
+            blockers.append(f"{split}_parents_{metrics['parent_map_count']}_lt_{req['min_parent_maps']}")
+        if metrics["map_family_count"] < int(req["min_map_families"]):
+            blockers.append(f"{split}_families_{metrics['map_family_count']}_lt_{req['min_map_families']}")
+        if metrics["missing_tiers"]:
+            blockers.append(f"{split}_missing_tiers_{metrics['missing_tiers']}")
+        if float(parent_concentration_cap_fraction) > 0.0 and metrics["max_parent_share"] > float(parent_concentration_cap_fraction) + 1.0e-12:
+            blockers.append(f"{split}_parent_share_{metrics['max_parent_share']}_gt_{parent_concentration_cap_fraction}")
+        if float(family_concentration_cap_fraction) > 0.0 and metrics["max_family_share"] > float(family_concentration_cap_fraction) + 1.0e-12:
+            blockers.append(f"{split}_family_share_{metrics['max_family_share']}_gt_{family_concentration_cap_fraction}")
+    if leakage:
+        blockers.append(f"parent_split_leakage_{len(leakage)}")
+    if blockers:
+        raise RuntimeError("gate3b_candidate_pool_joint_split_infeasible:" + ",".join(blockers))
+
+    meta = {
+        "allocator_status": "gate3b_joint_split_allocation_feasible",
+        "allocator_strategy": "scipy_milp_parent_tier_official_bucket_v1",
+        "milp_status": int(getattr(result, "status", -1)),
+        "milp_message": str(getattr(result, "message", "")),
+        "milp_fun": float(getattr(result, "fun", 0.0)),
+        "milp_mip_gap": float(getattr(result, "mip_gap", 0.0) or 0.0),
+        "milp_node_count": int(getattr(result, "mip_node_count", 0) or 0),
+        "milp_runtime_sec": runtime,
+        "milp_time_limit_sec": float(milp_time_limit_sec),
+        "variable_count": len(lower),
+        "constraint_count": len(lbs),
+        "parent_concentration_cap_fraction": float(parent_concentration_cap_fraction),
+        "family_concentration_cap_fraction": float(family_concentration_cap_fraction),
+        "parent_capacity_rows": parent_capacity_rows,
+        "parent_assignment_rows": parent_assignment_rows,
+        "row_allocation_rows": row_allocation,
+        "split_metrics": split_metrics,
+        "parent_map_split_leakage_count": len(leakage),
+        "parent_map_split_leakage_examples": dict(list(leakage.items())[:5]),
+        "unassigned_parent_maps": len(parent_order) - len({row["physical_map_sha256"] for row in parent_assignment_rows}),
+    }
+    return selected_by_split, meta
+
+
 def take_split_rows(
     rows: list[dict[str, Any]],
     *,
@@ -186,11 +733,25 @@ def take_split_rows(
         ),
     )
 
+    def parent_hash(row: dict[str, Any]) -> str:
+        return str(row.get("physical_map_sha256", ""))
+
+    def row_tier(row: dict[str, Any]) -> int:
+        return int(g567.number(row.get("agent_count"), 0))
+
+    def base_row_key(row: dict[str, Any]) -> tuple[Any, ...]:
+        return (
+            row_tier(row),
+            str(row.get("map_family", "")),
+            parent_hash(row),
+            row_uid(row),
+        )
+
     def can_take(row: dict[str, Any]) -> bool:
         uid = row_uid(row)
         if uid in used_uids or uid in selected_uids:
             return False
-        owner = hash_owner.get(str(row.get("physical_map_sha256", "")))
+        owner = hash_owner.get(parent_hash(row))
         return owner in {None, split}
 
     def add(row: dict[str, Any]) -> bool:
@@ -199,12 +760,11 @@ def take_split_rows(
         uid = row_uid(row)
         selected.append(row)
         selected_uids.add(uid)
-        hash_owner[str(row.get("physical_map_sha256", ""))] = split
+        hash_owner[parent_hash(row)] = split
         return True
 
     public_target = int(math.ceil(count * min_public_fraction))
     official_target = int(math.ceil(count * min_official_fraction))
-    synthetic_target = count - public_target
 
     def selected_source_count(public: bool) -> int:
         return sum(1 for item in selected if row_is_public(item) is public)
@@ -213,103 +773,208 @@ def take_split_rows(
         return sum(1 for item in selected if row_is_official_scenario(item))
 
     def selected_parent_hashes() -> set[str]:
-        return {str(item.get("physical_map_sha256", "")) for item in selected}
+        return {parent_hash(item) for item in selected}
 
     def selected_families() -> set[str]:
         return {str(item.get("map_family", "")) for item in selected}
 
-    def diversity_order(candidates: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    def selected_tiers() -> set[int]:
+        return {row_tier(item) for item in selected}
+
+    def group_rows(candidates: list[dict[str, Any]]) -> list[list[dict[str, Any]]]:
+        by_hash: dict[str, list[dict[str, Any]]] = {}
+        for row in candidates:
+            by_hash.setdefault(parent_hash(row), []).append(row)
+        return list(by_hash.values())
+
+    def ordered_groups(
+        candidates: list[dict[str, Any]],
+        *,
+        prefer_existing_parent: bool,
+        prefer_new_parent: bool = False,
+        prefer_new_family: bool = False,
+        prefer_synthetic: bool = False,
+        prefer_public: bool = False,
+    ) -> list[list[dict[str, Any]]]:
         hashes = selected_parent_hashes()
         families = selected_families()
-        need_parent = len(hashes) < int(min_parent_maps)
-        need_family = len(families) < int(min_map_families)
-        def parent_key(row: dict[str, Any]) -> int:
-            value = str(row.get("physical_map_sha256", ""))
-            if need_parent:
-                return 0 if value not in hashes else 1
-            return 0 if value in hashes else 1
+        tiers = selected_tiers()
 
-        def family_key(row: dict[str, Any]) -> int:
-            value = str(row.get("map_family", ""))
-            if need_family:
-                return 0 if value not in families else 1
-            return 0 if value in families else 1
-
-        return sorted(
-            candidates,
-            key=lambda row: (
-                parent_key(row),
-                family_key(row),
-                0 if row_is_public(row) else 1,
-                0 if row_is_official_scenario(row) else 1,
-                int(g567.number(row.get("agent_count"), 0)),
-                str(row.get("map_family", "")),
-                str(row.get("physical_map_sha256", "")),
-                row_uid(row),
-            ),
-        )
-
-    def eligible_groups(public: bool | None) -> list[list[dict[str, Any]]]:
-        by_hash: dict[str, list[dict[str, Any]]] = {}
-        for row in ordered:
-            if public is not None and row_is_public(row) is not public:
-                continue
-            if not can_take(row):
-                continue
-            by_hash.setdefault(str(row.get("physical_map_sha256", "")), []).append(row)
-        return sorted(
-            by_hash.values(),
-            key=lambda group: (
-                -len({int(g567.number(row.get("agent_count"), 0)) for row in group}),
+        def key(group: list[dict[str, Any]]) -> tuple[Any, ...]:
+            group_hash = parent_hash(group[0])
+            group_families = {str(row.get("map_family", "")) for row in group}
+            group_tiers = {row_tier(row) for row in group}
+            group_public = any(row_is_public(row) for row in group)
+            group_official = any(row_is_official_scenario(row) for row in group)
+            group_family = str(group[0].get("map_family", ""))
+            missing_tier_coverage = len((set(required_tiers) - tiers) & group_tiers)
+            return (
+                0 if prefer_existing_parent and group_hash in hashes else 1,
+                0 if prefer_new_parent and group_hash not in hashes else 1,
+                0 if prefer_new_family and bool(group_families - families) else 1,
+                0 if prefer_synthetic and not group_public else 1,
+                0 if prefer_public and group_public else 1,
+                0 if group_official else 1,
+                -missing_tier_coverage,
+                -len(group_tiers),
                 -len(group),
-                str(group[0].get("map_family", "")),
-                str(group[0].get("physical_map_sha256", "")),
-            ),
+                group_family,
+                group_hash,
+            )
+
+        return sorted(
+            [sorted(group, key=base_row_key) for group in group_rows(candidates)],
+            key=key,
         )
 
-    def fill_source(public: bool, target: int) -> None:
-        while len(selected) < count and selected_source_count(public) < target:
+    def add_from_groups(
+        candidates: list[dict[str, Any]],
+        *,
+        target: int | None,
+        metric: Any | None,
+        prefer_existing_parent: bool,
+        prefer_new_parent: bool = False,
+        prefer_new_family: bool = False,
+        prefer_synthetic: bool = False,
+        prefer_public: bool = False,
+        one_row: bool = False,
+    ) -> bool:
+        if not candidates or len(selected) >= count:
+            return False
+        groups = ordered_groups(
+            candidates,
+            prefer_existing_parent=prefer_existing_parent,
+            prefer_new_parent=prefer_new_parent,
+            prefer_new_family=prefer_new_family,
+            prefer_synthetic=prefer_synthetic,
+            prefer_public=prefer_public,
+        )
+        for group in groups:
             added = False
-            candidates = [row for row in ordered if row_is_public(row) is public and can_take(row)]
-            for row in diversity_order(candidates):
+            for row in group:
+                if len(selected) >= count:
+                    return added
+                if target is not None and metric is not None and metric() >= target:
+                    return added
                 if add(row):
                     added = True
-                    break
+                    if one_row:
+                        return True
+            if added:
+                return True
+        return False
+
+    def fill_until(
+        predicate: Any,
+        *,
+        target: int,
+        metric: Any,
+        prefer_public: bool = False,
+        prefer_synthetic: bool = False,
+    ) -> None:
+        while len(selected) < count and metric() < target:
+            candidates = [row for row in ordered if can_take(row) and predicate(row)]
+            added = add_from_groups(
+                candidates,
+                target=target,
+                metric=metric,
+                prefer_existing_parent=True,
+                prefer_public=prefer_public,
+                prefer_synthetic=prefer_synthetic,
+            )
             if not added:
                 break
 
-    def fill_official(target: int) -> None:
-        while len(selected) < count and selected_official_count() < target:
-            added = False
-            candidates = [row for row in ordered if row_is_public(row) and row_is_official_scenario(row) and can_take(row)]
-            for row in diversity_order(candidates):
-                if add(row):
-                    added = True
-                    break
-            if not added:
-                break
+    def add_one(
+        predicate: Any,
+        *,
+        prefer_new_parent: bool = False,
+        prefer_new_family: bool = False,
+        prefer_synthetic: bool = False,
+        prefer_public: bool = False,
+    ) -> bool:
+        candidates = [row for row in ordered if can_take(row) and predicate(row)]
+        return add_from_groups(
+            candidates,
+            target=None,
+            metric=None,
+            prefer_existing_parent=True,
+            prefer_new_parent=prefer_new_parent,
+            prefer_new_family=prefer_new_family,
+            prefer_synthetic=prefer_synthetic,
+            prefer_public=prefer_public,
+            one_row=True,
+        )
 
+    def add_many(
+        predicate: Any,
+        *,
+        prefer_synthetic: bool = False,
+        prefer_public: bool = False,
+    ) -> bool:
+        candidates = [row for row in ordered if can_take(row) and predicate(row)]
+        return add_from_groups(
+            candidates,
+            target=None,
+            metric=None,
+            prefer_existing_parent=True,
+            prefer_synthetic=prefer_synthetic,
+            prefer_public=prefer_public,
+        )
+
+    fill_until(
+        lambda row: row_is_public(row) and row_is_official_scenario(row),
+        target=official_target,
+        metric=selected_official_count,
+        prefer_public=True,
+    )
+    fill_until(
+        row_is_public,
+        target=public_target,
+        metric=lambda: selected_source_count(True),
+        prefer_public=True,
+    )
     for tier in required_tiers:
-        if len(selected) >= count:
-            break
-        tier_rows = [row for row in ordered if int(g567.number(row.get("agent_count"), 0)) == tier]
-        preferred_public = selected_source_count(True) < public_target
-        preferred = [row for row in tier_rows if row_is_public(row) is preferred_public]
-        fallback = [row for row in tier_rows if row_is_public(row) is not preferred_public]
-        for row in diversity_order(preferred + fallback):
-            if add(row):
-                break
-    fill_official(official_target)
-    fill_source(True, public_target)
-    fill_source(False, synthetic_target)
-    while len(selected) < count:
+        if tier in selected_tiers():
+            continue
+        prefer_synthetic = selected_source_count(True) >= public_target
+        if add_one(lambda row, tier=tier: row_tier(row) == tier, prefer_synthetic=prefer_synthetic):
+            continue
+
+    while len(selected) < count and (parent_map_count(selected) < int(min_parent_maps) or map_family_count(selected) < int(min_map_families)):
+        need_parent = parent_map_count(selected) < int(min_parent_maps)
+        need_family = map_family_count(selected) < int(min_map_families)
+        prefer_synthetic = selected_source_count(True) >= public_target
         added = False
-        candidates = [row for row in ordered if can_take(row)]
-        for row in diversity_order(candidates):
-            if add(row):
+        diversity_attempts = [
+            (need_parent, need_family),
+            (need_parent, False),
+            (False, need_family),
+            (False, False),
+        ]
+        for want_parent, want_family in diversity_attempts:
+            hashes = selected_parent_hashes()
+            families = selected_families()
+            if add_one(
+                lambda row, want_parent=want_parent, want_family=want_family, hashes=hashes, families=families: (
+                    (not want_parent or parent_hash(row) not in hashes)
+                    and (not want_family or str(row.get("map_family", "")) not in families)
+                ),
+                prefer_new_parent=want_parent,
+                prefer_new_family=want_family,
+                prefer_synthetic=prefer_synthetic,
+            ):
                 added = True
                 break
         if not added:
+            break
+
+    while len(selected) < count:
+        prefer_synthetic = selected_source_count(True) >= public_target
+        preferred_predicate = (lambda row: not row_is_public(row)) if prefer_synthetic else row_is_public
+        if add_many(preferred_predicate, prefer_synthetic=prefer_synthetic, prefer_public=not prefer_synthetic):
+            continue
+        if not add_many(lambda row: True, prefer_synthetic=prefer_synthetic, prefer_public=not prefer_synthetic):
             break
     if len(selected) < count:
         raise RuntimeError(f"not enough Gate-3B rows for {split}: {len(selected)} < {count}")
@@ -349,46 +1014,45 @@ def select_gate3b_rows(
     development_min_map_families: int,
     max_train_free_cells: int,
     max_train_area: int,
+    parent_concentration_cap_fraction: float = 0.0,
+    family_concentration_cap_fraction: float = 0.0,
+    milp_time_limit_sec: float = 120.0,
 ) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[dict[str, Any]], dict[str, Any]]:
     filtered = filter_candidate_rows(rows, max_free_cells=max_train_free_cells, max_area=max_train_area)
-    hash_owner: dict[str, str] = {}
-    used_uids: set[str] = set()
-    development_rows = take_split_rows(
+    requirements = {
+        "LABEL_TRAIN": {
+            "count": int(label_contexts),
+            "public_target": int(math.ceil(label_contexts * label_public_fraction_min)),
+            "official_target": int(math.ceil(label_contexts * label_official_scenario_fraction_min)),
+            "min_parent_maps": int(label_min_parent_maps),
+            "min_map_families": int(label_min_map_families),
+        },
+        "CALIBRATION": {
+            "count": int(calibration_contexts),
+            "public_target": int(math.ceil(calibration_contexts * calibration_public_fraction_min)),
+            "official_target": int(math.ceil(calibration_contexts * calibration_official_scenario_fraction_min)),
+            "min_parent_maps": int(calibration_min_parent_maps),
+            "min_map_families": int(calibration_min_map_families),
+        },
+        "DEVELOPMENT": {
+            "count": int(development_contexts),
+            "public_target": int(math.ceil(development_contexts * development_public_fraction_min)),
+            "official_target": int(math.ceil(development_contexts * development_official_scenario_fraction_min)),
+            "min_parent_maps": int(development_min_parent_maps),
+            "min_map_families": int(development_min_map_families),
+        },
+    }
+    selected_by_split, allocation_meta = solve_gate3b_joint_split_allocation(
         filtered,
-        split="DEVELOPMENT",
-        count=development_contexts,
-        min_public_fraction=development_public_fraction_min,
-        min_official_fraction=development_official_scenario_fraction_min,
-        min_parent_maps=development_min_parent_maps,
-        min_map_families=development_min_map_families,
+        requirements=requirements,
         required_tiers=REQUIRED_AGENT_TIERS,
-        hash_owner=hash_owner,
-        used_uids=used_uids,
+        parent_concentration_cap_fraction=float(parent_concentration_cap_fraction),
+        family_concentration_cap_fraction=float(family_concentration_cap_fraction),
+        milp_time_limit_sec=float(milp_time_limit_sec),
     )
-    calibration_rows = take_split_rows(
-        filtered,
-        split="CALIBRATION",
-        count=calibration_contexts,
-        min_public_fraction=calibration_public_fraction_min,
-        min_official_fraction=calibration_official_scenario_fraction_min,
-        min_parent_maps=calibration_min_parent_maps,
-        min_map_families=calibration_min_map_families,
-        required_tiers=REQUIRED_AGENT_TIERS,
-        hash_owner=hash_owner,
-        used_uids=used_uids,
-    )
-    label_rows = take_split_rows(
-        filtered,
-        split="LABEL_TRAIN",
-        count=label_contexts,
-        min_public_fraction=label_public_fraction_min,
-        min_official_fraction=label_official_scenario_fraction_min,
-        min_parent_maps=label_min_parent_maps,
-        min_map_families=label_min_map_families,
-        required_tiers=REQUIRED_AGENT_TIERS,
-        hash_owner=hash_owner,
-        used_uids=used_uids,
-    )
+    label_rows = selected_by_split["LABEL_TRAIN"]
+    calibration_rows = selected_by_split["CALIBRATION"]
+    development_rows = selected_by_split["DEVELOPMENT"]
     split_by_hash: dict[str, set[str]] = {}
     for split, split_rows in [("LABEL_TRAIN", label_rows), ("CALIBRATION", calibration_rows), ("DEVELOPMENT", development_rows)]:
         for row in split_rows:
@@ -443,6 +1107,14 @@ def select_gate3b_rows(
         "selected_map_source_types": dict(Counter(str(row.get("map_source_type", "")) for row in label_rows + calibration_rows + development_rows)),
         "max_train_free_cells": max_train_free_cells,
         "max_train_area": max_train_area,
+        "joint_allocator": {
+            key: value
+            for key, value in allocation_meta.items()
+            if key not in {"parent_capacity_rows", "parent_assignment_rows", "row_allocation_rows"}
+        },
+        "parent_capacity_rows": allocation_meta["parent_capacity_rows"],
+        "parent_assignment_rows": allocation_meta["parent_assignment_rows"],
+        "row_allocation_rows": allocation_meta["row_allocation_rows"],
     }
     return label_rows, calibration_rows, development_rows, meta
 
@@ -470,6 +1142,200 @@ def prepare_rows(rows: list[dict[str, Any]], *, split: str, prefix: str) -> list
         row["blind_locked"] = False
         prepared.append(row)
     return prepared
+
+
+def verify_candidate_pool_contract(
+    rows: list[dict[str, Any]],
+    *,
+    candidate_pool_path: Path,
+    candidate_audit_path: Path,
+    seed: int,
+    context_pool: int,
+    candidate_pool_reused: bool,
+    candidate_pool_source_commit: str,
+    previous_source_state: dict[str, Any],
+    source_state: dict[str, Any],
+    verify_file_hashes: bool,
+) -> dict[str, Any]:
+    row_ids = [row_uid(row) for row in rows]
+    unique_row_ids = len(set(row_ids))
+    parent_hashes = [row_parent_hash(row) for row in rows]
+    missing_parent_hashes = sum(1 for value in parent_hashes if not value.strip())
+    source_commit = ""
+    if candidate_pool_reused:
+        source_commit = str(candidate_pool_source_commit).strip() or str(previous_source_state.get("head", "")) or "unknown_legacy_persisted_candidate_pool"
+    else:
+        source_commit = str(source_state.get("head", ""))
+    generator_contract_versions = Counter(str(row.get("scenario_bank_source", "")) for row in rows)
+    context_generation_stages = Counter(str(row.get("context_generation_stage", "")) for row in rows)
+    feature_materialization_stages = Counter(str(row.get("feature_materialization_stage", "")) for row in rows)
+    contract = {
+        "candidate_pool_reused": bool(candidate_pool_reused),
+        "candidate_pool_path": g567.rel(candidate_pool_path),
+        "candidate_pool_manifest_sha256": g567.sha256_file(candidate_pool_path),
+        "candidate_pool_validity_path": g567.rel(candidate_audit_path),
+        "candidate_pool_validity_sha256": g567.sha256_file(candidate_audit_path),
+        "candidate_pool_source_commit": source_commit,
+        "selection_allocator_commit": str(source_state.get("head", "")),
+        "generation_seed": int(seed),
+        "context_pool_target": int(context_pool),
+        "public_map_registry_sha256": g567.sha256_file(g567.PUBLIC_MAP_REGISTRY),
+        "public_scenario_registry_sha256": g567.sha256_file(g567.PUBLIC_SCENARIO_REGISTRY),
+        "row_count": len(rows),
+        "unique_row_uid_count": unique_row_ids,
+        "duplicate_row_uid_count": len(rows) - unique_row_ids,
+        "nonempty_parent_hash_count": len({value for value in parent_hashes if value.strip()}),
+        "missing_parent_hash_rows": missing_parent_hashes,
+        "generator_contract_versions": dict(generator_contract_versions),
+        "context_generation_stages": dict(context_generation_stages),
+        "feature_materialization_stages": dict(feature_materialization_stages),
+        "verify_file_hashes": bool(verify_file_hashes),
+    }
+    blockers = []
+    if len(rows) != int(context_pool):
+        blockers.append(f"context_pool_target_mismatch_rows_{len(rows)}_ne_{int(context_pool)}")
+    if unique_row_ids != len(rows):
+        blockers.append(f"duplicate_row_uid_count_{len(rows) - unique_row_ids}")
+    if missing_parent_hashes:
+        blockers.append(f"missing_parent_hash_rows_{missing_parent_hashes}")
+    if verify_file_hashes:
+        checked = 0
+        missing = []
+        mismatches = []
+        seen: set[tuple[str, str]] = set()
+        path_specs: list[tuple[str, str, str]] = []
+        for row in rows:
+            path_specs.extend(
+                [
+                    ("raw_map_path", str(row.get("raw_map_path", "")), row_parent_hash(row)),
+                    ("benchmark_source_path", str(row.get("benchmark_source_path", "")), str(row.get("benchmark_source_sha256", ""))),
+                    ("raw_scenario_path", str(row.get("raw_scenario_path", "")), str(row.get("scenario_sha256", ""))),
+                ]
+            )
+        for field, raw_path, expected_hash in path_specs:
+            if not raw_path or not expected_hash:
+                continue
+            key = (field, raw_path)
+            if key in seen:
+                continue
+            seen.add(key)
+            resolved = g567.resolve(raw_path)
+            if not resolved.exists():
+                missing.append({"field": field, "path": raw_path})
+                continue
+            digest = g567.sha256_file(resolved)
+            checked += 1
+            if digest != expected_hash:
+                mismatches.append({"field": field, "path": raw_path, "expected": expected_hash, "actual": digest})
+        contract.update(
+            {
+                "referenced_file_hashes_checked": checked,
+                "referenced_file_missing_count": len(missing),
+                "referenced_file_hash_mismatch_count": len(mismatches),
+                "referenced_file_missing_examples": missing[:10],
+                "referenced_file_hash_mismatch_examples": mismatches[:10],
+            }
+        )
+        if missing:
+            blockers.append(f"referenced_file_missing_count_{len(missing)}")
+        if mismatches:
+            blockers.append(f"referenced_file_hash_mismatch_count_{len(mismatches)}")
+    contract["contract_blockers"] = blockers
+    contract["contract_ready"] = not blockers
+    return contract
+
+
+def write_split_feasibility_outputs(
+    *,
+    all_rows: list[dict[str, Any]],
+    selection_meta: dict[str, Any],
+    candidate_pool_contract: dict[str, Any],
+    source_state: dict[str, Any],
+    generation_meta: dict[str, Any],
+) -> dict[str, Any]:
+    parent_capacity_path = g567.TABLES / f"{g567.ROUND}_gate3b_parent_capacity.csv"
+    parent_assignment_path = g567.TABLES / f"{g567.ROUND}_gate3b_parent_assignment.csv"
+    row_allocation_path = g567.TABLES / f"{g567.ROUND}_gate3b_row_allocation.csv"
+    summary_path = g567.REPORTS / f"{g567.ROUND}_gate3b_split_feasibility_summary.json"
+    md_path = g567.REPORTS / f"{g567.ROUND}_gate3b_split_feasibility.md"
+    g567.write_rows(parent_capacity_path, selection_meta.get("parent_capacity_rows", []))
+    g567.write_rows(parent_assignment_path, selection_meta.get("parent_assignment_rows", []))
+    g567.write_rows(row_allocation_path, selection_meta.get("row_allocation_rows", []))
+    split_rows = {
+        split: [row for row in all_rows if str(row.get("split", "")).upper() == split]
+        for split in ["LABEL_TRAIN", "CALIBRATION", "DEVELOPMENT"]
+    }
+    split_summary = {}
+    for split, rows in split_rows.items():
+        parent_counts = Counter(row_parent_hash(row) for row in rows)
+        family_counts = Counter(str(row.get("map_family", "")) for row in rows)
+        tier_counts = Counter(str(row_agent_tier(row)) for row in rows)
+        public_rows = sum(1 for row in rows if row_is_public(row))
+        official_rows = sum(1 for row in rows if row_is_official_scenario(row))
+        split_summary[split] = {
+            "rows": len(rows),
+            "public_rows": public_rows,
+            "official_rows": official_rows,
+            "public_fraction": public_rows / max(1, len(rows)),
+            "official_scenario_fraction": official_rows / max(1, len(rows)),
+            "public_parent_count": len({row_parent_hash(row) for row in rows if row_is_public(row)}),
+            "official_parent_count": len({row_parent_hash(row) for row in rows if row_is_official_scenario(row)}),
+            "parent_map_count": len(parent_counts),
+            "map_family_count": len(family_counts),
+            "agent_tier_counts": dict(sorted(tier_counts.items(), key=lambda item: int(item[0]))),
+            "max_parent_share": max(parent_counts.values(), default=0) / max(1, len(rows)),
+            "max_family_share": max(family_counts.values(), default=0) / max(1, len(rows)),
+        }
+    joint = dict(selection_meta.get("joint_allocator", {}))
+    summary = {
+        "schema_version": f"{g567.ROUND}_gate3b_split_feasibility_summary_v1",
+        "decision": "gate3b_joint_split_allocation_feasible",
+        "allocator_status": joint.get("allocator_status", "gate3b_joint_split_allocation_feasible"),
+        "candidate_pool_contract": candidate_pool_contract,
+        "generation_meta": generation_meta,
+        "source_state": source_state,
+        "split_summary": split_summary,
+        "parent_map_split_leakage_count": int(selection_meta.get("parent_map_split_leakage_count", 0)),
+        "parent_capacity_path": g567.rel(parent_capacity_path),
+        "parent_assignment_path": g567.rel(parent_assignment_path),
+        "row_allocation_path": g567.rel(row_allocation_path),
+        "context_manifest_path": g567.rel(g567.TABLES / CONTEXT_MANIFEST_NAME),
+        "milp_status": joint.get("milp_status"),
+        "milp_message": joint.get("milp_message"),
+        "milp_mip_gap": joint.get("milp_mip_gap"),
+        "milp_runtime_sec": joint.get("milp_runtime_sec"),
+        "milp_node_count": joint.get("milp_node_count"),
+        "full_campaign_launched": False,
+        "final_blind_accessed": False,
+    }
+    g567.write_json(summary_path, summary)
+    lines = [
+        "# G5.67 Gate-3B Split Feasibility\n",
+        f"- decision: `{summary['decision']}`",
+        f"- allocator: `{joint.get('allocator_strategy', '')}`",
+        f"- MILP status/message/gap/runtime: `{joint.get('milp_status')}` / `{joint.get('milp_message')}` / `{joint.get('milp_mip_gap')}` / `{joint.get('milp_runtime_sec')}`",
+        f"- candidate pool reused: `{candidate_pool_contract.get('candidate_pool_reused')}`",
+        f"- candidate pool source commit: `{candidate_pool_contract.get('candidate_pool_source_commit')}`",
+        f"- selection allocator commit: `{candidate_pool_contract.get('selection_allocator_commit')}`",
+        f"- candidate pool manifest SHA256: `{candidate_pool_contract.get('candidate_pool_manifest_sha256')}`",
+        f"- parent leakage: `{summary['parent_map_split_leakage_count']}`",
+        "",
+    ]
+    for split, row in split_summary.items():
+        lines.extend(
+            [
+                f"## {split}",
+                f"- rows/public/official: `{row['rows']}` / `{row['public_rows']}` / `{row['official_rows']}`",
+                f"- public fraction / official fraction: `{row['public_fraction']}` / `{row['official_scenario_fraction']}`",
+                f"- parents/families: `{row['parent_map_count']}` / `{row['map_family_count']}`",
+                f"- public parents / official parents: `{row['public_parent_count']}` / `{row['official_parent_count']}`",
+                f"- max parent share / max family share: `{row['max_parent_share']}` / `{row['max_family_share']}`",
+                f"- tier counts: `{json.dumps(row['agent_tier_counts'], sort_keys=True)}`",
+                "",
+            ]
+        )
+    g567.write_text(md_path, "\n".join(lines) + "\n")
+    return summary
 
 
 def emit_event(event: str, **fields: Any) -> None:
@@ -862,6 +1728,12 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--development-min-map-families", type=int, default=8)
     parser.add_argument("--max-train-free-cells", type=int, default=24000)
     parser.add_argument("--max-train-area", type=int, default=32000)
+    parser.add_argument("--parent-concentration-cap-fraction", type=float, default=0.15)
+    parser.add_argument("--family-concentration-cap-fraction", type=float, default=0.30)
+    parser.add_argument("--split-selection-milp-time-limit-sec", type=float, default=120.0)
+    parser.add_argument("--split-selection-only", action="store_true")
+    parser.add_argument("--skip-candidate-pool-file-hash-check", action="store_true")
+    parser.add_argument("--candidate-pool-source-commit", default="")
     parser.add_argument("--seed", type=int, default=4567)
     parser.add_argument("--seed-checkpoint-glob", nargs="*", default=["outputs/external/phase5p5_repair5g567_evidence_ea2cb71b/stage2a/models/gcst/*.pt"])
     parser.add_argument("--actor-seed", type=int, default=567)
@@ -894,6 +1766,7 @@ def main(argv: list[str] | None = None) -> int:
     configure_isolated_outputs(args.stage_root)
     ensure_output_dirs()
     public_state = preseed_public_benchmark_metadata()
+    previous_source_state = g567.read_json(g567.SOURCE_STATE)
     source_state = g567.write_source_state(args.expected_head)
     if source_state.get("decision") != "g567_source_state_clean":
         summary = {
@@ -906,7 +1779,7 @@ def main(argv: list[str] | None = None) -> int:
         print(json.dumps(summary, sort_keys=True))
         return 2
     device = "cuda" if args.device == "auto" and torch.cuda.is_available() else ("cpu" if args.device == "auto" else args.device)
-    if not str(device).startswith("cuda"):
+    if not str(device).startswith("cuda") and not bool(args.split_selection_only):
         summary = {
             "schema_version": f"{g567.ROUND}_{PHASE}_summary_v1",
             "decision": "gate3b_blocked_cuda_bf16_required",
@@ -929,6 +1802,7 @@ def main(argv: list[str] | None = None) -> int:
     context_manifest_path = g567.TABLES / CONTEXT_MANIFEST_NAME
     candidate_pool_path = g567.TABLES / f"{g567.ROUND}_{PHASE}_candidate_pool_manifest.csv"
     candidate_audit_path = g567.TABLES / f"{g567.ROUND}_{PHASE}_candidate_pool_validity.csv"
+    candidate_pool_contract: dict[str, Any] = {}
     if context_manifest_path.exists() and not bool(args.overwrite):
         all_rows = g567.read_rows(context_manifest_path)
         label_rows = [row for row in all_rows if str(row.get("split", "")).upper() == "LABEL_TRAIN"]
@@ -976,6 +1850,7 @@ def main(argv: list[str] | None = None) -> int:
                 "candidate_pool_path": g567.rel(candidate_pool_path),
                 "candidate_audit_path": g567.rel(candidate_audit_path),
             }
+            candidate_pool_reused = True
         else:
             audit_rows, manifest_rows, generation_meta = g567.make_generated_contexts(int(args.context_pool), int(args.seed), g567.resolve(g567.TMP_ROOT))
             generation_meta["resumed_candidate_pool"] = False
@@ -983,27 +1858,67 @@ def main(argv: list[str] | None = None) -> int:
             generation_meta["candidate_audit_path"] = g567.rel(candidate_audit_path)
             g567.write_rows(candidate_pool_path, manifest_rows)
             g567.write_rows(candidate_audit_path, audit_rows)
-        g567.update_remote_map_registries(g567.resolve(g567.TMP_ROOT) / "maps")
-        label_rows_raw, calibration_rows_raw, development_rows_raw, selection_meta = select_gate3b_rows(
+            candidate_pool_reused = False
+        candidate_pool_contract = verify_candidate_pool_contract(
             manifest_rows,
-            label_contexts=int(args.label_train_contexts),
-            calibration_contexts=int(args.calibration_contexts),
-            development_contexts=int(args.development_contexts),
-            label_public_fraction_min=float(args.label_public_fraction_min),
-            calibration_public_fraction_min=float(args.calibration_public_fraction_min),
-            development_public_fraction_min=float(args.development_public_fraction_min),
-            label_official_scenario_fraction_min=float(args.label_official_scenario_fraction_min),
-            calibration_official_scenario_fraction_min=float(args.calibration_official_scenario_fraction_min),
-            development_official_scenario_fraction_min=float(args.development_official_scenario_fraction_min),
-            label_min_parent_maps=int(args.label_min_parent_maps),
-            calibration_min_parent_maps=int(args.calibration_min_parent_maps),
-            development_min_parent_maps=int(args.development_min_parent_maps),
-            label_min_map_families=int(args.label_min_map_families),
-            calibration_min_map_families=int(args.calibration_min_map_families),
-            development_min_map_families=int(args.development_min_map_families),
-            max_train_free_cells=int(args.max_train_free_cells),
-            max_train_area=int(args.max_train_area),
+            candidate_pool_path=candidate_pool_path,
+            candidate_audit_path=candidate_audit_path,
+            seed=int(args.seed),
+            context_pool=int(args.context_pool),
+            candidate_pool_reused=candidate_pool_reused,
+            candidate_pool_source_commit=str(args.candidate_pool_source_commit),
+            previous_source_state=previous_source_state,
+            source_state=source_state,
+            verify_file_hashes=not bool(args.skip_candidate_pool_file_hash_check),
         )
+        if not candidate_pool_contract.get("contract_ready"):
+            summary = {
+                "schema_version": f"{g567.ROUND}_{PHASE}_summary_v1",
+                "decision": "gate3b_candidate_pool_contract_fail_closed",
+                "candidate_pool_contract": candidate_pool_contract,
+                "source_state": source_state,
+                **g567.claims(),
+            }
+            g567.write_json(g567.REPORTS / SUMMARY_NAME, summary)
+            print(json.dumps(summary, sort_keys=True))
+            return 2
+        g567.update_remote_map_registries(g567.resolve(g567.TMP_ROOT) / "maps")
+        try:
+            label_rows_raw, calibration_rows_raw, development_rows_raw, selection_meta = select_gate3b_rows(
+                manifest_rows,
+                label_contexts=int(args.label_train_contexts),
+                calibration_contexts=int(args.calibration_contexts),
+                development_contexts=int(args.development_contexts),
+                label_public_fraction_min=float(args.label_public_fraction_min),
+                calibration_public_fraction_min=float(args.calibration_public_fraction_min),
+                development_public_fraction_min=float(args.development_public_fraction_min),
+                label_official_scenario_fraction_min=float(args.label_official_scenario_fraction_min),
+                calibration_official_scenario_fraction_min=float(args.calibration_official_scenario_fraction_min),
+                development_official_scenario_fraction_min=float(args.development_official_scenario_fraction_min),
+                label_min_parent_maps=int(args.label_min_parent_maps),
+                calibration_min_parent_maps=int(args.calibration_min_parent_maps),
+                development_min_parent_maps=int(args.development_min_parent_maps),
+                label_min_map_families=int(args.label_min_map_families),
+                calibration_min_map_families=int(args.calibration_min_map_families),
+                development_min_map_families=int(args.development_min_map_families),
+                max_train_free_cells=int(args.max_train_free_cells),
+                max_train_area=int(args.max_train_area),
+                parent_concentration_cap_fraction=float(args.parent_concentration_cap_fraction),
+                family_concentration_cap_fraction=float(args.family_concentration_cap_fraction),
+                milp_time_limit_sec=float(args.split_selection_milp_time_limit_sec),
+            )
+        except RuntimeError as exc:
+            summary = {
+                "schema_version": f"{g567.ROUND}_{PHASE}_summary_v1",
+                "decision": "gate3b_candidate_pool_joint_split_infeasible",
+                "error": str(exc),
+                "candidate_pool_contract": candidate_pool_contract,
+                "source_state": source_state,
+                **g567.claims(),
+            }
+            g567.write_json(g567.REPORTS / SUMMARY_NAME, summary)
+            print(json.dumps(summary, sort_keys=True))
+            return 2
         label_rows = prepare_rows(label_rows_raw, split="LABEL_TRAIN", prefix="g567_gate3b_label_train")
         calibration_rows = prepare_rows(calibration_rows_raw, split="CALIBRATION", prefix="g567_gate3b_calibration")
         development_rows = prepare_rows(development_rows_raw, split="DEVELOPMENT", prefix="g567_gate3b_development")
@@ -1011,6 +1926,33 @@ def main(argv: list[str] | None = None) -> int:
         g567.write_rows(g567.VALID_CONTEXT_MANIFEST, all_rows)
         g567.write_rows(g567.SCENARIO_VALIDITY, audit_rows)
         g567.write_rows(context_manifest_path, all_rows)
+        split_feasibility = write_split_feasibility_outputs(
+            all_rows=all_rows,
+            selection_meta=selection_meta,
+            candidate_pool_contract=candidate_pool_contract,
+            source_state=source_state,
+            generation_meta=generation_meta,
+        )
+        if bool(args.split_selection_only):
+            summary = {
+                "schema_version": f"{g567.ROUND}_{PHASE}_summary_v1",
+                "decision": "gate3b_joint_split_allocation_feasible",
+                "split_feasibility": split_feasibility,
+                "candidate_pool_contract": candidate_pool_contract,
+                "source_state": source_state,
+                "forbidden_actions": {
+                    "context_materialization_launched": False,
+                    "a5_inference_launched": False,
+                    "solver_replay_launched": False,
+                    "gpu_training_launched": False,
+                    "full_100k_generation_launched": False,
+                    "final_blind_panel_constructed_or_accessed": False,
+                },
+                **g567.claims(),
+            }
+            g567.write_json(g567.REPORTS / SUMMARY_NAME, summary)
+            print(json.dumps(summary, sort_keys=True))
+            return 0
     label_contexts, label_materialization = materialize_contexts(
         label_rows,
         phase="label_train",

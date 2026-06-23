@@ -1,10 +1,12 @@
 from __future__ import annotations
 
+import random
 import sys
 from pathlib import Path
 from types import SimpleNamespace
 
 import numpy as np
+import pytest
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -27,6 +29,28 @@ def _fake_row(tier: int, idx: int, source: str) -> dict[str, object]:
         "official_scenario": official,
         "physical_map_sha256": f"{source}-hash-{tier}-{idx}",
     }
+
+
+def _fake_parent_rows(parent: str, source: str, family: str, repeats: int) -> list[dict[str, object]]:
+    official = source == "canonical_public_benchmark_map"
+    rows = []
+    for tier in gate3b.REQUIRED_AGENT_TIERS:
+        for repeat in range(repeats):
+            rows.append(
+                {
+                    "g567_instance_uid": f"{parent}-{tier}-{repeat}",
+                    "agent_count": tier,
+                    "width": 128,
+                    "height": 128,
+                    "free_cells": max(4096, tier + 64),
+                    "map_family": family,
+                    "map_source_type": source,
+                    "scenario_source_type": "movingai_official_random" if official else "czr004_synthetic_derived_scenario",
+                    "official_scenario": official,
+                    "physical_map_sha256": parent,
+                }
+            )
+    return rows
 
 
 def test_gate3b_split_selection_preserves_parent_hash_and_public_mix() -> None:
@@ -64,6 +88,163 @@ def test_gate3b_split_selection_preserves_parent_hash_and_public_mix() -> None:
     assert meta["label_train_public_fraction"] >= 0.50
     assert meta["development_public_fraction"] >= 0.70
     assert set(gate3b.REQUIRED_AGENT_TIERS).issubset(set(meta["selected_agent_tiers"]))
+
+
+def test_gate3b_split_selection_does_not_starve_label_public_capacity(monkeypatch) -> None:
+    monkeypatch.setattr(gate3b, "REQUIRED_AGENT_TIERS", (8, 12, 16, 24))
+    rows = []
+    for parent_idx in range(14):
+        rows.extend(
+            _fake_parent_rows(
+                f"public-parent-{parent_idx}",
+                "canonical_public_benchmark_map",
+                f"public-family-{parent_idx % 5}",
+                repeats=8,
+            )
+        )
+    for parent_idx in range(36):
+        rows.extend(
+            _fake_parent_rows(
+                f"synthetic-parent-{parent_idx}",
+                "synthetic_stress_map",
+                f"synthetic-family-{parent_idx % 10}",
+                repeats=2,
+            )
+        )
+
+    label_rows, cal_rows, dev_rows, meta = gate3b.select_gate3b_rows(
+        rows,
+        label_contexts=160,
+        calibration_contexts=80,
+        development_contexts=80,
+        label_public_fraction_min=0.50,
+        calibration_public_fraction_min=0.70,
+        development_public_fraction_min=0.70,
+        label_official_scenario_fraction_min=0.20,
+        calibration_official_scenario_fraction_min=0.30,
+        development_official_scenario_fraction_min=0.30,
+        label_min_parent_maps=8,
+        calibration_min_parent_maps=4,
+        development_min_parent_maps=4,
+        label_min_map_families=5,
+        calibration_min_map_families=4,
+        development_min_map_families=4,
+        max_train_free_cells=24000,
+        max_train_area=32000,
+        parent_concentration_cap_fraction=0.15,
+        family_concentration_cap_fraction=0.40,
+        milp_time_limit_sec=30.0,
+    )
+
+    assert len(label_rows) == 160
+    assert len(cal_rows) == 80
+    assert len(dev_rows) == 80
+    assert meta["parent_map_split_leakage_count"] == 0
+    assert meta["label_train_public_fraction"] >= 0.50
+    assert meta["calibration_public_fraction"] >= 0.70
+    assert meta["development_public_fraction"] >= 0.70
+
+
+def test_gate3b_joint_allocator_is_deterministic_under_input_shuffle(monkeypatch) -> None:
+    monkeypatch.setattr(gate3b, "REQUIRED_AGENT_TIERS", (8, 12, 16, 24))
+    rows = []
+    for parent_idx in range(14):
+        rows.extend(
+            _fake_parent_rows(
+                f"public-parent-{parent_idx}",
+                "canonical_public_benchmark_map",
+                f"public-family-{parent_idx % 5}",
+                repeats=4,
+            )
+        )
+    for parent_idx in range(24):
+        rows.extend(
+            _fake_parent_rows(
+                f"synthetic-parent-{parent_idx}",
+                "synthetic_stress_map",
+                f"synthetic-family-{parent_idx % 8}",
+                repeats=2,
+            )
+        )
+
+    shuffled = list(rows)
+    random.Random(567).shuffle(shuffled)
+    kwargs = dict(
+        label_contexts=120,
+        calibration_contexts=60,
+        development_contexts=60,
+        label_public_fraction_min=0.50,
+        calibration_public_fraction_min=0.70,
+        development_public_fraction_min=0.70,
+        label_official_scenario_fraction_min=0.20,
+        calibration_official_scenario_fraction_min=0.30,
+        development_official_scenario_fraction_min=0.30,
+        label_min_parent_maps=8,
+        calibration_min_parent_maps=4,
+        development_min_parent_maps=4,
+        label_min_map_families=5,
+        calibration_min_map_families=4,
+        development_min_map_families=4,
+        max_train_free_cells=24000,
+        max_train_area=32000,
+        parent_concentration_cap_fraction=0.20,
+        family_concentration_cap_fraction=0.45,
+        milp_time_limit_sec=30.0,
+    )
+    selected_a = gate3b.select_gate3b_rows(rows, **kwargs)
+    selected_b = gate3b.select_gate3b_rows(shuffled, **kwargs)
+
+    assert [[gate3b.row_uid(row) for row in split] for split in selected_a[:3]] == [
+        [gate3b.row_uid(row) for row in split] for split in selected_b[:3]
+    ]
+
+
+def test_gate3b_joint_allocator_infeasible_pool_fails_closed(monkeypatch) -> None:
+    monkeypatch.setattr(gate3b, "REQUIRED_AGENT_TIERS", (8, 12, 16, 24))
+    rows = []
+    for parent_idx in range(2):
+        rows.extend(
+            _fake_parent_rows(
+                f"public-parent-{parent_idx}",
+                "canonical_public_benchmark_map",
+                f"public-family-{parent_idx}",
+                repeats=1,
+            )
+        )
+    for parent_idx in range(8):
+        rows.extend(
+            _fake_parent_rows(
+                f"synthetic-parent-{parent_idx}",
+                "synthetic_stress_map",
+                f"synthetic-family-{parent_idx}",
+                repeats=1,
+            )
+        )
+
+    with pytest.raises(RuntimeError, match="gate3b_candidate_pool_joint_split_infeasible"):
+        gate3b.select_gate3b_rows(
+            rows,
+            label_contexts=80,
+            calibration_contexts=40,
+            development_contexts=40,
+            label_public_fraction_min=0.50,
+            calibration_public_fraction_min=0.70,
+            development_public_fraction_min=0.70,
+            label_official_scenario_fraction_min=0.20,
+            calibration_official_scenario_fraction_min=0.30,
+            development_official_scenario_fraction_min=0.30,
+            label_min_parent_maps=8,
+            calibration_min_parent_maps=4,
+            development_min_parent_maps=4,
+            label_min_map_families=5,
+            calibration_min_map_families=4,
+            development_min_map_families=4,
+            max_train_free_cells=24000,
+            max_train_area=32000,
+            parent_concentration_cap_fraction=0.20,
+            family_concentration_cap_fraction=0.50,
+            milp_time_limit_sec=30.0,
+        )
 
 
 def test_gate3b_pass_conditions_require_bounded_rows_and_no_blind() -> None:

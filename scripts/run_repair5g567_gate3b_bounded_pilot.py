@@ -927,6 +927,8 @@ def main(argv: list[str] | None = None) -> int:
 
     start_size = directory_size_bytes(g567.resolve(args.stage_root))
     context_manifest_path = g567.TABLES / CONTEXT_MANIFEST_NAME
+    candidate_pool_path = g567.TABLES / f"{g567.ROUND}_{PHASE}_candidate_pool_manifest.csv"
+    candidate_audit_path = g567.TABLES / f"{g567.ROUND}_{PHASE}_candidate_pool_validity.csv"
     if context_manifest_path.exists() and not bool(args.overwrite):
         all_rows = g567.read_rows(context_manifest_path)
         label_rows = [row for row in all_rows if str(row.get("split", "")).upper() == "LABEL_TRAIN"]
@@ -965,7 +967,22 @@ def main(argv: list[str] | None = None) -> int:
             "max_train_area": int(args.max_train_area),
         }
     else:
-        audit_rows, manifest_rows, generation_meta = g567.make_generated_contexts(int(args.context_pool), int(args.seed), g567.resolve(g567.TMP_ROOT))
+        if candidate_pool_path.exists() and candidate_audit_path.exists() and not bool(args.overwrite):
+            manifest_rows = g567.read_rows(candidate_pool_path)
+            audit_rows = g567.read_rows(candidate_audit_path)
+            generation_meta = {
+                "resumed_candidate_pool": True,
+                "generated": len(manifest_rows),
+                "candidate_pool_path": g567.rel(candidate_pool_path),
+                "candidate_audit_path": g567.rel(candidate_audit_path),
+            }
+        else:
+            audit_rows, manifest_rows, generation_meta = g567.make_generated_contexts(int(args.context_pool), int(args.seed), g567.resolve(g567.TMP_ROOT))
+            generation_meta["resumed_candidate_pool"] = False
+            generation_meta["candidate_pool_path"] = g567.rel(candidate_pool_path)
+            generation_meta["candidate_audit_path"] = g567.rel(candidate_audit_path)
+            g567.write_rows(candidate_pool_path, manifest_rows)
+            g567.write_rows(candidate_audit_path, audit_rows)
         g567.update_remote_map_registries(g567.resolve(g567.TMP_ROOT) / "maps")
         label_rows_raw, calibration_rows_raw, development_rows_raw, selection_meta = select_gate3b_rows(
             manifest_rows,

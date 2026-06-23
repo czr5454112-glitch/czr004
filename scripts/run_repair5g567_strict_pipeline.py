@@ -2482,6 +2482,9 @@ DIRECT_COMMAND_FIELDS = [
     "cgroup_memory_peak_bytes_after",
     "cgroup_memory_max_bytes_after",
     "cgroup_memory_events_after",
+    "direct_exact_scheduler_weight",
+    "direct_exact_scheduler_weight_reason",
+    "direct_exact_worker_capacity",
 ]
 
 
@@ -2725,6 +2728,11 @@ def run_direct_exact_task(
             "candidate_count": 1,
             "solver_internal_time_limit_sec": internal_budget_sec,
             "process_hard_timeout_sec": process_hard_timeout_sec,
+            "direct_exact_scheduler_weight": direct_exact_row_weight(plan),
+            "direct_exact_scheduler_weight_reason": direct_exact_weight_reason(plan),
+            "direct_exact_worker_capacity": direct_exact_worker_capacity(
+                max(1, int(number(os.environ.get("G567_GATE3B_MAX_WORKERS", "8"), 8)))
+            ),
         }
     )
     task_run = log_dir / f"direct_exact_{stable_uid(plan.get('plan_row_id', ''), index)[:16]}.runs.jsonl"
@@ -2799,11 +2807,41 @@ def direct_exact_worker_capacity(workers: int) -> int:
     return max(1, int(number(os.environ.get("G567_DIRECT_EXACT_WORKER_CAPACITY", "8"), 8)))
 
 
-def direct_exact_row_weight(plan_row: dict[str, Any]) -> int:
+def direct_exact_extreme_tail_map(plan_row: dict[str, Any]) -> bool:
+    text = " ".join(
+        str(plan_row.get(field, "")).lower()
+        for field in ["map", "map_family", "panel", "route", "source_category"]
+    )
+    return any(token in text for token in ["tunnel", "connector", "cross"])
+
+
+def direct_exact_weight_reason(plan_row: dict[str, Any]) -> str:
     agents = int(number(plan_row.get("agents", plan_row.get("agent_count", 0)), 0))
+    extreme_tail = direct_exact_extreme_tail_map(plan_row)
     if agents >= 3000:
-        return 4
+        return "agent3000_serial_weight"
+    if extreme_tail and agents >= 256:
+        return "extreme_tail_256plus_serial_weight"
     if agents >= 1000:
+        return "large_agent_1000plus_dual_weight"
+    if extreme_tail and agents >= 128:
+        return "extreme_tail_128plus_dual_weight"
+    if agents >= 256:
+        return "medium_agent_256plus_weight"
+    return "small_agent_default_weight"
+
+
+def direct_exact_row_weight(plan_row: dict[str, Any]) -> int:
+    reason = direct_exact_weight_reason(plan_row)
+    if reason == "agent3000_serial_weight":
+        return 8
+    if reason == "extreme_tail_256plus_serial_weight":
+        return 8
+    if reason == "large_agent_1000plus_dual_weight":
+        return 4
+    if reason == "extreme_tail_128plus_dual_weight":
+        return 4
+    if reason == "medium_agent_256plus_weight":
         return 2
     return 1
 

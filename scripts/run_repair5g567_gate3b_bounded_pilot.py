@@ -632,7 +632,22 @@ def main(argv: list[str] | None = None) -> int:
     )
     label_baseline_rows = len(label_contexts) * 3
     response_target_rows = max(len(label_contexts), int(args.label_replay_solver_rows) - label_baseline_rows)
-    response_rows = g567.generate_response_thetas(label_contexts, seed_raw, phase=LABEL_PHASE, target_rows=response_target_rows)
+    response_rows = g567.generate_response_thetas(
+        label_contexts,
+        seed_raw,
+        phase=LABEL_PHASE,
+        target_rows=response_target_rows,
+        allow_selected_primary_30s_surface=True,
+    )
+    planned_label_solver_rows = label_baseline_rows + len(response_rows)
+    if planned_label_solver_rows != int(args.label_replay_solver_rows):
+        raise RuntimeError(
+            "Gate-3B label replay solver-row target not honored: "
+            f"planned={planned_label_solver_rows} requested={int(args.label_replay_solver_rows)} "
+            f"baseline_rows={label_baseline_rows} response_rows={len(response_rows)}"
+        )
+    if not (50000 <= planned_label_solver_rows <= 100000):
+        raise RuntimeError(f"Gate-3B planned label solver rows outside bounded range: {planned_label_solver_rows}")
     label_replay = g567.run_replay_phase(
         LABEL_PHASE,
         label_contexts,

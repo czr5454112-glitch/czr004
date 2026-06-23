@@ -160,6 +160,16 @@ Date: 2026-06-22 Asia/Shanghai
 
    Regression test: `tests/test_repair5g567_direct_exact.py::test_direct_exact_registers_generated_gate3b_map_paths`.
 
+22. Gate-3B did not enforce the requested bounded solver-row count before replay.
+
+   Symptom: Gate-3B r7 passed the r6 map-path failure point and started direct-exact label replay, but the direct-exact status showed `total_solver_rows=8000` even though the runner was launched with `--label-replay-solver-rows 60000`. I stopped r7 deliberately with runner `rc=143`; no full-campaign action was launched.
+
+   Root cause: Gate-3B computed a 54,000-row actor-response target, but `generate_response_thetas` skipped all non-coverage response-surface candidates whenever the context already used the primary 30s exact budget. With 2,000 contexts this produced only 2,000 actor rows plus 6,000 baseline rows.
+
+   Fix: Gate-3B now explicitly enables selected 30s exact acquisition for response-surface candidates and fail-closes before replay unless `baseline_rows + response_rows` exactly equals the requested bounded solver-row count and remains in the 50k-100k Gate-3B range. The default response generator still avoids expanding a full 30s lattice unless this selected-acquisition mode is explicitly requested.
+
+   Regression test: `tests/test_repair5g567_budget_contract.py::test_gate3b_selected_30s_acquisition_can_hit_response_row_target`.
+
 ## Existing Repairs Verified By Gates
 
 - A5 uses OD Perceiver instead of full OD self-attention for 3000 OD tokens.

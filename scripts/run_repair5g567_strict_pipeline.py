@@ -2794,7 +2794,14 @@ def checkpoint_paths(patterns: list[str]) -> list[Path]:
     return unique
 
 
-def generate_response_thetas(contexts: list[G567Context], raw_rows: list[dict[str, Any]], *, phase: str, target_rows: int) -> list[dict[str, Any]]:
+def generate_response_thetas(
+    contexts: list[G567Context],
+    raw_rows: list[dict[str, Any]],
+    *,
+    phase: str,
+    target_rows: int,
+    allow_selected_primary_30s_surface: bool = False,
+) -> list[dict[str, Any]]:
     raw_by_context = {str(row["context_id"]): row for row in raw_rows}
     alphas = [0.0, 0.25, 0.50, 0.75, 1.0, 1.25, 1.50]
     group_alphas = [0.0, 0.50, 1.0, 1.50]
@@ -2843,13 +2850,18 @@ def generate_response_thetas(contexts: list[G567Context], raw_rows: list[dict[st
                 "raw_actor_variant_id": raw.get("variant_id", ""),
                 "multi_fidelity_stage": (
                     "selected_30s_exact_candidate"
-                    if primary_30s_exact_context
-                    else ("coverage_first_exact_candidate" if coverage_first else f"exploratory_response_surface_pass_{pass_index:02d}")
+                    if primary_30s_exact_context and coverage_first
+                    else (
+                        f"selected_30s_exact_response_surface_pass_{pass_index:02d}"
+                        if primary_30s_exact_context
+                        else ("coverage_first_exact_candidate" if coverage_first else f"exploratory_response_surface_pass_{pass_index:02d}")
+                    )
                 ),
                 "coverage_first_candidate": coverage_first,
                 "response_candidate_pass": pass_index,
                 "primary_30s_exploratory_full_lattice_skipped": primary_30s_exact_context,
                 "large_agent_30s_exploratory_full_lattice_skipped": primary_30s_exact_context and ctx.agents in G567_LARGE_PRIMARY_AGENT_TIERS,
+                "selected_for_30s_exact_acquisition": primary_30s_exact_context,
                 **row,
             }
         )
@@ -2873,7 +2885,7 @@ def generate_response_thetas(contexts: list[G567Context], raw_rows: list[dict[st
             extra_specs.append(("leave", f"LEAVE_{group_name}_ALPHA_{str(alpha).replace('.', 'p')}", (cols, alpha)))
     for pass_index, (kind, label, spec) in enumerate(extra_specs, start=1):
         for ctx, raw, raw_vec, delta, primary_30s_exact_context in prepared:
-            if primary_30s_exact_context:
+            if primary_30s_exact_context and not allow_selected_primary_30s_surface:
                 continue
             if kind == "global":
                 vec = anchor + float(spec) * delta
@@ -2887,7 +2899,15 @@ def generate_response_thetas(contexts: list[G567Context], raw_rows: list[dict[st
                 mask = delta.copy()
                 mask[cols] *= float(alpha)
                 vec = anchor + mask
-            emit(ctx, raw, label, vec, primary_30s_exact_context=False, coverage_first=False, pass_index=pass_index)
+            emit(
+                ctx,
+                raw,
+                label,
+                vec,
+                primary_30s_exact_context=primary_30s_exact_context,
+                coverage_first=False,
+                pass_index=pass_index,
+            )
             if len(out) >= target_rows:
                 return out[:target_rows]
     return out[:target_rows]

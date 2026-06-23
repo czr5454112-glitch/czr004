@@ -146,6 +146,36 @@ def test_primary_30s_response_generation_uses_selected_candidate_not_full_lattic
     assert rows[0]["large_agent_30s_exploratory_full_lattice_skipped"] is True
 
 
+def test_gate3b_selected_30s_acquisition_can_hit_response_row_target() -> None:
+    contexts = [
+        _context(agents=32, base_sec=30.0),
+        _context(agents=64, base_sec=30.0),
+        _context(agents=3000, base_sec=30.0),
+    ]
+    raw_rows = [
+        {
+            "context_id": ctx.dataset_row_id,
+            "variant_id": "A5",
+            "model_path": "unit.pt",
+            **{col: float(g567.BASELINE_G556[idx]) for idx, col in enumerate(g567.THETA_NUMERIC_COLUMNS)},
+        }
+        for ctx in contexts
+    ]
+    rows = g567.generate_response_thetas(
+        contexts,
+        raw_rows,
+        phase="gate3b_label_train",
+        target_rows=12,
+        allow_selected_primary_30s_surface=True,
+    )
+
+    assert len(rows) == 12
+    assert {row["context_id"] for row in rows[:3]} == {ctx.dataset_row_id for ctx in contexts}
+    assert any(str(row["multi_fidelity_stage"]).startswith("selected_30s_exact_response_surface_pass_") for row in rows)
+    assert {row["primary_30s_exploratory_full_lattice_skipped"] for row in rows} == {True}
+    assert {row["selected_for_30s_exact_acquisition"] for row in rows} == {True}
+
+
 def test_response_generation_is_coverage_first_across_contexts() -> None:
     contexts = [
         _context(agents=32, base_sec=30.0, budget_ms=30000),

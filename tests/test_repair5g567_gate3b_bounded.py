@@ -324,6 +324,8 @@ def test_gate3b_pass_conditions_require_bounded_rows_and_no_blind() -> None:
         "boundary_repeat": {"decision": "gate3b_no_boundary_repeats_required"},
         "development_replay": {"decision": "g567_three_tier_replay_materialized", "planned_executed_exact": True},
         "process_hard_timeout_rows": 0,
+        "process_hard_timeout_rows_excluded_from_scientific_labels": 0,
+        "unexcluded_process_hard_timeout_rows": 0,
         "critic_calibration": {"decision": "g567_distributional_critic_calibrated", "calibration_blockers": []},
         "actor_training_rows": [{"cuda_bf16_training": True}, {"cuda_bf16_training": True}],
         "gpu_active_hours": 2.1,
@@ -339,6 +341,95 @@ def test_gate3b_pass_conditions_require_bounded_rows_and_no_blind() -> None:
     summary["total_solver_rows"] = 60000
     summary["final_blind_panel_constructed_or_accessed"] = True
     assert gate3b.gate3b_pass_conditions(summary)["no_final_blind_access"] is False
+
+
+def test_gate3b_pass_conditions_accept_excluded_infra_timeouts() -> None:
+    summary = {
+        "source_state": {"decision": "g567_source_state_clean"},
+        "public_benchmark_ingestion": {"ready": True},
+        "label_train_contexts": 2000,
+        "calibration_contexts": 500,
+        "development_contexts": 500,
+        "context_materialization": {
+            "label_train": {"traffic_prior_versions": {"traffic_prior_v1_bfs": 2000}},
+            "calibration": {"traffic_prior_versions": {"traffic_prior_v1_bfs": 500}},
+            "development": {"traffic_prior_versions": {"traffic_prior_v1_bfs": 500}},
+        },
+        "total_solver_rows": 60000,
+        "selected_agent_tiers": list(gate3b.REQUIRED_AGENT_TIERS),
+        "label_train_public_fraction": 0.50,
+        "calibration_public_fraction": 0.70,
+        "development_public_fraction": 0.70,
+        "label_train_official_scenario_fraction": 0.20,
+        "calibration_official_scenario_fraction": 0.30,
+        "development_official_scenario_fraction": 0.30,
+        "selected_map_source_types": {"canonical_public_benchmark_map": 1, "synthetic_stress_map": 1},
+        "parent_map_split_leakage_count": 0,
+        "split_diversity": {
+            "LABEL_TRAIN": {"parent_map_count": 32, "map_family_count": 10},
+            "CALIBRATION": {"parent_map_count": 12, "map_family_count": 8},
+            "DEVELOPMENT": {"parent_map_count": 16, "map_family_count": 8},
+        },
+        "label_replay": {
+            "decision": "g567_three_tier_replay_materialized_with_infra_timeout_exclusions",
+            "planned_executed_exact": True,
+            "expected_baseline_rows_exact": True,
+        },
+        "boundary_repeat": {"decision": "gate3b_no_boundary_repeats_required"},
+        "development_replay": {"decision": "g567_three_tier_replay_materialized", "planned_executed_exact": True},
+        "process_hard_timeout_rows": 24,
+        "process_hard_timeout_rows_excluded_from_scientific_labels": 24,
+        "unexcluded_process_hard_timeout_rows": 0,
+        "critic_calibration": {"decision": "g567_distributional_critic_calibrated", "calibration_blockers": []},
+        "actor_training_rows": [{"cuda_bf16_training": True}, {"cuda_bf16_training": True}],
+        "gpu_active_hours": 2.1,
+        "primary_actor_selection": {"decision": "g567_one_primary_actor_selected"},
+        "forbidden_actions": {"full_100k_generation_launched": False, "final_blind_panel_constructed_or_accessed": False},
+        "final_blind_panel_constructed_or_accessed": False,
+    }
+
+    assert gate3b.gate3b_pass_conditions(summary)["process_hard_timeouts_are_infra_excluded"] is True
+    assert all(gate3b.gate3b_pass_conditions(summary).values())
+
+
+def test_replay_summary_materializes_with_excluded_infra_timeout_rows() -> None:
+    plan_rows = [
+        {"candidate_id": gate3b.g567.ADDITIVE_SOLVER_ALIAS, "g567_dataset_row_id": "ctx-1"},
+        {"candidate_id": gate3b.g567.STATIC_FLOW_SOLVER_ALIAS, "g567_dataset_row_id": "ctx-1"},
+        {"candidate_id": gate3b.g567.G556_SOLVER_ALIAS, "g567_dataset_row_id": "ctx-1"},
+        {"candidate_id": "theta-valid", "g567_dataset_row_id": "ctx-1"},
+        {"candidate_id": "theta-timeout", "g567_dataset_row_id": "ctx-1"},
+    ]
+    rows = [
+        {"materialized_method": gate3b.g567.ADDITIVE_SOLVER_ALIAS, "process_hard_timeout_exceeded": False},
+        {"materialized_method": gate3b.g567.STATIC_FLOW_SOLVER_ALIAS, "process_hard_timeout_exceeded": False},
+        {"materialized_method": gate3b.g567.G556_SOLVER_ALIAS, "process_hard_timeout_exceeded": False},
+        {
+            "materialized_method": "theta-valid",
+            "is_actor_row": True,
+            "fulltheta_fingerprint_match_strict": True,
+            "candidate_recognized_bool": True,
+            "scenario_sha256_match": True,
+            "identity_retained": True,
+            "process_hard_timeout_exceeded": False,
+        },
+        {
+            "materialized_method": "theta-timeout",
+            "is_actor_row": True,
+            "process_hard_timeout_exceeded": True,
+            "infrastructure_timeout": True,
+            "excluded_from_scientific_labels": True,
+            "context_key": "ctx-1",
+        },
+    ]
+
+    summary = gate3b.g567.summarize_pairs([], rows, plan_rows, "unit_phase", margin=0.05)
+
+    assert summary["decision"] == "g567_three_tier_replay_materialized_with_infra_timeout_exclusions"
+    assert summary["process_hard_timeout_rows"] == 1
+    assert summary["process_hard_timeout_rows_excluded_from_scientific_labels"] == 1
+    assert summary["unexcluded_process_hard_timeout_rows"] == 0
+    assert summary["valid_actor_candidate_rows"] == 1
 
 
 def test_gate3b_materialization_reports_bfs_meta(monkeypatch) -> None:

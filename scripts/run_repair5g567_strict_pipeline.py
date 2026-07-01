@@ -2269,11 +2269,24 @@ def build_three_tier_pairs(rows: list[dict[str, Any]], phase: str) -> list[dict[
 
 def summarize_pairs(pairs: list[dict[str, Any]], rows: list[dict[str, Any]], plan_rows: list[dict[str, Any]], phase: str, margin: float) -> dict[str, Any]:
     actor_rows = [row for row in rows if boolish(row.get("is_actor_row"))]
-    exact = sum(boolish(row.get("fulltheta_fingerprint_match_strict")) for row in actor_rows)
-    recognized = sum(boolish(row.get("candidate_recognized_bool")) for row in actor_rows)
-    scenario = sum(boolish(row.get("scenario_sha256_match")) for row in actor_rows)
-    identity = sum(boolish(row.get("identity_retained")) for row in actor_rows)
+    valid_rows = [
+        row
+        for row in rows
+        if not boolish(row.get("infrastructure_timeout"))
+        and not boolish(row.get("excluded_from_scientific_labels"))
+    ]
+    valid_actor_rows = [row for row in valid_rows if boolish(row.get("is_actor_row"))]
+    exact = sum(boolish(row.get("fulltheta_fingerprint_match_strict")) for row in valid_actor_rows)
+    recognized = sum(boolish(row.get("candidate_recognized_bool")) for row in valid_actor_rows)
+    scenario = sum(boolish(row.get("scenario_sha256_match")) for row in valid_actor_rows)
+    identity = sum(boolish(row.get("identity_retained")) for row in valid_actor_rows)
     timeout_rows = sum(boolish(row.get("process_hard_timeout_exceeded")) for row in rows)
+    excluded_timeout_rows = sum(
+        boolish(row.get("process_hard_timeout_exceeded"))
+        and boolish(row.get("excluded_from_scientific_labels"))
+        for row in rows
+    )
+    unexcluded_timeout_rows = timeout_rows - excluded_timeout_rows
     expected_method_counts = Counter(str(row.get("candidate_id", "")) for row in plan_rows)
     executed_method_counts = Counter(str(row.get("materialized_method", "")) for row in rows)
     baseline_count_exact = all(
@@ -2282,12 +2295,12 @@ def summarize_pairs(pairs: list[dict[str, Any]], rows: list[dict[str, Any]], pla
     )
     planned_executed_exact = len(plan_rows) == len(rows)
     materialized = bool(
-        actor_rows
-        and exact == len(actor_rows)
-        and recognized == len(actor_rows)
-        and scenario == len(actor_rows)
-        and identity == len(actor_rows)
-        and timeout_rows == 0
+        valid_actor_rows
+        and exact == len(valid_actor_rows)
+        and recognized == len(valid_actor_rows)
+        and scenario == len(valid_actor_rows)
+        and identity == len(valid_actor_rows)
+        and unexcluded_timeout_rows == 0
         and planned_executed_exact
         and baseline_count_exact
     )
@@ -2367,26 +2380,45 @@ def summarize_pairs(pairs: list[dict[str, Any]], rows: list[dict[str, Any]], pla
             bucket[f"mean_delta_vs_{tier}"] = float(np.mean(values)) if values else None
             bucket[f"median_delta_vs_{tier}"] = float(np.median(values)) if values else None
             bucket[f"supported_worse_outside_margin_vs_{tier}"] = sum(value > margin for value in values)
+    if materialized:
+        decision = (
+            "g567_three_tier_replay_materialized_with_infra_timeout_exclusions"
+            if timeout_rows
+            else "g567_three_tier_replay_materialized"
+        )
+    elif timeout_rows:
+        decision = "g567_three_tier_materialization_blocked_process_hard_timeout"
+    else:
+        decision = "g567_three_tier_materialization_blocked"
 
     summary = {
         "schema_version": f"{ROUND}_{safe_token(phase)}_summary_v1",
-        "decision": (
-            "g567_three_tier_replay_materialized"
-            if materialized
-            else ("g567_three_tier_materialization_blocked_process_hard_timeout" if timeout_rows else "g567_three_tier_materialization_blocked")
-        ),
+        "decision": decision,
         "replay_phase": phase,
         "exact_execution_mode": DIRECT_EXACT_EXECUTION_MODE,
         "counterfactual_probe_rows_are_diagnostic_only": True,
         "counterfactual_probe_callback_enabled": False,
+        "infra_timeout_policy": "excluded_from_scientific_pairs_labels_and_training",
         "planned_rows": len(plan_rows),
         "executed_rows": len(rows),
+        "scientific_result_valid_rows": len(valid_rows),
+        "excluded_from_scientific_labels_rows": sum(boolish(row.get("excluded_from_scientific_labels")) for row in rows),
+        "infrastructure_timeout_rows": sum(boolish(row.get("infrastructure_timeout")) for row in rows),
         "planned_executed_exact": planned_executed_exact,
         "expected_additive_rows": expected_method_counts.get(ADDITIVE_SOLVER_ALIAS, 0),
         "expected_static_flow_rows": expected_method_counts.get(STATIC_FLOW_SOLVER_ALIAS, 0),
         "expected_g556_rows": expected_method_counts.get(G556_SOLVER_ALIAS, 0),
         "expected_baseline_rows_exact": baseline_count_exact,
         "process_hard_timeout_rows": timeout_rows,
+        "process_hard_timeout_rows_excluded_from_scientific_labels": excluded_timeout_rows,
+        "unexcluded_process_hard_timeout_rows": unexcluded_timeout_rows,
+        "process_hard_timeout_contexts": len(
+            {
+                str(row.get("context_key", ""))
+                for row in rows
+                if boolish(row.get("process_hard_timeout_exceeded"))
+            }
+        ),
         "process_group_timeout_provenance_rows": sum(
             str(row.get("process_timeout_provenance", "")).startswith("subprocess_popen_posix_start_new_session")
             for row in rows
@@ -2394,17 +2426,23 @@ def summarize_pairs(pairs: list[dict[str, Any]], rows: list[dict[str, Any]], pla
         ),
         "contexts": len({row.get("g567_dataset_row_id") for row in plan_rows}),
         "actor_candidate_rows": len(actor_rows),
+        "valid_actor_candidate_rows": len(valid_actor_rows),
+        "excluded_actor_candidate_rows": len(actor_rows) - len(valid_actor_rows),
         "new_exact_materialized_candidate_rows": sum(
             boolish(row.get("candidate_recognized_bool"))
             and boolish(row.get("fulltheta_fingerprint_match_strict"))
             and boolish(row.get("identity_retained"))
             and boolish(row.get("scenario_sha256_match"))
-            for row in actor_rows
+            for row in valid_actor_rows
         ),
         "exact_materialization_rate": (exact / max(1, len(actor_rows))),
+        "valid_actor_exact_materialization_rate": (exact / max(1, len(valid_actor_rows))),
         "candidate_recognized_rate": recognized / max(1, len(actor_rows)),
+        "valid_actor_candidate_recognized_rate": recognized / max(1, len(valid_actor_rows)),
         "identity_retention_rate": identity / max(1, len(actor_rows)),
+        "valid_actor_identity_retention_rate": identity / max(1, len(valid_actor_rows)),
         "scenario_hash_match_rate": scenario / max(1, len(actor_rows)),
+        "valid_actor_scenario_hash_match_rate": scenario / max(1, len(valid_actor_rows)),
         "additive_rows_present": sum(1 for row in rows if row.get("materialized_method") == ADDITIVE_SOLVER_ALIAS),
         "static_flow_rows_present": sum(1 for row in rows if row.get("materialized_method") == STATIC_FLOW_SOLVER_ALIAS),
         "g556_rows_present": sum(1 for row in rows if row.get("materialized_method") == G556_SOLVER_ALIAS),

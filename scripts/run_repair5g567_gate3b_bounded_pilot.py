@@ -35,6 +35,14 @@ SUMMARY_NAME = f"{g567.ROUND}_{PHASE}_summary.json"
 REPORT_NAME = f"{g567.ROUND}_{PHASE}.md"
 CONTEXT_MANIFEST_NAME = f"{g567.ROUND}_{PHASE}_contexts.csv"
 REQUIRED_AGENT_TIERS = tuple(g567.G567_AGENT_TIERS)
+REPLAY_MATERIALIZED_DECISIONS = {
+    "g567_three_tier_replay_materialized",
+    "g567_three_tier_replay_materialized_with_infra_timeout_exclusions",
+}
+
+
+def replay_materialized(summary: dict[str, Any]) -> bool:
+    return str(summary.get("decision", "")) in REPLAY_MATERIALIZED_DECISIONS
 
 
 def configure_isolated_outputs(stage_root: Path) -> None:
@@ -1805,13 +1813,18 @@ def gate3b_pass_conditions(summary: dict[str, Any]) -> dict[str, bool]:
             and int(g567.number(summary.get("split_diversity", {}).get("DEVELOPMENT", {}).get("map_family_count"), 0)) >= 8
         ),
         "traffic_prior_bfs_materialization": bool(materialization_versions) and all(versions == {"traffic_prior_v1_bfs"} for versions in materialization_versions),
-        "label_replay_materialized": summary.get("label_replay", {}).get("decision") == "g567_three_tier_replay_materialized",
+        "label_replay_materialized": replay_materialized(summary.get("label_replay", {})),
         "label_replay_planned_executed_exact": bool(summary.get("label_replay", {}).get("planned_executed_exact")),
         "label_replay_expected_baselines_exact": bool(summary.get("label_replay", {}).get("expected_baseline_rows_exact")),
-        "development_replay_materialized": summary.get("development_replay", {}).get("decision") == "g567_three_tier_replay_materialized",
+        "development_replay_materialized": replay_materialized(summary.get("development_replay", {})),
         "development_replay_planned_executed_exact": bool(summary.get("development_replay", {}).get("planned_executed_exact")),
-        "boundary_repeat_completed_or_none": summary.get("boundary_repeat", {}).get("decision") in {"g567_three_tier_replay_materialized", "gate3b_no_boundary_repeats_required"},
-        "zero_process_hard_timeouts": int(g567.number(summary.get("process_hard_timeout_rows"), 999)) == 0,
+        "boundary_repeat_completed_or_none": replay_materialized(summary.get("boundary_repeat", {}))
+        or summary.get("boundary_repeat", {}).get("decision") == "gate3b_no_boundary_repeats_required",
+        "process_hard_timeouts_are_infra_excluded": (
+            int(g567.number(summary.get("unexcluded_process_hard_timeout_rows"), 999)) == 0
+            and int(g567.number(summary.get("process_hard_timeout_rows"), 0))
+            == int(g567.number(summary.get("process_hard_timeout_rows_excluded_from_scientific_labels"), -1))
+        ),
         "critic_calibrated": summary.get("critic_calibration", {}).get("decision") == "g567_distributional_critic_calibrated" and not summary.get("critic_calibration", {}).get("calibration_blockers"),
         "actor_cuda_bf16_training": all(bool(row.get("cuda_bf16_training")) for row in summary.get("actor_training_rows", [])),
         "actor_seed_count_at_least_two": len(summary.get("actor_training_rows", [])) >= 2,
@@ -1832,7 +1845,10 @@ def write_gate3b_report(summary: dict[str, Any]) -> None:
         f"- calibration contexts: `{summary.get('calibration_contexts')}`\n"
         f"- development contexts: `{summary.get('development_contexts')}`\n"
         f"- total solver rows: `{summary.get('total_solver_rows')}`\n"
+        f"- scientific-valid solver rows: `{summary.get('scientific_result_valid_solver_rows')}`\n"
         f"- hard-timeout rate: `{summary.get('hard_timeout_rate')}`\n"
+        f"- hard-timeout rows excluded from scientific labels: `{summary.get('process_hard_timeout_rows_excluded_from_scientific_labels')}`\n"
+        f"- unexcluded hard-timeout rows: `{summary.get('unexcluded_process_hard_timeout_rows')}`\n"
         f"- crash rate: `{summary.get('crash_rate')}`\n"
         f"- label public fraction: `{summary.get('label_train_public_fraction')}`\n"
         f"- calibration public fraction: `{summary.get('calibration_public_fraction')}`\n"
@@ -2183,7 +2199,7 @@ def main(argv: list[str] | None = None) -> int:
         margin=float(args.margin),
         plan_only=False,
     )
-    if label_replay.get("decision") != "g567_three_tier_replay_materialized":
+    if not replay_materialized(label_replay):
         summary = {
             "schema_version": f"{g567.ROUND}_{PHASE}_summary_v1",
             "decision": "gate3b_blocked_label_replay_not_materialized",
@@ -2210,7 +2226,7 @@ def main(argv: list[str] | None = None) -> int:
             plan_only=False,
             repeat_count=5,
         )
-        if boundary_replay.get("decision") != "g567_three_tier_replay_materialized":
+        if not replay_materialized(boundary_replay):
             summary = {
                 "schema_version": f"{g567.ROUND}_{PHASE}_summary_v1",
                 "decision": "gate3b_blocked_boundary_repeat_not_materialized",
@@ -2233,7 +2249,10 @@ def main(argv: list[str] | None = None) -> int:
             "decision": "gate3b_no_boundary_repeats_required",
             "planned_rows": 0,
             "executed_rows": 0,
+            "scientific_result_valid_rows": 0,
             "process_hard_timeout_rows": 0,
+            "process_hard_timeout_rows_excluded_from_scientific_labels": 0,
+            "unexcluded_process_hard_timeout_rows": 0,
             **g567.claims(),
         }
         label_summary = prelim_label_summary
@@ -2362,6 +2381,21 @@ def main(argv: list[str] | None = None) -> int:
         + int(g567.number(boundary_replay.get("process_hard_timeout_rows"), 0))
         + int(g567.number(development_replay.get("process_hard_timeout_rows"), 0))
     )
+    excluded_timeout_rows = (
+        int(g567.number(label_replay.get("process_hard_timeout_rows_excluded_from_scientific_labels"), 0))
+        + int(g567.number(boundary_replay.get("process_hard_timeout_rows_excluded_from_scientific_labels"), 0))
+        + int(g567.number(development_replay.get("process_hard_timeout_rows_excluded_from_scientific_labels"), 0))
+    )
+    unexcluded_timeout_rows = (
+        int(g567.number(label_replay.get("unexcluded_process_hard_timeout_rows"), 0))
+        + int(g567.number(boundary_replay.get("unexcluded_process_hard_timeout_rows"), 0))
+        + int(g567.number(development_replay.get("unexcluded_process_hard_timeout_rows"), 0))
+    )
+    scientific_valid_solver_rows = (
+        int(g567.number(label_replay.get("scientific_result_valid_rows"), 0))
+        + int(g567.number(boundary_replay.get("scientific_result_valid_rows"), 0))
+        + int(g567.number(development_replay.get("scientific_result_valid_rows"), 0))
+    )
     crash_count = crash_rows(label_result_rows) + crash_rows(boundary_result_rows) + crash_rows(dev_result_rows)
     official_scenario_rows = sum(1 for row in all_rows if row_is_official_scenario(row))
     end_size = directory_size_bytes(g567.resolve(args.stage_root))
@@ -2421,8 +2455,12 @@ def main(argv: list[str] | None = None) -> int:
         "primary_actor_selection": primary,
         "research_signal": research_signal,
         "total_solver_rows": total_solver_rows,
+        "scientific_result_valid_solver_rows": scientific_valid_solver_rows,
         "process_hard_timeout_rows": timeout_rows,
+        "process_hard_timeout_rows_excluded_from_scientific_labels": excluded_timeout_rows,
+        "unexcluded_process_hard_timeout_rows": unexcluded_timeout_rows,
         "hard_timeout_rate": timeout_rows / max(1, total_solver_rows),
+        "unexcluded_hard_timeout_rate": unexcluded_timeout_rows / max(1, total_solver_rows),
         "crash_rows": crash_count,
         "crash_rate": crash_count / max(1, total_solver_rows),
         "disk_growth_bytes": end_size - start_size,

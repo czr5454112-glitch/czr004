@@ -704,6 +704,7 @@ def write_protocol_documents() -> None:
         "## Confirmed P0 Bugs Added By Uniform-Budget Review\n\n"
         "- `nonuniform_small_tier_timeout_contract`: small and medium diagnostic tiers could still use legacy short internal budgets while large tiers used a different primary budget, making cross-tier evidence non-comparable. G5.67 staged execution now assigns an explicit agent-tier-conditioned primary budget to every planned row and fails budget audit on any mismatch.\n\n"
         "- `context_batched_candidate_hard_timeout_scope`: G5.67 planned one solver row per candidate, but the probe runner grouped additive/static/g556/actor candidates into one C++ process while applying a single 60s hard timeout. Slow contexts could therefore be falsely killed as infrastructure timeouts even when no individual row had exhausted its own 60s process allowance. G5.67 replay now enables row-process isolation so every planned solver row gets its own process hard timeout.\n\n"
+        "- `gate3b_direct_exact_parallel_session_loss`: Gate-3B development replay reproduced a silent runner/session loss when 8 small direct-exact solver rows were launched concurrently, while isolated 1/2/3/4-row probes completed. G5.67 now defaults the bounded Gate-3B launcher and direct-exact weighted capacity to 4 unless an operator explicitly overrides the environment.\n\n"
         "## Confirmed P0 Bugs Added By Stage-2A/Gate-3A Review\n\n"
         "- `response_theta_front_loaded_context_coverage`: response-surface acquisition emitted up to 49 candidates for each early context before later LABEL_TRAIN contexts received any exact actor candidate. G5.67 now emits one coverage-first candidate for every context before exploratory alpha/group candidates.\n"
         "- `a5_attention_heads_checkpoint_load_mismatch`: A5 training saved `attention_heads=8`, but checkpoint loading only read `heads` and could reconstruct a 4-head model. G5.67 now saves both fields and loads either alias.\n"
@@ -2860,7 +2861,14 @@ def direct_exact_shard_size() -> int:
 
 
 def direct_exact_worker_capacity(workers: int) -> int:
-    return max(1, int(number(os.environ.get("G567_DIRECT_EXACT_WORKER_CAPACITY", "8"), 8)))
+    default_capacity = max(
+        1,
+        min(
+            int(max(1, workers)),
+            int(number(os.environ.get("G567_DIRECT_EXACT_DEFAULT_WORKER_CAPACITY", "4"), 4)),
+        ),
+    )
+    return max(1, int(number(os.environ.get("G567_DIRECT_EXACT_WORKER_CAPACITY", str(default_capacity)), default_capacity)))
 
 
 def direct_exact_extreme_tail_map(plan_row: dict[str, Any]) -> bool:

@@ -352,6 +352,7 @@ trap on_term TERM INT HUP
 export G567_STAGE_ROOT="${STAGE_ROOT}"
 export G567_RUNNER_STDOUT_LOG="${STDOUT_LOG}"
 export G567_RUNNER_STDERR_LOG="${STDERR_LOG}"
+export G567_DIRECT_EXACT_DEFAULT_WORKER_CAPACITY="${G567_DIRECT_EXACT_DEFAULT_WORKER_CAPACITY:-4}"
 
 if [[ -z "${G567_EXPECTED_HEAD:-}" ]]; then
   finalize 2 "missing_G567_EXPECTED_HEAD_fail_closed"
@@ -403,7 +404,7 @@ python scripts/run_repair5g567_gate3b_bounded_pilot.py \
   --family-concentration-cap-fraction "${G567_GATE3B_FAMILY_CONCENTRATION_CAP_FRACTION:-0.30}" \
   --split-selection-milp-time-limit-sec "${G567_GATE3B_SPLIT_SELECTION_MILP_TIME_LIMIT_SEC:-120}" \
   --candidate-pool-source-commit "${G567_GATE3B_CANDIDATE_POOL_SOURCE_COMMIT:-}" \
-  --max-workers "${G567_GATE3B_MAX_WORKERS:-8}" \
+  --max-workers "${G567_GATE3B_MAX_WORKERS:-4}" \
   --materialize-workers "${G567_GATE3B_MATERIALIZE_WORKERS:-8}" \
   --materialize-progress-interval-sec "${G567_GATE3B_MATERIALIZE_PROGRESS_INTERVAL_SEC:-30}" \
   --batch-size "${G567_GATE3B_BATCH_SIZE:-4}" \

@@ -197,6 +197,16 @@ def test_direct_exact_row_weights_match_large_agent_tiers() -> None:
     assert g567.direct_exact_weight_reason({"agents": 3000, "map": "g567-large-room-128x128-a-v0"}) == "agent3000_non_tail_dual_weight"
 
 
+def test_direct_exact_worker_capacity_defaults_to_gate3b_safe_parallelism(monkeypatch) -> None:
+    monkeypatch.delenv("G567_DIRECT_EXACT_DEFAULT_WORKER_CAPACITY", raising=False)
+    monkeypatch.delenv("G567_DIRECT_EXACT_WORKER_CAPACITY", raising=False)
+    assert g567.direct_exact_worker_capacity(1) == 1
+    assert g567.direct_exact_worker_capacity(4) == 4
+    assert g567.direct_exact_worker_capacity(8) == 4
+    monkeypatch.setenv("G567_DIRECT_EXACT_WORKER_CAPACITY", "3")
+    assert g567.direct_exact_worker_capacity(8) == 3
+
+
 def test_direct_exact_shards_recover_without_rerunning_completed_rows(tmp_path, monkeypatch) -> None:
     scenario_dir = tmp_path / "replay_scenarios"
     result_csv = tmp_path / "results.csv"

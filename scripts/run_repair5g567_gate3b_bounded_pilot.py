@@ -48,6 +48,65 @@ def replay_materialized(summary: dict[str, Any]) -> bool:
     return str(summary.get("decision", "")) in REPLAY_MATERIALIZED_DECISIONS
 
 
+def load_completed_actor_training_summary(
+    actor_seed_values: list[int],
+    *,
+    per_seed_min_gpu_hours: float,
+    per_seed_max_gpu_hours: float,
+    overwrite: bool,
+) -> tuple[list[dict[str, Any]], list[dict[str, Any]], dict[str, Any]] | None:
+    if overwrite or not g567.ACTOR_TRAINING_SUMMARY.exists():
+        return None
+    try:
+        summary = json.loads(g567.ACTOR_TRAINING_SUMMARY.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return None
+    if summary.get("decision") != "gate3b_a5_actor_training_completed":
+        return None
+    rows = list(summary.get("rows") or [])
+    if len(rows) < 2:
+        return None
+    by_seed: dict[int, dict[str, Any]] = {}
+    for row in rows:
+        try:
+            seed = int(row.get("seed"))
+        except (TypeError, ValueError):
+            continue
+        by_seed[seed] = row
+    expected_seeds = actor_seed_values[: max(2, min(len(actor_seed_values), 4))]
+    if any(seed not in by_seed for seed in expected_seeds):
+        return None
+    selected_rows = [by_seed[seed] for seed in expected_seeds]
+    for row in selected_rows:
+        model_path = row.get("model_path", "")
+        if not model_path or not g567.resolve(model_path).exists():
+            return None
+        if not bool(row.get("cuda_bf16_training")):
+            return None
+        if not bool(row.get("token_budget_batching")):
+            return None
+        if not bool(row.get("gpu_active_hour_target_met")):
+            return None
+        if not bool(row.get("gpu_active_hour_cap_respected")):
+            return None
+        gpu_hours = float(g567.number(row.get("gpu_active_hours"), 0.0))
+        if gpu_hours + 1.0e-6 < float(per_seed_min_gpu_hours):
+            return None
+        if per_seed_max_gpu_hours > 0.0 and gpu_hours > float(per_seed_max_gpu_hours) * 1.10:
+            return None
+    total_gpu_hours = sum(float(g567.number(row.get("gpu_active_hours"), 0.0)) for row in selected_rows)
+    if total_gpu_hours <= 0.0:
+        return None
+    resumed_summary = dict(summary)
+    resumed_summary["rows"] = selected_rows
+    resumed_summary["actor_seed_count"] = len(selected_rows)
+    resumed_summary["gpu_active_hours"] = total_gpu_hours
+    resumed_summary["resumed_from_completed_actor_training_summary"] = True
+    resumed_summary["resume_source_summary_path"] = str(g567.ACTOR_TRAINING_SUMMARY)
+    gradient_rows = list(summary.get("gradient_rows") or [])
+    return selected_rows, gradient_rows, resumed_summary
+
+
 def configure_isolated_outputs(stage_root: Path) -> None:
     stage_root = Path(stage_root)
     g567.OUTPUT_ROOT = stage_root
@@ -2455,54 +2514,72 @@ def main(argv: list[str] | None = None) -> int:
         raise RuntimeError("Gate-3B requires at least two A5 actor seeds")
     per_seed_min_gpu_hours = float(args.min_gpu_active_hours) / len(actor_seed_values)
     per_seed_max_gpu_hours = float(args.max_gpu_active_hours) / len(actor_seed_values)
-    actor_rows: list[dict[str, Any]] = []
-    grad_rows: list[dict[str, Any]] = []
-    for actor_seed in actor_seed_values:
-        actor_row, grad_row = g567.train_one_g567_actor(
-            "A5",
-            int(actor_seed),
-            examples,
-            device=device,
-            epochs=int(args.actor_epochs),
-            min_epochs=int(args.actor_min_epochs),
-            patience=int(args.actor_patience),
-            batch_size=max(1, int(args.batch_size)),
-            token_budget=max(1, int(args.train_token_budget)),
-            hidden_dim=int(args.actor_hidden_dim),
-            lr=float(args.actor_lr),
-            checkpoint_interval_sec=float(args.actor_checkpoint_interval_sec),
-            resume=True,
-            diagnostic_only=False,
-            no_performance_claim=True,
-            training_context_uids=[ctx.evaluation_uid for ctx in exact_label_contexts],
-            training_dataset_sha256=training_dataset_sha,
-            source_commit=source_state.get("head", ""),
-            min_gpu_active_hours=per_seed_min_gpu_hours,
-            max_gpu_active_hours=per_seed_max_gpu_hours,
-        )
-        actor_rows.append(actor_row)
-        grad_rows.append(grad_row)
-    g567.write_rows(g567.ACTOR_TRAINING_MATRIX, actor_rows)
-    g567.write_rows(g567.ACTOR_GRADIENT_AUDIT, grad_rows)
-    gpu_active_hours = sum(float(g567.number(row.get("gpu_active_hours"), 0.0)) for row in actor_rows)
-    actor_training_summary = {
-        "schema_version": f"{g567.ROUND}_{PHASE}_actor_training_summary_v1",
-        "decision": "gate3b_a5_actor_training_completed",
-        "selected_development_checkpoint_paths": [row.get("model_path", "") for row in actor_rows],
-        "rows": actor_rows,
-        "gradient_rows": grad_rows,
-        "critic_used_for_actor_training": critic_used_for_actor_training,
-        "critic_calibration_decision": critic.get("decision", ""),
-        "critic_calibration_blockers": critic.get("calibration_blockers", []),
-        "cuda_bf16_training": all(bool(row.get("cuda_bf16_training")) for row in actor_rows),
-        "token_budget_batching": all(bool(row.get("token_budget_batching")) for row in actor_rows),
-        "actor_seed_count": len(actor_rows),
-        "gpu_active_hours": gpu_active_hours,
-        "per_seed_min_gpu_active_hours": per_seed_min_gpu_hours,
-        "per_seed_max_gpu_active_hours": per_seed_max_gpu_hours,
-        **g567.claims(),
-    }
-    g567.write_json(g567.ACTOR_TRAINING_SUMMARY, actor_training_summary)
+    actor_resume = load_completed_actor_training_summary(
+        actor_seed_values,
+        per_seed_min_gpu_hours=per_seed_min_gpu_hours,
+        per_seed_max_gpu_hours=per_seed_max_gpu_hours,
+        overwrite=bool(args.overwrite),
+    )
+    if actor_resume is not None:
+        actor_rows, grad_rows, actor_training_summary = actor_resume
+        critic_used_for_actor_training = bool(actor_training_summary.get("critic_used_for_actor_training"))
+        gpu_active_hours = sum(float(g567.number(row.get("gpu_active_hours"), 0.0)) for row in actor_rows)
+        g567.write_rows(g567.ACTOR_TRAINING_MATRIX, actor_rows)
+        if grad_rows:
+            g567.write_rows(g567.ACTOR_GRADIENT_AUDIT, grad_rows)
+        actor_training_summary["critic_calibration_decision"] = critic.get("decision", "")
+        actor_training_summary["critic_calibration_blockers"] = critic.get("calibration_blockers", [])
+        actor_training_summary["gpu_active_hours"] = gpu_active_hours
+        g567.write_json(g567.ACTOR_TRAINING_SUMMARY, actor_training_summary)
+    else:
+        actor_rows = []
+        grad_rows = []
+        for actor_seed in actor_seed_values:
+            actor_row, grad_row = g567.train_one_g567_actor(
+                "A5",
+                int(actor_seed),
+                examples,
+                device=device,
+                epochs=int(args.actor_epochs),
+                min_epochs=int(args.actor_min_epochs),
+                patience=int(args.actor_patience),
+                batch_size=max(1, int(args.batch_size)),
+                token_budget=max(1, int(args.train_token_budget)),
+                hidden_dim=int(args.actor_hidden_dim),
+                lr=float(args.actor_lr),
+                checkpoint_interval_sec=float(args.actor_checkpoint_interval_sec),
+                resume=True,
+                diagnostic_only=False,
+                no_performance_claim=True,
+                training_context_uids=[ctx.evaluation_uid for ctx in exact_label_contexts],
+                training_dataset_sha256=training_dataset_sha,
+                source_commit=source_state.get("head", ""),
+                min_gpu_active_hours=per_seed_min_gpu_hours,
+                max_gpu_active_hours=per_seed_max_gpu_hours,
+            )
+            actor_rows.append(actor_row)
+            grad_rows.append(grad_row)
+        g567.write_rows(g567.ACTOR_TRAINING_MATRIX, actor_rows)
+        g567.write_rows(g567.ACTOR_GRADIENT_AUDIT, grad_rows)
+        gpu_active_hours = sum(float(g567.number(row.get("gpu_active_hours"), 0.0)) for row in actor_rows)
+        actor_training_summary = {
+            "schema_version": f"{g567.ROUND}_{PHASE}_actor_training_summary_v1",
+            "decision": "gate3b_a5_actor_training_completed",
+            "selected_development_checkpoint_paths": [row.get("model_path", "") for row in actor_rows],
+            "rows": actor_rows,
+            "gradient_rows": grad_rows,
+            "critic_used_for_actor_training": critic_used_for_actor_training,
+            "critic_calibration_decision": critic.get("decision", ""),
+            "critic_calibration_blockers": critic.get("calibration_blockers", []),
+            "cuda_bf16_training": all(bool(row.get("cuda_bf16_training")) for row in actor_rows),
+            "token_budget_batching": all(bool(row.get("token_budget_batching")) for row in actor_rows),
+            "actor_seed_count": len(actor_rows),
+            "gpu_active_hours": gpu_active_hours,
+            "per_seed_min_gpu_active_hours": per_seed_min_gpu_hours,
+            "per_seed_max_gpu_active_hours": per_seed_max_gpu_hours,
+            **g567.claims(),
+        }
+        g567.write_json(g567.ACTOR_TRAINING_SUMMARY, actor_training_summary)
     actor_ckpts = [g567.resolve(row["model_path"]) for row in actor_rows]
     dev_raw = g567.infer_checkpoint_thetas(
         development_contexts,

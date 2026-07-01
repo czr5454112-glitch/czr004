@@ -593,6 +593,67 @@ def test_actor_split_uses_calibration_without_parent_hash_leakage() -> None:
     assert audit["actor_train_validation_physical_map_overlap"] == 0
 
 
+def test_completed_actor_training_summary_resumes_without_retraining(tmp_path: Path) -> None:
+    gate3b.configure_isolated_outputs(tmp_path)
+    gate3b.ensure_output_dirs()
+    ckpt_567 = gate3b.g567.MODEL_DIR / "actor_seed567.pt"
+    ckpt_568 = gate3b.g567.MODEL_DIR / "actor_seed568.pt"
+    ckpt_567.write_bytes(b"seed567")
+    ckpt_568.write_bytes(b"seed568")
+    rows = [
+        {
+            "seed": 567,
+            "model_path": str(ckpt_567),
+            "cuda_bf16_training": True,
+            "token_budget_batching": True,
+            "gpu_active_hour_target_met": True,
+            "gpu_active_hour_cap_respected": True,
+            "gpu_active_hours": 2.0,
+        },
+        {
+            "seed": 568,
+            "model_path": str(ckpt_568),
+            "cuda_bf16_training": True,
+            "token_budget_batching": True,
+            "gpu_active_hour_target_met": True,
+            "gpu_active_hour_cap_respected": True,
+            "gpu_active_hours": 2.0,
+        },
+    ]
+    gate3b.g567.write_json(
+        gate3b.g567.ACTOR_TRAINING_SUMMARY,
+        {
+            "decision": "gate3b_a5_actor_training_completed",
+            "rows": rows,
+            "gradient_rows": [{"seed": 567}, {"seed": 568}],
+            "critic_used_for_actor_training": False,
+        },
+    )
+
+    loaded = gate3b.load_completed_actor_training_summary(
+        [567, 568],
+        per_seed_min_gpu_hours=1.0,
+        per_seed_max_gpu_hours=2.0,
+        overwrite=False,
+    )
+
+    assert loaded is not None
+    loaded_rows, gradient_rows, summary = loaded
+    assert [row["seed"] for row in loaded_rows] == [567, 568]
+    assert len(gradient_rows) == 2
+    assert summary["gpu_active_hours"] == 4.0
+    assert summary["resumed_from_completed_actor_training_summary"] is True
+    assert (
+        gate3b.load_completed_actor_training_summary(
+            [567, 568],
+            per_seed_min_gpu_hours=1.0,
+            per_seed_max_gpu_hours=2.0,
+            overwrite=True,
+        )
+        is None
+    )
+
+
 def test_gate3b_runner_finalizes_on_unexpected_shell_exit() -> None:
     script = (ROOT / "scripts/server_start_repair5g567_gate3b_bounded_pilot.sh").read_text(encoding="utf-8")
     assert "RUNNER_FINALIZED=0" in script

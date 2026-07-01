@@ -398,6 +398,7 @@ def test_replay_summary_materializes_with_excluded_infra_timeout_rows() -> None:
         {"candidate_id": gate3b.g567.STATIC_FLOW_SOLVER_ALIAS, "g567_dataset_row_id": "ctx-1"},
         {"candidate_id": gate3b.g567.G556_SOLVER_ALIAS, "g567_dataset_row_id": "ctx-1"},
         {"candidate_id": "theta-valid", "g567_dataset_row_id": "ctx-1"},
+        {"candidate_id": "theta-nosol", "g567_dataset_row_id": "ctx-1"},
         {"candidate_id": "theta-timeout", "g567_dataset_row_id": "ctx-1"},
     ]
     rows = [
@@ -412,6 +413,17 @@ def test_replay_summary_materializes_with_excluded_infra_timeout_rows() -> None:
             "scenario_sha256_match": True,
             "identity_retained": True,
             "process_hard_timeout_exceeded": False,
+        },
+        {
+            "materialized_method": "theta-nosol",
+            "is_actor_row": True,
+            "fulltheta_fingerprint_match_strict": True,
+            "candidate_recognized_bool": False,
+            "scenario_sha256_match": True,
+            "identity_retained": True,
+            "process_hard_timeout_exceeded": False,
+            "returncode_classification": "returncode2_no_solution_equivalent",
+            "direct_exact_success": False,
         },
         {
             "materialized_method": "theta-timeout",
@@ -429,7 +441,9 @@ def test_replay_summary_materializes_with_excluded_infra_timeout_rows() -> None:
     assert summary["process_hard_timeout_rows"] == 1
     assert summary["process_hard_timeout_rows_excluded_from_scientific_labels"] == 1
     assert summary["unexcluded_process_hard_timeout_rows"] == 0
-    assert summary["valid_actor_candidate_rows"] == 1
+    assert summary["valid_actor_candidate_rows"] == 2
+    assert summary["no_solution_fingerprint_backed_actor_rows"] == 1
+    assert summary["valid_actor_recognized_or_no_solution_rate"] == 1.0
 
 
 def test_gate3b_materialization_reports_bfs_meta(monkeypatch) -> None:

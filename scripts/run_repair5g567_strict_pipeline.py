@@ -2278,6 +2278,22 @@ def summarize_pairs(pairs: list[dict[str, Any]], rows: list[dict[str, Any]], pla
     valid_actor_rows = [row for row in valid_rows if boolish(row.get("is_actor_row"))]
     exact = sum(boolish(row.get("fulltheta_fingerprint_match_strict")) for row in valid_actor_rows)
     recognized = sum(boolish(row.get("candidate_recognized_bool")) for row in valid_actor_rows)
+    recognized_or_solver_no_solution = sum(
+        boolish(row.get("candidate_recognized_bool"))
+        or (
+            str(row.get("returncode_classification", "")) == "returncode2_no_solution_equivalent"
+            and not boolish(row.get("direct_exact_success"))
+            and boolish(row.get("fulltheta_fingerprint_match_strict"))
+        )
+        for row in valid_actor_rows
+    )
+    no_solution_fingerprint_backed_rows = sum(
+        str(row.get("returncode_classification", "")) == "returncode2_no_solution_equivalent"
+        and not boolish(row.get("direct_exact_success"))
+        and boolish(row.get("fulltheta_fingerprint_match_strict"))
+        and not boolish(row.get("candidate_recognized_bool"))
+        for row in valid_actor_rows
+    )
     scenario = sum(boolish(row.get("scenario_sha256_match")) for row in valid_actor_rows)
     identity = sum(boolish(row.get("identity_retained")) for row in valid_actor_rows)
     timeout_rows = sum(boolish(row.get("process_hard_timeout_exceeded")) for row in rows)
@@ -2297,7 +2313,7 @@ def summarize_pairs(pairs: list[dict[str, Any]], rows: list[dict[str, Any]], pla
     materialized = bool(
         valid_actor_rows
         and exact == len(valid_actor_rows)
-        and recognized == len(valid_actor_rows)
+        and recognized_or_solver_no_solution == len(valid_actor_rows)
         and scenario == len(valid_actor_rows)
         and identity == len(valid_actor_rows)
         and unexcluded_timeout_rows == 0
@@ -2439,6 +2455,8 @@ def summarize_pairs(pairs: list[dict[str, Any]], rows: list[dict[str, Any]], pla
         "valid_actor_exact_materialization_rate": (exact / max(1, len(valid_actor_rows))),
         "candidate_recognized_rate": recognized / max(1, len(actor_rows)),
         "valid_actor_candidate_recognized_rate": recognized / max(1, len(valid_actor_rows)),
+        "valid_actor_recognized_or_no_solution_rate": recognized_or_solver_no_solution / max(1, len(valid_actor_rows)),
+        "no_solution_fingerprint_backed_actor_rows": no_solution_fingerprint_backed_rows,
         "identity_retention_rate": identity / max(1, len(actor_rows)),
         "valid_actor_identity_retention_rate": identity / max(1, len(valid_actor_rows)),
         "scenario_hash_match_rate": scenario / max(1, len(actor_rows)),

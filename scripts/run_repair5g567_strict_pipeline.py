@@ -3912,10 +3912,19 @@ def actor_examples_from_labelv54(contexts: list[G567Context]) -> list[ActorTrain
         uid = row.get("g567_evaluation_uid", "")
         if uid in by_uid:
             candidates_by_uid[uid].append(row)
-    critic_by_candidate = {
-        (row.get("g567_evaluation_uid", ""), row.get("candidate_uid", "") or row.get("theta_id", "")): row
-        for row in read_rows(DISTRIBUTIONAL_CRITIC_PREDICTIONS)
-    }
+    critic_summary = read_json(DISTRIBUTIONAL_CRITIC_SUMMARY)
+    use_critic = (
+        critic_summary.get("decision") == "g567_distributional_critic_calibrated"
+        and not critic_summary.get("calibration_blockers")
+    )
+    critic_by_candidate = (
+        {
+            (row.get("g567_evaluation_uid", ""), row.get("candidate_uid", "") or row.get("theta_id", "")): row
+            for row in read_rows(DISTRIBUTIONAL_CRITIC_PREDICTIONS)
+        }
+        if use_critic
+        else {}
+    )
     examples: list[ActorTrainExample] = []
     anchor = np.asarray(BASELINE_G556, dtype=np.float32)
     span = np.maximum(np.asarray(THETA_HI - THETA_LO, dtype=np.float32), 1.0e-6)

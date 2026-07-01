@@ -327,6 +327,7 @@ def test_gate3b_pass_conditions_require_bounded_rows_and_no_blind() -> None:
         "process_hard_timeout_rows_excluded_from_scientific_labels": 0,
         "unexcluded_process_hard_timeout_rows": 0,
         "critic_calibration": {"decision": "g567_distributional_critic_calibrated", "calibration_blockers": []},
+        "critic_used_for_actor_training": True,
         "actor_training_rows": [{"cuda_bf16_training": True}, {"cuda_bf16_training": True}],
         "gpu_active_hours": 2.1,
         "primary_actor_selection": {"decision": "g567_one_primary_actor_selected"},
@@ -381,6 +382,7 @@ def test_gate3b_pass_conditions_accept_excluded_infra_timeouts() -> None:
         "process_hard_timeout_rows_excluded_from_scientific_labels": 24,
         "unexcluded_process_hard_timeout_rows": 0,
         "critic_calibration": {"decision": "g567_distributional_critic_calibrated", "calibration_blockers": []},
+        "critic_used_for_actor_training": True,
         "actor_training_rows": [{"cuda_bf16_training": True}, {"cuda_bf16_training": True}],
         "gpu_active_hours": 2.1,
         "primary_actor_selection": {"decision": "g567_one_primary_actor_selected"},
@@ -390,6 +392,16 @@ def test_gate3b_pass_conditions_accept_excluded_infra_timeouts() -> None:
 
     assert gate3b.gate3b_pass_conditions(summary)["process_hard_timeouts_are_infra_excluded"] is True
     assert all(gate3b.gate3b_pass_conditions(summary).values())
+
+    summary["critic_calibration"] = {
+        "decision": "g567_distributional_critic_not_calibrated",
+        "calibration_blockers": ["insufficient_tail_events_for_calibration"],
+    }
+    summary["critic_used_for_actor_training"] = False
+    assert gate3b.gate3b_pass_conditions(summary)["critic_calibration_reported_and_safe_for_actor_training"] is True
+
+    summary["critic_used_for_actor_training"] = True
+    assert gate3b.gate3b_pass_conditions(summary)["critic_calibration_reported_and_safe_for_actor_training"] is False
 
 
 def test_replay_summary_materializes_with_excluded_infra_timeout_rows() -> None:

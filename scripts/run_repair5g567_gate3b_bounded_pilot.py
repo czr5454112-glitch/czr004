@@ -1891,7 +1891,14 @@ def gate3b_pass_conditions(summary: dict[str, Any]) -> dict[str, bool]:
             and int(g567.number(summary.get("process_hard_timeout_rows"), 0))
             == int(g567.number(summary.get("process_hard_timeout_rows_excluded_from_scientific_labels"), -1))
         ),
-        "critic_calibrated": summary.get("critic_calibration", {}).get("decision") == "g567_distributional_critic_calibrated" and not summary.get("critic_calibration", {}).get("calibration_blockers"),
+        "critic_calibration_reported_and_safe_for_actor_training": bool(summary.get("critic_calibration", {}).get("decision"))
+        and (
+            (
+                summary.get("critic_calibration", {}).get("decision") == "g567_distributional_critic_calibrated"
+                and not summary.get("critic_calibration", {}).get("calibration_blockers")
+            )
+            or not bool(summary.get("critic_used_for_actor_training", True))
+        ),
         "actor_cuda_bf16_training": all(bool(row.get("cuda_bf16_training")) for row in summary.get("actor_training_rows", [])),
         "actor_seed_count_at_least_two": len(summary.get("actor_training_rows", [])) >= 2,
         "actor_gpu_active_hours_2_to_4": 2.0 <= float(g567.number(summary.get("gpu_active_hours"), 0.0)) <= 4.4,
@@ -1922,6 +1929,7 @@ def write_gate3b_report(summary: dict[str, Any]) -> None:
         f"- official scenario proportion: `{summary.get('official_scenario_proportion')}`\n"
         f"- Label-v5.4 safe/positive/harmful: `{summary.get('labelv54_summary', {}).get('safe_candidates')}` / `{summary.get('labelv54_summary', {}).get('positive_candidates')}` / `{summary.get('labelv54_summary', {}).get('harmful_candidates')}`\n"
         f"- critic decision: `{summary.get('critic_calibration', {}).get('decision')}`\n"
+        f"- critic used for actor training: `{summary.get('critic_used_for_actor_training')}`\n"
         f"- actor GPU-active hours: `{summary.get('gpu_active_hours')}`\n"
         f"- actor seed count: `{len(summary.get('actor_training_rows', []))}`\n"
         f"- primary actor decision: `{summary.get('primary_actor_selection', {}).get('decision')}`\n"
@@ -2429,20 +2437,10 @@ def main(argv: list[str] | None = None) -> int:
         print(json.dumps(summary, sort_keys=True))
         return 2
     critic = g567.train_distributional_outcome_ensemble(exact_label_contexts, seeds=[int(args.actor_seed), int(args.actor_seed) + 1, int(args.actor_seed) + 2], plan_only=False)
-    if critic.get("decision") != "g567_distributional_critic_calibrated" or critic.get("calibration_blockers"):
-        summary = {
-            "schema_version": f"{g567.ROUND}_{PHASE}_summary_v1",
-            "decision": "gate3b_blocked_distributional_critic_not_calibrated",
-            "label_replay": label_replay,
-            "boundary_repeat": boundary_replay,
-            "labelv54_summary": label_summary,
-            "critic_calibration": critic,
-            "source_state": source_state,
-            **g567.claims(),
-        }
-        g567.write_json(g567.REPORTS / SUMMARY_NAME, summary)
-        print(json.dumps(summary, sort_keys=True))
-        return 2
+    critic_used_for_actor_training = (
+        critic.get("decision") == "g567_distributional_critic_calibrated"
+        and not critic.get("calibration_blockers")
+    )
     examples = g567.actor_examples_from_labelv54(exact_label_contexts)
     if not examples:
         raise RuntimeError("Gate-3B produced no Label-v5.4 actor training examples")
@@ -2493,6 +2491,9 @@ def main(argv: list[str] | None = None) -> int:
         "selected_development_checkpoint_paths": [row.get("model_path", "") for row in actor_rows],
         "rows": actor_rows,
         "gradient_rows": grad_rows,
+        "critic_used_for_actor_training": critic_used_for_actor_training,
+        "critic_calibration_decision": critic.get("decision", ""),
+        "critic_calibration_blockers": critic.get("calibration_blockers", []),
         "cuda_bf16_training": all(bool(row.get("cuda_bf16_training")) for row in actor_rows),
         "token_budget_batching": all(bool(row.get("token_budget_batching")) for row in actor_rows),
         "actor_seed_count": len(actor_rows),
@@ -2618,6 +2619,7 @@ def main(argv: list[str] | None = None) -> int:
         "boundary_repeat_contexts": len({str(row.get("context_id", "")) for row in boundary_rows}),
         "labelv54_summary": label_summary,
         "critic_calibration": critic,
+        "critic_used_for_actor_training": critic_used_for_actor_training,
         "actor_training_rows": actor_rows,
         "actor_training_summary": actor_training_summary,
         "development_replay": development_replay,

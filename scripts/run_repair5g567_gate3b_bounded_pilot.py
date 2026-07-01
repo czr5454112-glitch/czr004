@@ -28,13 +28,16 @@ PHASE = "gate3b_bounded_pilot"
 LABEL_PHASE = "gate3b_label_train"
 CALIBRATION_PHASE = "gate3b_calibration"
 BOUNDARY_PHASE = "gate3b_boundary_repeat"
+LABEL_TOPUP_PHASE = "gate3b_label_train_topup"
 DEV_PHASE = "gate3b_development_three_tier"
 SEED_PHASE = "gate3b_seed_actor_response"
+TOPUP_SEED_PHASE = "gate3b_label_train_topup_seed_actor_response"
 DEFAULT_STAGE_ROOT = Path(f"outputs/tmp/{g567.ROUND}_{PHASE}")
 SUMMARY_NAME = f"{g567.ROUND}_{PHASE}_summary.json"
 REPORT_NAME = f"{g567.ROUND}_{PHASE}.md"
 CONTEXT_MANIFEST_NAME = f"{g567.ROUND}_{PHASE}_contexts.csv"
 REQUIRED_AGENT_TIERS = tuple(g567.G567_AGENT_TIERS)
+LABEL_TOPUP_ACTOR_ROWS_PER_CONTEXT = 24
 REPLAY_MATERIALIZED_DECISIONS = {
     "g567_three_tier_replay_materialized",
     "g567_three_tier_replay_materialized_with_infra_timeout_exclusions",
@@ -1176,6 +1179,69 @@ def prepare_rows(rows: list[dict[str, Any]], *, split: str, prefix: str) -> list
     return prepared
 
 
+def select_label_train_topup_rows(
+    candidate_rows: list[dict[str, Any]],
+    selected_rows: list[dict[str, Any]],
+    *,
+    needed: int,
+    max_train_free_cells: int,
+    max_train_area: int,
+) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    if needed <= 0:
+        return [], {"needed_contexts": 0, "selected_contexts": 0, "decision": "gate3b_label_topup_not_needed"}
+    filtered = filter_candidate_rows(candidate_rows, max_free_cells=max_train_free_cells, max_area=max_train_area)
+    selected_uids = {row_uid(row) for row in selected_rows}
+    label_parent_hashes = {
+        row_parent_hash(row)
+        for row in selected_rows
+        if str(row.get("split", "")).upper() == "LABEL_TRAIN" and row_parent_hash(row)
+    }
+    non_label_parent_hashes = {
+        row_parent_hash(row)
+        for row in selected_rows
+        if str(row.get("split", "")).upper() in {"CALIBRATION", "DEVELOPMENT"} and row_parent_hash(row)
+    }
+    candidates = [
+        row
+        for row in filtered
+        if row_uid(row) not in selected_uids
+        and row_parent_hash(row)
+        and row_parent_hash(row) not in non_label_parent_hashes
+    ]
+    candidates.sort(
+        key=lambda row: (
+            0 if row_parent_hash(row) in label_parent_hashes else 1,
+            0 if row_is_public(row) and row_is_official_scenario(row) else 1,
+            0 if row_is_public(row) else 1,
+            int(g567.number(row.get("agent_count"), 999999)),
+            int(g567.number(row.get("free_cells"), 999999)),
+            row_uid(row),
+        )
+    )
+    chosen = candidates[:needed]
+    meta = {
+        "schema_version": f"{g567.ROUND}_{PHASE}_label_train_topup_selection_v1",
+        "decision": "gate3b_label_topup_selected" if len(chosen) == needed else "gate3b_label_topup_insufficient_candidates",
+        "needed_contexts": int(needed),
+        "selected_contexts": len(chosen),
+        "candidate_pool_rows": len(candidate_rows),
+        "filtered_candidate_rows": len(filtered),
+        "eligible_topup_rows": len(candidates),
+        "reuses_label_parent_count": sum(row_parent_hash(row) in label_parent_hashes for row in chosen),
+        "new_parent_count": sum(row_parent_hash(row) not in label_parent_hashes for row in chosen),
+        "public_fraction": public_fraction(chosen),
+        "official_scenario_fraction": official_scenario_fraction(chosen),
+        "parent_map_count": parent_map_count(chosen),
+        "map_family_count": map_family_count(chosen),
+        "selected_agent_tiers": sorted({int(g567.number(row.get("agent_count"), 0)) for row in chosen}),
+        "selected_row_uids": [row_uid(row) for row in chosen],
+        **g567.claims(),
+    }
+    if len(chosen) != needed:
+        raise RuntimeError(f"Gate-3B label top-up could not find enough candidates: {meta}")
+    return chosen, meta
+
+
 def canonicalize_reused_candidate_pool_map_paths(rows: list[dict[str, Any]]) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     path_to_hashes: dict[str, set[str]] = {}
     for row in rows:
@@ -2210,7 +2276,95 @@ def main(argv: list[str] | None = None) -> int:
         g567.write_json(g567.REPORTS / SUMMARY_NAME, summary)
         print(json.dumps(summary, sort_keys=True))
         return 2
-    prelim_label_summary = g567.create_labelv54_from_pairs([g567.plan_paths(LABEL_PHASE)["pairs"]], float(args.margin))
+    label_pair_paths = [g567.plan_paths(LABEL_PHASE)["pairs"]]
+    label_topup_contexts: list[g567.G567Context] = []
+    label_topup_selection = {
+        "schema_version": f"{g567.ROUND}_{PHASE}_label_train_topup_selection_v1",
+        "decision": "gate3b_label_topup_not_needed",
+        "needed_contexts": 0,
+        "selected_contexts": 0,
+        **g567.claims(),
+    }
+    label_topup_materialization: dict[str, Any] = {}
+    label_topup_replay = {
+        "schema_version": f"{g567.ROUND}_{LABEL_TOPUP_PHASE}_summary_v1",
+        "decision": "gate3b_label_topup_not_needed",
+        "planned_rows": 0,
+        "executed_rows": 0,
+        "scientific_result_valid_rows": 0,
+        "process_hard_timeout_rows": 0,
+        "process_hard_timeout_rows_excluded_from_scientific_labels": 0,
+        "unexcluded_process_hard_timeout_rows": 0,
+        **g567.claims(),
+    }
+    prelim_label_summary = g567.create_labelv54_from_pairs(label_pair_paths, float(args.margin))
+    prelim_exact_contexts = int(g567.number(prelim_label_summary.get("label_train_unique_exact_labeled_contexts"), 0))
+    if prelim_exact_contexts < 2000:
+        needed_topup = 2000 - prelim_exact_contexts
+        if not candidate_pool_path.exists():
+            raise RuntimeError("Gate-3B label top-up requires the persisted candidate pool manifest")
+        topup_candidate_rows, _topup_canonicalization = canonicalize_reused_candidate_pool_map_paths(g567.read_rows(candidate_pool_path))
+        topup_raw_rows, label_topup_selection = select_label_train_topup_rows(
+            topup_candidate_rows,
+            label_rows + calibration_rows + development_rows,
+            needed=needed_topup,
+            max_train_free_cells=int(args.max_train_free_cells),
+            max_train_area=int(args.max_train_area),
+        )
+        topup_prepared_rows = prepare_rows(topup_raw_rows, split="LABEL_TRAIN", prefix="g567_gate3b_label_topup")
+        label_topup_contexts, label_topup_materialization = materialize_contexts(
+            topup_prepared_rows,
+            phase=LABEL_TOPUP_PHASE,
+            workers=max(1, min(2, int(args.materialize_workers))),
+            progress_interval_sec=float(args.materialize_progress_interval_sec),
+            cache_path=g567.TABLES / f"{g567.ROUND}_{PHASE}_{LABEL_TOPUP_PHASE}_contexts.pkl",
+        )
+        topup_seed_raw = g567.infer_checkpoint_thetas(
+            label_topup_contexts,
+            seed_ckpts[:1],
+            device=device,
+            batch_size=max(1, int(args.batch_size)),
+            phase=TOPUP_SEED_PHASE,
+            token_budget=max(0, int(args.inference_token_budget)),
+            progress_interval_sec=float(args.inference_progress_interval_sec),
+            output_path=g567.TABLES / f"{g567.ROUND}_{TOPUP_SEED_PHASE}_checkpoint_thetas.csv",
+            resume=not bool(args.overwrite),
+        )
+        topup_response_rows = g567.generate_response_thetas(
+            label_topup_contexts,
+            topup_seed_raw,
+            phase=LABEL_TOPUP_PHASE,
+            target_rows=max(needed_topup, needed_topup * LABEL_TOPUP_ACTOR_ROWS_PER_CONTEXT),
+            allow_selected_primary_30s_surface=True,
+        )
+        label_topup_replay = g567.run_replay_phase(
+            LABEL_TOPUP_PHASE,
+            label_topup_contexts,
+            topup_response_rows,
+            binary=args.binary,
+            max_workers=max(1, min(2, int(args.max_workers))),
+            overwrite=bool(args.overwrite),
+            margin=float(args.margin),
+            plan_only=False,
+        )
+        if not replay_materialized(label_topup_replay):
+            summary = {
+                "schema_version": f"{g567.ROUND}_{PHASE}_summary_v1",
+                "decision": "gate3b_blocked_label_topup_not_materialized",
+                "label_replay": label_replay,
+                "prelim_labelv54_summary": prelim_label_summary,
+                "label_topup_selection": label_topup_selection,
+                "label_topup_materialization": label_topup_materialization,
+                "label_topup_replay": label_topup_replay,
+                "source_state": source_state,
+                **g567.claims(),
+            }
+            g567.write_json(g567.REPORTS / SUMMARY_NAME, summary)
+            print(json.dumps(summary, sort_keys=True))
+            return 2
+        label_pair_paths.append(g567.plan_paths(LABEL_TOPUP_PHASE)["pairs"])
+        exact_label_contexts = exact_label_contexts + label_topup_contexts
+        prelim_label_summary = g567.create_labelv54_from_pairs(label_pair_paths, float(args.margin))
     boundary_rows = boundary_repeat_theta_rows(exact_label_contexts)
     if boundary_rows:
         boundary_context_ids = {str(row.get("context_id", "")) for row in boundary_rows}
@@ -2240,7 +2394,7 @@ def main(argv: list[str] | None = None) -> int:
             print(json.dumps(summary, sort_keys=True))
             return 2
         label_summary = g567.create_labelv54_from_pairs(
-            [g567.plan_paths(LABEL_PHASE)["pairs"], g567.plan_paths(BOUNDARY_PHASE)["pairs"]],
+            label_pair_paths + [g567.plan_paths(BOUNDARY_PHASE)["pairs"]],
             float(args.margin),
         )
     else:
@@ -2263,6 +2417,11 @@ def main(argv: list[str] | None = None) -> int:
             "decision": "gate3b_blocked_label_train_unique_context_count",
             "label_train_unique_exact_labeled_contexts": exact_contexts,
             "required_range": [2000, 4000],
+            "prelim_label_train_unique_exact_labeled_contexts": prelim_exact_contexts,
+            "label_topup_selection": label_topup_selection,
+            "label_topup_materialization": label_topup_materialization,
+            "label_topup_replay": label_topup_replay,
+            "label_topup_contexts": len(label_topup_contexts),
             "labelv54_summary": label_summary,
             **g567.claims(),
         }
@@ -2369,34 +2528,40 @@ def main(argv: list[str] | None = None) -> int:
     primary = g567.select_primary_actor_checkpoint(development_replay)
     research_signal = compute_research_signal(development_replay, primary, margin=float(args.margin))
     label_result_rows = replay_result_rows(LABEL_PHASE)
+    topup_result_rows = replay_result_rows(LABEL_TOPUP_PHASE) if label_topup_contexts else []
     boundary_result_rows = replay_result_rows(BOUNDARY_PHASE) if boundary_rows else []
     dev_result_rows = replay_result_rows(DEV_PHASE)
     total_solver_rows = (
         int(g567.number(label_replay.get("executed_rows"), 0))
+        + int(g567.number(label_topup_replay.get("executed_rows"), 0))
         + int(g567.number(boundary_replay.get("executed_rows"), 0))
         + int(g567.number(development_replay.get("executed_rows"), 0))
     )
     timeout_rows = (
         int(g567.number(label_replay.get("process_hard_timeout_rows"), 0))
+        + int(g567.number(label_topup_replay.get("process_hard_timeout_rows"), 0))
         + int(g567.number(boundary_replay.get("process_hard_timeout_rows"), 0))
         + int(g567.number(development_replay.get("process_hard_timeout_rows"), 0))
     )
     excluded_timeout_rows = (
         int(g567.number(label_replay.get("process_hard_timeout_rows_excluded_from_scientific_labels"), 0))
+        + int(g567.number(label_topup_replay.get("process_hard_timeout_rows_excluded_from_scientific_labels"), 0))
         + int(g567.number(boundary_replay.get("process_hard_timeout_rows_excluded_from_scientific_labels"), 0))
         + int(g567.number(development_replay.get("process_hard_timeout_rows_excluded_from_scientific_labels"), 0))
     )
     unexcluded_timeout_rows = (
         int(g567.number(label_replay.get("unexcluded_process_hard_timeout_rows"), 0))
+        + int(g567.number(label_topup_replay.get("unexcluded_process_hard_timeout_rows"), 0))
         + int(g567.number(boundary_replay.get("unexcluded_process_hard_timeout_rows"), 0))
         + int(g567.number(development_replay.get("unexcluded_process_hard_timeout_rows"), 0))
     )
     scientific_valid_solver_rows = (
         int(g567.number(label_replay.get("scientific_result_valid_rows"), 0))
+        + int(g567.number(label_topup_replay.get("scientific_result_valid_rows"), 0))
         + int(g567.number(boundary_replay.get("scientific_result_valid_rows"), 0))
         + int(g567.number(development_replay.get("scientific_result_valid_rows"), 0))
     )
-    crash_count = crash_rows(label_result_rows) + crash_rows(boundary_result_rows) + crash_rows(dev_result_rows)
+    crash_count = crash_rows(label_result_rows) + crash_rows(topup_result_rows) + crash_rows(boundary_result_rows) + crash_rows(dev_result_rows)
     official_scenario_rows = sum(1 for row in all_rows if row_is_official_scenario(row))
     end_size = directory_size_bytes(g567.resolve(args.stage_root))
     forbidden_actions = {
@@ -2443,6 +2608,10 @@ def main(argv: list[str] | None = None) -> int:
         "parent_map_split_leakage_examples": selection_meta["parent_map_split_leakage_examples"],
         "memory_smoke": memory_smoke,
         "label_replay": label_replay,
+        "label_topup_selection": label_topup_selection,
+        "label_topup_materialization": label_topup_materialization,
+        "label_topup_replay": label_topup_replay,
+        "label_topup_contexts": len(label_topup_contexts),
         "prelim_labelv54_summary": prelim_label_summary,
         "boundary_repeat": boundary_replay,
         "boundary_repeat_candidate_rows": len(boundary_rows),

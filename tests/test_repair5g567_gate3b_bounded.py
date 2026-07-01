@@ -446,6 +446,32 @@ def test_replay_summary_materializes_with_excluded_infra_timeout_rows() -> None:
     assert summary["valid_actor_recognized_or_no_solution_rate"] == 1.0
 
 
+def test_label_train_topup_avoids_calibration_development_parent_hashes() -> None:
+    selected_rows = [
+        {**_fake_parent_rows("label-parent", "canonical_public_benchmark_map", "warehouse", 1)[0], "split": "LABEL_TRAIN"},
+        {**_fake_parent_rows("cal-parent", "canonical_public_benchmark_map", "room", 1)[0], "split": "CALIBRATION"},
+        {**_fake_parent_rows("dev-parent", "synthetic_stress_map", "maze", 1)[0], "split": "DEVELOPMENT"},
+    ]
+    candidate_rows = [
+        *_fake_parent_rows("cal-parent", "canonical_public_benchmark_map", "room", 2),
+        *_fake_parent_rows("dev-parent", "synthetic_stress_map", "maze", 2),
+        *_fake_parent_rows("label-parent", "canonical_public_benchmark_map", "warehouse", 2),
+        *_fake_parent_rows("fresh-parent", "canonical_public_benchmark_map", "empty", 2),
+    ]
+
+    chosen, meta = gate3b.select_label_train_topup_rows(
+        candidate_rows,
+        selected_rows,
+        needed=1,
+        max_train_free_cells=100000,
+        max_train_area=100000,
+    )
+
+    assert len(chosen) == 1
+    assert chosen[0]["physical_map_sha256"] == "label-parent"
+    assert meta["reuses_label_parent_count"] == 1
+
+
 def test_gate3b_materialization_reports_bfs_meta(monkeypatch) -> None:
     def fake_context_from_manifest_row(row: dict[str, object]) -> SimpleNamespace:
         return SimpleNamespace(feature_row={"traffic_prior_version": "traffic_prior_v1_bfs"})

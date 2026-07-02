@@ -1,0 +1,12 @@
+{
+  "completed_same_context_triples": 238,
+  "decision_label": "actor_tied_or_negative_on_ltm30_subset",
+  "elapsed_sec": 772.6627550125122,
+  "executed_rows": 714,
+  "partial_stop": false,
+  "phase": "complete",
+  "planned_rows": 714,
+  "schema_version": "g568_ltm30_existingrow_status_v1",
+  "summary_json": "/root/shared-nvme/g568_ltm30_existingrow_20260702_135625/outputs/reports/g568_ltm30_existingrow_summary.json",
+  "updated_unix": 1782972560.5235317
+}

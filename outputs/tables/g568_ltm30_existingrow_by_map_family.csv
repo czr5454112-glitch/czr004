@@ -1,0 +1,5 @@
+map_family,contexts,complete_triples,ltm_30s_success_rate,ltm_30s_median_ratio,static_flow_30s_success_rate,static_flow_30s_median_ratio,gate3b_actor_30s_success_rate,gate3b_actor_30s_median_ratio,actor_vs_ltm_median_relative_quality_improvement,actor_vs_ltm_success_gain_count,actor_vs_ltm_success_regression_count,actor_vs_static_flow_median_relative_quality_improvement,actor_vs_static_flow_success_gain_count,actor_vs_static_flow_success_regression_count,static_flow_vs_ltm_median_relative_quality_improvement,static_flow_vs_ltm_success_gain_count,static_flow_vs_ltm_success_regression_count
+empty,85,85,1.0,1.22711864407,1.0,1.21903442818,1.0,1.23715629522,0.0,0,0,-0.0050980998028309354,0,0,0.004532983418015663,0,0
+maze,57,57,1.0,1.0853899309,1.0,1.07578740157,1.0,1.07663551402,0.011410788373115852,0,0,-0.0026155187459999396,0,0,0.01088435374863046,0,0
+random,65,65,1.0,1.18951902369,1.0,1.15547417483,1.0,1.16098973176,0.0,0,0,-0.005978260874604756,0,0,0.0,0,0
+warehouse,31,31,1.0,1.26361655773,1.0,1.28603423452,0.7419354838709677,2.12263556116,-0.09574042664569749,0,8,-0.02756410256782877,0,8,-0.0071410673989586336,0,0

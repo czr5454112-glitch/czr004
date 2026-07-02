@@ -1,0 +1,9 @@
+{
+  "all_rows_30s_internal_60s_hard": true,
+  "decision": "pass",
+  "failure_count": 0,
+  "failures": [],
+  "planned_rows": 714,
+  "same_context_methods_same_budget": true,
+  "schema_version": "g568_ltm30_existingrow_budget_audit_v1"
+}

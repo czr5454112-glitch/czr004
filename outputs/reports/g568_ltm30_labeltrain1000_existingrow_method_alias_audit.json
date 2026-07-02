@@ -1,0 +1,17 @@
+{
+  "gate3b_actor_30s": {
+    "checkpoint": "/root/shared-nvme/g567_gate3b_bounded_2d334c79_tmux_r13_pool20000/models/gcst/phase5p5_repair5g567_a5_hierarchical_od_perceiver_actor_seed568.pt",
+    "checkpoint_sha256": "5dff8bd987e051c76e8174d59f7a00373b5b52c8c36ebef49b6d8d5eafbf7d9b",
+    "interpretation": "Gate-3B primary actor continuous theta"
+  },
+  "ltm_30s": {
+    "interpretation": "paper_style_additive_ltm",
+    "solver_alias": "repair5g59_additive_fallback",
+    "traffic_map_range_expected": "[0,10]"
+  },
+  "schema_version": "g568_ltm30_existingrow_method_alias_audit_v1",
+  "static_flow_30s": {
+    "interpretation": "historical_static_flow_shield",
+    "solver_alias": "repair5g59_static_flow_shield"
+  }
+}

@@ -1,8 +1,11 @@
 """G5.68 LTM-paper-style 30s replay on existing Gate-3B rows.
 
-This runner is diagnostic-only. It selects existing non-training Gate-3B
-contexts that resemble the LTM paper's one-shot map set, then replays exactly
-three methods with a 30s internal solver budget:
+This runner is diagnostic-only. By default it selects existing non-training
+Gate-3B contexts that resemble the LTM paper's one-shot map set, then replays
+exactly three methods with a 30s internal solver budget. When
+``--label-train-backfill`` is explicitly set, LABEL_TRAIN rows may be used only
+to backfill the requested context count and the report is marked as
+training-contaminated diagnostic evidence.
 
 * paper-style additive/LTM
 * historical static-flow shield
@@ -63,12 +66,14 @@ LTM_TARGET_MAPS = [
 ]
 
 DESIRED_AGENT_TIERS = [16, 64, 256, 1000, 2000]
+LTM_TARGET_FAMILIES = [target_family_name.split("-", 1)[0].replace("_", "-") for target_family_name in LTM_TARGET_MAPS]
 EVAL_SPLIT_RANK = {
     "DEVELOPMENT": 0,
     "VALIDATION": 0,
     "VALID": 0,
     "HELDOUT": 0,
     "CALIBRATION": 1,
+    "LABEL_TRAIN": 2,
 }
 
 METHOD_LTM = "ltm_30s"
@@ -88,44 +93,53 @@ def output_dirs(output_root: Path) -> dict[str, Path]:
     }
 
 
-def paths(output_root: Path) -> dict[str, Path]:
+def safe_prefix(value: str) -> str:
+    text = re.sub(r"[^A-Za-z0-9_.-]+", "_", str(value).strip())
+    return text.strip("._-") or DEFAULT_PHASE
+
+
+def paths(output_root: Path, output_prefix: str = DEFAULT_PHASE) -> dict[str, Path]:
     dirs = output_dirs(output_root)
     tables = dirs["tables"]
     reports = dirs["reports"]
     logs = dirs["logs"]
+    prefix = safe_prefix(output_prefix)
     return {
         **dirs,
-        "inventory": tables / "g568_ltm30_existingrow_inventory_by_map_tier.csv",
-        "selected_contexts": tables / "g568_ltm30_existingrow_selected_contexts.csv",
-        "selection_report": reports / "g568_ltm30_existingrow_selection_report.md",
-        "plan": tables / "g568_ltm30_existingrow_plan.csv",
-        "registry": tables / "g568_ltm30_existingrow_registry.csv",
-        "results_raw": tables / "g568_ltm30_existingrow_results.raw.csv",
-        "results": tables / "g568_ltm30_existingrow_results.csv",
-        "pairs": tables / "g568_ltm30_existingrow_pairs.csv",
-        "by_map": tables / "g568_ltm30_existingrow_by_map.csv",
-        "by_map_family": tables / "g568_ltm30_existingrow_by_map_family.csv",
-        "by_agent_tier": tables / "g568_ltm30_existingrow_by_agent_tier.csv",
-        "by_split": tables / "g568_ltm30_existingrow_by_split.csv",
-        "by_public_official": tables / "g568_ltm30_existingrow_by_public_official.csv",
-        "summary_md": reports / "g568_ltm30_existingrow_summary.md",
-        "summary_json": reports / "g568_ltm30_existingrow_summary.json",
-        "partial_stop": reports / "g568_ltm30_existingrow_partial_stop.md",
-        "repro": reports / "g568_ltm30_existingrow_repro.md",
-        "status": reports / "g568_ltm30_existingrow_status.json",
-        "scenario_metadata": reports / "g568_ltm30_existingrow_replay_scenario_generation.json",
-        "theta_rows": tables / "g568_ltm30_existingrow_primary_actor_thetas.csv",
-        "method_alias_audit": reports / "g568_ltm30_existingrow_method_alias_audit.json",
-        "log_dir": logs / "g568_ltm30_existingrow",
-        "scenario_dir": dirs["tmp"] / "g568_ltm30_existingrow_replay_scenarios",
+        "output_prefix": prefix,
+        "inventory": tables / f"{prefix}_inventory_by_map_tier.csv",
+        "selected_contexts": tables / f"{prefix}_selected_contexts.csv",
+        "selection_report": reports / f"{prefix}_selection_report.md",
+        "plan": tables / f"{prefix}_plan.csv",
+        "registry": tables / f"{prefix}_registry.csv",
+        "results_raw": tables / f"{prefix}_results.raw.csv",
+        "results": tables / f"{prefix}_results.csv",
+        "pairs": tables / f"{prefix}_pairs.csv",
+        "by_map": tables / f"{prefix}_by_map.csv",
+        "by_map_family": tables / f"{prefix}_by_map_family.csv",
+        "by_agent_tier": tables / f"{prefix}_by_agent_tier.csv",
+        "by_split": tables / f"{prefix}_by_split.csv",
+        "by_public_official": tables / f"{prefix}_by_public_official.csv",
+        "summary_md": reports / f"{prefix}_summary.md",
+        "summary_json": reports / f"{prefix}_summary.json",
+        "partial_stop": reports / f"{prefix}_partial_stop.md",
+        "repro": reports / f"{prefix}_repro.md",
+        "status": reports / f"{prefix}_status.json",
+        "scenario_metadata": reports / f"{prefix}_replay_scenario_generation.json",
+        "theta_rows": tables / f"{prefix}_primary_actor_thetas.csv",
+        "method_alias_audit": reports / f"{prefix}_method_alias_audit.json",
+        "context_failures": tables / f"{prefix}_context_materialization_failures.csv",
+        "log_dir": logs / prefix,
+        "scenario_dir": dirs["tmp"] / f"{prefix}_replay_scenarios",
     }
 
 
-def configure_g567(source_stage_root: Path, output_root: Path) -> None:
+def configure_g567(source_stage_root: Path, output_root: Path, output_prefix: str = DEFAULT_PHASE) -> None:
     out = output_dirs(output_root)
     for directory in out.values():
         directory.mkdir(parents=True, exist_ok=True)
-    p = paths(output_root)
+    p = paths(output_root, output_prefix)
+    prefix = p["output_prefix"]
     source_stage_root = source_stage_root.resolve()
     g567.OUTPUT_ROOT = out["root"]
     g567.ARTIFACT_ROOT = out["root"] / "artifacts"
@@ -142,9 +156,9 @@ def configure_g567(source_stage_root: Path, output_root: Path) -> None:
         / "phase5p5_repair5g567_gate3b_bounded_pilot_valid_context_manifest.csv"
     )
     g567.BASELINE_REGISTRY = p["registry"]
-    g567.BASELINE_REGISTRY_SUMMARY = out["reports"] / "g568_ltm30_existingrow_baseline_registry_summary.json"
-    g567.SOLVER_BUDGET_AUDIT = out["tables"] / "g568_ltm30_existingrow_solver_budget_audit.csv"
-    g567.SOLVER_BUDGET_AUDIT_SUMMARY = out["reports"] / "g568_ltm30_existingrow_solver_budget_audit_summary.json"
+    g567.BASELINE_REGISTRY_SUMMARY = out["reports"] / f"{prefix}_baseline_registry_summary.json"
+    g567.SOLVER_BUDGET_AUDIT = out["tables"] / f"{prefix}_solver_budget_audit.csv"
+    g567.SOLVER_BUDGET_AUDIT_SUMMARY = out["reports"] / f"{prefix}_solver_budget_audit_summary.json"
     for directory in [g567.ARTIFACT_ROOT, g567.MODEL_DIR, p["log_dir"], p["scenario_dir"]]:
         directory.mkdir(parents=True, exist_ok=True)
 
@@ -195,17 +209,35 @@ def split_rank(row: dict[str, Any]) -> int:
     return EVAL_SPLIT_RANK.get(str(row.get("split", "")).upper(), 99)
 
 
-def is_allowed_eval_row(row: dict[str, Any], allow_calibration: bool) -> bool:
+def manifest_uid(row: dict[str, Any]) -> str:
+    return str(row.get("g567_evaluation_uid", "")) or str(row.get("g567_dataset_row_id", ""))
+
+
+def desired_tier_distance(agents: int) -> tuple[float, int, int]:
+    desired = min(
+        DESIRED_AGENT_TIERS,
+        key=lambda tier: (
+            abs(math.log(max(agents, 1) / tier, 2)),
+            abs(agents - tier),
+            tier,
+        ),
+    )
+    return (abs(math.log(max(agents, 1) / desired, 2)), abs(agents - desired), agents)
+
+
+def is_allowed_eval_row(row: dict[str, Any], allow_calibration: bool, label_train_backfill: bool = False) -> bool:
     split = str(row.get("split", "")).upper()
     if split in {"DEVELOPMENT", "VALIDATION", "VALID", "HELDOUT"}:
         return True
-    return allow_calibration and split == "CALIBRATION"
+    if allow_calibration and split == "CALIBRATION":
+        return True
+    return bool(label_train_backfill) and split == "LABEL_TRAIN"
 
 
-def candidate_rows_from_manifest(manifest_rows: list[dict[str, Any]], allow_calibration: bool) -> list[dict[str, Any]]:
+def candidate_rows_from_manifest(manifest_rows: list[dict[str, Any]], allow_calibration: bool, label_train_backfill: bool = False) -> list[dict[str, Any]]:
     out = []
     for row in manifest_rows:
-        if not is_allowed_eval_row(row, allow_calibration=allow_calibration):
+        if not is_allowed_eval_row(row, allow_calibration=allow_calibration, label_train_backfill=label_train_backfill):
             continue
         agents = int_value(row.get("agent_count", row.get("agents")))
         if agents <= 0 or agents > 2000:
@@ -318,8 +350,13 @@ def build_inventory_and_selection(
     max_tiers_per_map: int,
     max_contexts_per_map_tier: int,
     allow_calibration: bool,
+    label_train_backfill: bool,
 ) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[dict[str, Any]], dict[str, Any]]:
-    candidate_rows = candidate_rows_from_manifest(manifest_rows, allow_calibration=allow_calibration)
+    candidate_rows = candidate_rows_from_manifest(
+        manifest_rows,
+        allow_calibration=allow_calibration,
+        label_train_backfill=label_train_backfill,
+    )
     bindings = bind_target_maps(candidate_rows)
 
     rows_by_map_tier: dict[tuple[str, int], list[dict[str, Any]]] = defaultdict(list)
@@ -348,6 +385,7 @@ def build_inventory_and_selection(
                     "available_contexts": len(tier_rows),
                     "development_contexts": split_counts.get("DEVELOPMENT", 0),
                     "calibration_contexts": split_counts.get("CALIBRATION", 0),
+                    "label_train_contexts": split_counts.get("LABEL_TRAIN", 0),
                     "selected_for_primary_subset": tier in selected_tiers if selected_map else False,
                     "agent_count_primary_ltm_style": int_value(tier) <= 2000 if str(tier).strip() else False,
                 }
@@ -388,7 +426,14 @@ def build_inventory_and_selection(
                         "ltm_target_selected_map": selected_map,
                         "ltm_target_fallback": bool(binding.get("fallback")),
                         "selection_seed": SELECTION_SEED,
-                        "selection_policy": "target_map_then_nearest_5_agent_tiers_up_to_25_contexts_development_then_calibration",
+                        "selection_policy": (
+                            "target_map_then_nearest_5_agent_tiers_up_to_25_contexts_"
+                            "development_validation_heldout_then_calibration_then_label_train_backfill_"
+                            "then_same_family_secondary_backfill_to_target_count"
+                        ),
+                        "label_train_backfill_requested": bool(label_train_backfill),
+                        "selection_stage": "primary_ltm_target_tier",
+                        "ltm_style_primary_subset": True,
                     }
                 )
                 selected.append(out)
@@ -401,12 +446,100 @@ def build_inventory_and_selection(
         if len(selected) >= target_contexts:
             break
 
+    primary_count = len(selected)
+    if len(selected) < target_contexts:
+        selected_map_to_target = {
+            str(binding.get("selected_map", "")): str(binding.get("ltm_target_map", ""))
+            for binding in bindings.values()
+            if str(binding.get("selected_map", ""))
+        }
+        target_selected_maps = set(selected_map_to_target)
+        target_families = {target_family(target).replace("-", "_") for target in LTM_TARGET_MAPS}
+
+        def secondary_key(row: dict[str, Any]) -> tuple[Any, ...]:
+            map_name = str(row.get("map", ""))
+            agents = int_value(row.get("agent_count", row.get("agents")))
+            family = str(row.get("map_family", "")).lower() or target_family(map_name).replace("-", "_")
+            exact_target_map_rank = 0 if map_name in target_selected_maps else 1
+            family_rank = LTM_TARGET_FAMILIES.index(family.replace("_", "-")) if family.replace("_", "-") in LTM_TARGET_FAMILIES else 999
+            return (
+                exact_target_map_rank,
+                split_rank(row),
+                family_rank,
+                desired_tier_distance(agents),
+                stable_sort_key(
+                    "secondary_backfill",
+                    map_name,
+                    agents,
+                    row.get("g567_evaluation_uid", ""),
+                    row.get("g567_dataset_row_id", ""),
+                ),
+            )
+
+        secondary_candidates = []
+        for row in candidate_rows:
+            uid = manifest_uid(row)
+            if not uid or uid in selected_uids:
+                continue
+            family = str(row.get("map_family", "")).lower() or target_family(str(row.get("map", ""))).replace("-", "_")
+            if family not in target_families:
+                continue
+            secondary_candidates.append(row)
+        secondary_candidates.sort(key=secondary_key)
+        for row in secondary_candidates:
+            uid = manifest_uid(row)
+            if not uid or uid in selected_uids:
+                continue
+            map_name = str(row.get("map", ""))
+            family = str(row.get("map_family", "")).lower() or target_family(map_name).replace("-", "_")
+            is_exact_target_map = map_name in target_selected_maps
+            out = dict(row)
+            out.update(
+                {
+                    "ltm_target_map": selected_map_to_target.get(map_name, f"family_backfill:{family}"),
+                    "ltm_target_match_type": (
+                        "secondary_existing_target_map_backfill"
+                        if is_exact_target_map
+                        else "secondary_same_family_backfill"
+                    ),
+                    "ltm_target_selected_map": map_name,
+                    "ltm_target_fallback": not is_exact_target_map,
+                    "selection_seed": SELECTION_SEED,
+                    "selection_policy": (
+                        "target_map_then_nearest_5_agent_tiers_up_to_25_contexts_"
+                        "development_validation_heldout_then_calibration_then_label_train_backfill_"
+                        "then_same_family_secondary_backfill_to_target_count"
+                    ),
+                    "label_train_backfill_requested": bool(label_train_backfill),
+                    "selection_stage": (
+                        "secondary_existing_target_map_backfill"
+                        if is_exact_target_map
+                        else "secondary_same_family_backfill"
+                    ),
+                    "ltm_style_primary_subset": False,
+                }
+            )
+            selected.append(out)
+            selected_uids.add(uid)
+            if len(selected) >= target_contexts:
+                break
+
+    split_counts = Counter(str(row.get("split", "")) for row in selected)
+    stage_counts = Counter(str(row.get("selection_stage", "")) for row in selected)
+    match_counts = Counter(str(row.get("ltm_target_match_type", "")) for row in selected)
     meta = {
         "schema_version": "g568_ltm30_existingrow_selection_v1",
         "target_contexts": target_contexts,
         "selected_contexts": len(selected),
         "allow_calibration": allow_calibration,
-        "selected_split_counts": dict(Counter(str(row.get("split", "")) for row in selected)),
+        "label_train_backfill_requested": bool(label_train_backfill),
+        "label_train_backfill_used": split_counts.get("LABEL_TRAIN", 0) > 0,
+        "training_contaminated_diagnostic": split_counts.get("LABEL_TRAIN", 0) > 0,
+        "selected_split_counts": dict(split_counts),
+        "selected_stage_counts": dict(stage_counts),
+        "selected_match_type_counts": dict(match_counts),
+        "primary_ltm_style_contexts": primary_count,
+        "secondary_backfill_contexts": max(0, len(selected) - primary_count),
         "selected_map_counts": dict(Counter(str(row.get("map", "")) for row in selected)),
         "selected_agent_counts": {},
         "map_bindings": list(bindings.values()),
@@ -422,15 +555,29 @@ def write_selection_report(path: Path, bindings: list[dict[str, Any]], inventory
     inv_by_target = defaultdict(list)
     for row in inventory:
         inv_by_target[row["ltm_target_map"]].append(row)
+    label_train_used = boolish(meta.get("label_train_backfill_used"))
+    scope_line = (
+        "Diagnostic subset built from existing Gate-3B rows with LABEL_TRAIN backfill. "
+        "This is training-contaminated and must not be reported as heldout validation."
+        if label_train_used
+        else "Diagnostic subset built only from existing Gate-3B non-training rows. No solver replay has happened yet at this stage."
+    )
     lines = [
         "# G5.68 LTM30 Existing-Row Selection",
         "",
-        "Diagnostic subset built only from existing Gate-3B non-training rows. No solver replay has happened yet at this stage.",
+        scope_line,
         "",
         f"- deterministic sampling seed: `{SELECTION_SEED}`",
         f"- selected contexts: `{len(selected)}`",
         f"- expected maximum solver rows: `{len(selected) * len(METHODS)}`",
         f"- selected split counts: `{meta.get('selected_split_counts')}`",
+        f"- label-train backfill requested: `{meta.get('label_train_backfill_requested')}`",
+        f"- label-train backfill used: `{meta.get('label_train_backfill_used')}`",
+        f"- training-contaminated diagnostic: `{meta.get('training_contaminated_diagnostic')}`",
+        f"- primary LTM-style contexts: `{meta.get('primary_ltm_style_contexts')}`",
+        f"- secondary backfill contexts: `{meta.get('secondary_backfill_contexts')}`",
+        f"- selected stage counts: `{meta.get('selected_stage_counts')}`",
+        f"- selected match-type counts: `{meta.get('selected_match_type_counts')}`",
         "",
         "## Map Binding",
         "",
@@ -451,7 +598,7 @@ def write_selection_report(path: Path, bindings: list[dict[str, Any]], inventory
             )
             + " |"
         )
-    lines.extend(["", "## Selected Contexts By Map And Tier", "", "| target | map | tier | selected | available | dev | calibration |", "|---|---|---:|---:|---:|---:|---:|"])
+    lines.extend(["", "## Selected Contexts By Map And Tier", "", "| target | map | tier | selected | available | dev | calibration | label_train |", "|---|---|---:|---:|---:|---:|---:|---:|"])
     selected_counts = Counter(
         (
             str(row.get("ltm_target_map", "")),
@@ -475,17 +622,24 @@ def write_selection_report(path: Path, bindings: list[dict[str, Any]], inventory
                     str(row.get("available_contexts", 0)),
                     str(row.get("development_contexts", 0)),
                     str(row.get("calibration_contexts", 0)),
+                    str(row.get("label_train_contexts", 0)),
                 ]
             )
             + " |"
         )
+    label_train_limitation = (
+        "- `LABEL_TRAIN` rows are included only as an explicit backfill request; this run is a training-contaminated diagnostic/capacity check."
+        if label_train_used
+        else "- `LABEL_TRAIN` rows are excluded from primary evaluation."
+    )
     lines.extend(
         [
             "",
             "## Limitations",
             "",
-            "- `LABEL_TRAIN` rows are excluded from primary evaluation.",
+            label_train_limitation,
             "- `CALIBRATION` rows are used only when DEVELOPMENT/VALIDATION rows alone are insufficient for the target subset size.",
+            "- Secondary backfill rows are from the same broad LTM target families and are not the primary 5-tier LTM-style subset.",
             "- 3000-agent rows are excluded because this is the LTM-paper-style up-to-2000-agent subset.",
             "- Missing LTM target maps are not generated; same-family fallback maps are explicitly marked.",
             "",
@@ -614,6 +768,12 @@ def build_three_method_plan(contexts: list[g567.G567Context], theta_rows: list[d
     return plan_rows, registry_rows
 
 
+def apply_plan_prefix(plan_rows: list[dict[str, Any]], prefix: str) -> None:
+    clean = safe_prefix(prefix)
+    for idx, row in enumerate(plan_rows):
+        row["plan_row_id"] = f"{clean}_{idx:08d}"
+
+
 def audit_plan_budgets(plan_rows: list[dict[str, Any]]) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     rows = []
     failures = []
@@ -663,6 +823,7 @@ def run_direct_exact_time_capped(
     max_workers: int,
     phase: str,
     p: dict[str, Path],
+    output_prefix: str,
     overwrite: bool,
     chunk_rows: int,
     started_unix: float,
@@ -718,9 +879,9 @@ def run_direct_exact_time_capped(
             log_dir=p["log_dir"],
             scenario_dir=p["scenario_dir"],
             scenario_metadata=p["scenario_metadata"],
-            manifest_prefix="g568_ltm30_existingrow",
-            row_prefix="g568_ltm30_existingrow",
-            execution_mode=f"g568_ltm30_existingrow_{g567.DIRECT_EXACT_EXECUTION_MODE}",
+            manifest_prefix=output_prefix,
+            row_prefix=output_prefix,
+            execution_mode=f"{output_prefix}_{g567.DIRECT_EXACT_EXECUTION_MODE}",
         )
     raw_rows = g567.read_rows(p["results_raw"])
     completed_ids = {str(row.get("plan_row_id", "")) for row in raw_rows if str(row.get("plan_row_id", "")).strip()}
@@ -841,6 +1002,8 @@ def build_pairs(rows: list[dict[str, Any]], selected_context_rows: list[dict[str
             "map_family": meta.get("map_family", ""),
             "ltm_target_map": meta.get("ltm_target_map", ""),
             "ltm_target_match_type": meta.get("ltm_target_match_type", ""),
+            "selection_stage": meta.get("selection_stage", ""),
+            "ltm_style_primary_subset": meta.get("ltm_style_primary_subset", ""),
             "agent_count": meta.get("agent_count", meta.get("agents", "")),
             "official_scenario": meta.get("official_scenario", ""),
             "map_source_type": meta.get("map_source_type", ""),
@@ -944,6 +1107,9 @@ def summarize_all(rows: list[dict[str, Any]], pairs: list[dict[str, Any]], plan_
         "no_training": True,
         "no_regeneration": True,
         "no_full_launch": True,
+        "label_train_backfill_requested": False,
+        "label_train_backfill_used": False,
+        "training_contaminated_diagnostic": False,
         "planned_rows": len(plan_rows),
         "executed_rows": len(rows),
         "planned_contexts": len({row.get("context_id") for row in plan_rows}),
@@ -1009,7 +1175,13 @@ def write_summary_md(path: Path, summary: dict[str, Any], actor_meta: dict[str, 
     lines = [
         "# G5.68 LTM30 Existing-Row Replay Summary",
         "",
-        "Diagnostic-only subset replay on existing Gate-3B non-training contexts. No training, no context/scenario generation, no full launch, no blind access.",
+        (
+            "Diagnostic-only subset replay on existing Gate-3B contexts with LABEL_TRAIN backfill. "
+            "This is training-contaminated and is not a heldout-validation claim. "
+            "No training, no context/scenario generation, no full launch, no blind access."
+            if boolish(selection_meta.get("training_contaminated_diagnostic"))
+            else "Diagnostic-only subset replay on existing Gate-3B non-training contexts. No training, no context/scenario generation, no full launch, no blind access."
+        ),
         "",
         f"- decision label: `{summary.get('decision_label')}`",
         f"- planned contexts: `{summary.get('planned_contexts')}`",
@@ -1018,6 +1190,9 @@ def write_summary_md(path: Path, summary: dict[str, Any], actor_meta: dict[str, 
         f"- partial stop: `{summary.get('partial_stop')}`",
         f"- primary actor: `{actor_meta.get('primary_actor_path')}`",
         f"- selected splits: `{selection_meta.get('selected_split_counts')}`",
+        f"- selected stages: `{selection_meta.get('selected_stage_counts')}`",
+        f"- label-train backfill used: `{selection_meta.get('label_train_backfill_used')}`",
+        f"- training-contaminated diagnostic: `{selection_meta.get('training_contaminated_diagnostic')}`",
         "",
         "## Method Metrics",
         "",
@@ -1073,6 +1248,7 @@ def write_summary_md(path: Path, summary: dict[str, Any], actor_meta: dict[str, 
             "- This is a subset replay, not a full-campaign or paper claim.",
             "- If exact anytime curves are absent from solver logs, this report uses final 30s metrics and available runtime fields only.",
             "- CALIBRATION rows, if present, are reported as a limitation and are not training rows.",
+            "- LABEL_TRAIN rows, if present, are only a requested backfill diagnostic and contaminate heldout interpretation.",
             "- 3000-agent rows are excluded from the primary LTM-style analysis.",
             "",
         ]
@@ -1107,7 +1283,7 @@ def write_repro(path: Path, actor_meta: dict[str, Any], plan_rows: list[dict[str
         "",
         "- plan-only files written before solver execution",
         "- selected rows came from existing Gate-3B manifest",
-        "- LABEL_TRAIN excluded",
+        f"- LABEL_TRAIN backfill used: `{boolish(Counter(str(row.get('split', '')) for row in selected).get('LABEL_TRAIN', 0))}`",
         "- no 3000-agent primary rows",
         "- no solver semantic patching",
         "- no training or fine-tuning",
@@ -1137,11 +1313,13 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--source-stage-root", type=Path, default=DEFAULT_SOURCE_STAGE_ROOT)
     parser.add_argument("--output-root", type=Path, default=DEFAULT_OUTPUT_ROOT)
     parser.add_argument("--phase", default=DEFAULT_PHASE)
+    parser.add_argument("--output-prefix", default="")
     parser.add_argument("--target-contexts", type=int, default=DEFAULT_TARGET_CONTEXTS)
     parser.add_argument("--max-tiers-per-map", type=int, default=5)
     parser.add_argument("--max-contexts-per-map-tier", type=int, default=25)
     parser.add_argument("--allow-calibration", action="store_true", default=True)
     parser.add_argument("--no-calibration", action="store_false", dest="allow_calibration")
+    parser.add_argument("--label-train-backfill", action="store_true")
     parser.add_argument("--max-workers", type=int, default=DEFAULT_MAX_WORKERS)
     parser.add_argument("--chunk-rows", type=int, default=DEFAULT_CHUNK_ROWS)
     parser.add_argument("--stop-launch-after-sec", type=float, default=DEFAULT_STOP_LAUNCH_AFTER_SEC)
@@ -1159,8 +1337,9 @@ def parse_args() -> argparse.Namespace:
 def main() -> int:
     args = parse_args()
     started = time.time()
-    configure_g567(args.source_stage_root, args.output_root)
-    p = paths(args.output_root)
+    output_prefix = safe_prefix(args.output_prefix or args.phase)
+    configure_g567(args.source_stage_root, args.output_root, output_prefix)
+    p = paths(args.output_root, output_prefix)
 
     for directory in [p["tables"], p["reports"], p["logs"], p["tmp"], p["log_dir"], p["scenario_dir"]]:
         directory.mkdir(parents=True, exist_ok=True)
@@ -1174,6 +1353,7 @@ def main() -> int:
         max_tiers_per_map=max(1, int(args.max_tiers_per_map)),
         max_contexts_per_map_tier=max(1, int(args.max_contexts_per_map_tier)),
         allow_calibration=bool(args.allow_calibration),
+        label_train_backfill=bool(args.label_train_backfill),
     )
     g567.write_rows(p["inventory"], inventory)
     g567.write_rows(p["selected_contexts"], selected_rows)
@@ -1189,7 +1369,7 @@ def main() -> int:
 
     contexts, context_failures = materialize_selected_contexts(selected_rows)
     if context_failures:
-        g567.write_rows(p["tables"] / "g568_ltm30_existingrow_context_materialization_failures.csv", context_failures)
+        g567.write_rows(p["context_failures"], context_failures)
     if not contexts:
         raise RuntimeError("no selected contexts materialized")
 
@@ -1215,6 +1395,7 @@ def main() -> int:
     g567.write_rows(p["theta_rows"], theta_rows)
 
     plan_rows, registry_rows = build_three_method_plan(contexts, theta_rows, args.phase, int(args.max_workers))
+    apply_plan_prefix(plan_rows, output_prefix)
     budget_rows, budget_summary = audit_plan_budgets(plan_rows)
     g567.write_rows(g567.SOLVER_BUDGET_AUDIT, budget_rows)
     g567.write_json(g567.SOLVER_BUDGET_AUDIT_SUMMARY, budget_summary)
@@ -1258,8 +1439,12 @@ def main() -> int:
         summary = {
             "schema_version": "g568_ltm30_existingrow_plan_only_v1",
             "decision_label": "plan_only_not_executed",
+            "planned_contexts": len(contexts),
             "selected_contexts": len(contexts),
             "planned_rows": len(plan_rows),
+            "label_train_backfill_requested": boolish(selection_meta.get("label_train_backfill_requested")),
+            "label_train_backfill_used": boolish(selection_meta.get("label_train_backfill_used")),
+            "training_contaminated_diagnostic": boolish(selection_meta.get("training_contaminated_diagnostic")),
             "actor_meta": actor_meta,
             "selection_meta": selection_meta,
         }
@@ -1273,6 +1458,7 @@ def main() -> int:
         max_workers=max(1, int(args.max_workers)),
         phase=args.phase,
         p=p,
+        output_prefix=output_prefix,
         overwrite=bool(args.overwrite),
         chunk_rows=max(1, int(args.chunk_rows)),
         started_unix=started,
@@ -1295,6 +1481,9 @@ def main() -> int:
         {
             "actor_meta": actor_meta,
             "selection_meta": selection_meta,
+            "label_train_backfill_requested": boolish(selection_meta.get("label_train_backfill_requested")),
+            "label_train_backfill_used": boolish(selection_meta.get("label_train_backfill_used")),
+            "training_contaminated_diagnostic": boolish(selection_meta.get("training_contaminated_diagnostic")),
             "context_materialization_failures": len(context_failures),
             "anytime_curves_available": False,
             "anytime_curve_limitation": "Exact best-so-far checkpoint curves were not available without solver-semantic changes; final 30s metrics and runtime fields are reported.",

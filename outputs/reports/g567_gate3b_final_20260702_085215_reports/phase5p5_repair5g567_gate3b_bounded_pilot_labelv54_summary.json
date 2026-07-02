@@ -1,0 +1,32 @@
+{
+  "aaai_ready": false,
+  "applied_margin": 0.043,
+  "applied_margin_source": "/root/shared-nvme/g567_gate3b_bounded_2d334c79_tmux_r13_pool20000/reports/phase5p5_repair5g567_gate3b_bounded_pilot_repeatability_summary.json",
+  "candidates": 52503,
+  "contexts": 2500,
+  "decision": "g567_labelv54_valid_replicated_tail_materialized",
+  "development_calibration_blind_excluded_from_actor_training": true,
+  "harmful_candidates": 8906,
+  "joint_positive_ABC_candidates": 900,
+  "joint_positive_AB_candidates": 3447,
+  "label_train_24000_unique_context_target_met": false,
+  "label_train_unique_exact_labeled_contexts": 2000,
+  "learned_runtime_policy_validated": false,
+  "pareto_safe_AB_candidates": 9679,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "positive_candidates": 3447,
+  "primary_safe_AB_candidates": 52503,
+  "primary_training_candidates": 9679,
+  "replicate_rows": 0,
+  "runtime_claim_allowed": false,
+  "safe_candidates": 52503,
+  "safe_sets_path": "/root/shared-nvme/g567_gate3b_bounded_2d334c79_tmux_r13_pool20000/reports/phase5p5_repair5g567_gate3b_bounded_pilot_labelv54_safe_sets.jsonl",
+  "schema_version": "phase5p5_repair5g567_labelv54_summary_v1",
+  "single_run_boundary_uncertain_candidates": 0,
+  "source_pair_files": [
+    "/root/shared-nvme/g567_gate3b_bounded_2d334c79_tmux_r13_pool20000/tables/phase5p5_repair5g567_gate3b_label_train_pairs.csv",
+    "/root/shared-nvme/g567_gate3b_bounded_2d334c79_tmux_r13_pool20000/tables/phase5p5_repair5g567_gate3b_label_train_topup_pairs.csv"
+  ],
+  "stretch_safe_ABC_candidates": 52503
+}

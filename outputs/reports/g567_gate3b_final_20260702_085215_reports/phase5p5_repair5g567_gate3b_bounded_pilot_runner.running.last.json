@@ -1,0 +1,49 @@
+{
+  "cgroup_memory_current_bytes": 10325123072,
+  "cgroup_memory_events": {
+    "high": 0,
+    "low": 0,
+    "max": 0,
+    "oom": 0,
+    "oom_kill": 0
+  },
+  "cgroup_memory_max_bytes": 107374182400,
+  "cgroup_memory_peak_bytes": "",
+  "cgroup_path": "/",
+  "completed_solver_rows": 60000,
+  "disk_free_bytes_stage_root": 178485460992,
+  "expected_head": "4b786766da4625b315c281c1b89e7ffd6cbfa591",
+  "forbidden_actions": {
+    "final_blind_panel_constructed_or_accessed": false,
+    "final_blind_solver_replay_launched": false,
+    "forty_eight_hour_training_launched": false,
+    "full_100k_generation_launched": false,
+    "million_row_solver_acquisition_launched": false
+  },
+  "head": "4b786766da4625b315c281c1b89e7ffd6cbfa591",
+  "heartbeat_pid": "3562",
+  "heartbeat_pid_alive": false,
+  "heartbeat_unix": 1782937321.5617976,
+  "phase": "finalizing",
+  "python_orchestrator_cgroup": "",
+  "python_orchestrator_pid": "3425",
+  "python_orchestrator_pid_alive": false,
+  "result_csv_rows_by_file": {
+    "phase5p5_repair5g567_gate3b_development_three_tier_results.csv": 3000,
+    "phase5p5_repair5g567_gate3b_label_train_results.csv": 60000,
+    "phase5p5_repair5g567_gate3b_label_train_topup_results.csv": 27
+  },
+  "runner_bashpid": "3367",
+  "runner_cgroup": "0::/;",
+  "runner_parent_pid": "3366",
+  "runner_pgid": "3367",
+  "runner_shell_pid": "3367",
+  "runner_shell_pid_alive": true,
+  "runner_sid": "3367",
+  "schema_version": "phase5p5_repair5g567_gate3b_runner_running_v2",
+  "stage_root": "/root/shared-nvme/g567_gate3b_bounded_2d334c79_tmux_r13_pool20000",
+  "started_unix": 1782910708.9443576,
+  "tmux": "/tmp/tmux-0/default,3366,0",
+  "tmux_server_pid": "3366",
+  "tmux_session_name": "g567_gate3b_r19_w4_resume_20260701_205828"
+}

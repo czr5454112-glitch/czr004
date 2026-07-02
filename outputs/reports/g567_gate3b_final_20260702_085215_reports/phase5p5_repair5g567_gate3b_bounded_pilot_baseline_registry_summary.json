@@ -1,0 +1,20 @@
+{
+  "aaai_ready": false,
+  "baseline_rows": 3,
+  "decision": "g567_three_tier_baseline_registry_frozen",
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "registry_sha256": "78e6760a961821402e4de9a1257383e766c82fb28fe3552b582a3fa3de5a5e0e",
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g567_three_tier_baseline_registry_summary_v1",
+  "tierA_solver_alias": "repair5g59_additive_fallback",
+  "tierB_solver_alias": "repair5g59_static_flow_shield",
+  "tierB_underlying_method": "repair5g1_shield_c125_b125_w075_d095_beta0p35_max0p75",
+  "tierC_solver_alias": "g556_c063174",
+  "tiers": [
+    "A",
+    "B",
+    "C"
+  ]
+}

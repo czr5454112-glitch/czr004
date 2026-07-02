@@ -1,0 +1,20 @@
+{
+  "aaai_ready": false,
+  "agent3000_rows_have_60s_internal_120s_hard_timeout": true,
+  "agent_1000_to_2500_rows_have_40s_internal_80s_hard_timeout": true,
+  "agent_tier_conditioned_rows_match_budget_contract": true,
+  "all_rows_have_explicit_hard_timeout": true,
+  "all_rows_have_explicit_internal_budget": true,
+  "decision": "g567_solver_budget_audit_passed",
+  "failure_count": 0,
+  "failures": [],
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "planned_rows": 3000,
+  "replay_phase": "gate3b_development_three_tier",
+  "runtime_claim_allowed": false,
+  "same_context_methods_same_budget": true,
+  "schema_version": "phase5p5_repair5g567_solver_budget_audit_summary_v1",
+  "small_agent_rows_have_30s_internal_60s_hard_timeout": true
+}

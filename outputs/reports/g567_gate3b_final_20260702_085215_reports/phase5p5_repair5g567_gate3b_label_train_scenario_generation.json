@@ -1,0 +1,324 @@
+{
+  "agent_counts": [
+    12,
+    16,
+    32,
+    80,
+    128,
+    192,
+    384,
+    512,
+    768
+  ],
+  "created_at": "2026-07-01T21:00:01.904798",
+  "effective_instance_ids": [
+    4567000514,
+    4567000527,
+    4567001009,
+    4567001073,
+    4567001525,
+    4567001890,
+    4567002189,
+    4567002273,
+    4567003849,
+    4567003866,
+    4567005003,
+    4567005570,
+    4567005994,
+    4567006680,
+    4567007056,
+    4567007253,
+    4567007742,
+    4567008697,
+    4567008832,
+    4567008936,
+    4567009386,
+    4567009530,
+    4567009686,
+    4567009706,
+    4567011061,
+    4567011226,
+    4567011415,
+    4567011580,
+    4567011834,
+    4567012188,
+    4567012654,
+    4567012726,
+    4567013456,
+    4567014382,
+    4567014495,
+    4567014587,
+    4567015030,
+    4567015174,
+    4567015276,
+    4567016482,
+    4567017291,
+    4567017430,
+    4567019185,
+    4567019643,
+    4567019997,
+    4567020229,
+    4567020373,
+    4567020394,
+    4567020520,
+    4567020648
+  ],
+  "final_missing_count": 0,
+  "final_missing_examples": [],
+  "generated_count": 50,
+  "generated_examples": [
+    {
+      "instance_id": 4567000514,
+      "map": "warehouse_small",
+      "path": "/root/shared-nvme/g567_gate3b_bounded_2d334c79_tmux_r13_pool20000/replay_scenarios/warehouse_small-random-4567000514.scen"
+    },
+    {
+      "instance_id": 4567000527,
+      "map": "warehouse_small",
+      "path": "/root/shared-nvme/g567_gate3b_bounded_2d334c79_tmux_r13_pool20000/replay_scenarios/warehouse_small-random-4567000527.scen"
+    },
+    {
+      "instance_id": 4567001009,
+      "map": "warehouse_small",
+      "path": "/root/shared-nvme/g567_gate3b_bounded_2d334c79_tmux_r13_pool20000/replay_scenarios/warehouse_small-random-4567001009.scen"
+    },
+    {
+      "instance_id": 4567001073,
+      "map": "warehouse_small",
+      "path": "/root/shared-nvme/g567_gate3b_bounded_2d334c79_tmux_r13_pool20000/replay_scenarios/warehouse_small-random-4567001073.scen"
+    },
+    {
+      "instance_id": 4567001525,
+      "map": "warehouse_small",
+      "path": "/root/shared-nvme/g567_gate3b_bounded_2d334c79_tmux_r13_pool20000/replay_scenarios/warehouse_small-random-4567001525.scen"
+    },
+    {
+      "instance_id": 4567001890,
+      "map": "warehouse_small",
+      "path": "/root/shared-nvme/g567_gate3b_bounded_2d334c79_tmux_r13_pool20000/replay_scenarios/warehouse_small-random-4567001890.scen"
+    },
+    {
+      "instance_id": 4567002189,
+      "map": "warehouse_small",
+      "path": "/root/shared-nvme/g567_gate3b_bounded_2d334c79_tmux_r13_pool20000/replay_scenarios/warehouse_small-random-4567002189.scen"
+    },
+    {
+      "instance_id": 4567002273,
+      "map": "warehouse_small",
+      "path": "/root/shared-nvme/g567_gate3b_bounded_2d334c79_tmux_r13_pool20000/replay_scenarios/warehouse_small-random-4567002273.scen"
+    },
+    {
+      "instance_id": 4567003849,
+      "map": "warehouse_small",
+      "path": "/root/shared-nvme/g567_gate3b_bounded_2d334c79_tmux_r13_pool20000/replay_scenarios/warehouse_small-random-4567003849.scen"
+    },
+    {
+      "instance_id": 4567003866,
+      "map": "warehouse_small",
+      "path": "/root/shared-nvme/g567_gate3b_bounded_2d334c79_tmux_r13_pool20000/replay_scenarios/warehouse_small-random-4567003866.scen"
+    },
+    {
+      "instance_id": 4567005003,
+      "map": "warehouse_small",
+      "path": "/root/shared-nvme/g567_gate3b_bounded_2d334c79_tmux_r13_pool20000/replay_scenarios/warehouse_small-random-4567005003.scen"
+    },
+    {
+      "instance_id": 4567005570,
+      "map": "warehouse_small",
+      "path": "/root/shared-nvme/g567_gate3b_bounded_2d334c79_tmux_r13_pool20000/replay_scenarios/warehouse_small-random-4567005570.scen"
+    },
+    {
+      "instance_id": 4567005994,
+      "map": "warehouse_small",
+      "path": "/root/shared-nvme/g567_gate3b_bounded_2d334c79_tmux_r13_pool20000/replay_scenarios/warehouse_small-random-4567005994.scen"
+    },
+    {
+      "instance_id": 4567006680,
+      "map": "warehouse_small",
+      "path": "/root/shared-nvme/g567_gate3b_bounded_2d334c79_tmux_r13_pool20000/replay_scenarios/warehouse_small-random-4567006680.scen"
+    },
+    {
+      "instance_id": 4567007056,
+      "map": "warehouse_small",
+      "path": "/root/shared-nvme/g567_gate3b_bounded_2d334c79_tmux_r13_pool20000/replay_scenarios/warehouse_small-random-4567007056.scen"
+    },
+    {
+      "instance_id": 4567007253,
+      "map": "warehouse_small",
+      "path": "/root/shared-nvme/g567_gate3b_bounded_2d334c79_tmux_r13_pool20000/replay_scenarios/warehouse_small-random-4567007253.scen"
+    },
+    {
+      "instance_id": 4567007742,
+      "map": "warehouse_small",
+      "path": "/root/shared-nvme/g567_gate3b_bounded_2d334c79_tmux_r13_pool20000/replay_scenarios/warehouse_small-random-4567007742.scen"
+    },
+    {
+      "instance_id": 4567008697,
+      "map": "warehouse_small",
+      "path": "/root/shared-nvme/g567_gate3b_bounded_2d334c79_tmux_r13_pool20000/replay_scenarios/warehouse_small-random-4567008697.scen"
+    },
+    {
+      "instance_id": 4567008832,
+      "map": "warehouse_small",
+      "path": "/root/shared-nvme/g567_gate3b_bounded_2d334c79_tmux_r13_pool20000/replay_scenarios/warehouse_small-random-4567008832.scen"
+    },
+    {
+      "instance_id": 4567008936,
+      "map": "warehouse_small",
+      "path": "/root/shared-nvme/g567_gate3b_bounded_2d334c79_tmux_r13_pool20000/replay_scenarios/warehouse_small-random-4567008936.scen"
+    }
+  ],
+  "generated_missing_scenarios": true,
+  "generator_policy": {
+    "base_seed": 20260522,
+    "equivalent_command": "python scripts/generate_phase1a_scenarios.py --manifest <f4 maps with instances 26..45> --output-dir /root/shared-nvme/g567_gate3b_bounded_2d334c79_tmux_r13_pool20000/replay_scenarios --base-seed 20260522",
+    "script_version": "phase1a-scenario-generator-v1",
+    "seed_function": "sha256(script_version|base_seed|map_name|instance_id)",
+    "source": "scripts/generate_phase1a_scenarios.py functions"
+  },
+  "initial_missing_count": 0,
+  "initial_missing_examples": [],
+  "reduced_scope_reason": "",
+  "requested_instance_ids": [
+    4567000514,
+    4567000527,
+    4567001009,
+    4567001073,
+    4567001525,
+    4567001890,
+    4567002189,
+    4567002273,
+    4567003849,
+    4567003866,
+    4567005003,
+    4567005570,
+    4567005994,
+    4567006680,
+    4567007056,
+    4567007253,
+    4567007742,
+    4567008697,
+    4567008832,
+    4567008936,
+    4567009386,
+    4567009530,
+    4567009686,
+    4567009706,
+    4567011061,
+    4567011226,
+    4567011415,
+    4567011580,
+    4567011834,
+    4567012188,
+    4567012654,
+    4567012726,
+    4567013456,
+    4567014382,
+    4567014495,
+    4567014587,
+    4567015030,
+    4567015174,
+    4567015276,
+    4567016482,
+    4567017291,
+    4567017430,
+    4567019185,
+    4567019643,
+    4567019997,
+    4567020229,
+    4567020373,
+    4567020394,
+    4567020520,
+    4567020648
+  ],
+  "requested_maps": [
+    "warehouse_small"
+  ],
+  "scenario_dir": "/root/shared-nvme/g567_gate3b_bounded_2d334c79_tmux_r13_pool20000/replay_scenarios",
+  "scenario_metadata": "/root/shared-nvme/g567_gate3b_bounded_2d334c79_tmux_r13_pool20000/reports/phase5p5_repair5g567_gate3b_label_train_scenario_generation.json",
+  "schema_version": "phase5p5_repair5f4_scenario_generation_v1",
+  "source_missing_count": 50,
+  "source_missing_examples": [
+    {
+      "instance_id": 4567000514,
+      "map": "warehouse_small"
+    },
+    {
+      "instance_id": 4567000527,
+      "map": "warehouse_small"
+    },
+    {
+      "instance_id": 4567001009,
+      "map": "warehouse_small"
+    },
+    {
+      "instance_id": 4567001073,
+      "map": "warehouse_small"
+    },
+    {
+      "instance_id": 4567001525,
+      "map": "warehouse_small"
+    },
+    {
+      "instance_id": 4567001890,
+      "map": "warehouse_small"
+    },
+    {
+      "instance_id": 4567002189,
+      "map": "warehouse_small"
+    },
+    {
+      "instance_id": 4567002273,
+      "map": "warehouse_small"
+    },
+    {
+      "instance_id": 4567003849,
+      "map": "warehouse_small"
+    },
+    {
+      "instance_id": 4567003866,
+      "map": "warehouse_small"
+    },
+    {
+      "instance_id": 4567005003,
+      "map": "warehouse_small"
+    },
+    {
+      "instance_id": 4567005570,
+      "map": "warehouse_small"
+    },
+    {
+      "instance_id": 4567005994,
+      "map": "warehouse_small"
+    },
+    {
+      "instance_id": 4567006680,
+      "map": "warehouse_small"
+    },
+    {
+      "instance_id": 4567007056,
+      "map": "warehouse_small"
+    },
+    {
+      "instance_id": 4567007253,
+      "map": "warehouse_small"
+    },
+    {
+      "instance_id": 4567007742,
+      "map": "warehouse_small"
+    },
+    {
+      "instance_id": 4567008697,
+      "map": "warehouse_small"
+    },
+    {
+      "instance_id": 4567008832,
+      "map": "warehouse_small"
+    },
+    {
+      "instance_id": 4567008936,
+      "map": "warehouse_small"
+    }
+  ],
+  "source_scenario_dir": "outputs/tmp/phase1a/generated/phase1a-generated-random"
+}

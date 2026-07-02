@@ -1,0 +1,30 @@
+{
+  "aaai_ready": false,
+  "agent_count": 3000,
+  "architecture": "A5_hierarchical_od_perceiver_actor",
+  "backward_executed": true,
+  "cuda_bf16_autocast": true,
+  "cuda_peak_memory_bytes": 2148556288,
+  "decision": "g567_3000_agent_contract_valid",
+  "elapsed_sec": 2.010298560373485,
+  "full_node_quadratic_graph_attention_disabled": true,
+  "graph_edges": 63516,
+  "graph_global_layers": 0,
+  "graph_nodes": 16133,
+  "hidden_dim": 256,
+  "latent_tokens": 96,
+  "learned_runtime_policy_validated": false,
+  "map": "g567-large-room-128x128-a-v2",
+  "map_family": "large_room",
+  "od_perceiver": true,
+  "od_tokens": 3000,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "samples_per_sec": 0.49743854953276895,
+  "schema_version": "phase5p5_repair5g567_3000_agent_memory_smoke_v1",
+  "theta_shape": [
+    1,
+    15
+  ]
+}

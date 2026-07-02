@@ -1,0 +1,76 @@
+{
+  "aaai_ready": false,
+  "candidate_pool_contract": {
+    "candidate_pool_manifest_sha256": "57081c40646f8d8949c1c59688e2002a770f8e5cc6903fd071151b3554ce05b4",
+    "candidate_pool_path": "/root/shared-nvme/g567_gate3b_bounded_2d334c79_tmux_r13_pool20000/tables/phase5p5_repair5g567_gate3b_bounded_pilot_candidate_pool_manifest.csv",
+    "candidate_pool_reused": true,
+    "candidate_pool_source_commit": "2d334c79a5e6e2585a04128cc06a6e6d2a8c3b90",
+    "candidate_pool_validity_path": "/root/shared-nvme/g567_gate3b_bounded_2d334c79_tmux_r13_pool20000/tables/phase5p5_repair5g567_gate3b_bounded_pilot_candidate_pool_validity.csv",
+    "candidate_pool_validity_sha256": "a5d24d2300ac6e1ca3a678dfa5da1f71a16767fe5138328f0209eb8396b3fd21",
+    "context_generation_stages": {
+      "stage_a_component_validity_only": 20000
+    },
+    "context_pool_target": 20000,
+    "contract_blockers": [
+      "referenced_file_hash_mismatch_count_1"
+    ],
+    "contract_ready": false,
+    "duplicate_row_uid_count": 0,
+    "feature_materialization_stages": {
+      "stage_b_deferred_c0_f0_traffic_prior": 20000
+    },
+    "generation_seed": 4567,
+    "generator_contract_versions": {
+      "g567_component_aware_mixed_public_benchmark_and_synthetic": 20000
+    },
+    "missing_parent_hash_rows": 0,
+    "nonempty_parent_hash_count": 155,
+    "public_map_registry_sha256": "c9bba5e95e3e8fa6af33fae6e2375f82e32b572f1e9332a503b37ad1a08d3ee6",
+    "public_scenario_registry_sha256": "f832a73ac7aad1f7e31bfc41e6194fef99523ceca040089255568e761572bead",
+    "referenced_file_hash_mismatch_count": 1,
+    "referenced_file_hash_mismatch_examples": [
+      {
+        "actual": "8b7e0c65f0c38c49c742278ae35123f1c3f02d5069ca22a560fe199bd8c8d1ad",
+        "expected": "266ff1e56bfb45ec36ef71b876347dc195848681682c1e50473ae1f86ffb8fdf",
+        "field": "raw_map_path",
+        "path": "/root/shared-nvme/g567_gate3b_bounded_2d334c79_tmux_r13_pool20000/scenario_bank/maps/warehouse_small.map"
+      }
+    ],
+    "referenced_file_hashes_checked": 13759,
+    "referenced_file_missing_count": 0,
+    "referenced_file_missing_examples": [],
+    "row_count": 20000,
+    "selection_allocator_commit": "f225ebee5b8ace4ee382a9755f7c7f71b6b91165",
+    "unique_row_uid_count": 20000,
+    "verify_file_hashes": true
+  },
+  "decision": "gate3b_candidate_pool_contract_fail_closed",
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g567_gate3b_bounded_pilot_summary_v1",
+  "source_state": {
+    "aaai_ready": false,
+    "branch": "codex/repair5g567-large-scale-tail-safe",
+    "decision": "g567_source_state_clean",
+    "expected_head": "f225ebee5b8ace4ee382a9755f7c7f71b6b91165",
+    "head": "f225ebee5b8ace4ee382a9755f7c7f71b6b91165",
+    "head_matches_expected": true,
+    "inside_work_tree": "true",
+    "learned_runtime_policy_validated": false,
+    "phase5p5_allowed": false,
+    "phase6_allowed": false,
+    "runtime_claim_allowed": false,
+    "schema_version": "phase5p5_repair5g567_source_state_v1",
+    "source_plan": "czr004_g567_large_scale_tail_safe_direct_actor_plan.md",
+    "source_plan_sha256": "ed4a3185ee931656ff359a5a45c3d3b1d1bace37508205a58681abf5742fa542",
+    "source_state_failures": [],
+    "sparse_checkout": "false",
+    "sparse_checkout_disabled": true,
+    "status_clean": true,
+    "status_short": "",
+    "submodule_status": "61a4c40ce91ce18c06eb2fe070aa9f1951eecb8d external/lacam2 (v0.1-13-g61a4c40)\n 09a158196e513252cfb468ad46e33568787c1e92 external/lacam2/scripts (09a1581)\n e9ae471ea46a0f3dcd2bbbd26fa3d14433ec7884 external/lacam2/third_party/argparse (v2.9-5-ge9ae471)\n 5376968f6948923e2411081fd9372e71a59d8e77 external/lacam2/third_party/googletest (release-1.8.0-2986-g5376968f)",
+    "submodule_status_clean": true
+  }
+}

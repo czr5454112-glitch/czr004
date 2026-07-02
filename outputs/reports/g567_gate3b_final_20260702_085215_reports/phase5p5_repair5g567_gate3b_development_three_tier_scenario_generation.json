@@ -1,0 +1,278 @@
+{
+  "agent_counts": [
+    32,
+    512,
+    768,
+    1500,
+    2000,
+    2500,
+    3000
+  ],
+  "created_at": "2026-07-01T21:03:31.307220",
+  "effective_instance_ids": [
+    4567000255,
+    4567000357,
+    4567000694,
+    4567001399,
+    4567004054,
+    4567005503,
+    4567006018,
+    4567006946,
+    4567007309,
+    4567007809,
+    4567009094,
+    4567010314,
+    4567011049,
+    4567011963,
+    4567012774,
+    4567012965,
+    4567013188,
+    4567013390,
+    4567014922,
+    4567015538,
+    4567016207,
+    4567016970,
+    4567017575,
+    4567017686,
+    4567018201,
+    4567019651,
+    4567019834,
+    4567020106
+  ],
+  "final_missing_count": 0,
+  "final_missing_examples": [],
+  "generated_count": 28,
+  "generated_examples": [
+    {
+      "instance_id": 4567000255,
+      "map": "sortation_medium",
+      "path": "/root/shared-nvme/g567_gate3b_bounded_2d334c79_tmux_r13_pool20000/replay_scenarios/sortation_medium-random-4567000255.scen"
+    },
+    {
+      "instance_id": 4567000357,
+      "map": "sortation_medium",
+      "path": "/root/shared-nvme/g567_gate3b_bounded_2d334c79_tmux_r13_pool20000/replay_scenarios/sortation_medium-random-4567000357.scen"
+    },
+    {
+      "instance_id": 4567000694,
+      "map": "sortation_medium",
+      "path": "/root/shared-nvme/g567_gate3b_bounded_2d334c79_tmux_r13_pool20000/replay_scenarios/sortation_medium-random-4567000694.scen"
+    },
+    {
+      "instance_id": 4567001399,
+      "map": "sortation_medium",
+      "path": "/root/shared-nvme/g567_gate3b_bounded_2d334c79_tmux_r13_pool20000/replay_scenarios/sortation_medium-random-4567001399.scen"
+    },
+    {
+      "instance_id": 4567004054,
+      "map": "sortation_medium",
+      "path": "/root/shared-nvme/g567_gate3b_bounded_2d334c79_tmux_r13_pool20000/replay_scenarios/sortation_medium-random-4567004054.scen"
+    },
+    {
+      "instance_id": 4567005503,
+      "map": "sortation_medium",
+      "path": "/root/shared-nvme/g567_gate3b_bounded_2d334c79_tmux_r13_pool20000/replay_scenarios/sortation_medium-random-4567005503.scen"
+    },
+    {
+      "instance_id": 4567006018,
+      "map": "sortation_medium",
+      "path": "/root/shared-nvme/g567_gate3b_bounded_2d334c79_tmux_r13_pool20000/replay_scenarios/sortation_medium-random-4567006018.scen"
+    },
+    {
+      "instance_id": 4567006946,
+      "map": "sortation_medium",
+      "path": "/root/shared-nvme/g567_gate3b_bounded_2d334c79_tmux_r13_pool20000/replay_scenarios/sortation_medium-random-4567006946.scen"
+    },
+    {
+      "instance_id": 4567007309,
+      "map": "sortation_medium",
+      "path": "/root/shared-nvme/g567_gate3b_bounded_2d334c79_tmux_r13_pool20000/replay_scenarios/sortation_medium-random-4567007309.scen"
+    },
+    {
+      "instance_id": 4567007809,
+      "map": "sortation_medium",
+      "path": "/root/shared-nvme/g567_gate3b_bounded_2d334c79_tmux_r13_pool20000/replay_scenarios/sortation_medium-random-4567007809.scen"
+    },
+    {
+      "instance_id": 4567009094,
+      "map": "sortation_medium",
+      "path": "/root/shared-nvme/g567_gate3b_bounded_2d334c79_tmux_r13_pool20000/replay_scenarios/sortation_medium-random-4567009094.scen"
+    },
+    {
+      "instance_id": 4567010314,
+      "map": "sortation_medium",
+      "path": "/root/shared-nvme/g567_gate3b_bounded_2d334c79_tmux_r13_pool20000/replay_scenarios/sortation_medium-random-4567010314.scen"
+    },
+    {
+      "instance_id": 4567011049,
+      "map": "sortation_medium",
+      "path": "/root/shared-nvme/g567_gate3b_bounded_2d334c79_tmux_r13_pool20000/replay_scenarios/sortation_medium-random-4567011049.scen"
+    },
+    {
+      "instance_id": 4567011963,
+      "map": "sortation_medium",
+      "path": "/root/shared-nvme/g567_gate3b_bounded_2d334c79_tmux_r13_pool20000/replay_scenarios/sortation_medium-random-4567011963.scen"
+    },
+    {
+      "instance_id": 4567012774,
+      "map": "sortation_medium",
+      "path": "/root/shared-nvme/g567_gate3b_bounded_2d334c79_tmux_r13_pool20000/replay_scenarios/sortation_medium-random-4567012774.scen"
+    },
+    {
+      "instance_id": 4567012965,
+      "map": "sortation_medium",
+      "path": "/root/shared-nvme/g567_gate3b_bounded_2d334c79_tmux_r13_pool20000/replay_scenarios/sortation_medium-random-4567012965.scen"
+    },
+    {
+      "instance_id": 4567013188,
+      "map": "sortation_medium",
+      "path": "/root/shared-nvme/g567_gate3b_bounded_2d334c79_tmux_r13_pool20000/replay_scenarios/sortation_medium-random-4567013188.scen"
+    },
+    {
+      "instance_id": 4567013390,
+      "map": "sortation_medium",
+      "path": "/root/shared-nvme/g567_gate3b_bounded_2d334c79_tmux_r13_pool20000/replay_scenarios/sortation_medium-random-4567013390.scen"
+    },
+    {
+      "instance_id": 4567014922,
+      "map": "sortation_medium",
+      "path": "/root/shared-nvme/g567_gate3b_bounded_2d334c79_tmux_r13_pool20000/replay_scenarios/sortation_medium-random-4567014922.scen"
+    },
+    {
+      "instance_id": 4567015538,
+      "map": "sortation_medium",
+      "path": "/root/shared-nvme/g567_gate3b_bounded_2d334c79_tmux_r13_pool20000/replay_scenarios/sortation_medium-random-4567015538.scen"
+    }
+  ],
+  "generated_missing_scenarios": true,
+  "generator_policy": {
+    "base_seed": 20260522,
+    "equivalent_command": "python scripts/generate_phase1a_scenarios.py --manifest <f4 maps with instances 26..45> --output-dir /root/shared-nvme/g567_gate3b_bounded_2d334c79_tmux_r13_pool20000/replay_scenarios --base-seed 20260522",
+    "script_version": "phase1a-scenario-generator-v1",
+    "seed_function": "sha256(script_version|base_seed|map_name|instance_id)",
+    "source": "scripts/generate_phase1a_scenarios.py functions"
+  },
+  "initial_missing_count": 0,
+  "initial_missing_examples": [],
+  "reduced_scope_reason": "",
+  "requested_instance_ids": [
+    4567000255,
+    4567000357,
+    4567000694,
+    4567001399,
+    4567004054,
+    4567005503,
+    4567006018,
+    4567006946,
+    4567007309,
+    4567007809,
+    4567009094,
+    4567010314,
+    4567011049,
+    4567011963,
+    4567012774,
+    4567012965,
+    4567013188,
+    4567013390,
+    4567014922,
+    4567015538,
+    4567016207,
+    4567016970,
+    4567017575,
+    4567017686,
+    4567018201,
+    4567019651,
+    4567019834,
+    4567020106
+  ],
+  "requested_maps": [
+    "sortation_medium"
+  ],
+  "scenario_dir": "/root/shared-nvme/g567_gate3b_bounded_2d334c79_tmux_r13_pool20000/replay_scenarios",
+  "scenario_metadata": "/root/shared-nvme/g567_gate3b_bounded_2d334c79_tmux_r13_pool20000/reports/phase5p5_repair5g567_gate3b_development_three_tier_scenario_generation.json",
+  "schema_version": "phase5p5_repair5f4_scenario_generation_v1",
+  "source_missing_count": 28,
+  "source_missing_examples": [
+    {
+      "instance_id": 4567000255,
+      "map": "sortation_medium"
+    },
+    {
+      "instance_id": 4567000357,
+      "map": "sortation_medium"
+    },
+    {
+      "instance_id": 4567000694,
+      "map": "sortation_medium"
+    },
+    {
+      "instance_id": 4567001399,
+      "map": "sortation_medium"
+    },
+    {
+      "instance_id": 4567004054,
+      "map": "sortation_medium"
+    },
+    {
+      "instance_id": 4567005503,
+      "map": "sortation_medium"
+    },
+    {
+      "instance_id": 4567006018,
+      "map": "sortation_medium"
+    },
+    {
+      "instance_id": 4567006946,
+      "map": "sortation_medium"
+    },
+    {
+      "instance_id": 4567007309,
+      "map": "sortation_medium"
+    },
+    {
+      "instance_id": 4567007809,
+      "map": "sortation_medium"
+    },
+    {
+      "instance_id": 4567009094,
+      "map": "sortation_medium"
+    },
+    {
+      "instance_id": 4567010314,
+      "map": "sortation_medium"
+    },
+    {
+      "instance_id": 4567011049,
+      "map": "sortation_medium"
+    },
+    {
+      "instance_id": 4567011963,
+      "map": "sortation_medium"
+    },
+    {
+      "instance_id": 4567012774,
+      "map": "sortation_medium"
+    },
+    {
+      "instance_id": 4567012965,
+      "map": "sortation_medium"
+    },
+    {
+      "instance_id": 4567013188,
+      "map": "sortation_medium"
+    },
+    {
+      "instance_id": 4567013390,
+      "map": "sortation_medium"
+    },
+    {
+      "instance_id": 4567014922,
+      "map": "sortation_medium"
+    },
+    {
+      "instance_id": 4567015538,
+      "map": "sortation_medium"
+    }
+  ],
+  "source_scenario_dir": "outputs/tmp/phase1a/generated/phase1a-generated-random"
+}

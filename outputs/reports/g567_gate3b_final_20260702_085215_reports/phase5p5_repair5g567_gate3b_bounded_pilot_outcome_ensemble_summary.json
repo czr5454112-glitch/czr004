@@ -1,0 +1,171 @@
+{
+  "aaai_ready": false,
+  "actor_export_includes_critic": false,
+  "auprc_lift_min_vs_prevalence": null,
+  "binary_brier_mean": 0.0,
+  "binary_brier_skill_min_vs_prevalence": null,
+  "binary_calibration_by_target": {
+    "success_gain": {
+      "auprc": null,
+      "auprc_lift_vs_prevalence": null,
+      "auroc": null,
+      "brier": 0.0,
+      "brier_baseline": 0.0,
+      "brier_skill": null,
+      "ece": 0.0,
+      "prevalence": 0.0,
+      "recall_at_fpr_05": null
+    },
+    "success_regression_vs_additive": {
+      "auprc": null,
+      "auprc_lift_vs_prevalence": null,
+      "auroc": null,
+      "brier": 0.0,
+      "brier_baseline": 0.0,
+      "brier_skill": null,
+      "ece": 0.0,
+      "prevalence": 0.0,
+      "recall_at_fpr_05": null
+    },
+    "success_regression_vs_g556": {
+      "auprc": null,
+      "auprc_lift_vs_prevalence": null,
+      "auroc": null,
+      "brier": 0.0,
+      "brier_baseline": 0.0,
+      "brier_skill": null,
+      "ece": 0.0,
+      "prevalence": 0.0,
+      "recall_at_fpr_05": null
+    },
+    "success_regression_vs_static_flow": {
+      "auprc": null,
+      "auprc_lift_vs_prevalence": null,
+      "auroc": null,
+      "brier": 0.0,
+      "brier_baseline": 0.0,
+      "brier_skill": null,
+      "ece": 0.0,
+      "prevalence": 0.0,
+      "recall_at_fpr_05": null
+    }
+  },
+  "binary_ece_max": 0.0,
+  "calibration_blockers": [
+    "brier_skill_below_minimum",
+    "insufficient_tail_events_for_calibration",
+    "auprc_not_sufficiently_above_prevalence",
+    "fixed_fpr_regression_recall_missing"
+  ],
+  "crossfit_folds": 5,
+  "crossfit_unit": "physical_map_hash",
+  "decision": "g567_distributional_critic_not_calibrated",
+  "delta_oof_mae_mean": 0.7140085796121532,
+  "delta_quantile_empirical_coverage": {
+    "delta_vs_additive": {
+      "q90_empirical_coverage": 0.9394772199828997,
+      "q95_empirical_coverage": 0.9579210944179797
+    },
+    "delta_vs_g556": {
+      "q90_empirical_coverage": 0.9421847644639876,
+      "q95_empirical_coverage": 0.9605064940352591
+    },
+    "delta_vs_static_flow": {
+      "q90_empirical_coverage": 0.9062945319815968,
+      "q95_empirical_coverage": 0.982838646634909
+    }
+  },
+  "effort_log_oof_mae_mean": 1.2814411310057134,
+  "ensemble_seeds": [
+    567,
+    568,
+    569
+  ],
+  "fixed_fpr_05_recall_min": null,
+  "fold_positive_min_by_target": {
+    "success_regression_vs_additive": 0,
+    "success_regression_vs_g556": 0,
+    "success_regression_vs_static_flow": 0
+  },
+  "labelv54_candidates": 52503,
+  "learned_runtime_policy_validated": false,
+  "outputs": [
+    "P(success regression vs additive/static_flow/g556) with UCB",
+    "P(success gain) with LCB",
+    "quality delta q10/q50/q90/q95 for all three tiers",
+    "harmful_quality_cvar",
+    "runtime/search-effort q50/q90",
+    "epistemic_uncertainty"
+  ],
+  "per_agent_tier_positive_min_by_target": {
+    "success_regression_vs_additive": 0,
+    "success_regression_vs_g556": 0,
+    "success_regression_vs_static_flow": 0
+  },
+  "per_map_family_positive_min_by_target": {
+    "success_regression_vs_additive": 0,
+    "success_regression_vs_g556": 0,
+    "success_regression_vs_static_flow": 0
+  },
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "physical_map_leakage_violations": 0,
+  "physical_maps": 44,
+  "prediction_coverage_rows": 52503,
+  "prediction_rows": 52503,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g567_distributional_critic_summary_v1",
+  "targets": [
+    "success_regression_vs_additive",
+    "success_regression_vs_static_flow",
+    "success_regression_vs_g556",
+    "success_gain",
+    "delta_vs_additive",
+    "delta_vs_static_flow",
+    "delta_vs_g556",
+    "log_actor_runtime_ms",
+    "log_actor_expanded_nodes",
+    "log_actor_low_level_pibt_calls"
+  ],
+  "training_only_critic": true,
+  "usable_rows": 52503,
+  "zero_event_agent_tiers_enumerated": [
+    "8",
+    "12",
+    "16",
+    "24",
+    "32",
+    "48",
+    "64",
+    "80",
+    "128",
+    "192",
+    "256",
+    "384",
+    "512",
+    "768",
+    "1000",
+    "1500",
+    "2000",
+    "2500",
+    "3000"
+  ],
+  "zero_event_map_families_enumerated": [
+    "connector",
+    "empty",
+    "game",
+    "irregular_bottleneck",
+    "islands",
+    "large_empty",
+    "large_lanes",
+    "large_maze",
+    "large_room",
+    "maze",
+    "public_other",
+    "random",
+    "room",
+    "spiral",
+    "tunnel",
+    "warehouse"
+  ]
+}

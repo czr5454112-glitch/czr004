@@ -1,0 +1,32 @@
+{
+  "completed_unix": 1782910709.1982791,
+  "expected_head": "4b786766da4625b315c281c1b89e7ffd6cbfa591",
+  "forbidden_actions": {
+    "final_blind_panel_constructed_or_accessed": false,
+    "final_blind_solver_replay_launched": false,
+    "forty_eight_hour_training_launched": false,
+    "full_100k_generation_launched": false,
+    "million_row_solver_acquisition_launched": false
+  },
+  "head": "4b786766da4625b315c281c1b89e7ffd6cbfa591",
+  "heartbeat_pid": "",
+  "phase": "gate3b_bounded_pilot",
+  "python_orchestrator_pid": "",
+  "rc": 124,
+  "reason": "stale_previous_runner_marker_without_final_summary",
+  "runner_bashpid": "3367",
+  "runner_cgroup": "0::/;",
+  "runner_parent_pid": "3366",
+  "runner_pgid": "3367",
+  "runner_shell_pid": "3367",
+  "runner_sid": "3367",
+  "schema_version": "phase5p5_repair5g567_gate3b_runner_final_summary_v2",
+  "stage_root": "/root/shared-nvme/g567_gate3b_bounded_2d334c79_tmux_r13_pool20000",
+  "started_unix": 1782910708.9443576,
+  "status_short": "",
+  "stderr_log": "/root/shared-nvme/g567_gate3b_bounded_2d334c79_tmux_r13_pool20000/logs/phase5p5_repair5g567_gate3b_bounded_pilot_runner.stderr.log",
+  "stdout_log": "/root/shared-nvme/g567_gate3b_bounded_2d334c79_tmux_r13_pool20000/logs/phase5p5_repair5g567_gate3b_bounded_pilot_runner.stdout.log",
+  "tmux": "/tmp/tmux-0/default,3366,0",
+  "tmux_server_pid": "3366",
+  "tmux_session_name": "g567_gate3b_r19_w4_resume_20260701_205828"
+}

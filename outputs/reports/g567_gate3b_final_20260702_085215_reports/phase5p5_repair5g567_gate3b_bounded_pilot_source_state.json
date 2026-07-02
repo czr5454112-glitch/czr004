@@ -1,0 +1,23 @@
+{
+  "aaai_ready": false,
+  "branch": "codex/repair5g567-large-scale-tail-safe",
+  "decision": "g567_source_state_clean",
+  "expected_head": "4b786766da4625b315c281c1b89e7ffd6cbfa591",
+  "head": "4b786766da4625b315c281c1b89e7ffd6cbfa591",
+  "head_matches_expected": true,
+  "inside_work_tree": "true",
+  "learned_runtime_policy_validated": false,
+  "phase5p5_allowed": false,
+  "phase6_allowed": false,
+  "runtime_claim_allowed": false,
+  "schema_version": "phase5p5_repair5g567_source_state_v1",
+  "source_plan": "czr004_g567_large_scale_tail_safe_direct_actor_plan.md",
+  "source_plan_sha256": "ed4a3185ee931656ff359a5a45c3d3b1d1bace37508205a58681abf5742fa542",
+  "source_state_failures": [],
+  "sparse_checkout": "false",
+  "sparse_checkout_disabled": true,
+  "status_clean": true,
+  "status_short": "",
+  "submodule_status": "61a4c40ce91ce18c06eb2fe070aa9f1951eecb8d external/lacam2 (v0.1-13-g61a4c40)\n 09a158196e513252cfb468ad46e33568787c1e92 external/lacam2/scripts (09a1581)\n e9ae471ea46a0f3dcd2bbbd26fa3d14433ec7884 external/lacam2/third_party/argparse (v2.9-5-ge9ae471)\n 5376968f6948923e2411081fd9372e71a59d8e77 external/lacam2/third_party/googletest (release-1.8.0-2986-g5376968f)",
+  "submodule_status_clean": true
+}

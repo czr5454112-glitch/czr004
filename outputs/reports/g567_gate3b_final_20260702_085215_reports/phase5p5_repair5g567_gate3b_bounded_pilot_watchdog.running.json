@@ -1,0 +1,8 @@
+{
+  "heartbeat_unix": 1782824957.8593469,
+  "missing_count": 0,
+  "phase": "final_summary_present",
+  "schema_version": "phase5p5_repair5g567_gate3b_watchdog_running_v1",
+  "stage_root": "/root/shared-nvme/g567_gate3b_bounded_2d334c79_tmux_r13_pool20000",
+  "watchdog_pid": "45690"
+}

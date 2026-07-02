@@ -1,0 +1,11 @@
+family,contexts_covered,candidates,primary_safe_AB,pareto_safe_AB,joint_positive_AB,harmful,median_finite_improvement_vs_additive,median_finite_improvement_vs_static_flow,best_safe_improvement_vs_additive,best_safe_improvement_vs_static_flow,contexts_where_family_supplies_best_safe_oracle_vs_additive,contexts_where_family_supplies_best_safe_oracle_vs_static_flow,contexts_where_family_supplies_selected_target,contexts_where_family_supplies_high_gain_candidate_excluded_by_v54
+coverage_first,0,0,0,0,0,0,,,,,0,0,0,0
+g556_local,2500,14351,14351,2614,957,2432,0.00783835592505883,0.0006109672122009179,0.8691463470429368,0.8691463470429368,554,554,940,152
+static_flow_local,2500,12008,12008,2409,673,2114,0.006726128083790108,0.0,0.870445255580365,0.870445255580365,733,733,1173,162
+seed_actor_residual,2500,4608,4608,845,337,801,0.007498833099064417,0.00016298982919669904,0.8695976173285053,0.8695976173285053,189,189,560,133
+jitter_global,0,0,0,0,0,0,,,,,0,0,0,0
+field_group,2500,16768,16768,2970,1152,2810,0.007918342312478052,0.0007072135775976175,0.8708610402203231,0.8708610402203231,712,712,953,152
+leave_group,0,0,0,0,0,0,,,,,0,0,0,0
+group,2493,4768,4768,841,328,749,0.008197436329996335,0.0006546908117164177,0.8660289665530462,0.8660289665530462,151,151,503,139
+global_anchor,0,0,0,0,0,0,,,,,0,0,0,0
+other,0,0,0,0,0,0,,,,,0,0,0,0

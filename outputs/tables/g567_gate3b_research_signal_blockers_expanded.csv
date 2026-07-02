@@ -1,0 +1,7 @@
+blocker,condition,observed,required,nearest_pass_distance
+tier_A_additive_signal_missing,median_relative_improvement_vs_additive >= 0.05,0.010034757202263999,0.05,0.039965242797736
+tier_A_additive_signal_missing,parent_cluster_bootstrap_lcb05_relative_improvement_vs_additive > 0,0.004003184406547981,>0,
+tier_A_additive_signal_missing,supported_success_regressions_vs_additive <= floor(pair_count*0.01),0.0,5,-5.0
+tier_B_static_flow_signal_missing,median_relative_improvement_vs_static_flow > 0,0.0,>0,0.0
+tier_B_static_flow_signal_missing,parent_cluster_bootstrap_lcb05_relative_improvement_vs_static_flow > 0,-0.024142784246652928,>0,0.024142784246652928
+tier_B_static_flow_signal_missing,q95_harmful_delta_vs_static_flow <= margin,0.21588373910299968,0.043,0.1728837391029997
